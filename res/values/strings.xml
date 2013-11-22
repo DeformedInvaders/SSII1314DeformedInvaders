@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Algorithm App</string>
+    <string name="boton_bspline">Spline</string>
+    <string name="boton_convex_hull">Hull</string>
+	<string name="boton_delaunay">Delaunay</string>
+	<string name="boton_ear_clipping">EarClipping</string>
+	<string name="boton_mesh_triangles">Mesh</string>
+	<string name="boton_reiniciar">Reiniciar</string>
+</resources>
