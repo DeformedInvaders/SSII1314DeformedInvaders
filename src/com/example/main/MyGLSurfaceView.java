@@ -4,10 +4,14 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 
 public class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyOpenGLRenderer renderer;
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.f;
+    
     public MyGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -20,6 +24,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
 	@Override
@@ -37,6 +43,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			renderer.anyadirPunto(x/width, (height - y)/height);			
 			requestRender();
 		}
+		
+		mScaleDetector.onTouchEvent(event);
 		
 		return true;
 	}
@@ -75,4 +83,29 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		renderer.zoom(factor);
 		requestRender();
 	}
+	
+	public class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+		@Override
+		public boolean onScale(ScaleGestureDetector detector) {
+	        mScaleFactor *= detector.getScaleFactor();
+
+	        // Don't let the object get too small or too large.
+	        //mScaleFactor = Math.max(0.95f, Math.min(mScaleFactor, 1.05f));
+	        
+	        if(mScaleFactor > 1) {
+	        	mScaleFactor = 0.97f;
+	        }
+	        else if(mScaleFactor < 1) {
+	        	mScaleFactor = 1.03f;
+	        }
+	        
+	        zoom(mScaleFactor);
+	        
+	        invalidate();
+	        return true;
+	    }
+	}
 }
+
+
