@@ -16,14 +16,20 @@ import com.example.math.BSpline;
 import com.example.math.ConvexHull;
 import com.example.math.DelaunayTriangulator;
 import com.example.math.EarClippingTriangulator;
+import com.example.math.GeometryUtils;
 import com.example.math.Vector2;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
 public class MyOpenGLRenderer implements Renderer {
 
+	// Parámetros de la Cámara
 	private float xLeft, xRight, yTop, yBot, xCentro, yCentro;
 	private float RatioViewPort;
+	
+	// Parámetros del Puerto de Vista
+	private static final float height = 1280.0f;
+	private static final float width = 760.0f;
 	
 	//Estructura de Datos de la Escena
 	private TEstado estado;
@@ -41,6 +47,7 @@ public class MyOpenGLRenderer implements Renderer {
 	private ShortArray delaunay;
 	private ShortArray earClipping;
 	private ShortArray meshTriangles;
+	private ShortArray simple;
 	
 	private FloatBuffer bufferPuntos;
 	
@@ -49,15 +56,16 @@ public class MyOpenGLRenderer implements Renderer {
 	private ArrayList<FloatBuffer> bufferDelaunay;
 	private ArrayList<FloatBuffer> bufferEarClipping;
 	private ArrayList<FloatBuffer> bufferMeshTriangles;
+	private ArrayList<FloatBuffer> bufferSimple;
 	
 	public MyOpenGLRenderer() {
-        xRight = 760.8f; //width;
+        xRight = width;
         xLeft = 0.0f;
-        yTop = 1280.0f; //height;
+        yTop = height;
         yBot = 0.0f;
         xCentro = (xRight + xLeft)/2.0f;
         yCentro = (yTop + yBot)/2.0f;
-        RatioViewPort = 1.0f;
+        RatioViewPort = width/height;
         
         estado = TEstado.Dibujar;
 
@@ -69,6 +77,7 @@ public class MyOpenGLRenderer implements Renderer {
         delaunay = null;
         earClipping = null;
         meshTriangles = null;
+        simple = null;
 
         bsplineCalculator = null;
         convexHullCalculator = new ConvexHull();
@@ -112,6 +121,10 @@ public class MyOpenGLRenderer implements Renderer {
 			break;
 			case MeshGenerator:
 				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 1.0f, 1.0f, 1.0f, bufferMeshTriangles);
+			break;
+			case Simple:
+				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 0.0f, 1.0f, 1.0f, bufferPuntos);
+				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 0.0f, 0.0f, 1.0f, bufferSimple);
 			break;
 		}
 		
@@ -179,6 +192,28 @@ public class MyOpenGLRenderer implements Renderer {
 		yBot = yCentro - newAlto/2.0f;
 	}
 	
+	public void drag(float width, float height, float dx, float dy) {
+		
+		xLeft += dx * width;
+		xRight += dx * width;
+		yBot += dy * height;
+		yTop += dy * height;
+		
+		xCentro = (xRight + xLeft)/2.0f;
+        yCentro = (yTop + yBot)/2.0f;
+	}
+	
+	public void restore() {
+		
+        xRight = width; 
+        xLeft = 0.0f;
+        yTop = height;
+        yBot = 0.0f;
+        
+        xCentro = (xRight + xLeft)/2.0f;
+        yCentro = (yTop + yBot)/2.0f;
+	}
+	
 	public void anyadirPunto(float x, float y) {
 		
 		if(estado == TEstado.Dibujar) {
@@ -195,33 +230,36 @@ public class MyOpenGLRenderer implements Renderer {
 	
 	public void calcularBSpline() {
 			
-		if(bspline == null  && puntos.size > 4) {
+		if(puntos.size > 4) {
 			estado = TEstado.BSpline;
-			bspline = new FloatArray();
 			
-			int longControl = puntos.size/2;
-			Vector2 puntosControl[] = new Vector2[longControl];
-			
-			for(int i = 0; i < longControl; i++) {
-				float x = puntos.get(2*i);
-				float y = puntos.get(2*i+1);
+			if(bspline == null) {
+				bspline = new FloatArray();
 				
-				puntosControl[i] = new Vector2(x, y);
-			}
-			
-			bsplineCalculator = new BSpline<Vector2>(puntosControl, 3, true);
-						
-			float t = 0f;
-			float n = 100f;
-			
-			while(t < 1) {
-				Vector2 pos = new Vector2();
-				bsplineCalculator.valueAt(pos, t);
+				int longControl = puntos.size/2;
+				Vector2 puntosControl[] = new Vector2[longControl];
 				
-				bspline.add(pos.x);
-				bspline.add(pos.y);
-								
-				t += (1f/n);
+				for(int i = 0; i < longControl; i++) {
+					float x = puntos.get(2*i);
+					float y = puntos.get(2*i+1);
+					
+					puntosControl[i] = new Vector2(x, y);
+				}
+				
+				bsplineCalculator = new BSpline<Vector2>(puntosControl, 3, true);
+							
+				float t = 0f;
+				float n = 100f;
+				
+				while(t < 1) {
+					Vector2 pos = new Vector2();
+					bsplineCalculator.valueAt(pos, t);
+					
+					bspline.add(pos.x);
+					bspline.add(pos.y);
+									
+					t += (1f/n);
+				}
 			}
 		}
 		
@@ -230,59 +268,85 @@ public class MyOpenGLRenderer implements Renderer {
 	
 	public void calcularConvexHull() {
 		
-		if(convexHull == null && puntos.size > 4) {
+		if(puntos.size > 4) {
 			estado = TEstado.ConvexHull;
-			convexHull = convexHullCalculator.computePolygon(puntos, true);
-			bufferConvexHull = construirBuffer(convexHull);
+			
+			if(convexHull == null) {
+				convexHull = convexHullCalculator.computePolygon(puntos, true);
+				bufferConvexHull = construirBuffer(convexHull);
+			}
 		}
 	}
 	
 	public void calcularDelaunay() {
 		
-		if(delaunay == null && puntos.size > 4) {
+		if(puntos.size > 4) {
 			estado = TEstado.Delaunay;
-			delaunay = delaunayCalculator.computeTriangles(puntos, true);
-			bufferDelaunay = construirBuffer(delaunay, puntos);
+			
+			if(delaunay == null) {
+				delaunay = delaunayCalculator.computeTriangles(puntos, true);
+				bufferDelaunay = construirTriangulosBuffer(delaunay, puntos);
+			}
 		}
 	}
 	
 	public void calcularEarClipping() {
 		
-		if(earClipping == null && puntos.size > 4) {
+		if(puntos.size > 4) {
 			estado = TEstado.EarClipping;
-			earClipping = earClippingCalculator.computeTriangles(puntos);
-			bufferEarClipping = construirBuffer(earClipping, puntos);
+			
+			if(earClipping == null) {
+				earClipping = earClippingCalculator.computeTriangles(puntos);
+				bufferEarClipping = construirTriangulosBuffer(earClipping, puntos);
+			}
 		}
 	}
 	
 	public void calcularMeshTriangles() {
 				
-		if(meshTriangles == null && puntos.size > 4) {
+		if(puntos.size > 4) {
 			estado = TEstado.MeshGenerator;
 			
-			if(delaunay == null) {
-				delaunay = delaunayCalculator.computeTriangles(puntos, true);
-			}
+			if(meshTriangles == null) {
+				if(delaunay == null) {
+					delaunay = delaunayCalculator.computeTriangles(puntos, true);
+				}
+				
+				ShortArray delaunayNonConvex = new ShortArray(delaunay);
+				delaunayCalculator.trim(delaunayNonConvex, puntos, puntos, 0, puntos.size);
+				mesh = new FloatArray(puntos);
+				meshTriangles = new ShortArray();
+				delaunayCalculator.mesh(delaunayNonConvex, meshTriangles, mesh, 100, 50.0f);
 			
-			ShortArray delaunayNonConvex = new ShortArray(delaunay);
-			delaunayCalculator.trim(delaunayNonConvex, puntos, puntos, 0, puntos.size);
-			mesh = new FloatArray(puntos);
-			meshTriangles = new ShortArray();
-			delaunayCalculator.mesh(delaunayNonConvex, meshTriangles, mesh, 100, 50.0f);
-		
-			bufferMeshTriangles = construirBuffer(meshTriangles, mesh);
+				bufferMeshTriangles = construirTriangulosBuffer(meshTriangles, mesh);
+			}
+		}
+	}
+	
+	public void calcularPoligonoSimple() {
+		if(puntos.size > 4) {
+			estado = TEstado.Simple;
+			
+			if(simple == null) {
+				simple = GeometryUtils.isPolygonSimple(puntos, false);
+				
+				bufferSimple = construirLineasBuffer(simple, puntos);
+			}
 		}
 	}
 	
 	public void reiniciarPuntos() {
 		estado = TEstado.Dibujar;
+		
 		puntos = new FloatArray();
 		mesh = null;
+		
 		bspline = null;
 		convexHull = null;
 		delaunay = null;
 		earClipping = null;
 		meshTriangles = null;
+		simple = null;
 	}
 
 	private FloatBuffer construirBuffer(FloatArray lista) {
@@ -302,7 +366,40 @@ public class MyOpenGLRenderer implements Renderer {
 		return buffer;
 	}
 	
-	private ArrayList<FloatBuffer> construirBuffer(ShortArray lista, FloatArray puntos) {
+	private ArrayList<FloatBuffer> construirLineasBuffer(ShortArray lista, FloatArray puntos) {
+		
+		int arrayLong = 2 * 2;
+		ArrayList<FloatBuffer> listabuffer = new ArrayList<FloatBuffer>();
+		
+		int j = 0;
+		while(j < lista.size) {
+						
+			short a = lista.get(j);
+			short b = lista.get(j+1);
+			
+			float[] arrayPuntos = new float[arrayLong];
+			
+			arrayPuntos[0] = puntos.get(2*a);
+			arrayPuntos[1] = puntos.get(2*a+1);
+			
+			arrayPuntos[2] = puntos.get(2*b);
+			arrayPuntos[3] = puntos.get(2*b+1);		
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(arrayLong * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			FloatBuffer buffer = byteBuf.asFloatBuffer();
+			buffer.put(arrayPuntos);
+			buffer.position(0);
+
+			listabuffer.add(buffer);
+			
+			j = j+2;
+		}		
+		
+		return listabuffer;
+	}
+	
+	private ArrayList<FloatBuffer> construirTriangulosBuffer(ShortArray lista, FloatArray puntos) {
 		
 		int arrayLong = 2 * 3;
 		ArrayList<FloatBuffer> listabuffer = new ArrayList<FloatBuffer>();
