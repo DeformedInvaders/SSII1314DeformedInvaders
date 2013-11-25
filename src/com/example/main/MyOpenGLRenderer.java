@@ -83,6 +83,31 @@ public class MyOpenGLRenderer implements Renderer
         handles = new FloatArray();
 	}
 	
+	public float getxLeft()
+	{
+		return this.xLeft;
+	}
+	public float getxRight()
+	{
+		return this.xRight;
+	}
+	public float getyTop()
+	{
+		return this.yTop;
+	}
+	public float getyBot()
+	{
+		return this.yBot;
+	}
+	public float getwidth()
+	{
+		return this.width;
+	}
+	public float getheight()
+	{
+		return this.height;
+	}
+	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{

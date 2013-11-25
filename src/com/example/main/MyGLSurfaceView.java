@@ -1,7 +1,9 @@
 package com.example.main;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -11,7 +13,11 @@ public class MyGLSurfaceView extends GLSurfaceView
     private final MyOpenGLRenderer renderer;
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
-    
+    private Rect mContentRect;
+    /*private RectF mCurrentViewport = 
+            new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);*/
+
+ 
     public MyGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
@@ -143,7 +149,49 @@ public class MyGLSurfaceView extends GLSurfaceView
 	        invalidate();
 	        return true;
 	    }
+	
 	}
+	/*TODO*/
+	
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+	{
+	    // Scrolling uses math based on the viewport (as opposed to math using pixels).
+	    
+	    // Pixel offset is the offset in screen pixels, while viewport offset is the
+	    // offset within the current viewport. 
+	    float viewportOffsetX = distanceX * renderer.getwidth()
+	            / mContentRect.width();
+	    float viewportOffsetY = -distanceY * renderer.getheight() 
+	            / mContentRect.height();
+	    
+	    // Updates the viewport, refreshes the display. 
+	    setViewportBottomLeft(
+	    		renderer.getxLeft() + viewportOffsetX,
+	    		renderer.getyBot() + viewportOffsetY);
+	    
+	    return true;
+	}
+	
+	
+	private void setViewportBottomLeft(float x, float y)
+	{
+	    /*
+	     * Constrains within the scroll range. The scroll range is simply the viewport 
+	     * extremes (AXIS_X_MAX, etc.) minus the viewport size. For example, if the 
+	     * extremes were 0 and 10, and the viewport size was 2, the scroll range would 
+	     * be 0 to 8.
+	     */
+
+	    float curWidth = renderer.getwidth();
+	    float curHeight = renderer.getheight();
+	    x = Math.max(renderer.getxLeft(), Math.min(x, renderer.getxRight() - curWidth));
+	    y = Math.max(renderer.getyBot() + curHeight, Math.min(y, renderer.getyTop()));
+
+	    renderer.drag(x + curWidth, y - curHeight, x, y);
+
+	    // Invalidates the View to update the display.
+	    ViewCompat.postInvalidateOnAnimation(this);
+	}
+	
+	
 }
-
-
