@@ -166,4 +166,25 @@ public class GeometryUtils {
 		
 		return listaCortes;
 	}
+	
+	public static Vector2 isPointInMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
+		// TODO
+		Vector2 punto = new Vector2();
+		
+		int j = 0;
+		while(j < vertices.size) {
+			float px = (vertices.get(j) - xLeft)*dx;
+			float py = (vertices.get(j+1) - yBot)*dy;			
+						
+			if(Math.abs(px - x) < 10 && Math.abs(py - y) < 10) {
+				punto.x = vertices.get(j);
+				punto.y = vertices.get(j+1);
+				return punto;
+			}
+			
+			j = j+2;
+		}
+		
+		return null;
+	}
 }

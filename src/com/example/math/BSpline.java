@@ -17,7 +17,7 @@
 package com.example.math;
 
 import com.example.utils.Array;
-
+import com.example.utils.FloatArray;
 
 /** @author Xoppa */
 public class BSpline<T extends Vector<T>> implements Path<T> {
@@ -98,8 +98,24 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 	private T tmp;
 	
 	public BSpline() { }
+	
 	public BSpline(final T[] controlPoints, final int degree, final boolean continuous) {
 		set(controlPoints, degree, continuous);
+	}
+	
+	public BSpline(final FloatArray vertices, final int degree, final boolean continuous) {
+				
+		int longControl = vertices.size/2;
+		Vector2 controlPoints[] = new Vector2[longControl];
+		
+		for(int i = 0; i < longControl; i++) {
+			float x = vertices.get(2*i);
+			float y = vertices.get(2*i+1);
+			
+			controlPoints[i] = new Vector2(x, y);
+		}
+		
+		set((T[]) controlPoints, degree, continuous);
 	}
 	
 	public BSpline set(final T[] controlPoints, final int degree, final boolean continuous) {
@@ -194,5 +210,22 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 	public float locate (T v) {
 		// TODO Add a precise method
 		return approximate(v);
+	}
+	
+	public FloatArray computeBSpline(float offset, float iter) {
+		FloatArray spline = new FloatArray();
+					
+		float t = offset;		
+		while(t < 1) {
+			Vector2 pos = new Vector2();
+			valueAt((T) pos, t);
+			
+			spline.add(pos.x);
+			spline.add(pos.y);
+							
+			t += (1f/iter);
+		}
+		
+		return spline;
 	}
 }

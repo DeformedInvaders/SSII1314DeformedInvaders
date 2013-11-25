@@ -40,7 +40,31 @@ public class DelaunayTriangulator {
 
 	/** @see #computeTriangles(float[], int, int, boolean) */
 	public ShortArray computeTriangles (FloatArray points, boolean sorted) {
-		return computeTriangles(points.items, 0, points.size, sorted);
+		// TODO
+		float[] polygon = points.items;
+		ShortArray delaunay = computeTriangles(polygon, 0, points.size, sorted);
+		
+		if(!sorted) {
+			points.clear();
+			// Eliminar Memoria reservada
+			int i = 0;
+			while(i < polygon.length) {
+				try {
+					float px = polygon[i];
+					float py = polygon[i+1];
+					if(px != 0.0f && py != 0.0f) {
+						points.add(px);
+						points.add(py);
+					}
+				}
+				catch(Exception e) {
+					//e.printStackTrace();
+				}
+				i = i+2;
+			}
+		}
+		
+		return delaunay;
 	}
 
 	/** @see #computeTriangles(float[], int, int, boolean) */
@@ -58,6 +82,7 @@ public class DelaunayTriangulator {
 	public ShortArray computeTriangles (float[] points, int offset, int count, boolean sorted) {
 		ShortArray triangles = this.triangles;
 		triangles.clear();
+		
 		if (count < 6) return triangles;
 		triangles.ensureCapacity(count);
 
@@ -335,6 +360,7 @@ public class DelaunayTriangulator {
 	/** Removes all triangles with a centroid outside the specified hull, which may be concave. Note some triangulations may have
 	 * triangles whose centroid is inside the hull but a portion is outside. */
 	public void trim (ShortArray triangles, FloatArray points, FloatArray hull, int offset, int count) {
+		// TODO
 		
 		ShortArray trianglesTmp = new ShortArray();
 		
@@ -364,6 +390,7 @@ public class DelaunayTriangulator {
 	}
 	
 	public void mesh (ShortArray triangles, ShortArray mesh, FloatArray points, int count, float maxArea) {
+		// TODO
 		
 		ShortArray trianglesIn = new ShortArray(triangles);
 		ShortArray trianglesOut = new ShortArray();
@@ -393,7 +420,7 @@ public class DelaunayTriangulator {
 				Polygon p = new Polygon(vertices.items);
 				float area = Math.abs(p.area());
 				
-				if(area > 4 * maxArea) {
+				if(area > maxArea) {
 					float p4x = (p1x + p2x) / 2.0f;		float p4y = (p1y + p2y) / 2.0f;
 					float p5x = (p2x + p3x) / 2.0f;		float p5y = (p2y + p3y) / 2.0f;
 					float p6x = (p3x + p1x) / 2.0f;		float p6y = (p3y + p1y) / 2.0f;

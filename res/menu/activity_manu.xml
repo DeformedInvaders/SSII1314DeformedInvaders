@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:id="@+id/group1" android:menuCategory="container" android:enabled="true" android:checkableBehavior="none" android:visible="true">
+        <item android:id="@+id/itemNew" android:title="@string/item_new"/>
+        <item android:id="@+id/itemView" android:title="@string/item_view">
+            <menu>
+                <item android:id="@+id/itemZoomIn" android:title="@string/item_zoom_in"/>
+                <item android:id="@+id/itemZoomOut" android:title="@string/item_zoom_out"/>
+                <item android:id="@+id/itemDragRight" android:title="@string/item_drag_right"/>
+                <item android:id="@+id/itemDragLeft" android:title="@string/item_drag_left"/>
+                <item android:id="@+id/itemDragUp" android:title="@string/item_drag_up"/>
+                <item android:id="@+id/itemDragDown" android:title="@string/item_drag_down"/>
+                <item android:id="@+id/itemReset" android:title="@string/item_reset"/>
+            </menu>
+        </item>
+        <item android:id="@+id/itemAlgorithms" android:title="@string/item_algorithm">
+            <menu><item android:id="@+id/itemBSpline" android:title="@string/item_bspline"/>
+                <item android:id="@+id/itemConvexHull" android:title="@string/item_convex_hull"/>
+                <item android:id="@+id/itemDelaunay" android:title="@string/item_delaunay"/>
+                <item android:id="@+id/itemEarClipping" android:title="@string/item_ear_clipping"/>
+                <item android:id="@+id/itemMesh" android:title="@string/item_mesh_triangles"/>
+                <item android:id="@+id/itemSimple" android:title="@string/item_simple"/>
+            </menu>
+        </item>
+        <item android:id="@+id/itemRun" android:title="@string/item_run"/>
+    
+        
+</group>
+    
+
+</menu>

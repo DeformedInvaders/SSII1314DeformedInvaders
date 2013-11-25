@@ -6,13 +6,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-public class MyGLSurfaceView extends GLSurfaceView {
-
+public class MyGLSurfaceView extends GLSurfaceView
+{
     private final MyOpenGLRenderer renderer;
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
     
-    public MyGLSurfaceView(Context context, AttributeSet attrs) {
+    public MyGLSurfaceView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
 
         // Create an OpenGL 1.0 context.
@@ -29,8 +30,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
     }
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {	
-		
+	public boolean onTouchEvent(MotionEvent event)
+	{		
 		int action = event.getAction();
 		
 		float x = event.getX();
@@ -39,8 +40,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		float width = getWidth();
 		float height = getHeight();
 				
-		if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
-			renderer.anyadirPunto(x/width, (height - y)/height);			
+		if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
+		{
+			renderer.anyadirPunto(x, y, width, height);			
 			requestRender();
 		}
 		
@@ -49,54 +51,90 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		return true;
 	}
 	
-	public void calcularBSpline() {
-		renderer.calcularBSpline();
+	public void calcularBSpline()
+	{
+		renderer.bSpline();
 		requestRender();
 	}
 	
-	public void calcularConvexHull() {
-		renderer.calcularConvexHull();
+	public void calcularConvexHull()
+	{
+		renderer.convexHull();
 		requestRender();
 	}
 	
-	public void calcularDelaunay() {
-		renderer.calcularDelaunay();
+	public void calcularDelaunay()
+	{
+		renderer.delaunay();
 		requestRender();
 	}
 	
-	public void calcularEarClipping() {
-		renderer.calcularEarClipping();
+	public void calcularEarClipping()
+	{
+		renderer.earClipping();
 		requestRender();
 	}
 	
-	public void calcularMeshTriangles() {
-		renderer.calcularMeshTriangles();
+	public void calcularMeshTriangles()
+	{
+		renderer.meshGenerator();
 		requestRender();
 	}
 	
-	public void reiniciarPuntos() {
+	public boolean calcularTestSimple()
+	{
+		boolean b = renderer.testSimple();
+		requestRender();
+		return b;
+	}
+	
+	public boolean pruebaCompleta()
+	{
+		boolean b = renderer.test();
+		requestRender();
+		return b;
+	}
+	
+	public void reiniciarPuntos()
+	{
 		renderer.reiniciarPuntos();
 		requestRender();
 	}
 	
-	public void zoom(float factor) {
+	public void zoom(float factor)
+	{
 		renderer.zoom(factor);
 		requestRender();
 	}
 	
-	public class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
+	public void drag(float dx, float dy)
+	{
+		float width = getWidth();
+		float height = getHeight();
+		
+		renderer.drag(width, height, dx, dy);
+		requestRender();
+	}
+	
+	public void restore()
+	{		
+		renderer.restore();
+		requestRender();
+	}
+	
+	public class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
+	{
 		@Override
-		public boolean onScale(ScaleGestureDetector detector) {
+		public boolean onScale(ScaleGestureDetector detector)
+		{
 	        mScaleFactor *= detector.getScaleFactor();
-
-	        // Don't let the object get too small or too large.
-	        //mScaleFactor = Math.max(0.95f, Math.min(mScaleFactor, 1.05f));
 	        
-	        if(mScaleFactor > 1) {
+	        if(mScaleFactor > 1)
+	        {
 	        	mScaleFactor = 0.97f;
 	        }
-	        else if(mScaleFactor < 1) {
+	        else if(mScaleFactor < 1)
+	        {
 	        	mScaleFactor = 1.03f;
 	        }
 	        
