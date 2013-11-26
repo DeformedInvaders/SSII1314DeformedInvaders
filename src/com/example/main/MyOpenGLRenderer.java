@@ -83,31 +83,10 @@ public class MyOpenGLRenderer implements Renderer
         handles = new FloatArray();
 	}
 	
-	public float getxLeft()
+	public TEstado getEstado()
 	{
-		return this.xLeft;
+		return estado;
 	}
-	public float getxRight()
-	{
-		return this.xRight;
-	}
-	public float getyTop()
-	{
-		return this.yTop;
-	}
-	public float getyBot()
-	{
-		return this.yBot;
-	}
-	public float getwidth()
-	{
-		return this.width;
-	}
-	public float getheight()
-	{
-		return this.height;
-	}
-	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
@@ -247,19 +226,20 @@ public class MyOpenGLRenderer implements Renderer
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
-		float dx = width/(xRight-xLeft);
-		float dy = height/(yTop-yBot);
+		/*float dx = width/(xRight-xLeft);
+		float dy = height/(yTop-yBot);*/
 		
-		if(estado == TEstado.Dibujar)
-		{		
+		/*if(estado == TEstado.Dibujar)
+		{	*/	
 			puntos.add(nx);
 			puntos.add(ny);
 			
 			bufferPuntos = construirBuffer(puntos);
-		}
+			//TODO
+		/*}
 		else
-		{ 
-			Vector2 p = GeometryUtils.isPointInMesh(puntos, x, height-y, xLeft, yBot, dx, dy);
+		{ */
+			/*Vector2 p = GeometryUtils.isPointInMesh(puntos, x, height-y, xLeft, yBot, dx, dy);
 			
 			if(p != null)
 			{
@@ -282,7 +262,7 @@ public class MyOpenGLRenderer implements Renderer
 					bufferHandles = construirBuffer(handles);
 				}
 			}
-		}
+		}*/
 	}
 	
 	public void bSpline()
