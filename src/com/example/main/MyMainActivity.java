@@ -1,6 +1,7 @@
 package com.example.main;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,5 +112,17 @@ public class MyMainActivity extends Activity
 	{
 		super.onPause();
 		canvas.onPause();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
+
+	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+	        setContentView(R.layout.activity_layout);
+
+	    } else {
+	        setContentView(R.layout.activity_layout);
+	    }
 	}
 }

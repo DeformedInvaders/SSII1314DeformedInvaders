@@ -3,6 +3,7 @@ package com.example.main;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -10,6 +11,7 @@ public class MyGLSurfaceView extends GLSurfaceView
 {
     private final MyOpenGLRenderer renderer;
     private ScaleGestureDetector mScaleDetector;
+    private GestureDetector gestureDetector;
     private float mScaleFactor = 1.f;
     private float lastX;
 	private float lastY;
@@ -32,6 +34,7 @@ public class MyGLSurfaceView extends GLSurfaceView
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        gestureDetector = new GestureDetector(context, new GestureListener());
     }
 
 	@Override
@@ -44,30 +47,50 @@ public class MyGLSurfaceView extends GLSurfaceView
 		
 		float width = getWidth();
 		float height = getHeight();
-		if(renderer.getEstado() == TEstado.Dibujar)		
+		
+		if(event.getPointerCount() == 1)
 		{
-			if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
+			if(renderer.getEstado() == TEstado.Dibujar)		
 			{
-				renderer.anyadirPunto(x, y, width, height);			
-				requestRender();
+				if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
+				{
+					renderer.anyadirPunto(x, y, width, height);			
+					requestRender();
+				}
+			}
+			else
+			{
+				if(action == MotionEvent.ACTION_DOWN)
+				{
+					lastX = x;
+					lastY = height - y;
+				}
+				else if(action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
+				{
+					float dx = x - lastX;
+					float dy = height - y - lastY;
+					
+					if(dx > 30)
+						dx = -5f;
+					else if(dx < -30)
+						dx = 5f;
+					else
+						dx = 0f;
+					if(dy > 30)
+						dy = -5f;
+					else if(dy < -30)
+						dy = 5f;
+					else 
+						dy = 0f;
+					
+					renderer.drag(getWidth(), getHeight(), dx, dy);
+					
+					requestRender();
+				}
 			}
 		}
-		else
-		{
-			if(action == MotionEvent.ACTION_DOWN)
-			{
-				lastX = x;
-				lastY = y;
-			}
-			else if(action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
-			{
-				float dx = x - lastX;
-				float dy = y - lastY;
-				
-				renderer.drag(getWidth(), getHeight(), dx, dy);
-			}
-			mScaleDetector.onTouchEvent(event);
-		}
+		gestureDetector.onTouchEvent(event);
+		mScaleDetector.onTouchEvent(event);
 		return true;
 	}
 	
@@ -165,6 +188,19 @@ public class MyGLSurfaceView extends GLSurfaceView
 	    }
 	
 	}
-	
-	
+	private class GestureListener extends GestureDetector.SimpleOnGestureListener 
+	{
+        @Override
+        public boolean onDown(MotionEvent e) 
+        {
+            return true;
+        }
+        
+        @Override
+        public boolean onDoubleTap(MotionEvent e) 
+        {
+        	restore();
+            return true;
+        }
+	}
 }
