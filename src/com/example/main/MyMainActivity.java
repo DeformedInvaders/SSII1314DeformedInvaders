@@ -125,4 +125,20 @@ public class MyMainActivity extends Activity
 	        setContentView(R.layout.activity_layout);
 	    }
 	}
+	
+	/*
+	private int cont=5;
+	protected void onSaveInstanceStante(Bundle outState){
+		super.onSaveInstanceState(outState);
+		outState.putInt("CONT",cont);
+		Toast.makeText(getApplication(), "Contador1"+cont, Toast.LENGTH_SHORT).show();
+	}
+	protected void onRestoreIstanceState(Bundle savedInstanceState){
+		super.onRestoreInstanceState(savedInstanceState);
+		cont = savedInstanceState.getInt("CONT");
+		Toast.makeText(getApplication(), "Contador2"+cont, Toast.LENGTH_SHORT).show();
+	
+	}*/
+	
+	
 }
