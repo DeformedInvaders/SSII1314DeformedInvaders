@@ -1,4 +1,7 @@
-package com.example.main;
+package com.example.design;
+
+import com.example.touch.DoubleTouchGestureListener;
+import com.example.touch.ScaleGestureListener;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -7,19 +10,18 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-public class MyGLSurfaceView extends GLSurfaceView
+
+public class DesignGLSurfaceView extends GLSurfaceView
 {
-    private final MyOpenGLRenderer renderer;
-    private ScaleGestureDetector mScaleDetector;
+    private final DesignOpenGLRenderer renderer;
+    
+    private ScaleGestureDetector scaleDectector;
     private GestureDetector gestureDetector;
-    private float mScaleFactor = 1.f;
+    
     private float lastX;
 	private float lastY;
-    /*private RectF mCurrentViewport = 
-            new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);*/
-
  
-    public MyGLSurfaceView(Context context, AttributeSet attrs)
+    public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
 
@@ -27,14 +29,14 @@ public class MyGLSurfaceView extends GLSurfaceView
         setEGLContextClientVersion(1);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        renderer = new MyOpenGLRenderer();
+        renderer = new DesignOpenGLRenderer();
         setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        gestureDetector = new GestureDetector(context, new GestureListener());
+        scaleDectector = new ScaleGestureDetector(context, new ScaleGestureListener(renderer));
+        gestureDetector = new GestureDetector(context, new DoubleTouchGestureListener(renderer));
     }
 
 	@Override
@@ -50,7 +52,7 @@ public class MyGLSurfaceView extends GLSurfaceView
 		
 		if(event.getPointerCount() == 1)
 		{
-			if(renderer.getEstado() == TEstado.Dibujar)		
+			if(renderer.getEstado() == TDesignEstado.Dibujar)		
 			{
 				if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
 				{
@@ -70,18 +72,25 @@ public class MyGLSurfaceView extends GLSurfaceView
 					float dx = x - lastX;
 					float dy = height - y - lastY;
 					
-					if(dx > 30)
+					if(dx > 30) {
 						dx = -5f;
-					else if(dx < -30)
+					}
+					else if(dx < -30) {
 						dx = 5f;
-					else
+					}
+					else {
 						dx = 0f;
-					if(dy > 30)
+					}
+					
+					if(dy > 30) {
 						dy = -5f;
-					else if(dy < -30)
+					}
+					else if(dy < -30) {
 						dy = 5f;
-					else 
+					}
+					else { 
 						dy = 0f;
+					}
 					
 					renderer.drag(getWidth(), getHeight(), dx, dy);
 					
@@ -89,8 +98,8 @@ public class MyGLSurfaceView extends GLSurfaceView
 				}
 			}
 		}
+		scaleDectector.onTouchEvent(event);
 		gestureDetector.onTouchEvent(event);
-		mScaleDetector.onTouchEvent(event);
 		return true;
 	}
 	
@@ -163,44 +172,5 @@ public class MyGLSurfaceView extends GLSurfaceView
 	{		
 		renderer.restore();
 		requestRender();
-	}
-	
-	public class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
-	{
-		@Override
-		public boolean onScale(ScaleGestureDetector detector)
-		{
-	        mScaleFactor *= detector.getScaleFactor();
-	        
-	        if(mScaleFactor > 1)
-	        {
-	        	mScaleFactor = 0.97f;
-	        }
-	        else if(mScaleFactor < 1)
-	        {
-	        	mScaleFactor = 1.03f;
-	        }
-	        
-	        zoom(mScaleFactor);
-	        
-	        invalidate();
-	        return true;
-	    }
-	
-	}
-	private class GestureListener extends GestureDetector.SimpleOnGestureListener 
-	{
-        @Override
-        public boolean onDown(MotionEvent e) 
-        {
-            return true;
-        }
-        
-        @Override
-        public boolean onDoubleTap(MotionEvent e) 
-        {
-        	restore();
-            return true;
-        }
 	}
 }

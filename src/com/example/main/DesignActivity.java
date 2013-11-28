@@ -1,30 +1,48 @@
 package com.example.main;
 
+import com.example.design.DesignGLSurfaceView;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
-public class MyMainActivity extends Activity
+public class DesignActivity extends Activity
 {
-	private MyGLSurfaceView canvas;
+	private DesignGLSurfaceView canvas;
+	private Button next;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_layout);
+		setContentView(R.layout.design_layout);
 		
-		canvas = (MyGLSurfaceView) findViewById(R.id.myGLSurfaceView1);
+		canvas = (DesignGLSurfaceView) findViewById(R.id.designGLSurfaceView1);
+		next = (Button) findViewById(R.id.button1);
+		
+		next.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.activity_manu, menu);
+		getMenuInflater().inflate(R.menu.design_menu, menu);
 		return true;
 	}
 	
@@ -116,29 +134,7 @@ public class MyMainActivity extends Activity
 	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO
 	    super.onConfigurationChanged(newConfig);
-
-	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	        setContentView(R.layout.activity_layout);
-
-	    } else {
-	        setContentView(R.layout.activity_layout);
-	    }
-	}
-	
-	/*
-	private int cont=5;
-	protected void onSaveInstanceStante(Bundle outState){
-		super.onSaveInstanceState(outState);
-		outState.putInt("CONT",cont);
-		Toast.makeText(getApplication(), "Contador1"+cont, Toast.LENGTH_SHORT).show();
-	}
-	protected void onRestoreIstanceState(Bundle savedInstanceState){
-		super.onRestoreInstanceState(savedInstanceState);
-		cont = savedInstanceState.getInt("CONT");
-		Toast.makeText(getApplication(), "Contador2"+cont, Toast.LENGTH_SHORT).show();
-	
-	}*/
-	
-	
+	}	
 }

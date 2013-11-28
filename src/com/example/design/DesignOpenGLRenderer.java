@@ -1,4 +1,4 @@
-package com.example.main;
+package com.example.design;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -6,12 +6,9 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLSurfaceView.Renderer;
-import android.opengl.GLU;
-
+import com.example.main.OpenGLRenderer;
 import com.example.math.BSpline;
 import com.example.math.ConvexHull;
 import com.example.math.DelaunayMeshGenerator;
@@ -23,18 +20,10 @@ import com.example.utils.FloatArray;
 import com.example.utils.Mesh;
 import com.example.utils.ShortArray;
 
-public class MyOpenGLRenderer implements Renderer
-{
-
-	// Parámetros de la Cámara
-	private float xLeft, xRight, yTop, yBot, xCentro, yCentro;
-	
-	// Parámetros del Puerto de Vista
-	private int height = 1280;
-	private int width = 760;
-	
+public class DesignOpenGLRenderer extends OpenGLRenderer
+{	
 	//Estructura de Datos de la Escena
-	private TEstado estado;
+	private TDesignEstado estado;
 	
 	private FloatArray puntos;
 	private FloatArray puntosDelaunay;
@@ -68,36 +57,23 @@ public class MyOpenGLRenderer implements Renderer
 	private ArrayList<FloatBuffer> bufferTest;
 	/* TEST*/
 	
-	public MyOpenGLRenderer()
-	{
-        xRight = width;
-        xLeft = 0.0f;
-        yTop = height;
-        yBot = 0.0f;
-        xCentro = (xRight + xLeft)/2.0f;
-        yCentro = (yTop + yBot)/2.0f;
-        
-        estado = TEstado.Dibujar;
+	public DesignOpenGLRenderer()
+	{        
+        estado = TDesignEstado.Dibujar;
 
         puntos = new FloatArray();
         handles = new FloatArray();
 	}
 	
-	public TEstado getEstado()
+	public TDesignEstado getEstado()
 	{
 		return estado;
 	}
+	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, xLeft, xRight, yBot, yTop);
-		
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
+		super.onDrawFrame(gl);
 		
 		gl.glPointSize(10.0f);
 		gl.glLineWidth(3.0f);
@@ -108,7 +84,7 @@ public class MyOpenGLRenderer implements Renderer
 			case Dibujar:
 				if(puntos.size > 2)
 				{
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 1.0f, 1.0f, 1.0f, bufferPuntos);
+					dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
 				}
 			break;
 			case BSpline:
@@ -131,7 +107,7 @@ public class MyOpenGLRenderer implements Renderer
 				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 0.0f, 0.0f, 1.0f, bufferSimple);
 			break;
 			case Test:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 1.0f, 1.0f, 1.0f, bufferTest);
+				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 0.0f, 0.0f, 1.0f, bufferTest);
 			break;
 		}
 		
@@ -142,87 +118,13 @@ public class MyOpenGLRenderer implements Renderer
 		}
 		
 		// Dibujar Handles
-		if(estado != TEstado.Dibujar)
+		if(estado != TDesignEstado.Dibujar)
 		{
 			if(handles.size > 0)
 			{
 				dibujarBuffer(gl, GL10.GL_POINTS, 1.0f, 1.0f, 0.0f, 1.0f, bufferHandles);
 			}
 		}
-	}
-
-	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height)
-	{
-		this.xRight = this.xLeft + width;
-		this.yTop = this.yBot + height;
-		this.width = width;
-		this.height = height;
-		
-		gl.glViewport(0, 0, (int)this.width, (int)this.height); 	//Reset The Current Viewport
-		
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, this.xLeft, this.xRight, this.yBot, this.yTop);
-
-		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
-		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
-	}
-
-	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{
-		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); 	//Black Background
-		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup
-		gl.glEnable(GL10.GL_DEPTH_TEST); 			//Enables Depth Testing
-		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
-		
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-        gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, this.xLeft, this.xRight, this.yBot, this.yTop);
-		
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
-	}
-	
-	public void zoom(float factor)
-	{	
-		float newAncho = (xRight-xLeft)*factor;
-		float newAlto = (yTop-yBot)*factor;
-		
-		this.xRight = xCentro + newAncho/2.0f;
-		this.xLeft = xCentro - newAncho/2.0f;
-		this.yTop = yCentro + newAlto/2.0f;
-		this.yBot = yCentro - newAlto/2.0f;
-	}
-	
-	public void drag(float width, float height, float dx, float dy)
-	{	
-		/*this.xLeft += dx * width;
-		this.xRight += dx * width;
-		this.yBot += dy * height;
-		this.yTop += dy * height;*/
-		
-		this.xLeft += dx;
-		this.xRight += dx;
-		this.yBot += dy;
-		this.yTop += dy;
-		
-		this.xCentro = (xRight + xLeft)/2.0f;
-        this.yCentro = (yTop + yBot)/2.0f;
-	}
-	
-	public void restore()
-	{
-		
-        this.xRight = width; 
-        this.xLeft = 0.0f;
-        this.yTop = height;
-        this.yBot = 0.0f;
-        
-        this.xCentro = (xRight + xLeft)/2.0f;
-        this.yCentro = (yTop + yBot)/2.0f;
 	}
 	
 	public void anyadirPunto(float x, float y, float width, float height)
@@ -231,20 +133,25 @@ public class MyOpenGLRenderer implements Renderer
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
-		/*float dx = width/(xRight-xLeft);
-		float dy = height/(yTop-yBot);*/
+		puntos.add(nx);
+		puntos.add(ny);
 		
-		/*if(estado == TEstado.Dibujar)
-		{	*/	
+		bufferPuntos = construirBuffer(puntos);
+		
+		/*
+		float dx = width/(xRight-xLeft);
+		float dy = height/(yTop-yBot);
+		
+		if(estado == TEstado.Dibujar)
+		{		
 			puntos.add(nx);
 			puntos.add(ny);
 			
 			bufferPuntos = construirBuffer(puntos);
-			//TODO
-		/*}
+		}
 		else
-		{ */
-			/*Vector2 p = GeometryUtils.isPointInMesh(puntos, x, height-y, xLeft, yBot, dx, dy);
+		{
+			Vector2 p = GeometryUtils.isPointInMesh(puntos, x, height-y, xLeft, yBot, dx, dy);
 			
 			if(p != null)
 			{
@@ -267,14 +174,15 @@ public class MyOpenGLRenderer implements Renderer
 					bufferHandles = construirBuffer(handles);
 				}
 			}
-		}*/
+		}
+		*/
 	}
 	
 	public void bSpline()
 	{
 		if(puntos.size > 4)
 		{
-			estado = TEstado.BSpline;
+			estado = TDesignEstado.BSpline;
 			handles.clear();
 			
 			if(lineasBSpline == null)
@@ -295,7 +203,7 @@ public class MyOpenGLRenderer implements Renderer
 	{		
 		if(puntos.size > 4)
 		{
-			estado = TEstado.ConvexHull;
+			estado = TDesignEstado.ConvexHull;
 			handles.clear();
 			
 			if(lineasConvexHull == null)
@@ -316,7 +224,7 @@ public class MyOpenGLRenderer implements Renderer
 	{
 		if(puntos.size > 4)
 		{
-			estado = TEstado.Delaunay;
+			estado = TDesignEstado.Delaunay;
 			handles.clear();
 			
 			if(triangulosDelaunay == null)
@@ -338,7 +246,7 @@ public class MyOpenGLRenderer implements Renderer
 	{
 		if(puntos.size > 4) 
 		{
-			estado = TEstado.EarClipping;
+			estado = TDesignEstado.EarClipping;
 			handles.clear();
 			
 			if(triangulosEarClipping == null)
@@ -359,7 +267,7 @@ public class MyOpenGLRenderer implements Renderer
 	{
 		if(puntos.size > 4)
 		{
-			estado = TEstado.MeshGenerator;
+			estado = TDesignEstado.MeshGenerator;
 			handles.clear();
 			
 			if(triangulosMesh == null)
@@ -382,7 +290,7 @@ public class MyOpenGLRenderer implements Renderer
 	{
 		if(puntos.size > 4)
 		{
-			estado = TEstado.Simple;
+			estado = TDesignEstado.Simple;
 			handles.clear();
 			
 			if(lineasSimple == null)
@@ -407,7 +315,7 @@ public class MyOpenGLRenderer implements Renderer
 	{
 		if(puntos.size > 4)
 		{
-			estado = TEstado.Test;
+			estado = TDesignEstado.Test;
 			
 			//if(testSimple()) {
 				// TODO Calcular Iteraciones en función del Area del Poligono
@@ -428,7 +336,7 @@ public class MyOpenGLRenderer implements Renderer
 	
 	public void reiniciarPuntos()
 	{
-		estado = TEstado.Dibujar;
+		estado = TDesignEstado.Dibujar;
 		
 		puntos.clear();
 		puntosMesh = null;

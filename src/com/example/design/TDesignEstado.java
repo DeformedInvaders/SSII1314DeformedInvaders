@@ -1,6 +1,6 @@
-package com.example.main;
+package com.example.design;
 
-public enum TEstado
+public enum TDesignEstado
 {
 	Dibujar, BSpline, ConvexHull, Delaunay, EarClipping, MeshGenerator, Simple, Test
 }
