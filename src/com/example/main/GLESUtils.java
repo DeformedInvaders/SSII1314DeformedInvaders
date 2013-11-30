@@ -5,8 +5,11 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import android.graphics.Color;
 
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
@@ -101,9 +104,9 @@ public class GLESUtils
 		return listabuffer;
 	}
 
-	public static void dibujarBuffer(GL10 gl, int type, float size, float r, float g, float b, float a, FloatBuffer lista)
+	public static void dibujarBuffer(GL10 gl, int type, float size, int color, FloatBuffer lista)
 	{	
-		gl.glColor4f(r, g, b, a);
+		gl.glColor4f(Color.red(color)/255.0f, Color.green(color)/255.0f, Color.blue(color)/255.0f, 1.0f);
 		gl.glLineWidth(size);
 		gl.glFrontFace(GL10.GL_CW);
 		
@@ -114,13 +117,24 @@ public class GLESUtils
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
-	public static void dibujarBuffer(GL10 gl, int type, float size, float r, float g, float b, float a, ArrayList<FloatBuffer> lista)
+	public static void dibujarBuffer(GL10 gl, int type, float size, int color, ArrayList<FloatBuffer> lista)
 	{
 		Iterator<FloatBuffer> it = lista.iterator();
 		while(it.hasNext())
 		{
 			FloatBuffer buffer = it.next();
-			dibujarBuffer(gl, type, size, r, g, b, a, buffer);
+			dibujarBuffer(gl, type, size, color, buffer);
 		}
+	}
+	
+	public static int generarColor()
+	{
+		Random rand = new Random();
+		
+		int red = (int)(255*rand.nextFloat());
+		int green = (int)(255*rand.nextFloat());
+		int blue = (int)(255*rand.nextFloat());
+		
+		return Color.rgb(red, green, blue);
 	}
 }

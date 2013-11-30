@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Color;
+
 import com.example.main.GLESUtils;
 import com.example.main.OpenGLRenderer;
 import com.example.math.BSpline;
@@ -81,37 +83,37 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			case Dibujar:
 				if(puntos.size > 2)
 				{
-					GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
+					GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferPuntos);
 				}
 			break;
 			case BSpline:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 1.0f, 1.0f, 0.0f, 1.0f, bufferBSpline);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.YELLOW, bufferBSpline);
 			break;
 			case ConvexHull:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 0.0f, 1.0f, 1.0f, bufferConvexHull);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.GREEN, bufferConvexHull);
 			break;
 			case Delaunay:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 1.0f, 0.0f, 1.0f, bufferDelaunay);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLUE, bufferDelaunay);
 			break;
 			case EarClipping:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.5f, 0.5f, 0.5f, 1.0f, bufferEarClipping);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.GRAY, bufferEarClipping);
 			break;
 			case MeshGenerator:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 1.0f, 1.0f, 1.0f, bufferMeshTriangles);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.MAGENTA, bufferMeshTriangles);
 			break;
 			case Simple:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 1.0f, 0.0f, 1.0f, 1.0f, bufferPuntos);
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 1.0f, 0.0f, 0.0f, 1.0f, bufferSimple);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.LTGRAY, bufferPuntos);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.RED, bufferSimple);
 			break;
 			case Test:
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f, bufferTest);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferTest);
 			break;
 		}
 		
 		// Dibujar Puntos
 		if(puntos.size > 0)
 		{
-			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, 1.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
+			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, Color.RED, bufferPuntos);
 		}
 		
 		// Dibujar Handles
@@ -119,7 +121,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			if(handles.size > 0)
 			{
-				GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, 1.0f, 1.0f, 0.0f, 1.0f, bufferHandles);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, Color.YELLOW, bufferHandles);
 			}
 		}
 	}
@@ -269,7 +271,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	/* TEST */
-	public boolean test()
+	public Mesh test()
 	{
 		if(puntos.size > 4)
 		{
@@ -284,12 +286,13 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				
 				bufferTest = GLESUtils.construirTriangulosBuffer(triangulosTest, puntosTest);
 				
-				return true;
+				return m;
 			//}
 		}
 		
-		return false;
+		return null;
 	}
+	
 	/* TEST */
 	
 	public void reiniciarPuntos()

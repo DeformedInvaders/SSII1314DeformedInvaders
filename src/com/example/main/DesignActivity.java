@@ -1,6 +1,7 @@
 package com.example.main;
 
 import com.example.design.DesignGLSurfaceView;
+import com.example.utils.Mesh;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,9 +34,16 @@ public class DesignActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
-				//TODO Compartir ShortArray triangulos y FloatArray puntos de Test()
-				startActivity(intent);
+				boolean b = canvas.pruebaCompleta();
+				
+				if(b) {
+					Mesh m = canvas.getPruebaCompleta();
+					
+					Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
+					intent.putExtra("Triangulos", m.getTriangulos());
+					intent.putExtra("Puntos", m.getVertices());
+					startActivity(intent);
+				}
 			}
 		});
 	}

@@ -10,6 +10,7 @@ import android.view.ScaleGestureDetector;
 import com.example.touch.DoubleTouchGestureListener;
 import com.example.touch.DragGestureDetector;
 import com.example.touch.ScaleGestureListener;
+import com.example.utils.Mesh;
 
 public class DesignGLSurfaceView extends GLSurfaceView
 {
@@ -113,9 +114,14 @@ public class DesignGLSurfaceView extends GLSurfaceView
 	
 	public boolean pruebaCompleta()
 	{
-		boolean b = renderer.test();
+		Mesh m = renderer.test();
 		requestRender();
-		return b;
+		return m != null;
+	}
+	
+	public Mesh getPruebaCompleta()
+	{
+		return renderer.test();
 	}
 	
 	public void reiniciarPuntos()

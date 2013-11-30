@@ -16,6 +16,7 @@
 
 package com.example.utils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import com.example.math.MathUtils;
@@ -23,7 +24,10 @@ import com.example.math.MathUtils;
 /** A resizable, ordered or unordered float array. Avoids the boxing that occurs with ArrayList<Float>. If unordered, this class
  * avoids a memory copy when removing elements (the last element is moved to the removed element's position).
  * @author Nathan Sweet */
-public class FloatArray {
+public class FloatArray implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public float[] items;
 	public int size;
 	public boolean ordered;

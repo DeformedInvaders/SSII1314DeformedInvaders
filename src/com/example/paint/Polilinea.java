@@ -14,30 +14,27 @@ public class Polilinea
 	private FloatArray puntos;
 	private FloatBuffer buffer;
 	
-	private float size, colorR, colorG, colorB;
+	private int color;
+	private float size;
 	
-	public Polilinea(float colorR, float colorG, float colorB, float size)
+	public Polilinea(int color, float size)
 	{	
 		this.puntos = new FloatArray();
 		
 		this.size = size;
-		this.colorR = colorR;
-		this.colorG = colorG;
-		this.colorB = colorB;
+		this.color = color;
 	}
 	
-	public Polilinea(Punto p, float colorR, float colorG, float colorB, float size)
+	public Polilinea(Punto p, int color, float size)
 	{	
 		this.puntos = new FloatArray();
 		this.anyadirPunto(p);
 		
 		this.size = size;
-		this.colorR = colorR;
-		this.colorG = colorG;
-		this.colorB = colorB;
+		this.color = color;
 	}
 	
-	public Polilinea(Collection<Punto> c, float colorR, float colorG, float colorB, float size)
+	public Polilinea(Collection<Punto> c, int color, float size)
 	{	
 		this.puntos = new FloatArray();
 		
@@ -48,9 +45,7 @@ public class Polilinea
 		}
 		
 		this.size = size;
-		this.colorR = colorR;
-		this.colorG = colorG;
-		this.colorB = colorB;
+		this.color = color;
 	}
 	
 	public boolean anyadirPunto(Punto p)
@@ -67,7 +62,7 @@ public class Polilinea
 	{		
 		if(puntos.size > 1)
 		{
-			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_STRIP, size, colorR, colorG, colorB, 1.0f, buffer);
+			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_STRIP, size, color, buffer);
 		}
 	}
 }
