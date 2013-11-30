@@ -1,4 +1,4 @@
-package com.example.data;
+package com.example.paint;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

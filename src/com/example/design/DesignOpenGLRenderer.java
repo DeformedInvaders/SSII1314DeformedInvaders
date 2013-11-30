@@ -1,13 +1,11 @@
 package com.example.design;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.example.main.GLESUtils;
 import com.example.main.OpenGLRenderer;
 import com.example.math.BSpline;
 import com.example.math.ConvexHull;
@@ -76,7 +74,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		super.onDrawFrame(gl);
 		
 		gl.glPointSize(10.0f);
-		gl.glLineWidth(3.0f);
 				
 		// Dibujar Segmentos
 		switch(estado)
@@ -84,37 +81,37 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			case Dibujar:
 				if(puntos.size > 2)
 				{
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
+					GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
 				}
 			break;
 			case BSpline:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 1.0f, 0.0f, 1.0f, bufferBSpline);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 1.0f, 1.0f, 0.0f, 1.0f, bufferBSpline);
 			break;
 			case ConvexHull:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 0.0f, 1.0f, 1.0f, bufferConvexHull);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 0.0f, 1.0f, 1.0f, bufferConvexHull);
 			break;
 			case Delaunay:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 1.0f, 0.0f, 1.0f, bufferDelaunay);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 1.0f, 0.0f, 1.0f, bufferDelaunay);
 			break;
 			case EarClipping:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.5f, 0.5f, 0.5f, 1.0f, bufferEarClipping);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.5f, 0.5f, 0.5f, 1.0f, bufferEarClipping);
 			break;
 			case MeshGenerator:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 1.0f, 1.0f, 1.0f, bufferMeshTriangles);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 1.0f, 1.0f, 1.0f, bufferMeshTriangles);
 			break;
 			case Simple:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 0.0f, 1.0f, 1.0f, bufferPuntos);
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, 0.0f, 0.0f, 1.0f, bufferSimple);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 1.0f, 0.0f, 1.0f, 1.0f, bufferPuntos);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 1.0f, 0.0f, 0.0f, 1.0f, bufferSimple);
 			break;
 			case Test:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, 0.0f, 0.0f, 0.0f, 1.0f, bufferTest);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f, bufferTest);
 			break;
 		}
 		
 		// Dibujar Puntos
 		if(puntos.size > 0)
 		{
-			dibujarBuffer(gl, GL10.GL_POINTS, 1.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
+			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, 1.0f, 0.0f, 0.0f, 1.0f, bufferPuntos);
 		}
 		
 		// Dibujar Handles
@@ -122,7 +119,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			if(handles.size > 0)
 			{
-				dibujarBuffer(gl, GL10.GL_POINTS, 1.0f, 1.0f, 0.0f, 1.0f, bufferHandles);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, 1.0f, 1.0f, 0.0f, 1.0f, bufferHandles);
 			}
 		}
 	}
@@ -136,46 +133,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		puntos.add(nx);
 		puntos.add(ny);
 		
-		bufferPuntos = construirBuffer(puntos);
-		
-		/*
-		float dx = width/(xRight-xLeft);
-		float dy = height/(yTop-yBot);
-		
-		if(estado == TEstado.Dibujar)
-		{		
-			puntos.add(nx);
-			puntos.add(ny);
-			
-			bufferPuntos = construirBuffer(puntos);
-		}
-		else
-		{
-			Vector2 p = GeometryUtils.isPointInMesh(puntos, x, height-y, xLeft, yBot, dx, dy);
-			
-			if(p != null)
-			{
-				handles.add(p.x);	
-				handles.add(p.y);
-				
-				bufferHandles = construirBuffer(handles);
-				return;
-			}
-			
-			if(estado == TEstado.MeshGenerator)
-			{
-				p = GeometryUtils.isPointInMesh(puntosMesh, x, height-y, xLeft, yBot, dx, dy);
-				
-				if(p != null)
-				{
-					handles.add(p.x);	
-					handles.add(p.y);
-					
-					bufferHandles = construirBuffer(handles);
-				}
-			}
-		}
-		*/
+		bufferPuntos = GLESUtils.construirBuffer(puntos);
 	}
 	
 	public void bSpline()
@@ -188,7 +146,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if(lineasBSpline == null)
 			{
 				lineasBSpline = calcularBSpline(puntos, 3, 100f);
-				bufferBSpline = construirBuffer(lineasBSpline);
+				bufferBSpline = GLESUtils.construirBuffer(lineasBSpline);
 			}
 		}
 	}
@@ -209,7 +167,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if(lineasConvexHull == null)
 			{
 				lineasConvexHull = calcularConvexHull(puntos, false);
-				bufferConvexHull = construirBuffer(lineasConvexHull);
+				bufferConvexHull = GLESUtils.construirBuffer(lineasConvexHull);
 			}
 		}
 	}
@@ -231,7 +189,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			{
 				puntosDelaunay = new FloatArray(puntos);
 				triangulosDelaunay = calcularDelaunay(puntosDelaunay, false);
-				bufferDelaunay = construirTriangulosBuffer(triangulosDelaunay, puntosDelaunay);
+				bufferDelaunay = GLESUtils.construirTriangulosBuffer(triangulosDelaunay, puntosDelaunay);
 			}
 		}
 	}
@@ -252,7 +210,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if(triangulosEarClipping == null)
 			{
 				triangulosEarClipping = calcularEarClipping(puntos);
-				bufferEarClipping = construirTriangulosBuffer(triangulosEarClipping, puntos);
+				bufferEarClipping = GLESUtils.construirTriangulosBuffer(triangulosEarClipping, puntos);
 			}
 		}
 	}
@@ -275,7 +233,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				Mesh m = calcularMeshGenerator(puntos, 3, 10.0f);
 				puntosMesh = m.getVertices();
 				triangulosMesh = m.getTriangulos();
-				bufferMeshTriangles = construirTriangulosBuffer(triangulosMesh, puntosMesh);
+				bufferMeshTriangles = GLESUtils.construirTriangulosBuffer(triangulosMesh, puntosMesh);
 			}
 		}
 	}
@@ -296,7 +254,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if(lineasSimple == null)
 			{
 				lineasSimple = calcularPoligonoSimple(puntos, false);
-				bufferSimple = construirLineasBuffer(lineasSimple, puntos);
+				bufferSimple = GLESUtils.construirLineasBuffer(lineasSimple, puntos);
 			}
 			
 			return lineasSimple.size == 0;
@@ -324,7 +282,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				puntosTest = m.getVertices();
 				triangulosTest = m.getTriangulos();
 				
-				bufferTest = this.construirTriangulosBuffer(triangulosTest, puntosTest);
+				bufferTest = GLESUtils.construirTriangulosBuffer(triangulosTest, puntosTest);
 				
 				return true;
 			//}
@@ -354,115 +312,5 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		puntosTest = null;
 		triangulosTest = null;
 		/* TEST */ 
-	}
-
-	private FloatBuffer construirBuffer(FloatArray lista)
-	{	
-		int arrayLong = lista.size;
-		float[] arrayPuntos = new float[arrayLong];
-		for(int i = 0; i < lista.size; i++)
-		{
-			arrayPuntos[i] = lista.get(i);
-		}
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(arrayLong * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		FloatBuffer buffer = byteBuf.asFloatBuffer();
-		buffer.put(arrayPuntos);
-		buffer.position(0);
-		
-		return buffer;
-	}
-	
-	private ArrayList<FloatBuffer> construirLineasBuffer(ShortArray lista, FloatArray puntos)
-	{
-		int arrayLong = 2 * 2;
-		ArrayList<FloatBuffer> listabuffer = new ArrayList<FloatBuffer>();
-		
-		int j = 0;
-		while(j < lista.size)
-		{
-			short a = lista.get(j);
-			short b = lista.get(j+1);
-			
-			float[] arrayPuntos = new float[arrayLong];
-			
-			arrayPuntos[0] = puntos.get(2*a);
-			arrayPuntos[1] = puntos.get(2*a+1);
-			
-			arrayPuntos[2] = puntos.get(2*b);
-			arrayPuntos[3] = puntos.get(2*b+1);		
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(arrayLong * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			FloatBuffer buffer = byteBuf.asFloatBuffer();
-			buffer.put(arrayPuntos);
-			buffer.position(0);
-
-			listabuffer.add(buffer);
-			
-			j = j+2;
-		}		
-		
-		return listabuffer;
-	}
-	
-	private ArrayList<FloatBuffer> construirTriangulosBuffer(ShortArray lista, FloatArray puntos)
-	{
-		int arrayLong = 2 * 3;
-		ArrayList<FloatBuffer> listabuffer = new ArrayList<FloatBuffer>();
-		
-		int j = 0;
-		while(j < lista.size)
-		{
-			short a = lista.get(j);
-			short b = lista.get(j+1);
-			short c = lista.get(j+2);
-			
-			float[] arrayPuntos = new float[arrayLong];
-			
-			arrayPuntos[0] = puntos.get(2*a);
-			arrayPuntos[1] = puntos.get(2*a+1);
-			
-			arrayPuntos[2] = puntos.get(2*b);
-			arrayPuntos[3] = puntos.get(2*b+1);
-			
-			arrayPuntos[4] = puntos.get(2*c);
-			arrayPuntos[5] = puntos.get(2*c+1);			
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(arrayLong * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			FloatBuffer buffer = byteBuf.asFloatBuffer();
-			buffer.put(arrayPuntos);
-			buffer.position(0);
-
-			listabuffer.add(buffer);
-			
-			j = j+3;
-		}		
-		
-		return listabuffer;
-	}
-
-	private void dibujarBuffer(GL10 gl, int type, float r, float g, float b, float a, FloatBuffer lista)
-	{	
-		gl.glColor4f(r, g, b, a);
-		gl.glFrontFace(GL10.GL_CW);
-		
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, lista);
-		
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-			gl.glDrawArrays(type, 0, lista.capacity() / 2);
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	}
-	
-	private void dibujarBuffer(GL10 gl, int type, float r, float g, float b, float a, ArrayList<FloatBuffer> lista)
-	{
-		Iterator<FloatBuffer> it = lista.iterator();
-		while(it.hasNext())
-		{
-			FloatBuffer buffer = it.next();
-			dibujarBuffer(gl, type, r, g, b, a, buffer);
-		}
 	}
 }

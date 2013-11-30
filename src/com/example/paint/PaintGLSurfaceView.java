@@ -1,8 +1,5 @@
 package com.example.paint;
 
-import com.example.touch.DoubleTouchGestureListener;
-import com.example.touch.ScaleGestureListener;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -10,12 +7,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-public class PaintGLSurfaceView extends GLSurfaceView {
+import com.example.touch.DoubleTouchGestureListener;
+import com.example.touch.DragGestureDetector;
+import com.example.touch.ScaleGestureListener;
 
+public class PaintGLSurfaceView extends GLSurfaceView
+{
     private final PaintOpenGLRenderer renderer;
     
     private ScaleGestureDetector scaleDectector;
-    private GestureDetector gestureDetector;
+    private GestureDetector doubleTouchDetector;
+    private DragGestureDetector dragDetector;
 
     public PaintGLSurfaceView(Context context, AttributeSet attrs)
     {
@@ -32,7 +34,8 @@ public class PaintGLSurfaceView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         
         scaleDectector = new ScaleGestureDetector(context, new ScaleGestureListener(renderer));
-        gestureDetector = new GestureDetector(context, new DoubleTouchGestureListener(renderer));
+        doubleTouchDetector = new GestureDetector(context, new DoubleTouchGestureListener(renderer));
+        dragDetector = new DragGestureDetector(renderer);
     }
 
 	@Override
@@ -46,13 +49,60 @@ public class PaintGLSurfaceView extends GLSurfaceView {
 		float width = getWidth();
 		float height = getHeight();
 		
-		if(action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
-			renderer.anyadirPunto(x, y, width, height);			
-			requestRender();
+		TPaintEstado estado = renderer.getEstado();
+		
+		if(estado == TPaintEstado.Pincel)
+		{
+			switch(action)
+			{
+				case MotionEvent.ACTION_DOWN:
+					renderer.crearPolilinea();
+					renderer.anyadirPunto(x, y, width, height);
+				break;
+				case MotionEvent.ACTION_MOVE:
+					renderer.anyadirPunto(x, y, width, height);	
+				break;
+				case MotionEvent.ACTION_UP:
+					renderer.anyadirPunto(x, y, width, height);
+					renderer.guardarPolilinea();
+				break;
+			}
+		}
+		else if(estado == TPaintEstado.Cubo)
+		{
+			renderer.anyadirPunto(x, y, width, height);	
+		}
+		else {
+			if(event.getPointerCount() == 1)
+			{
+				dragDetector.onTouchEvent(event, x, y, width, height);
+				doubleTouchDetector.onTouchEvent(event);
+			}
+			else
+			{
+				scaleDectector.onTouchEvent(event);
+			}
 		}
 		
-		scaleDectector.onTouchEvent(event);
-		gestureDetector.onTouchEvent(event);
+		requestRender();
 		return true;
+	}
+	
+	public void seleccionarMano()
+	{
+		renderer.guardarPolilinea();
+		renderer.seleccionarMano();
+	}
+	
+	public void seleccionarPincel()
+	{
+		renderer.guardarPolilinea();
+		renderer.seleccionarPincel();
+	}
+	
+	public void seleccionarCubo()
+	{
+		renderer.guardarPolilinea();
+		renderer.seleccionarCubo();
 	}
 }

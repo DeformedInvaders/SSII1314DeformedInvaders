@@ -12,7 +12,7 @@ import com.example.paint.PaintGLSurfaceView;
 public class PaintActivity extends Activity {
 
 	private PaintGLSurfaceView canvas;
-	private Button botonPincel, botonCubo;
+	private Button botonPincel, botonCubo, botonMano;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,22 +21,38 @@ public class PaintActivity extends Activity {
 		
 		botonPincel = (Button) findViewById(R.id.button2);
 		botonCubo = (Button) findViewById(R.id.button3);
+		botonMano = (Button) findViewById(R.id.button4);
 		
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
 		
-		botonPincel.setOnClickListener(new OnClickListener() {
+		botonPincel.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
+			public void onClick(View arg0)
+			{
+				canvas.seleccionarPincel();
+				//TODO Lanzar Size Picker
 				Toast.makeText(getApplication(), "Pincel Seleccionado", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
-		botonCubo.setOnClickListener(new OnClickListener() {
+		botonCubo.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				canvas.seleccionarCubo();
+				//TODO Lanzar RGB Picker
+				Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		botonMano.setOnClickListener(new OnClickListener()
+		{
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
+				canvas.seleccionarMano();
+				Toast.makeText(getApplication(), "Mano Seleccionada", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

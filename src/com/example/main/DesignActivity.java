@@ -34,6 +34,7 @@ public class DesignActivity extends Activity
 			public void onClick(View arg0)
 			{
 				Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
+				//TODO Compartir ShortArray triangulos y FloatArray puntos de Test()
 				startActivity(intent);
 			}
 		});

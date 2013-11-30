@@ -1,8 +1,5 @@
 package com.example.design;
 
-import com.example.touch.DoubleTouchGestureListener;
-import com.example.touch.ScaleGestureListener;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -10,16 +7,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import com.example.touch.DoubleTouchGestureListener;
+import com.example.touch.DragGestureDetector;
+import com.example.touch.ScaleGestureListener;
 
 public class DesignGLSurfaceView extends GLSurfaceView
 {
     private final DesignOpenGLRenderer renderer;
     
     private ScaleGestureDetector scaleDectector;
-    private GestureDetector gestureDetector;
-    
-    private float lastX;
-	private float lastY;
+    private GestureDetector doubleTouchDetector;
+    private DragGestureDetector dragDetector;
  
     public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
@@ -36,7 +34,8 @@ public class DesignGLSurfaceView extends GLSurfaceView
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         
         scaleDectector = new ScaleGestureDetector(context, new ScaleGestureListener(renderer));
-        gestureDetector = new GestureDetector(context, new DoubleTouchGestureListener(renderer));
+        doubleTouchDetector = new GestureDetector(context, new DoubleTouchGestureListener(renderer));
+        dragDetector = new DragGestureDetector(renderer);
     }
 
 	@Override
@@ -50,56 +49,28 @@ public class DesignGLSurfaceView extends GLSurfaceView
 		float width = getWidth();
 		float height = getHeight();
 		
-		if(event.getPointerCount() == 1)
+		if(renderer.getEstado() == TDesignEstado.Dibujar)
 		{
-			if(renderer.getEstado() == TDesignEstado.Dibujar)		
+			if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
 			{
-				if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
-				{
-					renderer.anyadirPunto(x, y, width, height);			
-					requestRender();
-				}
+				renderer.anyadirPunto(x, y, width, height);			
+				requestRender();
+			}
+		}
+		else 
+		{
+			if(event.getPointerCount() == 1)
+			{		
+				dragDetector.onTouchEvent(event, x, y, width, height);
+				doubleTouchDetector.onTouchEvent(event);
 			}
 			else
 			{
-				if(action == MotionEvent.ACTION_DOWN)
-				{
-					lastX = x;
-					lastY = height - y;
-				}
-				else if(action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
-				{
-					float dx = x - lastX;
-					float dy = height - y - lastY;
-					
-					if(dx > 30) {
-						dx = -5f;
-					}
-					else if(dx < -30) {
-						dx = 5f;
-					}
-					else {
-						dx = 0f;
-					}
-					
-					if(dy > 30) {
-						dy = -5f;
-					}
-					else if(dy < -30) {
-						dy = 5f;
-					}
-					else { 
-						dy = 0f;
-					}
-					
-					renderer.drag(getWidth(), getHeight(), dx, dy);
-					
-					requestRender();
-				}
+				scaleDectector.onTouchEvent(event);
 			}
 		}
-		scaleDectector.onTouchEvent(event);
-		gestureDetector.onTouchEvent(event);
+		
+		requestRender();
 		return true;
 	}
 	

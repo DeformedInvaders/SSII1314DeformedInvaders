@@ -31,25 +31,26 @@ public final class R {
         public static final int button1=0x7f080002;
         public static final int button2=0x7f080007;
         public static final int button3=0x7f080008;
+        public static final int button4=0x7f080009;
         public static final int designGLSurfaceView1=0x7f080001;
-        public static final int group1=0x7f080009;
-        public static final int itemAlgorithms=0x7f080013;
-        public static final int itemBSpline=0x7f080014;
-        public static final int itemConvexHull=0x7f080015;
-        public static final int itemDelaunay=0x7f080016;
-        public static final int itemDragDown=0x7f080011;
-        public static final int itemDragLeft=0x7f08000f;
-        public static final int itemDragRight=0x7f08000e;
-        public static final int itemDragUp=0x7f080010;
-        public static final int itemEarClipping=0x7f080017;
-        public static final int itemMesh=0x7f080018;
-        public static final int itemNew=0x7f08000a;
-        public static final int itemReset=0x7f080012;
-        public static final int itemRun=0x7f08001a;
-        public static final int itemSimple=0x7f080019;
-        public static final int itemView=0x7f08000b;
-        public static final int itemZoomIn=0x7f08000c;
-        public static final int itemZoomOut=0x7f08000d;
+        public static final int group1=0x7f08000a;
+        public static final int itemAlgorithms=0x7f080014;
+        public static final int itemBSpline=0x7f080015;
+        public static final int itemConvexHull=0x7f080016;
+        public static final int itemDelaunay=0x7f080017;
+        public static final int itemDragDown=0x7f080012;
+        public static final int itemDragLeft=0x7f080010;
+        public static final int itemDragRight=0x7f08000f;
+        public static final int itemDragUp=0x7f080011;
+        public static final int itemEarClipping=0x7f080018;
+        public static final int itemMesh=0x7f080019;
+        public static final int itemNew=0x7f08000b;
+        public static final int itemReset=0x7f080013;
+        public static final int itemRun=0x7f08001b;
+        public static final int itemSimple=0x7f08001a;
+        public static final int itemView=0x7f08000c;
+        public static final int itemZoomIn=0x7f08000d;
+        public static final int itemZoomOut=0x7f08000e;
         public static final int progressBar1=0x7f080004;
         public static final int textView1=0x7f080003;
     }
@@ -64,12 +65,13 @@ public final class R {
         public static final int paint_menu=0x7f070002;
     }
     public static final class string {
-        public static final int action_settings=0x7f050018;
+        /**  Proyecto 
+         */
         public static final int app_name=0x7f050000;
         public static final int boton_cubo=0x7f050016;
+        public static final int boton_mano=0x7f050018;
         public static final int boton_next=0x7f050014;
         public static final int boton_pincel=0x7f050017;
-        public static final int hello_world=0x7f050019;
         public static final int item_algorithm=0x7f050004;
         public static final int item_bspline=0x7f050006;
         public static final int item_clear=0x7f05000c;
@@ -88,7 +90,11 @@ public final class R {
         public static final int item_view=0x7f050003;
         public static final int item_zoom_in=0x7f05000d;
         public static final int item_zoom_out=0x7f05000e;
+        /**  Fase de Modelado 
+         */
         public static final int title_activity_model=0x7f050001;
+        /**  Fase de Pintura 
+         */
         public static final int title_activity_paint=0x7f050015;
     }
     public static final class style {
