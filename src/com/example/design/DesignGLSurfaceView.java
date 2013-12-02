@@ -7,10 +7,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import com.example.main.Esqueleto;
 import com.example.touch.DoubleTouchGestureListener;
 import com.example.touch.DragGestureDetector;
 import com.example.touch.ScaleGestureListener;
-import com.example.utils.Mesh;
 
 public class DesignGLSurfaceView extends GLSurfaceView
 {
@@ -114,12 +114,12 @@ public class DesignGLSurfaceView extends GLSurfaceView
 	
 	public boolean pruebaCompleta()
 	{
-		Mesh m = renderer.test();
+		Esqueleto e = renderer.test();
 		requestRender();
-		return m != null;
+		return e != null;
 	}
 	
-	public Mesh getPruebaCompleta()
+	public Esqueleto getPruebaCompleta()
 	{
 		return renderer.test();
 	}

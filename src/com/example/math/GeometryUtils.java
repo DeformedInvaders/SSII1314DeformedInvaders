@@ -167,6 +167,11 @@ public class GeometryUtils {
 		return listaCortes;
 	}
 	
+	public static boolean isPointInsideMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
+		// TODO
+		return true;
+	}
+	
 	public static Vector2 isPointInMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
 		// TODO
 		Vector2 punto = new Vector2();

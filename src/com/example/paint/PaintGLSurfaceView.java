@@ -7,11 +7,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import com.example.main.Esqueleto;
 import com.example.touch.DoubleTouchGestureListener;
 import com.example.touch.DragGestureDetector;
 import com.example.touch.ScaleGestureListener;
-import com.example.utils.FloatArray;
-import com.example.utils.ShortArray;
 
 public class PaintGLSurfaceView extends GLSurfaceView
 {
@@ -108,8 +107,26 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		renderer.seleccionarCubo();
 	}
 	
-	public void setEsqueleto(FloatArray puntos, ShortArray triangulos)
+	public void anteriorAccion()
 	{
-		renderer.setEsqueleto(puntos, triangulos);
+		renderer.anteriorAccion();
+		requestRender();
+	}
+	
+	public void siguienteAccion()
+	{
+		renderer.siguienteAccion();
+		requestRender();
+	}
+	
+	public void reiniciar()
+	{
+		renderer.reiniciar();
+		requestRender();
+	}
+	
+	public void setEsqueleto(Esqueleto esqueleto)
+	{
+		renderer.setEsqueleto(esqueleto);
 	}
 }

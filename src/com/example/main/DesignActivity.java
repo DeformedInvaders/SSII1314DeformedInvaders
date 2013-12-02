@@ -1,8 +1,5 @@
 package com.example.main;
 
-import com.example.design.DesignGLSurfaceView;
-import com.example.utils.Mesh;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,13 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.example.design.DesignGLSurfaceView;
 
 public class DesignActivity extends Activity
 {
 	private DesignGLSurfaceView canvas;
-	private Button next;
+	private ImageButton botonReady;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -27,9 +26,9 @@ public class DesignActivity extends Activity
 		setContentView(R.layout.design_layout);
 		
 		canvas = (DesignGLSurfaceView) findViewById(R.id.designGLSurfaceView1);
-		next = (Button) findViewById(R.id.button1);
+		botonReady = (ImageButton) findViewById(R.id.imageButton0);
 		
-		next.setOnClickListener(new OnClickListener()
+		botonReady.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View arg0)
@@ -37,11 +36,10 @@ public class DesignActivity extends Activity
 				boolean b = canvas.pruebaCompleta();
 				
 				if(b) {
-					Mesh m = canvas.getPruebaCompleta();
+					Esqueleto e = canvas.getPruebaCompleta();
 					
 					Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
-					intent.putExtra("Triangulos", m.getTriangulos());
-					intent.putExtra("Puntos", m.getVertices());
+					intent.putExtra("Esqueleto", e);
 					startActivity(intent);
 				}
 			}

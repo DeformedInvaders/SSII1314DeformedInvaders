@@ -4,17 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.paint.PaintGLSurfaceView;
-import com.example.utils.FloatArray;
-import com.example.utils.ShortArray;
 
 public class PaintActivity extends Activity
 {
 	private PaintGLSurfaceView canvas;
-	private Button botonPincel, botonCubo, botonMano, botonNext;
+	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -22,18 +20,20 @@ public class PaintActivity extends Activity
 		super.onCreate(savedInstanceState);
 		
 		Bundle bundle = getIntent().getExtras();
-		FloatArray puntos = (FloatArray) bundle.get("Puntos");
-		ShortArray triangulos = (ShortArray) bundle.get("Triangulos");
+		Esqueleto e = (Esqueleto) bundle.get("Esqueleto");
 		
 		setContentView(R.layout.paint_layout);
 		
-		botonPincel = (Button) findViewById(R.id.button2);
-		botonCubo = (Button) findViewById(R.id.button3);
-		botonMano = (Button) findViewById(R.id.button4);
-		botonNext = (Button) findViewById(R.id.button5);
+		botonPincel = (ImageButton) findViewById(R.id.imageButton1);
+		botonCubo = (ImageButton) findViewById(R.id.imageButton2);
+		botonMano = (ImageButton) findViewById(R.id.imageButton3);
+		botonPrev = (ImageButton) findViewById(R.id.imageButton4);
+		botonNext = (ImageButton) findViewById(R.id.imageButton5);
+		botonDelete = (ImageButton) findViewById(R.id.imageButton6);
+		botonReady = (ImageButton) findViewById(R.id.imageButton7);
 		
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
-		canvas.setEsqueleto(puntos, triangulos);
+		canvas.setEsqueleto(e);
 		
 		botonPincel.setOnClickListener(new OnClickListener()
 		{
@@ -70,7 +70,36 @@ public class PaintActivity extends Activity
 		{
 			@Override
 			public void onClick(View arg0) {
-				// TODO Obtener BMP, Procesar Coordenadas de Textura
+				canvas.siguienteAccion();
+				Toast.makeText(getApplication(), "Next", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		botonPrev.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0) {
+				canvas.anteriorAccion();
+				Toast.makeText(getApplication(), "Previous", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		botonDelete.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0) {
+				canvas.reiniciar();
+				Toast.makeText(getApplication(), "Deleted", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		botonReady.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0) {
+				// TODO Obtener BMP, Procesar Coordenadas de Textura, Intent a Animaciones
+			    //View content = findViewById(R.id.designGLSurfaceView1);
+			    //Bitmap bitmap = content.getDrawingCache();
 				Toast.makeText(getApplication(), "Coming Soon!", Toast.LENGTH_SHORT).show();
 			}
 		});

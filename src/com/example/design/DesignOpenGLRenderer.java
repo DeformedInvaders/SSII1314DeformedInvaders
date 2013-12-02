@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Color;
 
+import com.example.main.Esqueleto;
 import com.example.main.GLESUtils;
 import com.example.main.OpenGLRenderer;
 import com.example.math.BSpline;
@@ -271,7 +272,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	/* TEST */
-	public Mesh test()
+	public Esqueleto test()
 	{
 		if(puntos.size > 4)
 		{
@@ -286,7 +287,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				
 				bufferTest = GLESUtils.construirTriangulosBuffer(triangulosTest, puntosTest);
 				
-				return m;
+				return new Esqueleto(bsplineVertices, puntosTest, triangulosTest);
 			//}
 		}
 		

@@ -4,32 +4,39 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Color;
 
+import com.example.main.Esqueleto;
 import com.example.main.GLESUtils;
 import com.example.main.OpenGLRenderer;
 import com.example.math.GeometryUtils;
-import com.example.math.Vector2;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {	
+	/* Estructura de datos */
 	private List<Polilinea> lista;
 	private Polilinea linea;
+	private TPaintEstado estado;
+	private int colorPincel, colorCubo;
+	private float sizeLinea;
 	
+	/* Esqueleto */	
+	private FloatArray hull;
 	private ShortArray triangulos;
 	private FloatArray puntos;
 	private int color;
 	private ArrayList<FloatBuffer> buffer;
+	private FloatBuffer bufferHull;
 	
-	private TPaintEstado estado;
-	private int colorPincel;
-	private int colorCubo;
-	private float sizeLinea;
+	/* Anterior Siguiente Buffers */
+	private Stack<Accion> anteriores;
+	private Stack<Accion> siguientes;
 	
 	public PaintOpenGLRenderer()
 	{
@@ -42,8 +49,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         this.colorPincel = Color.RED;
         this.colorCubo = Color.BLUE;
-        this.color = Color.BLACK;
         this.sizeLinea = 3.0f;
+        
+        this.anteriores = new Stack<Accion>();
+        this.siguientes = new Stack<Accion>();
 	}
 	
 	@Override
@@ -55,6 +64,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if(puntos != null && triangulos != null)
 		{
 			GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, buffer);
+			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
 		}
 		
 		// Detalles
@@ -92,12 +102,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return estado;
 	}
 	
-	public void setEsqueleto(FloatArray puntos, ShortArray triangulos)
+	public void setEsqueleto(Esqueleto esqueleto)
 	{
-		this.puntos = puntos;
-		this.triangulos = triangulos;
+		this.hull = esqueleto.getHull();
+		this.puntos = esqueleto.getMesh();
+		this.triangulos = esqueleto.getTriangles();
+		this.color = esqueleto.getColor();
 		
 		this.buffer = GLESUtils.construirTriangulosBuffer(this.triangulos, this.puntos);
+		this.bufferHull = GLESUtils.construirBuffer(this.hull);
 	}
 	
 	public void anyadirPunto(float x, float y, float width, float height)
@@ -115,11 +128,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			float dx = width/(xRight-xLeft);
 			float dy = height/(yTop-yBot);
 			
-			Vector2 v = GeometryUtils.isPointInMesh(puntos, x, y, xLeft, yBot, dx, dy);
-			
-			if(v != null)
+			if(GeometryUtils.isPointInsideMesh(hull, x, y, xLeft, yBot, dx, dy))
 			{
-				color = colorCubo;
+				if(colorCubo != color)
+				{
+					color = colorCubo;
+					this.anteriores.push(new Accion(colorCubo));
+					this.siguientes.clear();
+				}
 			}
 		}
 	}
@@ -134,7 +150,59 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if(linea != null)
 		{
 			this.lista.add(linea);
+			this.anteriores.push(new Accion(linea));
+			this.siguientes.clear();
 			this.linea = null;
 		}
+	}
+
+	public void anteriorAccion()
+	{
+		if(!anteriores.isEmpty())
+		{
+			Accion accion = anteriores.pop();
+			siguientes.add(accion);
+			actualizarEstado(anteriores);
+		}
+	}
+
+	public void siguienteAccion()
+	{
+		if(!siguientes.isEmpty())
+		{
+			Accion accion = siguientes.lastElement();
+			siguientes.remove(siguientes.size()-1);
+			anteriores.push(accion);
+			actualizarEstado(anteriores);
+		}
+	}
+	
+	private void actualizarEstado(Stack<Accion> pila)
+	{
+		this.color = Color.BLACK;
+		this.lista = new ArrayList<Polilinea>();
+		
+		Iterator<Accion> it = pila.iterator();
+		while(it.hasNext())
+		{
+			Accion accion = it.next();
+			if(accion.getTipo() == 0)
+			{
+				this.color = accion.getColor();
+			}
+			else
+			{
+				this.lista.add(accion.getLinea());
+			}
+		}
+	}
+
+	public void reiniciar()
+	{
+		this.linea = null;
+		this.lista.clear();
+		this.anteriores.clear();
+		this.siguientes.clear();
+		this.color = Color.BLACK;
 	}
 }

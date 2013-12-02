@@ -22,11 +22,14 @@
     <string name="item_drag_up">Drag up</string>
     <string name="item_drag_down">Drag down</string>
     <string name="item_reset">Reset</string>
-    <string name="boton_next">Next</string>
+    <string name="desc_ready">Ready</string>
     <!-- Fase de Pintura -->
     <string name="title_activity_paint">Paint Phase</string>
-    <string name="boton_cubo">Bucket</string>
-    <string name="boton_pincel">Pencil</string>
-    <string name="boton_mano">Hand</string>
+    <string name="desc_pencil">Bucket</string>
+    <string name="desc_bucket">Pencil</string>
+    <string name="desc_hand">Hand</string>
+    <string name="desc_next">Next</string>
+    <string name="desc_prev">Previous</string>
+    <string name="desc_delete">Delete</string>
 
 </resources>

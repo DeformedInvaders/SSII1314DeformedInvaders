@@ -20,38 +20,64 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" />
 
-    <Button
-        android:id="@+id/button2"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/PaintGLSurfaceView1"
-        android:layout_alignLeft="@+id/PaintGLSurfaceView1"
-        android:text="@string/boton_pincel" />
+        android:layout_alignLeft="@+id/PaintGLSurfaceView1" >
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_toRightOf="@+id/button2"
-        android:text="@string/boton_cubo" />
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_pencil"
+            android:src="@drawable/pencil" />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/PaintGLSurfaceView1"
-        android:layout_toRightOf="@+id/button3"
-        android:text="@string/boton_mano" />
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_bucket"
+            android:src="@drawable/bucket" />
+        
+		<ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_hand"
+            android:src="@drawable/hand" />
+        
+		<ImageButton
+            android:id="@+id/imageButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_prev"
+            android:src="@drawable/prev" />
+                
+		<ImageButton
+            android:id="@+id/imageButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_next"
+            android:src="@drawable/next" />
+                        
+		<ImageButton
+            android:id="@+id/imageButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_delete"
+            android:src="@drawable/delete" />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button4"
-        android:layout_alignBottom="@+id/button4"
-        android:layout_alignRight="@+id/PaintGLSurfaceView1"
-        android:text="@string/boton_next" />
+    </LinearLayout>
+
+   	<ImageButton
+   	    android:id="@+id/imageButton7"
+   	    android:layout_width="wrap_content"
+   	    android:layout_height="wrap_content"
+   	    android:layout_alignBottom="@+id/PaintGLSurfaceView1"
+   	    android:layout_alignRight="@+id/PaintGLSurfaceView1"
+   	    android:contentDescription="@string/desc_ready"
+   	    android:src="@drawable/ready" />
 
 </RelativeLayout>
