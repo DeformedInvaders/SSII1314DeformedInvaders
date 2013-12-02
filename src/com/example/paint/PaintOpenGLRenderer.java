@@ -124,11 +124,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			this.linea.anyadirPunto(new Punto(nx, ny));
 		}
 		else if(estado == TPaintEstado.Cubo)
-		{
-			float dx = width/(xRight-xLeft);
-			float dy = height/(yTop-yBot);
-			
-			if(GeometryUtils.isPointInsideMesh(hull, x, y, xLeft, yBot, dx, dy))
+		{			
+			if(GeometryUtils.isPointInsideMesh(hull, nx, ny))
 			{
 				if(colorCubo != color)
 				{

@@ -23,18 +23,13 @@
         </activity>
         <activity
             android:name="com.example.main.DesignActivity"
-            android:label="@string/title_activity_model"
-            android:screenOrientation="sensor" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/title_activity_model" 
+            android:parentActivityName="com.example.main.MainActivity" >
         </activity>
         <activity
             android:name="com.example.main.PaintActivity"
-            android:label="@string/title_activity_paint"
-            android:screenOrientation="sensor" >
+            android:label="@string/title_activity_paint" 
+            android:parentActivityName="com.example.main.DesignActivity" >
         </activity>
     </application>
-
 </manifest>

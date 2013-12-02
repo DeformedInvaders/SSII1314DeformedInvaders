@@ -11,6 +11,8 @@ public class MainActivity extends Activity
 	private boolean procesoActivo;
 	private int procesoEstado;
 	
+	private static final int segundos = 3;
+	
 	ProgressBar progress;
 
 	@Override
@@ -31,7 +33,7 @@ public class MainActivity extends Activity
 				{
 	                synchronized(this)
 	                {
-	                    wait(5000);
+	                    wait(segundos*1000);
 	                }
 	                
 	                procesoActivo = false;
@@ -58,7 +60,7 @@ public class MainActivity extends Activity
                 	{
                 		synchronized(this)
     	                {
-                			wait(500);
+                			wait(segundos*100);
     	                }
                 		
                 		procesoEstado = (procesoEstado + 10)%100;

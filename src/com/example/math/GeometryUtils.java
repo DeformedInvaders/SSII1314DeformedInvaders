@@ -16,6 +16,7 @@
 
 package com.example.math;
 
+import com.example.utils.Array;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
@@ -167,9 +168,17 @@ public class GeometryUtils {
 		return listaCortes;
 	}
 	
-	public static boolean isPointInsideMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
+	public static boolean isPointInsideMesh(FloatArray vertices, float x, float y) {
 		// TODO
-		return true;
+		Array<Vector2> polygon = new Array<Vector2>();
+		int j = 0;
+		while(j < vertices.size)
+		{
+			polygon.add(new Vector2(vertices.get(j), vertices.get(j+1)));
+			j = j+2;
+		}
+		
+		return Intersector.isPointInPolygon(polygon, new Vector2(x, y));
 	}
 	
 	public static Vector2 isPointInMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {

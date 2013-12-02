@@ -22,7 +22,7 @@ public class Esqueleto implements Serializable
 		this.hull = hull;
 		this.mesh = mesh;
 		this.triangles = triangles;
-		this.color = Color.BLACK;
+		this.color = Color.WHITE;
 	}
 	
 	public void setColor(int color)
