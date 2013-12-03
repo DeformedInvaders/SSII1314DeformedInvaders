@@ -157,6 +157,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		colorPaleta = GLESUtils.generarColor();
 	}
+	public void seleccionarColor(int color)
+	{
+		colorPaleta =color;
+	}
 	
 	public void seleccionarSize()
 	{

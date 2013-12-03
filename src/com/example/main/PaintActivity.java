@@ -1,15 +1,19 @@
 package com.example.main;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.paint.PaintGLSurfaceView;
 
-public class PaintActivity extends Activity
+public class PaintActivity extends Activity  implements ColorPickerDialog.OnColorChangedListener
 {
 	private PaintGLSurfaceView canvas;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize;
@@ -38,6 +42,8 @@ public class PaintActivity extends Activity
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
 		canvas.setEsqueleto(e);
 		
+			
+		
 		botonPincel.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -62,7 +68,11 @@ public class PaintActivity extends Activity
 			public void onClick(View arg0)
 			{
 				//TODO Lanzar RGB Picker
-				canvas.seleccionarColor();
+				  
+		       int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.WHITE);
+		       new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color).show();
+		       canvas.seleccionarColor(color);    
+//		       canvas.seleccionarColor();
 			}
 		});
 		
@@ -135,4 +145,19 @@ public class PaintActivity extends Activity
 		super.onPause();
 		canvas.onPause();
 	}
+	
+	/** Called when the activity is first created. */
+    private static final String BRIGHTNESS_PREFERENCE_KEY = "brightness";
+    private static final String COLOR_PREFERENCE_KEY = "color";
+//    TextView tv;
+
+
+
+    @Override
+    public void colorChanged(int color) {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(
+                COLOR_PREFERENCE_KEY, color).commit();
+//        tv.setTextColor(color);
+
+    }
 }

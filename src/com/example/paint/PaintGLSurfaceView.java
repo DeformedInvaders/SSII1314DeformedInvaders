@@ -111,6 +111,10 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	{
 		renderer.seleccionarColor();
 	}
+	public void seleccionarColor(int color)
+	{
+		renderer.seleccionarColor(color);
+	}
 	
 	public void seleccionarSize()
 	{
