@@ -13,7 +13,7 @@ import com.example.paint.PaintGLSurfaceView;
 public class PaintActivity extends Activity
 {
 	private PaintGLSurfaceView canvas;
-	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady;
+	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -33,6 +33,8 @@ public class PaintActivity extends Activity
 		botonNext = (ImageButton) findViewById(R.id.imageButton5);
 		botonDelete = (ImageButton) findViewById(R.id.imageButton6);
 		botonReady = (ImageButton) findViewById(R.id.imageButton7);
+		botonColor = (ImageButton) findViewById(R.id.imageButton8);
+		botonSize = (ImageButton) findViewById(R.id.imageButton9);
 		
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
 		canvas.setEsqueleto(e);
@@ -44,7 +46,7 @@ public class PaintActivity extends Activity
 			{
 				canvas.seleccionarPincel();
 				//TODO Lanzar Size Picker y RGB Picker
-				Toast.makeText(getApplication(), "Pincel Seleccionado", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplication(), "Pincel Seleccionado", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
@@ -55,7 +57,29 @@ public class PaintActivity extends Activity
 			{
 				canvas.seleccionarCubo();
 				//TODO Lanzar RGB Picker
-				Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		botonColor.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				canvas.seleccionarColor();
+				//TODO Lanzar RGB Picker
+				//Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		botonSize.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				canvas.seleccionarSize();
+				//TODO Lanzar RGB Picker
+				//Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
 			}
 		});
 		

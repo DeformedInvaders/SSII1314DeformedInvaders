@@ -29,55 +29,70 @@
 
         <ImageButton
             android:id="@+id/imageButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
             android:contentDescription="@string/desc_pencil"
-            android:src="@drawable/pencil" />
+            android:src="@drawable/icon_pencil" />
 
         <ImageButton
             android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
             android:contentDescription="@string/desc_bucket"
-            android:src="@drawable/bucket" />
+            android:src="@drawable/icon_bucket" />
+        
+		<ImageButton
+            android:id="@+id/imageButton8"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
+            android:contentDescription="@string/desc_bucket"
+            android:src="@drawable/icon_color" />
+        
+		<ImageButton
+            android:id="@+id/imageButton9"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
+            android:contentDescription="@string/desc_bucket"
+            android:src="@drawable/icon_size" />
+        
         
 		<ImageButton
             android:id="@+id/imageButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
             android:contentDescription="@string/desc_hand"
-            android:src="@drawable/hand" />
+            android:src="@drawable/icon_hand" />
         
 		<ImageButton
             android:id="@+id/imageButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
             android:contentDescription="@string/desc_prev"
-            android:src="@drawable/prev" />
+            android:src="@drawable/icon_prev" />
                 
 		<ImageButton
             android:id="@+id/imageButton5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    		android:layout_width="75dp"
+		    android:layout_height="75dp"
             android:contentDescription="@string/desc_next"
-            android:src="@drawable/next" />
+            android:src="@drawable/icon_next" />
                         
 		<ImageButton
-            android:id="@+id/imageButton6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/desc_delete"
-            android:src="@drawable/delete" />
+		    android:id="@+id/imageButton6"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
+		    android:contentDescription="@string/desc_delete"
+		    android:src="@drawable/icon_delete" />
 
     </LinearLayout>
 
    	<ImageButton
    	    android:id="@+id/imageButton7"
-   	    android:layout_width="wrap_content"
-   	    android:layout_height="wrap_content"
+	    android:layout_width="75dp"
+	    android:layout_height="75dp"
    	    android:layout_alignBottom="@+id/PaintGLSurfaceView1"
    	    android:layout_alignRight="@+id/PaintGLSurfaceView1"
    	    android:contentDescription="@string/desc_ready"
-   	    android:src="@drawable/ready" />
+   	    android:src="@drawable/icon_ready" />
 
 </RelativeLayout>

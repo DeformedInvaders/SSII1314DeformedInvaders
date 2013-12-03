@@ -27,7 +27,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private List<Polilinea> lista;
 	private Polilinea linea;
 	private TPaintEstado estado;
-	private int colorPincel, colorCubo;
+	private int colorPaleta;
 	private float sizeLinea;
 	
 	/* Esqueleto */	
@@ -64,9 +64,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         this.lista = new ArrayList<Polilinea>();
         this.linea = null;
         
-        this.colorPincel = Color.RED;
-        this.colorCubo = Color.BLUE;
-        this.sizeLinea = 3.0f;
+        this.colorPaleta = Color.RED;
+        this.sizeLinea = 1.0f;
         
         this.anteriores = new Stack<Accion>();
         this.siguientes = new Stack<Accion>();
@@ -95,7 +94,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			if(puntos != null && triangulos != null)
 			{
 				GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, bufferPuntos);
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
 			}
 			
 			// Detalles
@@ -108,6 +106,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			if(linea != null)
 			{
 				linea.dibujar(gl);
+			}
+			
+			if(puntos != null && triangulos != null)
+			{
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
 			}
 		}
 		
@@ -142,13 +145,21 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarPincel()
 	{
 		estado = TPaintEstado.Pincel;
-		colorPincel = GLESUtils.generarColor();
 	}
 	
 	public void seleccionarCubo()
 	{
 		estado = TPaintEstado.Cubo;
-		colorCubo = GLESUtils.generarColor();
+	}
+	
+	public void seleccionarColor()
+	{
+		colorPaleta = GLESUtils.generarColor();
+	}
+	
+	public void seleccionarSize()
+	{
+		sizeLinea = (sizeLinea+5)%15;
 	}
 	
 	public TPaintEstado getEstado()
@@ -181,10 +192,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{			
 			if(GeometryUtils.isPointInsideMesh(hull, nx, ny))
 			{
-				if(colorCubo != color)
+				if(colorPaleta != color)
 				{
-					color = colorCubo;
-					this.anteriores.push(new Accion(colorCubo));
+					color = colorPaleta;
+					this.anteriores.push(new Accion(colorPaleta));
 					this.siguientes.clear();
 				}
 			}
@@ -206,7 +217,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	public void crearPolilinea()
 	{
-		this.linea = new Polilinea(colorPincel, sizeLinea);
+		this.linea = new Polilinea(colorPaleta, sizeLinea);
 	}
 	
 	public void guardarPolilinea()
