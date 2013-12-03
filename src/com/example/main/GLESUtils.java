@@ -9,13 +9,26 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.opengl.GLUtils;
 
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
 public class GLESUtils
 {
+	public static FloatBuffer construirBuffer(float[] lista)
+	{			
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(lista.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		FloatBuffer buffer = byteBuf.asFloatBuffer();
+		buffer.put(lista);
+		buffer.position(0);
+		
+		return buffer;
+	}
+	
 	public static FloatBuffer construirBuffer(FloatArray lista)
 	{	
 		int arrayLong = lista.size;
@@ -104,27 +117,62 @@ public class GLESUtils
 		return listabuffer;
 	}
 
-	public static void dibujarBuffer(GL10 gl, int type, float size, int color, FloatBuffer lista)
+	public static void dibujarBuffer(GL10 gl, int type, float size, int color, FloatBuffer bufferPuntos)
 	{	
 		gl.glColor4f(Color.red(color)/255.0f, Color.green(color)/255.0f, Color.blue(color)/255.0f, 1.0f);
 		gl.glLineWidth(size);
 		gl.glFrontFace(GL10.GL_CW);
 		
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, lista);
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-			gl.glDrawArrays(type, 0, lista.capacity() / 2);
+			gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
-	public static void dibujarBuffer(GL10 gl, int type, float size, int color, ArrayList<FloatBuffer> lista)
+	public static void dibujarBuffer(GL10 gl, int type, float size, int color, ArrayList<FloatBuffer> bufferLista)
 	{
-		Iterator<FloatBuffer> it = lista.iterator();
+		Iterator<FloatBuffer> it = bufferLista.iterator();
 		while(it.hasNext())
 		{
 			FloatBuffer buffer = it.next();
 			dibujarBuffer(gl, type, size, color, buffer);
 		}
+	}
+	
+	public static void cargarTextura(GL10 gl, Bitmap textura, int[] nombreTextura, int pos)
+	{
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+			
+			gl.glGenTextures(1, nombreTextura, 0);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTextura[pos]);
+			
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+		
+			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, textura, 0);
+		
+		gl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
+	public static void dibujarBuffer(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferTextura, int[] nombreTextura, int pos)
+	{
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTextura[pos]);
+			gl.glFrontFace(GL10.GL_CW);
+			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			
+			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, bufferTextura);
+			
+			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+				gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, bufferPuntos.capacity()/2);
+			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
 	public static int generarColor()

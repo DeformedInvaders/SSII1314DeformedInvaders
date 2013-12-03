@@ -1,5 +1,7 @@
 package com.example.paint;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +10,8 @@ import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.example.main.Esqueleto;
@@ -30,17 +34,30 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private FloatArray hull;
 	private ShortArray triangulos;
 	private FloatArray puntos;
+	private ArrayList<FloatBuffer> bufferPuntos;
 	private int color;
-	private ArrayList<FloatBuffer> buffer;
 	private FloatBuffer bufferHull;
+	
+	/* Texturas */
+	private Bitmap textura;
+	private boolean takeScreenShot = false;
+	
+	private float[] coordsTextura = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
+	private FloatBuffer bufferTextura;
+	
+	private float[] coordsVertices = new float[8];
+	private FloatBuffer bufferVertices;
+	
+	private static final int numeroTexturas = 1;
+	private int[] nombreTextura = new int[numeroTexturas];
 	
 	/* Anterior Siguiente Buffers */
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
 	
-	public PaintOpenGLRenderer()
+	public PaintOpenGLRenderer(Context context)
 	{
-        super();
+        super(context);
         
         this.estado = TPaintEstado.Mano;
         
@@ -53,6 +70,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         this.anteriores = new Stack<Accion>();
         this.siguientes = new Stack<Accion>();
+        
+        /* TEST */
+        this.bufferTextura = GLESUtils.construirBuffer(coordsTextura);
+        this.bufferVertices = GLESUtils.construirBuffer(coordsVertices);
+        /* TEST */
 	}
 	
 	@Override
@@ -60,23 +82,55 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{			
 		super.onDrawFrame(gl);
 		
-		// Esqueleto
-		if(puntos != null && triangulos != null)
+		if(estado == TPaintEstado.Bitmap)
 		{
-			GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, buffer);
-			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
+			/* TEST */
+			GLESUtils.cargarTextura(gl, textura, nombreTextura, 0);
+			GLESUtils.dibujarBuffer(gl, bufferVertices, bufferTextura, nombreTextura, 0);			
+			/* TEST */
+		}
+		else
+		{
+			// Esqueleto
+			if(puntos != null && triangulos != null)
+			{
+				GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, bufferPuntos);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
+			}
+			
+			// Detalles
+			Iterator<Polilinea> it = lista.iterator();
+			while(it.hasNext())
+			{
+				it.next().dibujar(gl);
+			}
+			
+			if(linea != null)
+			{
+				linea.dibujar(gl);
+			}
 		}
 		
-		// Detalles
-		Iterator<Polilinea> it = lista.iterator();
-		while(it.hasNext())
-		{
-			it.next().dibujar(gl);
-		}
-		
-		if(linea != null)
-		{
-			linea.dibujar(gl);
+		if (takeScreenShot)
+		{			
+		    int screenshotSize = width * height;
+		    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
+		    bb.order(ByteOrder.nativeOrder());
+		    gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
+		    int pixelsBuffer[] = new int[screenshotSize];
+		    bb.asIntBuffer().get(pixelsBuffer);
+		    bb = null;
+
+		    for (int i = 0; i < screenshotSize; ++i) {
+		        // The alpha and green channels' positions are preserved while the red and blue are swapped
+		        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
+		    }
+
+		    textura = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		    textura.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
+		    
+		    takeScreenShot = false;
+		    this.estado = TPaintEstado.Bitmap;
 		}
 	}
 
@@ -109,7 +163,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.triangulos = esqueleto.getTriangles();
 		this.color = esqueleto.getColor();
 		
-		this.buffer = GLESUtils.construirTriangulosBuffer(this.triangulos, this.puntos);
+		this.bufferPuntos = GLESUtils.construirTriangulosBuffer(this.triangulos, this.puntos);
 		this.bufferHull = GLESUtils.construirBuffer(this.hull);
 	}
 	
@@ -134,6 +188,19 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 					this.siguientes.clear();
 				}
 			}
+		}
+		else if(estado == TPaintEstado.Bitmap)
+		{
+			coordsVertices[0] = nx; //bottom left
+			coordsVertices[1] = ny;
+			coordsVertices[2] = nx; // top left
+			coordsVertices[3] = ny + this.height/10;
+			coordsVertices[4] = nx + this.width/10; //bottom right
+			coordsVertices[5] = ny;
+			coordsVertices[6] = nx + this.width/10; // top right
+			coordsVertices[7] = ny + this.height/10;
+			
+			bufferVertices = GLESUtils.construirBuffer(coordsVertices);
 		}
 	}
 	
@@ -201,5 +268,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.anteriores.clear();
 		this.siguientes.clear();
 		this.color = Color.BLACK;
+	}
+	
+	public void testBitMap()
+	{
+		this.takeScreenShot = true;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.example.main.Esqueleto;
@@ -58,12 +59,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private ArrayList<FloatBuffer> bufferTest;
 	/* TEST*/
 	
-	public DesignOpenGLRenderer()
+	public DesignOpenGLRenderer(Context context)
 	{        
-        estado = TDesignEstado.Dibujar;
+		super(context);
+		
+        this.estado = TDesignEstado.Dibujar;
 
-        puntos = new FloatArray();
-        handles = new FloatArray();
+        this.puntos = new FloatArray();
+        this.handles = new FloatArray();
 	}
 	
 	public TDesignEstado getEstado()

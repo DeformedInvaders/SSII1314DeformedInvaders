@@ -1,6 +1,7 @@
 package com.example.main;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +23,7 @@ public class PaintActivity extends Activity
 		Bundle bundle = getIntent().getExtras();
 		Esqueleto e = (Esqueleto) bundle.get("Esqueleto");
 		
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		setContentView(R.layout.paint_layout);
 		
 		botonPincel = (ImageButton) findViewById(R.id.imageButton1);
@@ -98,11 +100,26 @@ public class PaintActivity extends Activity
 			@Override
 			public void onClick(View arg0) {
 				// TODO Obtener BMP, Procesar Coordenadas de Textura, Intent a Animaciones
-			    //View content = findViewById(R.id.designGLSurfaceView1);
-			    //Bitmap bitmap = content.getDrawingCache();
+			    canvas.testBitMap();
 				Toast.makeText(getApplication(), "Coming Soon!", Toast.LENGTH_SHORT).show();
 			}
 		});
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+	    super.onConfigurationChanged(newConfig);
+
+	    // Checks the orientation of the screen
+	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+	    {
+	        Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+	    }
+	    else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+	    {
+	        Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+	    }
 	}
 	
 	@Override

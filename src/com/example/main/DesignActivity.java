@@ -23,6 +23,7 @@ public class DesignActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		setContentView(R.layout.design_layout);
 		
 		canvas = (DesignGLSurfaceView) findViewById(R.id.designGLSurfaceView1);
@@ -33,15 +34,17 @@ public class DesignActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				boolean b = canvas.pruebaCompleta();
+				//boolean b = canvas.pruebaCompleta();
 				
-				if(b) {
+				//if(b) {
 					Esqueleto e = canvas.getPruebaCompleta();
-					
-					Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
-					intent.putExtra("Esqueleto", e);
-					startActivity(intent);
-				}
+					if(e != null)
+					{
+						Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
+						intent.putExtra("Esqueleto", e);
+						startActivity(intent);
+					}
+				//}
 			}
 		});
 	}
@@ -126,6 +129,22 @@ public class DesignActivity extends Activity
 	}
 	
 	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+	    super.onConfigurationChanged(newConfig);
+
+	    // Checks the orientation of the screen
+	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+	    {
+	        Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+	    }
+	    else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+	    {
+	        Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+	    }
+	}
+	
+	@Override
 	public void onResume()
 	{
 		super.onResume();
@@ -138,10 +157,4 @@ public class DesignActivity extends Activity
 		super.onPause();
 		canvas.onPause();
 	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO
-	    super.onConfigurationChanged(newConfig);
-	}	
 }

@@ -3,6 +3,7 @@ package com.example.main;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 
@@ -15,14 +16,19 @@ public class OpenGLRenderer implements Renderer
 	public int height = 1280;
 	public int width = 760;
 	
-	public OpenGLRenderer()
+	// Contexto
+	public Context context;
+	
+	public OpenGLRenderer(Context context)
 	{
-        xRight = width;
-        xLeft = 0.0f;
-        yTop = height;
-        yBot = 0.0f;
-        xCentro = (xRight + xLeft)/2.0f;
-        yCentro = (yTop + yBot)/2.0f;
+		this.context = context;
+		
+		this.xRight = width;
+		this.xLeft = 0.0f;
+		this.yTop = height;
+		this.yBot = 0.0f;
+		this.xCentro = (xRight + xLeft)/2.0f;
+		this.yCentro = (yTop + yBot)/2.0f;
 	}
 	
 	public void zoom(float factor)

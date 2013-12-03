@@ -28,7 +28,7 @@ public class DesignGLSurfaceView extends GLSurfaceView
         setEGLContextClientVersion(1);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        renderer = new DesignOpenGLRenderer();
+        renderer = new DesignOpenGLRenderer(context);
         setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data

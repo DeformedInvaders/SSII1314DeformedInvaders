@@ -28,7 +28,7 @@ public class PaintGLSurfaceView extends GLSurfaceView
         setEGLContextClientVersion(1);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        renderer = new PaintOpenGLRenderer();
+        renderer = new PaintOpenGLRenderer(context);
         setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data
@@ -70,6 +70,10 @@ public class PaintGLSurfaceView extends GLSurfaceView
 			}
 		}
 		else if(estado == TPaintEstado.Cubo)
+		{
+			renderer.anyadirPunto(x, y, width, height);	
+		}
+		else if(estado == TPaintEstado.Bitmap)
 		{
 			renderer.anyadirPunto(x, y, width, height);	
 		}
@@ -128,5 +132,12 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	public void setEsqueleto(Esqueleto esqueleto)
 	{
 		renderer.setEsqueleto(esqueleto);
+	}
+	
+	public void testBitMap()
+	{
+		renderer.guardarPolilinea();
+		renderer.testBitMap();
+		requestRender();
 	}
 }
