@@ -119,7 +119,7 @@ public class PaintActivity extends Activity
 			public void onClick(View arg0)
 			{
 				// TODO Obtener BMP, Procesar Coordenadas de Textura, Intent a Animaciones
-			    //canvas.testBitMap();
+			    canvas.testBitMap();
 			}
 		});
 	}

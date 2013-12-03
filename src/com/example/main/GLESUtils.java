@@ -117,9 +117,25 @@ public class GLESUtils
 		return listabuffer;
 	}
 	
-	public static FloatArray construirTextura(ShortArray triangulos, FloatArray puntos, float width, float height)
+	public static FloatArray construirTextura(FloatArray puntos, float width, float height, float xLeft, float yTop)
 	{
-		return null;
+		FloatArray textura = new FloatArray();
+		
+		int i = 0;
+		while(i < puntos.size)
+		{
+			float x = puntos.get(i);
+			float y = puntos.get(i+1);
+			
+			float cx = (xLeft + x) / width;
+			float cy = height - ((yTop + y) / height);
+			
+			textura.add(cx);
+			textura.add(cy);
+			
+			i = i+2;
+		}
+		return textura;
 	}
 
 	public static void dibujarBuffer(GL10 gl, int type, float size, int color, FloatBuffer bufferPuntos)

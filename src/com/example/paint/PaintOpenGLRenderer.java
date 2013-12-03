@@ -73,9 +73,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         this.takeScreenShot = false;
         this.nombreTextura = new int[numeroTexturas];
-        
-        this.coordsTextura = GLESUtils.construirTextura(triangulos, puntos, width, height);
-        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
 	}
 	
 	@Override
@@ -85,10 +82,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		if(estado == TPaintEstado.Bitmap)
 		{
-			/* TEST */
 			GLESUtils.cargarTextura(gl, texturaBMP, nombreTextura, 0);
-			GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferTextura, nombreTextura, 0);			
-			/* TEST */
+			GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferTextura, nombreTextura, 0);	
+			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, Color.DKGRAY, bufferPuntos);
+			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
 		}
 		else
 		{
@@ -110,7 +107,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				linea.dibujar(gl);
 			}
 			
-			if(puntos != null && triangulos != null)
+			if(puntos != null && triangulos != null && !takeScreenShot)
 			{
 				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
 			}
@@ -127,14 +124,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		    bb = null;
 
 		    for (int i = 0; i < screenshotSize; ++i) {
-		        // The alpha and green channels' positions are preserved while the red and blue are swapped
 		        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 		    }
 
-		    texturaBMP = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		    texturaBMP.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
+		    this.texturaBMP = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		    this.texturaBMP.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
 		    
-		    takeScreenShot = false;
+			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight(), xLeft, yBot);
+	        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
+		    
+		    this.takeScreenShot = false;
 		    this.estado = TPaintEstado.Bitmap;
 		}
 	}
