@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 	private boolean procesoActivo;
 	private int procesoEstado;
 	
-	private static final int segundos = 3;
+	private static final int segundos = 1;
 	
 	ProgressBar progress;
 

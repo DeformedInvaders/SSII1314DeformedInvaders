@@ -73,10 +73,6 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		{
 			renderer.anyadirPunto(x, y, width, height);	
 		}
-		else if(estado == TPaintEstado.Bitmap)
-		{
-			renderer.anyadirPunto(x, y, width, height);	
-		}
 		else {
 			if(event.getPointerCount() == 1)
 			{

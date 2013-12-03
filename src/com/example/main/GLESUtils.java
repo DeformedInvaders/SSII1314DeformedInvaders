@@ -116,6 +116,11 @@ public class GLESUtils
 		
 		return listabuffer;
 	}
+	
+	public static FloatArray construirTextura(ShortArray triangulos, FloatArray puntos, float width, float height)
+	{
+		return null;
+	}
 
 	public static void dibujarBuffer(GL10 gl, int type, float size, int color, FloatBuffer bufferPuntos)
 	{	
@@ -173,6 +178,16 @@ public class GLESUtils
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		gl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
+	public static void dibujarBuffer(GL10 gl, ArrayList<FloatBuffer> bufferPuntos, ArrayList<FloatBuffer> bufferTextura, int[] nombreTextura, int pos)
+	{
+		Iterator<FloatBuffer> itp = bufferPuntos.iterator();
+		Iterator<FloatBuffer> itt = bufferTextura.iterator();
+		while(itp.hasNext() && itt.hasNext())
+		{
+			dibujarBuffer(gl, itp.next(), itt.next(), nombreTextura, pos);
+		}
 	}
 	
 	public static int generarColor()

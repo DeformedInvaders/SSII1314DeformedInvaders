@@ -26,30 +26,31 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	/* Estructura de datos */
 	private List<Polilinea> lista;
 	private Polilinea linea;
+	
 	private TPaintEstado estado;
+	
 	private int colorPaleta;
 	private float sizeLinea;
 	
 	/* Esqueleto */	
 	private FloatArray hull;
+	private FloatBuffer bufferHull;
+	
 	private ShortArray triangulos;
 	private FloatArray puntos;
 	private ArrayList<FloatBuffer> bufferPuntos;
+	
 	private int color;
-	private FloatBuffer bufferHull;
 	
 	/* Texturas */
-	private Bitmap textura;
-	private boolean takeScreenShot = false;
+	private Bitmap texturaBMP;
+	private boolean takeScreenShot;
 	
-	private float[] coordsTextura = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
-	private FloatBuffer bufferTextura;
-	
-	private float[] coordsVertices = new float[8];
-	private FloatBuffer bufferVertices;
+	private FloatArray coordsTextura;
+	private ArrayList<FloatBuffer> bufferTextura;
 	
 	private static final int numeroTexturas = 1;
-	private int[] nombreTextura = new int[numeroTexturas];
+	private int[] nombreTextura;
 	
 	/* Anterior Siguiente Buffers */
 	private Stack<Accion> anteriores;
@@ -70,10 +71,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         this.anteriores = new Stack<Accion>();
         this.siguientes = new Stack<Accion>();
         
-        /* TEST */
-        this.bufferTextura = GLESUtils.construirBuffer(coordsTextura);
-        this.bufferVertices = GLESUtils.construirBuffer(coordsVertices);
-        /* TEST */
+        this.takeScreenShot = false;
+        this.nombreTextura = new int[numeroTexturas];
+        
+        this.coordsTextura = GLESUtils.construirTextura(triangulos, puntos, width, height);
+        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
 	}
 	
 	@Override
@@ -84,8 +86,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if(estado == TPaintEstado.Bitmap)
 		{
 			/* TEST */
-			GLESUtils.cargarTextura(gl, textura, nombreTextura, 0);
-			GLESUtils.dibujarBuffer(gl, bufferVertices, bufferTextura, nombreTextura, 0);			
+			GLESUtils.cargarTextura(gl, texturaBMP, nombreTextura, 0);
+			GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferTextura, nombreTextura, 0);			
 			/* TEST */
 		}
 		else
@@ -129,8 +131,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 		    }
 
-		    textura = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		    textura.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
+		    texturaBMP = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		    texturaBMP.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
 		    
 		    takeScreenShot = false;
 		    this.estado = TPaintEstado.Bitmap;
@@ -199,19 +201,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 					this.siguientes.clear();
 				}
 			}
-		}
-		else if(estado == TPaintEstado.Bitmap)
-		{
-			coordsVertices[0] = nx; //bottom left
-			coordsVertices[1] = ny;
-			coordsVertices[2] = nx; // top left
-			coordsVertices[3] = ny + this.height/10;
-			coordsVertices[4] = nx + this.width/10; //bottom right
-			coordsVertices[5] = ny;
-			coordsVertices[6] = nx + this.width/10; // top right
-			coordsVertices[7] = ny + this.height/10;
-			
-			bufferVertices = GLESUtils.construirBuffer(coordsVertices);
 		}
 	}
 	

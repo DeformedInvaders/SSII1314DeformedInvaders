@@ -1,7 +1,6 @@
 package com.example.main;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,8 +44,6 @@ public class PaintActivity extends Activity
 			public void onClick(View arg0)
 			{
 				canvas.seleccionarPincel();
-				//TODO Lanzar Size Picker y RGB Picker
-				//Toast.makeText(getApplication(), "Pincel Seleccionado", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
@@ -56,8 +53,6 @@ public class PaintActivity extends Activity
 			public void onClick(View arg0)
 			{
 				canvas.seleccionarCubo();
-				//TODO Lanzar RGB Picker
-				//Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
@@ -66,9 +61,8 @@ public class PaintActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				canvas.seleccionarColor();
 				//TODO Lanzar RGB Picker
-				//Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
+				canvas.seleccionarColor();
 			}
 		});
 		
@@ -77,43 +71,43 @@ public class PaintActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
+				//TODO Lanzar Size Picker
 				canvas.seleccionarSize();
-				//TODO Lanzar RGB Picker
-				//Toast.makeText(getApplication(), "Cubo Seleccionado", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
 		botonMano.setOnClickListener(new OnClickListener()
 		{
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				canvas.seleccionarMano();
-				Toast.makeText(getApplication(), "Mano Seleccionada", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
 		botonNext.setOnClickListener(new OnClickListener()
 		{
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				canvas.siguienteAccion();
-				Toast.makeText(getApplication(), "Next", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
 		botonPrev.setOnClickListener(new OnClickListener()
 		{
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				canvas.anteriorAccion();
-				Toast.makeText(getApplication(), "Previous", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
 		botonDelete.setOnClickListener(new OnClickListener()
 		{
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				canvas.reiniciar();
 				Toast.makeText(getApplication(), "Deleted", Toast.LENGTH_SHORT).show();
 			}
@@ -122,28 +116,12 @@ public class PaintActivity extends Activity
 		botonReady.setOnClickListener(new OnClickListener()
 		{
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				// TODO Obtener BMP, Procesar Coordenadas de Textura, Intent a Animaciones
-			    canvas.testBitMap();
-				Toast.makeText(getApplication(), "Coming Soon!", Toast.LENGTH_SHORT).show();
+			    //canvas.testBitMap();
 			}
 		});
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-	    super.onConfigurationChanged(newConfig);
-
-	    // Checks the orientation of the screen
-	    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-	    {
-	        Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-	    }
-	    else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-	    {
-	        Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-	    }
 	}
 	
 	@Override
