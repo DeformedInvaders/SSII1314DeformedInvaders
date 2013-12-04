@@ -40,19 +40,19 @@
             android:label="@string/title_activity_animation" >
         </activity>
         <activity
-            android:name="com.example.main.RunActivity"
+            android:name="com.example.main.RunFragment"
             android:label="@string/title_activity_run" >
         </activity>
         <activity
-            android:name="com.example.main.JumpActivity"
+            android:name="com.example.main.JumpFragment"
             android:label="@string/title_activity_jump" >
         </activity>
         <activity
-            android:name="com.example.main.DownActivity"
+            android:name="com.example.main.DownFragment"
             android:label="@string/title_activity_down" >
         </activity>
         <activity
-            android:name="com.example.main.AttackActivity"
+            android:name="com.example.main.AttackFragment"
             android:label="@string/title_activity_attack" >
         </activity>
     </application>
