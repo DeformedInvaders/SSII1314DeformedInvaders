@@ -15,6 +15,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.paint.PaintGLSurfaceView;
+
 public class ColorPickerDialog extends Dialog {
 
 	public interface OnColorChangedListener {
@@ -23,22 +25,56 @@ public class ColorPickerDialog extends Dialog {
 
 	private final OnColorChangedListener mListener;
 	private final int mInitialColor;
+	private PaintGLSurfaceView canvas;
 
+	public ColorPickerDialog(Context context, OnColorChangedListener listener, int initialColor, PaintGLSurfaceView canvas) {
+		super(context);
+
+		mListener = listener;
+		mInitialColor = initialColor;
+		this.canvas = canvas;
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		OnColorChangedListener colorListener = new OnColorChangedListener() {
+			public void colorChanged(int color) {
+				mListener.colorChanged(color);
+				canvas.seleccionarColor(color);
+				dismiss();
+			}
+		};
+
+		LinearLayout layout = new LinearLayout(getContext());
+		layout.setOrientation(LinearLayout.VERTICAL);
+		layout.setGravity(Gravity.CENTER);
+		layout.setPadding(10, 10, 10, 10);
+		layout.addView(new ColorPickerView(getContext(), colorListener, mInitialColor),
+				new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.WRAP_CONTENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT));
+
+		setContentView(layout);
+		setTitle("Selecciona un color");
+	}
+	
+	
 	private static class ColorPickerView extends View {
 		private final Paint mPaint;
 		private final Paint mCenterPaint;
 		private final int[] mColors;
 		private final OnColorChangedListener mListener;
 
-		ColorPickerView(Context c, OnColorChangedListener l, int color) {
-			super(c);
-			mListener = l;
+		ColorPickerView(Context context, OnColorChangedListener colorListener, int color) {
+			super(context);
+			mListener = colorListener;
 			mColors = new int[] { 0xFFFF0000, 0xFFFF00FF, 0xFF0000FF,
 					0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000 };
-			Shader s = new SweepGradient(0, 0, mColors, null);
+			Shader shader = new SweepGradient(0, 0, mColors, null);
 
 			mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			mPaint.setShader(s);
+			mPaint.setShader(shader);
 			mPaint.setStyle(Paint.Style.STROKE);
 			mPaint.setStrokeWidth(32);
 
@@ -61,7 +97,7 @@ public class ColorPickerDialog extends Dialog {
 			canvas.drawCircle(0, 0, CENTER_RADIUS, mCenterPaint);
 
 			if (mTrackingCenter) {
-				int c = mCenterPaint.getColor();
+				int colorCentro = mCenterPaint.getColor();
 				mCenterPaint.setStyle(Paint.Style.STROKE);
 
 				if (mHighlightCenter) {
@@ -73,7 +109,7 @@ public class ColorPickerDialog extends Dialog {
 						+ mCenterPaint.getStrokeWidth(), mCenterPaint);
 
 				mCenterPaint.setStyle(Paint.Style.FILL);
-				mCenterPaint.setColor(c);
+				mCenterPaint.setColor(colorCentro);
 			}
 		}
 
@@ -197,34 +233,5 @@ public class ColorPickerDialog extends Dialog {
 		}
 	}
 
-	public ColorPickerDialog(Context context, OnColorChangedListener listener,
-			int initialColor) {
-		super(context);
 
-		mListener = listener;
-		mInitialColor = initialColor;
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		OnColorChangedListener l = new OnColorChangedListener() {
-			public void colorChanged(int color) {
-				mListener.colorChanged(color);
-				dismiss();
-			}
-		};
-
-		LinearLayout layout = new LinearLayout(getContext());
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.setGravity(Gravity.CENTER);
-		layout.setPadding(10, 10, 10, 10);
-		layout.addView(new ColorPickerView(getContext(), l, mInitialColor),
-				new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.WRAP_CONTENT,
-						LinearLayout.LayoutParams.WRAP_CONTENT));
-
-		setContentView(layout);
-		setTitle("Selecciona un color");
-	}
 }
