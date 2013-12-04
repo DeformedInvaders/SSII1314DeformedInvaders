@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- Proyecto -->
+
+    <!-- Proyecto -->
     <string name="app_name">Proyecto SSII</string>
     <!-- Fase de Modelado -->
     <string name="title_activity_model">Model Phase</string>
@@ -34,5 +35,20 @@
     <string name="desc_color">Color</string>
     <string name="desc_size">Size</string>
     <string name="desc_eye">Eye</string>
-
+    <string name="title_activity_animation">AnimationActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_run">RunActivity</string>
+    <string name="title_activity_jump">JumpActivity</string>
+    <string name="title_activity_down">DownActivity</string>
+    <string name="title_activity_attack">AttackActivity</string>
+	<!-- Fase de Animacion -->
+	<string name="attackhello">Attack Hello</string>
+	<string name="jumphello">Jump Hello</string>
+	<string name="downhello">Down Hello</string>
+	<string name="runhello">Run Hello</string>
+	<string name="tabRun">Run</string>
+	<string name="tabJump">Jump</string>
+	<string name="tabDown">Down</string>
+	<string name="tabAttack">Attack</string>
 </resources>

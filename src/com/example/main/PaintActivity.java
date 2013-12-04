@@ -1,6 +1,7 @@
 package com.example.main;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -147,7 +148,9 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				// TODO Intent a Animaciones
-			    canvas.testBitMap();
+			    //canvas.testBitMap();
+				Intent intent = new Intent(PaintActivity.this, AnimationActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
