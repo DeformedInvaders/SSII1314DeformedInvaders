@@ -1,22 +1,25 @@
 package com.example.main;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.paint.PaintGLSurfaceView;
 
 public class PaintActivity extends Activity  implements ColorPickerDialog.OnColorChangedListener
 {
+	/** Called when the activity is first created. */
+    //private static final String BRIGHTNESS_PREFERENCE_KEY = "brightness";
+    private static final String COLOR_PREFERENCE_KEY = "color";
+    
 	private PaintGLSurfaceView canvas;
-	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize;
+	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -27,7 +30,16 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		Esqueleto e = (Esqueleto) bundle.get("Esqueleto");
 		
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-		setContentView(R.layout.paint_layout);
+		
+		int result = this.getResources().getConfiguration().orientation;
+		if(result == 1)
+		{
+			setContentView(R.layout.paint_layout_portrait);
+		}
+		else
+		{
+		    setContentView(R.layout.paint_layout_landscape);
+		}
 		
 		botonPincel = (ImageButton) findViewById(R.id.imageButton1);
 		botonCubo = (ImageButton) findViewById(R.id.imageButton2);
@@ -38,11 +50,10 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		botonReady = (ImageButton) findViewById(R.id.imageButton7);
 		botonColor = (ImageButton) findViewById(R.id.imageButton8);
 		botonSize = (ImageButton) findViewById(R.id.imageButton9);
+		botonEye = (ImageButton) findViewById(R.id.imageButton10);
 		
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
 		canvas.setEsqueleto(e);
-		
-			
 		
 		botonPincel.setOnClickListener(new OnClickListener()
 		{
@@ -67,12 +78,9 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			@Override
 			public void onClick(View arg0)
 			{
-				//TODO Lanzar RGB Picker
-				  
-		       int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.WHITE);
-		       new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color).show();
-		       canvas.seleccionarColor(color);    
-//		       canvas.seleccionarColor();
+				int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.WHITE);
+				new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color).show();
+				canvas.seleccionarColor(color);
 			}
 		});
 		
@@ -83,6 +91,16 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			{
 				//TODO Lanzar Size Picker
 				canvas.seleccionarSize();
+			}
+		});
+		
+		botonEye.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				//TODO Lanzar Textures Picker
+				Toast.makeText(getApplication(), "No so fast cowboy!", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
@@ -128,36 +146,43 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			@Override
 			public void onClick(View arg0)
 			{
-				// TODO Obtener BMP, Procesar Coordenadas de Textura, Intent a Animaciones
+				// TODO Intent a Animaciones
 			    canvas.testBitMap();
 			}
 		});
 	}
 	
 	@Override
-	public void onResume() {
+	public void onResume()
+	{
 		super.onResume();
 		canvas.onResume();
 	}
 	
 	@Override
-	public void onPause() {
+	public void onPause()
+	{
 		super.onPause();
 		canvas.onPause();
 	}
 	
-	/** Called when the activity is first created. */
-    private static final String BRIGHTNESS_PREFERENCE_KEY = "brightness";
-    private static final String COLOR_PREFERENCE_KEY = "color";
-//    TextView tv;
-
-
-
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		int result = this.getResources().getConfiguration().orientation;
+		if(result == 1)
+		{
+			setContentView(R.layout.paint_layout_portrait);
+		}
+		else
+		{
+		    setContentView(R.layout.paint_layout_landscape);
+		}
+	}
+	
     @Override
-    public void colorChanged(int color) {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(
-                COLOR_PREFERENCE_KEY, color).commit();
-//        tv.setTextColor(color);
-
+    public void colorChanged(int color)
+    {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(COLOR_PREFERENCE_KEY, color).commit();
     }
 }

@@ -45,17 +45,23 @@
             android:id="@+id/imageButton8"
 		    android:layout_width="75dp"
 		    android:layout_height="75dp"
-            android:contentDescription="@string/desc_bucket"
+            android:contentDescription="@string/desc_color"
             android:src="@drawable/icon_color" />
         
 		<ImageButton
             android:id="@+id/imageButton9"
 		    android:layout_width="75dp"
 		    android:layout_height="75dp"
-            android:contentDescription="@string/desc_bucket"
+            android:contentDescription="@string/desc_size"
             android:src="@drawable/icon_size" />
         
-        
+   		<ImageButton
+            android:id="@+id/imageButton10"
+		    android:layout_width="75dp"
+		    android:layout_height="75dp"
+            android:contentDescription="@string/desc_eye"
+            android:src="@drawable/icon_eye" />
+    		    
 		<ImageButton
             android:id="@+id/imageButton3"
 		    android:layout_width="75dp"

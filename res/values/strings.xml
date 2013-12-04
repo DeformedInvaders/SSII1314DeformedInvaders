@@ -31,5 +31,8 @@
     <string name="desc_next">Next</string>
     <string name="desc_prev">Previous</string>
     <string name="desc_delete">Delete</string>
+    <string name="desc_color">Color</string>
+    <string name="desc_size">Size</string>
+    <string name="desc_eye">Eye</string>
 
 </resources>
