@@ -159,7 +159,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	}
 	public void seleccionarColor(int color)
 	{
-		colorPaleta =color;
+		colorPaleta = color;
 	}
 	
 	public void seleccionarSize()

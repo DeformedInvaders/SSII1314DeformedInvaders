@@ -78,9 +78,9 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			@Override
 			public void onClick(View arg0)
 			{
-				int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.WHITE);
-				new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color).show();
-				canvas.seleccionarColor(color);
+				int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.RED);
+				new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color, canvas).show();
+				//canvas.seleccionarColor(color);
 			}
 		});
 		
