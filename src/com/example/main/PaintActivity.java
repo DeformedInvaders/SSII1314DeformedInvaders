@@ -101,7 +101,8 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				//TODO Lanzar Textures Picker
-				Toast.makeText(getApplication(), "No so fast cowboy!", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(PaintActivity.this, AnimationActivity.class);
+				startActivity(intent);
 			}
 		});
 		
@@ -148,9 +149,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				// TODO Intent a Animaciones
-			    //canvas.testBitMap();
-				Intent intent = new Intent(PaintActivity.this, AnimationActivity.class);
-				startActivity(intent);
+			    canvas.testBitMap();
 			}
 		});
 	}

@@ -13,8 +13,8 @@ public class OpenGLRenderer implements Renderer
 	public float xLeft, xRight, yTop, yBot, xCentro, yCentro;
 	
 	// Parámetros del Puerto de Vista
-	public int height = 1280;
-	public int width = 760;
+	public int height;
+	public int width;
 	
 	// Contexto
 	public Context context;
@@ -22,13 +22,6 @@ public class OpenGLRenderer implements Renderer
 	public OpenGLRenderer(Context context)
 	{
 		this.context = context;
-		
-		this.xRight = width;
-		this.xLeft = 0.0f;
-		this.yTop = height;
-		this.yBot = 0.0f;
-		this.xCentro = (xRight + xLeft)/2.0f;
-		this.yCentro = (yTop + yBot)/2.0f;
 	}
 	
 	public void zoom(float factor)
@@ -43,14 +36,7 @@ public class OpenGLRenderer implements Renderer
 	}
 	
 	public void drag(float width, float height, float dx, float dy)
-	{	
-		/*
-		this.xLeft += dx * width;
-		this.xRight += dx * width;
-		this.yBot += dy * height;
-		this.yTop += dy * height;
-		*/
-		
+	{			
 		this.xLeft += dx;
 		this.xRight += dx;
 		this.yBot += dy;
@@ -87,8 +73,13 @@ public class OpenGLRenderer implements Renderer
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
-		this.xRight = this.xLeft + width;
-		this.yTop = this.yBot + height;
+		this.xRight = width;
+		this.xLeft = 0.0f;
+		this.yTop = height;
+		this.yBot = 0.0f;
+		this.xCentro = (xRight + xLeft)/2.0f;
+		this.yCentro = (yTop + yBot)/2.0f;
+		
 		this.width = width;
 		this.height = height;
 		
@@ -104,7 +95,7 @@ public class OpenGLRenderer implements Renderer
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{
+	{		
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 	//White Background
 		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup

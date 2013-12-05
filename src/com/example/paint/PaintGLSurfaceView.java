@@ -147,10 +147,7 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	public void testBitMap()
 	{
 		renderer.guardarPolilinea();
-		renderer.testBitMap();
-		// Tomar ScreenShot
-		requestRender();
-		// Pintar Textura
+		renderer.capturaPantalla();
 		requestRender();
 	}
 }

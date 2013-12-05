@@ -37,7 +37,9 @@
         </activity>
         <activity
             android:name="com.example.main.AnimationActivity"
-            android:label="@string/title_activity_animation" >
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_animation" 
+            android:parentActivityName="com.example.main.DesignActivity" >
         </activity>
         <activity
             android:name="com.example.main.RunFragment"

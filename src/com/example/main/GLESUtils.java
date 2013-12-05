@@ -117,7 +117,7 @@ public class GLESUtils
 		return listabuffer;
 	}
 	
-	public static FloatArray construirTextura(FloatArray puntos, float width, float height, float xLeft, float yTop)
+	public static FloatArray construirTextura(FloatArray puntos, float width, float height)
 	{
 		FloatArray textura = new FloatArray();
 		
@@ -127,8 +127,8 @@ public class GLESUtils
 			float x = puntos.get(i);
 			float y = puntos.get(i+1);
 			
-			float cx = (xLeft + x) / width;
-			float cy = height - ((yTop + y) / height);
+			float cx = x / width;
+			float cy = (height - y) / height;
 			
 			textura.add(cx);
 			textura.add(cy);

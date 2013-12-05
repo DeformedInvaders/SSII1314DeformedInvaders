@@ -3,22 +3,13 @@ package com.example.design;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 
 import com.example.main.Esqueleto;
-import com.example.touch.DoubleTouchGestureListener;
-import com.example.touch.DragGestureDetector;
-import com.example.touch.ScaleGestureListener;
 
 public class DesignGLSurfaceView extends GLSurfaceView
 {
     private final DesignOpenGLRenderer renderer;
-    
-    private ScaleGestureDetector scaleDectector;
-    private GestureDetector doubleTouchDetector;
-    private DragGestureDetector dragDetector;
  
     public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
@@ -26,17 +17,13 @@ public class DesignGLSurfaceView extends GLSurfaceView
 
         // Create an OpenGL 1.0 context.
         setEGLContextClientVersion(1);
-
+        
         // Set the Renderer for drawing on the GLSurfaceView
         renderer = new DesignOpenGLRenderer(context);
         setRenderer(renderer);
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        
-        scaleDectector = new ScaleGestureDetector(context, new ScaleGestureListener(renderer));
-        doubleTouchDetector = new GestureDetector(context, new DoubleTouchGestureListener(renderer));
-        dragDetector = new DragGestureDetector(renderer);
     }
 
 	@Override
@@ -58,20 +45,7 @@ public class DesignGLSurfaceView extends GLSurfaceView
 				requestRender();
 			}
 		}
-		else 
-		{
-			if(event.getPointerCount() == 1)
-			{		
-				dragDetector.onTouchEvent(event, x, y, width, height);
-				doubleTouchDetector.onTouchEvent(event);
-			}
-			else
-			{
-				scaleDectector.onTouchEvent(event);
-			}
-		}
 		
-		requestRender();
 		return true;
 	}
 	

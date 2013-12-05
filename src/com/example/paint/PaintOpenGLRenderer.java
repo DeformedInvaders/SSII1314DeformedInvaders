@@ -77,7 +77,46 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
-	{			
+	{					
+		if (takeScreenShot)
+		{	
+			// Restaurar Camara posición inicial
+			float nxLeft = xLeft;
+			float nxRight = xRight;
+			float nyTop = yTop;
+			float nyBot = yBot;
+			
+			restore();
+			
+			// Limpiar Buffer Color y Actualizar Camara
+			super.onDrawFrame(gl);
+			
+			// Pintar Elementos a capturar
+			GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, bufferPuntos);
+			Iterator<Polilinea> it = lista.iterator();
+			while(it.hasNext())
+			{
+				it.next().dibujar(gl);
+			}
+			
+			// Capturar Pantalla
+		    this.texturaBMP = capturaPantalla(gl, height, width);
+		    
+		    // Construir Textura
+			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight());
+	        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
+			
+			// Desactivar Modo Captura
+			this.takeScreenShot = false;
+			this.estado = TPaintEstado.Bitmap;
+			
+			// Recuperar Camara
+			this.xLeft = nxLeft;
+			this.xRight = nxRight;
+			this.yTop = nyTop;
+			this.yBot = nyBot;
+		}
+		
 		super.onDrawFrame(gl);
 		
 		if(estado == TPaintEstado.Bitmap)
@@ -107,34 +146,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				linea.dibujar(gl);
 			}
 			
-			if(puntos != null && triangulos != null && !takeScreenShot)
+			if(puntos != null && triangulos != null)
 			{
 				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
 			}
-		}
-		
-		if (takeScreenShot)
-		{			
-		    int screenshotSize = width * height;
-		    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
-		    bb.order(ByteOrder.nativeOrder());
-		    gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
-		    int pixelsBuffer[] = new int[screenshotSize];
-		    bb.asIntBuffer().get(pixelsBuffer);
-		    bb = null;
-
-		    for (int i = 0; i < screenshotSize; ++i) {
-		        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
-		    }
-
-		    this.texturaBMP = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		    this.texturaBMP.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
-		    
-			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight(), xLeft, yBot);
-	        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
-		    
-		    this.takeScreenShot = false;
-		    this.estado = TPaintEstado.Bitmap;
 		}
 	}
 
@@ -273,8 +288,27 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.color = Color.BLACK;
 	}
 	
-	public void testBitMap()
+	public void capturaPantalla()
 	{
 		this.takeScreenShot = true;
+	}
+	
+	private Bitmap capturaPantalla(GL10 gl, int height, int width)
+	{
+	    int screenshotSize = width * height;
+	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
+	    bb.order(ByteOrder.nativeOrder());
+	    gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
+	    int pixelsBuffer[] = new int[screenshotSize];
+	    bb.asIntBuffer().get(pixelsBuffer);
+	    bb = null;
+
+	    for (int i = 0; i < screenshotSize; ++i) {
+	        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
+	    }
+
+	    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+	    bitmap.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
+	    return bitmap;
 	}
 }
