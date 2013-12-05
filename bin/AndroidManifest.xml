@@ -39,9 +39,9 @@
             android:name="com.example.main.AnimationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_animation" 
-            android:parentActivityName="com.example.main.DesignActivity" >
+            android:parentActivityName="com.example.main.PaintActivity" >
         </activity>
-        <activity
+        <!--  <activity
             android:name="com.example.main.RunFragment"
             android:label="@string/title_activity_run" >
         </activity>
@@ -56,7 +56,7 @@
         <activity
             android:name="com.example.main.AttackFragment"
             android:label="@string/title_activity_attack" >
-        </activity>
+        </activity>-->
     </application>
 
 </manifest>

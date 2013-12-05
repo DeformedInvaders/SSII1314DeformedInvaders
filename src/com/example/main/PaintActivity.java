@@ -102,6 +102,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			{
 				//TODO Lanzar Textures Picker
 				Intent intent = new Intent(PaintActivity.this, AnimationActivity.class);
+				//intent.putExtra("Esqueleto", e);
 				startActivity(intent);
 			}
 		});
