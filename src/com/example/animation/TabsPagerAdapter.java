@@ -1,5 +1,7 @@
 package com.example.animation;
 
+import com.example.main.AttackFragment;
+import com.example.main.DownFragment;
 import com.example.main.JumpFragment;
 import com.example.main.RunFragment;
 
@@ -21,10 +23,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return new RunFragment();
         case 1:
             return new JumpFragment();
-        /*case 2:
+        case 2:
             return new DownFragment();
         case 3:
-            return new AttackFragment();*/
+            return new AttackFragment();
         }
  
         return null;
@@ -33,7 +35,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // get item count - equal to number of tabs
-        return 3;
+        return 4;
     }
  
 }

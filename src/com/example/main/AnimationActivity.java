@@ -30,6 +30,7 @@ ActionBar.TabListener {
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
  
         viewPager.setAdapter(mAdapter);
+        
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
  
@@ -43,23 +44,37 @@ ActionBar.TabListener {
         actionBar.addTab(actionBar.newTab().setText("Attack")
                 .setTabListener(this));
 
-    	}
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+       	 
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+         
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+         
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+    }
 
-		@Override
-		public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-	
-		@Override
-		public void onTabSelected(Tab arg0, FragmentTransaction arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-	
-		@Override
-		public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
-			// TODO Auto-generated method stub
-			
-		}
+	@Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+		
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		viewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
+		
+	}
 }
