@@ -101,7 +101,14 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				//TODO Lanzar Textures Picker
-				canvas.testBitMap();
+				//canvas.testBitMap();
+				Esqueleto e = canvas.getEsqueleto();
+				if(e != null)
+				{
+					Intent intent = new Intent(PaintActivity.this, MoveActivity.class);
+					intent.putExtra("Esqueleto", e);
+					startActivity(intent);
+				}
 			}
 		});
 		
