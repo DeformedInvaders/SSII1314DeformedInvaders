@@ -144,6 +144,11 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		renderer.setEsqueleto(esqueleto);
 	}
 	
+	public Esqueleto getEsqueleto()
+	{
+		return renderer.getEsqueleto();
+	}
+	
 	public void testBitMap()
 	{
 		renderer.guardarPolilinea();

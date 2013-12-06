@@ -24,9 +24,10 @@ import com.example.math.MathUtils;
 /** A resizable, ordered or unordered float array. Avoids the boxing that occurs with ArrayList<Float>. If unordered, this class
  * avoids a memory copy when removing elements (the last element is moved to the removed element's position).
  * @author Nathan Sweet */
+
 public class FloatArray implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 666L;
 	
 	public float[] items;
 	public int size;
@@ -326,5 +327,15 @@ public class FloatArray implements Serializable {
 			buffer.append(items[i]);
 		}
 		return buffer.toString();
+	}
+	
+	public FloatArray clone() {
+		// TODO
+		FloatArray f = new FloatArray();
+		for(int i = 0; i < size; i++)
+		{
+			f.add(items[i]);
+		}
+		return f;
 	}
 }

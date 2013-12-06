@@ -101,9 +101,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				//TODO Lanzar Textures Picker
-				Intent intent = new Intent(PaintActivity.this, AnimationActivity.class);
-				//intent.putExtra("Esqueleto", e);
-				startActivity(intent);
+				canvas.testBitMap();
 			}
 		});
 		
@@ -148,9 +146,14 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		{
 			@Override
 			public void onClick(View arg0)
-			{
-				// TODO Intent a Animaciones
-			    canvas.testBitMap();
+			{		
+				Esqueleto e = canvas.getEsqueleto();
+				if(e != null)
+				{
+					Intent intent = new Intent(PaintActivity.this, DeformActivity.class);
+					intent.putExtra("Esqueleto", e);
+					startActivity(intent);
+				}
 			}
 		});
 	}
@@ -175,11 +178,11 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		int result = this.getResources().getConfiguration().orientation;
 		if(result == 1)
 		{
-			setContentView(R.layout.paint_layout_portrait);
+			//setContentView(R.layout.paint_layout_portrait);
 		}
 		else
 		{
-		    setContentView(R.layout.paint_layout_landscape);
+		    //setContentView(R.layout.paint_layout_landscape);
 		}
 	}
 	

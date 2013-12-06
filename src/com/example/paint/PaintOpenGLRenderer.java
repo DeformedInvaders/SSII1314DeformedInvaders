@@ -43,7 +43,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private int color;
 	
 	/* Texturas */
-	private Bitmap texturaBMP;
+	//private Bitmap texturaBMP;
+	private TexturaBMP textura;
 	private boolean takeScreenShot;
 	
 	private FloatArray coordsTextura;
@@ -100,9 +101,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			}
 			
 			// Capturar Pantalla
-		    this.texturaBMP = capturaPantalla(gl, height, width);
+		    this.textura = capturaPantalla(gl, height, width);
 		    
 		    // Construir Textura
+		    Bitmap texturaBMP = textura.getBitmap();
 			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight());
 	        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
 			
@@ -121,6 +123,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		if(estado == TPaintEstado.Bitmap)
 		{
+			Bitmap texturaBMP = textura.getBitmap();
 			GLESUtils.cargarTextura(gl, texturaBMP, nombreTextura, 0);
 			GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferTextura, nombreTextura, 0);	
 			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, Color.DKGRAY, bufferPuntos);
@@ -293,7 +296,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.takeScreenShot = true;
 	}
 	
-	private Bitmap capturaPantalla(GL10 gl, int height, int width)
+	private TexturaBMP capturaPantalla(GL10 gl, int height, int width)
 	{
 	    int screenshotSize = width * height;
 	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
@@ -306,9 +309,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	    for (int i = 0; i < screenshotSize; ++i) {
 	        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 	    }
-
-	    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-	    bitmap.setPixels(pixelsBuffer, screenshotSize-width, -width, 0, 0, width, height);
-	    return bitmap;
+	    
+	    TexturaBMP textura = new TexturaBMP();
+	    textura.setBitmap(pixelsBuffer, width, height);
+	    return textura;
+	}
+	
+	public Esqueleto getEsqueleto()
+	{
+		Esqueleto esqueleto = new Esqueleto(hull, puntos, triangulos);
+		//esqueleto.setTexture(textura, coordsTextura);
+		return esqueleto;
 	}
 }

@@ -2,9 +2,9 @@ package com.example.main;
 
 import java.io.Serializable;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import com.example.paint.TexturaBMP;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
@@ -14,7 +14,7 @@ public class Esqueleto implements Serializable
 	private FloatArray mesh;
 	private ShortArray triangles;
 	private int color;
-	private Bitmap texture;
+	private TexturaBMP texture;
 	private FloatArray coords;
 	
 	public Esqueleto(FloatArray hull, FloatArray mesh, ShortArray triangles)
@@ -30,7 +30,7 @@ public class Esqueleto implements Serializable
 		this.color = color;
 	}
 	
-	public void setTexture(Bitmap texture, FloatArray coords)
+	public void setTexture(TexturaBMP texture, FloatArray coords)
 	{
 		this.texture = texture;
 		this.coords = coords;
@@ -56,7 +56,7 @@ public class Esqueleto implements Serializable
 		return color;
 	}
 
-	public Bitmap getTexture()
+	public TexturaBMP getTexture()
 	{
 		return texture;
 	}

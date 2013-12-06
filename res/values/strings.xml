@@ -35,18 +35,24 @@
     <string name="desc_color">Color</string>
     <string name="desc_size">Size</string>
     <string name="desc_eye">Eye</string>
-	<!-- Fase de Animacion -->
-	<string name="title_activity_animation">Animation Phase</string>
+    <!-- Fase de Animacion -->
+    <string name="title_activity_animation">Animation Phase</string>
     <string name="title_activity_run">Run Fragment</string>
     <string name="title_activity_jump">Jump Fragnment</string>
     <string name="title_activity_down">Get Down Fragment</string>
     <string name="title_activity_attack">Attack Fragment</string>
-	<string name="attackhello">Attack Hello World</string>
-	<string name="jumphello">Jump Hello World</string>
-	<string name="downhello">Down Hello World</string>
-	<string name="runhello">Run Hello World</string>
-	<string name="tabRun">Run</string>
-	<string name="tabJump">Jump</string>
-	<string name="tabDown">Down</string>
-	<string name="tabAttack">Attack</string>
+    <string name="attackhello">Attack Hello World</string>
+    <string name="jumphello">Jump Hello World</string>
+    <string name="downhello">Down Hello World</string>
+    <string name="runhello">Run Hello World</string>
+    <string name="tabRun">Run</string>
+    <string name="tabJump">Jump</string>
+    <string name="tabDown">Down</string>
+    <string name="tabAttack">Attack</string>
+    <!-- Fase de Deformacion -->
+	<string name="title_activity_deform">Deform Activity</string>
+    <string name="desc_add">Add</string>
+    <string name="desc_remove">Remove</string>
+    <string name="desc_move">Move</string>
+
 </resources>

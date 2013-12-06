@@ -181,9 +181,9 @@ public class GeometryUtils {
 		return Intersector.isPointInPolygon(polygon, new Vector2(x, y));
 	}
 	
-	public static Vector2 isPointInMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
+	public static int isPointInMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
 		// TODO
-		Vector2 punto = new Vector2();
+		//Vector2 punto = new Vector2();
 		
 		int j = 0;
 		while(j < vertices.size) {
@@ -191,14 +191,14 @@ public class GeometryUtils {
 			float py = (vertices.get(j+1) - yBot)*dy;			
 						
 			if(Math.abs(px - x) < 10 && Math.abs(py - y) < 10) {
-				punto.x = vertices.get(j);
-				punto.y = vertices.get(j+1);
-				return punto;
+				//punto.x = vertices.get(j);
+				//punto.y = vertices.get(j+1);
+				return j/2;
 			}
 			
 			j = j+2;
 		}
 		
-		return null;
+		return -1;
 	}
 }

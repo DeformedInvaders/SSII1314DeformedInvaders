@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
     <application
@@ -36,27 +36,11 @@
             android:parentActivityName="com.example.main.DesignActivity" >
         </activity>
         <activity
-            android:name="com.example.main.AnimationActivity"
+            android:name="com.example.main.DeformActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_animation" 
-            android:parentActivityName="com.example.main.PaintActivity" >
+            android:label="@string/title_activity_deform"
+            android:parentActivityName="com.example.main.PaintActivity"  >
         </activity>
-        <!--  <activity
-            android:name="com.example.main.RunFragment"
-            android:label="@string/title_activity_run" >
-        </activity>
-        <activity
-            android:name="com.example.main.JumpFragment"
-            android:label="@string/title_activity_jump" >
-        </activity>
-        <activity
-            android:name="com.example.main.DownFragment"
-            android:label="@string/title_activity_down" >
-        </activity>
-        <activity
-            android:name="com.example.main.AttackFragment"
-            android:label="@string/title_activity_attack" >
-        </activity>-->
     </application>
 
 </manifest>
