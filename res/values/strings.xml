@@ -41,7 +41,6 @@
     <string name="title_activity_jump">Jump Fragnment</string>
     <string name="title_activity_down">Get Down Fragment</string>
     <string name="title_activity_attack">Attack Fragment</string>
-<<<<<<< .mine
     <string name="attackhello">Attack Hello</string>
     <string name="jumphello">Jump Hello</string>
     <string name="downhello">Down Hello</string>
@@ -56,25 +55,11 @@
     <string name="title_section2">Section Jump</string>
     <string name="title_section3">Section Down</string>
     <string name="title_section4">Section Attack</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_jump_fragment">JumpFragment</string>
-    <string name="title_activity_down_fragment">DownFragment</string>
-    <string name="title_activity_attack_fragment">AttackFragment</string>
-
-=======
-    <string name="attackhello">Attack Hello World</string>
-    <string name="jumphello">Jump Hello World</string>
-    <string name="downhello">Down Hello World</string>
-    <string name="runhello">Run Hello World</string>
-    <string name="tabRun">Run</string>
-    <string name="tabJump">Jump</string>
-    <string name="tabDown">Down</string>
-    <string name="tabAttack">Attack</string>
+    
     <!-- Fase de Deformacion -->
 	<string name="title_activity_deform">Deform Activity</string>
     <string name="desc_add">Add</string>
     <string name="desc_remove">Remove</string>
     <string name="desc_move">Move</string>
 
->>>>>>> .r32
 </resources>
