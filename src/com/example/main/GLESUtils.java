@@ -141,9 +141,15 @@ public class GLESUtils
 	public static void dibujarBuffer(GL10 gl, int type, float size, int color, FloatBuffer bufferPuntos)
 	{	
 		gl.glColor4f(Color.red(color)/255.0f, Color.green(color)/255.0f, Color.blue(color)/255.0f, 1.0f);
-		gl.glLineWidth(size);
 		gl.glFrontFace(GL10.GL_CW);
 		
+		if(type == GL10.GL_POINTS)
+		{
+			gl.glPointSize(size);
+		}
+		else {
+			gl.glLineWidth(size);
+		}
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);

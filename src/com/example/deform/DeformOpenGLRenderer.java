@@ -32,7 +32,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	private ArrayList<FloatBuffer> bufferPuntos;
 	//private ArrayList<FloatBuffer> bufferCoords;
-	//private ArrayList<FloatBuffer> bufferHandles;
+	private FloatBuffer bufferHandles;
 	
 	private TDeformEstado estado;
 	
@@ -54,23 +54,25 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{					
 		super.onDrawFrame(gl);
 		
-		// Dibujar Mesh
-		//GLESUtils.cargarTextura(gl, textura, nombreTextura, 0);
-		//GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferCoords, nombreTextura, 0);	
-		
-		GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 2.0f, Color.BLACK, bufferPuntos);
+		// Dibujar Mesh		
+		GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferPuntos);
 		
 		// Dibujar Handles		
-		//gl.glColor3d(1.0, 1.0, 0.0);
-		//dibujarFloatArray(gl, GL.GL_POINTS, puntosDeformacion, indiceHandlesDeformacion);
-		//if(handles.size > 0)
-		//{
-			//gl.glPointSize(3.0f);
-			//GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 2.0f, Color.YELLOW, bufferHandles);
-		//}
+		if(indiceHandles.size > 0)
+		{
+			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 10.0f, Color.BLUE, bufferHandles);
+		}
 		
 		// Dibujar Handle Seleccionado
-		//dibujarFloat(gl, indiceHandlesDeformacion, handleSeleccionado, puntosDeformacion);
+		if(handleSeleccionado != -1)
+		{
+			FloatArray seleccion = new FloatArray();
+			seleccion.add(handles.get(2*handleSeleccionado));
+			seleccion.add(handles.get(2*handleSeleccionado+1));
+			FloatBuffer bufferSeleccion = GLESUtils.construirBuffer(seleccion);
+			
+			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 10.0f, Color.RED, bufferSeleccion);
+		}		
 	}
 	
 	public void setEsqueleto(Esqueleto esqueleto)
@@ -90,8 +92,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarPunto(float x, float y, float width, float height)
 	{
 		// Conversión Pixel - Punto	
-		float nx = xLeft + (xRight-xLeft)*x/width;
-		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		//float nx = xLeft + (xRight-xLeft)*x/width;
+		//float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
 		float dx = width/(xRight-xLeft);
 		float dy = height/(yTop-yBot);
@@ -110,7 +112,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					
 					// Añadir Handle Nuevo
 					deformator.computeDeformation(handles, indiceHandles);
-					//bufferHandles = GLESUtils.con(this.triangulos, this.handles);
+					bufferHandles = GLESUtils.construirBuffer(handles);
 				}
 			}
 		}
@@ -132,22 +134,28 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				}
 			}
 		}
-		else if(estado == TDeformEstado.Mover)
+	}
+
+	public void deseleccionarPunto(float x, float y, float width, float height)
+	{
+		if(estado == TDeformEstado.Mover)
 		{
+			// Conversión Pixel - Punto	
+			float nx = xLeft + (xRight-xLeft)*x/width;
+			float ny = yBot + (yTop-yBot)*(height-y)/height;
+			
 			handles.set(2*handleSeleccionado, nx);
 			handles.set(2*handleSeleccionado+1, ny);
 			
 			// Cambiar Posicion de los Handles
 			puntos = deformator.computeDeformation(handles);
 			bufferPuntos = GLESUtils.construirTriangulosBuffer(this.triangulos, this.puntos);
-			//bufferHandles = GLESUtils.construirTriangulosBuffer(this.triangulos, this.handles);
+			bufferHandles = GLESUtils.construirBuffer(this.handles);
+			
+			estado = TDeformEstado.Seleccionar;
+			handleSeleccionado  = -1;
 		}
-	}
 
-	public void deseleccionarPunto(float x, float y, float width, float height)
-	{
-		estado = TDeformEstado.Seleccionar;
-		handleSeleccionado  = -1;
 	}
 
 	public void seleccionarAnyadir()

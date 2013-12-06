@@ -79,8 +79,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 		
-		gl.glPointSize(10.0f);
-				
 		// Dibujar Segmentos
 		switch(estado)
 		{
@@ -117,7 +115,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		// Dibujar Puntos
 		if(puntos.size > 0)
 		{
-			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, Color.RED, bufferPuntos);
+			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 10.0f, Color.RED, bufferPuntos);
 		}
 		
 		// Dibujar Handles
@@ -125,7 +123,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			if(handles.size > 0)
 			{
-				GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 3.0f, Color.YELLOW, bufferHandles);
+				GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 10.0f, Color.YELLOW, bufferHandles);
 			}
 		}
 	}
@@ -282,11 +280,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			estado = TDesignEstado.Test;
 			
 			// TODO Calcular Iteraciones en función del Area del Poligono
-			FloatArray bsplineVertices = calcularBSpline(puntos, 3, 100.0f);
+			FloatArray bsplineVertices = calcularBSpline(puntos, 3, 50.0f);
 			
 			ShortArray testSimple = calcularPoligonoSimple(bsplineVertices, false);
 			if(testSimple.size == 0) {
-				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 30.0f);
+				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 50.0f);
 				puntosTest = m.getVertices();
 				triangulosTest = m.getTriangulos();
 				
