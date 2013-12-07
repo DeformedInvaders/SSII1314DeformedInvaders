@@ -26,6 +26,10 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 {
     private static final String COLOR_PREFERENCE_KEY = "color";
     private String FILENAME;
+ // action id
+ 	private static final int ID_FINO = 1;
+ 	private static final int ID_NORMAL = 2;
+ 	private static final int ID_ANCHO = 3;
     
 	private PaintGLSurfaceView canvas;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
@@ -79,7 +83,52 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		{
 		    setContentView(R.layout.paint_layout_landscape);
 		}
-		
+		ActionItem finoItem = new ActionItem(ID_FINO, "1", getResources().getDrawable(R.drawable.linea1));
+		ActionItem normalItem = new ActionItem(ID_NORMAL, "6", getResources().getDrawable(R.drawable.linea2));
+		ActionItem anchoItem = new ActionItem(ID_ANCHO, "11", getResources().getDrawable(R.drawable.linea3));
+		// create QuickAction. Use QuickAction.VERTICAL or
+		// QuickAction.HORIZONTAL param to define layout
+		// orientation
+/*		final QuickAction quickAction = new QuickAction(this,
+				QuickAction.VERTICAL);
+
+		// add action items into QuickAction
+		quickAction.addActionItem(finoItem);
+		quickAction.addActionItem(normalItem);
+		quickAction.addActionItem(anchoItem);
+
+		// Set listener for action item clicked
+		quickAction
+				.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+					@Override
+					public void onItemClick(QuickAction source, int pos,
+							int actionId) {
+						ActionItem actionItem = quickAction.getActionItem(pos);
+						// TODO Aqui mirar que item es y hacer el
+						// canvas.seleccionarSize();
+						// here we can filter which action item was clicked with
+						// pos or actionId parameter
+
+						Toast.makeText(
+								getApplicationContext(),
+								"grosor " + actionItem.getTitle()
+										+ " seleccionado", Toast.LENGTH_SHORT)
+								.show();
+
+					}
+				});
+
+		// set listnener for on dismiss event, this listener will be called only
+		// if QuickAction dialog was dismissed
+		// by clicking the area outside the dialog.
+		quickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				Toast.makeText(getApplicationContext(), "Dismissed",
+						Toast.LENGTH_SHORT).show();
+			}
+		});*/
+
 		botonPincel = (ImageButton) findViewById(R.id.imageButton1);
 		botonCubo = (ImageButton) findViewById(R.id.imageButton2);
 		botonMano = (ImageButton) findViewById(R.id.imageButton3);
@@ -129,6 +178,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				//TODO Lanzar Size Picker
+				//quickAction.show(arg0);
 				canvas.seleccionarSize();
 			}
 		});
