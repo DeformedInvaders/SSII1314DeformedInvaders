@@ -31,14 +31,17 @@ public class GLESUtils
 	
 	public static FloatBuffer construirBuffer(FloatArray lista)
 	{	
-		int arrayLong = lista.size;
-		float[] arrayPuntos = new float[arrayLong];
+		/*int arrayLong = lista.size;
+		
 		for(int i = 0; i < lista.size; i++)
 		{
 			arrayPuntos[i] = lista.get(i);
-		}
+		}*/
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(arrayLong * 4);
+		float[] arrayPuntos = new float[lista.size];
+		System.arraycopy(lista.items, 0, arrayPuntos, 0, lista.size);
+		
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(lista.size * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		FloatBuffer buffer = byteBuf.asFloatBuffer();
 		buffer.put(arrayPuntos);
@@ -119,7 +122,7 @@ public class GLESUtils
 	
 	public static FloatArray construirTextura(FloatArray puntos, float width, float height)
 	{
-		FloatArray textura = new FloatArray();
+		FloatArray textura = new FloatArray(puntos.size);
 		
 		int i = 0;
 		while(i < puntos.size)

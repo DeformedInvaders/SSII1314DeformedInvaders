@@ -1,8 +1,6 @@
 package com.example.paint;
 
 import java.nio.FloatBuffer;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -29,20 +27,6 @@ public class Polilinea
 	{	
 		this.puntos = new FloatArray();
 		this.anyadirPunto(p);
-		
-		this.size = size;
-		this.color = color;
-	}
-	
-	public Polilinea(Collection<Punto> c, int color, float size)
-	{	
-		this.puntos = new FloatArray();
-		
-		Iterator<Punto> it = c.iterator();
-		while(it.hasNext())
-		{
-			this.anyadirPunto(it.next());
-		}
 		
 		this.size = size;
 		this.color = color;

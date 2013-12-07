@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.example.main.Esqueleto;
@@ -24,14 +25,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private ShortArray triangulos, indiceHandles;
 	private int handleSeleccionado;
 	
-	//private static final int numeroTexturas = 1;
-	//private int[] nombreTextura;
+	private static final int numeroTexturas = 1;
+	private int[] nombreTextura;
 	
-	//private Bitmap textura;
-	//private FloatArray coords;
+	private Bitmap textura;
+	private FloatArray coords;
 	
 	private ArrayList<FloatBuffer> bufferPuntos;
-	//private ArrayList<FloatBuffer> bufferCoords;
+	private ArrayList<FloatBuffer> bufferCoords;
 	private FloatBuffer bufferHandles;
 	
 	private TDeformEstado estado;
@@ -46,7 +47,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         indiceHandles = new ShortArray();
         handleSeleccionado = -1;
         
-        //nombreTextura = new int[numeroTexturas];
+        nombreTextura = new int[numeroTexturas];
 	}
 	
 	@Override
@@ -55,7 +56,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onDrawFrame(gl);
 		
 		// Dibujar Mesh		
-		GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferPuntos);
+		//GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferPuntos);
+		GLESUtils.cargarTextura(gl, textura, nombreTextura, 0);
+		GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferCoords, nombreTextura, 0);
 		
 		// Dibujar Handles		
 		if(indiceHandles.size > 0)
@@ -64,15 +67,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Dibujar Handle Seleccionado
-		if(handleSeleccionado != -1)
+		/*if(handleSeleccionado != -1)
 		{
-			FloatArray seleccion = new FloatArray();
+			FloatArray seleccion = new FloatArray(2);
 			seleccion.add(handles.get(2*handleSeleccionado));
 			seleccion.add(handles.get(2*handleSeleccionado+1));
 			FloatBuffer bufferSeleccion = GLESUtils.construirBuffer(seleccion);
 			
-			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 10.0f, Color.RED, bufferSeleccion);
-		}		
+			GLESUtils.dibujarBuffer(gl, GL10.GL_POINTS, 20.0f, Color.RED, bufferSeleccion);
+		}*/		
 	}
 	
 	public void setEsqueleto(Esqueleto esqueleto)
@@ -80,13 +83,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		this.hull = esqueleto.getMesh();
 		this.puntos = hull.clone();
 		this.triangulos = esqueleto.getTriangles();
-		//this.textura = esqueleto.getTexture().getBitmap();
-		//this.coords = esqueleto.getCoords();
+		this.textura = esqueleto.getTexture().getBitmap();
+		this.coords = esqueleto.getCoords();
 				
 		this.deformator = new Deformator(hull, triangulos, handles, indiceHandles);
 
 		this.bufferPuntos = GLESUtils.construirTriangulosBuffer(triangulos, hull);
-		//this.bufferCoords = GLESUtils.construirTriangulosBuffer(triangulos, coords);
+		this.bufferCoords = GLESUtils.construirTriangulosBuffer(triangulos, coords);
 	}
 
 	public void seleccionarPunto(float x, float y, float width, float height)

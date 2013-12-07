@@ -149,13 +149,13 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			
 			if(lineasBSpline == null)
 			{
-				lineasBSpline = calcularBSpline(puntos, 3, 100f);
+				lineasBSpline = calcularBSpline(puntos, 3, 100);
 				bufferBSpline = GLESUtils.construirBuffer(lineasBSpline);
 			}
 		}
 	}
 	
-	private FloatArray calcularBSpline(FloatArray vertices, int grado, float iter)
+	private FloatArray calcularBSpline(FloatArray vertices, int grado, int iter)
 	{
 		BSpline<Vector2> bsplineCalculator = new BSpline<Vector2>(vertices, grado, true);
 		return bsplineCalculator.computeBSpline(0.0f, iter);
@@ -280,11 +280,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			estado = TDesignEstado.Test;
 			
 			// TODO Calcular Iteraciones en función del Area del Poligono
-			FloatArray bsplineVertices = calcularBSpline(puntos, 3, 50.0f);
+			FloatArray bsplineVertices = calcularBSpline(puntos, 3, 50);
 			
 			ShortArray testSimple = calcularPoligonoSimple(bsplineVertices, false);
 			if(testSimple.size == 0) {
-				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 50.0f);
+				Mesh m = calcularMeshGenerator(bsplineVertices, 2, 75.0f);
 				puntosTest = m.getVertices();
 				triangulosTest = m.getTriangulos();
 				

@@ -1,11 +1,20 @@
 package com.example.main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -15,9 +24,8 @@ import com.example.paint.PaintGLSurfaceView;
 
 public class PaintActivity extends Activity  implements ColorPickerDialog.OnColorChangedListener
 {
-	/** Called when the activity is first created. */
-    //private static final String BRIGHTNESS_PREFERENCE_KEY = "brightness";
     private static final String COLOR_PREFERENCE_KEY = "color";
+    private String FILENAME;
     
 	private PaintGLSurfaceView canvas;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
@@ -28,7 +36,37 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		super.onCreate(savedInstanceState);
 		
 		Bundle bundle = getIntent().getExtras();
-		Esqueleto e = (Esqueleto) bundle.get("Esqueleto");
+		FILENAME = bundle.getString("Esqueleto");
+		Esqueleto e = null;
+
+		FileInputStream file;
+		ObjectInputStream data;
+		try
+		{
+			file = openFileInput(FILENAME);
+			data = new ObjectInputStream(file);
+			e = (Esqueleto) data.readObject();
+			data.close();
+			file.close();
+		}
+		catch (FileNotFoundException e1)
+		{
+			Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+			e1.printStackTrace();
+		}
+		catch (IOException e1)
+		{
+			Toast.makeText(getApplication(), "IO Exception", Toast.LENGTH_SHORT).show();
+			Log.d("TEST", "IO EXCEPTION");
+			e1.printStackTrace();
+		}
+		catch (ClassNotFoundException e1)
+		{
+			Toast.makeText(getApplication(), "Objecto not found", Toast.LENGTH_SHORT).show();
+			Log.d("TEST", "CLASS NOT FOUND EXCEPTION");
+			e1.printStackTrace();
+		}
 		
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		
@@ -105,8 +143,31 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 				Esqueleto e = canvas.getEsqueleto();
 				if(e != null)
 				{
+					FileOutputStream file;
+					ObjectOutputStream data;
+					try
+					{
+						file = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+						data = new ObjectOutputStream(file);
+						data.writeObject(e);
+						data.close();
+						file.close();
+					}
+					catch (FileNotFoundException e1)
+					{
+						Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+						e1.printStackTrace();
+					}
+					catch (IOException e1)
+					{
+						Toast.makeText(getApplication(), "IO Exception", Toast.LENGTH_SHORT).show();
+						Log.d("TEST", "IO EXCEPTION");
+						e1.printStackTrace();
+					}
+					
 					Intent intent = new Intent(PaintActivity.this, MoveActivity.class);
-					intent.putExtra("Esqueleto", e);
+					intent.putExtra("Esqueleto", FILENAME);
 					startActivity(intent);
 				}
 			}
@@ -154,11 +215,37 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			@Override
 			public void onClick(View arg0)
 			{		
+				canvas.testBitMap();
 				Esqueleto e = canvas.getEsqueleto();
 				if(e != null)
 				{
+					FileOutputStream file;
+					ObjectOutputStream data;
+					try
+					{
+						file = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+						data = new ObjectOutputStream(file);
+						Log.d("TEST", "ANTES WRITE");
+						data.writeObject(e);
+						Log.d("TEST", "DESPUES WRITE");
+						data.close();
+						file.close();
+					}
+					catch (FileNotFoundException e1)
+					{
+						Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+						e1.printStackTrace();
+					}
+					catch (IOException e1)
+					{
+						Toast.makeText(getApplication(), "IO Exception", Toast.LENGTH_SHORT).show();
+						Log.d("TEST", "IO EXCEPTION");
+						e1.printStackTrace();
+					}
+					
 					Intent intent = new Intent(PaintActivity.this, DeformActivity.class);
-					intent.putExtra("Esqueleto", e);
+					intent.putExtra("Esqueleto", FILENAME);
 					startActivity(intent);
 				}
 			}

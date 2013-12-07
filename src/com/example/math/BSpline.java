@@ -212,8 +212,8 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 		return approximate(v);
 	}
 	
-	public FloatArray computeBSpline(float offset, float iter) {
-		FloatArray spline = new FloatArray();
+	public FloatArray computeBSpline(float offset, int iter) {
+		FloatArray spline = new FloatArray(2*iter);
 					
 		float t = offset;		
 		while(t < 1) {
@@ -223,7 +223,7 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 			spline.add(pos.x);
 			spline.add(pos.y);
 							
-			t += (1f/iter);
+			t += (1.0f/(float)iter);
 		}
 		
 		return spline;

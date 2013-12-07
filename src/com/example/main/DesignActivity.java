@@ -1,8 +1,15 @@
 package com.example.main;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +21,8 @@ import com.example.design.DesignGLSurfaceView;
 
 public class DesignActivity extends Activity
 {
+	private final static String FILENAME = "skeleton";
+	
 	private DesignGLSurfaceView canvas;
 	private ImageButton botonReady;
 	
@@ -33,17 +42,36 @@ public class DesignActivity extends Activity
 			@Override
 			public void onClick(View arg0)
 			{
-				//boolean b = canvas.pruebaCompleta();
-				
-				//if(b) {
-					Esqueleto e = canvas.getPruebaCompleta();
-					if(e != null)
+				Esqueleto e = canvas.getPruebaCompleta();
+				if(e != null)
+				{					
+					FileOutputStream file;
+					ObjectOutputStream data;
+					try
 					{
-						Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
-						intent.putExtra("Esqueleto", e);
-						startActivity(intent);
+						file = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+						data = new ObjectOutputStream(file);
+						data.writeObject(e);
+						data.close();
+						file.close();
 					}
-				//}
+					catch (FileNotFoundException e1)
+					{
+						Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+						e1.printStackTrace();
+					}
+					catch (IOException e1)
+					{
+						Toast.makeText(getApplication(), "IO Exception", Toast.LENGTH_SHORT).show();
+						Log.d("TEST", "IO EXCEPTION");
+						e1.printStackTrace();
+					}
+					
+					Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
+					intent.putExtra("Esqueleto", FILENAME);
+					startActivity(intent);
+				}
 			}
 		});
 	}

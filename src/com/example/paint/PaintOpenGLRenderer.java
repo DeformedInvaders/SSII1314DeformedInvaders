@@ -46,6 +46,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	//private Bitmap texturaBMP;
 	private TexturaBMP textura;
 	private boolean takeScreenShot;
+	private boolean screenShotTaken;
 	
 	private FloatArray coordsTextura;
 	private ArrayList<FloatBuffer> bufferTextura;
@@ -73,6 +74,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         this.siguientes = new Stack<Accion>();
         
         this.takeScreenShot = false;
+        this.screenShotTaken = false;
         this.nombreTextura = new int[numeroTexturas];
 	}
 	
@@ -110,6 +112,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			
 			// Desactivar Modo Captura
 			this.takeScreenShot = false;
+			this.screenShotTaken = true;
 			this.estado = TPaintEstado.Bitmap;
 			
 			// Recuperar Camara
@@ -188,6 +191,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public TPaintEstado getEstado()
 	{
 		return estado;
+	}
+	
+	public boolean getScreenShotTaken()
+	{
+		return screenShotTaken;
 	}
 	
 	public void setEsqueleto(Esqueleto esqueleto)
@@ -318,7 +326,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public Esqueleto getEsqueleto()
 	{
 		Esqueleto esqueleto = new Esqueleto(hull, puntos, triangulos);
-		//esqueleto.setTexture(textura, coordsTextura);
+		esqueleto.setTexture(textura, coordsTextura);
 		return esqueleto;
 	}
 }

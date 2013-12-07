@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import com.example.utils.FloatArray;
 import com.example.utils.Mesh;
 import com.example.utils.ShortArray;
@@ -154,15 +153,16 @@ public class DelaunayMeshGenerator {
 			return array.size();
 		}
 		
-		@SuppressLint("UseValueOf")
-		public float distancia(int a, int b) {
+		public float distancia(int a, int b)
+		{
 			Coordinate pa = get(a);
 			Coordinate pb = get(b);
-			return new Float(Math.sqrt(Math.pow(pb.getX()-pa.getX(), 2) + Math.pow(pb.getY()-pa.getY(), 2)));
+			return Intersector.distancePoints(pa.getX(), pa.getY(), pb.getX(), pb.getY());
 		}
 		
-		public FloatArray toFloatArray() {
-			FloatArray vertices = new FloatArray();
+		public FloatArray toFloatArray()
+		{
+			FloatArray vertices = new FloatArray(2*array.size());
 			
 			Iterator<Coordinate> it = array.iterator();
 			while(it.hasNext()) {
