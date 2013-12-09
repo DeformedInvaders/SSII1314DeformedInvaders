@@ -22,17 +22,18 @@ public class ScaleGestureListener extends SimpleOnScaleGestureListener
 		// TODO Eliminar multiplicación para no acumular los factores de zoom.
         mScaleFactor *= detector.getScaleFactor();
         
-        if(mScaleFactor > 1)
+        if(mScaleFactor > 1.21)
         {
-        	mScaleFactor = 0.97f;
+        	mScaleFactor = 1.01f;
         }
-        else if(mScaleFactor < 1)
+        else if(mScaleFactor < 0.789)
         {
-        	mScaleFactor = 1.03f;
+        	mScaleFactor = 0.99f;
         }
         
         renderer.zoom(mScaleFactor);
-        //invalidate();
+        
+        mScaleFactor = 1.0f;
         
         return true;
     }
