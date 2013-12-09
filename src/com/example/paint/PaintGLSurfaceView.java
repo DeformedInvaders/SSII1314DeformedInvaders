@@ -121,6 +121,10 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	{
 		renderer.seleccionarSize();
 	}
+	public void seleccionarSize(int pos)
+	{
+		renderer.seleccionarSize(pos);
+	}
 	
 	public void anteriorAccion()
 	{

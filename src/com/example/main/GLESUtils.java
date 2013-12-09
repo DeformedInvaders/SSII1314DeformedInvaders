@@ -120,18 +120,20 @@ public class GLESUtils
 		return listabuffer;
 	}
 	
-	public static FloatArray construirTextura(FloatArray puntos, float width, float height)
+	public static FloatArray construirTextura(FloatArray puntos, float width, float height, float xRight, float xLeft, float yTop, float yBot)
 	{
 		FloatArray textura = new FloatArray(puntos.size);
-		
+		float dx= width/(xRight-xLeft);
+		float dy = height/(yTop-yBot);
 		int i = 0;
 		while(i < puntos.size)
 		{
 			float x = puntos.get(i);
 			float y = puntos.get(i+1);
-			
-			float cx = x / width;
-			float cy = (height - y) / height;
+			float px=(x-xLeft)*dx;
+			float py=(y-yBot)+dy;
+			float cx = px / width;
+			float cy = py / height;
 			
 			textura.add(cx);
 			textura.add(cy);
@@ -198,7 +200,7 @@ public class GLESUtils
 			
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-				gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, bufferPuntos.capacity()/2);
+				gl.glDrawArrays(GL10.GL_TRIANGLES, 0, bufferPuntos.capacity()/2);
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		

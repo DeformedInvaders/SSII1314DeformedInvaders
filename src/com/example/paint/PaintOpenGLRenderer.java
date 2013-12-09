@@ -107,7 +107,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		    
 		    // Construir Textura
 		    Bitmap texturaBMP = textura.getBitmap();
-			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight());
+			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight(), this.xRight,this.xLeft, this.yTop,this.yBot);
 	        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
 			
 			// Desactivar Modo Captura
@@ -186,6 +186,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarSize()
 	{
 		sizeLinea = (sizeLinea+5)%15;
+	}
+	public void seleccionarSize(int pos)
+	{
+		if(pos==0){
+			sizeLinea = 1;
+		}else if(pos==1){
+			sizeLinea = 6;
+		}else if(pos==2){
+			sizeLinea =11;
+		}
 	}
 	
 	public TPaintEstado getEstado()

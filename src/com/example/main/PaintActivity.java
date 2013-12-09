@@ -89,7 +89,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		// create QuickAction. Use QuickAction.VERTICAL or
 		// QuickAction.HORIZONTAL param to define layout
 		// orientation
-/*		final QuickAction quickAction = new QuickAction(this,
+		final QuickAction quickAction = new QuickAction(this,
 				QuickAction.VERTICAL);
 
 		// add action items into QuickAction
@@ -104,10 +104,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 					public void onItemClick(QuickAction source, int pos,
 							int actionId) {
 						ActionItem actionItem = quickAction.getActionItem(pos);
-						// TODO Aqui mirar que item es y hacer el
-						// canvas.seleccionarSize();
-						// here we can filter which action item was clicked with
-						// pos or actionId parameter
+						canvas.seleccionarSize(pos);
 
 						Toast.makeText(
 								getApplicationContext(),
@@ -121,7 +118,7 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 		// set listnener for on dismiss event, this listener will be called only
 		// if QuickAction dialog was dismissed
 		// by clicking the area outside the dialog.
-		quickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
+		/*quickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
 			@Override
 			public void onDismiss() {
 				Toast.makeText(getApplicationContext(), "Dismissed",
@@ -178,8 +175,8 @@ public class PaintActivity extends Activity  implements ColorPickerDialog.OnColo
 			public void onClick(View arg0)
 			{
 				//TODO Lanzar Size Picker
-				//quickAction.show(arg0);
-				canvas.seleccionarSize();
+				quickAction.show(arg0);
+//				canvas.seleccionarSize();
 			}
 		});
 		
