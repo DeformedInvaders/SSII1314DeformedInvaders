@@ -284,7 +284,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			
 			ShortArray testSimple = calcularPoligonoSimple(bsplineVertices, false);
 			if(testSimple.size == 0) {
-				Mesh m = calcularMeshGenerator(bsplineVertices, 2, 75.0f);
+				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 100.0f);
 				puntosTest = m.getVertices();
 				triangulosTest = m.getTriangulos();
 				

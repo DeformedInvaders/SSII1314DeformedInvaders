@@ -131,9 +131,9 @@ public class GLESUtils
 			float x = puntos.get(i);
 			float y = puntos.get(i+1);
 			float px=(x-xLeft)*dx;
-			float py=(y-yBot)+dy;
+			float py=(y-yBot)*dy;
 			float cx = px / width;
-			float cy = py / height;
+			float cy = (height - py )/ height;
 			
 			textura.add(cx);
 			textura.add(cy);
