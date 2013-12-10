@@ -280,11 +280,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			estado = TDesignEstado.Test;
 			
 			// TODO Calcular Iteraciones en función del Area del Poligono
-			FloatArray bsplineVertices = calcularBSpline(puntos, 3, 50);
+			FloatArray bsplineVertices = calcularBSpline(puntos, 3, 30);
 			
 			ShortArray testSimple = calcularPoligonoSimple(bsplineVertices, false);
 			if(testSimple.size == 0) {
-				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 100.0f);
+				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 75.0f);
 				puntosTest = m.getVertices();
 				triangulosTest = m.getTriangulos();
 				
