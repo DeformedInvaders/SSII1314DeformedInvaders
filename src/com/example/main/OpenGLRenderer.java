@@ -37,10 +37,10 @@ public class OpenGLRenderer implements Renderer
 	
 	public void drag(float width, float height, float dx, float dy)
 	{			
-		this.xLeft += dx;
-		this.xRight += dx;
-		this.yBot += dy;
-		this.yTop += dy;
+		this.xLeft += dx * width;
+		this.xRight += dx *width;
+		this.yBot += dy * height;
+		this.yTop += dy * height;
 		
 		this.xCentro = (xRight + xLeft)/2.0f;
         this.yCentro = (yTop + yBot)/2.0f;

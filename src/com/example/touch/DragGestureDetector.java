@@ -25,32 +25,44 @@ public class DragGestureDetector
 			lastX = x;
 			lastY = height - y;
 		}
-		else if(action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
+		else if(action == MotionEvent.ACTION_MOVE)
 		{
 			float dx = x - lastX;
 			float dy = height - y - lastY;
 			
-			if(dx > 30) {
-				dx = -5f;
+			//Desplazamiento a la izquierda
+			if(dx > 7) {
+				dx = -0.02f;
 			}
-			else if(dx < -30) {
-				dx = 5f;
+			//Desplazamiento a la derecha
+			else if(dx < -7) {
+				dx = 0.02f;
 			}
+			//Desplazamiento vertical
 			else {
 				dx = 0f;
 			}
-			
-			if(dy > 30) {
-				dy = -5f;
+			//Desplazamineto abajo
+			if(dy > 7) {
+				dy = -0.02f;
 			}
-			else if(dy < -30) {
-				dy = 5f;
+			//Desplazamiento arriba
+			else if(dy < -7) {
+				dy = 0.02f;
 			}
+			//Desplazamiento horizontal
 			else { 
 				dy = 0f;
 			}
 			
 			renderer.drag(width, height, dx, dy);
+			
+			lastX = x;
+			lastY = height - y;
+		}
+		else if (action == MotionEvent.ACTION_UP)
+		{
+			
 		}
     	
         return true;

@@ -9,7 +9,7 @@ public class ScaleGestureListener extends SimpleOnScaleGestureListener
 {
 	private OpenGLRenderer renderer;
 
-    private float mScaleFactor = 1.f;
+    private float mScaleFactor = 1.0f;
 	
 	public ScaleGestureListener(OpenGLRenderer renderer)
 	{
@@ -20,18 +20,18 @@ public class ScaleGestureListener extends SimpleOnScaleGestureListener
 	public boolean onScale(ScaleGestureDetector detector)
 	{
 		// TODO Eliminar multiplicación para no acumular los factores de zoom.
-        mScaleFactor *= detector.getScaleFactor();
+        mScaleFactor = detector.getScaleFactor();
         
-        if(mScaleFactor > 1.21)
+        if(mScaleFactor > 1.02)
         {
-        	mScaleFactor = 1.01f;
+        	mScaleFactor = 0.97f;
+        	renderer.zoom(mScaleFactor);
         }
-        else if(mScaleFactor < 0.789)
+        else if(mScaleFactor < 0.98)
         {
-        	mScaleFactor = 0.99f;
+        	mScaleFactor = 1.03f;
+        	renderer.zoom(mScaleFactor);
         }
-        
-        renderer.zoom(mScaleFactor);
         
         mScaleFactor = 1.0f;
         
