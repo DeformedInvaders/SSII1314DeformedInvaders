@@ -29,64 +29,64 @@
 
         <ImageButton
             android:id="@+id/imageButton1"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_pencil"
             android:src="@drawable/icon_pencil" />
 
         <ImageButton
             android:id="@+id/imageButton2"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_bucket"
             android:src="@drawable/icon_bucket" />
         
 		<ImageButton
             android:id="@+id/imageButton8"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_color"
             android:src="@drawable/icon_color" />
         
 		<ImageButton
             android:id="@+id/imageButton9"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_size"
             android:src="@drawable/icon_size" />
         
    		<ImageButton
             android:id="@+id/imageButton10"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_eye"
             android:src="@drawable/icon_eye" />
     		    
 		<ImageButton
             android:id="@+id/imageButton3"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_hand"
             android:src="@drawable/icon_hand" />
         
 		<ImageButton
             android:id="@+id/imageButton4"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_prev"
             android:src="@drawable/icon_prev" />
                 
 		<ImageButton
             android:id="@+id/imageButton5"
-    		android:layout_width="75dp"
-		    android:layout_height="75dp"
+    		android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_next"
             android:src="@drawable/icon_next" />
                         
 		<ImageButton
 		    android:id="@+id/imageButton6"
-		    android:layout_width="75dp"
-		    android:layout_height="75dp"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
 		    android:contentDescription="@string/desc_delete"
 		    android:src="@drawable/icon_delete" />
 
@@ -94,8 +94,8 @@
 
    	<ImageButton
    	    android:id="@+id/imageButton7"
-	    android:layout_width="75dp"
-	    android:layout_height="75dp"
+	    android:layout_width="70dp"
+	    android:layout_height="70dp"
    	    android:layout_alignBottom="@+id/PaintGLSurfaceView1"
    	    android:layout_alignRight="@+id/PaintGLSurfaceView1"
    	    android:contentDescription="@string/desc_ready"

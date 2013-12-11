@@ -25,22 +25,22 @@
 
         <ImageButton
             android:id="@+id/imageButton11"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:contentDescription="@string/desc_add"
             android:src="@drawable/icon_add" />
 
         <ImageButton
             android:id="@+id/imageButton12"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:contentDescription="@string/desc_remove"
             android:src="@drawable/icon_remove" />
 
         <ImageButton
             android:id="@+id/imageButton13"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:contentDescription="@string/desc_move"
             android:src="@drawable/icon_hand" />
     </LinearLayout>

@@ -65,12 +65,12 @@ public abstract class OpenGLRenderer implements Renderer
 		// Color de Fondo Blanco
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
-		//gl.glClearDepthf(1.0f);
+		// Limpiar Buffer de Profundidad
+		gl.glClearDepthf(1.0f);
 
 		// Activar Test de Profundidad
 		gl.glEnable(GL10.GL_DEPTH_TEST);
-		
-		//gl.glDepthFunc(GL10.GL_LEQUAL);
+		gl.glDepthFunc(GL10.GL_LEQUAL);
 		
 		// Activar Back-Face Culling
 		gl.glEnable(GL10.GL_CULL_FACE);

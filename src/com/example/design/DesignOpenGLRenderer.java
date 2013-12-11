@@ -16,6 +16,7 @@ import com.example.math.DelaunayMeshGenerator;
 import com.example.math.DelaunayTriangulator;
 import com.example.math.EarClippingTriangulator;
 import com.example.math.GeometryUtils;
+import com.example.math.Intersector;
 import com.example.math.Vector2;
 import com.example.utils.FloatArray;
 import com.example.utils.Mesh;
@@ -51,6 +52,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private ShortArray lineasSimple;
 	private ArrayList<FloatBuffer> bufferSimple;	
 	
+	private FloatArray puntosTest;
+	private ShortArray triangulosTest;
+	private ArrayList<FloatBuffer> bufferTest;
+	
 	public DesignOpenGLRenderer(Context context)
 	{        
 		super(context);
@@ -70,10 +75,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		switch(estado)
 		{
 			case Dibujar:
-				if(puntos.size > 2)
+				if(puntos.size > 0)
 				{
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPuntos);
 					dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
+					
+					if(puntos.size > 2)
+					{
+						dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPuntos);
+					}
 				}
 			break;
 			case BSpline:
@@ -98,8 +107,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			break;
 			case Simple:
 				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.LTGRAY, bufferPuntos);
-				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.RED, bufferSimple);
+				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE+2, Color.RED, bufferSimple);
 			break;
+			case Full:
+				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferTest);
 		}
 	}
 	
@@ -119,6 +130,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		triangulosEarClipping = null;
 		triangulosMesh = null;
 		lineasSimple = null;
+		
+		puntosTest = null;
+		triangulosTest = null;
 	}
 	
 	public void onTouchDown(float x, float y, float width, float height)
@@ -129,10 +143,23 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float nx = xLeft + (xRight-xLeft)*x/width;
 			float ny = yBot + (yTop-yBot)*(height-y)/height;
 			
-			puntos.add(nx);
-			puntos.add(ny);
+			boolean anyadir = true;
 			
-			bufferPuntos = construirBufferListaPuntos(puntos);
+			if(puntos.size > 0)
+			{
+				float lastX = puntos.get(puntos.size-2);
+				float lastY = puntos.get(puntos.size-1);
+				
+				anyadir = Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > 5;
+			}
+			
+			if(anyadir)
+			{
+				puntos.add(nx);
+				puntos.add(ny);
+				
+				bufferPuntos = construirBufferListaPuntos(puntos);
+			}
 		}
 	}
 	
@@ -286,6 +313,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if(puntos.size > 4)
 		{
+			estado = TDesignEstado.Full;
+			
 			int numBSplineVertices = 75;
 			// TODO Calcular Iteraciones en función del Area del Poligono
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, numBSplineVertices);
@@ -294,10 +323,12 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if(testSimple.size == 0)
 			{
 				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 75.0f);
-				FloatArray puntosTest = m.getVertices();
-				ShortArray triangulosTest = m.getTriangulos();
+				puntosTest = m.getVertices();
+				triangulosTest = m.getTriangulos();
 				ShortArray contornoTest = new ShortArray(numBSplineVertices);
 				for(int i = 0; i < numBSplineVertices; i++) contornoTest.add(i);
+				
+				bufferTest = this.construirBufferListaTriangulos(triangulosTest, puntosTest);
 				
 				return new Esqueleto(contornoTest, puntosTest, triangulosTest);
 			}

@@ -47,7 +47,7 @@ public class DesignGLSurfaceView extends GLSurfaceView
 				renderer.onTouchMove(x, y, width, height);	
 			break;
 			case MotionEvent.ACTION_UP:
-				renderer.onTouchUp(x, y, width, height);
+				//renderer.onTouchUp(x, y, width, height);
 			break;
 		}
 		
