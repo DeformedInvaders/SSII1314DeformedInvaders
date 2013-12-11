@@ -1,8 +1,6 @@
 package com.example.deform;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -13,6 +11,7 @@ import com.example.main.Esqueleto;
 import com.example.main.OpenGLRenderer;
 import com.example.math.Deformator;
 import com.example.math.GeometryUtils;
+import com.example.math.Intersector;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
@@ -24,12 +23,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferContorno;
 	
 	private FloatArray vertices;
-	
 	private FloatArray verticesModificados;
 	private FloatBuffer bufferVertices;
 	
 	private ShortArray triangulos;
-	private ArrayList<FloatBuffer> bufferTriangulos;
+	private FloatBuffer bufferTriangulos;
 	
 	private FloatArray handles;
 	private ShortArray indiceHandles;
@@ -43,7 +41,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	private Bitmap textura;
 	private FloatArray coords;
-	private ArrayList<FloatBuffer> bufferCoords;
+	private FloatBuffer bufferCoords;
 	
 	private TDeformEstado estado;
 	
@@ -69,23 +67,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		// Textura	
 		cargarTextura(gl, textura, nombreTextura, 0);
-		dibujarListaTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, 0);
+		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, 0);
 		
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
-				
+		
 		if(estado != TDeformEstado.Mover)
-		{	// Edges Mesh
-			dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.GRAY, bufferTriangulos);
-			
-			// Point Mesh
+		{
 			dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferVertices);
 		}
 		
 		// Handles		
 		if(indiceHandles.size > 0)
 		{
-			dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.YELLOW, bufferHandles);
+			dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.BLACK, bufferHandles);
 		}
 		
 		// Seleccionado
@@ -109,9 +104,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		this.deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
 
 		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
+		this.bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
+		this.bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
 		this.bufferVertices = construirBufferListaPuntos(verticesModificados);
-		this.bufferTriangulos = construirBufferListaTriangulos(triangulos, vertices);
-		this.bufferCoords = construirBufferListaTriangulos(triangulos, coords);
 	}
 	
 	/* Selección de Estado */
@@ -143,11 +138,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	public void onTouchDown(float x, float y, float width, float height)
-	{	
-		float dx = width/(xRight-xLeft);
-		float dy = height/(yTop-yBot);
+	{		
+		float nx = xLeft + (xRight-xLeft)*x/width;
+		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
-		short j = (short) GeometryUtils.isPointInMesh(verticesModificados, x, height-y, xLeft, yBot, dx, dy);
+		short j = (short) GeometryUtils.isPointInMesh(verticesModificados, nx, ny);
 		if(j != -1)
 		{
 			if(estado == TDeformEstado.Anyadir)
@@ -155,8 +150,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				if(!indiceHandles.contains((short) j))
 				{
 					indiceHandles.add(j);
-					handles.add(vertices.get(2*j));
-					handles.add(vertices.get(2*j+1));
+					handles.add(verticesModificados.get(2*j));
+					handles.add(verticesModificados.get(2*j+1));
 					
 					// Añadir Handle Nuevo
 					deformator.computeDeformation(handles, indiceHandles);
@@ -170,11 +165,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					int pos = indiceHandles.indexOf(j);
 					indiceHandles.removeIndex(pos);
 					
-					handles.removeIndex(pos+1);
-					handles.removeIndex(pos);
+					handles.removeIndex(2*pos+1);
+					handles.removeIndex(2*pos);
 					
 					deformator.computeDeformation(handles, indiceHandles);
-					bufferHandles = construirBufferListaPuntos(handles);
+					actualizarBufferListaPuntos(bufferHandles, handles);
 				}
 			}
 			else if(estado == TDeformEstado.Seleccionar)
@@ -200,7 +195,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if(estado == TDeformEstado.Seleccionar)
 		{
 			// TODO:
-			//onTouchDown(x, y, width, height);
+			onTouchDown(x, y, width, height);
 		}
 		else if(estado == TDeformEstado.Mover)
 		{
@@ -208,15 +203,24 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			float nx = xLeft + (xRight-xLeft)*x/width;
 			float ny = yBot + (yTop-yBot)*(height-y)/height;
 			
-			handles.set(2*handleSeleccionado, nx);
-			handles.set(2*handleSeleccionado+1, ny);
+			float lastX = handles.get(2*handleSeleccionado);
+			float lastY = handles.get(2*handleSeleccionado);
 			
-			// Cambiar Posicion de los Handles
-			verticesModificados = deformator.computeDeformation(handles);
-			
-			bufferContorno = construirBufferListaIndicePuntos(contorno, verticesModificados);
-			bufferTriangulos = construirBufferListaTriangulos(triangulos, verticesModificados);
-			bufferHandles = construirBufferListaIndicePuntos(indiceHandles, verticesModificados);
+			if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > EPSILON)
+			{
+				handles.set(2*handleSeleccionado, nx);
+				handles.set(2*handleSeleccionado+1, ny);
+				
+				// Cambiar Posicion de los Handles
+				verticesModificados = deformator.computeDeformation(handles);
+				
+				bufferHandleSeleccionado.put(0, nx);
+				bufferHandleSeleccionado.put(1, ny);
+				
+				actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+				actualizarBufferListaPuntos(bufferHandles, handles);
+				actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+			}
 		}
 	}
 	
@@ -226,10 +230,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			onTouchMove(x, y, width, height);
 			
-			bufferVertices = construirBufferListaPuntos(verticesModificados);
+			actualizarBufferListaPuntos(bufferVertices, verticesModificados);
 			
 			estado = TDeformEstado.Seleccionar;
-			handleSeleccionado  = -1;
+			handleSeleccionado = -1;
 		}	
 	}
 }

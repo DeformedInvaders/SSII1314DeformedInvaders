@@ -16,6 +16,7 @@ import android.graphics.Color;
 import com.example.main.Esqueleto;
 import com.example.main.OpenGLRenderer;
 import com.example.math.GeometryUtils;
+import com.example.math.Intersector;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
@@ -36,7 +37,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferContorno;
 	
 	private FloatArray vertices;
-	private ArrayList<FloatBuffer> bufferVertices;
+	private FloatBuffer bufferVertices;
 	
 	private ShortArray triangulos;
 	
@@ -68,7 +69,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         this.color = Color.WHITE;
         
-        this.colorPaleta = Color.RED;
+        this.colorPaleta = Color.GREEN;
         this.sizeLinea = 1;
         
         this.anteriores = new Stack<Accion>();
@@ -97,7 +98,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			super.onDrawFrame(gl);
 			
 			// Pintar Esqueleto
-			dibujarListaBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
+			dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
 			
 			// Pintar Polilineas
 			Iterator<Polilinea> it = listaLineas.iterator();
@@ -129,7 +130,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		// Esqueleto
 		if(vertices != null && triangulos != null)
 		{
-			dibujarListaBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
+			dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
 		}
 		
 		// Detalles
@@ -232,10 +233,23 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			crearPolilinea();
 			
-			this.lineaActual.add(nx);
-			this.lineaActual.add(ny);
+			boolean anyadir = true;
 			
-			this.bufferLineaActual = this.construirBufferListaPuntos(lineaActual);
+			if(lineaActual.size > 0)
+			{
+				float lastX = lineaActual.get(lineaActual.size-2);
+				float lastY = lineaActual.get(lineaActual.size-1);
+				
+				anyadir = Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > EPSILON;
+			}
+			
+			if(anyadir)
+			{
+				lineaActual.add(nx);
+				lineaActual.add(ny);
+				
+				bufferLineaActual = construirBufferListaPuntos(lineaActual);
+			}
 		}
 		else if(estado == TPaintEstado.Cubo)
 		{			
@@ -354,7 +368,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.vertices = esqueleto.getVertices();
 		this.triangulos = esqueleto.getTriangulos();
 		
-		this.bufferVertices = construirBufferListaTriangulos(triangulos, vertices);
+		this.bufferVertices = construirBufferListaTriangulosRellenos(triangulos, vertices);
 		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 	}
 	

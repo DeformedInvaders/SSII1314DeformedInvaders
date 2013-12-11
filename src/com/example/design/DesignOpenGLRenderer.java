@@ -1,7 +1,6 @@
 package com.example.design;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -41,20 +40,20 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferConvexHull;
 	
 	private ShortArray triangulosDelaunay;
-	private ArrayList<FloatBuffer> bufferDelaunay;
+	private FloatBuffer bufferDelaunay;
 	
 	private ShortArray triangulosEarClipping;
-	private ArrayList<FloatBuffer> bufferEarClipping;
+	private FloatBuffer bufferEarClipping;
 	
 	private ShortArray triangulosMesh;
-	private ArrayList<FloatBuffer> bufferMeshTriangles;
+	private FloatBuffer bufferMeshTriangles;
 	
 	private ShortArray lineasSimple;
-	private ArrayList<FloatBuffer> bufferSimple;	
+	private FloatBuffer bufferSimple;	
 	
 	private FloatArray puntosTest;
 	private ShortArray triangulosTest;
-	private ArrayList<FloatBuffer> bufferTest;
+	private FloatBuffer bufferTest;
 	
 	public DesignOpenGLRenderer(Context context)
 	{        
@@ -94,23 +93,23 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferConvexHull);
 			break;
 			case Delaunay:
-				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLUE, bufferDelaunay);
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLUE, bufferDelaunay);
 				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
 			break;
 			case EarClipping:
-				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.GRAY, bufferEarClipping);
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.GRAY, bufferEarClipping);
 				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
 			break;
 			case MeshGenerator:
-				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.MAGENTA, bufferMeshTriangles);
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.MAGENTA, bufferMeshTriangles);
 				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
 			break;
 			case Simple:
 				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.LTGRAY, bufferPuntos);
-				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE+2, Color.RED, bufferSimple);
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE+2, Color.RED, bufferSimple);
 			break;
 			case Full:
-				dibujarListaBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferTest);
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferTest);
 		}
 	}
 	
@@ -150,7 +149,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				float lastX = puntos.get(puntos.size-2);
 				float lastY = puntos.get(puntos.size-1);
 				
-				anyadir = Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > 5;
+				anyadir = Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > EPSILON;
 			}
 			
 			if(anyadir)
@@ -315,7 +314,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			estado = TDesignEstado.Full;
 			
-			int numBSplineVertices = 75;
+			int numBSplineVertices = 40;
 			// TODO Calcular Iteraciones en función del Area del Poligono
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, numBSplineVertices);
 			

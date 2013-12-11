@@ -3,8 +3,6 @@ package com.example.main;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -32,6 +30,8 @@ public abstract class OpenGLRenderer implements Renderer
 	//Parámetros de la Escena
 	protected static final int SIZELINE = 3;
 	protected static final int POINTWIDTH = 7;
+	
+	protected static final float EPSILON = 10.0f;
 	
 	// Contexto
 	protected Context context;
@@ -186,24 +186,19 @@ public abstract class OpenGLRenderer implements Renderer
 		return construirBufferListaPuntos(arrayVertices);
 	}
 	
-	// Actualiza los valores de un buffer de pintura para puntos
-	protected void actualizarBufferListaPuntos(FloatBuffer buffer, FloatArray vertices)
-	{
-		float[] arrayVertices = new float[vertices.size];
-		
-		buffer.put(arrayVertices);
-		buffer.position(0);
-	}
-	
 	// Construcción de un buffer de pintura para puntos a partir de una lista de indice de vertices
 	protected FloatBuffer construirBufferListaIndicePuntos(ShortArray indices, FloatArray vertices)
 	{
 		float[] arrayVertices = new float[2*indices.size];
-		for(int i = 0; i < indices.size; i++)
+		
+		int i = 0;
+		while(i < indices.size)
 		{
 			int pos = indices.get(i);
 			arrayVertices[2*pos] = vertices.get(2*pos);
 			arrayVertices[2*pos+1] = vertices.get(2*pos+1);
+			
+			i++;
 		}
 		
 		return construirBufferListaPuntos(arrayVertices);
@@ -211,64 +206,100 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos. 
 	// Uso para GL_LINES
-	protected ArrayList<FloatBuffer> construirBufferListaLineas(ShortArray triangulos, FloatArray vertices)
+	protected FloatBuffer construirBufferListaLineas(ShortArray triangulos, FloatArray vertices)
 	{
-		int arrayLong = 2 * 2;
-		ArrayList<FloatBuffer> listaBuffer = new ArrayList<FloatBuffer>();
+		int arrayLong = 2*(triangulos.size-1);
+		float[] arrayVertices = new float[2*arrayLong];
 		
 		int j = 0;
+		int i = 0;
 		while(j < triangulos.size)
 		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j+1);
 			
-			float[] arrayVertices = new float[arrayLong];
+			arrayVertices[i] = vertices.get(2*a);
+			arrayVertices[i+1] = vertices.get(2*a+1);
 			
-			arrayVertices[0] = vertices.get(2*a);
-			arrayVertices[1] = vertices.get(2*a+1);
+			arrayVertices[i+2] = vertices.get(2*b);
+			arrayVertices[i+3] = vertices.get(2*b+1);
 			
-			arrayVertices[2] = vertices.get(2*b);
-			arrayVertices[3] = vertices.get(2*b+1);		
-
-			listaBuffer.add(construirBufferListaPuntos(arrayVertices));
-			
-			j = j+2;
-		}		
+			j = j+1;
+			i = i+4;
+		}	
 		
-		return listaBuffer;
+		return construirBufferListaPuntos(arrayVertices);
 	}
 	
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
-	// Uso para GL_TRIANGLES
-	protected ArrayList<FloatBuffer> construirBufferListaTriangulos(ShortArray triangulos, FloatArray vertices)
+	// Uso para GL_LINES
+	protected FloatBuffer construirBufferListaTriangulos(ShortArray triangulos, FloatArray vertices)
 	{
-		int arrayLong = 2 * 3;
-		ArrayList<FloatBuffer> listaBuffer = new ArrayList<FloatBuffer>();
+		int arrayLong = 2*triangulos.size;
+		float[] arrayVertices = new float[2*arrayLong];
 		
 		int j = 0;
+		int i = 0;
 		while(j < triangulos.size)
 		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j+1);
 			short c = triangulos.get(j+2);
 			
-			float[] arrayVertices = new float[arrayLong];
+			arrayVertices[i] = vertices.get(2*a);
+			arrayVertices[i+1] = vertices.get(2*a+1);
 			
-			arrayVertices[0] = vertices.get(2*a);
-			arrayVertices[1] = vertices.get(2*a+1);
+			arrayVertices[i+2] = vertices.get(2*b);
+			arrayVertices[i+3] = vertices.get(2*b+1);
 			
-			arrayVertices[2] = vertices.get(2*b);
-			arrayVertices[3] = vertices.get(2*b+1);
+			arrayVertices[i+4] = vertices.get(2*b);
+			arrayVertices[i+5] = vertices.get(2*b+1);
 			
-			arrayVertices[4] = vertices.get(2*c);
-			arrayVertices[5] = vertices.get(2*c+1);			
+			arrayVertices[i+6] = vertices.get(2*c);
+			arrayVertices[i+7] = vertices.get(2*c+1);		
 			
-			listaBuffer.add(construirBufferListaPuntos(arrayVertices));
+			arrayVertices[i+8] = vertices.get(2*c);
+			arrayVertices[i+9] = vertices.get(2*c+1);
+			
+			arrayVertices[i+10] = vertices.get(2*a);
+			arrayVertices[i+11] = vertices.get(2*a+1);
 			
 			j = j+3;
-		}		
+			i = i+12;
+		}	
 		
-		return listaBuffer;
+		return construirBufferListaPuntos(arrayVertices);
+	}
+	
+	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
+	// Uso para GL_TRIANGLES
+	protected FloatBuffer construirBufferListaTriangulosRellenos(ShortArray triangulos, FloatArray vertices)
+	{
+		int arrayLong = triangulos.size;
+		float[] arrayVertices = new float[2*arrayLong];
+		
+		int j = 0;
+		int i = 0;
+		while(j < triangulos.size)
+		{
+			short a = triangulos.get(j);
+			short b = triangulos.get(j+1);
+			short c = triangulos.get(j+2);
+			
+			arrayVertices[i] = vertices.get(2*a);
+			arrayVertices[i+1] = vertices.get(2*a+1);
+			
+			arrayVertices[i+2] = vertices.get(2*b);
+			arrayVertices[i+3] = vertices.get(2*b+1);
+			
+			arrayVertices[i+4] = vertices.get(2*c);
+			arrayVertices[i+5] = vertices.get(2*c+1);
+			
+			j = j+3;
+			i = i+6;
+		}	
+		
+		return construirBufferListaPuntos(arrayVertices);
 	}
 	
 	// Construcción de Coordenadas de Textura a partir de una lista de puntos.
@@ -297,6 +328,58 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 		return textura;
 	}
+	
+	/* Metodos de Actualización de Buffers de Pintura */
+	
+	// Actualiza los valores de un buffer de pintura para puntos
+	protected void actualizarBufferListaPuntos(FloatBuffer buffer, FloatArray vertices)
+	{
+		float[] arrayVertices = new float[vertices.size];
+		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
+
+		buffer.put(arrayVertices);
+		buffer.position(0);
+	}
+	
+	// Actualiza los valores de un buffer de pintura para triangulos
+	protected void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
+	{
+		int j = 0;
+		int i = 0;
+		while(j < triangulos.size)
+		{
+			short a = triangulos.get(j);
+			short b = triangulos.get(j+1);
+			short c = triangulos.get(j+2);
+			
+			buffer.put(i, vertices.get(2*a));
+			buffer.put(i+1, vertices.get(2*a+1));
+			
+			buffer.put(i+2, vertices.get(2*b));
+			buffer.put(i+3, vertices.get(2*b+1));
+			
+			buffer.put(i+4, vertices.get(2*c));
+			buffer.put(i+5, vertices.get(2*c+1));
+			
+			j = j+3;
+			i = i+6;
+		}
+	}
+	
+	// Actualiza los valores de un buffer de pintura para indice puntos
+	protected void actualizarBufferListaIndicePuntos(FloatBuffer buffer, ShortArray contorno, FloatArray vertices)
+	{
+		int j = 0;
+		while(j < contorno.size)
+		{
+			short a = contorno.get(j);
+			
+			buffer.put(2*j, vertices.get(2*a));
+			buffer.put(2*j+1, vertices.get(2*a+1));
+			
+			j++;
+		}
+	}
 
 	/* Métodos de Pintura en la Tubería Gráfica */
 	
@@ -318,17 +401,6 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	}
-	
-	// Pintura de una Lista de Buffers de Lineas o Triángulos
-	protected void dibujarListaBuffer(GL10 gl, int type, int size, int color, ArrayList<FloatBuffer> bufferLista)
-	{
-		Iterator<FloatBuffer> it = bufferLista.iterator();
-		while(it.hasNext())
-		{
-			FloatBuffer buffer = it.next();
-			dibujarBuffer(gl, type, size, color, buffer);
-		}
 	}
 	
 	// Cargado de Textura
@@ -366,17 +438,6 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		gl.glDisable(GL10.GL_TEXTURE_2D);
-	}
-	
-	// Dibujar Textura para una Lista de Lineas o Triangulos asociada a una Lista de Coordenadas de Textura
-	protected void dibujarListaTextura(GL10 gl, ArrayList<FloatBuffer> bufferLista, ArrayList<FloatBuffer> bufferListaCoordTextura, int[] nombreTextura, int pos)
-	{
-		Iterator<FloatBuffer> itp = bufferLista.iterator();
-		Iterator<FloatBuffer> itt = bufferListaCoordTextura.iterator();
-		while(itp.hasNext() && itt.hasNext())
-		{
-			dibujarTextura(gl, itp.next(), itt.next(), nombreTextura, pos);
-		}
 	}
 	
 	/* Métodos Genéricos */

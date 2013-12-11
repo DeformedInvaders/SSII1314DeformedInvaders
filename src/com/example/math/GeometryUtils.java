@@ -183,24 +183,28 @@ public class GeometryUtils {
 		return Intersector.isPointInPolygon(polygon, new Vector2(x, y));
 	}
 	
-	public static int isPointInMesh(FloatArray vertices, float x, float y, float xLeft, float yBot, float dx, float dy) {
+	public static int isPointInMesh(FloatArray vertices, float x, float y)
+	{
 		// TODO
-		//Vector2 punto = new Vector2();
+		int minpos = -1;
+		float mindistancia = Float.MAX_VALUE;
 		
 		int j = 0;
-		while(j < vertices.size) {
-			float px = (vertices.get(j) - xLeft)*dx;
-			float py = (vertices.get(j+1) - yBot)*dy;			
+		while(j < vertices.size)
+		{
+			float px = vertices.get(j);
+			float py = vertices.get(j+1);			
 						
-			if(Math.abs(px - x) < 10 && Math.abs(py - y) < 10) {
-				//punto.x = vertices.get(j);
-				//punto.y = vertices.get(j+1);
-				return j/2;
+			float distancia = Math.abs(Intersector.distancePoints(x, y, px, py));
+			if(distancia < 10 && distancia < mindistancia)
+			{
+				minpos = j/2;
+				mindistancia = distancia;
 			}
 			
 			j = j+2;
 		}
 		
-		return -1;
+		return minpos;
 	}
 }
