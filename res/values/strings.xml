@@ -6,23 +6,13 @@
     <!-- Fase de Modelado -->
     <string name="title_activity_model">Model Phase</string>
     <string name="item_new">New</string>
-    <string name="item_view">View</string>
-    <string name="item_algorithm">Algorithms</string>
-    <string name="item_run">Run</string>
     <string name="item_bspline">B-Spline</string>
     <string name="item_convex_hull">Convex Hull</string>
     <string name="item_delaunay">Delaunay Triangulator</string>
     <string name="item_ear_clipping">Ear Clipping Triangulator</string>
     <string name="item_mesh_triangles">Mesh Generator</string>
     <string name="item_simple">Simple Test</string>
-    <string name="item_clear">Clear</string>
-    <string name="item_zoom_in">Zoom in</string>
-    <string name="item_zoom_out">Zoom out</string>
-    <string name="item_drag_left">Drag left</string>
-    <string name="item_drag_right">Drag right</string>
-    <string name="item_drag_up">Drag up</string>
-    <string name="item_drag_down">Drag down</string>
-    <string name="item_reset">Reset</string>
+	<string name="item_full">Full Test</string>
     <string name="desc_ready">Ready</string>
     <!-- Fase de Pintura -->
     <string name="title_activity_paint">Paint Phase</string>

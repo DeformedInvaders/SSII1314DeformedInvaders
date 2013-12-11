@@ -8,15 +8,16 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.example.main.Esqueleto;
-import com.example.main.GLESUtils;
 import com.example.main.OpenGLRenderer;
 import com.example.utils.FloatArray;
+import com.example.utils.ShortArray;
 
-public class DownOpenGLRenderer extends OpenGLRenderer{
-	
+public class DownOpenGLRenderer extends OpenGLRenderer
+{	
 	/* Esqueleto */	
-	private FloatArray hull;
-	private FloatBuffer bufferHull;
+	private ShortArray contorno;
+	private FloatArray vertices;
+	private FloatBuffer bufferContorno;
 	
 	public DownOpenGLRenderer(Context context)
 	{        
@@ -24,9 +25,11 @@ public class DownOpenGLRenderer extends OpenGLRenderer{
 		
 	}
 
-	public void setEsqueleto(Esqueleto esqueleto) {
-		this.hull = esqueleto.getHull();
-		this.bufferHull = GLESUtils.construirBuffer(hull);
+	public void setEsqueleto(Esqueleto esqueleto)
+	{
+		this.contorno = esqueleto.getContorno();
+		this.vertices = esqueleto.getVertices();
+		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 	}
 	
 	@Override
@@ -34,10 +37,34 @@ public class DownOpenGLRenderer extends OpenGLRenderer{
 	{
 		super.onDrawFrame(gl);
 		
-		if(hull != null) 
+		if(bufferContorno != null) 
 		{
-			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 		}
+	}
+
+	@Override
+	public void onTouchDown(float x, float y, float width, float height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTouchMove(float x, float y, float width, float height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTouchUp(float x, float y, float width, float height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reiniciar() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

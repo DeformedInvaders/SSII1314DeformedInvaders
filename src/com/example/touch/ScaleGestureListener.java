@@ -1,9 +1,9 @@
 package com.example.touch;
 
-import com.example.main.OpenGLRenderer;
-
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
+
+import com.example.main.OpenGLRenderer;
 
 public class ScaleGestureListener extends SimpleOnScaleGestureListener
 {

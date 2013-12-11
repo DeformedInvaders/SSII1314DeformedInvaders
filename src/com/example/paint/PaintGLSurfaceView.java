@@ -3,7 +3,6 @@ package com.example.paint;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -15,8 +14,10 @@ import com.example.touch.ScaleGestureListener;
 
 public class PaintGLSurfaceView extends GLSurfaceView
 {
+	// Renderer
     private final PaintOpenGLRenderer renderer;
     
+    // Detectores de Gestos
     private ScaleGestureDetector scaleDectector;
     private GestureDetector doubleTouchDetector;
     private DragGestureDetector dragDetector;
@@ -25,14 +26,14 @@ public class PaintGLSurfaceView extends GLSurfaceView
     {
         super(context, attrs);
 
-        // Create an OpenGL 1.0 context.
+        // Crear Contexto OpenGL ES 1.0
         setEGLContextClientVersion(1);
 
-        // Set the Renderer for drawing on the GLSurfaceView
+        // Asignar Renderer al GLSurfaceView
         renderer = new PaintOpenGLRenderer(context);
         setRenderer(renderer);
 
-        // Render the view only when there is a change in the drawing data
+        // Activar Modo Pintura en demanda
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         
         scaleDectector = new ScaleGestureDetector(context, new ScaleGestureListener(renderer));
@@ -50,31 +51,24 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		
 		float width = getWidth();
 		float height = getHeight();
-		
-		TPaintEstado estado = renderer.getEstado();
-		
-		if(estado == TPaintEstado.Pincel)
+	
+		if(renderer.getEstado() != TPaintEstado.Mano)
 		{
 			switch(action)
 			{
 				case MotionEvent.ACTION_DOWN:
-					renderer.crearPolilinea();
-					renderer.anyadirPunto(x, y, width, height);
+					renderer.onTouchDown(x, y, width, height);
 				break;
 				case MotionEvent.ACTION_MOVE:
-					renderer.anyadirPunto(x, y, width, height);	
+					renderer.onTouchMove(x, y, width, height);	
 				break;
 				case MotionEvent.ACTION_UP:
-					renderer.anyadirPunto(x, y, width, height);
-					renderer.guardarPolilinea();
+					renderer.onTouchUp(x, y, width, height);
 				break;
 			}
 		}
-		else if(estado == TPaintEstado.Cubo)
+		else
 		{
-			renderer.anyadirPunto(x, y, width, height);	
-		}
-		else {
 			if(event.getPointerCount() == 1)
 			{
 				dragDetector.onTouchEvent(event, x, y, width, height);
@@ -92,19 +86,16 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	
 	public void seleccionarMano()
 	{
-		renderer.guardarPolilinea();
 		renderer.seleccionarMano();
 	}
 	
 	public void seleccionarPincel()
 	{
-		renderer.guardarPolilinea();
 		renderer.seleccionarPincel();
 	}
 	
 	public void seleccionarCubo()
 	{
-		renderer.guardarPolilinea();
 		renderer.seleccionarCubo();
 	}
 	
@@ -112,6 +103,7 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	{
 		renderer.seleccionarColor();
 	}
+	
 	public void seleccionarColor(int color)
 	{
 		renderer.seleccionarColor(color);
@@ -121,6 +113,7 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	{
 		renderer.seleccionarSize();
 	}
+	
 	public void seleccionarSize(int pos)
 	{
 		renderer.seleccionarSize(pos);
@@ -151,16 +144,12 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	
 	public Esqueleto getEsqueleto()
 	{
-		Log.d("TEST", "ANTES WHILE");
-		while(!renderer.getScreenShotTaken());
-		Log.d("TEST", "DESPUES WHILE");
 		return renderer.getEsqueleto();
 	}
 	
-	public void testBitMap()
+	public void capturaPantalla()
 	{
-		renderer.guardarPolilinea();
-		renderer.capturaPantalla();
+		renderer.capturaPantalla(getHeight(), getWidth());
 		requestRender();
 	}
 }

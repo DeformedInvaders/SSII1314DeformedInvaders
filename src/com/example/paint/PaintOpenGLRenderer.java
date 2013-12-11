@@ -11,52 +11,51 @@ import java.util.Stack;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.example.main.Esqueleto;
-import com.example.main.GLESUtils;
 import com.example.main.OpenGLRenderer;
 import com.example.math.GeometryUtils;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
-{	
-	/* Estructura de datos */
-	private List<Polilinea> lista;
-	private Polilinea linea;
+{		
+	// Estructura de datos
+	private List<Polilinea> listaLineas;
+	private FloatArray lineaActual;
+	private FloatBuffer bufferLineaActual;
 	
 	private TPaintEstado estado;
 	
 	private int colorPaleta;
-	private float sizeLinea;
+	private int sizeLinea;
 	
-	/* Esqueleto */	
-	private FloatArray hull;
-	private FloatBuffer bufferHull;
+	// Esqueleto
+	private ShortArray contorno;
+	private FloatBuffer bufferContorno;
+	
+	private FloatArray vertices;
+	private ArrayList<FloatBuffer> bufferVertices;
 	
 	private ShortArray triangulos;
-	private FloatArray puntos;
-	private ArrayList<FloatBuffer> bufferPuntos;
 	
 	private int color;
 	
-	/* Texturas */
-	//private Bitmap texturaBMP;
+	// Texturas
+	private int canvasHeight, canvasWidth;
+	
+	private boolean modoCaptura;
+	private boolean capturaTerminada;
+	
 	private TexturaBMP textura;
-	private boolean takeScreenShot;
-	private boolean screenShotTaken;
-	
 	private FloatArray coordsTextura;
-	private ArrayList<FloatBuffer> bufferTextura;
 	
-	private static final int numeroTexturas = 1;
-	private int[] nombreTextura;
-	
-	/* Anterior Siguiente Buffers */
+	// Anterior Siguiente Buffers
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
+	
+	/* Constructora*/	
 	
 	public PaintOpenGLRenderer(Context context)
 	{
@@ -64,24 +63,27 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         this.estado = TPaintEstado.Mano;
         
-        this.lista = new ArrayList<Polilinea>();
-        this.linea = null;
+        this.listaLineas = new ArrayList<Polilinea>();
+        this.lineaActual = null;
+        
+        this.color = Color.WHITE;
         
         this.colorPaleta = Color.RED;
-        this.sizeLinea = 1.0f;
+        this.sizeLinea = 1;
         
         this.anteriores = new Stack<Accion>();
         this.siguientes = new Stack<Accion>();
         
-        this.takeScreenShot = false;
-        this.screenShotTaken = false;
-        this.nombreTextura = new int[numeroTexturas];
+        this.modoCaptura = false;
+        this.capturaTerminada = false;
 	}
+	
+	/* Métodos de la interfaz Renderer */
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{					
-		if (takeScreenShot)
+		if (modoCaptura)
 		{	
 			// Restaurar Camara posición inicial
 			float nxLeft = xLeft;
@@ -94,26 +96,26 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Limpiar Buffer Color y Actualizar Camara
 			super.onDrawFrame(gl);
 			
-			// Pintar Elementos a capturar
-			GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, bufferPuntos);
-			Iterator<Polilinea> it = lista.iterator();
+			// Pintar Esqueleto
+			dibujarListaBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
+			
+			// Pintar Polilineas
+			Iterator<Polilinea> it = listaLineas.iterator();
 			while(it.hasNext())
 			{
-				it.next().dibujar(gl);
+				Polilinea polilinea = it.next();
+				dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
 			}
 			
 			// Capturar Pantalla
-		    this.textura = capturaPantalla(gl, height, width);
+		    this.textura = capturaPantalla(gl, canvasHeight, canvasWidth);
 		    
 		    // Construir Textura
-		    Bitmap texturaBMP = textura.getBitmap();
-			this.coordsTextura = GLESUtils.construirTextura(puntos, texturaBMP.getWidth(), texturaBMP.getHeight(), this.xRight,this.xLeft, this.yTop,this.yBot);
-	        this.bufferTextura = GLESUtils.construirTriangulosBuffer(triangulos, coordsTextura);
+			this.coordsTextura = construirTextura(vertices, textura.getBitmap().getWidth(), textura.getBitmap().getHeight());
 			
 			// Desactivar Modo Captura
-			this.takeScreenShot = false;
-			this.screenShotTaken = true;
-			this.estado = TPaintEstado.Bitmap;
+			this.modoCaptura = false;
+			this.capturaTerminada = true;
 			
 			// Recuperar Camara
 			this.xLeft = nxLeft;
@@ -124,60 +126,62 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		super.onDrawFrame(gl);
 		
-		if(estado == TPaintEstado.Bitmap)
+		// Esqueleto
+		if(vertices != null && triangulos != null)
 		{
-			Bitmap texturaBMP = textura.getBitmap();
-			GLESUtils.cargarTextura(gl, texturaBMP, nombreTextura, 0);
-			GLESUtils.dibujarBuffer(gl, bufferPuntos, bufferTextura, nombreTextura, 0);	
-			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 1.0f, Color.DKGRAY, bufferPuntos);
-			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
+			dibujarListaBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
 		}
-		else
+		
+		// Detalles
+		Iterator<Polilinea> it = listaLineas.iterator();
+		while(it.hasNext())
 		{
-			// Esqueleto
-			if(puntos != null && triangulos != null)
-			{
-				GLESUtils.dibujarBuffer(gl, GL10.GL_TRIANGLES, 3.0f, color, bufferPuntos);
-			}
-			
-			// Detalles
-			Iterator<Polilinea> it = lista.iterator();
-			while(it.hasNext())
-			{
-				it.next().dibujar(gl);
-			}
-			
-			if(linea != null)
-			{
-				linea.dibujar(gl);
-			}
-			
-			if(puntos != null && triangulos != null)
-			{
-				GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_LOOP, 3.0f, Color.BLACK, bufferHull);
-			}
+			Polilinea polilinea = it.next();
+			dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
+		}
+		
+		if(lineaActual != null)
+		{
+			dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
+		}
+		
+		// Contorno
+		if(vertices != null && triangulos != null)
+		{
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 		}
 	}
 
+	/* Selección de Estado */
+	
+	public TPaintEstado getEstado()
+	{
+		return estado;
+	}
+	
 	public void seleccionarMano()
 	{
+		guardarPolilinea();
 		estado = TPaintEstado.Mano;
 	}
 	
 	public void seleccionarPincel()
 	{
+		guardarPolilinea();
 		estado = TPaintEstado.Pincel;
 	}
 	
 	public void seleccionarCubo()
 	{
+		guardarPolilinea();
 		estado = TPaintEstado.Cubo;
 	}
 	
 	public void seleccionarColor()
 	{
-		colorPaleta = GLESUtils.generarColor();
+		colorPaleta = generarColorAleatorio();
 	}
+	
 	public void seleccionarColor(int color)
 	{
 		colorPaleta = color;
@@ -187,51 +191,55 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		sizeLinea = (sizeLinea+5)%15;
 	}
+	
 	public void seleccionarSize(int pos)
 	{
-		if(pos==0){
+		if(pos == 0)
+		{
 			sizeLinea = 1;
-		}else if(pos==1){
+		}
+		else if(pos == 1)
+		{
 			sizeLinea = 6;
-		}else if(pos==2){
-			sizeLinea =11;
+		}
+		else if(pos == 2)
+		{
+			sizeLinea = 11;
 		}
 	}
 	
-	public TPaintEstado getEstado()
-	{
-		return estado;
-	}
+	/* Métodos abstractos de OpenGLRenderer */
 	
-	public boolean getScreenShotTaken()
+	public void reiniciar()
 	{
-		return screenShotTaken;
-	}
-	
-	public void setEsqueleto(Esqueleto esqueleto)
-	{
-		this.hull = esqueleto.getHull();
-		this.puntos = esqueleto.getMesh();
-		this.triangulos = esqueleto.getTriangles();
-		this.color = esqueleto.getColor();
+		this.lineaActual = null;
+		this.listaLineas.clear();
 		
-		this.bufferPuntos = GLESUtils.construirTriangulosBuffer(this.triangulos, this.puntos);
-		this.bufferHull = GLESUtils.construirBuffer(this.hull);
+		this.anteriores.clear();
+		this.siguientes.clear();
+		
+		this.color = Color.WHITE;
+		this.sizeLinea = 1;
 	}
 	
-	public void anyadirPunto(float x, float y, float width, float height)
+	public void onTouchDown(float x, float y, float width, float height)
 	{	
 		// Conversión Pixel - Punto	
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
 		if(estado == TPaintEstado.Pincel)
-		{ 
-			this.linea.anyadirPunto(new Punto(nx, ny));
+		{
+			crearPolilinea();
+			
+			this.lineaActual.add(nx);
+			this.lineaActual.add(ny);
+			
+			this.bufferLineaActual = this.construirBufferListaPuntos(lineaActual);
 		}
 		else if(estado == TPaintEstado.Cubo)
 		{			
-			if(GeometryUtils.isPointInsideMesh(hull, nx, ny))
+			if(GeometryUtils.isPointInsideMesh(contorno, vertices, nx, ny))
 			{
 				if(colorPaleta != color)
 				{
@@ -243,24 +251,51 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void crearPolilinea()
+	public void onTouchMove(float x, float y, float width, float height)
 	{
-		this.linea = new Polilinea(colorPaleta, sizeLinea);
-	}
-	
-	public void guardarPolilinea()
-	{
-		if(linea != null)
+		if(estado == TPaintEstado.Pincel)
 		{
-			this.lista.add(linea);
-			this.anteriores.push(new Accion(linea));
-			this.siguientes.clear();
-			this.linea = null;
+			onTouchDown(x, y, width, height);
 		}
 	}
+	
+	public void onTouchUp(float x, float y, float width, float height)
+	{
+		if(estado == TPaintEstado.Pincel)
+		{
+			guardarPolilinea();
+		}		
+	}
+	
+	/* Métodos de modificación de Linea Actual */
+	
+	private void crearPolilinea()
+	{
+		if(lineaActual == null)
+		{
+			lineaActual = new FloatArray();
+		}
+	}
+	
+	private void guardarPolilinea()
+	{
+		if(lineaActual != null)
+		{
+			Polilinea polilinea = new Polilinea(colorPaleta, sizeLinea, lineaActual, bufferLineaActual);
+			
+			this.listaLineas.add(polilinea);
+			this.anteriores.push(new Accion(polilinea));
+			this.siguientes.clear();
+			this.lineaActual = null;
+		}
+	}
+	
+	/* Métodos de modificación de Buffers de estado */
 
 	public void anteriorAccion()
 	{
+		guardarPolilinea();
+		
 		if(!anteriores.isEmpty())
 		{
 			Accion accion = anteriores.pop();
@@ -271,6 +306,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	public void siguienteAccion()
 	{
+		guardarPolilinea();
+		
 		if(!siguientes.isEmpty())
 		{
 			Accion accion = siguientes.lastElement();
@@ -283,7 +320,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private void actualizarEstado(Stack<Accion> pila)
 	{
 		this.color = Color.BLACK;
-		this.lista = new ArrayList<Polilinea>();
+		this.listaLineas = new ArrayList<Polilinea>();
 		
 		Iterator<Accion> it = pila.iterator();
 		while(it.hasNext())
@@ -295,31 +332,50 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				this.lista.add(accion.getLinea());
+				this.listaLineas.add(accion.getLinea());
 			}
 		}
 	}
-
-	public void reiniciar()
+	
+	/* Captura de Textura */
+	
+	public void capturaPantalla(int height, int width)
 	{
-		this.linea = null;
-		this.lista.clear();
-		this.anteriores.clear();
-		this.siguientes.clear();
-		this.color = Color.BLACK;
+		guardarPolilinea();
+		
+		this.canvasHeight = height;
+		this.canvasWidth = width;
+		this.modoCaptura = true;
 	}
 	
-	public void capturaPantalla()
+	public void setEsqueleto(Esqueleto esqueleto)
 	{
-		this.takeScreenShot = true;
+		this.contorno = esqueleto.getContorno();
+		this.vertices = esqueleto.getVertices();
+		this.triangulos = esqueleto.getTriangulos();
+		
+		this.bufferVertices = construirBufferListaTriangulos(triangulos, vertices);
+		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
+	}
+	
+	public Esqueleto getEsqueleto()
+	{
+		while(!capturaTerminada);
+		
+		Esqueleto esqueleto = new Esqueleto(contorno, vertices, triangulos);
+		esqueleto.setTexture(textura, coordsTextura);
+		return esqueleto;
 	}
 	
 	private TexturaBMP capturaPantalla(GL10 gl, int height, int width)
 	{
+		// TODO Comprimir Textura
 	    int screenshotSize = width * height;
 	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
 	    bb.order(ByteOrder.nativeOrder());
+	    
 	    gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
+	    
 	    int pixelsBuffer[] = new int[screenshotSize];
 	    bb.asIntBuffer().get(pixelsBuffer);
 	    bb = null;
@@ -331,12 +387,5 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	    TexturaBMP textura = new TexturaBMP();
 	    textura.setBitmap(pixelsBuffer, width, height);
 	    return textura;
-	}
-	
-	public Esqueleto getEsqueleto()
-	{
-		Esqueleto esqueleto = new Esqueleto(hull, puntos, triangulos);
-		esqueleto.setTexture(textura, coordsTextura);
-		return esqueleto;
 	}
 }

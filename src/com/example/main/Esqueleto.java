@@ -2,67 +2,55 @@ package com.example.main;
 
 import java.io.Serializable;
 
-import android.graphics.Color;
-
 import com.example.paint.TexturaBMP;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 
 public class Esqueleto implements Serializable
 {
-	private FloatArray hull;
-	private FloatArray mesh;
-	private ShortArray triangles;
-	private int color;
-	private TexturaBMP texture;
-	private FloatArray coords;
+	private static final long serialVersionUID = 666L;
 	
-	public Esqueleto(FloatArray hull, FloatArray mesh, ShortArray triangles)
-	{
-		this.hull = hull;
-		this.mesh = mesh;
-		this.triangles = triangles;
-		this.color = Color.WHITE;
-	}
+	private ShortArray contorno;
+	private FloatArray vertices;
+	private ShortArray triangulos;
+	private TexturaBMP textura;
+	private FloatArray coordTextura;
 	
-	public void setColor(int color)
+	public Esqueleto(ShortArray contorno, FloatArray vertices, ShortArray triangulos)
 	{
-		this.color = color;
+		this.contorno = contorno;
+		this.vertices = vertices;
+		this.triangulos = triangulos;
 	}
 	
-	public void setTexture(TexturaBMP texture, FloatArray coords)
+	public void setTexture(TexturaBMP textura, FloatArray coordTextura)
 	{
-		this.texture = texture;
-		this.coords = coords;
+		this.textura = textura;
+		this.coordTextura = coordTextura;
 	}
 
-	public FloatArray getHull()
+	public ShortArray getContorno()
 	{
-		return hull;
+		return contorno;
 	}
 
-	public FloatArray getMesh()
+	public FloatArray getVertices()
 	{
-		return mesh;
+		return vertices;
 	}
 
-	public ShortArray getTriangles()
+	public ShortArray getTriangulos()
 	{
-		return triangles;
+		return triangulos;
 	}
 
-	public int getColor()
+	public TexturaBMP getTextura()
 	{
-		return color;
+		return textura;
 	}
 
-	public TexturaBMP getTexture()
+	public FloatArray getCoordTextura()
 	{
-		return texture;
-	}
-
-	public FloatArray getCoords()
-	{
-		return coords;
+		return coordTextura;
 	}
 }

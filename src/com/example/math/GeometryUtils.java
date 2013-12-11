@@ -168,13 +168,15 @@ public class GeometryUtils {
 		return listaCortes;
 	}
 	
-	public static boolean isPointInsideMesh(FloatArray vertices, float x, float y) {
+	public static boolean isPointInsideMesh(ShortArray contorno, FloatArray vertices, float x, float y)
+	{
 		// TODO
-		Array<Vector2> polygon = new Array<Vector2>();
+		Array<Vector2> polygon = new Array<Vector2>(2*contorno.size);
 		int j = 0;
-		while(j < vertices.size)
+		while(j < contorno.size)
 		{
-			polygon.add(new Vector2(vertices.get(j), vertices.get(j+1)));
+			int pos = contorno.get(j);
+			polygon.add(new Vector2(vertices.get(2*pos), vertices.get(2*pos+1)));
 			j = j+2;
 		}
 		

@@ -9,20 +9,21 @@ import com.example.main.Esqueleto;
 
 public class DesignGLSurfaceView extends GLSurfaceView
 {
+	// Renderer
     private final DesignOpenGLRenderer renderer;
  
     public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
 
-        // Create an OpenGL 1.0 context.
+        // Crear Contexto OpenGL ES 1.0
         setEGLContextClientVersion(1);
         
-        // Set the Renderer for drawing on the GLSurfaceView
+        // Asignar Renderer al GLSurfaceView
         renderer = new DesignOpenGLRenderer(context);
         setRenderer(renderer);
 
-        // Render the view only when there is a change in the drawing data
+        // Activar Modo Pintura en demanda
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
@@ -37,15 +38,20 @@ public class DesignGLSurfaceView extends GLSurfaceView
 		float width = getWidth();
 		float height = getHeight();
 		
-		if(renderer.getEstado() == TDesignEstado.Dibujar)
+		switch(action)
 		{
-			if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP)
-			{
-				renderer.anyadirPunto(x, y, width, height);			
-				requestRender();
-			}
+			case MotionEvent.ACTION_DOWN:
+				renderer.onTouchDown(x, y, width, height);
+			break;
+			case MotionEvent.ACTION_MOVE:
+				renderer.onTouchMove(x, y, width, height);	
+			break;
+			case MotionEvent.ACTION_UP:
+				renderer.onTouchUp(x, y, width, height);
+			break;
 		}
 		
+		requestRender();		
 		return true;
 	}
 	
@@ -88,34 +94,19 @@ public class DesignGLSurfaceView extends GLSurfaceView
 	
 	public boolean pruebaCompleta()
 	{
-		Esqueleto e = renderer.test();
+		Esqueleto e = renderer.getEsqueleto();
 		requestRender();
 		return e != null;
 	}
 	
-	public Esqueleto getPruebaCompleta()
+	public Esqueleto getEsqueleto()
 	{
-		return renderer.test();
+		return renderer.getEsqueleto();
 	}
 	
-	public void reiniciarPuntos()
+	public void reiniciar()
 	{
-		renderer.reiniciarPuntos();
-		requestRender();
-	}
-	
-	public void zoom(float factor)
-	{
-		renderer.zoom(factor);
-		requestRender();
-	}
-	
-	public void drag(float dx, float dy)
-	{
-		float width = getWidth();
-		float height = getHeight();
-		
-		renderer.drag(width, height, dx, dy);
+		renderer.reiniciar();
 		requestRender();
 	}
 	

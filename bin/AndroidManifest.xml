@@ -24,25 +24,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.main.DesignActivity"
+            android:name="com.example.design.DesignActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_model"
             android:parentActivityName="com.example.main.MainActivity" >
         </activity>
         <activity
-            android:name="com.example.main.PaintActivity"
+            android:name="com.example.paint.PaintActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_paint"
-            android:parentActivityName="com.example.main.DesignActivity" >
+            android:parentActivityName="com.example.design.DesignActivity" >
         </activity>
         <activity
-            android:name="com.example.main.DeformActivity"
+            android:name="com.example.deform.DeformActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_deform"
-            android:parentActivityName="com.example.main.PaintActivity"  >
+            android:parentActivityName="com.example.paint.PaintActivity"  >
         </activity>
         <activity
-            android:name="com.example.main.MoveActivity"
+            android:name="com.example.animation.MoveActivity"
             android:label="@string/title_activity_move" >
         </activity>
     </application>

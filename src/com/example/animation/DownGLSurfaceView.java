@@ -1,10 +1,10 @@
 package com.example.animation;
 
-import com.example.main.Esqueleto;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+
+import com.example.main.Esqueleto;
 
 public class DownGLSurfaceView extends GLSurfaceView {
 

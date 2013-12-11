@@ -65,58 +65,47 @@ public final class R {
         public static final int popup=0x7f020015;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f09001d;
-        public static final int PaintGLSurfaceView1=0x7f090011;
+        public static final int LinearLayout1=0x7f09001b;
+        public static final int PaintGLSurfaceView1=0x7f09000f;
         public static final int RelativeLayout1=0x7f090008;
-        public static final int RelativeLayout2=0x7f090010;
-        public static final int arrow_down=0x7f090021;
-        public static final int arrow_up=0x7f090020;
+        public static final int RelativeLayout2=0x7f09000e;
+        public static final int arrow_down=0x7f09001f;
+        public static final int arrow_up=0x7f09001e;
         public static final int attackGLSurfaceView1=0x7f090002;
         public static final int deformGLSurfaceView1=0x7f090004;
         public static final int designGLSurfaceView1=0x7f090009;
         public static final int downGLSurfaceView1=0x7f09000b;
-        public static final int group1=0x7f090023;
+        public static final int group1=0x7f090021;
         public static final int imageButton0=0x7f09000a;
-        public static final int imageButton1=0x7f090013;
-        public static final int imageButton10=0x7f090017;
+        public static final int imageButton1=0x7f090011;
+        public static final int imageButton10=0x7f090015;
         public static final int imageButton11=0x7f090005;
         public static final int imageButton12=0x7f090006;
         public static final int imageButton13=0x7f090007;
-        public static final int imageButton2=0x7f090014;
-        public static final int imageButton3=0x7f090018;
-        public static final int imageButton4=0x7f090019;
-        public static final int imageButton5=0x7f09001a;
-        public static final int imageButton6=0x7f09001b;
-        public static final int imageButton7=0x7f09001c;
-        public static final int imageButton8=0x7f090015;
-        public static final int imageButton9=0x7f090016;
-        public static final int itemAlgorithms=0x7f09002d;
-        public static final int itemBSpline=0x7f09002e;
-        public static final int itemConvexHull=0x7f09002f;
-        public static final int itemDelaunay=0x7f090030;
-        public static final int itemDragDown=0x7f09002b;
-        public static final int itemDragLeft=0x7f090029;
-        public static final int itemDragRight=0x7f090028;
-        public static final int itemDragUp=0x7f09002a;
-        public static final int itemEarClipping=0x7f090031;
-        public static final int itemMesh=0x7f090032;
-        public static final int itemNew=0x7f090024;
-        public static final int itemReset=0x7f09002c;
-        public static final int itemRun=0x7f090034;
-        public static final int itemSimple=0x7f090033;
-        public static final int itemView=0x7f090025;
-        public static final int itemZoomIn=0x7f090026;
-        public static final int itemZoomOut=0x7f090027;
+        public static final int imageButton2=0x7f090012;
+        public static final int imageButton3=0x7f090016;
+        public static final int imageButton4=0x7f090017;
+        public static final int imageButton5=0x7f090018;
+        public static final int imageButton6=0x7f090019;
+        public static final int imageButton7=0x7f09001a;
+        public static final int imageButton8=0x7f090013;
+        public static final int imageButton9=0x7f090014;
+        public static final int itemBSpline=0x7f090023;
+        public static final int itemConvexHull=0x7f090024;
+        public static final int itemDelaunay=0x7f090025;
+        public static final int itemEarClipping=0x7f090026;
+        public static final int itemFull=0x7f090029;
+        public static final int itemMesh=0x7f090027;
+        public static final int itemNew=0x7f090022;
+        public static final int itemSimple=0x7f090028;
         public static final int iv_icon=0x7f090000;
-        public static final int jumpGLSurfaceView1=0x7f09000d;
-        public static final int linearLayout1=0x7f090012;
-        public static final int pager=0x7f09000f;
-        public static final int progressBar1=0x7f09000e;
-        public static final int runGLSurfaceView1=0x7f090022;
-        public static final int scroller=0x7f09001e;
-        public static final int section_label=0x7f09000c;
+        public static final int jumpGLSurfaceView1=0x7f09000c;
+        public static final int linearLayout1=0x7f090010;
+        public static final int pager=0x7f09000d;
+        public static final int runGLSurfaceView1=0x7f090020;
+        public static final int scroller=0x7f09001c;
         public static final int textView1=0x7f090003;
-        public static final int tracks=0x7f09001f;
+        public static final int tracks=0x7f09001d;
         public static final int tv_title=0x7f090001;
     }
     public static final class layout {
@@ -126,85 +115,74 @@ public final class R {
         public static final int deform_layout=0x7f030003;
         public static final int design_layout=0x7f030004;
         public static final int down_layout=0x7f030005;
-        public static final int fragment_move_dummy=0x7f030006;
-        public static final int horiz_separator=0x7f030007;
-        public static final int jump_layout=0x7f030008;
-        public static final int main_layout=0x7f030009;
-        public static final int move_layout=0x7f03000a;
-        public static final int paint_layout_landscape=0x7f03000b;
-        public static final int paint_layout_portrait=0x7f03000c;
-        public static final int popup_horizontal_layout=0x7f03000d;
-        public static final int popup_vertical_layout=0x7f03000e;
-        public static final int run_layout=0x7f03000f;
+        public static final int horiz_separator=0x7f030006;
+        public static final int jump_layout=0x7f030007;
+        public static final int main_layout=0x7f030008;
+        public static final int move_layout=0x7f030009;
+        public static final int paint_layout_landscape=0x7f03000a;
+        public static final int paint_layout_portrait=0x7f03000b;
+        public static final int popup_horizontal_layout=0x7f03000c;
+        public static final int popup_vertical_layout=0x7f03000d;
+        public static final int run_layout=0x7f03000e;
     }
     public static final class menu {
         public static final int design_menu=0x7f080000;
     }
     public static final class string {
-        public static final int action_settings=0x7f06002d;
+        public static final int action_settings=0x7f060023;
         /**  Proyecto 
          */
         public static final int app_name=0x7f060000;
-        public static final int attackhello=0x7f060024;
-        public static final int desc_add=0x7f060033;
-        public static final int desc_bucket=0x7f060017;
-        public static final int desc_color=0x7f06001c;
-        public static final int desc_delete=0x7f06001b;
-        public static final int desc_eye=0x7f06001e;
-        public static final int desc_hand=0x7f060018;
-        public static final int desc_move=0x7f060035;
-        public static final int desc_next=0x7f060019;
-        public static final int desc_pencil=0x7f060016;
-        public static final int desc_prev=0x7f06001a;
-        public static final int desc_ready=0x7f060014;
-        public static final int desc_remove=0x7f060034;
-        public static final int desc_size=0x7f06001d;
-        public static final int downhello=0x7f060026;
-        public static final int item_algorithm=0x7f060004;
-        public static final int item_bspline=0x7f060006;
-        public static final int item_clear=0x7f06000c;
-        public static final int item_convex_hull=0x7f060007;
-        public static final int item_delaunay=0x7f060008;
-        public static final int item_drag_down=0x7f060012;
-        public static final int item_drag_left=0x7f06000f;
-        public static final int item_drag_right=0x7f060010;
-        public static final int item_drag_up=0x7f060011;
-        public static final int item_ear_clipping=0x7f060009;
-        public static final int item_mesh_triangles=0x7f06000a;
+        public static final int attackhello=0x7f06001a;
+        public static final int desc_add=0x7f060029;
+        public static final int desc_bucket=0x7f06000d;
+        public static final int desc_color=0x7f060012;
+        public static final int desc_delete=0x7f060011;
+        public static final int desc_eye=0x7f060014;
+        public static final int desc_hand=0x7f06000e;
+        public static final int desc_move=0x7f06002b;
+        public static final int desc_next=0x7f06000f;
+        public static final int desc_pencil=0x7f06000c;
+        public static final int desc_prev=0x7f060010;
+        public static final int desc_ready=0x7f06000a;
+        public static final int desc_remove=0x7f06002a;
+        public static final int desc_size=0x7f060013;
+        public static final int downhello=0x7f06001c;
+        public static final int item_bspline=0x7f060003;
+        public static final int item_convex_hull=0x7f060004;
+        public static final int item_delaunay=0x7f060005;
+        public static final int item_ear_clipping=0x7f060006;
+        public static final int item_full=0x7f060009;
+        public static final int item_mesh_triangles=0x7f060007;
         public static final int item_new=0x7f060002;
-        public static final int item_reset=0x7f060013;
-        public static final int item_run=0x7f060005;
-        public static final int item_simple=0x7f06000b;
-        public static final int item_view=0x7f060003;
-        public static final int item_zoom_in=0x7f06000d;
-        public static final int item_zoom_out=0x7f06000e;
-        public static final int jumphello=0x7f060025;
-        public static final int runhello=0x7f060027;
-        public static final int tabAttack=0x7f06002b;
-        public static final int tabDown=0x7f06002a;
-        public static final int tabJump=0x7f060029;
-        public static final int tabRun=0x7f060028;
+        public static final int item_simple=0x7f060008;
+        public static final int jumphello=0x7f06001b;
+        public static final int runhello=0x7f06001d;
+        public static final int tabAttack=0x7f060021;
+        public static final int tabDown=0x7f060020;
+        public static final int tabJump=0x7f06001f;
+        public static final int tabRun=0x7f06001e;
         /**  Fase de Animacion 
          */
-        public static final int title_activity_animation=0x7f06001f;
-        public static final int title_activity_attack=0x7f060023;
+        public static final int title_activity_animation=0x7f060015;
+        public static final int title_activity_attack=0x7f060019;
         /**  Fase de Deformacion 
          */
-        public static final int title_activity_deform=0x7f060032;
-        public static final int title_activity_down=0x7f060022;
-        public static final int title_activity_jump=0x7f060021;
+        public static final int title_activity_deform=0x7f060028;
+        public static final int title_activity_down=0x7f060018;
+        public static final int title_activity_jump=0x7f060017;
         /**  Fase de Modelado 
          */
         public static final int title_activity_model=0x7f060001;
-        public static final int title_activity_move=0x7f06002c;
+        public static final int title_activity_move=0x7f060022;
         /**  Fase de Pintura 
          */
-        public static final int title_activity_paint=0x7f060015;
-        public static final int title_activity_run=0x7f060020;
-        public static final int title_section1=0x7f06002e;
-        public static final int title_section2=0x7f06002f;
-        public static final int title_section3=0x7f060030;
-        public static final int title_section4=0x7f060031;
+        public static final int title_activity_paint=0x7f06000b;
+        public static final int title_activity_run=0x7f060016;
+        public static final int title_section1=0x7f060024;
+        public static final int title_section2=0x7f060025;
+        public static final int title_section3=0x7f060026;
+        public static final int title_section4=0x7f060027;
     }
     public static final class style {
         public static final int Animations=0x7f070007;

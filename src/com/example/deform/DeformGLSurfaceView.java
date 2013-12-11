@@ -40,13 +40,13 @@ public class DeformGLSurfaceView extends GLSurfaceView
 		switch(action)
 		{
 			case MotionEvent.ACTION_DOWN:
-				renderer.seleccionarPunto(x, y, width, height);
+				renderer.onTouchDown(x, y, width, height);
 			break;
 			case MotionEvent.ACTION_MOVE:
-				renderer.moverPunto(x, y, width, height);	
+				renderer.onTouchMove(x, y, width, height);	
 			break;
 			case MotionEvent.ACTION_UP:
-				renderer.deseleccionarPunto(x, y, width, height);
+				renderer.onTouchUp(x, y, width, height);
 			break;
 		}
 

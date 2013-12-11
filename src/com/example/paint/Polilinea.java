@@ -2,9 +2,6 @@ package com.example.paint;
 
 import java.nio.FloatBuffer;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import com.example.main.GLESUtils;
 import com.example.utils.FloatArray;
 
 public class Polilinea
@@ -13,40 +10,36 @@ public class Polilinea
 	private FloatBuffer buffer;
 	
 	private int color;
-	private float size;
+	private int size;
 	
-	public Polilinea(int color, float size)
+	public Polilinea(int color, int size, FloatArray puntos, FloatBuffer buffer)
 	{	
 		this.puntos = new FloatArray();
 		
 		this.size = size;
 		this.color = color;
-	}
-	
-	public Polilinea(Punto p, int color, float size)
-	{	
-		this.puntos = new FloatArray();
-		this.anyadirPunto(p);
 		
-		this.size = size;
-		this.color = color;
+		this.puntos = puntos;
+		this.buffer = buffer;
 	}
-	
-	public boolean anyadirPunto(Punto p)
-	{	
-		this.puntos.add(p.getX());
-		this.puntos.add(p.getY());
-		
-		this.buffer = GLESUtils.construirBuffer(puntos);
-		
-		return true;
+
+	public FloatArray getPuntos()
+	{
+		return puntos;
 	}
-	
-	public void dibujar(GL10 gl)
-	{		
-		if(puntos.size > 1)
-		{
-			GLESUtils.dibujarBuffer(gl, GL10.GL_LINE_STRIP, size, color, buffer);
-		}
+
+	public FloatBuffer getBuffer()
+	{
+		return buffer;
 	}
+
+	public int getColor()
+	{
+		return color;
+	}
+
+	public int getSize()
+	{
+		return size;
+	}	
 }
