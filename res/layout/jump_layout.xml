@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00FF00"
-    android:orientation="vertical"
     tools:context=".JumpFragment" >
 
     <com.example.animation.JumpGLSurfaceView
