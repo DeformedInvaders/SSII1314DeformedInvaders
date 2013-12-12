@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.example.animation.MoveActivity;
 import com.example.deform.DeformActivity;
+import com.example.dialog.ActionItem;
 import com.example.dialog.ColorPickerDialog;
+import com.example.dialog.QuickAction;
 import com.example.main.Esqueleto;
 import com.example.main.InternalStorageManager;
 import com.example.main.R;
@@ -146,13 +148,13 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
     }
     
     //TODO Lanzar Size Picker
- 	//private static final int ID_FINO = 1;
- 	//private static final int ID_NORMAL = 2;
- 	//private static final int ID_ANCHO = 3;
+ 	private static final int ID_FINO = 1;
+ 	private static final int ID_NORMAL = 2;
+ 	private static final int ID_ANCHO = 3;
     
-    public void cargarSizePicker()
+    public void cargarSizePicker(View v)
     {
-    	/*ActionItem finoItem = new ActionItem(ID_FINO, "1", getResources().getDrawable(R.drawable.linea1));
+    	ActionItem finoItem = new ActionItem(ID_FINO, "1", getResources().getDrawable(R.drawable.linea1));
 		ActionItem normalItem = new ActionItem(ID_NORMAL, "6", getResources().getDrawable(R.drawable.linea2));
 		ActionItem anchoItem = new ActionItem(ID_ANCHO, "11", getResources().getDrawable(R.drawable.linea3));
 		// create QuickAction. Use QuickAction.VERTICAL or
@@ -183,7 +185,7 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 
 					}
 				});
-    	 */
+    	 
 		// set listnener for on dismiss event, this listener will be called only
 		// if QuickAction dialog was dismissed
 		// by clicking the area outside the dialog.
@@ -194,6 +196,8 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 						Toast.LENGTH_SHORT).show();
 			}
 		});*/
+		
+		quickAction.show(v);
     }
 
     private class OnPincelClickListener implements OnClickListener
@@ -233,7 +237,7 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		{
 			//TODO Lanzar Size Picker
 			//quickAction.show(arg0);
-			canvas.seleccionarSize();
+			cargarSizePicker(v);
 		}
     }
     
