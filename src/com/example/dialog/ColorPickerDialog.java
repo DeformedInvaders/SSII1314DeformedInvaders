@@ -1,237 +1,200 @@
 package com.example.dialog;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Canvas;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.SweepGradient;
-import android.os.Bundle;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.content.DialogInterface.OnCancelListener;
 
-import com.example.paint.PaintGLSurfaceView;
-
-public class ColorPickerDialog extends Dialog {
-
-	public interface OnColorChangedListener {
-		void colorChanged(int color);
-	}
-
-	private final OnColorChangedListener mListener;
-	private final int mInitialColor;
-	private PaintGLSurfaceView canvas;
-
-	public ColorPickerDialog(Context context, OnColorChangedListener listener, int initialColor, PaintGLSurfaceView canvas) {
-		super(context);
-
-		mListener = listener;
-		mInitialColor = initialColor;
-		this.canvas = canvas;
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		OnColorChangedListener colorListener = new OnColorChangedListener() {
-			public void colorChanged(int color) {
-				mListener.colorChanged(color);
-				canvas.seleccionarColor(color);
-				dismiss();
-			}
-		};
-
-		LinearLayout layout = new LinearLayout(getContext());
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.setGravity(Gravity.CENTER);
-		layout.setPadding(10, 10, 10, 10);
-		layout.addView(new ColorPickerView(getContext(), colorListener, mInitialColor),
-				new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.WRAP_CONTENT,
-						LinearLayout.LayoutParams.WRAP_CONTENT));
-
-		setContentView(layout);
-		setTitle("Selecciona un color");
-	}
-	
-	
-	private static class ColorPickerView extends View {
-		private final Paint mPaint;
-		private final Paint mCenterPaint;
-		private final int[] mColors;
-		private final OnColorChangedListener mListener;
-
-		ColorPickerView(Context context, OnColorChangedListener colorListener, int color) {
-			super(context);
-			mListener = colorListener;
-			mColors = new int[] { 0xFFFF0000, 0xFFFF00FF, 0xFF0000FF,
-					0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000 };
-			Shader shader = new SweepGradient(0, 0, mColors, null);
-
-			mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			mPaint.setShader(shader);
-			mPaint.setStyle(Paint.Style.STROKE);
-			mPaint.setStrokeWidth(32);
-
-			mCenterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			mCenterPaint.setColor(color);
-			mCenterPaint.setStrokeWidth(5);
-		}
-
-		private boolean mTrackingCenter;
-		private boolean mHighlightCenter;
-
-		@SuppressLint("DrawAllocation")
-		@Override
-		protected void onDraw(Canvas canvas) {
-			float r = CENTER_X - mPaint.getStrokeWidth() * 0.5f;
-
-			canvas.translate(CENTER_X, CENTER_X);
-
-			canvas.drawOval(new RectF(-r, -r, r, r), mPaint);
-			canvas.drawCircle(0, 0, CENTER_RADIUS, mCenterPaint);
-
-			if (mTrackingCenter) {
-				int colorCentro = mCenterPaint.getColor();
-				mCenterPaint.setStyle(Paint.Style.STROKE);
-
-				if (mHighlightCenter) {
-					mCenterPaint.setAlpha(0xFF);
-				} else {
-					mCenterPaint.setAlpha(0x80);
-				}
-				canvas.drawCircle(0, 0, CENTER_RADIUS
-						+ mCenterPaint.getStrokeWidth(), mCenterPaint);
-
-				mCenterPaint.setStyle(Paint.Style.FILL);
-				mCenterPaint.setColor(colorCentro);
-			}
-		}
-
-		@Override
-		protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-			setMeasuredDimension(CENTER_X * 2, CENTER_Y * 2);
-		}
-
-		private static final int CENTER_X = 100;
-		private static final int CENTER_Y = 100;
-		private static final int CENTER_RADIUS = 32;
-
-		/*private int floatToByte(float x) {
-			int n = java.lang.Math.round(x);
-			return n;
-		}*/
-
-		/*private int pinToByte(int n) {
-			if (n < 0) {
-				n = 0;
-			} else if (n > 255) {
-				n = 255;
-			}
-			return n;
-		}*/
-		
-		private int ave(int s, int d, float p) {
-			return s + java.lang.Math.round(p * (d - s));
-		}
-
-		private int interpColor(int colors[], float unit) {
-			if (unit <= 0)
-				return colors[0];
-			if (unit >= 1)
-				return colors[colors.length - 1];
-
-			float p = unit * (colors.length - 1);
-			int i = (int) p;
-			p -= i;
-
-			// now p is just the fractional part [0...1) and i is the index
-			int c0 = colors[i];
-			int c1 = colors[i + 1];
-			int a = ave(Color.alpha(c0), Color.alpha(c1), p);
-			int r = ave(Color.red(c0), Color.red(c1), p);
-			int g = ave(Color.green(c0), Color.green(c1), p);
-			int b = ave(Color.blue(c0), Color.blue(c1), p);
-
-			return Color.argb(a, r, g, b);
-		}
-		
-		/*private int rotateColor(int color, float rad) {
-			float deg = rad * 180 / 3.1415927f;
-			int r = Color.red(color);
-			int g = Color.green(color);
-			int b = Color.blue(color);
-
-			ColorMatrix cm = new ColorMatrix();
-			ColorMatrix tmp = new ColorMatrix();
-
-			cm.setRGB2YUV();
-			tmp.setRotate(0, deg);
-			cm.postConcat(tmp);
-			tmp.setYUV2RGB();
-			cm.postConcat(tmp);
-
-			final float[] a = cm.getArray();
-
-			int ir = floatToByte(a[0] * r + a[1] * g + a[2] * b);
-			int ig = floatToByte(a[5] * r + a[6] * g + a[7] * b);
-			int ib = floatToByte(a[10] * r + a[11] * g + a[12] * b);
-
-			return Color.argb(Color.alpha(color), pinToByte(ir), pinToByte(ig),
-					pinToByte(ib));
-		}*/
-
-		private static final float PI = 3.1415926f;
-
-		@Override
-		public boolean onTouchEvent(MotionEvent event) {
-			float x = event.getX() - CENTER_X;
-			float y = event.getY() - CENTER_Y;
-			boolean inCenter = java.lang.Math.sqrt(x * x + y * y) <= CENTER_RADIUS;
-
-			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				mTrackingCenter = inCenter;
-				if (inCenter) {
-					mHighlightCenter = true;
-					invalidate();
-					break;
-				}
-			case MotionEvent.ACTION_MOVE:
-				if (mTrackingCenter) {
-					if (mHighlightCenter != inCenter) {
-						mHighlightCenter = inCenter;
-						invalidate();
-					}
-				} else {
-					float angle = (float) java.lang.Math.atan2(y, x);
-					// need to turn angle [-PI ... PI] into unit [0....1]
-							float unit = angle / (2 * PI);
-					if (unit < 0) {
-						unit += 1;
-					}
-					mCenterPaint.setColor(interpColor(mColors, unit));
-					invalidate();
-				}
-				break;
-			case MotionEvent.ACTION_UP:
-				if (mTrackingCenter) {
-					if (inCenter) {
-						mListener.colorChanged(mCenterPaint.getColor());
-					}
-					mTrackingCenter = false; // so we draw w/o halo
-					invalidate();
-				}
-				break;
-			}
-			return true;
-		}
-	}
+import com.example.main.R;
 
 
+public class ColorPickerDialog {
+    public interface OnColorPickerListener {
+        void onCancel(ColorPickerDialog dialog);
+        void onOk(ColorPickerDialog dialog, int color);
+    }
+
+    final AlertDialog dialog;
+    final OnColorPickerListener listener;
+    final View viewCuadroColores;
+    final ColorPickerKotak viewCuadroPrincipal;
+    final ImageView viewCursor;
+    private View viewNewColor;
+    final ImageView viewTarget;
+    final ViewGroup viewContainer;
+    final float[] currentColorHsv = new float[3];
+    
+
+
+    public ColorPickerDialog(final Context context, int color, OnColorPickerListener listener) {
+        this.listener = listener;
+        Color.colorToHSV(color, currentColorHsv);
+
+        final View view = LayoutInflater.from(context).inflate(R.layout.dialog, null);
+        viewCuadroColores = view.findViewById(R.id.color_cuadroColores);
+        viewCuadroPrincipal = (ColorPickerKotak) view.findViewById(R.id.color_viewCuadroPrincipal);
+        viewCursor = (ImageView) view.findViewById(R.id.color_cursor);
+        viewNewColor = view.findViewById(R.id.color_cuadroSeleccionado);
+        viewTarget = (ImageView) view.findViewById(R.id.color_target);
+        viewContainer = (ViewGroup) view.findViewById(R.id.color_viewContainer);
+
+        viewCuadroPrincipal.setHue(getHue());
+        viewNewColor.setBackgroundColor(color);
+
+        viewCuadroColores.setOnTouchListener(new View.OnTouchListener() {
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE
+                        || event.getAction() == MotionEvent.ACTION_DOWN
+                        || event.getAction() == MotionEvent.ACTION_UP) {
+
+                    float y = event.getY();
+                    if (y < 0.f) y = 0.f;
+                    if (y > viewCuadroColores.getMeasuredHeight())
+                    	y = viewCuadroColores.getMeasuredHeight() - 0.001f; // para permitir looping desde el final al principio.
+                    float hue = 360.f - 360.f / viewCuadroColores.getMeasuredHeight() * y;
+                    if (hue == 360.f) hue = 0.f;
+                    setHue(hue);
+
+                    // Actualizar la vista
+                    viewCuadroPrincipal.setHue(getHue());
+                    moveCursor();
+                    viewNewColor.setBackgroundColor(getColor());
+
+                    return true;
+                }
+                return false;
+            }
+        });
+        viewCuadroPrincipal.setOnTouchListener(new View.OnTouchListener() {
+            @Override public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE
+                        || event.getAction() == MotionEvent.ACTION_DOWN
+                        || event.getAction() == MotionEvent.ACTION_UP) {
+
+                    float x = event.getX(); // evento touch en unidades dp.
+                    float y = event.getY();
+
+                    if (x < 0.f) x = 0.f;
+                    if (x > viewCuadroPrincipal.getMeasuredWidth()) x = viewCuadroPrincipal.getMeasuredWidth();
+                    if (y < 0.f) y = 0.f;
+                    if (y > viewCuadroPrincipal.getMeasuredHeight()) y = viewCuadroPrincipal.getMeasuredHeight();
+
+                    setSat(1.f / viewCuadroPrincipal.getMeasuredWidth() * x);
+                    setVal(1.f - (1.f / viewCuadroPrincipal.getMeasuredHeight() * y));
+
+                    // Actualizar la vista
+                    moveTarget();
+                    viewNewColor.setBackgroundColor(getColor());
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        dialog = new AlertDialog.Builder(context)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override 
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ColorPickerDialog.this.listener != null) {
+                            ColorPickerDialog.this.listener.onOk(ColorPickerDialog.this, getColor());
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override 
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ColorPickerDialog.this.listener != null) {
+                            ColorPickerDialog.this.listener.onCancel(ColorPickerDialog.this);
+                        }
+                    }
+                })
+                .setOnCancelListener(new OnCancelListener() {
+                    // si el boton de vuelta atrás es usado, vuelta a llamar al listener.
+                    @Override 
+                    public void onCancel(DialogInterface paramDialogInterface) {
+                        if (ColorPickerDialog.this.listener != null) {
+                            ColorPickerDialog.this.listener.onCancel(ColorPickerDialog.this);
+                        }
+
+                    }
+                })
+                .create();
+        // Elimina el padding de la ventana de dialogo
+        dialog.setView(view, 0, 0, 0, 0);
+
+        // mueve el cursor y el color objetivo en su primer dibujo
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override public void onGlobalLayout() {
+                moveCursor();
+                moveTarget();
+                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
+    }
+
+    protected void moveCursor() {
+        float y = viewCuadroColores.getMeasuredHeight() - (getHue() * viewCuadroColores.getMeasuredHeight() / 360.f);
+        if (y == viewCuadroColores.getMeasuredHeight()) y = 0.f;
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewCursor.getLayoutParams();
+        layoutParams.leftMargin = (int) (viewCuadroColores.getLeft() - Math.floor(viewCursor.getMeasuredWidth() / 2) - viewContainer.getPaddingLeft());
+        ;
+        layoutParams.topMargin = (int) (viewCuadroColores.getTop() + y - Math.floor(viewCursor.getMeasuredHeight() / 2) - viewContainer.getPaddingTop());
+        ;
+        viewCursor.setLayoutParams(layoutParams);
+    }
+
+    protected void moveTarget() {
+        float x = getSat() * viewCuadroPrincipal.getMeasuredWidth();
+        float y = (1.f - getVal()) * viewCuadroPrincipal.getMeasuredHeight();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewTarget.getLayoutParams();
+        layoutParams.leftMargin = (int) (viewCuadroPrincipal.getLeft() + x - Math.floor(viewTarget.getMeasuredWidth() / 2) - viewContainer.getPaddingLeft());
+        layoutParams.topMargin = (int) (viewCuadroPrincipal.getTop() + y - Math.floor(viewTarget.getMeasuredHeight() / 2) - viewContainer.getPaddingTop());
+        viewTarget.setLayoutParams(layoutParams);
+    }
+
+    private int getColor() {
+        return Color.HSVToColor(currentColorHsv);
+    }
+
+    private float getHue() {
+        return currentColorHsv[0];
+    }
+
+    private float getSat() {
+        return currentColorHsv[1];
+    }
+
+    private float getVal() {
+        return currentColorHsv[2];
+    }
+
+    private void setHue(float hue) {
+        currentColorHsv[0] = hue;
+    }
+
+    private void setSat(float sat) {
+        currentColorHsv[1] = sat;
+    }
+
+    private void setVal(float val) {
+        currentColorHsv[2] = val;
+    }
+
+    public void show() {
+        dialog.show();
+    }
+
+    public AlertDialog getDialog() {
+        return dialog;
+    }
 }

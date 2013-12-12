@@ -7,9 +7,7 @@ import java.io.FileOutputStream;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,12 +20,13 @@ import com.example.animation.MoveActivity;
 import com.example.deform.DeformActivity;
 import com.example.dialog.ActionItem;
 import com.example.dialog.ColorPickerDialog;
+import com.example.dialog.ColorPickerDialog.OnColorPickerListener;
 import com.example.dialog.QuickAction;
 import com.example.main.Esqueleto;
 import com.example.main.InternalStorageManager;
 import com.example.main.R;
 
-public class PaintActivity extends Activity implements ColorPickerDialog.OnColorChangedListener
+public class PaintActivity extends Activity
 {
 	private InternalStorageManager manager;
     
@@ -141,13 +140,30 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		}
 	}
 	
-    @Override
-    public void colorChanged(int color)
+	public void cargarColorpicker()
     {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("color", color).commit();
+	 	// El segundo parametro pasado al constructor es el color inicial, el cual el prefijo "0xff" se corresponde con el componente alpha
+		// En este caso, el color inicial es el negro
+        ColorPickerDialog dialog = new ColorPickerDialog(this, 0xff000000, new OnColorPickerListener()
+    	{
+
+        	// Si se pulsa el boton Cancelar
+    		@Override
+    		public void onCancel(ColorPickerDialog dialog){
+    	
+    		}
+    		
+    		// Si se pulsa el boton Aceptar
+    		@Override
+    		public void onOk(ColorPickerDialog dialog, int color) {
+    			canvas.seleccionarColor(color);			
+    		}
+    			
+    	});
+        dialog.show();
     }
+	
     
-    //TODO Lanzar Size Picker
  	private static final int ID_FINO = 1;
  	private static final int ID_NORMAL = 2;
  	private static final int ID_ANCHO = 3;
@@ -157,18 +173,15 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
     	ActionItem finoItem = new ActionItem(ID_FINO, "1", getResources().getDrawable(R.drawable.linea1));
 		ActionItem normalItem = new ActionItem(ID_NORMAL, "6", getResources().getDrawable(R.drawable.linea2));
 		ActionItem anchoItem = new ActionItem(ID_ANCHO, "11", getResources().getDrawable(R.drawable.linea3));
-		// create QuickAction. Use QuickAction.VERTICAL or
-		// QuickAction.HORIZONTAL param to define layout
-		// orientation
-		final QuickAction quickAction = new QuickAction(this,
-				QuickAction.VERTICAL);
+		// Crear el  QuickAction,usando el parametro QuickAction.VERTICAL o QuickAction.HORIZONTAL para definir la orientacion del layout
+		final QuickAction quickAction = new QuickAction(this, QuickAction.VERTICAL);
 
-		// add action items into QuickAction
+		// Añadir los action items al QuickAction
 		quickAction.addActionItem(finoItem);
 		quickAction.addActionItem(normalItem);
 		quickAction.addActionItem(anchoItem);
 
-		// Set listener for action item clicked
+		// Set listener para el action item clickado
 		quickAction
 				.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
 					@Override
@@ -186,9 +199,7 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 					}
 				});
     	 
-		// set listnener for on dismiss event, this listener will be called only
-		// if QuickAction dialog was dismissed
-		// by clicking the area outside the dialog.
+		// set listener para el evento de descarte, este listener se llamará solo si el QuickAction dialog fuera descartado por pulsar fuera del area del dialogo.
 		/*quickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
 			@Override
 			public void onDismiss() {
@@ -223,10 +234,7 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		@Override
 		public void onClick(View v)
 		{
-			//TODO Lanzar Color Picker
-			int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt("color", Color.RED);
-			new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color, canvas).show();
-			//canvas.seleccionarColor();
+			cargarColorpicker();
 		}
     }
     
@@ -235,8 +243,6 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		@Override
 		public void onClick(View v)
 		{
-			//TODO Lanzar Size Picker
-			//quickAction.show(arg0);
 			cargarSizePicker(v);
 		}
     }

@@ -19,7 +19,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.main.R;
-//import android.R;
 
 public class QuickAction extends PopupWindows implements OnDismissListener {
 	private View mRootView;
@@ -116,7 +115,6 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		// This was previously defined on show() method, moved here to prevent
 		// force close that occured
 		// when tapping fastly on a view to show quickaction dialog.
-		// Thanx to zammbi (github.com/zammbi)
 		mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
 
@@ -413,4 +411,6 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public interface OnDismissListener {
 		public abstract void onDismiss();
 	}
+
+
 }
