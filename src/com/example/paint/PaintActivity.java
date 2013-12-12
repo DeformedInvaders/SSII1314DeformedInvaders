@@ -10,8 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -58,6 +60,9 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		setContentView(R.layout.paint_layout_landscape);
 
 		// Instanciar Elementos de la GUI
+		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
+		canvas.setEsqueleto(esqueleto);
+		
 		botonPincel = (ImageButton) findViewById(R.id.imageButton1);
 		botonCubo = (ImageButton) findViewById(R.id.imageButton2);
 		botonMano = (ImageButton) findViewById(R.id.imageButton3);
@@ -69,138 +74,29 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		botonSize = (ImageButton) findViewById(R.id.imageButton9);
 		botonEye = (ImageButton) findViewById(R.id.imageButton10);
 		
-		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
-		canvas.setEsqueleto(esqueleto);
+		botonNext.setVisibility(View.INVISIBLE);
+		botonPrev.setVisibility(View.INVISIBLE);
+		botonDelete.setVisibility(View.INVISIBLE);
 		
-		botonPincel.setOnClickListener(new OnClickListener()
+		botonPincel.setOnClickListener(new OnPincelClickListener());	
+		botonCubo.setOnClickListener(new OnCuboClickListener());
+		botonColor.setOnClickListener(new OnColorClickListener());
+		botonSize.setOnClickListener(new OnSizeClickListener());
+		botonEye.setOnClickListener(new OnEyeClickListener());
+		botonMano.setOnClickListener(new OnManoClickListener());
+		botonNext.setOnClickListener(new OnNextClickListener());
+		botonPrev.setOnClickListener(new OnPrevClickListener());
+		botonDelete.setOnClickListener(new OnDeleteClickListener());
+		botonReady.setOnClickListener(new OnReadyClickListener());
+		
+		canvas.setOnTouchListener(new OnTouchListener()
 		{
 			@Override
-			public void onClick(View arg0)
+			public boolean onTouch(View v, MotionEvent event)
 			{
-				canvas.seleccionarPincel();
-			}
-		});
-		
-		botonCubo.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.seleccionarCubo();
-			}
-		});
-		
-		botonColor.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				//TODO Lanzar Color Picker
-				//int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.RED);
-				//new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color, canvas).show();
-				canvas.seleccionarColor();
-			}
-		});
-		
-		botonSize.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				//TODO Lanzar Size Picker
-				//quickAction.show(arg0);
-				canvas.seleccionarSize();
-			}
-		});
-		
-		botonEye.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.capturaPantalla();
-				Esqueleto esqueleto = canvas.getEsqueleto();
-				if(esqueleto != null)
-				{
-					try
-					{
-						FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-						manager.guardarEsqueleto(file, esqueleto);
-					}
-					catch (FileNotFoundException e)
-					{
-						Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
-						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-						e.printStackTrace();
-					}
-					
-					Intent intent = new Intent(PaintActivity.this, MoveActivity.class);
-					startActivity(intent);
-				}
-			}
-		});
-		
-		botonMano.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.seleccionarMano();
-			}
-		});
-		
-		botonNext.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.siguienteAccion();
-			}
-		});
-		
-		botonPrev.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.anteriorAccion();
-			}
-		});
-		
-		botonDelete.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.reiniciar();
-				Toast.makeText(getApplication(), "Deleted", Toast.LENGTH_SHORT).show();
-			}
-		});
-		
-		botonReady.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{		
-				canvas.capturaPantalla();
-				Esqueleto esqueleto = canvas.getEsqueleto();
-				if(esqueleto != null)
-				{
-					try
-					{
-						FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-						manager.guardarEsqueleto(file, esqueleto);
-					}
-					catch (FileNotFoundException e)
-					{
-						Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
-						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-						e.printStackTrace();
-					}
-					
-					Intent intent = new Intent(PaintActivity.this, DeformActivity.class);
-					startActivity(intent);
-				}
+				canvas.onTouch(event);
+				actualizarBotones();
+				return true;
 			}
 		});
 	}
@@ -217,6 +113,29 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 	{
 		super.onPause();
 		canvas.onPause();
+	}
+	
+	private void actualizarBotones()
+	{
+		if(canvas.bufferSiguienteVacio())
+		{
+			botonNext.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			botonNext.setVisibility(View.VISIBLE);
+		}
+		
+		if(canvas.bufferAnteriorVacio())
+		{
+			botonPrev.setVisibility(View.INVISIBLE);
+			botonDelete.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			botonPrev.setVisibility(View.VISIBLE);
+			botonDelete.setVisibility(View.VISIBLE);
+		}
 	}
 	
     @Override
@@ -274,5 +193,141 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 						Toast.LENGTH_SHORT).show();
 			}
 		});*/
+    }
+
+    private class OnPincelClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarPincel();
+		}
+    }
+    
+    private class OnCuboClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarCubo();			
+		}
+    }
+    
+    private class OnColorClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			//TODO Lanzar Color Picker
+			//int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.RED);
+			//new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color, canvas).show();
+			canvas.seleccionarColor();
+		}
+    }
+    
+    private class OnSizeClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			//TODO Lanzar Size Picker
+			//quickAction.show(arg0);
+			canvas.seleccionarSize();
+		}
+    }
+    
+    private class OnEyeClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.capturaPantalla();
+			Esqueleto esqueleto = canvas.getEsqueleto();
+			if(esqueleto != null)
+			{
+				try
+				{
+					FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
+					manager.guardarEsqueleto(file, esqueleto);
+				}
+				catch (FileNotFoundException e)
+				{
+					Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+					Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+					e.printStackTrace();
+				}
+				
+				Intent intent = new Intent(PaintActivity.this, MoveActivity.class);
+				startActivity(intent);
+			}
+		}
+	}
+    
+    private class OnManoClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarMano();
+		}
+    }
+    
+    private class OnPrevClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.anteriorAccion();
+			
+			actualizarBotones();
+		}
+    }
+    
+    private class OnNextClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.siguienteAccion();
+
+			actualizarBotones();
+		}
+    }
+    
+    private class OnDeleteClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.reiniciar();
+			Toast.makeText(getApplication(), "Deleted", Toast.LENGTH_SHORT).show();
+		}
+    }
+
+    private class OnReadyClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.capturaPantalla();
+			Esqueleto esqueleto = canvas.getEsqueleto();
+			if(esqueleto != null)
+			{
+				try
+				{
+					FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
+					manager.guardarEsqueleto(file, esqueleto);
+				}
+				catch (FileNotFoundException e)
+				{
+					Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+					Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+					e.printStackTrace();
+				}
+				
+				Intent intent = new Intent(PaintActivity.this, DeformActivity.class);
+				startActivity(intent);
+			}
+		}
     }
 }

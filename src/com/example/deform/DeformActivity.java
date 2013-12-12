@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -51,37 +53,28 @@ public class DeformActivity extends Activity
 		setContentView(R.layout.deform_layout);
 		
 		// Instanciar Elementos de la GUI
+		canvas = (DeformGLSurfaceView) findViewById(R.id.deformGLSurfaceView1);
+		canvas.setEsqueleto(esqueleto);
+		
 		botonAdd = (ImageButton) findViewById(R.id.imageButton11);
 		botonRemove = (ImageButton) findViewById(R.id.imageButton12);
 		botonMover = (ImageButton) findViewById(R.id.imageButton13);
 		
-		canvas = (DeformGLSurfaceView) findViewById(R.id.deformGLSurfaceView1);
-		canvas.setEsqueleto(esqueleto);
+		botonRemove.setVisibility(View.INVISIBLE);
+		botonMover.setVisibility(View.INVISIBLE);
 		
-		botonAdd.setOnClickListener(new OnClickListener()
+		botonAdd.setOnClickListener(new OnAddClickListener());
+		botonRemove.setOnClickListener(new OnRemoveClickListener());
+		botonMover.setOnClickListener(new OnMoveClickListener());
+		
+		canvas.setOnTouchListener(new OnTouchListener()
 		{
 			@Override
-			public void onClick(View arg0)
+			public boolean onTouch(View v, MotionEvent event)
 			{
-				canvas.seleccionarAnyadir();
-			}
-		});
-		
-		botonRemove.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.seleccionarEliminar();
-			}
-		});
-		
-		botonMover.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				canvas.seleccionarMover();
+				canvas.onTouch(event);
+				actualizarBotones();
+				return true;
 			}
 		});
 	}
@@ -98,5 +91,46 @@ public class DeformActivity extends Activity
 	{
 		super.onPause();
 		canvas.onPause();
+	}
+	
+	private void actualizarBotones()
+	{
+		if(canvas.handlesVacio())
+		{
+			botonRemove.setVisibility(View.INVISIBLE);
+			botonMover.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			botonRemove.setVisibility(View.VISIBLE);
+			botonMover.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private class OnAddClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarAnyadir();
+		}	
+	}
+	
+	private class OnRemoveClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarEliminar();
+		}	
+	}
+	
+	private class OnMoveClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarMover();
+		}	
 	}
 }

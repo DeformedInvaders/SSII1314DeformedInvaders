@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -45,29 +47,16 @@ public class DesignActivity extends Activity
 		canvas = (DesignGLSurfaceView) findViewById(R.id.designGLSurfaceView1);
 		botonReady = (ImageButton) findViewById(R.id.imageButton0);
 		
-		botonReady.setOnClickListener(new OnClickListener()
+		botonReady.setOnClickListener(new OnReadyClickListener());
+		
+		canvas.setOnTouchListener(new OnTouchListener()
 		{
 			@Override
-			public void onClick(View arg0)
+			public boolean onTouch(View v, MotionEvent event)
 			{
-				Esqueleto esqueleto = canvas.getEsqueleto();
-				if(esqueleto != null)
-				{					
-					try
-					{
-						FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-						manager.guardarEsqueleto(file, esqueleto);
-					}
-					catch (FileNotFoundException e)
-					{
-						Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
-						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-						e.printStackTrace();
-					}
-					
-					Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
-					startActivity(intent);
-				}
+				canvas.onTouch(event);
+				actualizarBotones();
+				return true;
 			}
 		});
 	}
@@ -118,6 +107,7 @@ public class DesignActivity extends Activity
 			break;
 			case R.id.itemNew:
 				canvas.reiniciar();
+				actualizarBotones();
 			break;
 			case R.id.itemFull:
 				if(!canvas.pruebaCompleta())
@@ -142,5 +132,43 @@ public class DesignActivity extends Activity
 	{
 		super.onPause();
 		canvas.onPause();
+	}
+	
+	private void actualizarBotones()
+	{
+		if(canvas.poligonoCompleto())
+		{
+			botonReady.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			botonReady.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	private class OnReadyClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			Esqueleto esqueleto = canvas.getEsqueleto();
+			if(esqueleto != null)
+			{					
+				try
+				{
+					FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
+					manager.guardarEsqueleto(file, esqueleto);
+				}
+				catch (FileNotFoundException e)
+				{
+					Toast.makeText(getApplication(), "File not found", Toast.LENGTH_SHORT).show();
+					Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+					e.printStackTrace();
+				}
+				
+				Intent intent = new Intent(DesignActivity.this, PaintActivity.class);
+				startActivity(intent);
+			}
+		}
 	}
 }

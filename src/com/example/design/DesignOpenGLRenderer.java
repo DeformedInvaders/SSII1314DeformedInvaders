@@ -335,4 +335,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		
 		return null;
 	}
+
+	public boolean poligonoCompleto()
+	{
+		return puntos.size >= 6;
+	}
 }

@@ -41,46 +41,50 @@ public class PaintGLSurfaceView extends GLSurfaceView
         dragDetector = new DragGestureDetector(renderer);
     }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event)
+	public boolean onTouch(MotionEvent event)
 	{	
-		int action = event.getAction();
-		
-		float x = event.getX();
-		float y = event.getY();
-		
-		float width = getWidth();
-		float height = getHeight();
-	
-		if(renderer.getEstado() != TPaintEstado.Mano)
+		if(event != null)
 		{
-			switch(action)
+			int action = event.getAction();
+			
+			float x = event.getX();
+			float y = event.getY();
+			
+			float width = getWidth();
+			float height = getHeight();
+		
+			if(renderer.getEstado() != TPaintEstado.Mano)
 			{
-				case MotionEvent.ACTION_DOWN:
-					renderer.onTouchDown(x, y, width, height);
-				break;
-				case MotionEvent.ACTION_MOVE:
-					renderer.onTouchMove(x, y, width, height);	
-				break;
-				case MotionEvent.ACTION_UP:
-					renderer.onTouchUp(x, y, width, height);
-				break;
-			}
-		}
-		else
-		{
-			if(event.getPointerCount() == 1)
-			{
-				dragDetector.onTouchEvent(event, x, y, width, height);
-				doubleTouchDetector.onTouchEvent(event);
+				switch(action)
+				{
+					case MotionEvent.ACTION_DOWN:
+						renderer.onTouchDown(x, y, width, height);
+					break;
+					case MotionEvent.ACTION_MOVE:
+						renderer.onTouchMove(x, y, width, height);	
+					break;
+					case MotionEvent.ACTION_UP:
+						renderer.onTouchUp(x, y, width, height);
+					break;
+					default:
+						return false;
+				}
 			}
 			else
 			{
-				scaleDectector.onTouchEvent(event);
+				if(event.getPointerCount() == 1)
+				{
+					dragDetector.onTouchEvent(event, x, y, width, height);
+					doubleTouchDetector.onTouchEvent(event);
+				}
+				else
+				{
+					scaleDectector.onTouchEvent(event);
+				}
 			}
+			
+			requestRender();
 		}
-		
-		requestRender();
 		return true;
 	}
 	
@@ -151,5 +155,15 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	{
 		renderer.capturaPantalla(getHeight(), getWidth());
 		requestRender();
+	}
+	
+	public boolean bufferSiguienteVacio()
+	{
+		return renderer.bufferSiguienteVacio();
+	}
+	
+	public boolean bufferAnteriorVacio()
+	{
+		return renderer.bufferAnteriorVacio();
 	}
 }

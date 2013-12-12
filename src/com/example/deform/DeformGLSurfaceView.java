@@ -9,48 +9,53 @@ import com.example.main.Esqueleto;
 
 public class DeformGLSurfaceView extends GLSurfaceView
 {
+	// Renderer
     private final DeformOpenGLRenderer renderer;
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
 
-        // Create an OpenGL 1.0 context.
+        // Crear Contexto OpenGL ES 1.0
         setEGLContextClientVersion(1);
 
-        // Set the Renderer for drawing on the GLSurfaceView
+        // Asignar Renderer al GLSurfaceView
         renderer = new DeformOpenGLRenderer(context);
         setRenderer(renderer);
 
-        // Render the view only when there is a change in the drawing data
+        // Activar Modo Pintura en demanda
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event)
+	public boolean onTouch(MotionEvent event)
 	{	
-		int action = event.getAction();
-		
-		float x = event.getX();
-		float y = event.getY();
-		
-		float width = getWidth();
-		float height = getHeight();
-		
-		switch(action)
+		if(event != null)
 		{
-			case MotionEvent.ACTION_DOWN:
-				renderer.onTouchDown(x, y, width, height);
-			break;
-			case MotionEvent.ACTION_MOVE:
-				renderer.onTouchMove(x, y, width, height);	
-			break;
-			case MotionEvent.ACTION_UP:
-				renderer.onTouchUp(x, y, width, height);
-			break;
+			int action = event.getAction();
+			
+			float x = event.getX();
+			float y = event.getY();
+			
+			float width = getWidth();
+			float height = getHeight();
+			
+			switch(action)
+			{
+				case MotionEvent.ACTION_DOWN:
+					renderer.onTouchDown(x, y, width, height);
+				break;
+				case MotionEvent.ACTION_MOVE:
+					renderer.onTouchMove(x, y, width, height);	
+				break;
+				case MotionEvent.ACTION_UP:
+					renderer.onTouchUp(x, y, width, height);
+				break;
+				default:
+					return false;
+			}
+	
+			requestRender();
 		}
-
-		requestRender();
 		return true;
 	}
 	
@@ -72,5 +77,10 @@ public class DeformGLSurfaceView extends GLSurfaceView
 	public void seleccionarMover()
 	{
 		renderer.seleccionarMover();
+	}
+
+	public boolean handlesVacio()
+	{
+		return renderer.handlesVacio();
 	}
 }

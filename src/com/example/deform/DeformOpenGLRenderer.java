@@ -72,6 +72,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 		
+		// Vertices
 		if(estado != TDeformEstado.Mover)
 		{
 			dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferVertices);
@@ -80,7 +81,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// Handles		
 		if(indiceHandles.size > 0)
 		{
-			dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.BLACK, bufferHandles);
+			dibujarBuffer(gl, GL10.GL_POINTS, 2*POINTWIDTH, Color.BLACK, bufferHandles);
 		}
 		
 		// Seleccionado
@@ -235,5 +236,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			estado = TDeformEstado.Seleccionar;
 			handleSeleccionado = -1;
 		}	
+	}
+
+	public boolean handlesVacio()
+	{
+		return indiceHandles.size == 0;
 	}
 }

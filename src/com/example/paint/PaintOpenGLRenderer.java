@@ -333,7 +333,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	private void actualizarEstado(Stack<Accion> pila)
 	{
-		this.color = Color.BLACK;
+		this.color = Color.WHITE;
 		this.listaLineas = new ArrayList<Polilinea>();
 		
 		Iterator<Accion> it = pila.iterator();
@@ -349,6 +349,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				this.listaLineas.add(accion.getLinea());
 			}
 		}
+	}
+	
+	public boolean bufferSiguienteVacio()
+	{
+		return siguientes.isEmpty();
+	}
+
+	public boolean bufferAnteriorVacio()
+	{
+		return anteriores.isEmpty();
 	}
 	
 	/* Captura de Textura */

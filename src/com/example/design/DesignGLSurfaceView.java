@@ -27,31 +27,35 @@ public class DesignGLSurfaceView extends GLSurfaceView
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event)
+	public boolean onTouch(MotionEvent event)
 	{		
-		int action = event.getAction();
-		
-		float x = event.getX();
-		float y = event.getY();
-		
-		float width = getWidth();
-		float height = getHeight();
-		
-		switch(action)
+		if(event != null)
 		{
-			case MotionEvent.ACTION_DOWN:
-				renderer.onTouchDown(x, y, width, height);
-			break;
-			case MotionEvent.ACTION_MOVE:
-				renderer.onTouchMove(x, y, width, height);	
-			break;
-			case MotionEvent.ACTION_UP:
-				//renderer.onTouchUp(x, y, width, height);
-			break;
+			int action = event.getAction();
+			
+			float x = event.getX();
+			float y = event.getY();
+			
+			float width = getWidth();
+			float height = getHeight();
+			
+			switch(action)
+			{
+				case MotionEvent.ACTION_DOWN:
+					renderer.onTouchDown(x, y, width, height);
+				break;
+				case MotionEvent.ACTION_MOVE:
+					renderer.onTouchMove(x, y, width, height);	
+				break;
+				case MotionEvent.ACTION_UP:
+					renderer.onTouchUp(x, y, width, height);
+				break;
+				default:
+					return false;
+			}
+			
+			requestRender();	
 		}
-		
-		requestRender();		
 		return true;
 	}
 	
@@ -114,5 +118,10 @@ public class DesignGLSurfaceView extends GLSurfaceView
 	{		
 		renderer.restore();
 		requestRender();
+	}
+
+	public boolean poligonoCompleto()
+	{
+		return renderer.poligonoCompleto();
 	}
 }
