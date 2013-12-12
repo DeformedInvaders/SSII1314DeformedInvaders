@@ -112,7 +112,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		    this.textura = capturaPantalla(gl, canvasHeight, canvasWidth);
 		    
 		    // Construir Textura
-			this.coordsTextura = construirTextura(vertices, textura.getBitmap().getWidth(), textura.getBitmap().getHeight());
+			this.coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
 			
 			// Desactivar Modo Captura
 			this.modoCaptura = false;
@@ -393,7 +393,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	private TexturaBMP capturaPantalla(GL10 gl, int height, int width)
 	{
-		// TODO Comprimir Textura
 	    int screenshotSize = width * height;
 	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
 	    bb.order(ByteOrder.nativeOrder());
