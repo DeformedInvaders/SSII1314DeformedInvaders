@@ -15,6 +15,7 @@ import android.graphics.Color;
 
 import com.example.main.Esqueleto;
 import com.example.main.OpenGLRenderer;
+import com.example.main.TexturaBMP;
 import com.example.math.GeometryUtils;
 import com.example.math.Intersector;
 import com.example.utils.FloatArray;

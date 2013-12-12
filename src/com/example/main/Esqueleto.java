@@ -2,7 +2,6 @@ package com.example.main;
 
 import java.io.Serializable;
 
-import com.example.paint.TexturaBMP;
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
 

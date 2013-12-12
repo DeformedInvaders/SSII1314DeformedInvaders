@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
@@ -401,6 +402,31 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+	}
+	
+	// Pintura de una Lista de Handles
+	protected void dibujarListaHandle(GL10 gl, int color, FloatBuffer handle, FloatArray posiciones)
+	{
+		gl.glPushMatrix();
+		
+			int i = 0;
+			while(i < posiciones.size)
+			{
+				float x = posiciones.get(i);
+				float y = posiciones.get(i+1);
+				float z = 0.0f;
+				
+				Log.d("TEST", "PINTAR HANDLE EN: "+x+" "+y);
+				
+				gl.glPushMatrix();
+					gl.glTranslatef(x, y, z);
+					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);
+				gl.glPopMatrix();
+				
+				i = i+2;
+			}
+		
+		gl.glPopMatrix();
 	}
 	
 	// Cargado de Textura

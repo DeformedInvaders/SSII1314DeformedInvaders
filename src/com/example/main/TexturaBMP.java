@@ -1,4 +1,4 @@
-package com.example.paint;
+package com.example.main;
 
 import java.io.Serializable;
 import java.util.ArrayList;

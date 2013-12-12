@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -219,9 +220,9 @@ public class PaintActivity extends Activity implements ColorPickerDialog.OnColor
 		public void onClick(View v)
 		{
 			//TODO Lanzar Color Picker
-			//int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt(COLOR_PREFERENCE_KEY, Color.RED);
-			//new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color, canvas).show();
-			canvas.seleccionarColor();
+			int color = PreferenceManager.getDefaultSharedPreferences(PaintActivity.this).getInt("color", Color.RED);
+			new ColorPickerDialog(PaintActivity.this, PaintActivity.this,color, canvas).show();
+			//canvas.seleccionarColor();
 		}
     }
     

@@ -29,12 +29,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private ShortArray triangulos;
 	private FloatBuffer bufferTriangulos;
 	
+	private Handle objetoHandle;
 	private FloatArray handles;
 	private ShortArray indiceHandles;
-	private FloatBuffer bufferHandles;
 	
-	private int handleSeleccionado;
-	private FloatBuffer bufferHandleSeleccionado;
+	private int indiceHandleSeleccionado;
+	private FloatArray handleSeleccionado;
 	
 	private static final int numeroTexturas = 1;
 	private int[] nombreTextura;
@@ -53,9 +53,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         
         handles = new FloatArray();
         indiceHandles = new ShortArray();
-        handleSeleccionado = -1;
+        handleSeleccionado = new FloatArray();
+        handleSeleccionado.add(0);
+        handleSeleccionado.add(0);
+        indiceHandleSeleccionado = -1;
         
         nombreTextura = new int[numeroTexturas];
+        
+        objetoHandle = new Handle(20, 2*POINTWIDTH);
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -79,15 +84,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Handles		
-		if(indiceHandles.size > 0)
+		if(handles.size > 0)
 		{
-			dibujarBuffer(gl, GL10.GL_POINTS, 2*POINTWIDTH, Color.BLACK, bufferHandles);
+			dibujarListaHandle(gl, Color.BLACK, objetoHandle.getBuffer(), handles);
 		}
 		
 		// Seleccionado
-		if(handleSeleccionado != -1)
-		{			
-			dibujarBuffer(gl, GL10.GL_POINTS, 2*POINTWIDTH, Color.RED, bufferHandleSeleccionado);
+		if(indiceHandleSeleccionado != -1)
+		{		
+			dibujarListaHandle(gl, Color.RED, objetoHandle.getBuffer(), handleSeleccionado);
 		}	
 	}
 	
@@ -135,7 +140,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		    
 		handles.clear();
 		indiceHandles.clear();
-		handleSeleccionado = -1;
+		indiceHandleSeleccionado = -1;
 	}
 	
 	public void onTouchDown(float x, float y, float width, float height)
@@ -156,7 +161,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					
 					// Añadir Handle Nuevo
 					deformator.computeDeformation(handles, indiceHandles);
-					bufferHandles = construirBufferListaPuntos(handles);
 				}
 			}
 			else if(estado == TDeformEstado.Eliminar)
@@ -170,7 +174,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					handles.removeIndex(2*pos);
 					
 					deformator.computeDeformation(handles, indiceHandles);
-					actualizarBufferListaPuntos(bufferHandles, handles);
 				}
 			}
 			else if(estado == TDeformEstado.Seleccionar)
@@ -178,12 +181,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				if(indiceHandles.contains((short) j))
 				{
 					// Seleccionar Handle
-					handleSeleccionado = indiceHandles.indexOf(j);
+					indiceHandleSeleccionado = indiceHandles.indexOf(j);
 					
-					float[] array = new float[2];
-					array[0] = handles.get(2*handleSeleccionado);
-					array[1] = handles.get(2*handleSeleccionado+1);
-					bufferHandleSeleccionado = construirBufferListaPuntos(array);
+					handleSeleccionado.set(0, handles.get(2*indiceHandleSeleccionado));
+					handleSeleccionado.set(1, handles.get(2*indiceHandleSeleccionado+1));
 					
 					estado = TDeformEstado.Mover;
 				}
@@ -204,22 +205,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			float nx = xLeft + (xRight-xLeft)*x/width;
 			float ny = yBot + (yTop-yBot)*(height-y)/height;
 			
-			float lastX = handles.get(2*handleSeleccionado);
-			float lastY = handles.get(2*handleSeleccionado);
+			float lastX = handles.get(2*indiceHandleSeleccionado);
+			float lastY = handles.get(2*indiceHandleSeleccionado);
 			
 			if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > EPSILON)
 			{
-				handles.set(2*handleSeleccionado, nx);
-				handles.set(2*handleSeleccionado+1, ny);
+				handles.set(2*indiceHandleSeleccionado, nx);
+				handles.set(2*indiceHandleSeleccionado+1, ny);
 				
 				// Cambiar Posicion de los Handles
 				verticesModificados = deformator.computeDeformation(handles);
 				
-				bufferHandleSeleccionado.put(0, nx);
-				bufferHandleSeleccionado.put(1, ny);
+				handleSeleccionado.set(0, nx);
+				handleSeleccionado.set(1, ny);
 				
 				actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-				actualizarBufferListaPuntos(bufferHandles, handles);
 				actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 			}
 		}
@@ -234,7 +234,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			actualizarBufferListaPuntos(bufferVertices, verticesModificados);
 			
 			estado = TDeformEstado.Seleccionar;
-			handleSeleccionado = -1;
+			indiceHandleSeleccionado = -1;
 		}	
 	}
 
