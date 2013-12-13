@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
-import android.util.Log;
 
 import com.example.utils.FloatArray;
 import com.example.utils.ShortArray;
@@ -415,8 +414,6 @@ public abstract class OpenGLRenderer implements Renderer
 				float x = posiciones.get(i);
 				float y = posiciones.get(i+1);
 				float z = 0.0f;
-				
-				Log.d("TEST", "PINTAR HANDLE EN: "+x+" "+y);
 				
 				gl.glPushMatrix();
 					gl.glTranslatef(x, y, z);

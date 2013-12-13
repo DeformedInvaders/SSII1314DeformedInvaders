@@ -76,9 +76,9 @@ public class PaintActivity extends Activity
 		botonSize = (ImageButton) findViewById(R.id.imageButton9);
 		botonEye = (ImageButton) findViewById(R.id.imageButton10);
 		
-		botonNext.setVisibility(View.INVISIBLE);
-		botonPrev.setVisibility(View.INVISIBLE);
-		botonDelete.setVisibility(View.INVISIBLE);
+		//botonNext.setVisibility(View.INVISIBLE);
+		//botonPrev.setVisibility(View.INVISIBLE);
+		//botonDelete.setVisibility(View.INVISIBLE);
 		
 		botonPincel.setOnClickListener(new OnPincelClickListener());	
 		botonCubo.setOnClickListener(new OnCuboClickListener());
@@ -121,22 +121,22 @@ public class PaintActivity extends Activity
 	{
 		if(canvas.bufferSiguienteVacio())
 		{
-			botonNext.setVisibility(View.INVISIBLE);
+			//botonNext.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
-			botonNext.setVisibility(View.VISIBLE);
+			//botonNext.setVisibility(View.VISIBLE);
 		}
 		
 		if(canvas.bufferAnteriorVacio())
 		{
-			botonPrev.setVisibility(View.INVISIBLE);
-			botonDelete.setVisibility(View.INVISIBLE);
+			//botonPrev.setVisibility(View.INVISIBLE);
+			//botonDelete.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
-			botonPrev.setVisibility(View.VISIBLE);
-			botonDelete.setVisibility(View.VISIBLE);
+			//botonPrev.setVisibility(View.VISIBLE);
+			//botonDelete.setVisibility(View.VISIBLE);
 		}
 	}
 	

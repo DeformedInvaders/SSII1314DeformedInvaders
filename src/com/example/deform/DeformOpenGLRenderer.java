@@ -1,6 +1,7 @@
 package com.example.deform;
 
 import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -24,20 +25,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	private FloatArray vertices;
 	private FloatArray verticesModificados;
-	private FloatBuffer bufferVertices;
 	
 	private ShortArray triangulos;
 	private FloatBuffer bufferTriangulos;
 	
-	private Handle objetoHandle;
 	private FloatArray handles;
 	private ShortArray indiceHandles;
 	
 	private int indiceHandleSeleccionado;
 	private FloatArray handleSeleccionado;
 	
+	private Handle objetoVertice, objetoHandle;
+	
 	private static final int numeroTexturas = 1;
 	private int[] nombreTextura;
+	private int posTextura;
 	
 	private Bitmap textura;
 	private FloatArray coords;
@@ -60,7 +62,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         
         nombreTextura = new int[numeroTexturas];
         
-        objetoHandle = new Handle(20, 2*POINTWIDTH);
+        objetoHandle = new Handle(20, POINTWIDTH);
+        objetoVertice = new Handle(20, POINTWIDTH/2);
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -72,7 +75,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		// Textura	
 		cargarTextura(gl, textura, nombreTextura, 0);
-		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, 0);
+		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
 		
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
@@ -80,7 +83,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// Vertices
 		if(estado != TDeformEstado.Mover)
 		{
-			dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferVertices);
+			dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
 		}
 		
 		// Handles		
@@ -106,13 +109,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		this.textura = esqueleto.getTextura().getBitmap();
 		this.coords = esqueleto.getCoordTextura();
-				
+		
 		this.deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
 
 		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 		this.bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
 		this.bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
-		this.bufferVertices = construirBufferListaPuntos(verticesModificados);
 	}
 	
 	/* Selección de Estado */
@@ -160,7 +162,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					handles.add(verticesModificados.get(2*j+1));
 					
 					// Añadir Handle Nuevo
-					deformator.computeDeformation(handles, indiceHandles);
+					deformator.anyadirHandles(handles, indiceHandles);
 				}
 			}
 			else if(estado == TDeformEstado.Eliminar)
@@ -173,7 +175,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					handles.removeIndex(2*pos+1);
 					handles.removeIndex(2*pos);
 					
-					deformator.computeDeformation(handles, indiceHandles);
+					deformator.anyadirHandles(handles, indiceHandles);
 				}
 			}
 			else if(estado == TDeformEstado.Seleccionar)
@@ -196,7 +198,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{	
 		if(estado == TDeformEstado.Seleccionar)
 		{
-			// TODO:
 			onTouchDown(x, y, width, height);
 		}
 		else if(estado == TDeformEstado.Mover)
@@ -214,7 +215,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				handles.set(2*indiceHandleSeleccionado+1, ny);
 				
 				// Cambiar Posicion de los Handles
-				verticesModificados = deformator.computeDeformation(handles);
+				deformator.moverHandles(handles, verticesModificados);
 				
 				handleSeleccionado.set(0, nx);
 				handleSeleccionado.set(1, ny);
@@ -230,8 +231,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if(estado == TDeformEstado.Mover)
 		{
 			onTouchMove(x, y, width, height);
-			
-			actualizarBufferListaPuntos(bufferVertices, verticesModificados);
 			
 			estado = TDeformEstado.Seleccionar;
 			indiceHandleSeleccionado = -1;

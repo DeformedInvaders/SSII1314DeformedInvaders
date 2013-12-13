@@ -138,11 +138,11 @@ public class DesignActivity extends Activity
 	{
 		if(canvas.poligonoCompleto())
 		{
-			botonReady.setVisibility(View.VISIBLE);
+			//botonReady.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			botonReady.setVisibility(View.INVISIBLE);
+			//botonReady.setVisibility(View.INVISIBLE);
 		}
 	}
 	

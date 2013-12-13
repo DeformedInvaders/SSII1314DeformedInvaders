@@ -61,14 +61,16 @@ public class DeformActivity extends Activity
 		botonMover = (ImageButton) findViewById(R.id.imageButton13);
 		botonDelete = (ImageButton) findViewById(R.id.imageButton14);
 		
-		botonRemove.setVisibility(View.INVISIBLE);
-		botonMover.setVisibility(View.INVISIBLE);
-		botonDelete.setVisibility(View.INVISIBLE);
+		//botonRemove.setVisibility(View.INVISIBLE);
+		//botonMover.setVisibility(View.INVISIBLE);
+		//botonDelete.setVisibility(View.INVISIBLE);
 		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
 		botonMover.setOnClickListener(new OnMoveClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
+		
+		
 		
 		canvas.setOnTouchListener(new OnTouchListener()
 		{
@@ -100,15 +102,15 @@ public class DeformActivity extends Activity
 	{
 		if(canvas.handlesVacio())
 		{
-			botonRemove.setVisibility(View.INVISIBLE);
-			botonMover.setVisibility(View.INVISIBLE);
-			botonDelete.setVisibility(View.INVISIBLE);
+			//botonRemove.setVisibility(View.INVISIBLE);
+			//botonMover.setVisibility(View.INVISIBLE);
+			//botonDelete.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
-			botonRemove.setVisibility(View.VISIBLE);
-			botonMover.setVisibility(View.VISIBLE);
-			botonDelete.setVisibility(View.VISIBLE);
+			//botonRemove.setVisibility(View.VISIBLE);
+			//botonMover.setVisibility(View.VISIBLE);
+			//botonDelete.setVisibility(View.VISIBLE);
 		}
 	}
 	

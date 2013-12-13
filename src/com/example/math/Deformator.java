@@ -11,20 +11,19 @@ import com.example.utils.ShortArray;
 public class Deformator
 {
 	private ArrayList<Arista> aristas;
-	private FloatArray puntos, handles;
-	private ShortArray triangulos, indiceHandles, vecinos;
+	private FloatArray puntos;
+	private ShortArray triangulos;
+	private ShortArray vecinos;
 	
 	private int numVertices, numAristas, numHandles;
 	private static final float w = 1000;
 	
-	private Matrix matrizA, matrizB;
+	private Matrix matrizA, matrizAt, matrizAtA, matrizB;
 	
 	public Deformator(FloatArray puntos, ShortArray triangulos, FloatArray handles, ShortArray indiceHandles)
 	{
 		this.puntos = puntos.clone();
 		this.triangulos = triangulos;
-		this.handles = handles;
-		this.indiceHandles = indiceHandles;
 		
 		this.aristas = new ArrayList<Arista>();
 		this.vecinos = computeTriangles();
@@ -33,49 +32,46 @@ public class Deformator
 		this.numAristas = vecinos.size/4;
 		this.numHandles = indiceHandles.size;
 		
-		this.matrizA = calcularMatrizA();
-		this.matrizB = calcularMatrizB();
-	}
-	
-	// Obtener nuevos puntos
-	private FloatArray computeDeformation()
-	{
-		Matrix matrizAt = matrizA.transpose();
-		Matrix matrizAtA = matrizAt.times(matrizA);
+		this.matrizA = calcularMatrizA(handles, indiceHandles);
+		this.matrizAt = matrizA.transpose();
+		this.matrizAtA = matrizAt.times(matrizA);
 		
-		Matrix matrizAtB = matrizAt.times(matrizB);
-		
-		QRDecomposition solver = new QRDecomposition(matrizAtA); 
-		Matrix m = solver.solve(matrizAtB);
-		
-		FloatArray nuevosPuntos = new FloatArray();
-		for(int i = 0; i < 2*numVertices; i++)
-		{
-			nuevosPuntos.add((float) m.get(i, 0));
-		}
-		
-		return nuevosPuntos;
+		this.matrizB = calcularMatrizB(handles);
 	}
 	
 	// Modificación de Posición de Handles
-	public FloatArray computeDeformation(FloatArray handles)
+	public void moverHandles(FloatArray handles, FloatArray vertices)
 	{
-		this.handles = handles;
+		// Actualizar MatrizB
+		actualizarMatrizB(handles);
 		
-		this.matrizB = calcularMatrizB();
+		// Cálculo de Ajuste de Traslación y Rotación
+		Matrix matrizAtB = matrizAt.times(matrizB);
 		
-		return computeDeformation();
+		QRDecomposition solver = new QRDecomposition(matrizAtA);
+		Matrix m = solver.solve(matrizAtB);
+		
+		// Actualizar Valores de los Vertices
+		for(int i = 0; i < 2*numVertices; i++)
+		{
+			vertices.set(i, (float) m.get(i, 0));
+		}
+		
+		// Cálculo de Ajuste de Escalación
 	}
 	
 	// Añadir nuevos Handles
-	public void computeDeformation(FloatArray handles, ShortArray indiceHandles)
+	public void anyadirHandles(FloatArray handles, ShortArray indiceHandles)
 	{
-		this.handles = handles;
-		this.indiceHandles = indiceHandles;
-		this.numHandles = this.indiceHandles.size;
+		this.numHandles = indiceHandles.size;
 		
-		this.matrizA = actualizarMatrizA();
-		this.matrizB = calcularMatrizB();
+		// Calcular MatrizA
+		this.matrizA = actualizarMatrizA(handles, indiceHandles);
+		this.matrizAt = matrizA.transpose();
+		this.matrizAtA = matrizAt.times(matrizA);
+		
+		// Calcular MatrizB
+		this.matrizB = calcularMatrizB(handles);
 	}
 	
 	// Calculo Matriz H
@@ -163,7 +159,7 @@ public class Deformator
 	}
 	
 	// Calculo Matriz A
-	private Matrix calcularMatrizA()
+	private Matrix calcularMatrizA(FloatArray handles, ShortArray indiceHandles)
 	{
 		Matrix m = new Matrix(2*numAristas + 2*numHandles, 2*numVertices);
 		
@@ -212,7 +208,7 @@ public class Deformator
 	}
 	
 	// Actualizar Matriz A
-	private Matrix actualizarMatrizA()
+	private Matrix actualizarMatrizA(FloatArray handles, ShortArray indiceHandles)
 	{
 		Matrix m = new Matrix(2*numAristas + 2*numHandles, 2*numVertices);
 		
@@ -235,9 +231,9 @@ public class Deformator
 		
 		return m;
 	}
-	// Calculo Matriz B
 	
-	private Matrix calcularMatrizB()
+	// Calculo Matriz B
+	private Matrix calcularMatrizB(FloatArray handles)
 	{
 		Matrix m = new Matrix(2*numAristas + 2*numHandles, 1);
 		
@@ -252,6 +248,20 @@ public class Deformator
 		}
 		
 		return m;
+	}
+	
+	// Actualizar Matriz B
+	private void actualizarMatrizB(FloatArray handles)
+	{
+		for(int i = 0; i < numHandles; i++)
+		{
+			int pos = 2*numAristas + 2*i;
+			float x = handles.get(2*i);
+			float y = handles.get(2*i+1);
+			
+			matrizB.set(pos, 0, w*x);
+			matrizB.set(pos+1, 0, w*y);
+		}
 	}
 	
 	private ShortArray computeTriangles()
