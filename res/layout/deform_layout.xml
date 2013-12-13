@@ -41,6 +41,13 @@
             android:layout_height="70dp"
             android:contentDescription="@string/desc_move"
             android:src="@drawable/icon_hand" />
+        
+		<ImageButton
+            android:id="@+id/imageButton14"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/desc_delete"
+            android:src="@drawable/icon_delete" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -59,7 +59,7 @@ public class PaintActivity extends Activity
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		
 		// Seleccionar Layout
-		setContentView(R.layout.paint_layout_landscape);
+		setContentView(R.layout.paint_layout);
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
@@ -312,6 +312,8 @@ public class PaintActivity extends Activity
 		{
 			canvas.reiniciar();
 			Toast.makeText(getApplication(), "Deleted", Toast.LENGTH_SHORT).show();
+			
+			actualizarBotones();
 		}
     }
 

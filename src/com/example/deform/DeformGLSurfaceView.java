@@ -83,4 +83,10 @@ public class DeformGLSurfaceView extends GLSurfaceView
 	{
 		return renderer.handlesVacio();
 	}
+
+	public void reiniciar()
+	{
+		renderer.reiniciar();
+		requestRender();
+	}
 }

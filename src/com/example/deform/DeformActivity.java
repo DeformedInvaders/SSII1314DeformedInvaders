@@ -22,7 +22,7 @@ public class DeformActivity extends Activity
 	private InternalStorageManager manager;
 	
 	private DeformGLSurfaceView canvas;
-	private ImageButton botonAdd, botonRemove, botonMover;
+	private ImageButton botonAdd, botonRemove, botonMover, botonDelete;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -59,13 +59,16 @@ public class DeformActivity extends Activity
 		botonAdd = (ImageButton) findViewById(R.id.imageButton11);
 		botonRemove = (ImageButton) findViewById(R.id.imageButton12);
 		botonMover = (ImageButton) findViewById(R.id.imageButton13);
+		botonDelete = (ImageButton) findViewById(R.id.imageButton14);
 		
 		botonRemove.setVisibility(View.INVISIBLE);
 		botonMover.setVisibility(View.INVISIBLE);
+		botonDelete.setVisibility(View.INVISIBLE);
 		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
 		botonMover.setOnClickListener(new OnMoveClickListener());
+		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener()
 		{
@@ -99,11 +102,13 @@ public class DeformActivity extends Activity
 		{
 			botonRemove.setVisibility(View.INVISIBLE);
 			botonMover.setVisibility(View.INVISIBLE);
+			botonDelete.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
 			botonRemove.setVisibility(View.VISIBLE);
 			botonMover.setVisibility(View.VISIBLE);
+			botonDelete.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -131,6 +136,17 @@ public class DeformActivity extends Activity
 		public void onClick(View v)
 		{
 			canvas.seleccionarMover();
+		}	
+	}
+	
+	private class OnDeleteClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.reiniciar();
+			
+			actualizarBotones();
 		}	
 	}
 }
