@@ -1,8 +1,16 @@
 package com.example.main;
 
-import android.app.Activity;
+import java.util.Locale;
+
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -12,11 +20,15 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.animation.AttackFragment;
+import com.example.animation.DownFragment;
+import com.example.animation.JumpFragment;
+import com.example.animation.RunFragment;
 import com.example.deform.DeformGLSurfaceView;
 import com.example.design.DesignGLSurfaceView;
 import com.example.paint.PaintGLSurfaceView;
 
-public class MainActivity extends Activity
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {	
 	private TEstado estado;
 	private Esqueleto esqueleto;
@@ -30,6 +42,7 @@ public class MainActivity extends Activity
 	private ImageButton botonDesignReady;
 	
 	/* PAINT ACTIVITY */
+	// TODO
 	//private ColorPicker colorPicker;
 	//private SizePicker sizePicker;
 	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
@@ -37,11 +50,16 @@ public class MainActivity extends Activity
 	/* DEFORM ACTIVITY */
 	private ImageButton botonDeformAdd, botonDeformRemove, botonDeformMover, botonDeformDelete;
 	
+	/* ANIM ACTIVITY */
+	private SectionsPagerAdapter mSectionsPagerAdapter;
+	private ViewPager mViewPager;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
+		// TODO
 		createDesignActivity();
 	}
 	
@@ -84,7 +102,7 @@ public class MainActivity extends Activity
 	}
 	
 	/* LOADING ACTIVITY */
-	
+	// TODO
 	/*private void createLoadingActivity()
 	{
 		// Estado
@@ -104,7 +122,6 @@ public class MainActivity extends Activity
 	                    wait(segundos*1000);
 	                }
 					
-					// TODO
 	                createDesignActivity();
 				}
 				catch(InterruptedException e)
@@ -154,8 +171,7 @@ public class MainActivity extends Activity
 		if(e != null)
 		{					
 			esqueleto = e;
-			
-			// TODO
+
 			createPaintActivity();
 		}
 	}
@@ -301,13 +317,10 @@ public class MainActivity extends Activity
 			
 			if(buttonId == botonPaintEye.getId())
 			{
-				//TODO
-				//estado = TEstado.Anim;
-				//recreate();
+				createAnimActivity();
 			}
 			else if(buttonId == botonPaintReady.getId())
 			{
-				//TODO
 				createDeformActivity();
 			}
 		}
@@ -344,6 +357,7 @@ public class MainActivity extends Activity
 		{
 			if(estado == TEstado.Paint)
 			{
+				// TODO
 				((PaintGLSurfaceView) canvas).seleccionarColor();
 				//colorPicker.cargarColorPicker();
 				//canvasPaint.seleccionarColor(colorPicker.getColor());
@@ -358,6 +372,7 @@ public class MainActivity extends Activity
 		{
 			if(estado == TEstado.Paint)
 			{
+				// TODO
 				((PaintGLSurfaceView) canvas).seleccionarSize();
 				//sizePicker.cargarSizePicker();
 				//canvasPaint.seleccionarSize(colorPicker.getSize());
@@ -570,5 +585,108 @@ public class MainActivity extends Activity
 				actualizarDeformBotones();
 			}
 		}	
+	}
+	
+	/* ANIM ACTIVITY */
+	
+	private void createAnimActivity()
+	{
+		// Estado
+		estado = TEstado.Anim;
+		
+		// Seleccionar Layout
+		setContentView(R.layout.move_layout);
+				
+		final ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position)
+			{
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
+
+		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++)
+		{
+			actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+		}
+	}
+	
+	@Override
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+	{
+		mViewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+
+	@Override
+	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	
+	public class SectionsPagerAdapter extends FragmentPagerAdapter
+	{
+		public SectionsPagerAdapter(FragmentManager fm)
+		{
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position)
+		{
+			switch (position)
+			{
+		        case 0:
+		        	RunFragment run = new RunFragment();
+		        	run.setEsqueleto(esqueleto);
+		            return run;
+		        case 1:
+		        	JumpFragment jump = new JumpFragment();
+		        	jump.setEsqueleto(esqueleto);
+		            return jump;
+		        case 2:
+		        	DownFragment down = new DownFragment();
+		        	down.setEsqueleto(esqueleto);
+		            return down;
+		        case 3:
+		        	AttackFragment attack = new AttackFragment();
+		        	attack.setEsqueleto(esqueleto);
+		            return attack;
+	        }
+	 
+	        return null;
+		}
+
+		@Override
+		public int getCount()
+		{
+			return 4;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position)
+		{
+			Locale l = Locale.getDefault();
+			switch (position)
+			{
+				case 0:
+					return getString(R.string.title_section1).toUpperCase(l);
+				case 1:
+					return getString(R.string.title_section2).toUpperCase(l);
+				case 2:
+					return getString(R.string.title_section3).toUpperCase(l);
+				case 3:
+					return getString(R.string.title_section4).toUpperCase(l);
+			}
+			
+			return null;
+		}
 	}
 }
