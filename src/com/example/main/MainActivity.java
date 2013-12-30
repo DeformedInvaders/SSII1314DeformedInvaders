@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,7 +28,7 @@ import com.example.animation.RunFragment;
 import com.example.deform.DeformGLSurfaceView;
 import com.example.design.DesignGLSurfaceView;
 import com.example.dialog.ColorPickerDialog;
-import com.example.dialog.QuickAction;
+import com.example.dialog.SizePicker;
 import com.example.paint.PaintGLSurfaceView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
@@ -48,7 +47,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	
 	/* PAINT ACTIVITY */
 	private ColorPickerDialog colorPicker;
-	private QuickAction sizePicker;
+	private SizePicker sizePicker;
 	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
 	
 	/* DEFORM ACTIVITY */
@@ -375,7 +374,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		{
 			if(estado == TEstado.Paint)
 			{
-				if (sizePicker == null) sizePicker= new QuickAction(mContext, QuickAction.VERTICAL, (PaintGLSurfaceView)canvas);    	
+				if (sizePicker == null) sizePicker= new SizePicker(mContext, SizePicker.VERTICAL, (PaintGLSurfaceView)canvas);    	
 				sizePicker.show(v);
 			}
 		}

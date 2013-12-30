@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.animation.MoveActivity;
 import com.example.deform.DeformActivity;
 import com.example.dialog.ColorPickerDialog;
-import com.example.dialog.QuickAction;
+import com.example.dialog.SizePicker;
 import com.example.main.Esqueleto;
 import com.example.main.InternalStorageManager;
 import com.example.main.R;
@@ -30,7 +30,7 @@ public class PaintActivity extends Activity
     
 	private PaintGLSurfaceView canvas;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
-	private QuickAction quickAction;
+	private SizePicker quickAction;
 	private Context mContext;
 	
 	@Override
@@ -177,7 +177,7 @@ public class PaintActivity extends Activity
 		@Override
 		public void onClick(View v)
 		{
-			if (quickAction == null) quickAction= new QuickAction(mContext, QuickAction.VERTICAL, canvas);    	
+			if (quickAction == null) quickAction= new SizePicker(mContext, SizePicker.VERTICAL, canvas);    	
 			quickAction.show(v);
 		}
     }

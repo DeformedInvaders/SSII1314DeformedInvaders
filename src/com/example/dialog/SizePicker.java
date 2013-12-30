@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import com.example.main.R;
 import com.example.paint.PaintGLSurfaceView;
 
-public class QuickAction extends PopupWindows implements OnDismissListener {
+public class SizePicker extends PopupWindows implements OnDismissListener {
 	private View mRootView;
 	private ImageView mArrowDown;
 	private LayoutInflater mInflater;
@@ -39,7 +39,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * @param context
 	 *            Context
 	 */
-	public QuickAction(final Context context, final PaintGLSurfaceView canvas) {
+	public SizePicker(final Context context, final PaintGLSurfaceView canvas) {
 		this(context, VERTICAL, canvas);
 		final ImageButton ibincremento = (ImageButton)this.getView().findViewById(R.id.ibIncremento);
 		final ImageButton ibdecremento = (ImageButton)this.getView().findViewById(R.id.ibDecremento);
@@ -79,7 +79,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * @param orientation
 	 *            Layout orientation, can be vartical or horizontal
 	 */
-	public QuickAction(final Context context, int orientation, final PaintGLSurfaceView canvas) {
+	public SizePicker(final Context context, int orientation, final PaintGLSurfaceView canvas) {
 		super(context);
 
 		//mOrientation = orientation;
@@ -271,7 +271,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * the quicakction dialog is dismissed by clicking outside the dialog or
 	 * clicking on sticky item.
 	 */
-	public void setOnDismissListener(QuickAction.OnDismissListener listener) {
+	public void setOnDismissListener(SizePicker.OnDismissListener listener) {
 		setOnDismissListener( (OnDismissListener) this);
 
 		mDismissListener = listener;
@@ -289,7 +289,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * 
 	 */
 	public interface OnActionItemClickListener {
-		public abstract void onItemClick(QuickAction source, int pos,
+		public abstract void onItemClick(SizePicker source, int pos,
 				int actionId);
 	}
 
