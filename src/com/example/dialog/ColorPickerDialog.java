@@ -3,6 +3,7 @@ package com.example.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,9 +12,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.content.DialogInterface.OnCancelListener;
 
 import com.example.main.R;
+import com.example.paint.PaintGLSurfaceView;
 
 
 public class ColorPickerDialog {
@@ -34,8 +35,23 @@ public class ColorPickerDialog {
     
 
 
-    public ColorPickerDialog(final Context context, int color, OnColorPickerListener listener) {
-        this.listener = listener;
+    public ColorPickerDialog(final Context context, int color, final PaintGLSurfaceView canvas) {
+        this.listener =  new OnColorPickerListener()
+    	{
+
+        	// Si se pulsa el boton Cancelar
+    		@Override
+    		public void onCancel(ColorPickerDialog dialog){
+    	
+    		}
+    		
+    		// Si se pulsa el boton Aceptar
+    		@Override
+    		public void onOk(ColorPickerDialog dialog, int color) {
+    			canvas.seleccionarColor(color);			
+    		}
+    			
+    	};
         Color.colorToHSV(color, currentColorHsv);
 
         final View view = LayoutInflater.from(context).inflate(R.layout.dialog, null);

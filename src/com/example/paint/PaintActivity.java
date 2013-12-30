@@ -18,9 +18,7 @@ import android.widget.Toast;
 
 import com.example.animation.MoveActivity;
 import com.example.deform.DeformActivity;
-import com.example.dialog.ActionItem;
 import com.example.dialog.ColorPickerDialog;
-import com.example.dialog.ColorPickerDialog.OnColorPickerListener;
 import com.example.dialog.QuickAction;
 import com.example.main.Esqueleto;
 import com.example.main.InternalStorageManager;
@@ -32,6 +30,8 @@ public class PaintActivity extends Activity
     
 	private PaintGLSurfaceView canvas;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
+	private QuickAction quickAction;
+	private Context mContext;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -61,6 +61,7 @@ public class PaintActivity extends Activity
 		// Seleccionar Layout
 		setContentView(R.layout.paint_layout);
 
+		mContext = this;
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
 		canvas.setEsqueleto(esqueleto);
@@ -139,77 +140,7 @@ public class PaintActivity extends Activity
 			//botonDelete.setVisibility(View.VISIBLE);
 		}
 	}
-	
-	public void cargarColorpicker()
-    {
-	 	// El segundo parametro pasado al constructor es el color inicial, el cual el prefijo "0xff" se corresponde con el componente alpha
-		// En este caso, el color inicial es el negro
-        ColorPickerDialog dialog = new ColorPickerDialog(this, 0xff000000, new OnColorPickerListener()
-    	{
 
-        	// Si se pulsa el boton Cancelar
-    		@Override
-    		public void onCancel(ColorPickerDialog dialog){
-    	
-    		}
-    		
-    		// Si se pulsa el boton Aceptar
-    		@Override
-    		public void onOk(ColorPickerDialog dialog, int color) {
-    			canvas.seleccionarColor(color);			
-    		}
-    			
-    	});
-        dialog.show();
-    }
-	
-    
- 	private static final int ID_FINO = 1;
- 	private static final int ID_NORMAL = 2;
- 	private static final int ID_ANCHO = 3;
-    
-    public void cargarSizePicker(View v)
-    {
-    	ActionItem finoItem = new ActionItem(ID_FINO, "1", getResources().getDrawable(R.drawable.linea1));
-		ActionItem normalItem = new ActionItem(ID_NORMAL, "6", getResources().getDrawable(R.drawable.linea2));
-		ActionItem anchoItem = new ActionItem(ID_ANCHO, "11", getResources().getDrawable(R.drawable.linea3));
-		// Crear el  QuickAction,usando el parametro QuickAction.VERTICAL o QuickAction.HORIZONTAL para definir la orientacion del layout
-		final QuickAction quickAction = new QuickAction(this, QuickAction.VERTICAL);
-
-		// Añadir los action items al QuickAction
-		quickAction.addActionItem(finoItem);
-		quickAction.addActionItem(normalItem);
-		quickAction.addActionItem(anchoItem);
-
-		// Set listener para el action item clickado
-		quickAction
-				.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						ActionItem actionItem = quickAction.getActionItem(pos);
-						canvas.seleccionarSize(pos);
-
-						Toast.makeText(
-								getApplicationContext(),
-								"grosor " + actionItem.getTitle()
-										+ " seleccionado", Toast.LENGTH_SHORT)
-								.show();
-
-					}
-				});
-    	 
-		// set listener para el evento de descarte, este listener se llamará solo si el QuickAction dialog fuera descartado por pulsar fuera del area del dialogo.
-		/*quickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
-			@Override
-			public void onDismiss() {
-				Toast.makeText(getApplicationContext(), "Dismissed",
-						Toast.LENGTH_SHORT).show();
-			}
-		});*/
-		
-		quickAction.show(v);
-    }
 
     private class OnPincelClickListener implements OnClickListener
     {
@@ -234,7 +165,10 @@ public class PaintActivity extends Activity
 		@Override
 		public void onClick(View v)
 		{
-			cargarColorpicker();
+			// El segundo parametro pasado al constructor es el color inicial, el cual el prefijo "0xff" se corresponde con el componente alfa
+			// En este caso, el color inicial es el negro
+	        ColorPickerDialog dialog = new ColorPickerDialog(mContext, 0xff000000, canvas);
+	        dialog.show();
 		}
     }
     
@@ -243,7 +177,8 @@ public class PaintActivity extends Activity
 		@Override
 		public void onClick(View v)
 		{
-			cargarSizePicker(v);
+			if (quickAction == null) quickAction= new QuickAction(mContext, QuickAction.VERTICAL, canvas);    	
+			quickAction.show(v);
 		}
     }
     

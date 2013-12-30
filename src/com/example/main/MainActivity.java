@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,6 +28,8 @@ import com.example.animation.JumpFragment;
 import com.example.animation.RunFragment;
 import com.example.deform.DeformGLSurfaceView;
 import com.example.design.DesignGLSurfaceView;
+import com.example.dialog.ColorPickerDialog;
+import com.example.dialog.QuickAction;
 import com.example.paint.PaintGLSurfaceView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
@@ -33,6 +37,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private TEstado estado;
 	private Esqueleto esqueleto;
 	private GLSurfaceView canvas;
+	private Context mContext;
 
 	/* LOADING ACTIVITY */
 	//private Thread threadTimer;
@@ -42,9 +47,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ImageButton botonDesignReady;
 	
 	/* PAINT ACTIVITY */
-	// TODO
-	//private ColorPicker colorPicker;
-	//private SizePicker sizePicker;
+	private ColorPickerDialog colorPicker;
+	private QuickAction sizePicker;
 	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
 	
 	/* DEFORM ACTIVITY */
@@ -58,7 +62,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+		mContext = this;
 		// TODO
 		createDesignActivity();
 	}
@@ -357,10 +361,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		{
 			if(estado == TEstado.Paint)
 			{
-				// TODO
-				((PaintGLSurfaceView) canvas).seleccionarColor();
-				//colorPicker.cargarColorPicker();
-				//canvasPaint.seleccionarColor(colorPicker.getColor());
+				((PaintGLSurfaceView) canvas).seleccionarColor(0xff000000);
+				colorPicker = new ColorPickerDialog(mContext, 0xff000000, (PaintGLSurfaceView)canvas);
+				colorPicker.show();
 			}
 		}
     }
@@ -372,10 +375,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		{
 			if(estado == TEstado.Paint)
 			{
-				// TODO
-				((PaintGLSurfaceView) canvas).seleccionarSize();
-				//sizePicker.cargarSizePicker();
-				//canvasPaint.seleccionarSize(colorPicker.getSize());
+				if (sizePicker == null) sizePicker= new QuickAction(mContext, QuickAction.VERTICAL, (PaintGLSurfaceView)canvas);    	
+				sizePicker.show(v);
 			}
 		}
     }
