@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/RelativeLayout2"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
     android:orientation="horizontal"
     tools:context=".PaintActivity" >
 
@@ -11,17 +11,17 @@
         android:id="@+id/PaintGLSurfaceView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true" 
+        android:layout_marginBottom="70dp"/>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/PaintGLSurfaceView1"
-        android:layout_alignLeft="@+id/PaintGLSurfaceView1" >
+        android:layout_alignParentBottom="true"
+   	    android:layout_alignParentLeft="true" >
 
         <ImageButton
             android:id="@+id/imageButton1"
@@ -92,8 +92,8 @@
    	    android:id="@+id/imageButton7"
 	    android:layout_width="70dp"
 	    android:layout_height="70dp"
-   	    android:layout_alignBottom="@+id/PaintGLSurfaceView1"
-   	    android:layout_alignRight="@+id/PaintGLSurfaceView1"
+   	    android:layout_alignParentBottom="true"
+   	    android:layout_alignParentRight="true"
    	    android:contentDescription="@string/desc_ready"
    	    android:src="@drawable/icon_ready" />
 
