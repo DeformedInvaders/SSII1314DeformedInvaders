@@ -39,8 +39,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private Context mContext;
 
 	/* LOADING ACTIVITY */
-	//private Thread threadTimer;
-	//private static final int segundos = 1;
+	private ImageButton botonMainAdd, botonMainPlay, botonMainView;
 
 	/* DESIGN ACTIVITY */
 	private ImageButton botonDesignReady;
@@ -62,8 +61,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	{
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		// TODO
-		createDesignActivity();
+
+		createLoadingActivity();
 	}
 	
 	@Override
@@ -105,8 +104,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 	
 	/* LOADING ACTIVITY */
-	// TODO
-	/*private void createLoadingActivity()
+
+	private void createLoadingActivity()
 	{
 		// Estado
 		estado = TEstado.Loading;
@@ -114,28 +113,62 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// Seleccionar Layout
 		setContentView(R.layout.main_layout);
 		
-		threadTimer = new Thread() {
-			@Override
-			public void run()
-			{
-				try
-				{
-	                synchronized(this)
-	                {
-	                    wait(segundos*1000);
-	                }
-					
-	                createDesignActivity();
-				}
-				catch(InterruptedException e)
-				{ 
-					e.printStackTrace();
-				}             
-			}
-		};
+		// Recolector de Basura
+		//TODO
+		System.gc();
 		
-		threadTimer.start(); 
-	}	*/
+		// Instanciar Elementos de la GUI
+		botonMainAdd = (ImageButton) findViewById(R.id.imageButtonMain1);
+		botonMainPlay = (ImageButton) findViewById(R.id.imageButtonMain2);
+		botonMainView = (ImageButton) findViewById(R.id.imageButtonMain3);
+		
+		botonMainAdd.setOnClickListener(new OnMainAddClickListener());
+		botonMainView.setOnClickListener(new OnMainViewClickListener());
+		botonMainPlay.setOnClickListener(new OnMainPlayClickListener());		
+	}
+	
+	private void destroyLoadingActivity(int buttonId)
+	{
+		if(buttonId == botonMainAdd.getId())
+		{
+			createDesignActivity();
+		}
+		else if(buttonId == botonMainView.getId())
+		{
+			Toast.makeText(getApplication(), "View Characters", Toast.LENGTH_SHORT).show();
+		}
+		else if(buttonId == botonMainPlay.getId())
+		{
+			Toast.makeText(getApplication(), "Play Game", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private class OnMainAddClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			destroyLoadingActivity(v.getId());
+		}
+	}
+	
+	private class OnMainViewClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			destroyLoadingActivity(v.getId());
+		}
+	}
+	
+	private class OnMainPlayClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			destroyLoadingActivity(v.getId());
+		}
+	}
 	
 	/* DESIGN ACTIVITY */
 	
@@ -147,9 +180,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// Seleccionar Layout
 		setContentView(R.layout.design_layout);
 		
+		// Recolector de Basura
+		//TODO
+		System.gc();
+		
 		// Instanciar Elementos de la GUI
 		canvas = (DesignGLSurfaceView) findViewById(R.id.designGLSurfaceView1);
-		botonDesignReady = (ImageButton) findViewById(R.id.imageButton0);
+		botonDesignReady = (ImageButton) findViewById(R.id.imageButtonDesign1);
 		
 		botonDesignReady.setOnClickListener(new OnDesignReadyClickListener());
 		
@@ -264,21 +301,25 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 		// Seleccionar Layout
 		setContentView(R.layout.paint_layout);
+		
+		// Recolector de Basura
+		//TODO
+		System.gc();
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
 		((PaintGLSurfaceView) canvas).setEsqueleto(esqueleto);
 		
-		botonPaintPincel = (ImageButton) findViewById(R.id.imageButton1);
-		botonPaintCubo = (ImageButton) findViewById(R.id.imageButton2);
-		botonPaintMano = (ImageButton) findViewById(R.id.imageButton3);
-		botonPaintPrev = (ImageButton) findViewById(R.id.imageButton4);
-		botonPaintNext = (ImageButton) findViewById(R.id.imageButton5);
-		botonPaintDelete = (ImageButton) findViewById(R.id.imageButton6);
-		botonPaintReady = (ImageButton) findViewById(R.id.imageButton7);
-		botonPaintColor = (ImageButton) findViewById(R.id.imageButton8);
-		botonPaintSize = (ImageButton) findViewById(R.id.imageButton9);
-		botonPaintEye = (ImageButton) findViewById(R.id.imageButton10);
+		botonPaintPincel = (ImageButton) findViewById(R.id.imageButtonPaint1);
+		botonPaintCubo = (ImageButton) findViewById(R.id.imageButtonPaint2);
+		botonPaintColor = (ImageButton) findViewById(R.id.imageButtonPaint3);
+		botonPaintSize = (ImageButton) findViewById(R.id.imageButtonPaint4);
+		botonPaintEye = (ImageButton) findViewById(R.id.imageButtonPaint5);
+		botonPaintMano = (ImageButton) findViewById(R.id.imageButtonPaint6);
+		botonPaintPrev = (ImageButton) findViewById(R.id.imageButtonPaint7);
+		botonPaintNext = (ImageButton) findViewById(R.id.imageButtonPaint8);
+		botonPaintDelete = (ImageButton) findViewById(R.id.imageButtonPaint9);
+		botonPaintReady = (ImageButton) findViewById(R.id.imageButtonPaint10);
 		
 		//botonPaintNext.setVisibility(View.INVISIBLE);
 		//botonPaintPrev.setVisibility(View.INVISIBLE);
@@ -305,9 +346,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				return true;
 			}
 		});
-		
-		//colorPicker = new ColorPicker();
-		//sizePicker = new SizePicker();
 	}
 	
 	private void destroyPaintActivity(int buttonId)
@@ -486,14 +524,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// Seleccionar Layout
 		setContentView(R.layout.deform_layout);
 		
+		// Recolector de Basura
+		//TODO
+		System.gc();
+		
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) findViewById(R.id.deformGLSurfaceView1);
 		((DeformGLSurfaceView) canvas).setEsqueleto(esqueleto);
 		
-		botonDeformAdd = (ImageButton) findViewById(R.id.imageButton11);
-		botonDeformRemove = (ImageButton) findViewById(R.id.imageButton12);
-		botonDeformMover = (ImageButton) findViewById(R.id.imageButton13);
-		botonDeformDelete = (ImageButton) findViewById(R.id.imageButton14);
+		botonDeformAdd = (ImageButton) findViewById(R.id.imageButtonDeform1);
+		botonDeformRemove = (ImageButton) findViewById(R.id.imageButtonDeform2);
+		botonDeformMover = (ImageButton) findViewById(R.id.imageButtonDeform3);
+		botonDeformDelete = (ImageButton) findViewById(R.id.imageButtonDeform4);
 		
 		//botonDeformRemove.setVisibility(View.INVISIBLE);
 		//botonDeformMover.setVisibility(View.INVISIBLE);
@@ -596,6 +638,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 		// Seleccionar Layout
 		setContentView(R.layout.move_layout);
+		
+		// Recolector de Basura
+		//TODO
+		System.gc();
 				
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

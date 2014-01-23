@@ -23,28 +23,28 @@
    	    android:layout_alignParentLeft="true"  >
 
         <ImageButton
-            android:id="@+id/imageButton11"
+            android:id="@+id/imageButtonDeform1"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:contentDescription="@string/desc_add"
             android:src="@drawable/icon_add" />
 
         <ImageButton
-            android:id="@+id/imageButton12"
+            android:id="@+id/imageButtonDeform2"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:contentDescription="@string/desc_remove"
             android:src="@drawable/icon_remove" />
 
         <ImageButton
-            android:id="@+id/imageButton13"
+            android:id="@+id/imageButtonDeform3"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:contentDescription="@string/desc_move"
             android:src="@drawable/icon_hand" />
         
 		<ImageButton
-            android:id="@+id/imageButton14"
+            android:id="@+id/imageButtonDeform4"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:contentDescription="@string/desc_delete"

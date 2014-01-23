@@ -54,6 +54,10 @@ public class DeformGLSurfaceView extends GLSurfaceView
 					return false;
 			}
 	
+			// Recolector de Basura
+			// TODO
+			System.gc();
+			
 			requestRender();
 		}
 		return true;

@@ -3,6 +3,10 @@
 
     <!-- Proyecto -->
     <string name="app_name">Proyecto SSII</string>
+    <!-- Main -->
+    <string name="desc_new_character">New Character</string>
+    <string name="desc_view_characters">View Characters</string>
+    <string name="desc_play_game">Play Game</string>
     <!-- Fase de Modelado -->
     <string name="title_activity_model">Model Phase</string>
     <string name="item_new">New</string>
