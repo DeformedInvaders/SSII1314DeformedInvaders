@@ -23,29 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.example.design.DesignActivity"
-            android:label="@string/title_activity_model"
-            android:screenOrientation="landscape"
-            android:parentActivityName="com.example.main.MainActivity" >
-        </activity>
-        <activity
-            android:name="com.example.paint.PaintActivity"
-            android:label="@string/title_activity_paint"
-            android:screenOrientation="landscape"
-            android:parentActivityName="com.example.design.DesignActivity" >
-        </activity>
-        <activity
-            android:name="com.example.deform.DeformActivity"
-            android:label="@string/title_activity_deform"
-            android:screenOrientation="landscape"
-            android:parentActivityName="com.example.paint.PaintActivity"  >
-        </activity>
-        <activity
-            android:name="com.example.animation.MoveActivity"
-            android:label="@string/title_activity_move" 
-            android:screenOrientation="landscape">
-        </activity>
     </application>
 
 </manifest>

@@ -15,7 +15,7 @@
             android:paddingRight="@dimen/color_spacer"
             android:paddingTop="@dimen/color_spacer" android:layout_gravity="center">
 
-        <com.example.dialog.ColorPickerKotak
+        <com.android.dialog.ColorPickerKotak
                 android:id="@+id/color_viewCuadroPrincipal"
                 android:layout_width="@dimen/color_hsvWidth"
                 android:layout_height="@dimen/color_hsvHeight"

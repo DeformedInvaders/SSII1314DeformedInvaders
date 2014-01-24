@@ -25,22 +25,22 @@
 
         <ImageButton
             android:id="@+id/imageButtonMain1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_new_character"
             android:src="@drawable/newcharacter_icon" />
 
         <ImageButton
             android:id="@+id/imageButtonMain2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_play_game"
             android:src="@drawable/playgame_icon" />
 
         <ImageButton
             android:id="@+id/imageButtonMain3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
             android:contentDescription="@string/desc_view_characters"
             android:src="@drawable/viewcharacter_icon" />
     </LinearLayout>

@@ -15,8 +15,8 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 
-import com.example.utils.FloatArray;
-import com.example.utils.ShortArray;
+import com.lib.utils.FloatArray;
+import com.lib.utils.ShortArray;
 
 public abstract class OpenGLRenderer implements Renderer
 {	

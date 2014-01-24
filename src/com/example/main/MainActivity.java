@@ -21,15 +21,12 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.animation.AttackFragment;
-import com.example.animation.DownFragment;
-import com.example.animation.JumpFragment;
-import com.example.animation.RunFragment;
-import com.example.deform.DeformGLSurfaceView;
-import com.example.design.DesignGLSurfaceView;
-import com.example.dialog.ColorPickerDialog;
-import com.example.dialog.SizePicker;
-import com.example.paint.PaintGLSurfaceView;
+import com.android.dialog.ColorPickerDialog;
+import com.android.dialog.SizePicker;
+import com.create.deform.DeformFragment;
+import com.create.design.DesignGLSurfaceView;
+import com.create.paint.PaintGLSurfaceView;
+import com.example.data.Esqueleto;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {	
@@ -49,12 +46,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private SizePicker sizePicker;
 	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
 	
-	/* DEFORM ACTIVITY */
-	private ImageButton botonDeformAdd, botonDeformRemove, botonDeformMover, botonDeformDelete;
-	
 	/* ANIM ACTIVITY */
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
+	private DeformFragment fragmentoAttack, fragmentoRun, fragmentoJump, fragmentoDown;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -348,22 +343,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		});
 	}
 	
-	private void destroyPaintActivity(int buttonId)
+	private void destroyPaintActivity()
 	{
 		((PaintGLSurfaceView) canvas).capturaPantalla();
 		Esqueleto e = ((PaintGLSurfaceView) canvas).getEsqueleto();
 		if(e != null)
 		{
 			esqueleto = e;
-			
-			if(buttonId == botonPaintEye.getId())
-			{
-				createAnimActivity();
-			}
-			else if(buttonId == botonPaintReady.getId())
-			{
-				createDeformActivity();
-			}
+			createAnimActivity();
 		}
 	}
 	
@@ -423,7 +410,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		@Override
 		public void onClick(View v)
 		{
-			destroyPaintActivity(v.getId());
+			Toast.makeText(getApplication(), "Textures", Toast.LENGTH_SHORT).show();
 		}
 	}
     
@@ -487,7 +474,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		@Override
 		public void onClick(View v)
 		{
-			destroyPaintActivity(v.getId());
+			destroyPaintActivity();
 		}
     }
 	
@@ -514,127 +501,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
 	}
 	
-	/* DEFORM ACTIVITY */
-	
-	private void createDeformActivity()
-	{
-		// Estado
-		estado = TEstado.Deform;
-		
-		// Seleccionar Layout
-		setContentView(R.layout.deform_layout);
-		
-		// Recolector de Basura
-		//TODO
-		System.gc();
-		
-		// Instanciar Elementos de la GUI
-		canvas = (DeformGLSurfaceView) findViewById(R.id.deformGLSurfaceView1);
-		((DeformGLSurfaceView) canvas).setEsqueleto(esqueleto);
-		
-		botonDeformAdd = (ImageButton) findViewById(R.id.imageButtonDeform1);
-		botonDeformRemove = (ImageButton) findViewById(R.id.imageButtonDeform2);
-		botonDeformMover = (ImageButton) findViewById(R.id.imageButtonDeform3);
-		botonDeformDelete = (ImageButton) findViewById(R.id.imageButtonDeform4);
-		
-		//botonDeformRemove.setVisibility(View.INVISIBLE);
-		//botonDeformMover.setVisibility(View.INVISIBLE);
-		//botonDeformDelete.setVisibility(View.INVISIBLE);
-		
-		botonDeformAdd.setOnClickListener(new OnDeformAddClickListener());
-		botonDeformRemove.setOnClickListener(new OnDeformRemoveClickListener());
-		botonDeformMover.setOnClickListener(new OnDeformMoveClickListener());
-		botonDeformDelete.setOnClickListener(new OnDeformDeleteClickListener());
-		
-		canvas.setOnTouchListener(new OnTouchListener()
-		{
-			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				((DeformGLSurfaceView) canvas).onTouch(event);
-				actualizarDeformBotones();
-				return true;
-			}
-		});
-	}
-	
-	/*private void destroyDeformActiviy()
-	{
-	
-	}*/
-	
-	private void actualizarDeformBotones()
-	{
-		if(((DeformGLSurfaceView) canvas).handlesVacio())
-		{
-			botonDeformRemove.setVisibility(View.INVISIBLE);
-			botonDeformMover.setVisibility(View.INVISIBLE);
-			botonDeformDelete.setVisibility(View.INVISIBLE);
-		}
-		else
-		{
-			botonDeformRemove.setVisibility(View.VISIBLE);
-			botonDeformMover.setVisibility(View.VISIBLE);
-			botonDeformDelete.setVisibility(View.VISIBLE);
-		}
-	}
-	
-	private class OnDeformAddClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if(estado == TEstado.Deform)
-			{
-				((DeformGLSurfaceView) canvas).seleccionarAnyadir();
-			}
-		}	
-	}
-	
-	private class OnDeformRemoveClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if(estado == TEstado.Deform)
-			{
-				((DeformGLSurfaceView) canvas).seleccionarEliminar();
-			}
-		}	
-	}
-	
-	private class OnDeformMoveClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if(estado == TEstado.Deform)
-			{
-				((DeformGLSurfaceView) canvas).seleccionarMover();
-			}
-		}	
-	}
-	
-	private class OnDeformDeleteClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if(estado == TEstado.Deform)
-			{
-				((DeformGLSurfaceView) canvas).reiniciar();
-			
-				actualizarDeformBotones();
-			}
-		}	
-	}
-	
 	/* ANIM ACTIVITY */
 	
 	private void createAnimActivity()
 	{
 		// Estado
-		estado = TEstado.Anim;
+		estado = TEstado.Animation;
 		
 		// Seleccionar Layout
 		setContentView(R.layout.move_layout);
@@ -645,6 +517,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		fragmentoAttack = new DeformFragment();
+    	fragmentoRun = new DeformFragment();
+    	fragmentoJump = new DeformFragment();
+    	fragmentoDown = new DeformFragment();
+  
+		fragmentoAttack.setEsqueleto(esqueleto);
+    	fragmentoRun.setEsqueleto(esqueleto);
+    	fragmentoJump.setEsqueleto(esqueleto);
+    	fragmentoDown.setEsqueleto(esqueleto);
 
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -690,24 +572,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			switch (position)
 			{
 		        case 0:
-		        	RunFragment run = new RunFragment();
-		        	run.setEsqueleto(esqueleto);
-		            return run;
+		            return fragmentoRun;
 		        case 1:
-		        	JumpFragment jump = new JumpFragment();
-		        	jump.setEsqueleto(esqueleto);
-		            return jump;
+		        	return fragmentoJump;
 		        case 2:
-		        	DownFragment down = new DownFragment();
-		        	down.setEsqueleto(esqueleto);
-		            return down;
+		        	return fragmentoDown;
 		        case 3:
-		        	AttackFragment attack = new AttackFragment();
-		        	attack.setEsqueleto(esqueleto);
-		            return attack;
+		        	return fragmentoAttack;
 	        }
-	 
-	        return null;
+			
+			return null;
 		}
 
 		@Override
@@ -723,13 +597,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			switch (position)
 			{
 				case 0:
-					return getString(R.string.title_section1).toUpperCase(l);
+					return getString(R.string.title_section_run).toUpperCase(l);
 				case 1:
-					return getString(R.string.title_section2).toUpperCase(l);
+					return getString(R.string.title_section_jump).toUpperCase(l);
 				case 2:
-					return getString(R.string.title_section3).toUpperCase(l);
+					return getString(R.string.title_section_down).toUpperCase(l);
 				case 3:
-					return getString(R.string.title_section4).toUpperCase(l);
+					return getString(R.string.title_section_attack).toUpperCase(l);
 			}
 			
 			return null;

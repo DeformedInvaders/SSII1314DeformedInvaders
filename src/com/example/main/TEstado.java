@@ -2,5 +2,5 @@ package com.example.main;
 
 public enum TEstado
 {
-	Loading, Design, Paint, Deform, Anim
+	Loading, Design, Paint, Animation
 }
