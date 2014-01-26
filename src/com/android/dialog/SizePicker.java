@@ -42,6 +42,7 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 	public SizePicker(final Context context, final PaintGLSurfaceView canvas) {
 		this(context, VERTICAL, canvas);
 		final ImageButton ibincremento = (ImageButton)this.getView().findViewById(R.id.ibIncremento);
+		final ImageButton ibContenido = (ImageButton)this.getView().findViewById(R.id.ibContenido);
 		final ImageButton ibdecremento = (ImageButton)this.getView().findViewById(R.id.ibDecremento);
 		
 		ibincremento.setOnClickListener(new OnClickListener() {
@@ -55,6 +56,27 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 						if (pos == 2)
 							ibincremento.setEnabled(false);	
 					}
+		});
+		
+		ibContenido.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				switch (pos){
+				case 0: 
+						canvas.seleccionarSize(0);
+						dismiss();
+						break;
+				case 1:
+						canvas.seleccionarSize(1);
+						dismiss();
+						break;
+				case 2:
+						canvas.seleccionarSize(2);
+						dismiss();
+						break;
+				}
+				
+			}
 		});
 		
 		ibdecremento.setOnClickListener(new OnClickListener() {
@@ -87,37 +109,60 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			setRootViewId(R.layout.popup_vertical_layout);
+		setRootViewId(R.layout.popup_vertical_layout);
 	
 
 		
 	
-		final ImageButton ibincremento = (ImageButton)this.getView().findViewById(R.id.ibIncremento);
-		final ImageButton ibdecremento = (ImageButton)this.getView().findViewById(R.id.ibDecremento);
+		final ImageButton ibIncremento = (ImageButton)this.getView().findViewById(R.id.ibIncremento);
+		final ImageButton ibContenido = (ImageButton)this.getView().findViewById(R.id.ibContenido);
+		final ImageButton ibDecremento = (ImageButton)this.getView().findViewById(R.id.ibDecremento);
 		
-		ibincremento.setOnClickListener(new OnClickListener() {
+		ibIncremento.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						
-						ibdecremento.setEnabled(true);
+						ibDecremento.setEnabled(true);
 						if (pos < 2)
 							pos++;
 						cambiarImagen(pos, canvas, context);
 						if (pos == 2)
-							ibincremento.setEnabled(false);	
+							ibIncremento.setEnabled(false);	
 					}
 		});
 		
-		ibdecremento.setOnClickListener(new OnClickListener() {
+		ibContenido.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				switch (pos){
+				case 0: 
+						canvas.seleccionarSize(0);
+						dismiss();
+						break;
+				case 1:
+						canvas.seleccionarSize(1);
+						onDismiss();
+						dismiss();
+						break;
+				case 2:
+						canvas.seleccionarSize(2);
+						dismiss();
+						break;
+				}
+				
+			}
+		});
+		
+		ibDecremento.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				
-				ibincremento.setEnabled(true);
+				ibIncremento.setEnabled(true);
 				if (pos > 0)
 					pos--;
 				cambiarImagen(pos, canvas, context);
 				if (pos == 0)
-					ibdecremento.setEnabled(false);
+					ibDecremento.setEnabled(false);
 			}
 		});
 	}

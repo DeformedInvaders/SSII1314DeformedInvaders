@@ -108,6 +108,11 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		renderer.seleccionarColor();
 	}*/
 	
+	public int getColorPaleta()
+	{
+		return renderer.getColorPaleta();
+	}
+	
 	public void seleccionarColor(int color)
 	{
 		renderer.seleccionarColor(color);

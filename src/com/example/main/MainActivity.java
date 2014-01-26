@@ -385,8 +385,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		{
 			if(estado == TEstado.Paint)
 			{
-				((PaintGLSurfaceView) canvas).seleccionarColor(0xff000000);
-				colorPicker = new ColorPickerDialog(mContext, 0xff000000, (PaintGLSurfaceView)canvas);
+				int color = ((PaintGLSurfaceView) canvas).getColorPaleta();
+				((PaintGLSurfaceView) canvas).seleccionarColor(color);
+				colorPicker = new ColorPickerDialog(mContext, color, (PaintGLSurfaceView)canvas);
 				colorPicker.show();
 			}
 		}

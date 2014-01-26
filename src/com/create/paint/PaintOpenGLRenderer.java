@@ -71,7 +71,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         this.color = Color.WHITE;
         
         this.colorPaleta = Color.GREEN;
-        this.sizeLinea = 1;
+        this.sizeLinea = 6;
         
         this.anteriores = new Stack<Accion>();
         this.siguientes = new Stack<Accion>();
@@ -189,6 +189,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		colorPaleta = color;
 	}
 	
+	public int getColorPaleta() {
+		return colorPaleta;
+	}
+
+	public void setColorPaleta(int colorPaleta) {
+		this.colorPaleta = colorPaleta;
+	}
+	
 	/*public void seleccionarSize()
 	{
 		sizeLinea = (sizeLinea+5)%15;
@@ -198,16 +206,17 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if(pos == 0)
 		{
-			sizeLinea = 1;
+			sizeLinea = 6;
 		}
 		else if(pos == 1)
 		{
-			sizeLinea = 6;
+			sizeLinea = 11;
 		}
 		else if(pos == 2)
 		{
-			sizeLinea = 11;
+			sizeLinea = 16;
 		}
+		estado = TPaintEstado.Pincel;
 	}
 	
 	/* Métodos abstractos de OpenGLRenderer */
@@ -221,7 +230,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.siguientes.clear();
 		
 		this.color = Color.WHITE;
-		this.sizeLinea = 1;
+		this.sizeLinea = 6;
 	}
 	
 	public void onTouchDown(float x, float y, float width, float height)
