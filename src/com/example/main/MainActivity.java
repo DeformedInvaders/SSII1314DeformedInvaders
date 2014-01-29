@@ -1,5 +1,11 @@
 package com.example.main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -12,6 +18,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,17 +30,23 @@ import android.widget.Toast;
 
 import com.android.dialog.ColorPickerDialog;
 import com.android.dialog.SizePicker;
+import com.android.storage.InternalStorageManager;
 import com.create.deform.DeformFragment;
 import com.create.design.DesignGLSurfaceView;
 import com.create.paint.PaintGLSurfaceView;
 import com.example.data.Esqueleto;
+import com.view.select.SelectFragment;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener
+public class MainActivity extends FragmentActivity
 {	
+	/* DATA */
 	private TEstado estado;
-	private Esqueleto esqueleto;
+	private List<Esqueleto> esqueletoLista;
+	private Esqueleto esqueletoActual;
+	
 	private GLSurfaceView canvas;
 	private Context mContext;
+	private InternalStorageManager manager;
 
 	/* LOADING ACTIVITY */
 	private ImageButton botonMainAdd, botonMainPlay, botonMainView;
@@ -47,15 +60,37 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
 	
 	/* ANIM ACTIVITY */
-	private SectionsPagerAdapter mSectionsPagerAdapter;
-	private ViewPager mViewPager;
-	private DeformFragment fragmentoAttack, fragmentoRun, fragmentoJump, fragmentoDown;
+	private ImageButton botonAnimReady;
+	private SectionsAnimPagerAdapter sectionsAnimPagerAdapter;
+	private ViewPager viewAnimPager;
+	private DeformFragment fragmentoAnimAttack, fragmentoAnimRun, fragmentoAnimJump, fragmentoAnimDown;
+	
+	/* VIEW ACTIVITY */
+	private ImageButton botonViewReady;
+	private SectionsViewPagerAdapter sectionsViewPagerAdapter;
+	private ViewPager viewViewPager;
+	private List<SelectFragment> listaViewFragmentos;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		mContext = this;
+		
+		esqueletoLista = new ArrayList<Esqueleto>();
+		manager = new InternalStorageManager();
+		
+		// Cargar Esqueletos Guardados
+		try
+		{
+			FileInputStream file = openFileInput(manager.getFileName());
+			manager.cargarEsqueleto(file, esqueletoLista);
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+			e.printStackTrace();
+		}
 
 		createLoadingActivity();
 	}
@@ -113,13 +148,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		System.gc();
 		
 		// Instanciar Elementos de la GUI
+		ActionBar actionBar = getActionBar();
+		actionBar.removeAllTabs();
+		
 		botonMainAdd = (ImageButton) findViewById(R.id.imageButtonMain1);
 		botonMainPlay = (ImageButton) findViewById(R.id.imageButtonMain2);
 		botonMainView = (ImageButton) findViewById(R.id.imageButtonMain3);
 		
 		botonMainAdd.setOnClickListener(new OnMainAddClickListener());
 		botonMainView.setOnClickListener(new OnMainViewClickListener());
-		botonMainPlay.setOnClickListener(new OnMainPlayClickListener());		
+		botonMainPlay.setOnClickListener(new OnMainPlayClickListener());	
+		
+		// Canvas con esqueleto seleccionado
+		//TODO
 	}
 	
 	private void destroyLoadingActivity(int buttonId)
@@ -130,7 +171,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
 		else if(buttonId == botonMainView.getId())
 		{
-			Toast.makeText(getApplication(), "View Characters", Toast.LENGTH_SHORT).show();
+			createViewActivity();
 		}
 		else if(buttonId == botonMainPlay.getId())
 		{
@@ -205,7 +246,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		Esqueleto e = ((DesignGLSurfaceView) canvas).getEsqueleto();
 		if(e != null)
 		{					
-			esqueleto = e;
+			esqueletoActual = e;
 
 			createPaintActivity();
 		}
@@ -303,7 +344,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) findViewById(R.id.PaintGLSurfaceView1);
-		((PaintGLSurfaceView) canvas).setEsqueleto(esqueleto);
+		((PaintGLSurfaceView) canvas).setEsqueleto(esqueletoActual);
 		
 		botonPaintPincel = (ImageButton) findViewById(R.id.imageButtonPaint1);
 		botonPaintCubo = (ImageButton) findViewById(R.id.imageButtonPaint2);
@@ -349,7 +390,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		Esqueleto e = ((PaintGLSurfaceView) canvas).getEsqueleto();
 		if(e != null)
 		{
-			esqueleto = e;
+			esqueletoActual = e;
 			createAnimActivity();
 		}
 	}
@@ -515,26 +556,32 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// Recolector de Basura
 		//TODO
 		System.gc();
+		
+		// Instanciar Elementos de la GUI
+		botonAnimReady = (ImageButton) findViewById(R.id.imageButtonAnim1);		
+		botonAnimReady.setOnClickListener(new OnAnimReadyClickListener());	
 				
 		final ActionBar actionBar = getActionBar();
+		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		fragmentoAttack = new DeformFragment();
-    	fragmentoRun = new DeformFragment();
-    	fragmentoJump = new DeformFragment();
-    	fragmentoDown = new DeformFragment();
+		fragmentoAnimAttack = new DeformFragment();
+    	fragmentoAnimRun = new DeformFragment();
+    	fragmentoAnimJump = new DeformFragment();
+    	fragmentoAnimDown = new DeformFragment();
   
-		fragmentoAttack.setEsqueleto(esqueleto);
-    	fragmentoRun.setEsqueleto(esqueleto);
-    	fragmentoJump.setEsqueleto(esqueleto);
-    	fragmentoDown.setEsqueleto(esqueleto);
+		fragmentoAnimAttack.setEsqueleto(esqueletoActual);
+    	fragmentoAnimRun.setEsqueleto(esqueletoActual);
+    	fragmentoAnimJump.setEsqueleto(esqueletoActual);
+    	fragmentoAnimDown.setEsqueleto(esqueletoActual);
 
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		sectionsAnimPagerAdapter = new SectionsAnimPagerAdapter(getSupportFragmentManager());
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		viewAnimPager = (ViewPager) findViewById(R.id.pagerAnim1);
+		viewAnimPager.removeAllViews();
+		viewAnimPager.setAdapter(sectionsAnimPagerAdapter);
 
-		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		viewAnimPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position)
 			{
@@ -542,27 +589,56 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			}
 		});
 
-		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++)
+		for (int i = 0; i < sectionsAnimPagerAdapter.getCount(); i++)
 		{
-			actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+			actionBar.addTab(actionBar.newTab().setText(sectionsAnimPagerAdapter.getPageTitle(i)).setTabListener(new TabAnimListener()));
 		}
 	}
 	
-	@Override
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-		mViewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-
-	@Override
-	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+    private class OnAnimReadyClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			if(estado == TEstado.Animation)
+			{
+				esqueletoLista.add(esqueletoActual);
+				
+				// Cargar Esqueletos Guardados
+				try
+				{
+					FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
+					manager.guardarEsqueleto(file, esqueletoLista);
+					
+					createLoadingActivity();
+				}
+				catch (FileNotFoundException e)
+				{
+					Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+					e.printStackTrace();
+				}
+			}
+		}
+    }
 	
-	public class SectionsPagerAdapter extends FragmentPagerAdapter
+	public class TabAnimListener implements ActionBar.TabListener
 	{
-		public SectionsPagerAdapter(FragmentManager fm)
+		@Override
+		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+		{
+			viewAnimPager.setCurrentItem(tab.getPosition());
+		}
+	
+		@Override
+		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	
+		@Override
+		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	}
+	
+	public class SectionsAnimPagerAdapter extends FragmentPagerAdapter
+	{
+		public SectionsAnimPagerAdapter(FragmentManager fm)
 		{
 			super(fm);
 		}
@@ -573,13 +649,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			switch (position)
 			{
 		        case 0:
-		            return fragmentoRun;
+		            return fragmentoAnimRun;
 		        case 1:
-		        	return fragmentoJump;
+		        	return fragmentoAnimJump;
 		        case 2:
-		        	return fragmentoDown;
+		        	return fragmentoAnimDown;
 		        case 3:
-		        	return fragmentoAttack;
+		        	return fragmentoAnimAttack;
 	        }
 			
 			return null;
@@ -610,4 +686,121 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			return null;
 		}
 	}
+
+	/* VIEW ACTIVITY */
+	
+	private void createViewActivity()
+	{
+		// Estado
+		estado = TEstado.View;
+		
+		// Seleccionar Layout
+		setContentView(R.layout.view_layout);
+		
+		// Recolector de Basura
+		//TODO
+		System.gc();
+		
+		// Instanciar Elementos de la GUI
+		botonViewReady = (ImageButton) findViewById(R.id.imageButtonView1);		
+		botonViewReady.setOnClickListener(new OnViewReadyClickListener());			
+		
+		final ActionBar actionBar = getActionBar();
+		actionBar.removeAllTabs();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		listaViewFragmentos = new ArrayList<SelectFragment>();
+		
+		Iterator<Esqueleto> it = esqueletoLista.iterator();
+		while(it.hasNext())
+		{
+			SelectFragment sf = new SelectFragment();
+			sf.setEsqueleto(it.next());
+			
+			listaViewFragmentos.add(sf);
+		}
+
+		sectionsViewPagerAdapter = new SectionsViewPagerAdapter(getSupportFragmentManager());
+
+		viewViewPager = (ViewPager) findViewById(R.id.pagerView1);
+		viewViewPager.removeAllViews();
+		viewViewPager.setAdapter(sectionsViewPagerAdapter);
+
+		viewViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position)
+			{
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
+
+		for (int i = 0; i < sectionsViewPagerAdapter.getCount(); i++)
+		{
+			actionBar.addTab(actionBar.newTab().setText(sectionsViewPagerAdapter.getPageTitle(i)).setTabListener(new TabViewListener()));
+		}
+	}
+	
+    private class OnViewReadyClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			if(estado == TEstado.View)
+			{
+				createLoadingActivity();
+			}
+		}
+    }
+	
+	public class TabViewListener implements ActionBar.TabListener
+	{
+		@Override
+		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+		{
+			viewViewPager.setCurrentItem(tab.getPosition());
+		}
+	
+		@Override
+		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	
+		@Override
+		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	}
+	
+	public class SectionsViewPagerAdapter extends FragmentPagerAdapter
+	{
+		public SectionsViewPagerAdapter(FragmentManager fm)
+		{
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position)
+		{
+			if(position >= 0 && position < listaViewFragmentos.size())
+			{
+				return listaViewFragmentos.get(position);
+			}
+			
+			return null;
+		}
+
+		@Override
+		public int getCount()
+		{
+			return listaViewFragmentos.size();
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position)
+		{			
+			if(position >= 0 && position < listaViewFragmentos.size())
+			{
+				return "PERSONAJE "+position;
+			}
+			
+			return null;
+		}
+	}
+
 }

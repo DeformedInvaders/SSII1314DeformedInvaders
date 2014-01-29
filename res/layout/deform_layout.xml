@@ -3,8 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    android:orientation="horizontal"
-    tools:context=".DeformActivity" >
+    android:orientation="horizontal">
 
     <com.create.deform.DeformGLSurfaceView
         android:id="@+id/deformGLSurfaceView1"
