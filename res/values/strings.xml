@@ -10,15 +10,9 @@
     <!-- Modo Creación Personaje -->
 	    <!-- Fase de Modelado -->
 	    <string name="title_activity_model">Model Phase</string>
-	    <string name="item_new">New</string>
-	    <string name="item_bspline">B-Spline</string>
-	    <string name="item_convex_hull">Convex Hull</string>
-	    <string name="item_delaunay">Delaunay Triangulator</string>
-	    <string name="item_ear_clipping">Ear Clipping Triangulator</string>
-	    <string name="item_mesh_triangles">Mesh Generator</string>
-	    <string name="item_simple">Simple Test</string>
-		<string name="item_full">Full Test</string>
 	    <string name="desc_ready">Ready</string>
+	    <string name="desc_new">New</string>
+	    <string name="desc_test">Test</string>
 	    <!-- Fase de Pintura -->
 	    <string name="title_activity_paint">Paint Phase</string>
 	    <string name="desc_pencil">Bucket</string>

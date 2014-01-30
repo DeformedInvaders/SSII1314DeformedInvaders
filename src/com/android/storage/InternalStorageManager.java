@@ -15,6 +15,7 @@ import com.example.data.Esqueleto;
 public class InternalStorageManager
 {
 	private static final String FILENAME = "SkeletonDataBase";
+	private int seleccionado = -1;
 	
 	public String getFileName()
 	{
@@ -32,6 +33,9 @@ public class InternalStorageManager
 			
 			// Cargar Numero de Esqueletos
 			numEsqueletos = data.readInt();
+			
+			// Cargar Esqueleto Seleccionado
+			seleccionado = data.readInt();
 			
 			// Cargar Lista de Esqueletos
 			for(int i = 0; i < numEsqueletos; i++)
@@ -65,6 +69,9 @@ public class InternalStorageManager
 			// Guardar Numero de Esqueletos
 			data.writeInt(lista.size());
 			
+			// Guardar Esqueleto Seleccionado
+			data.writeInt(seleccionado);
+			
 			// Guardar Lista de Esqueletos
 			Iterator<Esqueleto> it = lista.iterator();
 			while(it.hasNext())
@@ -80,5 +87,10 @@ public class InternalStorageManager
 			Log.d("TEST", "IO EXCEPTION");
 			e.printStackTrace();
 		}
+	}
+	
+	public int getEsqueletoSeleccionado()
+	{
+		return seleccionado;
 	}
 }

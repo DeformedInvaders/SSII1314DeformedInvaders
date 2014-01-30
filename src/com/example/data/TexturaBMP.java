@@ -1,4 +1,4 @@
-package com.android.dialog;
+package com.example.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +15,19 @@ public class TexturaBMP implements Serializable
 	public TexturaBMP()
 	{
 		
+	}
+	
+	public TexturaBMP(int[] pixelsBuffer, int width, int height)
+	{
+		setBitmap(pixelsBuffer, width, height);
+	}
+	
+	public TexturaBMP(ArrayList<Integer> pixels, int width, int height)
+	{
+		this.width = width;
+		this.height = height;
+		
+		this.pixelsCompressed = pixels;
 	}
 	
 	public void setBitmap(int[] pixelsBuffer, int width, int height)

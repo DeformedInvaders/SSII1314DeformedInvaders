@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,12 +21,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.android.storage.InternalStorageManager;
 import com.create.deform.DeformFragment;
 import com.create.design.DesignGLSurfaceView;
 import com.create.paint.PaintGLSurfaceView;
+import com.view.select.SelectGLSurfaceView;
 import com.example.data.Esqueleto;
 import com.view.select.SelectFragment;
 
@@ -43,6 +45,7 @@ public class MainActivity extends FragmentActivity
 	private TEstado estado;
 	private List<Esqueleto> esqueletoLista;
 	private Esqueleto esqueletoActual;
+	private int esqueletoSeleccionado;
 	
 	private GLSurfaceView canvas;
 	private Context mContext;
@@ -52,7 +55,7 @@ public class MainActivity extends FragmentActivity
 	private ImageButton botonMainAdd, botonMainPlay, botonMainView;
 
 	/* DESIGN ACTIVITY */
-	private ImageButton botonDesignReady;
+	private ImageButton botonDesignReady, botonDesignNuevo, botonDesignTest;
 	
 	/* PAINT ACTIVITY */
 	private ColorPickerDialog colorPicker;
@@ -63,10 +66,10 @@ public class MainActivity extends FragmentActivity
 	private ImageButton botonAnimReady;
 	private SectionsAnimPagerAdapter sectionsAnimPagerAdapter;
 	private ViewPager viewAnimPager;
-	private DeformFragment fragmentoAnimAttack, fragmentoAnimRun, fragmentoAnimJump, fragmentoAnimDown;
+	private List<DeformFragment> listaAnimFragmentos;
 	
 	/* VIEW ACTIVITY */
-	private ImageButton botonViewReady;
+	private ImageButton botonViewReady, botonViewDelete;
 	private SectionsViewPagerAdapter sectionsViewPagerAdapter;
 	private ViewPager viewViewPager;
 	private List<SelectFragment> listaViewFragmentos;
@@ -77,6 +80,10 @@ public class MainActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		
+		listaViewFragmentos = new ArrayList<SelectFragment>();
+		listaAnimFragmentos = new ArrayList<DeformFragment>();
+		
+		esqueletoSeleccionado = -1;
 		esqueletoLista = new ArrayList<Esqueleto>();
 		manager = new InternalStorageManager();
 		
@@ -85,6 +92,7 @@ public class MainActivity extends FragmentActivity
 		{
 			FileInputStream file = openFileInput(manager.getFileName());
 			manager.cargarEsqueleto(file, esqueletoLista);
+			esqueletoSeleccionado = manager.getEsqueletoSeleccionado();
 		}
 		catch (FileNotFoundException e)
 		{
@@ -99,38 +107,14 @@ public class MainActivity extends FragmentActivity
 	public void onResume()
 	{
 		super.onResume();
-		if(estado != null && estado != TEstado.Loading)
-		{
-			canvas.onResume();
-		}
+		canvas.onResume();
 	}
 	
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		if(estado != null && estado != TEstado.Loading)
-		{
-			canvas.onPause();
-		}
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.design_menu, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu)
-	{    
-	    menu.clear();    
-	    if (estado == TEstado.Design)
-	    {
-	        getMenuInflater().inflate(R.menu.design_menu, menu);
-	    } 
-	    return super.onPrepareOptionsMenu(menu);
+		canvas.onPause();
 	}
 	
 	/* LOADING ACTIVITY */
@@ -147,9 +131,15 @@ public class MainActivity extends FragmentActivity
 		//TODO
 		System.gc();
 		
-		// Instanciar Elementos de la GUI
 		ActionBar actionBar = getActionBar();
 		actionBar.removeAllTabs();
+		
+		// Instanciar Elementos de la GUI
+		canvas = (SelectGLSurfaceView) findViewById(R.id.selectGLSurfaceView2);
+		if(esqueletoSeleccionado >= 0 && esqueletoSeleccionado < esqueletoLista.size())
+		{
+			((SelectGLSurfaceView) canvas).setEsqueleto(esqueletoLista.get(esqueletoSeleccionado));
+		}
 		
 		botonMainAdd = (ImageButton) findViewById(R.id.imageButtonMain1);
 		botonMainPlay = (ImageButton) findViewById(R.id.imageButtonMain2);
@@ -157,7 +147,10 @@ public class MainActivity extends FragmentActivity
 		
 		botonMainAdd.setOnClickListener(new OnMainAddClickListener());
 		botonMainView.setOnClickListener(new OnMainViewClickListener());
-		botonMainPlay.setOnClickListener(new OnMainPlayClickListener());	
+		botonMainPlay.setOnClickListener(new OnMainPlayClickListener());
+		
+		botonMainView.setEnabled(esqueletoLista.size() > 0);
+		botonMainPlay.setEnabled(false);
 		
 		// Canvas con esqueleto seleccionado
 		//TODO
@@ -223,10 +216,16 @@ public class MainActivity extends FragmentActivity
 		// Instanciar Elementos de la GUI
 		canvas = (DesignGLSurfaceView) findViewById(R.id.designGLSurfaceView1);
 		botonDesignReady = (ImageButton) findViewById(R.id.imageButtonDesign1);
+		botonDesignNuevo = (ImageButton) findViewById(R.id.imageButtonDesign2);
+		botonDesignTest = (ImageButton) findViewById(R.id.imageButtonDesign3);
 		
 		botonDesignReady.setOnClickListener(new OnDesignReadyClickListener());
+		botonDesignNuevo.setOnClickListener(new onDesignNewClickListener());
+		botonDesignTest.setOnClickListener(new onDesignTestClickListener());
 		
-		//botonDesignReady.setVisibility(View.INVISIBLE);
+		botonDesignReady.setEnabled(false);
+		botonDesignNuevo.setEnabled(false);
+		botonDesignTest.setEnabled(false);
 		
 		canvas.setOnTouchListener(new OnTouchListener()
 		{
@@ -250,21 +249,29 @@ public class MainActivity extends FragmentActivity
 
 			createPaintActivity();
 		}
+		else 
+		{
+			Toast.makeText(getApplication(), "The Polygon is Complex", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	private void actualizarDesignBotones()
 	{
 		if(((DesignGLSurfaceView) canvas).poligonoCompleto())
 		{
-			botonDesignReady.setVisibility(View.VISIBLE);
+			botonDesignReady.setEnabled(true);
+			botonDesignNuevo.setEnabled(true);
+			botonDesignTest.setEnabled(true);
 		}
 		else
 		{
-			botonDesignReady.setVisibility(View.INVISIBLE);
+			botonDesignReady.setEnabled(false);
+			botonDesignNuevo.setEnabled(false);
+			botonDesignTest.setEnabled(false);
 		}
 	}
 	
-	private class OnDesignReadyClickListener implements OnClickListener
+	public class OnDesignReadyClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
@@ -273,6 +280,29 @@ public class MainActivity extends FragmentActivity
 		}
 	}
 	
+	private class onDesignNewClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			((DesignGLSurfaceView) canvas).reiniciar();
+			actualizarDesignBotones();
+		}
+	}
+	
+	private class onDesignTestClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			if(!((DesignGLSurfaceView) canvas).pruebaCompleta())
+			{
+				Toast.makeText(getApplication(), "The Polygon is Complex", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
+	/*
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -326,7 +356,7 @@ public class MainActivity extends FragmentActivity
 		}
 	
 		return true;
-	}
+	}*/
 	
 	/* PAINT ACTIVITY */
 	
@@ -357,9 +387,9 @@ public class MainActivity extends FragmentActivity
 		botonPaintDelete = (ImageButton) findViewById(R.id.imageButtonPaint9);
 		botonPaintReady = (ImageButton) findViewById(R.id.imageButtonPaint10);
 		
-		//botonPaintNext.setVisibility(View.INVISIBLE);
-		//botonPaintPrev.setVisibility(View.INVISIBLE);
-		//botonPaintDelete.setVisibility(View.INVISIBLE);
+		botonPaintNext.setEnabled(false);
+		botonPaintPrev.setEnabled(false);
+		botonPaintDelete.setEnabled(false);
 		
 		botonPaintPincel.setOnClickListener(new OnPaintPincelClickListener());	
 		botonPaintCubo.setOnClickListener(new OnPaintCuboClickListener());
@@ -441,7 +471,7 @@ public class MainActivity extends FragmentActivity
 		{
 			if(estado == TEstado.Paint)
 			{
-				if (sizePicker == null) sizePicker= new SizePicker(mContext, SizePicker.VERTICAL, (PaintGLSurfaceView)canvas);    	
+				if (sizePicker == null) sizePicker = new SizePicker(mContext, SizePicker.VERTICAL, (PaintGLSurfaceView)canvas);    	
 				sizePicker.show(v);
 			}
 		}
@@ -524,22 +554,22 @@ public class MainActivity extends FragmentActivity
 	{
 		if(((PaintGLSurfaceView) canvas).bufferSiguienteVacio())
 		{
-			botonPaintNext.setVisibility(View.INVISIBLE);
+			botonPaintNext.setEnabled(false);
 		}
 		else
 		{
-			botonPaintNext.setVisibility(View.VISIBLE);
+			botonPaintNext.setEnabled(true);
 		}
 		
 		if(((PaintGLSurfaceView) canvas).bufferAnteriorVacio())
 		{
-			botonPaintPrev.setVisibility(View.INVISIBLE);
-			botonPaintDelete.setVisibility(View.INVISIBLE);
+			botonPaintPrev.setEnabled(false);
+			botonPaintDelete.setEnabled(false);
 		}
 		else
 		{
-			botonPaintPrev.setVisibility(View.VISIBLE);
-			botonPaintDelete.setVisibility(View.VISIBLE);
+			botonPaintPrev.setEnabled(true);
+			botonPaintDelete.setEnabled(true);
 		}
 	}
 	
@@ -565,15 +595,15 @@ public class MainActivity extends FragmentActivity
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		fragmentoAnimAttack = new DeformFragment();
-    	fragmentoAnimRun = new DeformFragment();
-    	fragmentoAnimJump = new DeformFragment();
-    	fragmentoAnimDown = new DeformFragment();
-  
-		fragmentoAnimAttack.setEsqueleto(esqueletoActual);
-    	fragmentoAnimRun.setEsqueleto(esqueletoActual);
-    	fragmentoAnimJump.setEsqueleto(esqueletoActual);
-    	fragmentoAnimDown.setEsqueleto(esqueletoActual);
+		listaAnimFragmentos.clear();
+		
+		for(int i = 0; i < 4; i++)
+		{
+			DeformFragment df = new DeformFragment();
+			df.setEsqueleto(esqueletoActual);
+			
+			listaAnimFragmentos.add(df);
+		}
 
 		sectionsAnimPagerAdapter = new SectionsAnimPagerAdapter(getSupportFragmentManager());
 
@@ -595,28 +625,59 @@ public class MainActivity extends FragmentActivity
 		}
 	}
 	
+	private void destroyAnimActiviy()
+	{
+		esqueletoLista.add(esqueletoActual);
+		
+		// Guardar Esqueletos Guardados
+		try
+		{
+			FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
+			manager.guardarEsqueleto(file, esqueletoLista);
+			
+			createLoadingActivity();
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+			e.printStackTrace();
+		}
+	}
+	
     private class OnAnimReadyClickListener implements OnClickListener
     {
 		@Override
 		public void onClick(View v)
 		{
 			if(estado == TEstado.Animation)
-			{
-				esqueletoLista.add(esqueletoActual);
-				
-				// Cargar Esqueletos Guardados
-				try
-				{
-					FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-					manager.guardarEsqueleto(file, esqueletoLista);
-					
-					createLoadingActivity();
-				}
-				catch (FileNotFoundException e)
-				{
-					Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-					e.printStackTrace();
-				}
+			{				
+				AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+
+				alert.setTitle("Personaje Finalizado");
+				alert.setMessage("Introduzca un nombre si desea guardar el personaje");
+
+				// Set an EditText view to get user input 
+				final EditText input = new EditText(mContext);
+				alert.setView(input);
+
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton)
+					{
+						String value = input.getText().toString();
+						esqueletoActual.setNombre(value);
+						
+						destroyAnimActiviy();
+					}
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton)
+					{
+						createLoadingActivity();
+					}
+				});
+
+				alert.show();
 			}
 		}
     }
@@ -646,17 +707,10 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public Fragment getItem(int position)
 		{
-			switch (position)
+			if(position >= 0 && position < listaAnimFragmentos.size())
 			{
-		        case 0:
-		            return fragmentoAnimRun;
-		        case 1:
-		        	return fragmentoAnimJump;
-		        case 2:
-		        	return fragmentoAnimDown;
-		        case 3:
-		        	return fragmentoAnimAttack;
-	        }
+				return listaAnimFragmentos.get(position);
+			}
 			
 			return null;
 		}
@@ -664,7 +718,7 @@ public class MainActivity extends FragmentActivity
 		@Override
 		public int getCount()
 		{
-			return 4;
+			return listaAnimFragmentos.size();
 		}
 
 		@Override
@@ -702,15 +756,18 @@ public class MainActivity extends FragmentActivity
 		System.gc();
 		
 		// Instanciar Elementos de la GUI
-		botonViewReady = (ImageButton) findViewById(R.id.imageButtonView1);		
-		botonViewReady.setOnClickListener(new OnViewReadyClickListener());			
+		botonViewReady = (ImageButton) findViewById(R.id.imageButtonView1);
+		botonViewDelete = (ImageButton) findViewById(R.id.imageButtonView2);
+		
+		botonViewReady.setOnClickListener(new OnViewReadyClickListener());		
+		botonViewDelete.setOnClickListener(new OnViewDeleteClickListener());
 		
 		final ActionBar actionBar = getActionBar();
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		listaViewFragmentos = new ArrayList<SelectFragment>();
-		
+		listaViewFragmentos.clear();
+				
 		Iterator<Esqueleto> it = esqueletoLista.iterator();
 		while(it.hasNext())
 		{
@@ -747,7 +804,51 @@ public class MainActivity extends FragmentActivity
 		{
 			if(estado == TEstado.View)
 			{
+				final ActionBar actionBar = getActionBar();
+				esqueletoSeleccionado = actionBar.getSelectedNavigationIndex();
+				
 				createLoadingActivity();
+			}
+		}
+    }
+    
+    private class OnViewDeleteClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			if(estado == TEstado.View)
+			{
+				final ActionBar actionBar = getActionBar();
+				int position = actionBar.getSelectedNavigationIndex();
+				
+				esqueletoLista.remove(position);
+				
+				if(esqueletoSeleccionado == position)
+				{
+					esqueletoSeleccionado = -1;
+				}
+				
+				// Guardar Esqueletos Guardados
+				try
+				{
+					FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
+					manager.guardarEsqueleto(file, esqueletoLista);
+					
+					if(esqueletoLista.size() > 0)
+					{
+						createViewActivity();
+					}
+					else 
+					{
+						createLoadingActivity();
+					}
+				}
+				catch (FileNotFoundException e)
+				{
+					Log.d("TEST", "FILE NOT FOUND EXCEPTION");
+					e.printStackTrace();
+				}
 			}
 		}
     }
@@ -796,7 +897,7 @@ public class MainActivity extends FragmentActivity
 		{			
 			if(position >= 0 && position < listaViewFragmentos.size())
 			{
-				return "PERSONAJE "+position;
+				return esqueletoLista.get(position).getNombre();
 			}
 			
 			return null;

@@ -2,7 +2,6 @@ package com.example.data;
 
 import java.io.Serializable;
 
-import com.android.dialog.TexturaBMP;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 
@@ -10,6 +9,7 @@ public class Esqueleto implements Serializable
 {
 	private static final long serialVersionUID = 666L;
 	
+	private String nombre;
 	private ShortArray contorno;
 	private FloatArray vertices;
 	private ShortArray triangulos;
@@ -18,6 +18,7 @@ public class Esqueleto implements Serializable
 	
 	public Esqueleto(ShortArray contorno, FloatArray vertices, ShortArray triangulos)
 	{
+		this.nombre = "";
 		this.contorno = contorno;
 		this.vertices = vertices;
 		this.triangulos = triangulos;
@@ -27,6 +28,16 @@ public class Esqueleto implements Serializable
 	{
 		this.textura = textura;
 		this.coordTextura = coordTextura;
+	}
+	
+	public void setNombre(String nombre)
+	{
+		this.nombre = nombre;
+	}
+	
+	public String getNombre()
+	{
+		return nombre;
 	}
 
 	public ShortArray getContorno()

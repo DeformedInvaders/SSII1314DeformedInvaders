@@ -4,17 +4,16 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/textView1"
+    
+    <com.view.select.SelectGLSurfaceView
+        android:id="@+id/selectGLSurfaceView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="@string/app_name"
-        android:textColor="#FFFFFF"
-        android:textSize="80sp" />
+        android:layout_marginBottom="70dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -43,5 +42,16 @@
             android:contentDescription="@string/desc_view_characters"
             android:src="@drawable/viewcharacter_icon" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/app_name"
+        android:textColor="#000000"
+        android:textSize="80sp" />
 
 </RelativeLayout>

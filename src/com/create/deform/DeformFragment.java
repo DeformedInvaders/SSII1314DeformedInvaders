@@ -34,9 +34,9 @@ public class DeformFragment extends Fragment
 		botonDeformMover = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonDeformDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
 		
-		//botonDeformRemove.setVisibility(View.INVISIBLE);
-		//botonDeformMover.setVisibility(View.INVISIBLE);
-		//botonDeformDelete.setVisibility(View.INVISIBLE);
+		botonDeformRemove.setEnabled(false);
+		botonDeformMover.setEnabled(false);
+		botonDeformDelete.setEnabled(false);
 		
 		botonDeformAdd.setOnClickListener(new OnDeformAddClickListener());
 		botonDeformRemove.setOnClickListener(new OnDeformRemoveClickListener());
@@ -68,15 +68,15 @@ public class DeformFragment extends Fragment
 	{
 		if(((DeformGLSurfaceView) canvas).handlesVacio())
 		{
-			botonDeformRemove.setVisibility(View.INVISIBLE);
-			botonDeformMover.setVisibility(View.INVISIBLE);
-			botonDeformDelete.setVisibility(View.INVISIBLE);
+			botonDeformRemove.setEnabled(false);
+			botonDeformMover.setEnabled(false);
+			botonDeformDelete.setEnabled(false);
 		}
 		else
 		{
-			botonDeformRemove.setVisibility(View.VISIBLE);
-			botonDeformMover.setVisibility(View.VISIBLE);
-			botonDeformDelete.setVisibility(View.VISIBLE);
+			botonDeformRemove.setEnabled(true);
+			botonDeformMover.setEnabled(true);
+			botonDeformDelete.setEnabled(true);
 		}
 	}
 	

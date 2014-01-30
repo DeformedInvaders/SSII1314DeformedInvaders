@@ -13,8 +13,8 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.android.dialog.TexturaBMP;
 import com.example.data.Esqueleto;
+import com.example.data.TexturaBMP;
 import com.example.main.OpenGLRenderer;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
