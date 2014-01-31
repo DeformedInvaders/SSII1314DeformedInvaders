@@ -29,15 +29,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.dialog.ColorPickerDialog;
+import com.android.dialog.ColorPicker;
 import com.android.dialog.SizePicker;
 import com.android.storage.InternalStorageManager;
 import com.create.deform.DeformFragment;
 import com.create.design.DesignGLSurfaceView;
 import com.create.paint.PaintGLSurfaceView;
-import com.view.select.SelectGLSurfaceView;
 import com.example.data.Esqueleto;
 import com.view.select.SelectFragment;
+import com.view.select.SelectGLSurfaceView;
 
 public class MainActivity extends FragmentActivity
 {	
@@ -58,7 +58,7 @@ public class MainActivity extends FragmentActivity
 	private ImageButton botonDesignReady, botonDesignNuevo, botonDesignTest;
 	
 	/* PAINT ACTIVITY */
-	private ColorPickerDialog colorPicker;
+	private ColorPicker colorPicker;
 	private SizePicker sizePicker;
 	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
 	
@@ -458,8 +458,8 @@ public class MainActivity extends FragmentActivity
 			{
 				int color = ((PaintGLSurfaceView) canvas).getColorPaleta();
 				((PaintGLSurfaceView) canvas).seleccionarColor(color);
-				colorPicker = new ColorPickerDialog(mContext, color, (PaintGLSurfaceView)canvas);
-				colorPicker.show();
+				if (colorPicker == null) colorPicker= new ColorPicker(mContext, ColorPicker.VERTICAL, (PaintGLSurfaceView)canvas, color);    	
+				colorPicker.show(v);
 			}
 		}
     }

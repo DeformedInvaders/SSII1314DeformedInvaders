@@ -187,6 +187,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarColor(int color)
 	{
 		colorPaleta = color;
+		estado = TPaintEstado.Pincel;
 	}
 	
 	public int getColorPaleta() {
@@ -195,6 +196,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	public void setColorPaleta(int colorPaleta) {
 		this.colorPaleta = colorPaleta;
+		estado = TPaintEstado.Pincel;
 	}
 	
 	/*public void seleccionarSize()
