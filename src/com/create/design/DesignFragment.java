@@ -11,8 +11,8 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.data.Esqueleto;
-import com.example.main.R;
+import com.project.data.Esqueleto;
+import com.project.main.R;
 
 public class DesignFragment extends Fragment
 {
@@ -65,7 +65,7 @@ public class DesignFragment extends Fragment
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-				((DesignGLSurfaceView) canvas).onTouch(event);
+				canvas.onTouch(event);
 				actualizarDesignBotones();
 				
 				return true;
@@ -76,7 +76,7 @@ public class DesignFragment extends Fragment
 	
 	private void actualizarDesignBotones()
 	{
-		if(((DesignGLSurfaceView) canvas).poligonoCompleto())
+		if(canvas.poligonoCompleto())
 		{
 			botonDesignReady.setEnabled(true);
 			botonDesignNuevo.setEnabled(true);

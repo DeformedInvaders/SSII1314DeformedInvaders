@@ -7,8 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.example.data.Esqueleto;
-import com.example.main.OpenGLRenderer;
 import com.lib.math.BSpline;
 import com.lib.math.ConvexHull;
 import com.lib.math.DelaunayMeshGenerator;
@@ -20,6 +18,8 @@ import com.lib.math.Vector2;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
+import com.project.data.Esqueleto;
+import com.project.main.OpenGLRenderer;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {		

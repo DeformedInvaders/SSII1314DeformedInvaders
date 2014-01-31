@@ -13,14 +13,14 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.example.data.Esqueleto;
-import com.example.data.MapaBits;
-import com.example.data.Textura;
-import com.example.main.OpenGLRenderer;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.data.Esqueleto;
+import com.project.data.MapaBits;
+import com.project.data.Textura;
+import com.project.main.OpenGLRenderer;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {		
@@ -385,7 +385,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.modoCaptura = true;
 	}
 	
-	public void setEsqueleto(Esqueleto esqueleto)
+	public void setParameters(Esqueleto esqueleto)
 	{
 		this.contorno = esqueleto.getContorno();
 		this.vertices = esqueleto.getVertices();

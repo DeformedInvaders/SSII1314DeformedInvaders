@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.create.paint.PaintGLSurfaceView;
-import com.example.main.R;
+import com.project.main.R;
 
 public class SizePicker extends PopupWindows implements OnDismissListener {
 	private View mRootView;

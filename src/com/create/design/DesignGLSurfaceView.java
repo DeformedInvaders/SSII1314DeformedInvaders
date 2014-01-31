@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.data.Esqueleto;
+import com.project.data.Esqueleto;
 
 public class DesignGLSurfaceView extends GLSurfaceView
 {

@@ -10,8 +10,8 @@ import android.view.ScaleGestureDetector;
 import com.android.touch.DoubleTouchGestureListener;
 import com.android.touch.DragGestureDetector;
 import com.android.touch.ScaleGestureListener;
-import com.example.data.Esqueleto;
-import com.example.data.Textura;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
 
 public class PaintGLSurfaceView extends GLSurfaceView
 {
@@ -137,9 +137,9 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		requestRender();
 	}
 	
-	public void setEsqueleto(Esqueleto esqueleto)
+	public void setParameters(Esqueleto esqueleto)
 	{
-		renderer.setEsqueleto(esqueleto);
+		renderer.setParameters(esqueleto);
 	}
 	
 	public Textura getTextura()

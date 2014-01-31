@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.create.paint.PaintGLSurfaceView;
-import com.example.main.R;
+import com.project.main.R;
 
 public class ColorPicker extends PopupWindows implements OnDismissListener {
 	private View mRootView;

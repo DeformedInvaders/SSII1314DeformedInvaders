@@ -14,9 +14,9 @@ import android.widget.ImageButton;
 
 import com.android.dialog.ColorPicker;
 import com.android.dialog.SizePicker;
-import com.example.data.Esqueleto;
-import com.example.data.Textura;
-import com.example.main.R;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
+import com.project.main.R;
 
 public class PaintFragment extends Fragment
 {
@@ -64,7 +64,7 @@ public class PaintFragment extends Fragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.PaintGLSurfaceView1);
-		((PaintGLSurfaceView) canvas).setEsqueleto(esqueletoActual);
+		canvas.setParameters(esqueletoActual);
 		
 		botonPaintPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
 		botonPaintCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
@@ -97,7 +97,7 @@ public class PaintFragment extends Fragment
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-				((PaintGLSurfaceView) canvas).onTouch(event);
+				canvas.onTouch(event);
 				actualizarPaintBotones();
 				return true;
 			}
@@ -137,7 +137,7 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			int color = ((PaintGLSurfaceView) canvas).getColorPaleta();
+			int color = canvas.getColorPaleta();
 			canvas.seleccionarColor(color);
 			
 			if (colorPicker == null)
@@ -223,7 +223,7 @@ public class PaintFragment extends Fragment
 	
 	private void actualizarPaintBotones()
 	{
-		if(((PaintGLSurfaceView) canvas).bufferSiguienteVacio())
+		if(canvas.bufferSiguienteVacio())
 		{
 			botonPaintNext.setEnabled(false);
 		}
@@ -232,7 +232,7 @@ public class PaintFragment extends Fragment
 			botonPaintNext.setEnabled(true);
 		}
 		
-		if(((PaintGLSurfaceView) canvas).bufferAnteriorVacio())
+		if(canvas.bufferAnteriorVacio())
 		{
 			botonPaintPrev.setEnabled(false);
 			botonPaintDelete.setEnabled(false);

@@ -10,9 +10,9 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.data.Esqueleto;
-import com.example.data.Textura;
-import com.example.main.R;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
+import com.project.main.R;
 
 public class DeformFragment extends Fragment
 {
@@ -42,7 +42,7 @@ public class DeformFragment extends Fragment
 		
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceView1);
-		canvas.setEsqueleto(esqueletoActual, texturaActual);
+		canvas.setParameters(esqueletoActual, texturaActual);
 		
 		botonDeformAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonDeformRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
@@ -90,7 +90,7 @@ public class DeformFragment extends Fragment
 	
 	private void actualizarDeformBotones()
 	{
-		if(((DeformGLSurfaceView) canvas).handlesVacio())
+		if(canvas.handlesVacio())
 		{
 			botonDeformRemove.setEnabled(false);
 			botonDeformMover.setEnabled(false);

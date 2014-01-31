@@ -2,7 +2,7 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
-import com.example.main.OpenGLRenderer;
+import com.project.main.OpenGLRenderer;
 
 public class DragGestureDetector
 {

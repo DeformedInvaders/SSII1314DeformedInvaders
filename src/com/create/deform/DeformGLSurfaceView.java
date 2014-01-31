@@ -5,8 +5,8 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.data.Esqueleto;
-import com.example.data.Textura;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
 
 public class DeformGLSurfaceView extends GLSurfaceView
 {
@@ -64,9 +64,9 @@ public class DeformGLSurfaceView extends GLSurfaceView
 		return true;
 	}
 	
-	public void setEsqueleto(Esqueleto esqueleto, Textura textura)
+	public void setParameters(Esqueleto esqueleto, Textura textura)
 	{
-		renderer.setEsqueleto(esqueleto, textura);
+		renderer.setParameters(esqueleto, textura);
 	}
 
 	public void seleccionarAnyadir()

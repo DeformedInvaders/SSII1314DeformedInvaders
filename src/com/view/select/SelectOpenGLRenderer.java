@@ -8,10 +8,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import com.example.data.Esqueleto;
-import com.example.main.OpenGLRenderer;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
+import com.project.main.OpenGLRenderer;
 
 public class SelectOpenGLRenderer extends OpenGLRenderer
 {
@@ -56,15 +57,15 @@ public class SelectOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void setEsqueleto(Esqueleto esqueleto)
+	public void setParameters(Esqueleto esqueleto, Textura textura)
 	{
 		this.contorno = esqueleto.getContorno();
 		this.vertices = esqueleto.getVertices();
 		
 		this.triangulos = esqueleto.getTriangulos();
 		
-		this.textura = esqueleto.getTextura().getBitmap();
-		this.coords = esqueleto.getCoordTextura();
+		this.textura = textura.getTextura().getBitmap();
+		this.coords = textura.getCoordTextura();
 
 		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 		this.bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);

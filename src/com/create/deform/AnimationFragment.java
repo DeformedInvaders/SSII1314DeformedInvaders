@@ -18,10 +18,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.data.Esqueleto;
-import com.example.data.Movimientos;
-import com.example.data.Textura;
-import com.example.main.R;
+import com.project.data.Esqueleto;
+import com.project.data.Movimientos;
+import com.project.data.Textura;
+import com.project.main.R;
 
 public class AnimationFragment extends Fragment
 {

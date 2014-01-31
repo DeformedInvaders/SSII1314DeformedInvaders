@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.data.Esqueleto;
-import com.example.data.Textura;
-import com.example.main.R;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
+import com.project.main.R;
 import com.view.display.DisplayGLSurfaceView;
 
 public class SelectFragment extends Fragment
@@ -37,7 +37,7 @@ public class SelectFragment extends Fragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceView1);
-		canvas.setEsqueleto(esqueletoActual, texturaActual);
+		canvas.setParameters(esqueletoActual, texturaActual);
         
         return rootView;
     }

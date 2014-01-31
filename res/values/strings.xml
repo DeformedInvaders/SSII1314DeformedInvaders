@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Proyecto -->
     <string name="app_name">DEFORMS INVADERS</string>
     <!-- Main -->
@@ -9,12 +8,10 @@
     <string name="desc_play_game">Play Game</string>
     <!-- Modo Creación Personaje -->
 	    <!-- Fase de Modelado -->
-	    <string name="title_activity_model">Model Phase</string>
 	    <string name="desc_ready">Ready</string>
 	    <string name="desc_new">New</string>
 	    <string name="desc_test">Test</string>
 	    <!-- Fase de Pintura -->
-	    <string name="title_activity_paint">Paint Phase</string>
 	    <string name="desc_pencil">Bucket</string>
 	    <string name="desc_bucket">Pencil</string>
 	    <string name="desc_hand">Hand</string>
@@ -25,7 +22,6 @@
 	    <string name="desc_size">Size</string>
 	    <string name="desc_eye">Eye</string>
 	    <!-- Fase de Animacion -->
-	    <string name="title_activity_move">Animation Phase</string>
 	    <string name="title_section_run">Run</string>
 	    <string name="title_section_jump">Jump</string>
 	    <string name="title_section_down">Down</string>
@@ -35,7 +31,11 @@
 	    <string name="desc_move">Move</string>
 	    <string name="desc_save">Save</string>
     <!-- Modo de Seleccion de Personaje -->
-    	<string name="title_activity_view">Selection Phase</string>
     <!-- Modo de Juego -->
+    <!-- Dialogs -->
+    <string name="desc_dialog_increment">Increment</string>
+    <string name="desc_dialog_decrement">Decrement</string>
+    <string name="desc_dialog_content">Content</string>
+    <string name="desc_dialog_arrow">Arrow</string>
 
 </resources>

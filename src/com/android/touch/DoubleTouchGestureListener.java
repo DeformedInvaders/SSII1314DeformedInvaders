@@ -3,7 +3,7 @@ package com.android.touch;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 
-import com.example.main.OpenGLRenderer;
+import com.project.main.OpenGLRenderer;
 
 public class DoubleTouchGestureListener extends SimpleOnGestureListener 
 {

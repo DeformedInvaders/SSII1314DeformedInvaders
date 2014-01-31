@@ -18,8 +18,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.data.Personaje;
-import com.example.main.R;
+import com.project.data.Personaje;
+import com.project.main.R;
 
 public class SelectionFragment extends Fragment
 {

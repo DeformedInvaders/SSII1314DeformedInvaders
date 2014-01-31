@@ -10,7 +10,7 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.example.data.Personaje;
+import com.project.data.Personaje;
 
 public class InternalStorageManager
 {
@@ -58,7 +58,7 @@ public class InternalStorageManager
 		}
 	}
 	
-	public void guardarPersonajes(FileOutputStream file, List<Personaje> lista)
+	public void guardarPersonajes(FileOutputStream file, List<Personaje> lista, int indice)
 	{
 		ObjectOutputStream data;
 		try
@@ -69,7 +69,7 @@ public class InternalStorageManager
 			data.writeInt(lista.size());
 			
 			// Guardar Esqueleto Seleccionado
-			data.writeInt(seleccionado);
+			data.writeInt(indice);
 			
 			// Guardar Lista de Esqueletos
 			Iterator<Personaje> it = lista.iterator();
@@ -88,7 +88,7 @@ public class InternalStorageManager
 		}
 	}
 	
-	public int getEsqueletoSeleccionado()
+	public int getPersonajeSeleccionado()
 	{
 		return seleccionado;
 	}

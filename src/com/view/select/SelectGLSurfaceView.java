@@ -4,7 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.example.data.Esqueleto;
+import com.project.data.Esqueleto;
+import com.project.data.Textura;
 
 public class SelectGLSurfaceView extends GLSurfaceView
 {
@@ -26,8 +27,8 @@ public class SelectGLSurfaceView extends GLSurfaceView
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 	
-	public void setEsqueleto(Esqueleto esqueleto)
+	public void setParameters(Esqueleto esqueleto, Textura textura)
 	{
-		renderer.setEsqueleto(esqueleto);
+		renderer.setParameters(esqueleto, textura);
 	}
 }
