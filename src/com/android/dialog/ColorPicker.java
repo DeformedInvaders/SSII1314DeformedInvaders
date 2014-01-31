@@ -162,7 +162,7 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		setRootViewId(R.layout.color_layout);
+		setRootViewId(R.layout.dialog_color_layout);
 	
 	
 		final ImageButton ibAceptar = (ImageButton)this.getView().findViewById(R.id.ibAceptar);

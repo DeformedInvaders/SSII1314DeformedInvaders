@@ -109,7 +109,7 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		setRootViewId(R.layout.popup_vertical_layout);
+		setRootViewId(R.layout.dialog_size_layout);
 	
 
 		

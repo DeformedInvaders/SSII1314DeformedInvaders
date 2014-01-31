@@ -7,27 +7,52 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.data.Esqueleto;
+import com.example.data.Textura;
 import com.example.main.R;
+import com.view.display.DisplayGLSurfaceView;
 
 public class SelectFragment extends Fragment
 {
-	private SelectGLSurfaceView canvas;
-	private Esqueleto esqueleto;
+	private DisplayGLSurfaceView canvas;
+	private Esqueleto esqueletoActual;
+	private Textura texturaActual;
+	
+	public static final SelectFragment newInstance(Esqueleto e, Textura t)
+	{
+		SelectFragment fragment = new SelectFragment();
+		fragment.setParameters(e, t);
+		return fragment;
+	}
+	
+	private void setParameters(Esqueleto e, Textura t)
+	{	
+		esqueletoActual = e;
+		texturaActual = t;
+	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-        View rootView = inflater.inflate(R.layout.select_layout, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_select_layout, container, false);
  		
 		// Instanciar Elementos de la GUI
-		canvas = (SelectGLSurfaceView) rootView.findViewById(R.id.selectGLSurfaceView1);
-		canvas.setEsqueleto(esqueleto);
+		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceView1);
+		canvas.setEsqueleto(esqueletoActual, texturaActual);
         
         return rootView;
     }
-
-	public void setEsqueleto(Esqueleto e)
-	{	
-		esqueleto = e;
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		canvas.onResume();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		canvas.onPause();
 	}
 }

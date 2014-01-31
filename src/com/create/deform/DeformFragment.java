@@ -11,23 +11,38 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.data.Esqueleto;
+import com.example.data.Textura;
 import com.example.main.R;
 
 public class DeformFragment extends Fragment
 {
 	private DeformGLSurfaceView canvas;
-	private Esqueleto esqueleto;
+	private Esqueleto esqueletoActual;
+	private Textura texturaActual;
 	
 	private ImageButton botonDeformAdd, botonDeformRemove, botonDeformMover, botonDeformDelete;
+		
+	public static final DeformFragment newInstance(Esqueleto e, Textura t)
+	{
+		DeformFragment fragment = new DeformFragment();
+		fragment.setParameters(e, t);
+		return fragment;
+	}
 	
+	private void setParameters(Esqueleto e, Textura t)
+	{	
+		esqueletoActual = e;
+		texturaActual = t;
+	}
+
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-        View rootView = inflater.inflate(R.layout.deform_layout, container, false);
- 		
+	{        
+		View rootView = inflater.inflate(R.layout.fragment_deform_layout, container, false);
+		
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceView1);
-		canvas.setEsqueleto(esqueleto);
+		canvas.setEsqueleto(esqueletoActual, texturaActual);
 		
 		botonDeformAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonDeformRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
@@ -53,13 +68,22 @@ public class DeformFragment extends Fragment
 				return true;
 			}
 		});
-        
+		
         return rootView;
     }
-
-	public void setEsqueleto(Esqueleto e)
-	{	
-		esqueleto = e;
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		canvas.onResume();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		canvas.onPause();
 	}
 	
 	/* DEFORM ACTIVITY */

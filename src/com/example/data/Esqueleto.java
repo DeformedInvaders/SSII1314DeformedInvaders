@@ -7,37 +7,22 @@ import com.lib.utils.ShortArray;
 
 public class Esqueleto implements Serializable
 {
-	private static final long serialVersionUID = 666L;
+	private static final long serialVersionUID = 1L;
 	
-	private String nombre;
 	private ShortArray contorno;
 	private FloatArray vertices;
 	private ShortArray triangulos;
-	private TexturaBMP textura;
-	private FloatArray coordTextura;
+	
+	public Esqueleto()
+	{
+		
+	}
 	
 	public Esqueleto(ShortArray contorno, FloatArray vertices, ShortArray triangulos)
 	{
-		this.nombre = "";
 		this.contorno = contorno;
 		this.vertices = vertices;
 		this.triangulos = triangulos;
-	}
-	
-	public void setTexture(TexturaBMP textura, FloatArray coordTextura)
-	{
-		this.textura = textura;
-		this.coordTextura = coordTextura;
-	}
-	
-	public void setNombre(String nombre)
-	{
-		this.nombre = nombre;
-	}
-	
-	public String getNombre()
-	{
-		return nombre;
 	}
 
 	public ShortArray getContorno()
@@ -45,9 +30,19 @@ public class Esqueleto implements Serializable
 		return contorno;
 	}
 
+	public void setContorno(ShortArray contorno)
+	{
+		this.contorno = contorno;
+	}
+
 	public FloatArray getVertices()
 	{
 		return vertices;
+	}
+
+	public void setVertices(FloatArray vertices)
+	{
+		this.vertices = vertices;
 	}
 
 	public ShortArray getTriangulos()
@@ -55,13 +50,13 @@ public class Esqueleto implements Serializable
 		return triangulos;
 	}
 
-	public TexturaBMP getTextura()
+	public void setTriangulos(ShortArray triangulos)
 	{
-		return textura;
+		this.triangulos = triangulos;
 	}
 
-	public FloatArray getCoordTextura()
+	public static long getSerialversionuid()
 	{
-		return coordTextura;
+		return serialVersionUID;
 	}
 }

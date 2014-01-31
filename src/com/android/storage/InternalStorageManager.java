@@ -10,7 +10,7 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.example.data.Esqueleto;
+import com.example.data.Personaje;
 
 public class InternalStorageManager
 {
@@ -22,7 +22,7 @@ public class InternalStorageManager
 		return FILENAME;
 	}
 	
-	public void cargarEsqueleto(FileInputStream file, List<Esqueleto> lista)
+	public void cargarPersonajes(FileInputStream file, List<Personaje> lista)
 	{
 		int numEsqueletos = 0;
 
@@ -40,8 +40,7 @@ public class InternalStorageManager
 			// Cargar Lista de Esqueletos
 			for(int i = 0; i < numEsqueletos; i++)
 			{
-				Esqueleto e = (Esqueleto) data.readObject();
-				lista.add(e);
+				lista.add((Personaje) data.readObject());
 			}
 			
 			data.close();
@@ -59,7 +58,7 @@ public class InternalStorageManager
 		}
 	}
 	
-	public void guardarEsqueleto(FileOutputStream file, List<Esqueleto> lista)
+	public void guardarPersonajes(FileOutputStream file, List<Personaje> lista)
 	{
 		ObjectOutputStream data;
 		try
@@ -73,7 +72,7 @@ public class InternalStorageManager
 			data.writeInt(seleccionado);
 			
 			// Guardar Lista de Esqueletos
-			Iterator<Esqueleto> it = lista.iterator();
+			Iterator<Personaje> it = lista.iterator();
 			while(it.hasNext())
 			{
 				data.writeObject(it.next());

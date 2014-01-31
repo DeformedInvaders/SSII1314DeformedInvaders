@@ -14,7 +14,8 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.example.data.Esqueleto;
-import com.example.data.TexturaBMP;
+import com.example.data.MapaBits;
+import com.example.data.Textura;
 import com.example.main.OpenGLRenderer;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
@@ -50,7 +51,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private boolean modoCaptura;
 	private boolean capturaTerminada;
 	
-	private TexturaBMP textura;
+	private MapaBits textura;
 	private FloatArray coordsTextura;
 	
 	// Anterior Siguiente Buffers
@@ -394,16 +395,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 	}
 	
-	public Esqueleto getEsqueleto()
+	public Textura getTextura()
 	{
 		while(!capturaTerminada);
 		
-		Esqueleto esqueleto = new Esqueleto(contorno, vertices, triangulos);
-		esqueleto.setTexture(textura, coordsTextura);
-		return esqueleto;
+		return new Textura(textura, coordsTextura);
 	}
 	
-	private TexturaBMP capturaPantalla(GL10 gl, int height, int width)
+	private MapaBits capturaPantalla(GL10 gl, int height, int width)
 	{
 	    int screenshotSize = width * height;
 	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
@@ -419,7 +418,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 	    }
 	    
-	    TexturaBMP textura = new TexturaBMP();
+	    MapaBits textura = new MapaBits();
 	    textura.setBitmap(pixelsBuffer, width, height);
 	    return textura;
 	}

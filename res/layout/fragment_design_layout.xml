@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="horizontal" >
+
+    <com.create.design.DesignGLSurfaceView
+        android:id="@+id/designGLSurfaceView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="70dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" >
+
+		<ImageButton
+            android:id="@+id/imageButtonDesign2"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
+		    android:contentDescription="@string/desc_new"
+            android:src="@drawable/icon_new" />
+        		        
+        <ImageButton
+            android:id="@+id/imageButtonDesign3"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
+		    android:contentDescription="@string/desc_test"
+            android:src="@drawable/icon_test" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButtonDesign1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/desc_ready"
+        android:src="@drawable/icon_ready" />
+
+</RelativeLayout>

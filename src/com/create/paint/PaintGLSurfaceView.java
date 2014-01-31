@@ -11,6 +11,7 @@ import com.android.touch.DoubleTouchGestureListener;
 import com.android.touch.DragGestureDetector;
 import com.android.touch.ScaleGestureListener;
 import com.example.data.Esqueleto;
+import com.example.data.Textura;
 
 public class PaintGLSurfaceView extends GLSurfaceView
 {
@@ -103,11 +104,6 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		renderer.seleccionarCubo();
 	}
 	
-	/*public void seleccionarColor()
-	{
-		renderer.seleccionarColor();
-	}*/
-	
 	public int getColorPaleta()
 	{
 		return renderer.getColorPaleta();
@@ -117,11 +113,6 @@ public class PaintGLSurfaceView extends GLSurfaceView
 	{
 		renderer.seleccionarColor(color);
 	}
-	
-	/*public void seleccionarSize()
-	{
-		renderer.seleccionarSize();
-	}*/
 	
 	public void seleccionarSize(int pos)
 	{
@@ -151,9 +142,9 @@ public class PaintGLSurfaceView extends GLSurfaceView
 		renderer.setEsqueleto(esqueleto);
 	}
 	
-	public Esqueleto getEsqueleto()
+	public Textura getTextura()
 	{
-		return renderer.getEsqueleto();
+		return renderer.getTextura();
 	}
 	
 	public void capturaPantalla()

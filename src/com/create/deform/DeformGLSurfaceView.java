@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.example.data.Esqueleto;
+import com.example.data.Textura;
 
 public class DeformGLSurfaceView extends GLSurfaceView
 {
@@ -63,9 +64,9 @@ public class DeformGLSurfaceView extends GLSurfaceView
 		return true;
 	}
 	
-	public void setEsqueleto(Esqueleto esqueleto)
+	public void setEsqueleto(Esqueleto esqueleto, Textura textura)
 	{
-		renderer.setEsqueleto(esqueleto);
+		renderer.setEsqueleto(esqueleto, textura);
 	}
 
 	public void seleccionarAnyadir()

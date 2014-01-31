@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="horizontal">
+    
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:id="@+id/pagerAnim1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="#FFFFFF"/>
+
+    <ImageButton
+        android:id="@+id/imageButtonAnim1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/desc_save"
+        android:src="@drawable/icon_ready" />
+    
+</RelativeLayout>

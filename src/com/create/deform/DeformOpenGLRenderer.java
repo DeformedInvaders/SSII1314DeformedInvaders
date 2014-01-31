@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.example.data.Esqueleto;
+import com.example.data.Textura;
 import com.example.main.OpenGLRenderer;
 import com.lib.math.Deformator;
 import com.lib.math.GeometryUtils;
@@ -99,7 +100,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}	
 	}
 	
-	public void setEsqueleto(Esqueleto esqueleto)
+	public void setEsqueleto(Esqueleto esqueleto, Textura textura)
 	{
 		this.contorno = esqueleto.getContorno();
 		this.vertices = esqueleto.getVertices();
@@ -107,8 +108,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		this.triangulos = esqueleto.getTriangulos();
 		
-		this.textura = esqueleto.getTextura().getBitmap();
-		this.coords = esqueleto.getCoordTextura();
+		this.textura = textura.getTextura().getBitmap();
+		this.coords = textura.getCoordTextura();
 		
 		this.deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
 
