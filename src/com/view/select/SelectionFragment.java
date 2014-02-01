@@ -10,7 +10,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +23,12 @@ import com.project.main.R;
 
 public class SelectionFragment extends Fragment
 {
+	private ActionBar actionBar;
 	private SelectionFragmentListener mCallback;
 	
 	private ImageButton botonViewReady, botonViewDelete;
-	private SectionsViewPagerAdapter sectionsViewPagerAdapter;
-	private ViewPager viewViewPager;
+	private SectionsViewPagerAdapter pageAdapter;
+	private ViewPager viewPager;
 	private List<SelectFragment> listaViewFragmentos;
 	
 	private List<Personaje> listaPersonajes;
@@ -64,13 +65,13 @@ public class SelectionFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_selection_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
-		botonViewReady = (ImageButton) rootView.findViewById(R.id.imageButtonView1);
-		botonViewDelete = (ImageButton) rootView.findViewById(R.id.imageButtonView2);
+		botonViewReady = (ImageButton) rootView.findViewById(R.id.imageButtonSelection1);
+		botonViewDelete = (ImageButton) rootView.findViewById(R.id.imageButtonSelection2);
 		
 		botonViewReady.setOnClickListener(new OnViewReadyClickListener());		
 		botonViewDelete.setOnClickListener(new OnViewDeleteClickListener());
 		
-		final ActionBar actionBar = getActivity().getActionBar();
+		actionBar = getActivity().getActionBar();
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
@@ -83,13 +84,13 @@ public class SelectionFragment extends Fragment
 			listaViewFragmentos.add(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura()));
 		}
 
-		sectionsViewPagerAdapter = new SectionsViewPagerAdapter(getActivity().getSupportFragmentManager());
+		pageAdapter = new SectionsViewPagerAdapter(getActivity().getSupportFragmentManager());
 
-		viewViewPager = (ViewPager) rootView.findViewById(R.id.pagerView1);
-		viewViewPager.removeAllViews();
-		viewViewPager.setAdapter(sectionsViewPagerAdapter);
+		viewPager = (ViewPager) rootView.findViewById(R.id.pagerViewSelection1);
+		viewPager.removeAllViews();
+		viewPager.setAdapter(pageAdapter);
 
-		viewViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position)
 			{
@@ -97,9 +98,9 @@ public class SelectionFragment extends Fragment
 			}
 		});
 
-		for (int i = 0; i < sectionsViewPagerAdapter.getCount(); i++)
+		for (int i = 0; i < pageAdapter.getCount(); i++)
 		{
-			actionBar.addTab(actionBar.newTab().setText(sectionsViewPagerAdapter.getPageTitle(i)).setTabListener(sectionsViewPagerAdapter));
+			actionBar.addTab(actionBar.newTab().setText(pageAdapter.getPageTitle(i)).setTabListener(pageAdapter));
 		}
 				
         return rootView;
@@ -125,7 +126,7 @@ public class SelectionFragment extends Fragment
 		}
     }
 	
-	public class SectionsViewPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener
+	public class SectionsViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
 	{
 		public SectionsViewPagerAdapter(FragmentManager fm)
 		{
@@ -163,7 +164,7 @@ public class SelectionFragment extends Fragment
 		@Override
 		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
 		{
-			viewViewPager.setCurrentItem(tab.getPosition());
+			viewPager.setCurrentItem(tab.getPosition());
 		}
 	
 		@Override

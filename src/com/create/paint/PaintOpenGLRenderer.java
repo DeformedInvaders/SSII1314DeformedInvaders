@@ -180,11 +180,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		estado = TPaintEstado.Cubo;
 	}
 	
-	/*public void seleccionarColor()
-	{
-		colorPaleta = generarColorAleatorio();
-	}*/
-	
 	public void seleccionarColor(int color)
 	{
 		colorPaleta = color;
@@ -199,11 +194,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.colorPaleta = colorPaleta;
 		estado = TPaintEstado.Pincel;
 	}
-	
-	/*public void seleccionarSize()
-	{
-		sizeLinea = (sizeLinea+5)%15;
-	}*/
 	
 	public void seleccionarSize(int pos)
 	{

@@ -7,13 +7,13 @@
     
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
 	    xmlns:tools="http://schemas.android.com/tools"
-	    android:id="@+id/pagerAnim1"
+	    android:id="@+id/pagerViewAnimation1"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:background="#FFFFFF"/>
 
     <ImageButton
-        android:id="@+id/imageButtonAnim1"
+        android:id="@+id/imageButtonAnimation1"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"

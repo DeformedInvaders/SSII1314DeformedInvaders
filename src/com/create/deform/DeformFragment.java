@@ -41,7 +41,7 @@ public class DeformFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_deform_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
-		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceView1);
+		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
 		canvas.setParameters(esqueletoActual, texturaActual);
 		
 		botonDeformAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);

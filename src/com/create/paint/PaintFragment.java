@@ -63,7 +63,7 @@ public class PaintFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_paint_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.PaintGLSurfaceView1);
+		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
 		canvas.setParameters(esqueletoActual);
 		
 		botonPaintPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);

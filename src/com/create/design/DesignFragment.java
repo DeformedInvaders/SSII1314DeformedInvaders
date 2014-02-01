@@ -47,7 +47,7 @@ public class DesignFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_design_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
-		canvas = (DesignGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceView1);
+		canvas = (DesignGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
 		botonDesignReady = (ImageButton) rootView.findViewById(R.id.imageButtonDesign1);
 		botonDesignNuevo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
 		botonDesignTest = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);

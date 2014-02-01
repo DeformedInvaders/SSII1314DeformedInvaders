@@ -62,7 +62,7 @@ public class LoadingFragment extends Fragment
 		actionBar.removeAllTabs();
 		
 		// Instanciar Elementos de la GUI
-		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceView2);
+		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.DisplayGLSurfaceViewLoading1);
 		if(personajeSeleccionado >= 0 && personajeSeleccionado < listaPersonajes.size())
 		{
 			Personaje p = listaPersonajes.get(personajeSeleccionado);

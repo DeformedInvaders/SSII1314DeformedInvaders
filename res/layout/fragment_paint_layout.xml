@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <com.create.paint.PaintGLSurfaceView
-        android:id="@+id/PaintGLSurfaceView1"
+        android:id="@+id/paintGLSurfaceViewPaint1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"

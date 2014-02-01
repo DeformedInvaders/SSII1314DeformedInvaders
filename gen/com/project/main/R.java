@@ -73,7 +73,7 @@ public final class R {
         public static final int viewcharacter_icon=0x7f020029;
     }
     public static final class id {
-        public static final int PaintGLSurfaceView1=0x7f080023;
+        public static final int DisplayGLSurfaceViewLoading1=0x7f08001d;
         public static final int RelativeLayout1=0x7f080017;
         public static final int RelativeLayout2=0x7f080022;
         public static final int arrow_down=0x7f080003;
@@ -84,17 +84,16 @@ public final class R {
         public static final int color_target=0x7f080008;
         public static final int color_viewContainer=0x7f080004;
         public static final int color_viewCuadroPrincipal=0x7f080005;
-        public static final int deformGLSurfaceView1=0x7f080012;
-        public static final int designGLSurfaceView1=0x7f080018;
-        public static final int displayGLSurfaceView1=0x7f08002e;
-        public static final int displayGLSurfaceView2=0x7f08001d;
-        public static final int fragment_container=0x7f080000;
+        public static final int deformGLSurfaceViewDeform1=0x7f080012;
+        public static final int designGLSurfaceViewDesign1=0x7f080018;
+        public static final int displayGLSurfaceViewSelect1=0x7f08002e;
+        public static final int frameLayoutMain1=0x7f080000;
         public static final int ibAceptar=0x7f08000c;
         public static final int ibCancelar=0x7f08000b;
         public static final int ibContenido=0x7f08000e;
         public static final int ibDecremento=0x7f08000f;
         public static final int ibIncremento=0x7f08000d;
-        public static final int imageButtonAnim1=0x7f080011;
+        public static final int imageButtonAnimation1=0x7f080011;
         public static final int imageButtonDeform1=0x7f080013;
         public static final int imageButtonDeform2=0x7f080014;
         public static final int imageButtonDeform3=0x7f080015;
@@ -115,11 +114,12 @@ public final class R {
         public static final int imageButtonPaint7=0x7f08002a;
         public static final int imageButtonPaint8=0x7f08002b;
         public static final int imageButtonPaint9=0x7f08002c;
-        public static final int imageButtonView1=0x7f080030;
-        public static final int imageButtonView2=0x7f080031;
+        public static final int imageButtonSelection1=0x7f080030;
+        public static final int imageButtonSelection2=0x7f080031;
         public static final int linearLayout1=0x7f080019;
-        public static final int pagerAnim1=0x7f080010;
-        public static final int pagerView1=0x7f08002f;
+        public static final int pagerViewAnimation1=0x7f080010;
+        public static final int pagerViewSelection1=0x7f08002f;
+        public static final int paintGLSurfaceViewPaint1=0x7f080023;
         public static final int scroller=0x7f080001;
         public static final int textView1=0x7f080021;
         public static final int tracks=0x7f080002;

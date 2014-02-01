@@ -10,7 +10,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +25,12 @@ import com.project.main.R;
 
 public class AnimationFragment extends Fragment
 {
+	private ActionBar actionBar;
 	private AnimationFragmentListener mCallback;
 	
 	private ImageButton botonAnimReady;
-	private SectionsAnimPagerAdapter sectionsAnimPagerAdapter;
-	private ViewPager viewAnimPager;
+	private AnimPagerAdapter pageAdapter;
+	private ViewPager viewPager;
 	private List<DeformFragment> listaAnimFragmentos;
 	
 	private Esqueleto esqueletoActual;
@@ -67,10 +68,10 @@ public class AnimationFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_animation_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
-		botonAnimReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnim1);		
+		botonAnimReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);		
 		botonAnimReady.setOnClickListener(new OnAnimReadyClickListener());	
 				
-		final ActionBar actionBar = getActivity().getActionBar();
+		actionBar = getActivity().getActionBar();
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
@@ -81,13 +82,13 @@ public class AnimationFragment extends Fragment
 			listaAnimFragmentos.add(DeformFragment.newInstance(esqueletoActual, texturaActual));
 		}
 
-		sectionsAnimPagerAdapter = new SectionsAnimPagerAdapter(getActivity().getSupportFragmentManager());
+		pageAdapter = new AnimPagerAdapter(getActivity().getSupportFragmentManager());
 
-		viewAnimPager = (ViewPager) rootView.findViewById(R.id.pagerAnim1);
-		viewAnimPager.removeAllViews();
-		viewAnimPager.setAdapter(sectionsAnimPagerAdapter);
+		viewPager = (ViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
+		viewPager.removeAllViews();
+		viewPager.setAdapter(pageAdapter);
 
-		viewAnimPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position)
 			{
@@ -95,9 +96,9 @@ public class AnimationFragment extends Fragment
 			}
 		});
 
-		for (int i = 0; i < sectionsAnimPagerAdapter.getCount(); i++)
+		for (int i = 0; i < pageAdapter.getCount(); i++)
 		{
-			actionBar.addTab(actionBar.newTab().setText(sectionsAnimPagerAdapter.getPageTitle(i)).setTabListener(new TabAnimListener()));
+			actionBar.addTab(actionBar.newTab().setText(pageAdapter.getPageTitle(i)).setTabListener(pageAdapter));
 		}
 				
         return rootView;
@@ -112,25 +113,10 @@ public class AnimationFragment extends Fragment
 			mCallback.onAnimationReadyButtonClicked(null);
 		}
     }
-	
-	public class TabAnimListener implements ActionBar.TabListener
+
+	public class AnimPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
 	{
-		@Override
-		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-		{
-			viewAnimPager.setCurrentItem(tab.getPosition());
-		}
-	
-		@Override
-		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	
-		@Override
-		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	}
-	
-	public class SectionsAnimPagerAdapter extends FragmentPagerAdapter
-	{
-		public SectionsAnimPagerAdapter(FragmentManager fm)
+		public AnimPagerAdapter(FragmentManager fm)
 		{
 			super(fm);
 		}
@@ -170,5 +156,17 @@ public class AnimationFragment extends Fragment
 			
 			return null;
 		}
+		
+		@Override
+		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+		{
+			viewPager.setCurrentItem(tab.getPosition());
+		}
+	
+		@Override
+		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	
+		@Override
+		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
 	}
 }

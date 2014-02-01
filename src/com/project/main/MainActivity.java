@@ -41,7 +41,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		
 		manager = new InternalStorageManager();
 		
-        if (findViewById(R.id.fragment_container) != null)
+        if (findViewById(R.id.frameLayoutMain1) != null)
         {
 			personajeSeleccionado = manager.cargarSeleccionado(this);
 			manager.cargarPersonajes(this, listaPersonajes);
@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
 		// TODO
-		transaction.replace(R.id.fragment_container, fragment);
+		transaction.replace(R.id.frameLayoutMain1, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

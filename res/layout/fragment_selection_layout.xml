@@ -7,13 +7,13 @@
     
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
 	    xmlns:tools="http://schemas.android.com/tools"
-	    android:id="@+id/pagerView1"
+	    android:id="@+id/pagerViewSelection1"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:background="#FFFFFF"/>
 
     <ImageButton
-        android:id="@+id/imageButtonView1"
+        android:id="@+id/imageButtonSelection1"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
@@ -22,7 +22,7 @@
         android:src="@drawable/icon_ready" />
 
 	<ImageButton
-	    android:id="@+id/imageButtonView2"
+	    android:id="@+id/imageButtonSelection2"
 	    android:layout_width="70dp"
 	    android:layout_height="70dp"
 	    android:layout_alignParentBottom="true"

@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <com.view.display.DisplayGLSurfaceView
-        android:id="@+id/displayGLSurfaceView1"
+        android:id="@+id/displayGLSurfaceViewSelect1"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
