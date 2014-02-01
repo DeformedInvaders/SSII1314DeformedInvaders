@@ -20,6 +20,8 @@ public class DeformFragment extends Fragment
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
 	
+	private DeformDataSaved dataSaved;
+	
 	private ImageButton botonDeformAdd, botonDeformRemove, botonDeformMover, botonDeformDelete;
 		
 	public static final DeformFragment newInstance(Esqueleto e, Textura t)
@@ -77,6 +79,11 @@ public class DeformFragment extends Fragment
 	{
 		super.onResume();
 		canvas.onResume();
+		
+		if(dataSaved != null)
+		{
+			canvas.restoreData(dataSaved);
+		}
 	}
 	
 	@Override
@@ -84,6 +91,8 @@ public class DeformFragment extends Fragment
 	{
 		super.onPause();
 		canvas.onPause();
+		
+		dataSaved = canvas.saveData();
 	}
 	
 	/* DEFORM ACTIVITY */

@@ -101,7 +101,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
-	{
+	{		
 		this.contorno = esqueleto.getContorno();
 		this.vertices = esqueleto.getVertices();
 		this.verticesModificados = vertices.clone();
@@ -241,5 +241,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public boolean handlesVacio()
 	{
 		return indiceHandles.size == 0;
+	}
+	
+	public DeformDataSaved saveData()
+	{
+		return new DeformDataSaved(handles, indiceHandles, verticesModificados);
+	}
+	
+	public void restoreData(DeformDataSaved data)
+	{
+		this.handles = data.getHandles();
+		this.indiceHandles = data.getIndiceHandles();
+		this.verticesModificados = data.getVerticesModificados();
+		
+		deformator.anyadirHandles(handles, indiceHandles);
+		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
 }

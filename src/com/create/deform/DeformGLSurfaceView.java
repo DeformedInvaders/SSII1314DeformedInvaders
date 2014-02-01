@@ -3,6 +3,7 @@ package com.create.deform;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.project.data.Esqueleto;
@@ -16,6 +17,8 @@ public class DeformGLSurfaceView extends GLSurfaceView
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
+        
+        Log.d("TEST", "DEFORM GLSURFACE CONSTRUCTORA");
 
         // Crear Contexto OpenGL ES 1.0
         setEGLContextClientVersion(1);
@@ -54,10 +57,6 @@ public class DeformGLSurfaceView extends GLSurfaceView
 				default:
 					return false;
 			}
-	
-			// Recolector de Basura
-			// TODO
-			System.gc();
 			
 			requestRender();
 		}
@@ -93,5 +92,15 @@ public class DeformGLSurfaceView extends GLSurfaceView
 	{
 		renderer.reiniciar();
 		requestRender();
+	}
+	
+	public DeformDataSaved saveData()
+	{
+		return renderer.saveData();
+	}
+	
+	public void restoreData(DeformDataSaved data)
+	{
+		renderer.restoreData(data);
 	}
 }
