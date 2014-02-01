@@ -29,6 +29,6 @@ public class DisplayGLSurfaceView extends GLSurfaceView
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
 	{
-		renderer.setParameters(esqueleto, textura);
+		this.renderer.setParameters(esqueleto, textura);
 	}
 }

@@ -29,6 +29,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private int personajeSeleccionado;
 	
 	private InternalStorageManager manager;
+	private TEstado estado;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -47,17 +48,28 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			manager.cargarPersonajes(this, listaPersonajes);
 
     		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+    		estado = TEstado.Loading;
         }
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		if(estado != TEstado.Loading)
+		{
+			super.onBackPressed();
+		}
 	}
 	
 	private void changeFragment(Fragment fragment, boolean clearStack)
 	{
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-		// TODO
+		
 		transaction.replace(R.id.frameLayoutMain1, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
+		
+		//TODO Eliminar Fragmentos guardados en el BackStack al llegar a un estado Loading
 	}
 	
 	/* LOADING ACTIVITY */
@@ -67,11 +79,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		personajeActual = new Personaje();
 		
 		changeFragment(DesignFragment.newInstance(), false);
+		estado = TEstado.Design;
 	}
 	
     public void onLoadingSelectButtonClicked()
     {
     	changeFragment(SelectionFragment.newInstance(listaPersonajes), true);
+    	estado = TEstado.Selection;
     }
     
     public void onLoadingPlayButtonClicked()
@@ -91,6 +105,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	{
     		personajeActual.setEsqueleto(esqueleto);    		
     		changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto()), true);
+    		estado = TEstado.Paint;
     	}
     }
     
@@ -114,6 +129,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	{
     		personajeActual.setTextura(textura);
     		changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura()), true);
+    		estado = TEstado.Animation;
     	}
     }
     
@@ -121,7 +137,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
     public void onAnimationReadyButtonClicked(Movimientos movimientos)
     {
-    	//TODO
+    	//TODO Controlar los movimientos recibidos
+    	
 		//if(movimientos != null)
 		//{
 			personajeActual.setMovimientos(movimientos);
@@ -146,6 +163,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					manager.guardarPersonajes(MainActivity.this, listaPersonajes);
 						
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+					estado = TEstado.Loading;
 				}
 			});
 	
@@ -153,6 +171,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+					estado = TEstado.Loading;
 				}
 			});
 	
@@ -169,6 +188,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.guardarSeleccionado(this, personajeSeleccionado);
 		
 		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+		estado = TEstado.Loading;
     }
     
     public void onSelectionDeleteButtonClicked(int indice)
@@ -183,13 +203,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.guardarSeleccionado(this, personajeSeleccionado);
 		manager.guardarPersonajes(this, listaPersonajes);
 		
-		if(listaPersonajes.size() > 0)
+		if(listaPersonajes.size() > 0 && personajeSeleccionado == -1)
 		{
 			changeFragment(SelectionFragment.newInstance(listaPersonajes), true);
+			estado = TEstado.Selection;
 		}
 		else 
 		{
 			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+			estado = TEstado.Loading;
 		}
     }
 }

@@ -38,7 +38,7 @@ public class SelectFragment extends Fragment
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
 		canvas.setParameters(esqueletoActual, texturaActual);
-        
+		
         return rootView;
     }
 	
