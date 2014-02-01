@@ -99,7 +99,7 @@ public class SelectionFragment extends Fragment
 
 		for (int i = 0; i < sectionsViewPagerAdapter.getCount(); i++)
 		{
-			actionBar.addTab(actionBar.newTab().setText(sectionsViewPagerAdapter.getPageTitle(i)).setTabListener(new TabViewListener()));
+			actionBar.addTab(actionBar.newTab().setText(sectionsViewPagerAdapter.getPageTitle(i)).setTabListener(sectionsViewPagerAdapter));
 		}
 				
         return rootView;
@@ -125,22 +125,7 @@ public class SelectionFragment extends Fragment
 		}
     }
 	
-	public class TabViewListener implements ActionBar.TabListener
-	{
-		@Override
-		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-		{
-			viewViewPager.setCurrentItem(tab.getPosition());
-		}
-	
-		@Override
-		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	
-		@Override
-		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	}
-	
-	public class SectionsViewPagerAdapter extends FragmentPagerAdapter
+	public class SectionsViewPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener
 	{
 		public SectionsViewPagerAdapter(FragmentManager fm)
 		{
@@ -174,5 +159,17 @@ public class SelectionFragment extends Fragment
 			
 			return null;
 		}
+		
+		@Override
+		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+		{
+			viewViewPager.setCurrentItem(tab.getPosition());
+		}
+	
+		@Override
+		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+	
+		@Override
+		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
 	}
 }

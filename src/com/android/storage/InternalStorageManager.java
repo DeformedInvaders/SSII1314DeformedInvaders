@@ -8,37 +8,63 @@ import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.project.data.Personaje;
 
 public class InternalStorageManager
 {
-	private static final String FILENAME = "SkeletonDataBase";
-	private int seleccionado = -1;
+	private static final String CHARACTERSFILENAME = "CharactersDataBase";
+	private static final String CHOSENCHARACTERFILENAME = "ChosenCharacterFile";
 	
-	public String getFileName()
+	private String getCharactersFileName()
 	{
-		return FILENAME;
+		return CHARACTERSFILENAME;
 	}
 	
-	public void cargarPersonajes(FileInputStream file, List<Personaje> lista)
+	private String getChosenCharacterFileName()
 	{
-		int numEsqueletos = 0;
-
-		ObjectInputStream data;
+		return CHOSENCHARACTERFILENAME;
+	}
+	
+	public int cargarSeleccionado(Activity activity)
+	{
+		int seleccionado = -1;
+		
 		try
 		{
-			data = new ObjectInputStream(file);
+			FileInputStream file = activity.openFileInput(getChosenCharacterFileName());
+			ObjectInputStream data = new ObjectInputStream(file);
 			
-			// Cargar Numero de Esqueletos
-			numEsqueletos = data.readInt();
-			
-			// Cargar Esqueleto Seleccionado
+			// Cargar Personaje Seleccionado
 			seleccionado = data.readInt();
 			
-			// Cargar Lista de Esqueletos
-			for(int i = 0; i < numEsqueletos; i++)
+			data.close();
+			file.close();
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "IO EXCEPTION");
+			e.printStackTrace();
+		}
+		
+		return seleccionado;
+	}
+	
+	public void cargarPersonajes(Activity activity, List<Personaje> lista)
+	{
+		try
+		{
+			FileInputStream file = activity.openFileInput(getCharactersFileName());
+			ObjectInputStream data = new ObjectInputStream(file);
+			
+			// Cargar Numero de Personajes
+			int numPersonajes = data.readInt();
+			
+			// Cargar Lista de Personajes
+			for(int i = 0; i < numPersonajes; i++)
 			{
 				lista.add((Personaje) data.readObject());
 			}
@@ -58,20 +84,37 @@ public class InternalStorageManager
 		}
 	}
 	
-	public void guardarPersonajes(FileOutputStream file, List<Personaje> lista, int indice)
+	public void guardarSeleccionado(Activity activity, int seleccionado)
 	{
-		ObjectOutputStream data;
 		try
 		{
-			data = new ObjectOutputStream(file);
+			FileOutputStream file = activity.openFileOutput(getChosenCharacterFileName(), Context.MODE_PRIVATE);
+			ObjectOutputStream data = new ObjectOutputStream(file);
 			
-			// Guardar Numero de Esqueletos
+			// Guardar Personaje Seleccionado
+			data.writeInt(seleccionado);
+			
+			data.close();
+			file.close();
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "IO EXCEPTION");
+			e.printStackTrace();
+		}
+	}
+	
+	public void guardarPersonajes(Activity activity, List<Personaje> lista)
+	{
+		try
+		{
+			FileOutputStream file = activity.openFileOutput(getCharactersFileName(), Context.MODE_PRIVATE);
+			ObjectOutputStream data = new ObjectOutputStream(file);
+			
+			// Guardar Numero de Personajes
 			data.writeInt(lista.size());
 			
-			// Guardar Esqueleto Seleccionado
-			data.writeInt(indice);
-			
-			// Guardar Lista de Esqueletos
+			// Guardar Lista de Personajes
 			Iterator<Personaje> it = lista.iterator();
 			while(it.hasNext())
 			{
@@ -86,10 +129,5 @@ public class InternalStorageManager
 			Log.d("TEST", "IO EXCEPTION");
 			e.printStackTrace();
 		}
-	}
-	
-	public int getPersonajeSeleccionado()
-	{
-		return seleccionado;
 	}
 }

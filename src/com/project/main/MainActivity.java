@@ -1,19 +1,14 @@
 package com.project.main;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -48,35 +43,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		
         if (findViewById(R.id.fragment_container) != null)
         {
-    		try
-    		{
-    			FileInputStream file = openFileInput(manager.getFileName());
-    			manager.cargarPersonajes(file, listaPersonajes);
-    			personajeSeleccionado = manager.getPersonajeSeleccionado();
-    		}
-    		catch (FileNotFoundException e)
-    		{
-    			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-    			e.printStackTrace();
-    		}
+			personajeSeleccionado = manager.cargarSeleccionado(this);
+			manager.cargarPersonajes(this, listaPersonajes);
 
     		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
         }
-	}
-	
-	@Override
-	protected void onDestroy()
-	{
-		try
-		{
-			FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-			manager.guardarPersonajes(file, listaPersonajes, personajeSeleccionado);
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-			e.printStackTrace();
-		}
 	}
 	
 	private void changeFragment(Fragment fragment, boolean clearStack)
@@ -172,18 +143,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					
 					listaPersonajes.add(personajeActual);
 					
-					try
-					{
-						FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-						manager.guardarPersonajes(file, listaPersonajes, personajeSeleccionado);
+					manager.guardarPersonajes(MainActivity.this, listaPersonajes);
 						
-						changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
-					}
-					catch (FileNotFoundException e)
-					{
-						Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-						e.printStackTrace();
-					}
+					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
 				}
 			});
 	
@@ -204,18 +166,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
 		personajeSeleccionado = indice;
 		
-		try
-		{
-			FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-			manager.guardarPersonajes(file, listaPersonajes, personajeSeleccionado);
-			
-			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-			e.printStackTrace();
-		}
+		manager.guardarSeleccionado(this, personajeSeleccionado);
+		
+		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
     }
     
     public void onSelectionDeleteButtonClicked(int indice)
@@ -227,24 +180,16 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			personajeSeleccionado = -1;
 		}
 		
-		try
+		manager.guardarSeleccionado(this, personajeSeleccionado);
+		manager.guardarPersonajes(this, listaPersonajes);
+		
+		if(listaPersonajes.size() > 0)
 		{
-			FileOutputStream file = openFileOutput(manager.getFileName(), Context.MODE_PRIVATE);
-			manager.guardarPersonajes(file, listaPersonajes, personajeSeleccionado);
-			
-			if(listaPersonajes.size() > 0)
-			{
-				changeFragment(SelectionFragment.newInstance(listaPersonajes), true);
-			}
-			else 
-			{
-				changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
-			}
+			changeFragment(SelectionFragment.newInstance(listaPersonajes), true);
 		}
-		catch (FileNotFoundException e)
+		else 
 		{
-			Log.d("TEST", "FILE NOT FOUND EXCEPTION");
-			e.printStackTrace();
+			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
 		}
     }
 }
