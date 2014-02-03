@@ -33,7 +33,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatArray handles;
 	private ShortArray indiceHandles;
 	
-	private int indiceHandleSeleccionado;
 	private FloatArray handleSeleccionado;
 	
 	private Handle objetoVertice, objetoHandle;
@@ -47,19 +46,30 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferCoords;
 	
 	private TDeformEstado estado;
+	private TTouchEstado estadoPos1, estadoPos2;
+
+	private static final int POS1 = 0;
+	private static final int POS2 = 3;
 	
 	public DeformOpenGLRenderer(Context context)
 	{
         super(context);
         
         estado = TDeformEstado.Nada;
+        estadoPos1 = TTouchEstado.Up;
+        estadoPos2 = TTouchEstado.Up;
         
         handles = new FloatArray();
         indiceHandles = new ShortArray();
         handleSeleccionado = new FloatArray();
-        handleSeleccionado.add(0);
-        handleSeleccionado.add(0);
-        indiceHandleSeleccionado = -1;
+        for(int i = 0; i < 2; i++)
+        {
+        	// Indice Handle
+        	handleSeleccionado.add(-1);
+        	// Posicion Handle
+        	handleSeleccionado.add(0);
+        	handleSeleccionado.add(0);
+        }
         
         nombreTextura = new int[numeroTexturas];
         
@@ -82,7 +92,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 		
 		// Vertices
-		if(estado != TDeformEstado.Mover)
+		if(estadoPos1 != TTouchEstado.Move && estadoPos2 != TTouchEstado.Move)
 		{
 			dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
 		}
@@ -94,10 +104,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Seleccionado
-		if(indiceHandleSeleccionado != -1)
-		{		
-			dibujarListaHandle(gl, Color.RED, objetoHandle.getBuffer(), handleSeleccionado);
-		}	
+		dibujarListaIndiceHandle(gl, Color.RED, objetoHandle.getBuffer(), handleSeleccionado);
 	}
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
@@ -132,7 +139,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarMover()
 	{
-		estado = TDeformEstado.Seleccionar;
+		estado = TDeformEstado.Deformar;
 	}
 
 	/* Métodos abstractos de OpenGLRenderer */
@@ -143,98 +150,207 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		    
 		handles.clear();
 		indiceHandles.clear();
-		indiceHandleSeleccionado = -1;
+        for(int i = 0; i < 2; i++)
+        {
+        	// Indice Handle
+        	handleSeleccionado.add(-1);
+        	// Posicion Handle
+        	handleSeleccionado.add(0);
+        	handleSeleccionado.add(0);
+        }
 	}
 	
 	public void onTouchDown(float x, float y, float width, float height)
 	{		
-		float nx = xLeft + (xRight-xLeft)*x/width;
-		float ny = yBot + (yTop-yBot)*(height-y)/height;
-		
-		short j = (short) GeometryUtils.isPointInMesh(verticesModificados, nx, ny);
-		if(j != -1)
+		if(estado == TDeformEstado.Anyadir)
+		{			
+			anyadirHandle(x, y);
+		}
+		else if(estado == TDeformEstado.Eliminar)
 		{
-			if(estado == TDeformEstado.Anyadir)
-			{			
-				if(!indiceHandles.contains((short) j))
-				{
-					indiceHandles.add(j);
-					handles.add(verticesModificados.get(2*j));
-					handles.add(verticesModificados.get(2*j+1));
-					
-					// Añadir Handle Nuevo
-					deformator.anyadirHandles(handles, indiceHandles);
-				}
-			}
-			else if(estado == TDeformEstado.Eliminar)
+			eliminarHandle(x, y);
+		}
+		else if(estado == TDeformEstado.Deformar)
+		{						
+			estadoPos1 = seleccionarHandle(estadoPos1, x, y, POS1);
+		}
+	}
+	
+	public void onTouchDown(float x1, float y1, float x2, float y2, float width, float height)
+	{		
+		// TODO
+		
+		if(estado == TDeformEstado.Deformar)
+		{	
+			if(estadoPos1 == TTouchEstado.Up)
 			{
-				if(indiceHandles.contains((short) j))
-				{					
-					int pos = indiceHandles.indexOf(j);
-					indiceHandles.removeIndex(pos);
-					
-					handles.removeIndex(2*pos+1);
-					handles.removeIndex(2*pos);
-					
-					deformator.anyadirHandles(handles, indiceHandles);
-				}
+				estadoPos1 = seleccionarHandle(estadoPos1, x1, y1, POS1);
 			}
-			else if(estado == TDeformEstado.Seleccionar)
-			{						
-				if(indiceHandles.contains((short) j))
-				{
-					// Seleccionar Handle
-					indiceHandleSeleccionado = indiceHandles.indexOf(j);
-					
-					handleSeleccionado.set(0, handles.get(2*indiceHandleSeleccionado));
-					handleSeleccionado.set(1, handles.get(2*indiceHandleSeleccionado+1));
-					
-					estado = TDeformEstado.Mover;
-				}
+			
+			if(estadoPos2 == TTouchEstado.Up)
+			{
+				estadoPos2 = seleccionarHandle(estadoPos2, x2, y2, POS2);
 			}
 		}
 	}
 	
+	
+	private short buscarPixel(float x, float y)
+	{
+		float nx = xLeft + (xRight-xLeft)*x/width;
+		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		
+		return (short) GeometryUtils.isPointInMesh(verticesModificados, nx, ny);
+	}
+	
+	private void anyadirHandle(float x, float y)
+	{
+		short j = buscarPixel(x, y);
+		if(j != -1)
+		{
+			if(!indiceHandles.contains((short) j))
+			{
+				indiceHandles.add(j);
+				handles.add(verticesModificados.get(2*j));
+				handles.add(verticesModificados.get(2*j+1));
+				
+				// Añadir Handle Nuevo
+				deformator.anyadirHandles(handles, indiceHandles);
+			}
+		}
+	}
+	
+	private void eliminarHandle(float x, float y)
+	{
+		short j = buscarPixel(x, y);
+		if(j != -1)
+		{
+			if(indiceHandles.contains((short) j))
+			{					
+				int pos = indiceHandles.indexOf(j);
+				indiceHandles.removeIndex(pos);
+				
+				handles.removeIndex(2*pos+1);
+				handles.removeIndex(2*pos);
+				
+				deformator.anyadirHandles(handles, indiceHandles);
+			}
+		}
+	}
+	
+	private TTouchEstado seleccionarHandle(TTouchEstado estado, float x, float y, int pos)
+	{
+		if(estado == TTouchEstado.Up)
+		{
+			short j = buscarPixel(x, y);
+			if(j != -1)
+			{	
+				if(indiceHandles.contains(j))
+				{
+					// Seleccionar Handle
+					int indiceHandleSeleccionado = indiceHandles.indexOf(j);
+					handleSeleccionado.set(pos, indiceHandleSeleccionado);
+					handleSeleccionado.set(pos+1, handles.get(2*indiceHandleSeleccionado));
+					handleSeleccionado.set(pos+2, handles.get(2*indiceHandleSeleccionado+1));
+					
+					return TTouchEstado.Move;
+				}
+			}
+		}
+		
+		return estado;
+	}
+	
 	public void onTouchMove(float x, float y, float width, float height)
 	{	
-		if(estado == TDeformEstado.Seleccionar)
+		if(estado == TDeformEstado.Deformar)
 		{
-			onTouchDown(x, y, width, height);
-		}
-		else if(estado == TDeformEstado.Mover)
-		{
-			// Conversión Pixel - Punto	
-			float nx = xLeft + (xRight-xLeft)*x/width;
-			float ny = yBot + (yTop-yBot)*(height-y)/height;
-			
-			float lastX = handles.get(2*indiceHandleSeleccionado);
-			float lastY = handles.get(2*indiceHandleSeleccionado);
-			
-			if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > EPSILON)
+			if(estadoPos1 == TTouchEstado.Up)
 			{
-				handles.set(2*indiceHandleSeleccionado, nx);
-				handles.set(2*indiceHandleSeleccionado+1, ny);
-				
-				// Cambiar Posicion de los Handles
-				deformator.moverHandles(handles, verticesModificados);
-				
-				handleSeleccionado.set(0, nx);
-				handleSeleccionado.set(1, ny);
-				
-				actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-				actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+				onTouchDown(x, y, width, height);
 			}
+			else if(estadoPos1 == TTouchEstado.Move)
+			{
+				moverHandle(x, y, POS1);
+			}
+		}
+	}
+	
+	public void onTouchMove(float x1, float y1, float x2, float y2, float width, float height)
+	{
+		//TODO: Unificar moverHandle(x1, y1, x2, y2)
+		
+		if(estado == TDeformEstado.Deformar)
+		{
+			if(estadoPos1 == TTouchEstado.Up)
+			{
+				onTouchDown(x1, y1, width, height);
+			}
+			else if(estadoPos1 == TTouchEstado.Move)
+			{
+				moverHandle(x1, y1, POS1);
+			}
+			
+			if(estadoPos2 == TTouchEstado.Up)
+			{
+				onTouchDown(x2, y2, width, height);
+			}
+			else if(estadoPos2 == TTouchEstado.Move)
+			{
+				moverHandle(x2, y2, POS2);
+			}
+		}
+	}
+	
+	private void moverHandle(float x, float y, int pos)
+	{
+		// Conversión Pixel - Punto	
+		float nx = xLeft + (xRight-xLeft)*x/width;
+		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		
+		int indiceHandleSeleccionado = (int) handleSeleccionado.get(pos);
+		float lastX = handles.get(2*indiceHandleSeleccionado);
+		float lastY = handles.get(2*indiceHandleSeleccionado);
+		
+		if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > 2*EPSILON)
+		{
+			handles.set(2*indiceHandleSeleccionado, nx);
+			handles.set(2*indiceHandleSeleccionado+1, ny);
+			
+			// Cambiar Posicion de los Handles
+			deformator.moverHandles(handles, verticesModificados);
+			
+			handleSeleccionado.set(pos+1, nx);
+			handleSeleccionado.set(pos+2, ny);
+			
+			actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+			actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 		}
 	}
 	
 	public void onTouchUp(float x, float y, float width, float height)
 	{	
-		if(estado == TDeformEstado.Mover)
+		if(estado == TDeformEstado.Deformar)
 		{
 			onTouchMove(x, y, width, height);
 			
-			estado = TDeformEstado.Seleccionar;
-			indiceHandleSeleccionado = -1;
+			estadoPos1 = TTouchEstado.Up;
+			handleSeleccionado.set(POS1, -1);
+		}	
+	}
+	
+	public void onTouchUp(float x1, float y1, float x2, float y2, float width, float height)
+	{	
+		// TODO
+		
+		if(estado == TDeformEstado.Deformar)
+		{
+			onTouchMove(x1, y1, x2, y2, width, height);
+			
+			estadoPos1 = TTouchEstado.Up;
+			estadoPos2 = TTouchEstado.Up;
+			handleSeleccionado.set(POS1, -1);
+			handleSeleccionado.set(POS2, -1);
 		}	
 	}
 

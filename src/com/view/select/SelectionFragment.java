@@ -26,10 +26,10 @@ public class SelectionFragment extends Fragment
 	private ActionBar actionBar;
 	private SelectionFragmentListener mCallback;
 	
-	private ImageButton botonViewReady, botonViewDelete;
+	private ImageButton botonReady, botonDelete;
 	private SectionsViewPagerAdapter pageAdapter;
 	private ViewPager viewPager;
-	private List<SelectFragment> listaViewFragmentos;
+	private List<SelectFragment> listaFragmentos;
 	
 	private List<Personaje> listaPersonajes;
 	
@@ -65,23 +65,23 @@ public class SelectionFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_selection_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
-		botonViewReady = (ImageButton) rootView.findViewById(R.id.imageButtonSelection1);
-		botonViewDelete = (ImageButton) rootView.findViewById(R.id.imageButtonSelection2);
+		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonSelection1);
+		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonSelection2);
 		
-		botonViewReady.setOnClickListener(new OnViewReadyClickListener());		
-		botonViewDelete.setOnClickListener(new OnViewDeleteClickListener());
+		botonReady.setOnClickListener(new OnViewReadyClickListener());		
+		botonDelete.setOnClickListener(new OnViewDeleteClickListener());
 		
 		actionBar = getActivity().getActionBar();
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		listaViewFragmentos = new ArrayList<SelectFragment>();
+		listaFragmentos = new ArrayList<SelectFragment>();
 				
 		Iterator<Personaje> it = listaPersonajes.iterator();
 		while(it.hasNext())
 		{
 			Personaje p = it.next();
-			listaViewFragmentos.add(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura()));
+			listaFragmentos.add(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura()));
 		}
 
 		pageAdapter = new SectionsViewPagerAdapter(getActivity().getSupportFragmentManager());
@@ -98,14 +98,14 @@ public class SelectionFragment extends Fragment
 			}
 		});
 
-		for (int i = 0; i < pageAdapter.getCount(); i++)
+		for(int i = 0; i < pageAdapter.getCount(); i++)
 		{
 			actionBar.addTab(actionBar.newTab().setText(pageAdapter.getPageTitle(i)).setTabListener(pageAdapter));
 		}
 				
         return rootView;
     }
-	
+	 
 	private class OnViewReadyClickListener implements OnClickListener
     {
 		@Override
@@ -136,9 +136,9 @@ public class SelectionFragment extends Fragment
 		@Override
 		public Fragment getItem(int position)
 		{
-			if(position >= 0 && position < listaViewFragmentos.size())
+			if(position >= 0 && position < listaFragmentos.size())
 			{
-				return listaViewFragmentos.get(position);
+				return listaFragmentos.get(position);
 			}
 			
 			return null;
@@ -147,13 +147,13 @@ public class SelectionFragment extends Fragment
 		@Override
 		public int getCount()
 		{
-			return listaViewFragmentos.size();
+			return listaFragmentos.size();
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position)
 		{			
-			if(position >= 0 && position < listaViewFragmentos.size())
+			if(position >= 0 && position < listaFragmentos.size())
 			{
 				return listaPersonajes.get(position).getNombre();
 			}

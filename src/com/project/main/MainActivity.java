@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -47,7 +48,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			personajeSeleccionado = manager.cargarSeleccionado(this);
 			manager.cargarPersonajes(this, listaPersonajes);
 
-    		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+    		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
     		estado = TEstado.Loading;
         }
 	}
@@ -61,15 +62,24 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
 	
-	private void changeFragment(Fragment fragment, boolean clearStack)
+	private void changeFragment(Fragment fragment)
 	{
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		
+		if(estado == TEstado.Loading)
+		{
+			clearBackStack();
+		}
 		
 		transaction.replace(R.id.frameLayoutMain1, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
-		
-		//TODO Eliminar Fragmentos guardados en el BackStack al llegar a un estado Loading
+	}
+	
+	private void clearBackStack()
+	{
+		getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 	
 	/* LOADING ACTIVITY */
@@ -78,13 +88,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	{
 		personajeActual = new Personaje();
 		
-		changeFragment(DesignFragment.newInstance(), false);
+		changeFragment(DesignFragment.newInstance());
 		estado = TEstado.Design;
 	}
 	
     public void onLoadingSelectButtonClicked()
     {
-    	changeFragment(SelectionFragment.newInstance(listaPersonajes), true);
+    	changeFragment(SelectionFragment.newInstance(listaPersonajes));
     	estado = TEstado.Selection;
     }
     
@@ -104,7 +114,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	else
     	{
     		personajeActual.setEsqueleto(esqueleto);    		
-    		changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto()), true);
+    		changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto()));
     		estado = TEstado.Paint;
     	}
     }
@@ -128,7 +138,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	else
     	{
     		personajeActual.setTextura(textura);
-    		changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura()), true);
+    		changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura()));
     		estado = TEstado.Animation;
     	}
     }
@@ -162,7 +172,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					
 					manager.guardarPersonajes(MainActivity.this, listaPersonajes);
 						
-					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 					estado = TEstado.Loading;
 				}
 			});
@@ -170,7 +180,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
-					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 					estado = TEstado.Loading;
 				}
 			});
@@ -187,7 +197,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		
 		manager.guardarSeleccionado(this, personajeSeleccionado);
 		
-		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 		estado = TEstado.Loading;
     }
     
@@ -205,12 +215,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		
 		if(listaPersonajes.size() > 0 && personajeSeleccionado == -1)
 		{
-			changeFragment(SelectionFragment.newInstance(listaPersonajes), true);
+			changeFragment(SelectionFragment.newInstance(listaPersonajes));
 			estado = TEstado.Selection;
 		}
 		else 
 		{
-			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado), false);
+			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 			estado = TEstado.Loading;
 		}
     }

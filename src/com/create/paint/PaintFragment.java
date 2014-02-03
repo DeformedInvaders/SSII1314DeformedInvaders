@@ -26,7 +26,7 @@ public class PaintFragment extends Fragment
 	private PaintGLSurfaceView canvas;
 	private ColorPicker colorPicker;
 	private SizePicker sizePicker;
-	private ImageButton botonPaintPincel, botonPaintCubo, botonPaintMano, botonPaintNext, botonPaintPrev, botonPaintDelete, botonPaintReady, botonPaintColor, botonPaintSize, botonPaintEye;
+	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
 	
 	private Esqueleto esqueletoActual;
 	
@@ -66,31 +66,31 @@ public class PaintFragment extends Fragment
 		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
 		canvas.setParameters(esqueletoActual);
 		
-		botonPaintPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
-		botonPaintCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
-		botonPaintColor = (ImageButton) rootView.findViewById(R.id.imageButtonPaint3);
-		botonPaintSize = (ImageButton) rootView.findViewById(R.id.imageButtonPaint4);
-		botonPaintEye = (ImageButton) rootView.findViewById(R.id.imageButtonPaint5);
-		botonPaintMano = (ImageButton) rootView.findViewById(R.id.imageButtonPaint6);
-		botonPaintPrev = (ImageButton) rootView.findViewById(R.id.imageButtonPaint7);
-		botonPaintNext = (ImageButton) rootView.findViewById(R.id.imageButtonPaint8);
-		botonPaintDelete = (ImageButton) rootView.findViewById(R.id.imageButtonPaint9);
-		botonPaintReady = (ImageButton) rootView.findViewById(R.id.imageButtonPaint10);
+		botonPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
+		botonCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
+		botonColor = (ImageButton) rootView.findViewById(R.id.imageButtonPaint3);
+		botonSize = (ImageButton) rootView.findViewById(R.id.imageButtonPaint4);
+		botonEye = (ImageButton) rootView.findViewById(R.id.imageButtonPaint5);
+		botonMano = (ImageButton) rootView.findViewById(R.id.imageButtonPaint6);
+		botonPrev = (ImageButton) rootView.findViewById(R.id.imageButtonPaint7);
+		botonNext = (ImageButton) rootView.findViewById(R.id.imageButtonPaint8);
+		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonPaint9);
+		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonPaint10);
 		
-		botonPaintNext.setEnabled(false);
-		botonPaintPrev.setEnabled(false);
-		botonPaintDelete.setEnabled(false);
+		botonNext.setEnabled(false);
+		botonPrev.setEnabled(false);
+		botonDelete.setEnabled(false);
 		
-		botonPaintPincel.setOnClickListener(new OnPaintPincelClickListener());	
-		botonPaintCubo.setOnClickListener(new OnPaintCuboClickListener());
-		botonPaintColor.setOnClickListener(new OnPaintColorClickListener());
-		botonPaintSize.setOnClickListener(new OnPaintSizeClickListener());
-		botonPaintEye.setOnClickListener(new OnPaintEyeClickListener());
-		botonPaintMano.setOnClickListener(new OnPaintManoClickListener());
-		botonPaintNext.setOnClickListener(new OnPaintNextClickListener());
-		botonPaintPrev.setOnClickListener(new OnPaintPrevClickListener());
-		botonPaintDelete.setOnClickListener(new OnPaintDeleteClickListener());
-		botonPaintReady.setOnClickListener(new OnPaintReadyClickListener());
+		botonPincel.setOnClickListener(new OnPaintPincelClickListener());	
+		botonCubo.setOnClickListener(new OnPaintCuboClickListener());
+		botonColor.setOnClickListener(new OnPaintColorClickListener());
+		botonSize.setOnClickListener(new OnPaintSizeClickListener());
+		botonEye.setOnClickListener(new OnPaintEyeClickListener());
+		botonMano.setOnClickListener(new OnPaintManoClickListener());
+		botonNext.setOnClickListener(new OnPaintNextClickListener());
+		botonPrev.setOnClickListener(new OnPaintPrevClickListener());
+		botonDelete.setOnClickListener(new OnPaintDeleteClickListener());
+		botonReady.setOnClickListener(new OnPaintReadyClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener()
 		{
@@ -225,22 +225,22 @@ public class PaintFragment extends Fragment
 	{
 		if(canvas.bufferSiguienteVacio())
 		{
-			botonPaintNext.setEnabled(false);
+			botonNext.setEnabled(false);
 		}
 		else
 		{
-			botonPaintNext.setEnabled(true);
+			botonNext.setEnabled(true);
 		}
 		
 		if(canvas.bufferAnteriorVacio())
 		{
-			botonPaintPrev.setEnabled(false);
-			botonPaintDelete.setEnabled(false);
+			botonPrev.setEnabled(false);
+			botonDelete.setEnabled(false);
 		}
 		else
 		{
-			botonPaintPrev.setEnabled(true);
-			botonPaintDelete.setEnabled(true);
+			botonPrev.setEnabled(true);
+			botonDelete.setEnabled(true);
 		}
 	}
 

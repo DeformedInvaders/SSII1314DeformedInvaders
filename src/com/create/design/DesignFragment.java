@@ -19,7 +19,7 @@ public class DesignFragment extends Fragment
 	private DesignFragmentListener mCallback;
 	
 	private DesignGLSurfaceView canvas;
-	private ImageButton botonDesignReady, botonDesignNuevo, botonDesignTest;
+	private ImageButton botonReady, botonNuevo, botonTest;
 	
 	public static final DesignFragment newInstance()
 	{
@@ -48,17 +48,17 @@ public class DesignFragment extends Fragment
 		
 		// Instanciar Elementos de la GUI
 		canvas = (DesignGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
-		botonDesignReady = (ImageButton) rootView.findViewById(R.id.imageButtonDesign1);
-		botonDesignNuevo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
-		botonDesignTest = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);
+		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonDesign1);
+		botonNuevo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
+		botonTest = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);
 		
-		botonDesignReady.setOnClickListener(new OnDesignReadyClickListener());
-		botonDesignNuevo.setOnClickListener(new onDesignNewClickListener());
-		botonDesignTest.setOnClickListener(new onDesignTestClickListener());
+		botonReady.setOnClickListener(new OnDesignReadyClickListener());
+		botonNuevo.setOnClickListener(new onDesignNewClickListener());
+		botonTest.setOnClickListener(new onDesignTestClickListener());
 		
-		botonDesignReady.setEnabled(false);
-		botonDesignNuevo.setEnabled(false);
-		botonDesignTest.setEnabled(false);
+		botonReady.setEnabled(false);
+		botonNuevo.setEnabled(false);
+		botonTest.setEnabled(false);
 		
 		canvas.setOnTouchListener(new OnTouchListener()
 		{
@@ -78,15 +78,15 @@ public class DesignFragment extends Fragment
 	{
 		if(canvas.poligonoCompleto())
 		{
-			botonDesignReady.setEnabled(true);
-			botonDesignNuevo.setEnabled(true);
-			botonDesignTest.setEnabled(true);
+			botonReady.setEnabled(true);
+			botonNuevo.setEnabled(true);
+			botonTest.setEnabled(true);
 		}
 		else
 		{
-			botonDesignReady.setEnabled(false);
-			botonDesignNuevo.setEnabled(false);
-			botonDesignTest.setEnabled(false);
+			botonReady.setEnabled(false);
+			botonNuevo.setEnabled(false);
+			botonTest.setEnabled(false);
 		}
 	}
 	

@@ -404,6 +404,34 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 	
 	// Pintura de una Lista de Handles
+	protected void dibujarListaIndiceHandle(GL10 gl, int color, FloatBuffer handle, FloatArray posiciones)
+	{
+		gl.glPushMatrix();
+		
+			int i = 0;
+			while(i < posiciones.size)
+			{
+				float pos = posiciones.get(i);
+				
+				if(pos != -1)
+				{
+					float x = posiciones.get(i+1);
+					float y = posiciones.get(i+2);
+					float z = 0.0f;
+					
+					gl.glPushMatrix();
+						gl.glTranslatef(x, y, z);
+						dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);
+					gl.glPopMatrix();
+				}
+				
+				i = i+3;
+			}
+		
+		gl.glPopMatrix();
+	}
+	
+	// Pintura de una Lista de Handles
 	protected void dibujarListaHandle(GL10 gl, int color, FloatBuffer handle, FloatArray posiciones)
 	{
 		gl.glPushMatrix();
@@ -414,7 +442,7 @@ public abstract class OpenGLRenderer implements Renderer
 				float x = posiciones.get(i);
 				float y = posiciones.get(i+1);
 				float z = 0.0f;
-				
+					
 				gl.glPushMatrix();
 					gl.glTranslatef(x, y, z);
 					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);

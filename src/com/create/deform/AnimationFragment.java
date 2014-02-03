@@ -28,10 +28,10 @@ public class AnimationFragment extends Fragment
 	private ActionBar actionBar;
 	private AnimationFragmentListener mCallback;
 	
-	private ImageButton botonAnimReady;
+	private ImageButton botonReady;
 	private AnimPagerAdapter pageAdapter;
 	private ViewPager viewPager;
-	private List<DeformFragment> listaAnimFragmentos;
+	private List<DeformFragment> listaFragmentos;
 	
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
@@ -68,18 +68,18 @@ public class AnimationFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.fragment_animation_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
-		botonAnimReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);		
-		botonAnimReady.setOnClickListener(new OnAnimReadyClickListener());	
+		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);		
+		botonReady.setOnClickListener(new OnAnimReadyClickListener());	
 				
 		actionBar = getActivity().getActionBar();
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		listaAnimFragmentos = new ArrayList<DeformFragment>();
+		listaFragmentos = new ArrayList<DeformFragment>();
 		
 		for(int i = 0; i < 4; i++)
 		{
-			listaAnimFragmentos.add(DeformFragment.newInstance(esqueletoActual, texturaActual));
+			listaFragmentos.add(DeformFragment.newInstance(esqueletoActual, texturaActual));
 		}
 
 		pageAdapter = new AnimPagerAdapter(getActivity().getSupportFragmentManager());
@@ -109,7 +109,6 @@ public class AnimationFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			//TODO
 			mCallback.onAnimationReadyButtonClicked(null);
 		}
     }
@@ -124,9 +123,9 @@ public class AnimationFragment extends Fragment
 		@Override
 		public Fragment getItem(int position)
 		{
-			if(position >= 0 && position < listaAnimFragmentos.size())
+			if(position >= 0 && position < listaFragmentos.size())
 			{
-				return listaAnimFragmentos.get(position);
+				return listaFragmentos.get(position);
 			}
 			
 			return null;
@@ -135,7 +134,7 @@ public class AnimationFragment extends Fragment
 		@Override
 		public int getCount()
 		{
-			return listaAnimFragmentos.size();
+			return listaFragmentos.size();
 		}
 
 		@Override

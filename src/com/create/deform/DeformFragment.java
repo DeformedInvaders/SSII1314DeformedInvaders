@@ -22,7 +22,7 @@ public class DeformFragment extends Fragment
 	
 	private DeformDataSaved dataSaved;
 	
-	private ImageButton botonDeformAdd, botonDeformRemove, botonDeformMover, botonDeformDelete;
+	private ImageButton botonAdd, botonRemove, botonMover, botonDelete;
 		
 	public static final DeformFragment newInstance(Esqueleto e, Textura t)
 	{
@@ -46,19 +46,19 @@ public class DeformFragment extends Fragment
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
 		canvas.setParameters(esqueletoActual, texturaActual);
 		
-		botonDeformAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
-		botonDeformRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
-		botonDeformMover = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
-		botonDeformDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
+		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
+		botonRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
+		botonMover = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
+		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
 		
-		botonDeformRemove.setEnabled(false);
-		botonDeformMover.setEnabled(false);
-		botonDeformDelete.setEnabled(false);
+		botonRemove.setEnabled(false);
+		botonMover.setEnabled(false);
+		botonDelete.setEnabled(false);
 		
-		botonDeformAdd.setOnClickListener(new OnDeformAddClickListener());
-		botonDeformRemove.setOnClickListener(new OnDeformRemoveClickListener());
-		botonDeformMover.setOnClickListener(new OnDeformMoveClickListener());
-		botonDeformDelete.setOnClickListener(new OnDeformDeleteClickListener());
+		botonAdd.setOnClickListener(new OnDeformAddClickListener());
+		botonRemove.setOnClickListener(new OnDeformRemoveClickListener());
+		botonMover.setOnClickListener(new OnDeformMoveClickListener());
+		botonDelete.setOnClickListener(new OnDeformDeleteClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener()
 		{
@@ -101,15 +101,15 @@ public class DeformFragment extends Fragment
 	{
 		if(canvas.handlesVacio())
 		{
-			botonDeformRemove.setEnabled(false);
-			botonDeformMover.setEnabled(false);
-			botonDeformDelete.setEnabled(false);
+			botonRemove.setEnabled(false);
+			botonMover.setEnabled(false);
+			botonDelete.setEnabled(false);
 		}
 		else
 		{
-			botonDeformRemove.setEnabled(true);
-			botonDeformMover.setEnabled(true);
-			botonDeformDelete.setEnabled(true);
+			botonRemove.setEnabled(true);
+			botonMover.setEnabled(true);
+			botonDelete.setEnabled(true);
 		}
 	}
 	

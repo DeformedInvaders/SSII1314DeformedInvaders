@@ -20,7 +20,7 @@ public class LoadingFragment extends Fragment
 	private LoadingFragmentListener mCallback;
 	
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonMainAdd, botonMainPlay, botonMainView;
+	private ImageButton botonAdd, botonPlay, botonView;
 	
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
@@ -69,30 +69,30 @@ public class LoadingFragment extends Fragment
 			canvas.setParameters(p.getEsqueleto(), p.getTextura());
 		}
 		
-		botonMainAdd = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
-		botonMainPlay = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
-		botonMainView = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
+		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
+		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
+		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
 		
-		botonMainAdd.setOnClickListener(new OnMainAddClickListener());
-		botonMainView.setOnClickListener(new OnMainViewClickListener());
-		botonMainPlay.setOnClickListener(new OnMainPlayClickListener());
+		botonAdd.setOnClickListener(new OnMainAddClickListener());
+		botonView.setOnClickListener(new OnMainViewClickListener());
+		botonPlay.setOnClickListener(new OnMainPlayClickListener());
 		
-		botonMainView.setEnabled(listaPersonajes.size() > 0);
+		botonView.setEnabled(listaPersonajes.size() > 0);
 		
         return rootView;
     }
 
 	private void destroyLoadingActivity(int buttonId)
 	{
-		if(buttonId == botonMainAdd.getId())
+		if(buttonId == botonAdd.getId())
 		{
 			mCallback.onLoadingCreateButtonClicked();
 		}
-		else if(buttonId == botonMainView.getId())
+		else if(buttonId == botonView.getId())
 		{
 			mCallback.onLoadingSelectButtonClicked();
 		}
-		else if(buttonId == botonMainPlay.getId())
+		else if(buttonId == botonPlay.getId())
 		{
 			mCallback.onLoadingPlayButtonClicked();
 		}

@@ -3,7 +3,6 @@ package com.create.deform;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.project.data.Esqueleto;
@@ -17,8 +16,6 @@ public class DeformGLSurfaceView extends GLSurfaceView
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        
-        Log.d("TEST", "DEFORM GLSURFACE CONSTRUCTORA");
 
         // Crear Contexto OpenGL ES 1.0
         setEGLContextClientVersion(1);
@@ -35,31 +32,63 @@ public class DeformGLSurfaceView extends GLSurfaceView
 	{	
 		if(event != null)
 		{
+			//int pointCount = event.getPointerCount();
 			int action = event.getAction();
-			
-			float x = event.getX();
-			float y = event.getY();
 			
 			float width = getWidth();
 			float height = getHeight();
 			
-			switch(action)
-			{
-				case MotionEvent.ACTION_DOWN:
-					renderer.onTouchDown(x, y, width, height);
-				break;
-				case MotionEvent.ACTION_MOVE:
-					renderer.onTouchMove(x, y, width, height);	
-				break;
-				case MotionEvent.ACTION_UP:
-					renderer.onTouchUp(x, y, width, height);
-				break;
-				default:
-					return false;
-			}
+			//if(pointCount == 1)
+			//{
+				float x = event.getX();
+				float y = event.getY();
+				
+				switch(action)
+				{
+					case MotionEvent.ACTION_DOWN:
+						renderer.onTouchDown(x, y, width, height);
+					break;
+					case MotionEvent.ACTION_MOVE:
+						renderer.onTouchMove(x, y, width, height);	
+					break;
+					case MotionEvent.ACTION_UP:
+						renderer.onTouchUp(x, y, width, height);
+					break;
+					default:
+						return false;
+				}
+			//}
+			//else
+			//{
+				/*
+				float x1 = event.getX(0);
+				float y1 = event.getY(0);
+				float x2 = event.getX(1);
+				float y2 = event.getY(1);
+				
+				switch(action)
+				{
+					case MotionEvent.ACTION_DOWN:
+					case MotionEvent.ACTION_POINTER_DOWN:
+						renderer.onTouchDown(x1, y1, x2, y2, width, height);
+					break;
+					case MotionEvent.ACTION_MOVE:
+						renderer.onTouchMove(x1, y1, x2, y2, width, height);	
+					break;
+					case MotionEvent.ACTION_UP:
+					case MotionEvent.ACTION_POINTER_UP:
+						renderer.onTouchUp(x1, y1, x2, y2, width, height);
+					break;
+					default:
+						return false;
+				}
+				*/
+			//}
 			
 			requestRender();
 		}
+		
+		invalidate();
 		return true;
 	}
 	
