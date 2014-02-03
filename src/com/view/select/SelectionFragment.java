@@ -72,8 +72,6 @@ public class SelectionFragment extends Fragment
 		botonDelete.setOnClickListener(new OnViewDeleteClickListener());
 		
 		actionBar = getActivity().getActionBar();
-		actionBar.removeAllTabs();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 		listaFragmentos = new ArrayList<SelectFragment>();
 				

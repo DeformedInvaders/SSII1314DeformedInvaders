@@ -72,8 +72,6 @@ public class AnimationFragment extends Fragment
 		botonReady.setOnClickListener(new OnAnimReadyClickListener());	
 				
 		actionBar = getActivity().getActionBar();
-		actionBar.removeAllTabs();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 		listaFragmentos = new ArrayList<DeformFragment>();
 		

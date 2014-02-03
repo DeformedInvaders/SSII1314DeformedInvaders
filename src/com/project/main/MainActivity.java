@@ -3,6 +3,7 @@ package com.project.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private Personaje personajeActual;
 	private int personajeSeleccionado;
 
+	private ActionBar actionBar;
 	private InternalStorageManager manager;
 	private FrameLayout layout;
 	private TEstado estado;
@@ -43,6 +45,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		
 		personajeSeleccionado = -1;
 		listaPersonajes = new ArrayList<Personaje>();
+		
+		actionBar = getActionBar();
+		actionBar.removeAllTabs();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 		manager = new InternalStorageManager();
 		layout = (FrameLayout) findViewById(R.id.frameLayoutMain1);
@@ -61,6 +67,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	{
 		if(estado != TEstado.Loading)
 		{	
+			limpiarActionBar();
+			
 			super.onBackPressed();
 			
 			actualizarEstado();
@@ -70,6 +78,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private void changeFragment(Fragment fragmento)
 	{
 		actualizarEstado(fragmento);
+		limpiarActionBar();
 		
 		FragmentManager manager = getSupportFragmentManager();
 		
@@ -224,7 +233,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
     }
     
-    public void actualizarEstado(Fragment fragmento)
+    private void limpiarActionBar()
+    {
+    	actionBar.removeAllTabs();
+    }
+    
+    private void actualizarEstado(Fragment fragmento)
     {
     	if(fragmento != null)
     	{
@@ -239,7 +253,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	Toast.makeText(getApplication(), "Fase: "+estado.toString(), Toast.LENGTH_SHORT).show();
     }
     
-    public void actualizarEstado()
+    private void actualizarEstado()
     {
     	String tag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
 		actualizarEstado(getSupportFragmentManager().findFragmentByTag(tag));
