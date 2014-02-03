@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.multitouch.MultitouchFragment;
 import com.android.storage.InternalStorageManager;
 import com.create.deform.AnimationFragment;
 import com.create.design.DesignFragment;
@@ -100,7 +101,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
     public void onLoadingPlayButtonClicked()
     {
-    	Toast.makeText(getApplication(), "Play Game", Toast.LENGTH_SHORT).show();
+    	//Toast.makeText(getApplication(), "Play Game", Toast.LENGTH_SHORT).show();
+    	changeFragment(MultitouchFragment.newInstance());
+		estado = TEstado.Game;
     }
 	
 	/* DESIGN ACTIVITY */

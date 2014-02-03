@@ -454,6 +454,54 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
+	/* TESTING */
+	protected void dibujarListaHandleMultitouch(GL10 gl, FloatBuffer handle, FloatArray posiciones)
+	{
+		gl.glPushMatrix();
+		
+		int i = 0;
+		while(i < posiciones.size)
+		{
+			float estado = posiciones.get(i);
+			
+			// estado = 0 SUELTO
+			// estado = 1 PULSADO
+			if(estado == 1)
+			{
+				float x = posiciones.get(i+1);
+				float y = posiciones.get(i+2);
+				float z = 0.0f;
+				
+				int color = Color.BLACK;
+				switch(i/3)
+				{
+					case 0:
+						color = Color.BLUE;
+					break;
+					case 1:
+						color = Color.YELLOW;
+					break;
+					case 2:
+						color = Color.RED;
+					break;
+					case 3:
+						color = Color.GREEN;
+					break;
+				}
+				
+				gl.glPushMatrix();
+					gl.glTranslatef(x, y, z);
+					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);
+				gl.glPopMatrix();
+			}
+			
+			i = i+3;
+		}
+	
+		gl.glPopMatrix();
+	}
+	/* TESTING */
+	
 	// Cargado de Textura
 	protected void cargarTextura(GL10 gl, Bitmap textura, int[] nombreTextura, int pos)
 	{
