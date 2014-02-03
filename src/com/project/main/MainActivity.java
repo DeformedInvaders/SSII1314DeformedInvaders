@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.android.multitouch.MultitouchFragment;
@@ -29,8 +30,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
 	private int personajeSeleccionado;
-	
+
 	private InternalStorageManager manager;
+	private FrameLayout layout;
 	private TEstado estado;
 
 	@Override
@@ -43,14 +45,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		listaPersonajes = new ArrayList<Personaje>();
 		
 		manager = new InternalStorageManager();
-		
-        if (findViewById(R.id.frameLayoutMain1) != null)
+		layout = (FrameLayout) findViewById(R.id.frameLayoutMain1);
+        
+		if(layout != null)
         {
 			personajeSeleccionado = manager.cargarSeleccionado(this);
 			manager.cargarPersonajes(this, listaPersonajes);
 
     		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-    		estado = TEstado.Loading;
         }
 	}
 	
@@ -58,29 +60,33 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	public void onBackPressed()
 	{
 		if(estado != TEstado.Loading)
-		{
+		{	
 			super.onBackPressed();
+			
+			actualizarEstado();
 		}
 	}
 	
-	private void changeFragment(Fragment fragment)
+	private void changeFragment(Fragment fragmento)
 	{
+		actualizarEstado(fragmento);
+		
 		FragmentManager manager = getSupportFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
 		
 		if(estado == TEstado.Loading)
 		{
-			clearBackStack();
+			clearBackStack(manager);
 		}
 		
-		transaction.replace(R.id.frameLayoutMain1, fragment);
-		transaction.addToBackStack(null);
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.frameLayoutMain1, fragmento, estado.toString());
+		transaction.addToBackStack(estado.toString());
 		transaction.commit();
 	}
 	
-	private void clearBackStack()
+	private void clearBackStack(FragmentManager manager)
 	{
-		getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 	
 	/* LOADING ACTIVITY */
@@ -90,20 +96,17 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		personajeActual = new Personaje();
 		
 		changeFragment(DesignFragment.newInstance());
-		estado = TEstado.Design;
 	}
 	
     public void onLoadingSelectButtonClicked()
     {
     	changeFragment(SelectionFragment.newInstance(listaPersonajes));
-    	estado = TEstado.Selection;
     }
     
     public void onLoadingPlayButtonClicked()
     {
     	//Toast.makeText(getApplication(), "Play Game", Toast.LENGTH_SHORT).show();
     	changeFragment(MultitouchFragment.newInstance());
-		estado = TEstado.Game;
     }
 	
 	/* DESIGN ACTIVITY */
@@ -118,7 +121,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	{
     		personajeActual.setEsqueleto(esqueleto);    		
     		changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto()));
-    		estado = TEstado.Paint;
     	}
     }
     
@@ -142,7 +144,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	{
     		personajeActual.setTextura(textura);
     		changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura()));
-    		estado = TEstado.Animation;
     	}
     }
     
@@ -176,7 +177,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					manager.guardarPersonajes(MainActivity.this, listaPersonajes);
 						
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-					estado = TEstado.Loading;
 				}
 			});
 	
@@ -184,7 +184,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-					estado = TEstado.Loading;
 				}
 			});
 	
@@ -201,7 +200,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.guardarSeleccionado(this, personajeSeleccionado);
 		
 		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-		estado = TEstado.Loading;
     }
     
     public void onSelectionDeleteButtonClicked(int indice)
@@ -219,12 +217,31 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		if(listaPersonajes.size() > 0 && personajeSeleccionado == -1)
 		{
 			changeFragment(SelectionFragment.newInstance(listaPersonajes));
-			estado = TEstado.Selection;
 		}
 		else 
 		{
 			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-			estado = TEstado.Loading;
 		}
+    }
+    
+    public void actualizarEstado(Fragment fragmento)
+    {
+    	if(fragmento != null)
+    	{
+    		if(fragmento instanceof LoadingFragment) estado = TEstado.Loading;
+    		else if(fragmento instanceof DesignFragment) estado = TEstado.Design;
+    		else if(fragmento instanceof PaintFragment) estado = TEstado.Paint;
+    		else if(fragmento instanceof AnimationFragment) estado = TEstado.Animation;
+    		else if(fragmento instanceof SelectionFragment) estado = TEstado.Selection;
+    		else if(fragmento instanceof MultitouchFragment) estado = TEstado.Game;
+    	}
+    	
+    	Toast.makeText(getApplication(), "Fase: "+estado.toString(), Toast.LENGTH_SHORT).show();
+    }
+    
+    public void actualizarEstado()
+    {
+    	String tag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
+		actualizarEstado(getSupportFragmentManager().findFragmentByTag(tag));
     }
 }
