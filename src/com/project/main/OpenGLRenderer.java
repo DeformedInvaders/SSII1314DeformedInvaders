@@ -413,12 +413,12 @@ public abstract class OpenGLRenderer implements Renderer
 			int i = 0;
 			while(i < posiciones.size)
 			{
-				float pos = posiciones.get(i);
+				float estado = posiciones.get(i+1);
 				
-				if(pos != -1)
+				if(estado == 1)
 				{
-					float x = posiciones.get(i+1);
-					float y = posiciones.get(i+2);
+					float x = posiciones.get(i+2);
+					float y = posiciones.get(i+3);
 					float z = 0.0f;
 					
 					gl.glPushMatrix();
@@ -427,7 +427,7 @@ public abstract class OpenGLRenderer implements Renderer
 					gl.glPopMatrix();
 				}
 				
-				i = i+3;
+				i = i+4;
 			}
 		
 		gl.glPopMatrix();

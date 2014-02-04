@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import com.android.multitouch.TMultiTouchEstado;
 import com.lib.math.Deformator;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
@@ -31,12 +30,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private ShortArray triangulos;
 	private FloatBuffer bufferTriangulos;
 	
+	// Coordenadas de Handles
 	private FloatArray handles;
+	// Indice Vertice asociado a Handles
 	private ShortArray indiceHandles;
-	
+	// Coordenadas de Handles Seleccionados
 	private FloatArray handleSeleccionado;
 	
-	private Handle objetoVertice, objetoHandle;
+	private Handle objetoVertice, objetoHandle, objetoHandleSeleccionado;
 	
 	private static final int numeroTexturas = 1;
 	private int[] nombreTextura;
@@ -47,26 +48,27 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferCoords;
 	
 	private TDeformEstado estado;
-	private TMultiTouchEstado estadoPos1, estadoPos2;
-
-	private static final int POS1 = 0;
-	//private static final int POS2 = 3;
 	
-	public DeformOpenGLRenderer(Context context)
+	private final int NUM_HANDLES;
+	
+	public DeformOpenGLRenderer(Context context, int num_handles)
 	{
         super(context);
         
+        NUM_HANDLES = num_handles;
+        
         estado = TDeformEstado.Nada;
-        estadoPos1 = TMultiTouchEstado.Up;
-        estadoPos2 = TMultiTouchEstado.Up;
         
         handles = new FloatArray();
         indiceHandles = new ShortArray();
+        
         handleSeleccionado = new FloatArray();
-        for(int i = 0; i < 2; i++)
+        for(int i = 0; i < NUM_HANDLES; i++)
         {
         	// Indice Handle
         	handleSeleccionado.add(-1);
+        	// Estado Handle
+        	handleSeleccionado.add(0);
         	// Posicion Handle
         	handleSeleccionado.add(0);
         	handleSeleccionado.add(0);
@@ -76,6 +78,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         
         objetoHandle = new Handle(20, POINTWIDTH);
         objetoVertice = new Handle(20, POINTWIDTH/2);
+        objetoHandleSeleccionado = new Handle(20, 2*POINTWIDTH);
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -93,7 +96,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 		
 		// Vertices
-		if(estadoPos1 != TMultiTouchEstado.Move && estadoPos2 != TMultiTouchEstado.Move)
+		if(estado != TDeformEstado.Deformar)
 		{
 			dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
 		}
@@ -105,7 +108,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Seleccionado
-		dibujarListaIndiceHandle(gl, Color.RED, objetoHandle.getBuffer(), handleSeleccionado);
+		dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
 	}
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
@@ -151,13 +154,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		    
 		handles.clear();
 		indiceHandles.clear();
-        for(int i = 0; i < 2; i++)
+		
+        for(int i = 0; i < NUM_HANDLES; i++)
         {
         	// Indice Handle
-        	handleSeleccionado.add(-1);
-        	// Posicion Handle
-        	handleSeleccionado.add(0);
-        	handleSeleccionado.add(0);
+        	handleSeleccionado.set(4*i, -1);
+        	// Estado Handle
+        	handleSeleccionado.set(4*i+1, 0);
         }
 	}
 	
@@ -174,7 +177,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		else if(estado == TDeformEstado.Deformar)
 		{						
-			estadoPos1 = seleccionarHandle(estadoPos1, x, y, POS1);
+			seleccionarHandle(x, y, pos);
 		}
 	}
 
@@ -188,9 +191,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	private void anyadirHandle(float x, float y)
 	{
+		// Pixel pertenece a los Vértices
 		short j = buscarPixel(x, y);
 		if(j != -1)
 		{
+			// Vértice no pertenece a los Handles
 			if(!indiceHandles.contains((short) j))
 			{
 				indiceHandles.add(j);
@@ -205,43 +210,42 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	private void eliminarHandle(float x, float y)
 	{
+		// Pixel pertenece a los Vértices
 		short j = buscarPixel(x, y);
 		if(j != -1)
 		{
+			// Vértice no pertenece a los Handles
 			if(indiceHandles.contains((short) j))
-			{					
+			{		
 				int pos = indiceHandles.indexOf(j);
 				indiceHandles.removeIndex(pos);
 				
 				handles.removeIndex(2*pos+1);
 				handles.removeIndex(2*pos);
 				
+				// Eliminar Handle
 				deformator.anyadirHandles(handles, indiceHandles);
 			}
 		}
 	}
 	
-	private TMultiTouchEstado seleccionarHandle(TMultiTouchEstado estado, float x, float y, int pos)
+	private void seleccionarHandle(float x, float y, int pos)
 	{
-		if(estado == TMultiTouchEstado.Up)
-		{
-			short j = buscarPixel(x, y);
-			if(j != -1)
-			{	
-				if(indiceHandles.contains(j))
-				{
-					// Seleccionar Handle
-					int indiceHandleSeleccionado = indiceHandles.indexOf(j);
-					handleSeleccionado.set(pos, indiceHandleSeleccionado);
-					handleSeleccionado.set(pos+1, handles.get(2*indiceHandleSeleccionado));
-					handleSeleccionado.set(pos+2, handles.get(2*indiceHandleSeleccionado+1));
-					
-					return TMultiTouchEstado.Move;
-				}
+		// Pixel pertenece a los Vértices
+		short j = buscarPixel(x, y);
+		if(j != -1)
+		{	
+			// Vértice pertenece a los Handles
+			if(indiceHandles.contains(j))
+			{
+				// Seleccionar Handle
+				int indiceHandleSeleccionado = indiceHandles.indexOf(j);
+				handleSeleccionado.set(4*pos, indiceHandleSeleccionado);
+				handleSeleccionado.set(4*pos+1, 1);
+				handleSeleccionado.set(4*pos+2, handles.get(2*indiceHandleSeleccionado));
+				handleSeleccionado.set(4*pos+3, handles.get(2*indiceHandleSeleccionado+1));
 			}
 		}
-		
-		return estado;
 	}
 	
 	@Override
@@ -249,13 +253,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
-			if(estadoPos1 == TMultiTouchEstado.Up)
+			// Handle sin Pulsar
+			if(handleSeleccionado.get(4*pos+1) == 0)
 			{
 				onTouchDown(x, y, width, height, pos);
 			}
-			else if(estadoPos1 == TMultiTouchEstado.Move)
+			else
 			{
-				moverHandle(x, y, POS1);
+				moverHandle(x, y, pos);
 			}
 		}
 	}
@@ -266,7 +271,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
-		int indiceHandleSeleccionado = (int) handleSeleccionado.get(pos);
+		int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pos);
 		float lastX = handles.get(2*indiceHandleSeleccionado);
 		float lastY = handles.get(2*indiceHandleSeleccionado);
 		
@@ -275,14 +280,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handles.set(2*indiceHandleSeleccionado, nx);
 			handles.set(2*indiceHandleSeleccionado+1, ny);
 			
-			// Cambiar Posicion de los Handles
-			deformator.moverHandles(handles, verticesModificados);
-			
-			handleSeleccionado.set(pos+1, nx);
-			handleSeleccionado.set(pos+2, ny);
-			
-			actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-			actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+			handleSeleccionado.set(4*pos+2, nx);
+			handleSeleccionado.set(4*pos+3, ny);
 		}
 	}
 	
@@ -293,15 +292,19 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			onTouchMove(x, y, width, height, pos);
 			
-			estadoPos1 = TMultiTouchEstado.Up;
-			handleSeleccionado.set(POS1, -1);
+			handleSeleccionado.set(4*pos, -1);
+			handleSeleccionado.set(4*pos+1, 0);
 		}	
 	}
 	
 	@Override
 	public void onMultiTouchEvent()
 	{
+		// Cambiar Posicion de los Handles
+		deformator.moverHandles(handles, verticesModificados);
 		
+		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
 
 	public boolean handlesVacio()

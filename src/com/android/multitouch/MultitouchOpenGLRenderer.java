@@ -35,7 +35,7 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 		super.onDrawFrame(gl);
 		
 		// Handles		
-		this.dibujarListaHandleMultitouch(gl, objetoHandle.getBuffer(), handles);
+		dibujarListaHandleMultitouch(gl, objetoHandle.getBuffer(), handles);
 	}
 	
 	/* Métodos abstractos de OpenGLRenderer */

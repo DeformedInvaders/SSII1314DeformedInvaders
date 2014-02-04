@@ -69,9 +69,9 @@ public class LoadingFragment extends Fragment
 			canvas.setParameters(p.getEsqueleto(), p.getTextura());
 		}
 		
-		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
-		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
-		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
+		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonLoading1);
+		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonLoading2);
+		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonLoading3);
 		
 		botonAdd.setOnClickListener(new OnMainAddClickListener());
 		botonView.setOnClickListener(new OnMainViewClickListener());

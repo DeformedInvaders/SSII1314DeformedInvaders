@@ -16,10 +16,10 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
     	//TODO
-        super(context, attrs, TTouchEstado.SimpleTouch);
+        super(context, attrs, TTouchEstado.MultiTouch);
         
         // Asignar Renderer al GLSurfaceView
-        renderer = new DeformOpenGLRenderer(context);
+        renderer = new DeformOpenGLRenderer(context, NUM_HANDLES);
         setRenderer(renderer);
     }
 	
