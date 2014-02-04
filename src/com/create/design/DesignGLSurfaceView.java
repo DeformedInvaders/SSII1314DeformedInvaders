@@ -1,65 +1,27 @@
 package com.create.design;
 
 import android.content.Context;
-import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
 import com.project.data.Esqueleto;
+import com.project.main.OpenGLSurfaceView;
+import com.project.main.TTouchEstado;
 
-public class DesignGLSurfaceView extends GLSurfaceView
+public class DesignGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
     private final DesignOpenGLRenderer renderer;
  
     public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
-        super(context, attrs);
+        super(context, attrs, TTouchEstado.SimpleTouch);
 
-        // Crear Contexto OpenGL ES 1.0
-        setEGLContextClientVersion(1);
-        
         // Asignar Renderer al GLSurfaceView
         renderer = new DesignOpenGLRenderer(context);
         setRenderer(renderer);
-
-        // Activar Modo Pintura en demanda
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
-
-	public boolean onTouch(MotionEvent event)
-	{		
-		if(event != null)
-		{
-			int action = event.getAction();
-			
-			float x = event.getX();
-			float y = event.getY();
-			
-			float width = getWidth();
-			float height = getHeight();
-			
-			switch(action)
-			{
-				case MotionEvent.ACTION_DOWN:
-					renderer.onTouchDown(x, y, width, height);
-				break;
-				case MotionEvent.ACTION_MOVE:
-					renderer.onTouchMove(x, y, width, height);	
-				break;
-				case MotionEvent.ACTION_UP:
-					renderer.onTouchUp(x, y, width, height);
-				break;
-				default:
-					return false;
-			}
-			
-			requestRender();	
-		}
-		return true;
-	}
 	
-	public void calcularBSpline()
+	/*public void calcularBSpline()
 	{
 		renderer.bSpline();
 		requestRender();
@@ -94,7 +56,7 @@ public class DesignGLSurfaceView extends GLSurfaceView
 		boolean b = renderer.testSimple();
 		requestRender();
 		return b;
-	}
+	}*/
 	
 	public boolean pruebaCompleta()
 	{
@@ -114,11 +76,11 @@ public class DesignGLSurfaceView extends GLSurfaceView
 		requestRender();
 	}
 	
-	public void restore()
+	/*public void restore()
 	{		
 		renderer.restore();
 		requestRender();
-	}
+	}*/
 
 	public boolean poligonoCompleto()
 	{

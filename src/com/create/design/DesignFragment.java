@@ -65,9 +65,8 @@ public class DesignFragment extends Fragment
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-				canvas.onTouch(event);
+				canvas.onTouch(v, event);
 				actualizarDesignBotones();
-				
 				return true;
 			}
 		});

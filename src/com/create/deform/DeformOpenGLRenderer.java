@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import com.android.multitouch.TMultiTouchEstado;
 import com.lib.math.Deformator;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
@@ -46,18 +47,18 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferCoords;
 	
 	private TDeformEstado estado;
-	private TTouchEstado estadoPos1, estadoPos2;
+	private TMultiTouchEstado estadoPos1, estadoPos2;
 
 	private static final int POS1 = 0;
-	private static final int POS2 = 3;
+	//private static final int POS2 = 3;
 	
 	public DeformOpenGLRenderer(Context context)
 	{
         super(context);
         
         estado = TDeformEstado.Nada;
-        estadoPos1 = TTouchEstado.Up;
-        estadoPos2 = TTouchEstado.Up;
+        estadoPos1 = TMultiTouchEstado.Up;
+        estadoPos2 = TMultiTouchEstado.Up;
         
         handles = new FloatArray();
         indiceHandles = new ShortArray();
@@ -92,7 +93,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 		
 		// Vertices
-		if(estadoPos1 != TTouchEstado.Move && estadoPos2 != TTouchEstado.Move)
+		if(estadoPos1 != TMultiTouchEstado.Move && estadoPos2 != TMultiTouchEstado.Move)
 		{
 			dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
 		}
@@ -160,7 +161,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         }
 	}
 	
-	public void onTouchDown(float x, float y, float width, float height)
+	@Override
+	public void onTouchDown(float x, float y, float width, float height, int pos)
 	{		
 		if(estado == TDeformEstado.Anyadir)
 		{			
@@ -175,26 +177,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			estadoPos1 = seleccionarHandle(estadoPos1, x, y, POS1);
 		}
 	}
-	
-	public void onTouchDown(float x1, float y1, float x2, float y2, float width, float height)
-	{		
-		// TODO
-		
-		if(estado == TDeformEstado.Deformar)
-		{	
-			if(estadoPos1 == TTouchEstado.Up)
-			{
-				estadoPos1 = seleccionarHandle(estadoPos1, x1, y1, POS1);
-			}
-			
-			if(estadoPos2 == TTouchEstado.Up)
-			{
-				estadoPos2 = seleccionarHandle(estadoPos2, x2, y2, POS2);
-			}
-		}
-	}
-	
-	
+
 	private short buscarPixel(float x, float y)
 	{
 		float nx = xLeft + (xRight-xLeft)*x/width;
@@ -238,9 +221,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private TTouchEstado seleccionarHandle(TTouchEstado estado, float x, float y, int pos)
+	private TMultiTouchEstado seleccionarHandle(TMultiTouchEstado estado, float x, float y, int pos)
 	{
-		if(estado == TTouchEstado.Up)
+		if(estado == TMultiTouchEstado.Up)
 		{
 			short j = buscarPixel(x, y);
 			if(j != -1)
@@ -253,7 +236,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					handleSeleccionado.set(pos+1, handles.get(2*indiceHandleSeleccionado));
 					handleSeleccionado.set(pos+2, handles.get(2*indiceHandleSeleccionado+1));
 					
-					return TTouchEstado.Move;
+					return TMultiTouchEstado.Move;
 				}
 			}
 		}
@@ -261,43 +244,18 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return estado;
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height)
+	@Override
+	public void onTouchMove(float x, float y, float width, float height, int pos)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
-			if(estadoPos1 == TTouchEstado.Up)
+			if(estadoPos1 == TMultiTouchEstado.Up)
 			{
-				onTouchDown(x, y, width, height);
+				onTouchDown(x, y, width, height, pos);
 			}
-			else if(estadoPos1 == TTouchEstado.Move)
+			else if(estadoPos1 == TMultiTouchEstado.Move)
 			{
 				moverHandle(x, y, POS1);
-			}
-		}
-	}
-	
-	public void onTouchMove(float x1, float y1, float x2, float y2, float width, float height)
-	{
-		//TODO: Unificar moverHandle(x1, y1, x2, y2)
-		
-		if(estado == TDeformEstado.Deformar)
-		{
-			if(estadoPos1 == TTouchEstado.Up)
-			{
-				onTouchDown(x1, y1, width, height);
-			}
-			else if(estadoPos1 == TTouchEstado.Move)
-			{
-				moverHandle(x1, y1, POS1);
-			}
-			
-			if(estadoPos2 == TTouchEstado.Up)
-			{
-				onTouchDown(x2, y2, width, height);
-			}
-			else if(estadoPos2 == TTouchEstado.Move)
-			{
-				moverHandle(x2, y2, POS2);
 			}
 		}
 	}
@@ -328,30 +286,22 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height)
+	@Override
+	public void onTouchUp(float x, float y, float width, float height, int pos)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
-			onTouchMove(x, y, width, height);
+			onTouchMove(x, y, width, height, pos);
 			
-			estadoPos1 = TTouchEstado.Up;
+			estadoPos1 = TMultiTouchEstado.Up;
 			handleSeleccionado.set(POS1, -1);
 		}	
 	}
 	
-	public void onTouchUp(float x1, float y1, float x2, float y2, float width, float height)
-	{	
-		// TODO
+	@Override
+	public void onMultiTouchEvent()
+	{
 		
-		if(estado == TDeformEstado.Deformar)
-		{
-			onTouchMove(x1, y1, x2, y2, width, height);
-			
-			estadoPos1 = TTouchEstado.Up;
-			estadoPos2 = TTouchEstado.Up;
-			handleSeleccionado.set(POS1, -1);
-			handleSeleccionado.set(POS2, -1);
-		}	
 	}
 
 	public boolean handlesVacio()

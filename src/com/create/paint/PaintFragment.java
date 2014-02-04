@@ -97,7 +97,7 @@ public class PaintFragment extends Fragment
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-				canvas.onTouch(event);
+				canvas.onTouch(v, event);
 				actualizarPaintBotones();
 				return true;
 			}

@@ -42,12 +42,6 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 	
 	public void reiniciar() { }
 	
-	public void onTouchDown(float x, float y, float width, float height) { }
-	
-	public void onTouchMove(float x, float y, float width, float height) { }
-	
-	public void onTouchUp(float x, float y, float width, float height) { }
-	
 	public void onTouchDown(float x, float y, float width, float height, int pos)
 	{		
 		float nx = xLeft + (xRight-xLeft)*x/width;
@@ -83,4 +77,6 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 			handles.set(3*pos, 0);
 		}	
 	}
+	
+	public void onMultiTouchEvent() { }
 }

@@ -76,10 +76,12 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	
 	public void reiniciar() { }
 	
-	public void onTouchDown(float x, float y, float width, float height) { }
+	public void onTouchDown(float x, float y, float width, float height, int pos) { }
 	
-	public void onTouchMove(float x, float y, float width, float height) { }
+	public void onTouchMove(float x, float y, float width, float height, int pos) { }
 	
-	public void onTouchUp(float x, float y, float width, float height) { }
+	public void onTouchUp(float x, float y, float width, float height, int pos) { }
+	
+	public void onMultiTouchEvent() { }
 
 }

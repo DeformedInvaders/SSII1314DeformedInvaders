@@ -1,30 +1,25 @@
 package com.view.display;
 
 import android.content.Context;
-import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
+import com.project.main.OpenGLSurfaceView;
+import com.project.main.TTouchEstado;
 
-public class DisplayGLSurfaceView extends GLSurfaceView
+public class DisplayGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
-    private final DisplayOpenGLRenderer renderer;
+    private DisplayOpenGLRenderer renderer;
     
     public DisplayGLSurfaceView(Context context, AttributeSet attrs)
     {
-        super(context, attrs);
-
-        // Crear Contexto OpenGL ES 1.0
-        setEGLContextClientVersion(1);
+        super(context, attrs, TTouchEstado.SimpleTouch);
 
         // Asignar Renderer al GLSurfaceView
         renderer = new DisplayOpenGLRenderer(context);
         setRenderer(renderer);
-
-        // Activar Modo Pintura en demanda
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)

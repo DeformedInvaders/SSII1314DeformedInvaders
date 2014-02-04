@@ -186,13 +186,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		estado = TPaintEstado.Pincel;
 	}
 	
-	public int getColorPaleta() {
+	public int getColorPaleta()
+	{
 		return colorPaleta;
 	}
 
-	public void setColorPaleta(int colorPaleta) {
+	public void setColorPaleta(int colorPaleta)
+	{
 		this.colorPaleta = colorPaleta;
-		estado = TPaintEstado.Pincel;
 	}
 	
 	public void seleccionarSize(int pos)
@@ -209,7 +210,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			sizeLinea = 16;
 		}
-		estado = TPaintEstado.Pincel;
 	}
 	
 	/* Métodos abstractos de OpenGLRenderer */
@@ -226,7 +226,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.sizeLinea = 6;
 	}
 	
-	public void onTouchDown(float x, float y, float width, float height)
+	public void onTouchDown(float x, float y, float width, float height, int pos)
 	{	
 		// Conversión Pixel - Punto	
 		float nx = xLeft + (xRight-xLeft)*x/width;
@@ -268,21 +268,23 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height)
+	public void onTouchMove(float x, float y, float width, float height, int pos)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
-			onTouchDown(x, y, width, height);
+			onTouchDown(x, y, width, height, pos);
 		}
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height)
+	public void onTouchUp(float x, float y, float width, float height, int pos)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
 			guardarPolilinea();
 		}		
 	}
+	
+	public void onMultiTouchEvent() {}
 	
 	/* Métodos de modificación de Linea Actual */
 	

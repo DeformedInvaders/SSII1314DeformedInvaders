@@ -49,9 +49,10 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* Métodos abstractos a implementar */
 	
-	public abstract void onTouchDown(float x, float y, float width, float height);
-	public abstract void onTouchMove(float x, float y, float width, float height);
-	public abstract void onTouchUp(float x, float y, float width, float height);
+	public abstract void onTouchDown(float x, float y, float width, float height, int pos);
+	public abstract void onTouchMove(float x, float y, float width, float height, int pos);
+	public abstract void onTouchUp(float x, float y, float width, float height, int pos);
+	public abstract void onMultiTouchEvent();
 	public abstract void reiniciar();
 	
 	/* Métodos de la interfaz Renderer */
@@ -396,6 +397,7 @@ public abstract class OpenGLRenderer implements Renderer
 		else {
 			gl.glLineWidth(size);
 		}
+		
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
