@@ -78,7 +78,7 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 	{	
 		if(handles.get(3*pos) == 1)
 		{
-			onTouchMove(x, y, width, height);
+			onTouchMove(x, y, width, height, pos);
 			
 			handles.set(3*pos, 0);
 		}	

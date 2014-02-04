@@ -36,7 +36,7 @@ public class MultitouchGLSurfaceView extends GLSurfaceView implements OnTouchLis
 		if(event != null)
 		{
 			int pointCount = event.getPointerCount();
-			int action = event.getAction();
+			int action = event.getActionMasked();
 			
 			float width = getWidth();
 			float height = getHeight();
@@ -48,16 +48,20 @@ public class MultitouchGLSurfaceView extends GLSurfaceView implements OnTouchLis
 				float x = event.getX(i);
 				float y = event.getY(i);
 				
+				int id = event.getPointerId(i);
+				
 				switch(action)
 				{
 					case MotionEvent.ACTION_DOWN:
-						renderer.onTouchDown(x, y, width, height, i);
+					case MotionEvent.ACTION_POINTER_DOWN:
+						renderer.onTouchDown(x, y, width, height, id);
 					break;
 					case MotionEvent.ACTION_MOVE:
-						renderer.onTouchMove(x, y, width, height, i);	
+						renderer.onTouchMove(x, y, width, height, id);	
 					break;
 					case MotionEvent.ACTION_UP:
-						renderer.onTouchUp(x, y, width, height, i);
+					case MotionEvent.ACTION_POINTER_UP:
+						renderer.onTouchUp(x, y, width, height, id);
 					break;
 					default:
 						return false;
@@ -67,6 +71,7 @@ public class MultitouchGLSurfaceView extends GLSurfaceView implements OnTouchLis
 			requestRender();
 		}
 		
+		invalidate();
 		return true;
 	}
 }
