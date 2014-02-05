@@ -21,6 +21,8 @@ public class DesignFragment extends Fragment
 	private DesignGLSurfaceView canvas;
 	private ImageButton botonReady, botonNuevo, botonTest;
 	
+	/* Constructora */
+	
 	public static final DesignFragment newInstance()
 	{
 		DesignFragment fragment = new DesignFragment();
@@ -52,28 +54,45 @@ public class DesignFragment extends Fragment
 		botonNuevo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
 		botonTest = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);
 		
-		botonReady.setOnClickListener(new OnDesignReadyClickListener());
-		botonNuevo.setOnClickListener(new onDesignNewClickListener());
-		botonTest.setOnClickListener(new onDesignTestClickListener());
+		botonReady.setOnClickListener(new OnReadyClickListener());
+		botonNuevo.setOnClickListener(new onNewClickListener());
+		botonTest.setOnClickListener(new onTestClickListener());
 		
 		botonReady.setEnabled(false);
 		botonNuevo.setEnabled(false);
 		botonTest.setEnabled(false);
 		
-		canvas.setOnTouchListener(new OnTouchListener()
-		{
+		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
+			public boolean onTouch(View view, MotionEvent event)
 			{
-				canvas.onTouch(v, event);
-				actualizarDesignBotones();
+				canvas.onTouch(view, event);
+				actualizarBotones();
+				
 				return true;
 			}
 		});
+		
         return rootView;
     }
 	
-	private void actualizarDesignBotones()
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		canvas.onResume();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		canvas.onPause();
+	}
+	
+	/* Métodos abstractos de OpenGLFragmentListener */
+	
+	private void actualizarBotones()
 	{
 		if(canvas.poligonoCompleto())
 		{
@@ -89,7 +108,9 @@ public class DesignFragment extends Fragment
 		}
 	}
 	
-	public class OnDesignReadyClickListener implements OnClickListener
+	/* Listener de Botones */
+	
+	public class OnReadyClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
@@ -98,17 +119,17 @@ public class DesignFragment extends Fragment
 		}
 	}
 	
-	private class onDesignNewClickListener implements OnClickListener
+	private class onNewClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
-			actualizarDesignBotones();
+			actualizarBotones();
 		}
 	}
 	
-	private class onDesignTestClickListener implements OnClickListener
+	private class onTestClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)

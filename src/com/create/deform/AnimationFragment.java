@@ -29,12 +29,14 @@ public class AnimationFragment extends Fragment
 	private AnimationFragmentListener mCallback;
 	
 	private ImageButton botonReady;
-	private AnimPagerAdapter pageAdapter;
+	private SectionViewPagerAdapter pageAdapter;
 	private ViewPager viewPager;
 	private List<DeformFragment> listaFragmentos;
 	
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
+	
+	/* Constructora */
 	
 	public static final AnimationFragment newInstance(Esqueleto e, Textura t)
 	{
@@ -69,7 +71,7 @@ public class AnimationFragment extends Fragment
 		
 		// Instanciar Elementos de la GUI
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);		
-		botonReady.setOnClickListener(new OnAnimReadyClickListener());	
+		botonReady.setOnClickListener(new OnReadyClickListener());	
 				
 		actionBar = getActivity().getActionBar();
 		
@@ -80,7 +82,7 @@ public class AnimationFragment extends Fragment
 			listaFragmentos.add(DeformFragment.newInstance(esqueletoActual, texturaActual));
 		}
 
-		pageAdapter = new AnimPagerAdapter(getActivity().getSupportFragmentManager());
+		pageAdapter = new SectionViewPagerAdapter(getActivity().getSupportFragmentManager());
 
 		viewPager = (ViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
 		viewPager.removeAllViews();
@@ -102,18 +104,23 @@ public class AnimationFragment extends Fragment
         return rootView;
     }
 	
-    private class OnAnimReadyClickListener implements OnClickListener
+	/* Listener de Botones */
+	
+    private class OnReadyClickListener implements OnClickListener
     {
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onAnimationReadyButtonClicked(null);
+			// TODO:
+			mCallback.onAnimationReadyButtonClicked(new Movimientos());
 		}
     }
+    
+    /* Adaptador de PagerViewer */
 
-	public class AnimPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
+	public class SectionViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
 	{
-		public AnimPagerAdapter(FragmentManager fm)
+		public SectionViewPagerAdapter(FragmentManager fm)
 		{
 			super(fm);
 		}

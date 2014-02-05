@@ -27,11 +27,13 @@ public class SelectionFragment extends Fragment
 	private SelectionFragmentListener mCallback;
 	
 	private ImageButton botonReady, botonDelete;
-	private SectionsViewPagerAdapter pageAdapter;
+	private SectionViewPagerAdapter pageAdapter;
 	private ViewPager viewPager;
 	private List<SelectFragment> listaFragmentos;
 	
 	private List<Personaje> listaPersonajes;
+	
+	/* Constructora */
 	
 	public static final SelectionFragment newInstance(List<Personaje> lista)
 	{
@@ -68,8 +70,8 @@ public class SelectionFragment extends Fragment
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonSelection1);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonSelection2);
 		
-		botonReady.setOnClickListener(new OnViewReadyClickListener());		
-		botonDelete.setOnClickListener(new OnViewDeleteClickListener());
+		botonReady.setOnClickListener(new OnReadyClickListener());		
+		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		
 		actionBar = getActivity().getActionBar();
 		
@@ -82,7 +84,7 @@ public class SelectionFragment extends Fragment
 			listaFragmentos.add(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura()));
 		}
 
-		pageAdapter = new SectionsViewPagerAdapter(getActivity().getSupportFragmentManager());
+		pageAdapter = new SectionViewPagerAdapter(getActivity().getSupportFragmentManager());
 
 		viewPager = (ViewPager) rootView.findViewById(R.id.pagerViewSelection1);
 		viewPager.removeAllViews();
@@ -103,8 +105,10 @@ public class SelectionFragment extends Fragment
 				
         return rootView;
     }
+	
+	/* Listeners de Botones */
 	 
-	private class OnViewReadyClickListener implements OnClickListener
+	private class OnReadyClickListener implements OnClickListener
     {
 		@Override
 		public void onClick(View v)
@@ -114,7 +118,7 @@ public class SelectionFragment extends Fragment
 		}
     }
     
-    private class OnViewDeleteClickListener implements OnClickListener
+    private class OnDeleteClickListener implements OnClickListener
     {
 		@Override
 		public void onClick(View v)
@@ -123,10 +127,12 @@ public class SelectionFragment extends Fragment
 			mCallback.onSelectionDeleteButtonClicked(actionBar.getSelectedNavigationIndex());
 		}
     }
+    
+    /* Adaptador de ViewPager */
 	
-	public class SectionsViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
+	public class SectionViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
 	{
-		public SectionsViewPagerAdapter(FragmentManager fm)
+		public SectionViewPagerAdapter(FragmentManager fm)
 		{
 			super(fm);
 		}

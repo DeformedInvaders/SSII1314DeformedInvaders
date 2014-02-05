@@ -17,6 +17,8 @@ public class SelectFragment extends Fragment
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
 	
+	/* Constructora */
+	
 	public static final SelectFragment newInstance(Esqueleto e, Textura t)
 	{
 		SelectFragment fragment = new SelectFragment();
@@ -54,5 +56,5 @@ public class SelectFragment extends Fragment
 	{
 		super.onPause();
 		canvas.onPause();
-	}
+	}	
 }

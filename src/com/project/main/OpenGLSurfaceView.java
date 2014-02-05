@@ -1,9 +1,5 @@
 package com.project.main;
 
-import com.android.touch.DoubleTouchGestureListener;
-import com.android.touch.DragGestureDetector;
-import com.android.touch.ScaleGestureListener;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -11,6 +7,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
+import com.android.touch.DoubleTouchGestureListener;
+import com.android.touch.DragGestureDetector;
+import com.android.touch.ScaleGestureListener;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
@@ -28,7 +28,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     {
     	 super(context, attrs);
          
-         // Multitouch
+         // Tipo Multitouch
          this.estado = estado;
          this.mContext = context;
          
@@ -44,19 +44,23 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	public abstract void onMultiTouchEvent();
     
     public void setRenderer(OpenGLRenderer renderer)
-    {		
+    {	
+    	// Renderer
     	super.setRenderer(renderer);
     	super.setRenderMode(RENDERMODE_WHEN_DIRTY);
     	
-    	this.scaleDectector = new ScaleGestureDetector(mContext, new ScaleGestureListener(renderer));
-        this.doubleTouchDetector = new GestureDetector(mContext, new DoubleTouchGestureListener(renderer));
-        this.dragDetector = new DragGestureDetector(renderer);
+        // Detectors
+    	scaleDectector = new ScaleGestureDetector(mContext, new ScaleGestureListener(renderer));
+        doubleTouchDetector = new GestureDetector(mContext, new DoubleTouchGestureListener(renderer));
+        dragDetector = new DragGestureDetector(renderer);
     }
     
     public void setEstado(TTouchEstado estado)
     {
     	this.estado = estado;
     }
+    
+    /* Método abstractos de OnTouchListener */
     
     public boolean onTouch(View v, MotionEvent event)
     {

@@ -24,6 +24,8 @@ public class DeformFragment extends Fragment
 	
 	private ImageButton botonAdd, botonRemove, botonMover, botonDelete;
 		
+	/* Constructora */
+	
 	public static final DeformFragment newInstance(Esqueleto e, Textura t)
 	{
 		DeformFragment fragment = new DeformFragment();
@@ -55,18 +57,18 @@ public class DeformFragment extends Fragment
 		botonMover.setEnabled(false);
 		botonDelete.setEnabled(false);
 		
-		botonAdd.setOnClickListener(new OnDeformAddClickListener());
-		botonRemove.setOnClickListener(new OnDeformRemoveClickListener());
-		botonMover.setOnClickListener(new OnDeformMoveClickListener());
-		botonDelete.setOnClickListener(new OnDeformDeleteClickListener());
+		botonAdd.setOnClickListener(new OnAddClickListener());
+		botonRemove.setOnClickListener(new OnRemoveClickListener());
+		botonMover.setOnClickListener(new OnMoveClickListener());
+		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		
-		canvas.setOnTouchListener(new OnTouchListener()
-		{
+		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
+			public boolean onTouch(View view, MotionEvent event)
 			{
-				canvas.onTouch(v, event);
-				actualizarDeformBotones();
+				canvas.onTouch(view, event);
+				actualizarBotones();
+				
 				return true;
 			}
 		});
@@ -95,9 +97,9 @@ public class DeformFragment extends Fragment
 		dataSaved = canvas.saveData();
 	}
 	
-	/* DEFORM ACTIVITY */
+	/* Métodos abstractos de OpenGLFramgent */
 	
-	private void actualizarDeformBotones()
+	private void actualizarBotones()
 	{
 		if(canvas.handlesVacio())
 		{
@@ -113,7 +115,9 @@ public class DeformFragment extends Fragment
 		}
 	}
 	
-	private class OnDeformAddClickListener implements OnClickListener
+	/* Listener de Botones */
+	
+	private class OnAddClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
@@ -122,7 +126,7 @@ public class DeformFragment extends Fragment
 		}	
 	}
 	
-	private class OnDeformRemoveClickListener implements OnClickListener
+	private class OnRemoveClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
@@ -131,7 +135,7 @@ public class DeformFragment extends Fragment
 		}	
 	}
 	
-	private class OnDeformMoveClickListener implements OnClickListener
+	private class OnMoveClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
@@ -140,13 +144,13 @@ public class DeformFragment extends Fragment
 		}	
 	}
 	
-	private class OnDeformDeleteClickListener implements OnClickListener
+	private class OnDeleteClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
-			actualizarDeformBotones();
+			actualizarBotones();
 		}	
 	}
 }

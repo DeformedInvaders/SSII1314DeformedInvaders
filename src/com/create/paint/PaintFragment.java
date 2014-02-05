@@ -30,6 +30,8 @@ public class PaintFragment extends Fragment
 	
 	private Esqueleto esqueletoActual;
 	
+	/* Constructora */
+	
 	public static final PaintFragment newInstance(Esqueleto e)
 	{
 		PaintFragment fragment = new PaintFragment();
@@ -58,7 +60,6 @@ public class PaintFragment extends Fragment
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-				
 		// Seleccionar Layout
 		View rootView = inflater.inflate(R.layout.fragment_paint_layout, container, false);
 
@@ -81,147 +82,48 @@ public class PaintFragment extends Fragment
 		botonPrev.setEnabled(false);
 		botonDelete.setEnabled(false);
 		
-		botonPincel.setOnClickListener(new OnPaintPincelClickListener());	
-		botonCubo.setOnClickListener(new OnPaintCuboClickListener());
-		botonColor.setOnClickListener(new OnPaintColorClickListener());
-		botonSize.setOnClickListener(new OnPaintSizeClickListener());
-		botonEye.setOnClickListener(new OnPaintEyeClickListener());
-		botonMano.setOnClickListener(new OnPaintManoClickListener());
-		botonNext.setOnClickListener(new OnPaintNextClickListener());
-		botonPrev.setOnClickListener(new OnPaintPrevClickListener());
-		botonDelete.setOnClickListener(new OnPaintDeleteClickListener());
-		botonReady.setOnClickListener(new OnPaintReadyClickListener());
+		botonPincel.setOnClickListener(new OnPincelClickListener());	
+		botonCubo.setOnClickListener(new OnCuboClickListener());
+		botonColor.setOnClickListener(new OnColorClickListener());
+		botonSize.setOnClickListener(new OnSizeClickListener());
+		botonEye.setOnClickListener(new OnEyeClickListener());
+		botonMano.setOnClickListener(new OnManoClickListener());
+		botonNext.setOnClickListener(new OnNextClickListener());
+		botonPrev.setOnClickListener(new OnPrevClickListener());
+		botonDelete.setOnClickListener(new OnDeleteClickListener());
+		botonReady.setOnClickListener(new OnReadyClickListener());
 		
-		canvas.setOnTouchListener(new OnTouchListener()
-		{
+		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
+			public boolean onTouch(View view, MotionEvent event)
 			{
-				canvas.onTouch(v, event);
-				actualizarPaintBotones();
+				canvas.onTouch(view, event);
+				actualizarBotones();
+				
 				return true;
 			}
 		});
 		
 		return rootView;
     }
-
-
-	private void destroyPaintActivity()
+	
+	@Override
+	public void onResume()
 	{
-		canvas.capturaPantalla();
-		
-		mCallback.onPaintReadyButtonClicked(canvas.getTextura());
+		super.onResume();
+		canvas.onResume();
 	}
 	
-	private class OnPaintPincelClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			canvas.seleccionarPincel();
-		}
-    }
-    
-    private class OnPaintCuboClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			canvas.seleccionarCubo();
-		}
-    }
-    
-    private class OnPaintColorClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			int color = canvas.getColorPaleta();
-			canvas.seleccionarColor(color);
-			
-			if (colorPicker == null)
-			{
-				colorPicker = new ColorPicker(mContext, ColorPicker.VERTICAL, canvas, color);    	
-			}
-			colorPicker.show(v);
-		}
-    }
-    
-    private class OnPaintSizeClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			if (sizePicker == null) 
-			{
-				sizePicker = new SizePicker(mContext, SizePicker.VERTICAL, canvas);    	
-			}
-			sizePicker.show(v);
-		}
-    }
-    
-    private class OnPaintEyeClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			//Toast.makeText(getApplication(), "Textures", Toast.LENGTH_SHORT).show();
-		}
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		canvas.onPause();
 	}
-    
-    private class OnPaintManoClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			canvas.seleccionarMano();
-		}
-    }
-    
-    private class OnPaintPrevClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			canvas.anteriorAccion();
-			
-			actualizarPaintBotones();
-		}
-    }
-    
-    private class OnPaintNextClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			canvas.siguienteAccion();
 	
-			actualizarPaintBotones();
-		}
-    }
-    
-    private class OnPaintDeleteClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			canvas.reiniciar();
-				
-			actualizarPaintBotones();
-		}
-    }
-
-    private class OnPaintReadyClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{
-			destroyPaintActivity();
-		}
-    }
+	/* Métodos abstractos de OpenGLFragment */
 	
-	private void actualizarPaintBotones()
+	private void actualizarBotones()
 	{
 		if(canvas.bufferSiguienteVacio())
 		{
@@ -243,5 +145,115 @@ public class PaintFragment extends Fragment
 			botonDelete.setEnabled(true);
 		}
 	}
+	
+	/* Listener de Botones */
+	
+	private class OnPincelClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarPincel();
+		}
+    }
+    
+    private class OnCuboClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarCubo();
+		}
+    }
+    
+    private class OnColorClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			int color = canvas.getColorPaleta();
+			canvas.seleccionarColor(color);
+			
+			if (colorPicker == null)
+			{
+				colorPicker = new ColorPicker(mContext, ColorPicker.VERTICAL, canvas, color);    	
+			}
+			colorPicker.show(v);
+		}
+    }
+    
+    private class OnSizeClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			if (sizePicker == null) 
+			{
+				sizePicker = new SizePicker(mContext, SizePicker.VERTICAL, canvas);    	
+			}
+			sizePicker.show(v);
+		}
+    }
+    
+    private class OnEyeClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			// TODO
+		}
+	}
+    
+    private class OnManoClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.seleccionarMano();
+		}
+    }
+    
+    private class OnPrevClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.anteriorAccion();
+			
+			actualizarBotones();
+		}
+    }
+    
+    private class OnNextClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.siguienteAccion();
+	
+			actualizarBotones();
+		}
+    }
+    
+    private class OnDeleteClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.reiniciar();
+				
+			actualizarBotones();
+		}
+    }
 
+    private class OnReadyClickListener implements OnClickListener
+    {
+		@Override
+		public void onClick(View v)
+		{
+			canvas.capturaPantalla();
+			
+			mCallback.onPaintReadyButtonClicked(canvas.getTextura());
+		}
+    }
 }

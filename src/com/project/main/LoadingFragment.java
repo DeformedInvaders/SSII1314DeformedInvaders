@@ -25,6 +25,8 @@ public class LoadingFragment extends Fragment
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
 	
+	/* Constructora */
+	
 	public static final LoadingFragment newInstance(List<Personaje> lista, int indice)
 	{
 		LoadingFragment fragment = new LoadingFragment();
@@ -73,55 +75,55 @@ public class LoadingFragment extends Fragment
 		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonLoading2);
 		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonLoading3);
 		
-		botonAdd.setOnClickListener(new OnMainAddClickListener());
-		botonView.setOnClickListener(new OnMainViewClickListener());
-		botonPlay.setOnClickListener(new OnMainPlayClickListener());
+		botonAdd.setOnClickListener(new OnAddClickListener());
+		botonView.setOnClickListener(new OnViewClickListener());
+		botonPlay.setOnClickListener(new OnPlayClickListener());
 		
 		botonView.setEnabled(listaPersonajes.size() > 0);
 		
         return rootView;
     }
-
-	private void destroyLoadingActivity(int buttonId)
+	
+	@Override
+	public void onResume()
 	{
-		if(buttonId == botonAdd.getId())
+		super.onResume();
+		canvas.onResume();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		canvas.onPause();
+	}
+	
+	/* Listener de Botones */
+	
+	private class OnAddClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
 		{
 			mCallback.onLoadingCreateButtonClicked();
 		}
-		else if(buttonId == botonView.getId())
+	}
+	
+	private class OnViewClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
 		{
 			mCallback.onLoadingSelectButtonClicked();
 		}
-		else if(buttonId == botonPlay.getId())
+	}
+	
+	private class OnPlayClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
 		{
 			mCallback.onLoadingPlayButtonClicked();
-		}
-	}
-	
-	private class OnMainAddClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			destroyLoadingActivity(v.getId());
-		}
-	}
-	
-	private class OnMainViewClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			destroyLoadingActivity(v.getId());
-		}
-	}
-	
-	private class OnMainPlayClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			destroyLoadingActivity(v.getId());
 		}
 	}
 

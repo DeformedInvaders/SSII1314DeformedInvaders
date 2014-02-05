@@ -155,10 +155,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
     public void onAnimationReadyButtonClicked(Movimientos movimientos)
     {
-    	//TODO Controlar los movimientos recibidos
-    	
-		//if(movimientos != null)
-		//{
+		if(movimientos != null)
+		{
 			personajeActual.setMovimientos(movimientos);
 			
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -194,7 +192,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			});
 	
 			alert.show();
-		//}
+		}
 	}
     
 	/* SELECTION ACTIVITY */
