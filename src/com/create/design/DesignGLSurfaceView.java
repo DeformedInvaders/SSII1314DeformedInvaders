@@ -20,6 +20,36 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
         renderer = new DesignOpenGLRenderer(context);
         setRenderer(renderer);
     }
+    
+    /* Métodos abstractos OpenGLSurfaceView */
+	
+	public void onTouchDown(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchDown(x, y, width, height, pos);
+	}
+	
+	public void onTouchMove(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchMove(x, y, width, height, pos);
+	}
+	
+	public void onTouchUp(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchUp(x, y, width, height, pos);
+	}
+	
+	public void onMultiTouchEvent()
+	{
+		
+	}
+	
+	/* Métodos de modifiación del Renderer */
+	
+	public void reiniciar()
+	{
+		renderer.reiniciar();
+		requestRender();
+	}
 	
 	/*public void calcularBSpline()
 	{
@@ -56,7 +86,15 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		boolean b = renderer.testSimple();
 		requestRender();
 		return b;
+	}
+	
+	/*public void restore()
+	{		
+		renderer.restore();
+		requestRender();
 	}*/
+	
+	/* Métodos de Obtención de Información */
 	
 	public boolean pruebaCompleta()
 	{
@@ -69,18 +107,6 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 	{
 		return renderer.getEsqueleto();
 	}
-	
-	public void reiniciar()
-	{
-		renderer.reiniciar();
-		requestRender();
-	}
-	
-	/*public void restore()
-	{		
-		renderer.restore();
-		requestRender();
-	}*/
 
 	public boolean poligonoCompleto()
 	{

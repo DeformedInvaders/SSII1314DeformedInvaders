@@ -15,7 +15,6 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
-    	//TODO
         super(context, attrs, TTouchEstado.MultiTouch);
         
         // Asignar Renderer al GLSurfaceView
@@ -27,6 +26,30 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.setParameters(esqueleto, textura);
 	}
+	
+    /* Métodos abstractos OpenGLSurfaceView */
+	
+	public void onTouchDown(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchDown(x, y, width, height, pos);
+	}
+	
+	public void onTouchMove(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchMove(x, y, width, height, pos);
+	}
+	
+	public void onTouchUp(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchUp(x, y, width, height, pos);
+	}
+	
+	public void onMultiTouchEvent()
+	{
+		renderer.onMultiTouchEvent();
+	}
+	
+	/* Métodos de modifiación del Renderer */
 
 	public void seleccionarAnyadir()
 	{
@@ -42,17 +65,21 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.seleccionarMover();
 	}
-
-	public boolean handlesVacio()
-	{
-		return renderer.handlesVacio();
-	}
-
+	
 	public void reiniciar()
 	{
 		renderer.reiniciar();
 		requestRender();
 	}
+
+	/* Métodos de Obtención de Información */
+	
+	public boolean handlesVacio()
+	{
+		return renderer.handlesVacio();
+	}
+	
+	/* Métodos de Guardado de Información */
 	
 	public DeformDataSaved saveData()
 	{

@@ -26,4 +26,14 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	{
 		this.renderer.setParameters(esqueleto, textura);
 	}
+	
+	/* Métodos abstractos OpenGLSurfaceView */
+	
+	public void onTouchDown(float x, float y, float width, float height, int pos) { }
+	
+	public void onTouchMove(float x, float y, float width, float height, int pos) { }
+	
+	public void onTouchUp(float x, float y, float width, float height, int pos) { }
+	
+	public void onMultiTouchEvent() { }
 }

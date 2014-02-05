@@ -1,6 +1,5 @@
 package com.project.main;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -43,20 +42,16 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_layout);
 		
-		personajeSeleccionado = -1;
-		listaPersonajes = new ArrayList<Personaje>();
-		
 		actionBar = getActionBar();
-		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		manager = new InternalStorageManager();
+		manager = new InternalStorageManager(this);
 		layout = (FrameLayout) findViewById(R.id.frameLayoutMain1);
         
 		if(layout != null)
         {
-			personajeSeleccionado = manager.cargarSeleccionado(this);
-			manager.cargarPersonajes(this, listaPersonajes);
+			personajeSeleccionado = manager.cargarSeleccionado();
+			listaPersonajes = manager.cargarListaPersonajes();
 
     		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
         }
@@ -181,9 +176,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					String value = input.getText().toString();
 					personajeActual.setNombre(value);
 					
-					listaPersonajes.add(personajeActual);
-					
-					manager.guardarPersonajes(MainActivity.this, listaPersonajes);
+					if(manager.guardarPersonaje(personajeActual))
+					{
+						listaPersonajes.add(personajeActual);
+						personajeActual = null;
+					}
 						
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 				}
@@ -206,24 +203,26 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
 		personajeSeleccionado = indice;
 		
-		manager.guardarSeleccionado(this, personajeSeleccionado);
+		manager.guardarSeleccionado(personajeSeleccionado);
 		
 		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
     }
     
     public void onSelectionDeleteButtonClicked(int indice)
     {
-		listaPersonajes.remove(indice);
+    	if(manager.eliminarPersonaje(listaPersonajes.get(indice)))
+    	{
+    		listaPersonajes.remove(indice);
+    		
+    		if(personajeSeleccionado == indice)
+    		{
+    			personajeSeleccionado = -1;	
+    		}
+    		
+    		manager.guardarSeleccionado(personajeSeleccionado);
+    	}
 		
-		if(personajeSeleccionado == indice)
-		{
-			personajeSeleccionado = -1;
-		}
-		
-		manager.guardarSeleccionado(this, personajeSeleccionado);
-		manager.guardarPersonajes(this, listaPersonajes);
-		
-		if(listaPersonajes.size() > 0 && personajeSeleccionado == -1)
+		if(listaPersonajes.size() > 0)
 		{
 			changeFragment(SelectionFragment.newInstance(listaPersonajes));
 		}

@@ -21,4 +21,23 @@ public class MultitouchGLSurfaceView extends OpenGLSurfaceView implements OnTouc
         setRenderer(renderer);
         setOnTouchListener(this);
     }
+    
+    /* Métodos abstractos OpenGLSurfaceView */
+	
+	public void onTouchDown(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchDown(x, y, width, height, pos);
+	}
+	
+	public void onTouchMove(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchMove(x, y, width, height, pos);
+	}
+	
+	public void onTouchUp(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchUp(x, y, width, height, pos);
+	}
+	
+	public void onMultiTouchEvent() { }
 }

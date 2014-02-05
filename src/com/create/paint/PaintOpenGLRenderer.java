@@ -183,7 +183,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarColor(int color)
 	{
 		colorPaleta = color;
-		estado = TPaintEstado.Pincel;
 	}
 	
 	public int getColorPaleta()

@@ -17,7 +17,6 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	protected static final int NUM_HANDLES = 10;
 	
 	private Context mContext;
-	private OpenGLRenderer renderer;
 	private TTouchEstado estado;
 	
 	 // Detectores de Gestos
@@ -37,10 +36,15 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
          setEGLContextClientVersion(1);
     }
     
+    /* Métodos abstractos a implementar */
+	
+	public abstract void onTouchDown(float x, float y, float width, float height, int pos);
+	public abstract void onTouchMove(float x, float y, float width, float height, int pos);
+	public abstract void onTouchUp(float x, float y, float width, float height, int pos);
+	public abstract void onMultiTouchEvent();
+    
     public void setRenderer(OpenGLRenderer renderer)
     {		
-    	this.renderer = renderer;
-    	
     	super.setRenderer(renderer);
     	super.setRenderMode(RENDERMODE_WHEN_DIRTY);
     	
@@ -84,13 +88,13 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			switch(action)
 			{
 				case MotionEvent.ACTION_DOWN:
-					renderer.onTouchDown(x, y, width, height, 0);
+					onTouchDown(x, y, width, height, 0);
 				break;
 				case MotionEvent.ACTION_MOVE:
-					renderer.onTouchMove(x, y, width, height, 0);	
+					onTouchMove(x, y, width, height, 0);	
 				break;
 				case MotionEvent.ACTION_UP:
-					renderer.onTouchUp(x, y, width, height, 0);
+					onTouchUp(x, y, width, height, 0);
 				break;
 				default:
 					return false;
@@ -151,21 +155,21 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 				{
 					case MotionEvent.ACTION_DOWN:
 					case MotionEvent.ACTION_POINTER_DOWN:
-						renderer.onTouchDown(x, y, width, height, id);
+						onTouchDown(x, y, width, height, id);
 					break;
 					case MotionEvent.ACTION_MOVE:
-						renderer.onTouchMove(x, y, width, height, id);	
+						onTouchMove(x, y, width, height, id);	
 					break;
 					case MotionEvent.ACTION_UP:
 					case MotionEvent.ACTION_POINTER_UP:
-						renderer.onTouchUp(x, y, width, height, id);
+						onTouchUp(x, y, width, height, id);
 					break;
 					default:
 						return false;
 				}
 			}
 			
-			renderer.onMultiTouchEvent();
+			onMultiTouchEvent();
 			requestRender();
 		}
 		

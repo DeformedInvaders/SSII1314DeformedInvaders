@@ -21,6 +21,35 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
         renderer = new PaintOpenGLRenderer(context);
         setRenderer(renderer);
     }
+    
+	public void setParameters(Esqueleto esqueleto)
+	{
+		renderer.setParameters(esqueleto);
+	}
+    
+    /* Métodos abstractos OpenGLSurfaceView */
+	
+	public void onTouchDown(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchDown(x, y, width, height, pos);
+	}
+	
+	public void onTouchMove(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchMove(x, y, width, height, pos);
+	}
+	
+	public void onTouchUp(float x, float y, float width, float height, int pos)
+	{
+		renderer.onTouchUp(x, y, width, height, pos);
+	}
+	
+	public void onMultiTouchEvent()
+	{
+		
+	}
+	
+	/* Métodos de modifiación del Renderer */
 	
 	public void seleccionarMano()
 	{
@@ -74,10 +103,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 	
-	public void setParameters(Esqueleto esqueleto)
-	{
-		renderer.setParameters(esqueleto);
-	}
+	/* Métodos de Obtención de Información */
 	
 	public Textura getTextura()
 	{
