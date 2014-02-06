@@ -1,97 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="#ffffff"
-    android:orientation="horizontal">
+<RelativeLayout style="@style/MainFragmentLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.create.paint.PaintGLSurfaceView
-        android:id="@+id/paintGLSurfaceViewPaint1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" 
-        android:layout_marginBottom="70dp"/>
+    <com.create.paint.PaintGLSurfaceView style="@style/GLSurfaceViewWithButtons"
+        android:id="@+id/paintGLSurfaceViewPaint1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-   	    android:layout_alignParentLeft="true" >
+    <LinearLayout style="@style/BigImageButtonLeftLayout">
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint1"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_pencil"
             android:src="@drawable/icon_pencil" />
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint2"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_bucket"
             android:src="@drawable/icon_bucket" />
         
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint3"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_color"
             android:src="@drawable/icon_color" />
         
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint4"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_size"
             android:src="@drawable/icon_size" />
         
-   		<ImageButton
+   		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint5"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_eye"
             android:src="@drawable/icon_eye" />
     		    
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint6"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_hand"
             android:src="@drawable/icon_hand" />
         
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint7"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_prev"
             android:src="@drawable/icon_prev" />
                 
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint8"
-    		android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_next"
             android:src="@drawable/icon_next" />
                         
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
 		    android:id="@+id/imageButtonPaint9"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
 		    android:contentDescription="@string/desc_delete"
 		    android:src="@drawable/icon_delete" />
 
     </LinearLayout>
+    
+    <LinearLayout style="@style/BigImageButtonRightLayout">
 
-   	<ImageButton
-   	    android:id="@+id/imageButtonPaint10"
-	    android:layout_width="70dp"
-	    android:layout_height="70dp"
-   	    android:layout_alignParentBottom="true"
-   	    android:layout_alignParentRight="true"
-   	    android:contentDescription="@string/desc_ready"
-   	    android:src="@drawable/icon_ready" />
+	   	<ImageButton style="@style/BigImageButton"
+	   	    android:id="@+id/imageButtonPaint10"
+	   	    android:contentDescription="@string/desc_ready"
+	   	    android:src="@drawable/icon_ready" />
+   	
+   	</LinearLayout>
 
 </RelativeLayout>

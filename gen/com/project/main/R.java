@@ -209,5 +209,21 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        /**  Botones 
+         */
+        public static final int BigImageButton=0x7f070004;
+        public static final int BigImageButtonCenterLayout=0x7f070009;
+        public static final int BigImageButtonLeftLayout=0x7f070008;
+        /**  Layout Botones 
+         */
+        public static final int BigImageButtonRightLayout=0x7f070007;
+        public static final int GLSurfaceViewWithButtons=0x7f070006;
+        /**  Canvas 
+         */
+        public static final int GLSurfaceViewWithoutButtons=0x7f070005;
+        /**  MainLayout 
+         */
+        public static final int MainActivityLayout=0x7f070002;
+        public static final int MainFragmentLayout=0x7f070003;
     }
 }

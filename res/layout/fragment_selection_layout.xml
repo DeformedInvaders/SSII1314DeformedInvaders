@@ -1,34 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="horizontal">
+<RelativeLayout style="@style/MainFragmentLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
 	    xmlns:tools="http://schemas.android.com/tools"
 	    android:id="@+id/pagerViewSelection1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:background="#FFFFFF"/>
+	    android:layout_height="match_parent"/>
+    
+    <LinearLayout style="@style/BigImageButtonRightLayout">
 
-    <ImageButton
-        android:id="@+id/imageButtonSelection1"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:contentDescription="@string/desc_save"
-        android:src="@drawable/icon_ready" />
-
-	<ImageButton
-	    android:id="@+id/imageButtonSelection2"
-	    android:layout_width="70dp"
-	    android:layout_height="70dp"
-	    android:layout_alignParentBottom="true"
-	    android:layout_alignParentRight="true"
-	    android:layout_marginRight="69dp"
-	    android:contentDescription="@string/desc_delete"
-	    android:src="@drawable/icon_delete" />
+	    <ImageButton style="@style/BigImageButton"
+	        android:id="@+id/imageButtonSelection1"
+	        android:contentDescription="@string/desc_save"
+	        android:src="@drawable/icon_ready" />
+	
+		<ImageButton style="@style/BigImageButton"
+		    android:id="@+id/imageButtonSelection2"
+		    android:contentDescription="@string/desc_delete"
+		    android:src="@drawable/icon_delete" />
+	
+	</LinearLayout>
     
 </RelativeLayout>

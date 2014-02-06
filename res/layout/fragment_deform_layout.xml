@@ -1,53 +1,36 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="horizontal">
+<RelativeLayout style="@style/MainFragmentLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.create.deform.DeformGLSurfaceView
-        android:id="@+id/deformGLSurfaceViewDeform1"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="70dp" />
+    <com.create.deform.DeformGLSurfaceView style="@style/GLSurfaceViewWithButtons"
+        android:id="@+id/deformGLSurfaceViewDeform1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-   	    android:layout_alignParentLeft="true"  >
-
-        <ImageButton
+    <LinearLayout style="@style/BigImageButtonLeftLayout">
+        
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform1"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
             android:contentDescription="@string/desc_add"
             android:src="@drawable/icon_add" />
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform2"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
             android:contentDescription="@string/desc_remove"
             android:src="@drawable/icon_remove" />
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform3"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
             android:contentDescription="@string/desc_move"
             android:src="@drawable/icon_hand" />
         
-		<ImageButton
+		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform4"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
             android:contentDescription="@string/desc_delete"
             android:src="@drawable/icon_delete" />
+		
+    </LinearLayout>
+    
+    <LinearLayout style="@style/BigImageButtonRightLayout">
+        
     </LinearLayout>
 
 </RelativeLayout>

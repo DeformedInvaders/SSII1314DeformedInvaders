@@ -1,46 +1,27 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="horizontal">
+<RelativeLayout style="@style/MainFragmentLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     
-    <com.view.display.DisplayGLSurfaceView
-        android:id="@+id/DisplayGLSurfaceViewLoading1"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="70dp" />
+    <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceViewWithButtons"
+        android:id="@+id/DisplayGLSurfaceViewLoading1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" >
+    <LinearLayout style="@style/BigImageButtonCenterLayout">
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading1"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_new_character"
             android:src="@drawable/newcharacter_icon" />
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading2"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_play_game"
             android:src="@drawable/playgame_icon" />
 
-        <ImageButton
+        <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading3"
-		    android:layout_width="70dp"
-		    android:layout_height="70dp"
             android:contentDescription="@string/desc_view_characters"
             android:src="@drawable/viewcharacter_icon" />
+        
     </LinearLayout>
 
     <TextView

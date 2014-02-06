@@ -211,7 +211,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
+		if(controlPixel(nx, ny)) return -1;
+		
 		return (short) GeometryUtils.isPointInMesh(verticesModificados, nx, ny);
+	}
+	
+	private boolean controlPixel(float x, float y)
+	{
+		return x >= xLeft && x <= xRight && y >= yBot && y <= yTop;
 	}
 	
 	private void anyadirHandle(float x, float y)
@@ -297,17 +304,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
-		int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pos);
-		float lastX = handles.get(2*indiceHandleSeleccionado);
-		float lastY = handles.get(2*indiceHandleSeleccionado);
-		
-		if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > 2*EPSILON)
+		if(controlPixel(nx, ny))
 		{
-			handles.set(2*indiceHandleSeleccionado, nx);
-			handles.set(2*indiceHandleSeleccionado+1, ny);
+			int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pos);
+			float lastX = handles.get(2*indiceHandleSeleccionado);
+			float lastY = handles.get(2*indiceHandleSeleccionado);
 			
-			handleSeleccionado.set(4*pos+2, nx);
-			handleSeleccionado.set(4*pos+3, ny);
+			if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > 2*EPSILON)
+			{
+				handles.set(2*indiceHandleSeleccionado, nx);
+				handles.set(2*indiceHandleSeleccionado+1, ny);
+				
+				handleSeleccionado.set(4*pos+2, nx);
+				handleSeleccionado.set(4*pos+3, ny);
+			}
 		}
 	}
 	

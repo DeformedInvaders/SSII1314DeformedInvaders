@@ -168,7 +168,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			final EditText input = new EditText(this);
 			alert.setView(input);
 	
-			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
 					String value = input.getText().toString();
@@ -184,7 +184,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 				}
 			});
 	
-			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
