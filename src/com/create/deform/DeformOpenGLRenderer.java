@@ -21,23 +21,43 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 {
 	private Deformator deformator;
 	
+	private final int NUM_HANDLES;
+	
+	// TODO: Definir Modo Grabado
+	private TDeformEstado estado;
+	// private boolean modoGrabado;
+	
+	// TODO: Información de Movimiento. Posición de los Handles en los pasos intermedios.
+	// private List<FloatArray> movimientos;
+	
+	/* Esqueleto */
+	
+	// Indice de Vertices que forman en ConvexHull
 	private ShortArray contorno;
 	private FloatBuffer bufferContorno;
 	
+	// Coordenadas de Vertices	
 	private FloatArray vertices;
 	private FloatArray verticesModificados;
 	
+	// Indice de Vertices que forman Triángulos	
 	private ShortArray triangulos;
 	private FloatBuffer bufferTriangulos;
 	
+	/* Handles */
+	
 	// Coordenadas de Handles
 	private FloatArray handles;
+	
 	// Indice Vertice asociado a Handles
 	private ShortArray indiceHandles;
+	
 	// Coordenadas de Handles Seleccionados
 	private FloatArray handleSeleccionado;
 	
 	private Handle objetoVertice, objetoHandle, objetoHandleSeleccionado;
+	
+	/* Textura */
 	
 	private static final int numeroTexturas = 1;
 	private int[] nombreTextura;
@@ -47,17 +67,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
 	
-	private TDeformEstado estado;
-	
-	private final int NUM_HANDLES;
-	
 	public DeformOpenGLRenderer(Context context, int num_handles)
 	{
         super(context);
         
         NUM_HANDLES = num_handles;
         
+        // TODO: Inicializar Modo Grabado
         estado = TDeformEstado.Nada;
+        // modoGrabado = false;
         
         handles = new FloatArray();
         indiceHandles = new ShortArray();
@@ -145,6 +163,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		estado = TDeformEstado.Deformar;
 	}
+	
+	// TODO: Seleccionar Modo Grabado
+	//public void seleccionarGrabado() { }
 
 	/* Métodos abstractos de OpenGLRenderer */
 	
@@ -154,6 +175,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		    
 		handles.clear();
 		indiceHandles.clear();
+		
+		// TODO: Reiniciar Información de Movimiento
 		
         for(int i = 0; i < NUM_HANDLES; i++)
         {
@@ -176,9 +199,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			eliminarHandle(x, y);
 		}
 		else if(estado == TDeformEstado.Deformar)
-		{						
+		{	
+			// TODO: Si Modo Grabado Guardar Posición inicial de los Handles			
 			seleccionarHandle(x, y, pos);
 		}
+		
 	}
 
 	private short buscarPixel(float x, float y)
@@ -260,6 +285,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
+				// TODO: Si Modo Grabado guardar posicion intermedia de los Handles
 				moverHandle(x, y, pos);
 			}
 		}
@@ -306,11 +332,31 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
+	
+	/* Métodos de Actualización de Estado */
+	
+	// TODO: Seleccionar Modo Grabación. Actualizar Estado Grabación.
+	// public void seleccionarGrabacion();
+	
+	// TODO: Seleccionar Restauracion. Reiniciar posición Inicial de Vertices. Actualizar Estado Grabación.
+	// public void restaurar();
+	
+	/* Métodos de Obtención de Información */
 
 	public boolean handlesVacio()
 	{
 		return indiceHandles.size == 0;
 	}
+	
+	// TODO: Obtener Estado de Grabación
+	// public boolean estadoGrabacion() { }
+	
+	// TODO: Obtener Información de Movimientos. Reducir a numIter pasos intermedios. Calcular Posición de Vertices en esos pasos y devolverlos.
+	// public List<FloatArray> getMovimientos(int numIter) { }
+	
+	/* Métodos de Salvados de Información */
+	
+	// TODO: Guardar Información del Movimiento
 	
 	public DeformDataSaved saveData()
 	{

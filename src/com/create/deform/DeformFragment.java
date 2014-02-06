@@ -22,7 +22,8 @@ public class DeformFragment extends Fragment
 	
 	private DeformDataSaved dataSaved;
 	
-	private ImageButton botonAdd, botonRemove, botonMover, botonDelete;
+	// TODO: Añadir Botón de Grabado de Movimiento
+	private ImageButton botonAdd, botonRemove, botonMover, botonDelete; //, botonRecord;
 		
 	/* Constructora */
 	
@@ -52,6 +53,8 @@ public class DeformFragment extends Fragment
 		botonRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
 		botonMover = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
+		// TODO: Instanciar Botón de Grabado
+		// botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
 		
 		botonRemove.setEnabled(false);
 		botonMover.setEnabled(false);
@@ -61,6 +64,8 @@ public class DeformFragment extends Fragment
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
 		botonMover.setOnClickListener(new OnMoveClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
+		//TODO: Asignar Listener al Botón de Grabado
+		// botonGrabar.setOnClickListener(new OnRecordClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -101,17 +106,21 @@ public class DeformFragment extends Fragment
 	
 	private void actualizarBotones()
 	{
+		// TODO: Actualizar Estado del Botón Record.
 		if(canvas.handlesVacio())
 		{
 			botonRemove.setEnabled(false);
 			botonMover.setEnabled(false);
 			botonDelete.setEnabled(false);
+			// botonRecord.setEnabled(false);
 		}
 		else
 		{
+			// TODO: Comprobar Si estado de Grabación bloquear botones de modifiación de Handles
 			botonRemove.setEnabled(true);
 			botonMover.setEnabled(true);
 			botonDelete.setEnabled(true);
+			// botonRecord.setEnabled(true);
 		}
 	}
 	
@@ -153,4 +162,12 @@ public class DeformFragment extends Fragment
 			actualizarBotones();
 		}	
 	}
+	
+	// TODO: Añadir Listener para Grabar Movimiento. Cambiar Imagen del boton en modo Grabacíón / Restaurar y actualizar Botones.
+	// private class OnRecordClickListener implements OnClickListener { }
+	
+	/* Métodos de Obtención de Información */
+	
+	// TODO: Añadir Método para Obtener la Grabación
+	// public List<FloatArray> getMovimiento() { }
 }

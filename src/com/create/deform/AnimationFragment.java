@@ -36,6 +36,9 @@ public class AnimationFragment extends Fragment
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
 	
+	// TODO: Inicializar lista de Movimientos
+	//private List<FloatArray> movimientoSalto, movimientoAtaque, movimientoAgacharse, movimientoCorrer;
+	
 	/* Constructora */
 	
 	public static final AnimationFragment newInstance(Esqueleto e, Textura t)
@@ -111,7 +114,7 @@ public class AnimationFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			// TODO:
+			// TODO: Comprobar que hay guardado 4 List<FloatArray> distintos
 			mCallback.onAnimationReadyButtonClicked(new Movimientos());
 		}
     }
