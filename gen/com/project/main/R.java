@@ -138,49 +138,101 @@ public final class R {
         public static final int fragment_selection_layout=0x7f03000c;
     }
     public static final class string {
-        /**  Proyecto 
+        /**  Animation Fragment 
+ Animation Fragment 
          */
-        public static final int app_name=0x7f060000;
-        public static final int desc_add=0x7f060014;
-        public static final int desc_bucket=0x7f060008;
-        public static final int desc_color=0x7f06000d;
-        public static final int desc_delete=0x7f06000c;
-        public static final int desc_dialog_arrow=0x7f06001b;
-        public static final int desc_dialog_content=0x7f06001a;
-        public static final int desc_dialog_decrement=0x7f060019;
-        /**  Modo de Seleccion de Personaje 
- Modo de Juego 
+        public static final int desc_animation_ready=0x7f060030;
+        /**  Deform Fragment 
+ Deform Fragment 
+         */
+        public static final int desc_deform_add=0x7f06002a;
+        public static final int desc_deform_move=0x7f06002c;
+        public static final int desc_deform_ready=0x7f06002f;
+        public static final int desc_deform_record=0x7f06002e;
+        public static final int desc_deform_remove=0x7f06002b;
+        public static final int desc_deform_reset=0x7f06002d;
+        /**  Design Fragment 
+ Design Fragment 
+         */
+        public static final int desc_design_ready=0x7f06001d;
+        public static final int desc_design_reset=0x7f06001e;
+        public static final int desc_design_test=0x7f06001f;
+        public static final int desc_dialog_arrow=0x7f060036;
+        /**  Unknown 
+ Unknown 
+         */
+        public static final int desc_dialog_content=0x7f060035;
+        public static final int desc_dialog_decrement=0x7f060034;
+        /**  Dialogs 
  Dialogs 
          */
-        public static final int desc_dialog_increment=0x7f060018;
-        public static final int desc_eye=0x7f06000f;
-        public static final int desc_hand=0x7f060009;
-        public static final int desc_move=0x7f060016;
-        public static final int desc_new=0x7f060005;
-        /**  Main 
+        public static final int desc_dialog_increment=0x7f060033;
+        /**  IMAGE DESCRIPTIONS 
+ Loading Fragment 
+ IMAGE DESCRIPTIONS 
+ Loading Fragment 
          */
-        public static final int desc_new_character=0x7f060001;
-        public static final int desc_next=0x7f06000a;
-        /**  Fase de Pintura 
+        public static final int desc_loading_new=0x7f06001a;
+        public static final int desc_loading_play=0x7f06001c;
+        public static final int desc_loading_select=0x7f06001b;
+        /**  Paint Fragment 
+ Paint Fragment 
          */
-        public static final int desc_pencil=0x7f060007;
-        public static final int desc_play_game=0x7f060003;
-        public static final int desc_prev=0x7f06000b;
-        /**  Modo Creación Personaje 
- Fase de Modelado 
+        public static final int desc_paint_bucket=0x7f060020;
+        public static final int desc_paint_color=0x7f060026;
+        public static final int desc_paint_eye=0x7f060028;
+        public static final int desc_paint_hand=0x7f060022;
+        public static final int desc_paint_next=0x7f060023;
+        public static final int desc_paint_pencil=0x7f060021;
+        public static final int desc_paint_prev=0x7f060024;
+        public static final int desc_paint_ready=0x7f060029;
+        public static final int desc_paint_reset=0x7f060025;
+        public static final int desc_paint_size=0x7f060027;
+        public static final int desc_selection_delete=0x7f060032;
+        /**  Selection Fragment 
+ Selection Fragment 
          */
-        public static final int desc_ready=0x7f060004;
-        public static final int desc_remove=0x7f060015;
-        public static final int desc_save=0x7f060017;
-        public static final int desc_size=0x7f06000e;
-        public static final int desc_test=0x7f060006;
-        public static final int desc_view_characters=0x7f060002;
-        public static final int title_section_attack=0x7f060013;
-        public static final int title_section_down=0x7f060012;
-        public static final int title_section_jump=0x7f060011;
-        /**  Fase de Animacion 
+        public static final int desc_selection_select=0x7f060031;
+        public static final int error_animation=0x7f060017;
+        public static final int error_delete_character=0x7f060019;
+        public static final int error_design=0x7f060015;
+        public static final int error_paint=0x7f060016;
+        public static final int error_save_character=0x7f060018;
+        /**  Errors 
+ Errors 
          */
-        public static final int title_section_run=0x7f060010;
+        public static final int error_test=0x7f060014;
+        public static final int text_confirmation_no=0x7f060013;
+        public static final int text_confirmation_yes=0x7f060012;
+        public static final int text_delete_character_confirmation=0x7f060011;
+        public static final int text_delete_character_description=0x7f060010;
+        public static final int text_delete_character_title=0x7f06000f;
+        public static final int text_replace_character_confirmation=0x7f06000d;
+        public static final int text_save_character_confirmation=0x7f06000c;
+        public static final int text_save_character_description=0x7f06000b;
+        /**  Dialogs 
+ Dialogs 
+         */
+        public static final int text_save_character_title=0x7f06000a;
+        public static final int text_select_character_confirmation=0x7f06000e;
+        public static final int title_animation_phase=0x7f060003;
+        public static final int title_animation_section_attack=0x7f060009;
+        public static final int title_animation_section_down=0x7f060008;
+        public static final int title_animation_section_jump=0x7f060007;
+        /**  ActionBar PagerView Section Titles 
+ ActionBar PagerView Section Titles 
+         */
+        public static final int title_animation_section_run=0x7f060006;
+        /**  STRINGS 
+ ActionBar Titles 
+ STRINGS 
+ ActionBar Titles 
+         */
+        public static final int title_app=0x7f060000;
+        public static final int title_design_phase=0x7f060001;
+        public static final int title_game_phase=0x7f060005;
+        public static final int title_paint_phase=0x7f060002;
+        public static final int title_selection_phase=0x7f060004;
     }
     public static final class style {
         /** 

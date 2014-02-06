@@ -9,17 +9,17 @@
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading1"
-            android:contentDescription="@string/desc_new_character"
+            android:contentDescription="@string/desc_loading_new"
             android:src="@drawable/newcharacter_icon" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading2"
-            android:contentDescription="@string/desc_play_game"
+            android:contentDescription="@string/desc_loading_play"
             android:src="@drawable/playgame_icon" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading3"
-            android:contentDescription="@string/desc_view_characters"
+            android:contentDescription="@string/desc_loading_select"
             android:src="@drawable/viewcharacter_icon" />
         
     </LinearLayout>
@@ -31,7 +31,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:text="@string/app_name"
+        android:text="@string/title_app"
         android:textColor="#000000"
         android:textSize="80sp" />
 

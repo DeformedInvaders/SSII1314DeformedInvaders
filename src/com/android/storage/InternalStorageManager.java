@@ -1,10 +1,12 @@
 package com.android.storage;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.project.data.Personaje;
+import com.project.main.R;
 
 public class InternalStorageManager
 {
@@ -66,7 +69,7 @@ public class InternalStorageManager
 	
 	/* LISTA NOMBRES */
 	
-	private void cargarNombres()
+	private boolean cargarNombres()
 	{
 		try
 		{
@@ -83,21 +86,39 @@ public class InternalStorageManager
 			
 			data.close();
 			file.close();
+			
+			Log.d("TEST", "Names loaded");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Name file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Name sream corrupted");
+			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "IO EXCEPTION - CARGAR NOMBRES");
+			Log.d("TEST", "File Name ioexception");
 			e.printStackTrace();
 		}
+		
+		Log.d("TEST", "Names not loadead");
+		return false;
 	}
 	
 	private boolean eliminarNombre(String nombre)
 	{
 		if(nombres.remove(nombre))
 		{
+			Log.d("TEST", "Name deleted");
 			return guardarNombres();
 		}
 		
+		Log.d("TEST", "Name not deleted");
 		return false;
 	}
 	
@@ -121,15 +142,27 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 			
+			Log.d("TEST", "Names saved");			
 			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Name file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Name sream corrupted");
+			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "IO EXCEPTION - GUARDAR NOMBRES");
+			Log.d("TEST", "File Name ioexception");
 			e.printStackTrace();
-			
-			return false;
 		}
+		
+		Log.d("TEST", "Names not loadead");
+		return false;
 	}
 	
 	/* LISTA DE PERSONAJES */
@@ -153,29 +186,41 @@ public class InternalStorageManager
 	
 	public int cargarSeleccionado()
 	{
-		int seleccionado = -1;
-		
 		try
 		{
 			FileInputStream file = activity.openFileInput(getCharacterChosenFileName());
 			ObjectInputStream data = new ObjectInputStream(file);
 			
 			// Cargar Personaje Seleccionado
-			seleccionado = data.readInt();
+			int seleccionado = data.readInt();
 			
 			data.close();
 			file.close();
+			
+			Log.d("TEST", "Chosen loadead");
+			return seleccionado;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Chosen file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Chosen sream corrupted");
+			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "IO EXCEPTION - CARGAR SELECCIONADO");
+			Log.d("TEST", "File Chosen ioexception");
 			e.printStackTrace();
 		}
 		
-		return seleccionado;
+		Log.d("TEST", "Chosen not loadead");
+		return -1;
 	}
 	
-	public void guardarSeleccionado(int seleccionado)
+	public boolean guardarSeleccionado(int seleccionado)
 	{
 		try
 		{
@@ -187,12 +232,28 @@ public class InternalStorageManager
 			
 			data.close();
 			file.close();
+			
+			Log.d("TEST", "Chosen saved");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Chosen file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Chosen sream corrupted");
+			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "IO EXCEPTION - GUARDAR SELECCIONADO");
+			Log.d("TEST", "File Chosen ioexception");
 			e.printStackTrace();
 		}
+		
+		Log.d("TEST", "Chosen not saved");
+		return false;
 	}
 	
 	/* PERSONAJE ACTUAL */
@@ -210,22 +271,32 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 			
+			Log.d("TEST", "Character Loadead");
 			return p;
-		}
-		catch (IOException e)
-		{
-			Log.d("TEST", "IO EXCEPTION - CARGAR PERSONAJE");
-			e.printStackTrace();
-			
-			return null;
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d("TEST", "CLASS NOT FOUND EXCEPTION - CARGAR PERSONAJE");
+			Log.d("TEST", "File Character class not found");
 			e.printStackTrace();
-			
-			return null;
 		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Character file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Character sream corrupted");
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "File Character ioexception");
+			e.printStackTrace();
+		}
+		
+		Log.d("TEST", "Character not loadead");
+		return null;
 	}
 	
 	public boolean guardarPersonaje(Personaje personaje)
@@ -234,10 +305,10 @@ public class InternalStorageManager
 		if(!comprobarNombresInternos(personaje.getNombre())) return false;
 		
 		// Comprobar Nombres de Personajes ya existentes
-		if(!comprobarNombresUsados(personaje.getNombre()))
+		if(comprobarNombresUsados(personaje.getNombre()))
 		{
 			// Personaje Reemplazado
-			Toast.makeText(activity.getApplication(), "Personaje Reemplazado", Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity.getApplication(), R.string.text_replace_character_confirmation, Toast.LENGTH_SHORT).show();
 		}
 		
 		String nombreActual = personaje.getNombre().toUpperCase(Locale.getDefault());
@@ -254,24 +325,38 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 			
+			Log.d("TEST", "Character saved");
 			return guardarNombres();
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Character file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Character sream corrupted");
+			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "IO EXCEPTION - GUARDAR PERSONAJE");
+			Log.d("TEST", "File Character ioexception");
 			e.printStackTrace();
-			
-			return false;
 		}
+		
+		Log.d("TEST", "Character not saved");
+		return false;
 	}
 	
 	public boolean eliminarPersonaje(Personaje personaje)
 	{
 		if(activity.deleteFile(personaje.getNombre()))
 		{
+			Log.d("TEST", "File deleted");
 			return eliminarNombre(personaje.getNombre());
 		}
 		
+		Log.d("TEST", "File not deleted");
 		return false;
 	}
 }

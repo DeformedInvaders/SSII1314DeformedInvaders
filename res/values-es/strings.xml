@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- STRINGS -->
+    	<!-- ActionBar Titles -->
+		    <string name="title_app">DEFORMS INVADERS</string>
+		    <string name="title_design_phase">Define el diseño.</string>
+		    <string name="title_paint_phase">Define la textura.</string>
+		    <string name="title_animation_phase">Define las animaciones.</string>
+		    <string name="title_selection_phase">Selecciona un personaje.</string>
+		    <string name="title_game_phase">Disfruta del juego.</string>
+	    
+	    <!-- ActionBar PagerView Section Titles -->
+			<string name="title_animation_section_run">Correr</string>
+			<string name="title_animation_section_jump">Saltar</string>
+			<string name="title_animation_section_down">Agacharse</string>
+			<string name="title_animation_section_attack">Atacar</string>
+			
+		<!-- Dialogs -->
+			<string name="text_save_character_title">Guardando tu personaje.</string>
+			<string name="text_save_character_description">Introduce el nombre de tu personaje.</string>
+			<string name="text_save_character_confirmation">Personaje guardado.</string>
+			
+			<string name="text_replace_character_confirmation">Personaje reemplazado.</string>
+			<string name="text_select_character_confirmation">Personaje seleccionado.</string>
+			
+			<string name="text_delete_character_title">Eliminando tu personaje.</string>
+			<string name="text_delete_character_description">¿Estás seguro de eliminar este personaje?.</string>
+			<string name="text_delete_character_confirmation">Personaje eliminado.</string>
+			
+			<string name="text_confirmation_yes">Si</string>
+			<string name="text_confirmation_no">No</string>
+			
+		<!-- Errors -->
+			<string name="error_test">El poligono es complejo.</string>
+			<string name="error_design">El esqueleto está corrupto.</string>
+			<string name="error_paint">La textura está corrupta.</string>
+			<string name="error_animation">Las animaciones están corruptas.</string>
+			<string name="error_save_character">El personaje no se ha podido guardar.</string>
+			<string name="error_delete_character">El pesronaje no se ha podido eliminar.</string>
+			
+	<!-- IMAGE DESCRIPTIONS -->
+	
+	    <!-- Loading Fragment -->
+		    <string name="desc_loading_new">Crear un nuevo personaje.</string>
+		    <string name="desc_loading_select">Selecciona un personajer.</string>
+		    <string name="desc_loading_play">Jugar.</string>
+		    
+		<!-- Design Fragment -->
+		    <string name="desc_design_ready">Listo para definir la textura.</string>
+		    <string name="desc_design_reset">Reiniciar el diseño.</string>
+		    <string name="desc_design_test">Probar el diseño.</string>
+		    
+		<!-- Paint Fragment -->
+		    <string name="desc_paint_bucket">Seleccionar la herramienta cubo.</string>
+		    <string name="desc_paint_pencil">Seleccionar la herramienta pincel.</string>
+		    <string name="desc_paint_hand">Seleccionar la herramienta mano.</string>
+		    <string name="desc_paint_next">Rehacer la última acción.</string>
+		    <string name="desc_paint_prev">Deshacer la última acción.</string>
+		    <string name="desc_paint_reset">Reiniciar la textura.</string>
+		    <string name="desc_paint_color">Cambiar el color del cubo.</string>
+		    <string name="desc_paint_size">Cambiar el tamaño del pincel.</string>
+		    <string name="desc_paint_eye">Añadir una etiqueta.</string>
+		    <string name="desc_paint_ready">Listo para definir las animaciones.</string>
+		    
+		<!-- Deform Fragment -->
+		    <string name="desc_deform_add">Añadir un nuevo tirador.</string>
+		    <string name="desc_deform_remove">Eliminar un tirador.</string>
+		    <string name="desc_deform_move">Mover un tirador.</string>
+		    <string name="desc_deform_reset">Reiniciar la animación.</string>
+		    <string name="desc_deform_record">Grabar la animación.</string>
+		    <string name="desc_deform_ready">Listo para guardar la animación.</string>
+		    
+		<!-- Animation Fragment -->
+		    <string name="desc_animation_ready">Listo para guardar el personaje.</string>
+		    
+		<!-- Selection Fragment -->
+	    	<string name="desc_selection_select">Selecciona un personaje.</string>
+	    	<string name="desc_selection_delete">Elimina el personaje.</string>
+	    	
+	    <!-- Dialogs -->
+		    <string name="desc_dialog_increment">Incrementa el tamaño del pincel.</string>
+		    <string name="desc_dialog_decrement">Decrementa el tamaño del pincel.</string>
+		
+		<!-- Unknown -->
+			<string name="desc_dialog_content">Contenido</string>
+		    <string name="desc_dialog_arrow">Flecha</string>
+
+</resources>

@@ -9,22 +9,22 @@
         
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform1"
-            android:contentDescription="@string/desc_add"
+            android:contentDescription="@string/desc_deform_add"
             android:src="@drawable/icon_add" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform2"
-            android:contentDescription="@string/desc_remove"
+            android:contentDescription="@string/desc_deform_remove"
             android:src="@drawable/icon_remove" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform3"
-            android:contentDescription="@string/desc_move"
+            android:contentDescription="@string/desc_deform_move"
             android:src="@drawable/icon_hand" />
         
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform4"
-            android:contentDescription="@string/desc_delete"
+            android:contentDescription="@string/desc_deform_reset"
             android:src="@drawable/icon_delete" />
 		
     </LinearLayout>

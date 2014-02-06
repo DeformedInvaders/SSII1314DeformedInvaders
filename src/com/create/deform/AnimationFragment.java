@@ -152,13 +152,13 @@ public class AnimationFragment extends Fragment
 			switch (position)
 			{
 				case 0:
-					return getString(R.string.title_section_run).toUpperCase(l);
+					return getString(R.string.title_animation_section_run).toUpperCase(l);
 				case 1:
-					return getString(R.string.title_section_jump).toUpperCase(l);
+					return getString(R.string.title_animation_section_jump).toUpperCase(l);
 				case 2:
-					return getString(R.string.title_section_down).toUpperCase(l);
+					return getString(R.string.title_animation_section_down).toUpperCase(l);
 				case 3:
-					return getString(R.string.title_section_attack).toUpperCase(l);
+					return getString(R.string.title_animation_section_attack).toUpperCase(l);
 			}
 			
 			return null;

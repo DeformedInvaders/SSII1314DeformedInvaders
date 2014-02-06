@@ -1,41 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Proyecto -->
-    <string name="app_name">DEFORMS INVADERS</string>
-    <!-- Main -->
-    <string name="desc_new_character">New Character</string>
-    <string name="desc_view_characters">View Characters</string>
-    <string name="desc_play_game">Play Game</string>
-    <!-- Modo Creación Personaje -->
-	    <!-- Fase de Modelado -->
-	    <string name="desc_ready">Ready</string>
-	    <string name="desc_new">New</string>
-	    <string name="desc_test">Test</string>
-	    <!-- Fase de Pintura -->
-	    <string name="desc_pencil">Bucket</string>
-	    <string name="desc_bucket">Pencil</string>
-	    <string name="desc_hand">Hand</string>
-	    <string name="desc_next">Next</string>
-	    <string name="desc_prev">Previous</string>
-	    <string name="desc_delete">Delete</string>
-	    <string name="desc_color">Color</string>
-	    <string name="desc_size">Size</string>
-	    <string name="desc_eye">Eye</string>
-	    <!-- Fase de Animacion -->
-	    <string name="title_section_run">Run</string>
-	    <string name="title_section_jump">Jump</string>
-	    <string name="title_section_down">Down</string>
-	    <string name="title_section_attack">Attack</string>
-	    <string name="desc_add">Add</string>
-	    <string name="desc_remove">Remove</string>
-	    <string name="desc_move">Move</string>
-	    <string name="desc_save">Save</string>
-    <!-- Modo de Seleccion de Personaje -->
-    <!-- Modo de Juego -->
-    <!-- Dialogs -->
-    <string name="desc_dialog_increment">Increment</string>
-    <string name="desc_dialog_decrement">Decrement</string>
-    <string name="desc_dialog_content">Content</string>
-    <string name="desc_dialog_arrow">Arrow</string>
+    <!-- STRINGS -->
+    	<!-- ActionBar Titles -->
+		    <string name="title_app">DEFORMS INVADERS</string>
+		    <string name="title_design_phase">Define the design.</string>
+		    <string name="title_paint_phase">Define the texture.</string>
+		    <string name="title_animation_phase">Define the animation.</string>
+		    <string name="title_selection_phase">Select a character.</string>
+		    <string name="title_game_phase">Enjoy the game.</string>
+	    
+	    <!-- ActionBar PagerView Section Titles -->
+			<string name="title_animation_section_run">Run</string>
+			<string name="title_animation_section_jump">Jump</string>
+			<string name="title_animation_section_down">Down</string>
+			<string name="title_animation_section_attack">Attack</string>
+			
+		<!-- Dialogs -->
+			<string name="text_save_character_title">Saving your character.</string>
+			<string name="text_save_character_description">Introduce a name for your new character.</string>
+			<string name="text_save_character_confirmation">Character saved.</string>
+			
+			<string name="text_replace_character_confirmation">Character replaced.</string>
+			<string name="text_select_character_confirmation">Character selected.</string>
+			
+			<string name="text_delete_character_title">Deleting your character.</string>
+			<string name="text_delete_character_description">Are you sure to delete this character?.</string>
+			<string name="text_delete_character_confirmation">Character deleted.</string>
+			
+			<string name="text_confirmation_yes">Yes</string>
+			<string name="text_confirmation_no">No</string>
+			
+		<!-- Errors -->
+			<string name="error_test">The polygon is complex.</string>
+			<string name="error_design">The design is corrupted.</string>
+			<string name="error_paint">The texture is corrupted.</string>
+			<string name="error_animation">The animation is corrupted.</string>
+			<string name="error_save_character">The character cannot be saved.</string>
+			<string name="error_delete_character">The character cannot be deleted.</string>
+			
+	<!-- IMAGE DESCRIPTIONS -->
+	
+	    <!-- Loading Fragment -->
+		    <string name="desc_loading_new">Create a new character.</string>
+		    <string name="desc_loading_select">Select a character.</string>
+		    <string name="desc_loading_play">Play the Game.</string>
+		    
+		<!-- Design Fragment -->
+		    <string name="desc_design_ready">Ready to define the texture.</string>
+		    <string name="desc_design_reset">Reset the design.</string>
+		    <string name="desc_design_test">Test the design.</string>
+		    
+		<!-- Paint Fragment -->
+		    <string name="desc_paint_bucket">Select bucket tool.</string>
+		    <string name="desc_paint_pencil">Select pencil tool.</string>
+		    <string name="desc_paint_hand">Select hand tool.</string>
+		    <string name="desc_paint_next">Redo last action.</string>
+		    <string name="desc_paint_prev">Undo last action.</string>
+		    <string name="desc_paint_reset">Reset the texture.</string>
+		    <string name="desc_paint_color">Change the bucket\'s color.</string>
+		    <string name="desc_paint_size">Change the pencil\'s size.</string>
+		    <string name="desc_paint_eye">Add a new sticker.</string>
+		    <string name="desc_paint_ready">Ready to define the animations.</string>
+		    
+		<!-- Deform Fragment -->
+		    <string name="desc_deform_add">Add a new handle.</string>
+		    <string name="desc_deform_remove">Remove a handle.</string>
+		    <string name="desc_deform_move">Move a handle.</string>
+		    <string name="desc_deform_reset">Reset the animation.</string>
+		    <string name="desc_deform_record">Record an animation.</string>
+		    <string name="desc_deform_ready">Ready to save the animation.</string>
+		    
+		<!-- Animation Fragment -->
+		    <string name="desc_animation_ready">Ready to save the character.</string>
+		    
+		<!-- Selection Fragment -->
+	    	<string name="desc_selection_select">Select this character.</string>
+	    	<string name="desc_selection_delete">Delete this character.</string>
+	    	
+	    <!-- Dialogs -->
+		    <string name="desc_dialog_increment">Increment the pencil\'s size.</string>
+		    <string name="desc_dialog_decrement">Decrement the pencil\'s size.</string>
+		
+		<!-- Unknown -->
+			<string name="desc_dialog_content">Content</string>
+		    <string name="desc_dialog_arrow">Arrow</string>
 
 </resources>

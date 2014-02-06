@@ -9,12 +9,12 @@
 
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDesign2"
-		    android:contentDescription="@string/desc_new"
+		    android:contentDescription="@string/desc_design_reset"
             android:src="@drawable/icon_new" />
         		        
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDesign3"
-		    android:contentDescription="@string/desc_test"
+		    android:contentDescription="@string/desc_design_test"
             android:src="@drawable/icon_test" />
 
     </LinearLayout>
@@ -23,7 +23,7 @@
 
 	    <ImageButton style="@style/BigImageButton"
 	        android:id="@+id/imageButtonDesign1"
-	        android:contentDescription="@string/desc_ready"
+	        android:contentDescription="@string/desc_design_ready"
 	        android:src="@drawable/icon_ready" />
     
     </LinearLayout>

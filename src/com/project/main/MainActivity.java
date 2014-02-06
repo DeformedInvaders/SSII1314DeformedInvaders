@@ -1,6 +1,7 @@
 package com.project.main;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -72,19 +73,28 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	
 	private void changeFragment(Fragment fragmento)
 	{
+		boolean clearBackStack = false;
+		boolean addToBackStack = true;
+		
+		if(estado == TEstado.Selection) addToBackStack = false;
+		
 		actualizarEstado(fragmento);
 		limpiarActionBar();
 		
+		if(estado == TEstado.Loading) clearBackStack = true;
+		
 		FragmentManager manager = getSupportFragmentManager();
 		
-		if(estado == TEstado.Loading)
-		{
-			clearBackStack(manager);
-		}
+		// Limpiar la BackStack
+		if(clearBackStack) clearBackStack(manager);
 		
+		// Reemplazar el Fragmento
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.replace(R.id.frameLayoutMain1, fragmento, estado.toString());
-		transaction.addToBackStack(estado.toString());
+		
+		// Añadir a la BackStack
+		if(addToBackStack) transaction.addToBackStack(estado.toString());
+		
 		transaction.commit();
 	}
 	
@@ -109,7 +119,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
     public void onLoadingPlayButtonClicked()
     {
-    	//Toast.makeText(getApplication(), "Play Game", Toast.LENGTH_SHORT).show();
     	changeFragment(MultitouchFragment.newInstance());
     }
 	
@@ -119,7 +128,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(esqueleto == null)
     	{
-    		Toast.makeText(getApplication(), "The Polygon is Complex", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplication(), R.string.error_design, Toast.LENGTH_SHORT).show();
     	}
     	else
     	{
@@ -132,7 +141,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(!test)
     	{
-    		Toast.makeText(getApplication(), "The Polygon is Complex", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplication(), R.string.error_test, Toast.LENGTH_SHORT).show();
     	}
     }
 	
@@ -142,7 +151,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(textura == null)
     	{
-    		Toast.makeText(getApplication(), "The Texture is Corrupted", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplication(), R.string.error_paint, Toast.LENGTH_SHORT).show();
     	}
     	else
     	{
@@ -155,36 +164,45 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
     public void onAnimationReadyButtonClicked(Movimientos movimientos)
     {
-		if(movimientos != null)
+		if(movimientos == null)
+		{
+			Toast.makeText(getApplication(), R.string.error_animation, Toast.LENGTH_SHORT).show();
+		}
+		else
 		{
 			personajeActual.setMovimientos(movimientos);
 			
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 	
-			alert.setTitle("Personaje Finalizado");
-			alert.setMessage("Introduzca un nombre si desea guardar el personaje");
+			alert.setTitle(R.string.text_save_character_title);
+			alert.setMessage(R.string.text_save_character_description);
 	
-			// Set an EditText view to get user input 
 			final EditText input = new EditText(this);
 			alert.setView(input);
 	
-			alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+			alert.setPositiveButton(R.string.text_confirmation_yes, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
-					String value = input.getText().toString();
+					String value = input.getText().toString().toUpperCase(Locale.getDefault());
 					personajeActual.setNombre(value);
 					
 					if(manager.guardarPersonaje(personajeActual))
 					{
 						listaPersonajes.add(personajeActual);
 						personajeActual = null;
+						
+						Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						Toast.makeText(getApplication(), R.string.error_save_character, Toast.LENGTH_SHORT).show();
 					}
 						
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 				}
 			});
 	
-			alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			alert.setNegativeButton(R.string.text_confirmation_no, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
@@ -202,32 +220,55 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		personajeSeleccionado = indice;
 		
 		manager.guardarSeleccionado(personajeSeleccionado);
-		
+		Toast.makeText(getApplication(), R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
+
 		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
     }
     
-    public void onSelectionDeleteButtonClicked(int indice)
-    {
-    	if(manager.eliminarPersonaje(listaPersonajes.get(indice)))
-    	{
-    		listaPersonajes.remove(indice);
-    		
-    		if(personajeSeleccionado == indice)
-    		{
-    			personajeSeleccionado = -1;	
-    		}
-    		
-    		manager.guardarSeleccionado(personajeSeleccionado);
-    	}
-		
-		if(listaPersonajes.size() > 0)
-		{
-			changeFragment(SelectionFragment.newInstance(listaPersonajes));
-		}
-		else 
-		{
-			changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-		}
+    public void onSelectionDeleteButtonClicked(final int indice)
+    {    	
+    	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    	
+		alert.setTitle(R.string.text_delete_character_title);
+		alert.setMessage(R.string.text_delete_character_description);
+
+		alert.setPositiveButton(R.string.text_confirmation_yes, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+		    	if(manager.eliminarPersonaje(listaPersonajes.get(indice)))
+		    	{
+		    		listaPersonajes.remove(indice);
+		    		
+		    		if(personajeSeleccionado == indice)
+		    		{
+		    			personajeSeleccionado = -1;	
+		    		}
+		    		
+		    		manager.guardarSeleccionado(personajeSeleccionado);
+		    		
+		    		Toast.makeText(getApplication(), R.string.text_delete_character_confirmation, Toast.LENGTH_SHORT).show();
+		    	}
+		    	else
+		    	{
+		    		Toast.makeText(getApplication(), R.string.error_delete_character, Toast.LENGTH_SHORT).show();
+		    	}
+		    	
+				if(listaPersonajes.size() > 0)
+				{
+					changeFragment(SelectionFragment.newInstance(listaPersonajes));
+				}
+				else 
+				{
+					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
+				}
+			}
+		});
+
+		alert.setNegativeButton(R.string.text_confirmation_no, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) { }
+		});
+
+		alert.show();
     }
     
     private void limpiarActionBar()
@@ -239,15 +280,37 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(fragmento != null)
     	{
-    		if(fragmento instanceof LoadingFragment) estado = TEstado.Loading;
-    		else if(fragmento instanceof DesignFragment) estado = TEstado.Design;
-    		else if(fragmento instanceof PaintFragment) estado = TEstado.Paint;
-    		else if(fragmento instanceof AnimationFragment) estado = TEstado.Animation;
-    		else if(fragmento instanceof SelectionFragment) estado = TEstado.Selection;
-    		else if(fragmento instanceof MultitouchFragment) estado = TEstado.Game;
+    		if(fragmento instanceof LoadingFragment)
+    		{
+    			estado = TEstado.Loading;
+    			setTitle(R.string.title_app);
+    		}
+    		else if(fragmento instanceof DesignFragment)
+    		{
+    			estado = TEstado.Design;
+    			setTitle(R.string.title_design_phase);
+    		}
+    		else if(fragmento instanceof PaintFragment)
+    		{
+    			estado = TEstado.Paint;
+    			setTitle(R.string.title_paint_phase);
+    		}
+    		else if(fragmento instanceof AnimationFragment)
+    		{
+    			estado = TEstado.Animation;
+    			setTitle(R.string.title_animation_phase);
+    		}
+    		else if(fragmento instanceof SelectionFragment)
+    		{
+    			estado = TEstado.Selection;
+    			setTitle(R.string.title_selection_phase);
+    		}
+    		else if(fragmento instanceof MultitouchFragment)
+    		{
+    			estado = TEstado.Game;
+    			setTitle(R.string.title_game_phase);
+    		}
     	}
-    	
-    	Toast.makeText(getApplication(), "Fase: "+estado.toString(), Toast.LENGTH_SHORT).show();
     }
     
     private void actualizarEstado()

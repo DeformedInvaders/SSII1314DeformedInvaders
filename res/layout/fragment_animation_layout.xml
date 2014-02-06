@@ -13,7 +13,7 @@
 
 	    <ImageButton style="@style/BigImageButton"
 	        android:id="@+id/imageButtonAnimation1"
-	        android:contentDescription="@string/desc_save"
+	        android:contentDescription="@string/desc_animation_ready"
 	        android:src="@drawable/icon_ready" />
 	    
     </LinearLayout>
