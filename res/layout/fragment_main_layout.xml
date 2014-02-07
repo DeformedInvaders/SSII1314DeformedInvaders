@@ -1,0 +1,38 @@
+<RelativeLayout style="@style/MainFragmentLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceViewWithButtons"
+        android:id="@+id/DisplayGLSurfaceViewLoading1" />
+
+    <LinearLayout style="@style/BigImageButtonCenterLayout">
+
+        <ImageButton style="@style/BigImageButton"
+            android:id="@+id/imageButtonLoading1"
+            android:contentDescription="@string/desc_loading_new"
+            android:background="@drawable/icon_create" />
+
+        <ImageButton style="@style/BigImageButton"
+            android:id="@+id/imageButtonLoading2"
+            android:contentDescription="@string/desc_loading_play"
+            android:background="@drawable/icon_play" />
+
+        <ImageButton style="@style/BigImageButton"
+            android:id="@+id/imageButtonLoading3"
+            android:contentDescription="@string/desc_loading_select"
+            android:background="@drawable/icon_select" />
+        
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewLoading1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/title_app"
+        android:textColor="#000000"
+        android:textSize="80sp" />
+
+</RelativeLayout>

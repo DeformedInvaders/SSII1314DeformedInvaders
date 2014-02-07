@@ -15,9 +15,9 @@ import android.widget.ImageButton;
 import com.project.data.Personaje;
 import com.view.display.DisplayGLSurfaceView;
 
-public class LoadingFragment extends Fragment
+public class MainFragment extends Fragment
 {
-	private LoadingFragmentListener mCallback;
+	private MainFragmentListener mCallback;
 	
 	private DisplayGLSurfaceView canvas;
 	private ImageButton botonAdd, botonPlay, botonView;
@@ -27,9 +27,9 @@ public class LoadingFragment extends Fragment
 	
 	/* Constructora */
 	
-	public static final LoadingFragment newInstance(List<Personaje> lista, int indice)
+	public static final MainFragment newInstance(List<Personaje> lista, int indice)
 	{
-		LoadingFragment fragment = new LoadingFragment();
+		MainFragment fragment = new MainFragment();
 		fragment.setParameters(lista, indice);
 		return fragment;
 	}
@@ -40,25 +40,25 @@ public class LoadingFragment extends Fragment
 		personajeSeleccionado = indice;
 	}
 	
-	public interface LoadingFragmentListener
+	public interface MainFragmentListener
 	{
-		public void onLoadingCreateButtonClicked();
-		public void onLoadingSelectButtonClicked();
-		public void onLoadingPlayButtonClicked();
+		public void onMainCreateButtonClicked();
+		public void onMainSelectButtonClicked();
+		public void onMainPlayButtonClicked();
     }
 	
 	@Override
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		mCallback = (LoadingFragmentListener) activity;
+		mCallback = (MainFragmentListener) activity;
 	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{		
 		// Seleccionar Layout
-		View rootView = inflater.inflate(R.layout.fragment_loading_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_main_layout, container, false);
 		
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.removeAllTabs();
@@ -105,7 +105,7 @@ public class LoadingFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onLoadingCreateButtonClicked();
+			mCallback.onMainCreateButtonClicked();
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class LoadingFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onLoadingSelectButtonClicked();
+			mCallback.onMainSelectButtonClicked();
 		}
 	}
 	
@@ -123,7 +123,7 @@ public class LoadingFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onLoadingPlayButtonClicked();
+			mCallback.onMainPlayButtonClicked();
 		}
 	}
 

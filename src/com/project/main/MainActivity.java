@@ -23,9 +23,10 @@ import com.project.data.Esqueleto;
 import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
+import com.project.loading.LoadingFragment;
 import com.view.select.SelectionFragment;
 
-public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener
+public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener
 {	
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
@@ -50,17 +51,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
         
 		if(layout != null)
         {
-			personajeSeleccionado = manager.cargarSeleccionado();
-			listaPersonajes = manager.cargarListaPersonajes();
-
-    		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
+    		changeFragment(LoadingFragment.newInstance(manager));
         }
 	}
 	
 	@Override
 	public void onBackPressed()
 	{
-		if(estado != TEstado.Loading)
+		if(estado != TEstado.Main)
 		{	
 			limpiarActionBar();
 			
@@ -80,7 +78,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		actualizarEstado(fragmento);
 		limpiarActionBar();
 		
-		if(estado == TEstado.Loading) clearBackStack = true;
+		if(estado == TEstado.Main) clearBackStack = true;
 		
 		FragmentManager manager = getSupportFragmentManager();
 		
@@ -102,27 +100,42 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 	
-	/* LOADING ACTIVITY */
+	/* LOADING FRAGMENT */
 	
-	public void onLoadingCreateButtonClicked()
+	@Override
+	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado)
+	{
+		listaPersonajes = lista;
+		personajeSeleccionado = seleccionado;
+		
+		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+	}
+	
+	/* MAIN FRAGMENT */
+	
+	@Override
+	public void onMainCreateButtonClicked()
 	{
 		personajeActual = new Personaje();
 		
 		changeFragment(DesignFragment.newInstance());
 	}
 	
-    public void onLoadingSelectButtonClicked()
+	@Override
+    public void onMainSelectButtonClicked()
     {
     	changeFragment(SelectionFragment.newInstance(listaPersonajes));
     }
     
-    public void onLoadingPlayButtonClicked()
+	@Override
+    public void onMainPlayButtonClicked()
     {
     	changeFragment(MultitouchFragment.newInstance());
     }
 	
-	/* DESIGN ACTIVITY */
+	/* DESIGN FRAGMENT */
     
+	@Override
     public void onDesignReadyButtonClicked(Esqueleto esqueleto)
     {
     	if(esqueleto == null)
@@ -136,6 +149,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	}
     }
     
+	@Override
     public void onDesignTestButtonClicked(boolean test)
     {
     	if(!test)
@@ -144,8 +158,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	}
     }
 	
-	/* PAINT ACTIVITY */
+	/* PAINT FRAGMENT */
     
+	@Override
     public void onPaintReadyButtonClicked(Textura textura)
     {
     	if(textura == null)
@@ -159,8 +174,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	}
     }
     
-	/* ANIM ACTIVITY */
+	/* ANIMATION FRAGMENT */
     
+	@Override
     public void onAnimationReadyButtonClicked(Movimientos movimientos)
     {
 		if(movimientos == null)
@@ -191,13 +207,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 						Toast.makeText(getApplication(), R.string.error_save_character, Toast.LENGTH_SHORT).show();
 					}
 						
-					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
+					changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
 				}
 
 				@Override
 				public void onNegativeButtonClick()
 				{
-					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
+					changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
 				}
 				
 			};
@@ -206,8 +222,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
     
-	/* SELECTION ACTIVITY */
+	/* SELECTION FRAGMENT */
     
+	@Override
     public void onSelectionSelectClicked(int indice)
     {
 		personajeSeleccionado = indice;
@@ -215,9 +232,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.guardarSeleccionado(personajeSeleccionado);
 		Toast.makeText(getApplication(), R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
 
-		changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
+		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
     }
     
+	@Override
     public void onSelectionDeleteButtonClicked(final int indice)
     {   
     	
@@ -232,10 +250,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		    		
 		    		if(personajeSeleccionado == indice)
 		    		{
-		    			personajeSeleccionado = -1;	
+		    			personajeSeleccionado = -1;
+		    			manager.guardarSeleccionado(personajeSeleccionado);
 		    		}
-		    		
-		    		manager.guardarSeleccionado(personajeSeleccionado);
 		    		
 		    		Toast.makeText(getApplication(), R.string.text_delete_character_confirmation, Toast.LENGTH_SHORT).show();
 		    	}
@@ -244,14 +261,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		    		Toast.makeText(getApplication(), R.string.error_delete_character, Toast.LENGTH_SHORT).show();
 		    	}
 		    	
-				if(listaPersonajes.size() > 0)
-				{
-					changeFragment(SelectionFragment.newInstance(listaPersonajes));
-				}
-				else 
-				{
-					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-				}			}
+				changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+			}
 
 			@Override
 			public void onNegativeButtonClick() { }
@@ -272,6 +283,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     		if(fragmento instanceof LoadingFragment)
     		{
     			estado = TEstado.Loading;
+    			setTitle(R.string.title_app);
+    		}
+    		if(fragmento instanceof MainFragment)
+    		{
+    			estado = TEstado.Main;
     			setTitle(R.string.title_app);
     		}
     		else if(fragmento instanceof DesignFragment)

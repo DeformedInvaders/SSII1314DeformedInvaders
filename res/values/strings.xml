@@ -15,6 +15,12 @@
 			<string name="title_animation_section_down">Down</string>
 			<string name="title_animation_section_attack">Attack</string>
 			
+		<!-- ProgressBar -->
+			<string name="text_progressBar">Loading store data.</string>
+			<string name="text_progressBar_chosen">Loading chosen character.</string>
+			<string name="text_progressBar_character_list">Loading character: </string>
+			<string name="text_progressBar_completed">Loading stored data completed.</string>
+			
 		<!-- Dialogs -->
 			<string name="text_save_character_title">Saving your character.</string>
 			<string name="text_save_character_description">Introduce a name for your new character.</string>

@@ -15,6 +15,12 @@
 			<string name="title_animation_section_down">Agacharse</string>
 			<string name="title_animation_section_attack">Atacar</string>
 			
+		<!-- ProgressBar -->
+			<string name="text_progressBar">Cargando datos guardados.</string>
+			<string name="text_progressBar_chosen">Cargando personaje seleccionado.</string>
+			<string name="text_progressBar_character_list">Cargando personaje: </string>
+			<string name="text_progressBar_completed">Cargado de datos guardados completo.</string>
+			
 		<!-- Dialogs -->
 			<string name="text_save_character_title">Guardando tu personaje.</string>
 			<string name="text_save_character_description">Introduce el nombre de tu personaje.</string>

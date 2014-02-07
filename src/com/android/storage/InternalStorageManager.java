@@ -18,6 +18,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.project.data.Personaje;
+import com.project.loading.LoadingFragment;
 import com.project.main.R;
 
 public class InternalStorageManager
@@ -167,16 +168,21 @@ public class InternalStorageManager
 	
 	/* LISTA DE PERSONAJES */
 	
-	public List<Personaje> cargarListaPersonajes()
+	public List<Personaje> cargarListaPersonajes(LoadingFragment fragment)
 	{
+		int i = 0;
 		List<Personaje> lista = new ArrayList<Personaje>();
 		
 		// Cargar Lista de Personajes
 		Iterator<String> it = nombres.iterator();
 		while(it.hasNext())
 		{
-			Personaje p = cargarPersonaje(it.next());
-			lista.add(p);
+			String name = it.next();
+			
+			fragment.updateProgressBarStatus(100 * i / nombres.size(), name);
+			
+			lista.add(cargarPersonaje(name));
+			i++;
 		}
 		
 		return lista;
