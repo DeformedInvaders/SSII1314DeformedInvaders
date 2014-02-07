@@ -56,10 +56,6 @@ public class DeformFragment extends Fragment
 		// TODO: Instanciar Botón de Grabado
 		// botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
 		
-		botonRemove.setEnabled(false);
-		botonMover.setEnabled(false);
-		botonDelete.setEnabled(false);
-		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
 		botonMover.setOnClickListener(new OnMoveClickListener());
@@ -78,6 +74,7 @@ public class DeformFragment extends Fragment
 			}
 		});
 		
+		actualizarBotones();		
         return rootView;
     }
 	
@@ -109,18 +106,18 @@ public class DeformFragment extends Fragment
 		// TODO: Actualizar Estado del Botón Record.
 		if(canvas.handlesVacio())
 		{
-			botonRemove.setEnabled(false);
-			botonMover.setEnabled(false);
-			botonDelete.setEnabled(false);
-			// botonRecord.setEnabled(false);
+			botonRemove.setVisibility(View.INVISIBLE);
+			botonMover.setVisibility(View.INVISIBLE);
+			botonDelete.setVisibility(View.INVISIBLE);
+			// botonRecord.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
 			// TODO: Comprobar Si estado de Grabación bloquear botones de modifiación de Handles
-			botonRemove.setEnabled(true);
-			botonMover.setEnabled(true);
-			botonDelete.setEnabled(true);
-			// botonRecord.setEnabled(true);
+			botonRemove.setVisibility(View.VISIBLE);
+			botonMover.setVisibility(View.VISIBLE);
+			botonDelete.setVisibility(View.VISIBLE);
+			// botonRecord.setVisibility(View.VISIBLE);
 		}
 	}
 	

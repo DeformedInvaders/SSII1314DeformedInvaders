@@ -211,7 +211,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float nx = xLeft + (xRight-xLeft)*x/width;
 		float ny = yBot + (yTop-yBot)*(height-y)/height;
 		
-		if(controlPixel(nx, ny)) return -1;
+		if(!controlPixel(nx, ny)) return -1;
 		
 		return (short) GeometryUtils.isPointInMesh(verticesModificados, nx, ny);
 	}
@@ -336,11 +336,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void onMultiTouchEvent()
 	{
-		// Cambiar Posicion de los Handles
-		deformator.moverHandles(handles, verticesModificados);
-		
-		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+		if(estado == TDeformEstado.Deformar)
+		{
+			// Cambiar Posicion de los Handles
+			deformator.moverHandles(handles, verticesModificados);
+			
+			actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+			actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+		}
 	}
 	
 	/* Métodos de Actualización de Estado */

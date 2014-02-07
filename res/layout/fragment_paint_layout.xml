@@ -50,7 +50,7 @@
 		<ImageButton style="@style/BigImageButton"
 		    android:id="@+id/imageButtonPaint9"
 		    android:contentDescription="@string/desc_paint_reset"
-		    android:src="@drawable/icon_delete" />
+		    android:src="@drawable/icon_reset" />
 
     </LinearLayout>
     

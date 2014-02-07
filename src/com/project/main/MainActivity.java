@@ -4,17 +4,16 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.android.alert.AlertDialogConfirmation;
+import com.android.alert.AlertDialogTextInput;
 import com.android.multitouch.MultitouchFragment;
 import com.android.storage.InternalStorageManager;
 import com.create.deform.AnimationFragment;
@@ -171,19 +170,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		else
 		{
 			personajeActual.setMovimientos(movimientos);
-			
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	
-			alert.setTitle(R.string.text_save_character_title);
-			alert.setMessage(R.string.text_save_character_description);
-	
-			final EditText input = new EditText(this);
-			alert.setView(input);
-	
-			alert.setPositiveButton(R.string.text_confirmation_yes, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton)
+		
+			AlertDialogTextInput alert = new AlertDialogTextInput(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_confirmation_yes), getString(R.string.text_confirmation_no)) {
+
+				@Override
+				public void onPossitiveButtonClick()
 				{
-					String value = input.getText().toString().toUpperCase(Locale.getDefault());
+					String value = getText().toUpperCase(Locale.getDefault());
 					personajeActual.setNombre(value);
 					
 					if(manager.guardarPersonaje(personajeActual))
@@ -200,15 +193,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 						
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 				}
-			});
-	
-			alert.setNegativeButton(R.string.text_confirmation_no, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton)
+
+				@Override
+				public void onNegativeButtonClick()
 				{
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
 				}
-			});
-	
+				
+			};
+
 			alert.show();
 		}
 	}
@@ -226,16 +219,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     }
     
     public void onSelectionDeleteButtonClicked(final int indice)
-    {    	
-    	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    {   
     	
-		alert.setTitle(R.string.text_delete_character_title);
-		alert.setMessage(R.string.text_delete_character_description);
+    	AlertDialogConfirmation alert = new AlertDialogConfirmation(this, getString(R.string.text_delete_character_title), getString(R.string.text_delete_character_description), getString(R.string.text_confirmation_yes), getString(R.string.text_confirmation_no)) {
 
-		alert.setPositiveButton(R.string.text_confirmation_yes, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton)
+			@Override
+			public void onPossitiveButtonClick()
 			{
-		    	if(manager.eliminarPersonaje(listaPersonajes.get(indice)))
+				if(manager.eliminarPersonaje(listaPersonajes.get(indice)))
 		    	{
 		    		listaPersonajes.remove(indice);
 		    		
@@ -260,13 +251,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 				else 
 				{
 					changeFragment(LoadingFragment.newInstance(listaPersonajes, personajeSeleccionado));
-				}
-			}
-		});
+				}			}
 
-		alert.setNegativeButton(R.string.text_confirmation_no, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) { }
-		});
+			@Override
+			public void onNegativeButtonClick() { }
+    	};
 
 		alert.show();
     }

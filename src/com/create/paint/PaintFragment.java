@@ -77,11 +77,7 @@ public class PaintFragment extends Fragment
 		botonNext = (ImageButton) rootView.findViewById(R.id.imageButtonPaint8);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonPaint9);
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonPaint10);
-		
-		botonNext.setEnabled(false);
-		botonPrev.setEnabled(false);
-		botonDelete.setEnabled(false);
-		
+
 		botonPincel.setOnClickListener(new OnPincelClickListener());	
 		botonCubo.setOnClickListener(new OnCuboClickListener());
 		botonColor.setOnClickListener(new OnColorClickListener());
@@ -104,6 +100,7 @@ public class PaintFragment extends Fragment
 			}
 		});
 		
+		actualizarBotones();
 		return rootView;
     }
 	
@@ -127,22 +124,22 @@ public class PaintFragment extends Fragment
 	{
 		if(canvas.bufferSiguienteVacio())
 		{
-			botonNext.setEnabled(false);
+			botonNext.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
-			botonNext.setEnabled(true);
+			botonNext.setVisibility(View.VISIBLE);
 		}
 		
 		if(canvas.bufferAnteriorVacio())
 		{
-			botonPrev.setEnabled(false);
-			botonDelete.setEnabled(false);
+			botonPrev.setVisibility(View.INVISIBLE);
+			botonDelete.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
-			botonPrev.setEnabled(true);
-			botonDelete.setEnabled(true);
+			botonPrev.setVisibility(View.VISIBLE);
+			botonDelete.setVisibility(View.VISIBLE);
 		}
 	}
 	

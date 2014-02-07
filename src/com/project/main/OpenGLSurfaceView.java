@@ -100,14 +100,13 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 				case MotionEvent.ACTION_UP:
 					onTouchUp(x, y, width, height, 0);
 				break;
-				default:
-					return false;
 			}
 			
 			requestRender();	
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
     
     private boolean onDetectorsTouch(View v, MotionEvent event)
@@ -131,9 +130,10 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			}
 			
 			requestRender();
+			return true;
     	}
     	
-    	return true;
+    	return false;
     }
     
 	private boolean onMultiTouch(View v, MotionEvent event)
@@ -168,15 +168,14 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 					case MotionEvent.ACTION_POINTER_UP:
 						onTouchUp(x, y, width, height, id);
 					break;
-					default:
-						return false;
 				}
 			}
 			
 			onMultiTouchEvent();
 			requestRender();
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 }

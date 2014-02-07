@@ -19,7 +19,7 @@
 		<ImageButton style="@style/BigImageButton"
 		    android:id="@+id/imageButtonSelection2"
 		    android:contentDescription="@string/desc_selection_delete"
-		    android:src="@drawable/icon_delete" />
+		    android:src="@drawable/icon_reset" />
 	
 	</LinearLayout>
     

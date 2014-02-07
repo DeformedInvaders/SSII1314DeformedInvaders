@@ -58,10 +58,6 @@ public class DesignFragment extends Fragment
 		botonNuevo.setOnClickListener(new onNewClickListener());
 		botonTest.setOnClickListener(new onTestClickListener());
 		
-		botonReady.setEnabled(false);
-		botonNuevo.setEnabled(false);
-		botonTest.setEnabled(false);
-		
 		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event)
@@ -73,6 +69,7 @@ public class DesignFragment extends Fragment
 			}
 		});
 		
+		actualizarBotones();
         return rootView;
     }
 	
@@ -96,15 +93,15 @@ public class DesignFragment extends Fragment
 	{
 		if(canvas.poligonoCompleto())
 		{
-			botonReady.setEnabled(true);
-			botonNuevo.setEnabled(true);
-			botonTest.setEnabled(true);
+			botonReady.setVisibility(View.VISIBLE);
+			botonNuevo.setVisibility(View.VISIBLE);
+			botonTest.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			botonReady.setEnabled(false);
-			botonNuevo.setEnabled(false);
-			botonTest.setEnabled(false);
+			botonReady.setVisibility(View.INVISIBLE);
+			botonNuevo.setVisibility(View.INVISIBLE);
+			botonTest.setVisibility(View.INVISIBLE);
 		}
 	}
 	

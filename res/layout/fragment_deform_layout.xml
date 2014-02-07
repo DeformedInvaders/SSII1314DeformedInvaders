@@ -25,7 +25,7 @@
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonDeform4"
             android:contentDescription="@string/desc_deform_reset"
-            android:src="@drawable/icon_delete" />
+            android:src="@drawable/icon_reset" />
 		
     </LinearLayout>
     

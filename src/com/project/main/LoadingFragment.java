@@ -79,7 +79,7 @@ public class LoadingFragment extends Fragment
 		botonView.setOnClickListener(new OnViewClickListener());
 		botonPlay.setOnClickListener(new OnPlayClickListener());
 		
-		botonView.setEnabled(listaPersonajes.size() > 0);
+		if(listaPersonajes.size() > 0) botonView.setVisibility(View.VISIBLE);
 		
         return rootView;
     }
