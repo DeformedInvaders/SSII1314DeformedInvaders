@@ -10,17 +10,17 @@
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading1"
             android:contentDescription="@string/desc_loading_new"
-            android:src="@drawable/icon_create" />
+            android:background="@drawable/icon_create" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading2"
             android:contentDescription="@string/desc_loading_play"
-            android:src="@drawable/icon_play" />
+            android:background="@drawable/icon_play" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonLoading3"
             android:contentDescription="@string/desc_loading_select"
-            android:src="@drawable/icon_select" />
+            android:background="@drawable/icon_select" />
         
     </LinearLayout>
 

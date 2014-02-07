@@ -23,7 +23,7 @@ public class DeformFragment extends Fragment
 	private DeformDataSaved dataSaved;
 	
 	// TODO: Añadir Botón de Grabado de Movimiento
-	private ImageButton botonAdd, botonRemove, botonMover, botonDelete; //, botonRecord;
+	private ImageButton botonAdd, botonRemove, botonMove, botonDelete; //, botonRecord;
 		
 	/* Constructora */
 	
@@ -51,14 +51,14 @@ public class DeformFragment extends Fragment
 		
 		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
-		botonMover = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
+		botonMove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
 		// TODO: Instanciar Botón de Grabado
 		// botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
 		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
-		botonMover.setOnClickListener(new OnMoveClickListener());
+		botonMove.setOnClickListener(new OnMoveClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		//TODO: Asignar Listener al Botón de Grabado
 		// botonGrabar.setOnClickListener(new OnRecordClickListener());
@@ -74,7 +74,7 @@ public class DeformFragment extends Fragment
 			}
 		});
 		
-		actualizarBotones();		
+		actualizarBotones();
         return rootView;
     }
 	
@@ -107,7 +107,7 @@ public class DeformFragment extends Fragment
 		if(canvas.handlesVacio())
 		{
 			botonRemove.setVisibility(View.INVISIBLE);
-			botonMover.setVisibility(View.INVISIBLE);
+			botonMove.setVisibility(View.INVISIBLE);
 			botonDelete.setVisibility(View.INVISIBLE);
 			// botonRecord.setVisibility(View.INVISIBLE);
 		}
@@ -115,10 +115,17 @@ public class DeformFragment extends Fragment
 		{
 			// TODO: Comprobar Si estado de Grabación bloquear botones de modifiación de Handles
 			botonRemove.setVisibility(View.VISIBLE);
-			botonMover.setVisibility(View.VISIBLE);
+			botonMove.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 			// botonRecord.setVisibility(View.VISIBLE);
 		}
+	}
+	
+	private void reiniciarImagenesBotones()
+	{
+		botonAdd.setBackgroundResource(R.drawable.icon_add);
+		botonRemove.setBackgroundResource(R.drawable.icon_remove);
+		botonMove.setBackgroundResource(R.drawable.icon_hand);
 	}
 	
 	/* Listener de Botones */
@@ -129,6 +136,9 @@ public class DeformFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarAnyadir();
+			
+			reiniciarImagenesBotones();
+			botonAdd.setBackgroundResource(R.drawable.icon_add_selected);
 		}	
 	}
 	
@@ -138,6 +148,9 @@ public class DeformFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarEliminar();
+			
+			reiniciarImagenesBotones();
+			botonRemove.setBackgroundResource(R.drawable.icon_remove_selected);
 		}	
 	}
 	
@@ -147,6 +160,9 @@ public class DeformFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarMover();
+			
+			reiniciarImagenesBotones();
+			botonMove.setBackgroundResource(R.drawable.icon_hand_selected);
 		}	
 	}
 	

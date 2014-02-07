@@ -10,47 +10,47 @@
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint1"
             android:contentDescription="@string/desc_paint_pencil"
-            android:src="@drawable/icon_pencil" />
+            android:background="@drawable/icon_pencil" />
 
         <ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint2"
             android:contentDescription="@string/desc_paint_bucket"
-            android:src="@drawable/icon_bucket" />
+            android:background="@drawable/icon_bucket" />
         
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint3"
             android:contentDescription="@string/desc_paint_color"
-            android:src="@drawable/icon_color" />
+            android:background="@drawable/icon_color" />
         
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint4"
             android:contentDescription="@string/desc_paint_size"
-            android:src="@drawable/icon_size" />
+            android:background="@drawable/icon_size" />
         
    		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint5"
             android:contentDescription="@string/desc_paint_eye"
-            android:src="@drawable/icon_eye" />
+            android:background="@drawable/icon_eye" />
     		    
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint6"
             android:contentDescription="@string/desc_paint_hand"
-            android:src="@drawable/icon_hand" />
+            android:background="@drawable/icon_hand" />
         
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint7"
             android:contentDescription="@string/desc_paint_prev"
-            android:src="@drawable/icon_prev" />
+            android:background="@drawable/icon_prev" />
                 
 		<ImageButton style="@style/BigImageButton"
             android:id="@+id/imageButtonPaint8"
             android:contentDescription="@string/desc_paint_next"
-            android:src="@drawable/icon_next" />
+            android:background="@drawable/icon_next" />
                         
 		<ImageButton style="@style/BigImageButton"
 		    android:id="@+id/imageButtonPaint9"
 		    android:contentDescription="@string/desc_paint_reset"
-		    android:src="@drawable/icon_reset" />
+		    android:background="@drawable/icon_reset" />
 
     </LinearLayout>
     
@@ -59,7 +59,7 @@
 	   	<ImageButton style="@style/BigImageButton"
 	   	    android:id="@+id/imageButtonPaint10"
 	   	    android:contentDescription="@string/desc_paint_ready"
-	   	    android:src="@drawable/icon_ready" />
+	   	    android:background="@drawable/icon_ready" />
    	
    	</LinearLayout>
 

@@ -14,13 +14,14 @@
             android:id="@+id/imageButtonDesign3"
             style="@style/BigImageButton"
             android:contentDescription="@string/desc_design_test"
-            android:src="@drawable/icon_test" />
+            android:background="@drawable/icon_test" />
 
         <ImageButton
             android:id="@+id/imageButtonDesign2"
             style="@style/BigImageButton"
             android:contentDescription="@string/desc_design_reset"
-            android:src="@drawable/icon_reset" />
+            android:background="@drawable/icon_reset" />
+    
     </LinearLayout>
 
     <LinearLayout style="@style/BigImageButtonRightLayout" >
@@ -29,7 +30,8 @@
             android:id="@+id/imageButtonDesign1"
             style="@style/BigImageButton"
             android:contentDescription="@string/desc_design_ready"
-            android:src="@drawable/icon_ready" />
+            android:background="@drawable/icon_ready" />
+    
     </LinearLayout>
 
 </RelativeLayout>

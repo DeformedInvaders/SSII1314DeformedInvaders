@@ -14,12 +14,12 @@
 	    <ImageButton style="@style/BigImageButton"
 	        android:id="@+id/imageButtonSelection1"
 	        android:contentDescription="@string/desc_selection_select"
-	        android:src="@drawable/icon_ready" />
+	        android:background="@drawable/icon_ready" />
 	
 		<ImageButton style="@style/BigImageButton"
 		    android:id="@+id/imageButtonSelection2"
 		    android:contentDescription="@string/desc_selection_delete"
-		    android:src="@drawable/icon_reset" />
+		    android:background="@drawable/icon_reset" />
 	
 	</LinearLayout>
     

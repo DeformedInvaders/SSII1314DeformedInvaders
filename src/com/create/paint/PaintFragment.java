@@ -143,6 +143,13 @@ public class PaintFragment extends Fragment
 		}
 	}
 	
+	private void reiniciarImagenesBotones()
+	{
+		botonPincel.setBackgroundResource(R.drawable.icon_pencil);
+		botonCubo.setBackgroundResource(R.drawable.icon_bucket);
+		botonMano.setBackgroundResource(R.drawable.icon_hand);
+	}
+	
 	/* Listener de Botones */
 	
 	private class OnPincelClickListener implements OnClickListener
@@ -151,6 +158,9 @@ public class PaintFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarPincel();
+			
+			reiniciarImagenesBotones();
+			botonPincel.setBackgroundResource(R.drawable.icon_pencil_selected);
 		}
     }
     
@@ -160,6 +170,9 @@ public class PaintFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarCubo();
+			
+			reiniciarImagenesBotones();
+			botonCubo.setBackgroundResource(R.drawable.icon_bucket_selected);
 		}
     }
     
@@ -207,6 +220,9 @@ public class PaintFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarMano();
+			
+			reiniciarImagenesBotones();
+			botonMano.setBackgroundResource(R.drawable.icon_hand_selected);
 		}
     }
     
