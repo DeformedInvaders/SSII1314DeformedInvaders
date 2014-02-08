@@ -61,6 +61,13 @@ public class SelectionFragment extends Fragment
 	}
 	
 	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+	}
+	
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// Seleccionar Layout
@@ -102,9 +109,22 @@ public class SelectionFragment extends Fragment
 		{
 			actionBar.addTab(actionBar.newTab().setText(pageAdapter.getPageTitle(i)).setTabListener(pageAdapter));
 		}
-				
+			
         return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		actionBar = null;
+		botonReady = null;
+		botonDelete = null;
+		pageAdapter = null;
+		viewPager = null;
+		listaFragmentos = null;
+	}
 	
 	/* Listeners de Botones */
 	 

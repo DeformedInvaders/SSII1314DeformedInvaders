@@ -43,6 +43,13 @@ public class DesignFragment extends Fragment
 	}
 	
 	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+	}
+	
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// Seleccionar Layout
@@ -72,6 +79,17 @@ public class DesignFragment extends Fragment
 		actualizarBotones();
         return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		canvas = null;
+		botonReady = null;
+		botonNuevo = null;
+		botonTest = null;
+	}
 	
 	@Override
 	public void onResume()

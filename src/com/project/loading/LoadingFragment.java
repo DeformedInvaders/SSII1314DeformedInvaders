@@ -60,6 +60,14 @@ public class LoadingFragment extends Fragment
 	}
 	
 	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+		handler = null;
+	}
+	
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{		
 		// Seleccionar Layout
@@ -108,6 +116,17 @@ public class LoadingFragment extends Fragment
 		
         return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+
+		threadProgressBar = null;
+		threadLoadData = null;
+		textView = null;
+		progressBar = null;
+	}
 	
 	public void updateProgressBarStatus(final int progress, final String name)
 	{

@@ -55,6 +55,13 @@ public class MainFragment extends Fragment
 	}
 	
 	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+	}
+	
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{		
 		// Seleccionar Layout
@@ -83,6 +90,17 @@ public class MainFragment extends Fragment
 		
         return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		canvas = null;
+		botonAdd = null;
+		botonPlay = null;
+		botonView = null;
+	}
 	
 	@Override
 	public void onResume()

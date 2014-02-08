@@ -58,6 +58,14 @@ public class PaintFragment extends Fragment
 	}
 	
 	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+		mContext = null;
+	}
+	
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// Seleccionar Layout
@@ -103,6 +111,26 @@ public class PaintFragment extends Fragment
 		actualizarBotones();
 		return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		canvas = null;
+		colorPicker = null;
+		sizePicker = null;
+		botonPincel = null;
+		botonCubo = null;
+		botonMano = null;
+		botonNext = null;
+		botonPrev = null;
+		botonDelete = null;
+		botonReady = null;
+		botonColor = null;
+		botonSize = null;
+		botonEye = null;		
+	}
 	
 	@Override
 	public void onResume()

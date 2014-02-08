@@ -79,6 +79,19 @@ public class DeformFragment extends Fragment
     }
 	
 	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		canvas = null;
+		dataSaved = null;
+		botonAdd = null;
+		botonRemove = null;
+		botonMove = null;
+		botonDelete = null;
+	}
+	
+	@Override
 	public void onResume()
 	{
 		super.onResume();

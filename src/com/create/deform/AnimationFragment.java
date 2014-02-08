@@ -67,6 +67,13 @@ public class AnimationFragment extends Fragment
 	}
 	
 	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+	}
+	
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{		
 		// Seleccionar Layout
@@ -106,6 +113,18 @@ public class AnimationFragment extends Fragment
 				
         return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		actionBar = null;
+		botonReady = null;
+		pageAdapter = null;
+		viewPager = null;
+		listaFragmentos = null;
+	}
 	
 	/* Listener de Botones */
 	

@@ -45,6 +45,14 @@ public class SelectFragment extends Fragment
     }
 	
 	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		canvas = null;
+	}
+	
+	@Override
 	public void onResume()
 	{
 		super.onResume();
