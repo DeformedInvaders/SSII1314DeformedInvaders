@@ -143,12 +143,14 @@ public class LoadingFragment extends Fragment
 	
 	private void completeProgressBar()
 	{
+		progressBarStatus = 100;
 		progressCompleted = true;
 		
 		getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
+            	progressBar.setProgress(progressBarStatus);
         		textView.setText(getString(R.string.text_progressBar_completed)+" "+"(100%)");
         		
                 // Guardar datos

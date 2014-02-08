@@ -188,43 +188,38 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchDown(float x, float y, float width, float height, int pos)
+	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{		
 		if(estado == TDeformEstado.Anyadir)
 		{			
-			anyadirHandle(x, y);
+			anyadirHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TDeformEstado.Eliminar)
 		{
-			eliminarHandle(x, y);
+			eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TDeformEstado.Deformar)
 		{	
 			// TODO: Si Modo Grabado Guardar Posición inicial de los Handles			
-			seleccionarHandle(x, y, pos);
-		}
-		
+			seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
+		}	
 	}
 
-	private short buscarPixel(float x, float y)
+	private short buscarPixel(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		float nx = xLeft + (xRight-xLeft)*x/width;
-		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 		
-		if(!controlPixel(nx, ny)) return -1;
+		if(!inPixelInCanvas(worldX, worldY)) return -1;
 		
-		return (short) GeometryUtils.isPointInMesh(verticesModificados, nx, ny);
+		return (short) GeometryUtils.isPointInMesh(verticesModificados, worldX, worldY);
 	}
+
 	
-	private boolean controlPixel(float x, float y)
-	{
-		return x >= xLeft && x <= xRight && y >= yBot && y <= yTop;
-	}
-	
-	private void anyadirHandle(float x, float y)
+	private void anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(x, y);
+		short j = buscarPixel(pixelX, pixelY, screenWidth, screenHeight);
 		if(j != -1)
 		{
 			// Vértice no pertenece a los Handles
@@ -240,10 +235,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private void eliminarHandle(float x, float y)
+	private void eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(x, y);
+		short j = buscarPixel(pixelX, pixelY, screenWidth, screenHeight);
 		if(j != -1)
 		{
 			// Vértice no pertenece a los Handles
@@ -261,10 +256,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private void seleccionarHandle(float x, float y, int pos)
+	private void seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(x, y);
+		short j = buscarPixel(pixelX, pixelY, screenWidth, screenHeight);
 		if(j != -1)
 		{	
 			// Vértice pertenece a los Handles
@@ -272,64 +267,67 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			{
 				// Seleccionar Handle
 				int indiceHandleSeleccionado = indiceHandles.indexOf(j);
-				handleSeleccionado.set(4*pos, indiceHandleSeleccionado);
-				handleSeleccionado.set(4*pos+1, 1);
-				handleSeleccionado.set(4*pos+2, handles.get(2*indiceHandleSeleccionado));
-				handleSeleccionado.set(4*pos+3, handles.get(2*indiceHandleSeleccionado+1));
+				handleSeleccionado.set(4*pointer, indiceHandleSeleccionado);
+				handleSeleccionado.set(4*pointer+1, 1);
+				handleSeleccionado.set(4*pointer+2, handles.get(2*indiceHandleSeleccionado));
+				handleSeleccionado.set(4*pointer+3, handles.get(2*indiceHandleSeleccionado+1));
 			}
 		}
 	}
 	
 	@Override
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
 			// Handle sin Pulsar
-			if(handleSeleccionado.get(4*pos+1) == 0)
+			if(handleSeleccionado.get(4*pointer+1) == 0)
 			{
-				onTouchDown(x, y, width, height, pos);
+				onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			}
 			else
 			{
 				// TODO: Si Modo Grabado guardar posicion intermedia de los Handles
-				moverHandle(x, y, pos);
+				moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			}
 		}
 	}
 	
-	private void moverHandle(float x, float y, int pos)
+	private void moverHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Conversión Pixel - Punto	
-		float nx = xLeft + (xRight-xLeft)*x/width;
-		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 		
-		if(controlPixel(nx, ny))
+		if(inPixelInCanvas(worldX, worldY))
 		{
-			int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pos);
-			float lastX = handles.get(2*indiceHandleSeleccionado);
-			float lastY = handles.get(2*indiceHandleSeleccionado);
+			int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pointer);
+			float lastWorldX = handles.get(2*indiceHandleSeleccionado);
+			float lastWorldY = handles.get(2*indiceHandleSeleccionado);
 			
-			if(Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > 2*EPSILON)
+			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
+			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+			
+			if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*EPSILON)
 			{
-				handles.set(2*indiceHandleSeleccionado, nx);
-				handles.set(2*indiceHandleSeleccionado+1, ny);
+				handles.set(2*indiceHandleSeleccionado, worldX);
+				handles.set(2*indiceHandleSeleccionado+1, worldY);
 				
-				handleSeleccionado.set(4*pos+2, nx);
-				handleSeleccionado.set(4*pos+3, ny);
+				handleSeleccionado.set(4*pointer+2, worldX);
+				handleSeleccionado.set(4*pointer+3, worldY);
 			}
 		}
 	}
 	
 	@Override
-	public void onTouchUp(float x, float y, float width, float height, int pos)
+	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
-			onTouchMove(x, y, width, height, pos);
+			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			
-			handleSeleccionado.set(4*pos, -1);
-			handleSeleccionado.set(4*pos+1, 0);
+			handleSeleccionado.set(4*pointer, -1);
+			handleSeleccionado.set(4*pointer+1, 0);
 		}	
 	}
 	

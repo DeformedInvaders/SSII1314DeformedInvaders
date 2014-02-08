@@ -38,9 +38,9 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     
     /* Métodos abstractos a implementar */
 	
-	public abstract void onTouchDown(float x, float y, float width, float height, int pos);
-	public abstract void onTouchMove(float x, float y, float width, float height, int pos);
-	public abstract void onTouchUp(float x, float y, float width, float height, int pos);
+	public abstract void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	public abstract void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	public abstract void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
 	public abstract void onMultiTouchEvent();
     
     public void setRenderer(OpenGLRenderer renderer)
@@ -83,22 +83,22 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		{
 			int action = event.getActionMasked();
 			
-			float x = event.getX();
-			float y = event.getY();
+			float pixelX = event.getX();
+			float pixelY = event.getY();
 			
-			float width = getWidth();
-			float height = getHeight();
+			float screenWidth = getWidth();
+			float screenHeight = getHeight();
 			
 			switch(action)
 			{
 				case MotionEvent.ACTION_DOWN:
-					onTouchDown(x, y, width, height, 0);
+					onTouchDown(pixelX, pixelY, screenWidth, screenHeight, 0);
 				break;
 				case MotionEvent.ACTION_MOVE:
-					onTouchMove(x, y, width, height, 0);	
+					onTouchMove(pixelX, pixelY, screenWidth, screenHeight, 0);	
 				break;
 				case MotionEvent.ACTION_UP:
-					onTouchUp(x, y, width, height, 0);
+					onTouchUp(pixelX, pixelY, screenWidth, screenHeight, 0);
 				break;
 			}
 			
@@ -113,15 +113,15 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     {
     	if(event != null)
     	{
-    		float x = event.getX();
-			float y = event.getY();
+    		float pixelX = event.getX();
+			float pixelY = event.getY();
 			
-			float width = getWidth();
-			float height = getHeight();
+			float screenWidth = getWidth();
+			float screenHeight = getHeight();
 			
 			if(event.getPointerCount() == 1)
 			{
-				dragDetector.onTouchEvent(event, x, y, width, height);
+				dragDetector.onTouchEvent(event, pixelX, pixelY, screenWidth, screenHeight);
 				doubleTouchDetector.onTouchEvent(event);
 			}
 			else
@@ -143,30 +143,30 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			int pointCount = event.getPointerCount();
 			int action = event.getActionMasked();
 			
-			float width = getWidth();
-			float height = getHeight();
+			float screenWidth = getWidth();
+			float screenHeight = getHeight();
 			
 			if(pointCount > NUM_HANDLES) pointCount = NUM_HANDLES;
 			
 			for(int i = 0; i < pointCount; i++)
 			{
-				float x = event.getX(i);
-				float y = event.getY(i);
+				float pixelX = event.getX(i);
+				float pixelY = event.getY(i);
 				
-				int id = event.getPointerId(i);
+				int pointer = event.getPointerId(i);
 				
 				switch(action)
 				{
 					case MotionEvent.ACTION_DOWN:
 					case MotionEvent.ACTION_POINTER_DOWN:
-						onTouchDown(x, y, width, height, id);
+						onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 					case MotionEvent.ACTION_MOVE:
-						onTouchMove(x, y, width, height, id);	
+						onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);	
 					break;
 					case MotionEvent.ACTION_UP:
 					case MotionEvent.ACTION_POINTER_UP:
-						onTouchUp(x, y, width, height, id);
+						onTouchUp(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 				}
 			}

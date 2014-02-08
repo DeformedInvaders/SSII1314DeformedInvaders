@@ -16,7 +16,9 @@ public final class R {
     }
     public static final class dimen {
         /**  Botones 
+ Dialog dimensions 
  Botones 
+ Dialog dimensions 
  Botones 
          */
         public static final int BigImageButton_layoutHeight=0x7f050006;

@@ -24,8 +24,7 @@ public abstract class OpenGLRenderer implements Renderer
 	protected float xLeft, xRight, yTop, yBot, xCentro, yCentro;
 	
 	// Parámetros del Puerto de Vista
-	protected int height;
-	protected int width;
+	private int height, width;
 	
 	//Parámetros de la Escena
 	protected static final int SIZELINE = 3;
@@ -160,6 +159,31 @@ public abstract class OpenGLRenderer implements Renderer
         
         this.xCentro = (xRight + xLeft)/2.0f;
         this.yCentro = (yTop + yBot)/2.0f;
+	}
+	
+	protected float convertToWorldXCoordinate(float pixelX, float screenWidth)
+	{
+		return xLeft + (xRight-xLeft)*pixelX/screenWidth;
+	}
+	
+	protected float convertToWorldYCoordinate(float pixelY, float screenHeight)
+	{
+		return yBot + (yTop-yBot)*(screenHeight-pixelY)/screenHeight;
+	}
+	
+	protected float convertToPixelXCoordinate(float worldX, float screenWidth)
+	{
+		return (worldX - xLeft)*screenWidth/(xRight-xLeft);
+	}
+	
+	protected float convertToPixelYCoordinate(float worldY, float screenHeight)
+	{
+		return screenHeight - (worldY - yBot)*screenHeight/(yTop-yBot);
+	}
+	
+	protected boolean inPixelInCanvas(float worldX, float worldY)
+	{
+		return worldX >= xLeft && worldX <= xRight && worldY >= yBot && worldY <= yTop;
 	}
 	
 	/* Métodos de Construcción de Buffer de Pintura */

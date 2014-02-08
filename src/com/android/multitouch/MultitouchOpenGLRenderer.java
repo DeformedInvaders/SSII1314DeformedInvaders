@@ -42,39 +42,39 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 	
 	public void reiniciar() { }
 	
-	public void onTouchDown(float x, float y, float width, float height, int pos)
+	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{		
-		float nx = xLeft + (xRight-xLeft)*x/width;
-		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 		
-		handles.set(3*pos, 1);
-		handles.set(3*pos+1, nx);
-		handles.set(3*pos+2, ny);
+		handles.set(3*pointer, 1);
+		handles.set(3*pointer+1, worldX);
+		handles.set(3*pointer+2, worldY);
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
-		if(handles.get(3*pos) == 1)
+		if(handles.get(3*pointer) == 1)
 		{
-			float nx = xLeft + (xRight-xLeft)*x/width;
-			float ny = yBot + (yTop-yBot)*(height-y)/height;
+			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 			
-			handles.set(3*pos+1, nx);
-			handles.set(3*pos+2, ny);
+			handles.set(3*pointer+1, worldX);
+			handles.set(3*pointer+2, worldY);
 		}
 		else 
 		{
-			onTouchDown(x, y, width, height, pos);
+			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height, int pos)
+	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
-		if(handles.get(3*pos) == 1)
+		if(handles.get(3*pointer) == 1)
 		{
-			onTouchMove(x, y, width, height, pos);
+			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			
-			handles.set(3*pos, 0);
+			handles.set(3*pointer, 0);
 		}	
 	}
 	

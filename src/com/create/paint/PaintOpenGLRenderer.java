@@ -225,11 +225,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.sizeLinea = 6;
 	}
 	
-	public void onTouchDown(float x, float y, float width, float height, int pos)
+	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		// Conversión Pixel - Punto	
-		float nx = xLeft + (xRight-xLeft)*x/width;
-		float ny = yBot + (yTop-yBot)*(height-y)/height;
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 		
 		if(estado == TPaintEstado.Pincel)
 		{
@@ -239,23 +239,26 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			
 			if(lineaActual.size > 0)
 			{
-				float lastX = lineaActual.get(lineaActual.size-2);
-				float lastY = lineaActual.get(lineaActual.size-1);
+				float lastWorldX = lineaActual.get(lineaActual.size-2);
+				float lastWorldY = lineaActual.get(lineaActual.size-1);
 				
-				anyadir = Math.abs(Intersector.distancePoints(nx, ny, lastX, lastY)) > EPSILON;
+				float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
+				float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+				
+				anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
 			}
 			
 			if(anyadir)
 			{
-				lineaActual.add(nx);
-				lineaActual.add(ny);
+				lineaActual.add(worldX);
+				lineaActual.add(worldY);
 				
 				bufferLineaActual = construirBufferListaPuntos(lineaActual);
 			}
 		}
 		else if(estado == TPaintEstado.Cubo)
 		{			
-			if(GeometryUtils.isPointInsideMesh(contorno, vertices, nx, ny))
+			if(GeometryUtils.isPointInsideMesh(contorno, vertices, worldX, worldY))
 			{
 				if(colorPaleta != color)
 				{
@@ -267,15 +270,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
-			onTouchDown(x, y, width, height, pos);
+			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height, int pos)
+	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{

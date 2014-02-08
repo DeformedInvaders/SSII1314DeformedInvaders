@@ -63,7 +63,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			limpiarActionBar();
 			
 			super.onBackPressed();
-			
 			actualizarEstado();
 		}
 	}
