@@ -126,7 +126,7 @@ public class AnimationFragment extends Fragment
 		listaFragmentos = null;
 	}
 	
-	/* Listener de Botones */
+	/* Listeners de Botones */
 	
     private class OnReadyClickListener implements OnClickListener
     {

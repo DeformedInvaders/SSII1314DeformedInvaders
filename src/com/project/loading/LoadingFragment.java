@@ -151,9 +151,6 @@ public class LoadingFragment extends Fragment
             {
         		textView.setText(getString(R.string.text_progressBar_completed)+" "+"(100%)");
         		
-        		threadProgressBar = null;
-        		threadLoadData = null;
-        		
                 // Guardar datos
                 mCallback.onLoadingListCharacters(lista, seleccionado);
             }

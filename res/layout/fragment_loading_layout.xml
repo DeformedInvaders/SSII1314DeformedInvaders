@@ -1,25 +1,26 @@
-<RelativeLayout style="@style/MainFragmentLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#000000">
+    style="@style/MainFragmentLayout"
+    android:background="#000000" >
 
     <ProgressBar
         android:id="@+id/progressBarLoading1"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="292dp" />
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100" 
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="147dp" />
 
     <TextView
         android:id="@+id/textViewLoading1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/progressBarLoading1"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="182dp"
-        android:textSize="20sp"
+        android:text="@string/text_progressBar"
         android:textColor="#ffffff"
-        android:text="@string/text_progressBar"/>
+        android:textSize="12sp" />
 
 </RelativeLayout>
