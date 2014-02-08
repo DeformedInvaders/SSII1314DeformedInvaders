@@ -15,7 +15,22 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
+        /**  Botones 
+ Botones 
+ Botones 
+         */
+        public static final int BigImageButton_layoutHeight=0x7f050006;
+        public static final int BigImageButton_layoutWidth=0x7f050007;
+        /**  ProgressBar 
+ ProgressBar 
+ ProgressBar 
+         */
+        public static final int ProgressBar_layoutWidth=0x7f050008;
         /**  Default screen margins, per the Android Design guidelines. 
+
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) in landscape here.
+    
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
@@ -23,6 +38,8 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
+        /**  Dialog dimensions 
+         */
         public static final int color_hsvHeight=0x7f050002;
         public static final int color_hsvWidth=0x7f050003;
         public static final int color_hueWidth=0x7f050004;

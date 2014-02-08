@@ -3,9 +3,18 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+	
+    <!-- Dialog dimensions -->
 	<dimen name="color_hsvHeight">240dp</dimen>
     <dimen name="color_hsvWidth">240dp</dimen>
     <dimen name="color_hueWidth">30dp</dimen>
     <dimen name="color_spacer">8dp</dimen>
+    
+    <!-- Botones -->
+    <dimen name="BigImageButton_layoutHeight">30dp</dimen>
+    <dimen name="BigImageButton_layoutWidth">30dp</dimen>
+    
+    <!-- ProgressBar -->
+    <dimen name="ProgressBar_layoutWidth">300dp</dimen>
     
 </resources>

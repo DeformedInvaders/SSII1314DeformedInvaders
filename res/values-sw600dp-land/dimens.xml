@@ -1,0 +1,19 @@
+<resources>
+
+    <!--
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) in landscape here.
+    -->
+    
+    <dimen name="activity_horizontal_margin">32dp</dimen>
+    
+    <!-- Dialog dimensions -->
+    
+	<!-- Botones -->
+    <dimen name="BigImageButton_layoutHeight">50dp</dimen>
+    <dimen name="BigImageButton_layoutWidth">50dp</dimen>
+    
+    <!-- ProgressBar -->
+    <dimen name="ProgressBar_layoutWidth">400dp</dimen>
+
+</resources>

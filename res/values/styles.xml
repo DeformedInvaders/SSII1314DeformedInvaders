@@ -35,8 +35,8 @@
     <!-- Botones -->
     
     <style name="BigImageButton">
-        <item name="android:layout_width">70dp</item>
-        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_width">@dimen/BigImageButton_layoutWidth</item>
+        <item name="android:layout_height">@dimen/BigImageButton_layoutHeight</item>
         <item name="android:layout_marginLeft">10dp</item>
 	</style>
 	
@@ -58,7 +58,7 @@
 		<item name="android:layout_alignParentLeft">true</item>
 		<item name="android:layout_alignParentRight">true</item>
 		<item name="android:layout_alignParentTop">true</item>
-		<item name="android:layout_marginBottom">70dp</item>
+		<item name="android:layout_marginBottom">@dimen/BigImageButton_layoutHeight</item>
 	</style>
 	
     <!-- Layout Botones -->
