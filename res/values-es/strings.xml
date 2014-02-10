@@ -90,5 +90,9 @@
 		<!-- Unknown -->
 			<string name="desc_dialog_content">Contenido</string>
 		    <string name="desc_dialog_arrow">Flecha</string>
+		    
+		<!-- Botones -->
+		    <string name="cancelar">Cancelar</string>
+		    <string name="aceptar">Aceptar</string>
 
 </resources>

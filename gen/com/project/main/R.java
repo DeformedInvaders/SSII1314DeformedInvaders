@@ -92,10 +92,7 @@ public final class R {
         public static final int incremento_btn=0x7f020029;
         public static final int incremento_disabled=0x7f02002a;
         public static final int incremento_seleccionado=0x7f02002b;
-        public static final int linea1=0x7f02002c;
-        public static final int linea2=0x7f02002d;
-        public static final int linea3=0x7f02002e;
-        public static final int popup=0x7f02002f;
+        public static final int popup=0x7f02002c;
     }
     public static final class id {
         public static final int DisplayGLSurfaceViewLoading1=0x7f08001e;
@@ -166,6 +163,11 @@ public final class R {
         public static final int fragment_selection_layout=0x7f03000d;
     }
     public static final class string {
+        public static final int aceptar=0x7f06003c;
+        /**  Botones 
+ Botones 
+         */
+        public static final int cancelar=0x7f06003b;
         /**  Animation Fragment 
  Animation Fragment 
          */

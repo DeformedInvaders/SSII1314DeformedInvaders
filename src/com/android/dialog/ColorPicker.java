@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -51,8 +52,8 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 	 */
 	public ColorPicker(final Context context, final PaintGLSurfaceView canvas, int color) {
 		this(context, VERTICAL, canvas, color);
-		final ImageButton ibAceptar = (ImageButton)this.getView().findViewById(R.id.ibAceptar);
-		final ImageButton ibCancelar = (ImageButton)this.getView().findViewById(R.id.ibCancelar);
+		final Button ibAceptar = (Button)this.getView().findViewById(R.id.ibAceptar);
+		final Button ibCancelar = (Button)this.getView().findViewById(R.id.ibCancelar);
 		
 		ibCancelar.setOnClickListener(new OnClickListener() {
 					@Override
@@ -165,8 +166,8 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 		setRootViewId(R.layout.dialog_color_layout);
 	
 	
-		final ImageButton ibAceptar = (ImageButton)this.getView().findViewById(R.id.ibAceptar);
-		final ImageButton ibCancelar = (ImageButton)this.getView().findViewById(R.id.ibCancelar);
+		final Button ibAceptar = (Button)this.getView().findViewById(R.id.ibAceptar);
+		final Button ibCancelar = (Button)this.getView().findViewById(R.id.ibCancelar);
 		
 		ibCancelar.setOnClickListener(new OnClickListener() {
 					@Override

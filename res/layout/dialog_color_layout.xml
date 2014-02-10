@@ -76,27 +76,22 @@
                         android:background="#aaf" />
                 </LinearLayout>
 
-                <LinearLayout
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_alignParentBottom="true"
-		   	    android:layout_alignParentLeft="true" 
-		   	    android:layout_below="@+id/color_state" >
-                    
-                <ImageButton
+
+          		<Button
                     android:id="@+id/ibCancelar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/cancelar" />
+                    android:layout_below="@+id/color_state"
+                    android:text="@string/cancelar" />
 
-                 <ImageButton
+                <Button
                     android:id="@+id/ibAceptar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/aceptar" />
-                 </LinearLayout>
+                    android:layout_alignRight="@+id/color_cuadroColores"
+                    android:layout_below="@+id/color_state"
+                    android:text="@string/aceptar" />
+
             </RelativeLayout>
 
         </LinearLayout>
