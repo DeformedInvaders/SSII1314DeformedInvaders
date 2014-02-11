@@ -15,7 +15,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 
     public PaintGLSurfaceView(Context context, AttributeSet attrs)
     {
-        super(context, attrs, TTouchEstado.Detectors);
+        super(context, attrs, TTouchEstado.SimpleTouch);
     }
     
 	public void setParameters(Esqueleto esqueleto)

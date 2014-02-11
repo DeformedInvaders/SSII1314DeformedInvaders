@@ -213,6 +213,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarPegatina(int pegatina)
 	{
 		guardarPolilinea();
+		
 		pegatinaActual = pegatina;
 		estado = TPaintEstado.Pegatinas;
 	}

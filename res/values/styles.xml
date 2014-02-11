@@ -22,12 +22,17 @@
     <style name="Layout_Fragment_Style">
 		<item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">horizontal</item>
+        <item name="android:orientation">vertical</item>
 	</style>
 	
-	<style name="Layout_Activity_Style" parent="Layout_Fragment_Style">
-        <item name="android:orientation">horizontal</item>
-	</style>
+	<style name="Layout_Activity_Style" parent="Layout_Fragment_Style"/>
+	
+	<style name="Layout_Dialog_Style" >	    
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_margin">5dp</item>
+    </style>
     
     <!-- Botones -->
     
@@ -36,6 +41,12 @@
         <item name="android:layout_height">@dimen/BigImageButton_LayoutHeight_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
 	</style>
+	
+    <style name="ImageButton_Sticker_Style">
+        <item name="android:layout_width">@dimen/StickerImageButton_LayoutWidth_Dimen</item>
+        <item name="android:layout_height">@dimen/StickerImageButton_LayoutHeight_Dimen</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
 	
     <!-- FrameLayout -->
     
@@ -82,6 +93,34 @@
 
 	<style name="Layout_Center_BigImageButton_Style" parent="Layout_BigImageButton_Style">
 		<item name="android:layout_centerHorizontal">true</item>
+	</style>
+	
+	<style name="Layout_Content_Dialog_Style">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:orientation">vertical</item>
+		<item name="android:background">#7F7F7F</item>
+		<item name="android:padding">10dp</item>
+	</style>
+	
+	<style name="Text_Section_Sticker_Style">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textColor">#FFFFFF</item>
+		<item name="android:textSize">25sp</item>   
+	</style>
+	
+	<style name="Layout_Section_Sticker_Style">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:paddingTop">10dp</item>	
+		<item name="android:paddingBottom">10dp</item>	    
+	</style>
+	
+	<style name="ImageView_Arrow_Dialog_Style">
+	    <item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:src">@drawable/image_dialog_arrow</item>	
 	</style>
 	
 </resources>

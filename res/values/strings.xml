@@ -15,6 +15,10 @@
 			<string name="title_animation_section_down">Down</string>
 			<string name="title_animation_section_attack">Attack</string>
 			
+			<string name="text_sticker_eyes">Eyes:</string>
+			<string name="text_sticker_mouths">Mouths:</string>
+			<string name="text_sticker_weapons">Weapons:</string>
+			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
 			<string name="text_progressBar_chosen">Loading chosen character.</string>
@@ -89,6 +93,10 @@
 	    <!-- Dialogs -->
 		    <string name="desc_dialog_increment">Increment the pencil\'s size.</string>
 		    <string name="desc_dialog_decrement">Decrement the pencil\'s size.</string>
+		    
+		    <string name="desc_dialog_eye">Eye Sticker</string>
+		    <string name="desc_dialog_mouth">Mouth Sticker</string>
+		    <string name="desc_dialog_weapon">Weapon Sticker</string>
 		
 		<!-- Unknown -->
 			<string name="desc_dialog_content">Content</string>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Content_Dialog_Style">
+        
+  	    <TextView style="@style/Text_Section_Sticker_Style"
+  	        android:text="@string/text_sticker_eyes"/>
+  	    
+	    <LinearLayout style="@style/Layout_Section_Sticker_Style">
+	        
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerEye1"
+				android:background="@drawable/texture_eyes1"
+				android:contentDescription="@string/desc_dialog_eye" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerEye2"
+				android:background="@drawable/texture_eyes2"
+				android:contentDescription="@string/desc_dialog_eye" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerEye3"
+				android:background="@drawable/texture_eyes3"
+				android:contentDescription="@string/desc_dialog_eye" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerEye4"
+				android:background="@drawable/texture_eyes4"
+				android:contentDescription="@string/desc_dialog_eye" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerEye5"
+				android:background="@drawable/texture_eyes5"
+				android:contentDescription="@string/desc_dialog_eye" />
+		
+		</LinearLayout>
+	
+	    <TextView style="@style/Text_Section_Sticker_Style"
+  	        android:text="@string/text_sticker_mouths"/>
+  	    
+	    <LinearLayout style="@style/Layout_Section_Sticker_Style">
+	        
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerMouth1"
+				android:background="@drawable/texture_mouth1"
+				android:contentDescription="@string/desc_dialog_mouth" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerMouth2"
+				android:background="@drawable/texture_mouth2"
+				android:contentDescription="@string/desc_dialog_mouth" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerMouth3"
+				android:background="@drawable/texture_mouth3"
+				android:contentDescription="@string/desc_dialog_mouth" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerMouth4"
+				android:background="@drawable/texture_mouth4"
+				android:contentDescription="@string/desc_dialog_mouth" />
+			
+			<ImageButton style="@style/ImageButton_Sticker_Style"
+				android:id="@+id/imageButtonStickerMouth5"
+				android:background="@drawable/texture_mouth5"
+				android:contentDescription="@string/desc_dialog_mouth" />
+			
+		</LinearLayout>
+		
+	</LinearLayout>
+	
+ 	<ImageView style="@style/ImageView_Arrow_Dialog_Style"
+ 	    android:contentDescription="@string/desc_dialog_arrow" />
+
+</LinearLayout>
+

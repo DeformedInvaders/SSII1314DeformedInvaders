@@ -13,6 +13,9 @@
     <dimen name="BigImageButton_LayoutHeight_Dimen">70dp</dimen>
     <dimen name="BigImageButton_LayoutWidth_Dimen">70dp</dimen>
     
+    <dimen name="StickerImageButton_LayoutHeight_Dimen">50dp</dimen>
+    <dimen name="StickerImageButton_LayoutWidth_Dimen">100dp</dimen>
+    
     <!-- ProgressBar -->
     <dimen name="ProgressBar_LayoutWidth_Dimen">500dp</dimen>
     

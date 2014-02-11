@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 
 import com.android.dialog.ColorPicker;
 import com.android.dialog.SizePicker;
+import com.android.dialog.StickerPicker;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
 import com.project.main.R;
@@ -26,6 +27,7 @@ public class PaintFragment extends Fragment
 	private PaintGLSurfaceView canvas;
 	private ColorPicker colorPicker;
 	private SizePicker sizePicker;
+	private StickerPicker stickerPicker;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonPegatina;
 	
 	private Esqueleto esqueletoActual;
@@ -120,6 +122,7 @@ public class PaintFragment extends Fragment
 		canvas = null;
 		colorPicker = null;
 		sizePicker = null;
+		stickerPicker = null;
 		botonPincel = null;
 		botonCubo = null;
 		botonMano = null;
@@ -244,13 +247,23 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			//TODO
-			canvas.seleccionarPegatina(0);
-			
-			reiniciarImagenesBotones();
-			botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
+			if(stickerPicker == null)
+			{
+				stickerPicker = new StickerPicker(mContext, PaintFragment.this);
+			}
+			stickerPicker.show(v);
 		}
 	}
+    
+    public void seleccionarPegatina(int pegatina)
+    {
+    	if(pegatina != -1)
+    	{
+    		reiniciarImagenesBotones();
+			botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
+			canvas.seleccionarPegatina(pegatina);
+    	}
+    }
     
     private class OnManoClickListener implements OnClickListener
     {
