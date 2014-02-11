@@ -30,33 +30,13 @@ public class Esqueleto implements Serializable
 		return contorno;
 	}
 
-	public void setContorno(ShortArray contorno)
-	{
-		this.contorno = contorno;
-	}
-
 	public FloatArray getVertices()
 	{
 		return vertices;
 	}
 
-	public void setVertices(FloatArray vertices)
-	{
-		this.vertices = vertices;
-	}
-
 	public ShortArray getTriangulos()
 	{
 		return triangulos;
-	}
-
-	public void setTriangulos(ShortArray triangulos)
-	{
-		this.triangulos = triangulos;
-	}
-
-	public static long getSerialversionuid()
-	{
-		return serialVersionUID;
 	}
 }

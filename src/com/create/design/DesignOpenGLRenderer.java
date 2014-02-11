@@ -109,7 +109,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
 			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
 			
-			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
+			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > MAX_DISTANCE_PIXELS;
 		}
 		
 		if(anyadir)

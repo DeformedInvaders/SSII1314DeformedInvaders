@@ -26,7 +26,7 @@ public class PaintFragment extends Fragment
 	private PaintGLSurfaceView canvas;
 	private ColorPicker colorPicker;
 	private SizePicker sizePicker;
-	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonEye;
+	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonPegatina;
 	
 	private Esqueleto esqueletoActual;
 	
@@ -79,7 +79,7 @@ public class PaintFragment extends Fragment
 		botonCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
 		botonColor = (ImageButton) rootView.findViewById(R.id.imageButtonPaint3);
 		botonSize = (ImageButton) rootView.findViewById(R.id.imageButtonPaint4);
-		botonEye = (ImageButton) rootView.findViewById(R.id.imageButtonPaint5);
+		botonPegatina = (ImageButton) rootView.findViewById(R.id.imageButtonPaint5);
 		botonMano = (ImageButton) rootView.findViewById(R.id.imageButtonPaint6);
 		botonPrev = (ImageButton) rootView.findViewById(R.id.imageButtonPaint7);
 		botonNext = (ImageButton) rootView.findViewById(R.id.imageButtonPaint8);
@@ -90,7 +90,7 @@ public class PaintFragment extends Fragment
 		botonCubo.setOnClickListener(new OnCuboClickListener());
 		botonColor.setOnClickListener(new OnColorClickListener());
 		botonSize.setOnClickListener(new OnSizeClickListener());
-		botonEye.setOnClickListener(new OnEyeClickListener());
+		botonPegatina.setOnClickListener(new OnPegatinaClickListener());
 		botonMano.setOnClickListener(new OnManoClickListener());
 		botonNext.setOnClickListener(new OnNextClickListener());
 		botonPrev.setOnClickListener(new OnPrevClickListener());
@@ -129,7 +129,7 @@ public class PaintFragment extends Fragment
 		botonReady = null;
 		botonColor = null;
 		botonSize = null;
-		botonEye = null;		
+		botonPegatina = null;		
 	}
 	
 	@Override
@@ -169,6 +169,11 @@ public class PaintFragment extends Fragment
 			botonPrev.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 		}
+		
+		if(canvas.pegatinaAnyadida())
+		{
+			reiniciarImagenesBotones();
+		}
 	}
 	
 	private void reiniciarImagenesBotones()
@@ -176,6 +181,7 @@ public class PaintFragment extends Fragment
 		botonPincel.setBackgroundResource(R.drawable.icon_pencil);
 		botonCubo.setBackgroundResource(R.drawable.icon_bucket);
 		botonMano.setBackgroundResource(R.drawable.icon_hand);
+		botonPegatina.setBackgroundResource(R.drawable.icon_eye);
 	}
 	
 	/* Listener de Botones */
@@ -233,12 +239,16 @@ public class PaintFragment extends Fragment
 		}
     }
     
-    private class OnEyeClickListener implements OnClickListener
+    private class OnPegatinaClickListener implements OnClickListener
     {
 		@Override
 		public void onClick(View v)
 		{
-			// TODO
+			//TODO
+			canvas.seleccionarPegatina(0);
+			
+			reiniciarImagenesBotones();
+			botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
 		}
 	}
     

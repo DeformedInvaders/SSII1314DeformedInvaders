@@ -46,8 +46,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* Handles */
 	
-	private static final float MAX_DISTANCE_PIXELS = 10;
-	
 	// Coordenadas de Handles
 	private FloatArray handles;
 	
@@ -216,44 +214,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}	
 	}
-
-	private short buscarPixel(float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-		
-		if(!inPixelInCanvas(worldX, worldY)) return -1;
-		
-		int minpos = -1;
-		//float mindistancia = Float.MAX_VALUE;
-		
-		int j = 0;
-		while(j < vertices.size)
-		{
-			float px = verticesModificados.get(j);
-			float py = verticesModificados.get(j+1);	
-			
-			float lastpx = convertToPixelXCoordinate(px, screenWidth);
-			float lastpy = convertToPixelYCoordinate(py, screenHeight);
-						
-			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
-			if(distancia < MAX_DISTANCE_PIXELS)// && distancia < mindistancia)
-			{
-				minpos = j/2;
-				return (short)minpos;
-				//mindistancia = distancia;
-			}
-			
-			j = j+2;
-		}
-		
-		return (short)minpos;
-	}
 	
 	private void anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
 		if(j != -1)
 		{
 			// Vértice no pertenece a los Handles
@@ -272,7 +237,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private void eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
 		if(j != -1)
 		{
 			// Vértice no pertenece a los Handles
@@ -293,7 +258,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private void seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
 		if(j != -1)
 		{	
 			// Vértice pertenece a los Handles
@@ -342,7 +307,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
 			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
 			
-			if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*EPSILON)
+			if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*MAX_DISTANCE_PIXELS)
 			{
 				handles.set(2*indiceHandleSeleccionado, worldX);
 				handles.set(2*indiceHandleSeleccionado+1, worldY);

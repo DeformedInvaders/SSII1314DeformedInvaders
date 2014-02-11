@@ -24,15 +24,22 @@ import com.project.main.OpenGLRenderer;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {		
-	// Estructura de datos
-	private List<Polilinea> listaLineas;
-	private FloatArray lineaActual;
-	private FloatBuffer bufferLineaActual;
-	
+	// Estructura de Datos
 	private TPaintEstado estado;
 	
 	private int colorPaleta;
 	private int sizeLinea;
+	private int pegatinaActual;
+	
+	private boolean pegatinaAnyadida;
+	
+	// Detalles
+	private List<Polilinea> listaLineas;
+	private FloatArray lineaActual;
+	private FloatBuffer bufferLineaActual;
+	
+	// Pegatinas
+	private List<Integer> listaPegatinas;
 	
 	// Esqueleto
 	private ShortArray contorno;
@@ -58,34 +65,38 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
 	
-	/* Constructora*/	
+	/* Constructora */	
 	
 	public PaintOpenGLRenderer(Context context, Esqueleto esqueleto)
 	{
         super(context);
         
-        this.estado = TPaintEstado.Nada;
+        estado = TPaintEstado.Nada;
         
-        this.contorno = esqueleto.getContorno();
-		this.vertices = esqueleto.getVertices();
-		this.triangulos = esqueleto.getTriangulos();
+        contorno = esqueleto.getContorno();
+		vertices = esqueleto.getVertices();
+		triangulos = esqueleto.getTriangulos();
 		
-		this.bufferVertices = construirBufferListaTriangulosRellenos(triangulos, vertices);
-		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
+		bufferVertices = construirBufferListaTriangulosRellenos(triangulos, vertices);
+		bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
         
-        this.listaLineas = new ArrayList<Polilinea>();
-        this.lineaActual = null;
+        listaLineas = new ArrayList<Polilinea>();
+        lineaActual = null;
         
-        this.color = Color.WHITE;
+        listaPegatinas = new ArrayList<Integer>();
+        pegatinaActual = 0;
+        pegatinaAnyadida = false;
         
-        this.colorPaleta = Color.GREEN;
-        this.sizeLinea = 6;
+        color = Color.WHITE;
         
-        this.anteriores = new Stack<Accion>();
-        this.siguientes = new Stack<Accion>();
+        colorPaleta = Color.GREEN;
+        sizeLinea = 6;
         
-        this.modoCaptura = false;
-        this.capturaTerminada = false;
+        anteriores = new Stack<Accion>();
+        siguientes = new Stack<Accion>();
+        
+        modoCaptura = false;
+        capturaTerminada = false;
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -104,14 +115,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarEsqueleto(gl);
 			
 			// Capturar Pantalla
-		    this.textura = capturaPantalla(gl, canvasHeight, canvasWidth);
+		    textura = capturaPantalla(gl, canvasHeight, canvasWidth);
 		    
 		    // Construir Textura
-			this.coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
+			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
 			
 			// Desactivar Modo Captura
-			this.modoCaptura = false;
-			this.capturaTerminada = true;
+			modoCaptura = false;
+			capturaTerminada = true;
 			
 			// Restaurar posición anterior de la Cámara
 			recuperarCamara();
@@ -121,6 +132,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+		
+		// Pegatinas
+		//TODO
+		//dibujarListaTextura(gl, listaPegatinas, vertices);
 	}
 	
 	private void dibujarEsqueleto(GL10 gl)
@@ -144,13 +159,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-
 	/* Selección de Estado */
-	
-	public TPaintEstado getEstado()
-	{
-		return estado;
-	}
 	
 	public void seleccionarMano()
 	{
@@ -201,19 +210,26 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
+	public void seleccionarPegatina(int pegatina)
+	{
+		guardarPolilinea();
+		pegatinaActual = pegatina;
+		estado = TPaintEstado.Pegatinas;
+	}
+	
 	/* Métodos abstractos de OpenGLRenderer */
 	
 	public void reiniciar()
 	{
-		this.lineaActual = null;
-		this.listaLineas.clear();
+		lineaActual = null;
+		listaLineas.clear();
 		
-		this.anteriores.clear();
-		this.siguientes.clear();
+		anteriores.clear();
+		siguientes.clear();
 		
-		this.estado = TPaintEstado.Nada;
-		this.color = Color.WHITE;
-		this.sizeLinea = 6;
+		estado = TPaintEstado.Nada;
+		color = Color.WHITE;
+		sizeLinea = 6;
 	}
 	
 	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
@@ -225,6 +241,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		else if(estado == TPaintEstado.Cubo)
 		{			
 			pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
+		}
+		else if(estado == TPaintEstado.Pegatinas)
+		{
+			anyadirPegatina(pixelX, pixelY, screenWidth, screenHeight);
 		}
 	}
 	
@@ -249,7 +269,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
 			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
 			
-			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
+			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > MAX_DISTANCE_PIXELS;
 		}
 		
 		if(anyadir)
@@ -272,9 +292,26 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			if(colorPaleta != color)
 			{
 				color = colorPaleta;
-				this.anteriores.push(new Accion(colorPaleta));
-				this.siguientes.clear();
+				
+				anteriores.push(new Accion(colorPaleta));
+				siguientes.clear();
 			}
+		}
+	}
+	
+	private synchronized void anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		// Pixel pertenece a los Vértices
+		short j = buscarPixel(contorno, vertices, pixelX, pixelY, screenWidth, screenHeight);
+		if(j != -1)
+		{
+			listaPegatinas.add(pegatinaActual);
+			listaPegatinas.add((int) j);
+			
+			pegatinaAnyadida = true;
+			
+			anteriores.push(new Accion(pegatinaActual, j));
+			siguientes.clear();
 		}
 	}
 	
@@ -304,10 +341,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			Polilinea polilinea = new Polilinea(colorPaleta, sizeLinea, lineaActual, bufferLineaActual);
 			
-			this.listaLineas.add(polilinea);
-			this.anteriores.push(new Accion(polilinea));
-			this.siguientes.clear();
-			this.lineaActual = null;
+			listaLineas.add(polilinea);
+			anteriores.push(new Accion(polilinea));
+			siguientes.clear();
+			lineaActual = null;
 		}
 	}
 	
@@ -340,23 +377,31 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	private synchronized void actualizarEstado(Stack<Accion> pila)
 	{
-		this.color = Color.WHITE;
-		this.listaLineas = new ArrayList<Polilinea>();
+		color = Color.WHITE;
+		listaLineas = new ArrayList<Polilinea>();
+		listaPegatinas = new ArrayList<Integer>();
 		
 		Iterator<Accion> it = pila.iterator();
 		while(it.hasNext())
 		{
 			Accion accion = it.next();
-			if(accion.getTipo() == 0)
+			if(accion.isTipoColor())
 			{
-				this.color = accion.getColor();
+				color = accion.getColor();
 			}
-			else
+			else if(accion.isTipoPolilinea())
 			{
-				this.listaLineas.add(accion.getLinea());
+				listaLineas.add(accion.getLinea());
+			}
+			else if(accion.isTipoPegatina())
+			{
+				listaPegatinas.add(accion.getPegatina());
+				listaPegatinas.add(accion.getVertice());
 			}
 		}
 	}
+	
+	/* Métodos de Obtención de Información */
 	
 	public boolean bufferSiguienteVacio()
 	{
@@ -368,22 +413,33 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return anteriores.isEmpty();
 	}
 	
-	/* Captura de Textura */
+	public boolean pegatinaAnyadida()
+	{
+		if(pegatinaAnyadida)
+		{
+			pegatinaAnyadida = false;
+			estado = TPaintEstado.Nada;
+			
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public void capturaPantalla(int height, int width)
 	{
 		guardarPolilinea();
 		
-		this.canvasHeight = height;
-		this.canvasWidth = width;
-		this.modoCaptura = true;
+		canvasHeight = height;
+		canvasWidth = width;
+		modoCaptura = true;
 	}
 	
 	public Textura getTextura()
 	{
 		while(!capturaTerminada);
 		
-		return new Textura(textura, coordsTextura);
+		return new Textura(textura, coordsTextura, listaPegatinas);
 	}
 	
 	private MapaBits capturaPantalla(GL10 gl, int height, int width)

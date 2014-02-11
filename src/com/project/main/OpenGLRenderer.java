@@ -15,6 +15,8 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 
+import com.lib.math.GeometryUtils;
+import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 
@@ -34,7 +36,7 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final int SIZELINE = 3;
 	protected static final int POINTWIDTH = 7;
 	
-	protected static final float EPSILON = 10.0f;
+	protected static final float MAX_DISTANCE_PIXELS = 10;
 	
 	// Contexto
 	protected Context context;
@@ -221,6 +223,71 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		return worldX >= xLeft && worldX <= xRight && worldY >= yBot && worldY <= yTop;
 	}
+	
+	/* Búsqueda de Pixeles */
+	
+	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+		
+		if(!inPixelInCanvas(worldX, worldY)) return -1;
+		
+		int minpos = -1;
+		
+		int j = 0;
+		while(j < vertices.size)
+		{
+			float px = vertices.get(j);
+			float py = vertices.get(j+1);	
+			
+			float lastpx = convertToPixelXCoordinate(px, screenWidth);
+			float lastpy = convertToPixelYCoordinate(py, screenHeight);
+						
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
+			if(distancia < MAX_DISTANCE_PIXELS)
+			{
+				minpos = j/2;
+				return (short)minpos;
+			}
+			
+			j = j+2;
+		}
+		
+		return (short)minpos;
+	}	
+	
+	protected short buscarPixel(ShortArray contorno, FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+				
+		if(!GeometryUtils.isPointInsideMesh(contorno, vertices, worldX, worldY)) return -1;
+		
+		float mindistancia = Float.MAX_VALUE;
+		int minpos = -1;
+		
+		int j = 0;
+		while(j < vertices.size)
+		{
+			float px = vertices.get(j);
+			float py = vertices.get(j+1);	
+			
+			float lastpx = convertToPixelXCoordinate(px, screenWidth);
+			float lastpy = convertToPixelYCoordinate(py, screenHeight);
+						
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
+			if(distancia < mindistancia)
+			{
+				minpos = j/2;
+				mindistancia = distancia;
+			}
+			
+			j = j+2;
+		}
+		
+		return (short)minpos;
+	}	
 	
 	/* Métodos de Construcción de Buffer de Pintura */
 	

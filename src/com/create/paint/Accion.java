@@ -3,7 +3,14 @@ package com.create.paint;
 public class Accion
 {
 	private int tipo;
+	
+	// Color
 	private int color;
+	
+	// Pegatina
+	private int pegatina, vertice;
+	
+	// Polilinea
 	private Polilinea linea;
 	
 	public Accion(int color)
@@ -18,6 +25,13 @@ public class Accion
 		this.tipo = 1;
 	}
 	
+	public Accion(int pegatina, int vertice)
+	{
+		this.pegatina = pegatina;
+		this.vertice = vertice;
+		this.tipo = 2;
+	}
+	
 	public int getColor()
 	{
 		return color;
@@ -28,8 +42,28 @@ public class Accion
 		return linea;
 	}
 	
-	public int getTipo()
+	public int getPegatina()
 	{
-		return tipo;
+		return pegatina;
+	}
+	
+	public int getVertice()
+	{
+		return vertice;
+	}
+	
+	public boolean isTipoColor()
+	{
+		return tipo == 0;
+	}
+	
+	public boolean isTipoPolilinea()
+	{
+		return tipo == 1;
+	}
+	
+	public boolean isTipoPegatina()
+	{
+		return tipo == 2;
 	}
 }

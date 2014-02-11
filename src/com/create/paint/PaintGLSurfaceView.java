@@ -83,6 +83,12 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarSize(pos);
 	}
 	
+	public void seleccionarPegatina(int pegatina)
+	{
+		renderer.seleccionarPegatina(pegatina);
+		setEstado(TTouchEstado.SimpleTouch);
+	}
+	
 	public void anteriorAccion()
 	{
 		renderer.anteriorAccion();
@@ -122,5 +128,10 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public boolean bufferAnteriorVacio()
 	{
 		return renderer.bufferAnteriorVacio();
+	}
+	
+	public boolean pegatinaAnyadida()
+	{
+		return renderer.pegatinaAnyadida();
 	}
 }
