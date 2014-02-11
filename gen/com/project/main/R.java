@@ -93,6 +93,20 @@ public final class R {
         public static final int incremento_disabled=0x7f02002a;
         public static final int incremento_seleccionado=0x7f02002b;
         public static final int popup=0x7f02002c;
+        public static final int texture_eyes1=0x7f02002d;
+        public static final int texture_eyes2=0x7f02002e;
+        public static final int texture_eyes3=0x7f02002f;
+        public static final int texture_eyes4=0x7f020030;
+        public static final int texture_eyes5=0x7f020031;
+        public static final int texture_mouth1=0x7f020032;
+        public static final int texture_mouth2=0x7f020033;
+        public static final int texture_mouth3=0x7f020034;
+        public static final int texture_mouth4=0x7f020035;
+        public static final int texture_mouth5=0x7f020036;
+        public static final int texture_weapon1=0x7f020037;
+        public static final int texture_weapon2=0x7f020038;
+        public static final int texture_weapon3=0x7f020039;
+        public static final int texture_weapon6=0x7f02003a;
     }
     public static final class id {
         public static final int DisplayGLSurfaceViewLoading1=0x7f08001d;
@@ -295,23 +309,28 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
-        public static final int GLSurfaceView_BigImageButton_Style=0x7f070006;
+        /**  FrameLayout 
+         */
+        public static final int FrameLayout_Style=0x7f070005;
+        /**  TODO 
+         */
+        public static final int GLSurfaceView_BigImageButton_Style=0x7f070008;
         /**  Canvas 
          */
-        public static final int GLSurfaceView_Style=0x7f070005;
+        public static final int GLSurfaceView_Style=0x7f070007;
         /**  Botones 
          */
         public static final int ImageButton_Big_Style=0x7f070004;
         public static final int Layout_Activity_Style=0x7f070003;
         /**  Layout Botones 
          */
-        public static final int Layout_BigImageButton_Style=0x7f070008;
-        public static final int Layout_Center_BigImageButton_Style=0x7f07000b;
+        public static final int Layout_BigImageButton_Style=0x7f070009;
+        public static final int Layout_Center_BigImageButton_Style=0x7f07000c;
         /**  MainLayout 
          */
         public static final int Layout_Fragment_Style=0x7f070002;
-        public static final int Layout_Left_BigImageButton_Style=0x7f07000a;
-        public static final int Layout_Right_BigImageButton_Style=0x7f070009;
-        public static final int ViewPager_Style=0x7f070007;
+        public static final int Layout_Left_BigImageButton_Style=0x7f07000b;
+        public static final int Layout_Right_BigImageButton_Style=0x7f07000a;
+        public static final int ViewPager_Style=0x7f070006;
     }
 }

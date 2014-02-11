@@ -31,8 +31,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferTest;
 	
 	private final static int NUM_BSPLINE_VERTICES = 60;
-	private final static int DEEP_TRIANGULATOR = 5;
-	private final static float MAX_LONG_EDGE_TRIANGULATOR = 50.0f;
+	private final static int DEEP_TRIANGULATOR = 3;
+	private final static float MAX_LONG_EDGE_TRIANGULATOR = 100.0f;
 	
 	public DesignOpenGLRenderer(Context context)
 	{        

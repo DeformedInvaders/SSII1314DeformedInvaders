@@ -2,9 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
-    <android.support.v4.view.ViewPager style="@style/ViewPager_Style"
-   		xmlns:android="http://schemas.android.com/apk/res/android"
-	    xmlns:tools="http://schemas.android.com/tools"
+    <com.android.view.NonSwipeableViewPager style="@style/ViewPager_Style"
 	    android:id="@+id/pagerViewAnimation1"/>
     
     <LinearLayout style="@style/Layout_Right_BigImageButton_Style">

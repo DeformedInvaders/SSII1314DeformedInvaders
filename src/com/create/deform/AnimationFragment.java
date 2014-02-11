@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.android.view.NonSwipeableViewPager;
 import com.project.data.Esqueleto;
 import com.project.data.Movimientos;
 import com.project.data.Textura;
@@ -30,7 +31,7 @@ public class AnimationFragment extends Fragment
 	
 	private ImageButton botonReady;
 	private SectionViewPagerAdapter pageAdapter;
-	private ViewPager viewPager;
+	private NonSwipeableViewPager viewPager;
 	private List<DeformFragment> listaFragmentos;
 	
 	private Esqueleto esqueletoActual;
@@ -94,7 +95,7 @@ public class AnimationFragment extends Fragment
 
 		pageAdapter = new SectionViewPagerAdapter(getActivity().getSupportFragmentManager());
 
-		viewPager = (ViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
+		viewPager = (NonSwipeableViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
 		viewPager.removeAllViews();
 		viewPager.setAdapter(pageAdapter);
 

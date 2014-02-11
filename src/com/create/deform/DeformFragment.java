@@ -84,7 +84,6 @@ public class DeformFragment extends Fragment
 		super.onDestroyView();
 		
 		canvas = null;
-		dataSaved = null;
 		botonAdd = null;
 		botonRemove = null;
 		botonMove = null;
@@ -98,8 +97,10 @@ public class DeformFragment extends Fragment
 		canvas.onResume();
 		
 		if(dataSaved != null)
-		{
+		{			
 			canvas.restoreData(dataSaved);
+			actualizarBotones();
+			reiniciarImagenesBotones(dataSaved.getEstado());
 		}
 	}
 	
@@ -139,6 +140,26 @@ public class DeformFragment extends Fragment
 		botonAdd.setBackgroundResource(R.drawable.icon_add);
 		botonRemove.setBackgroundResource(R.drawable.icon_remove);
 		botonMove.setBackgroundResource(R.drawable.icon_hand);
+	}
+	
+	private void reiniciarImagenesBotones(TDeformEstado estado)
+	{
+		reiniciarImagenesBotones();
+		
+		switch(estado)
+		{
+			case Anyadir:
+				botonAdd.setBackgroundResource(R.drawable.icon_add_selected);
+			break;
+			case Eliminar:
+				botonRemove.setBackgroundResource(R.drawable.icon_remove_selected);
+			break;
+			case Deformar:
+				botonMove.setBackgroundResource(R.drawable.icon_hand_selected);
+			break;
+			default:
+			break;
+		}
 	}
 	
 	/* Listener de Botones */

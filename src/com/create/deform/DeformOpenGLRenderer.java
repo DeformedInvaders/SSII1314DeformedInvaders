@@ -225,7 +225,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if(!inPixelInCanvas(worldX, worldY)) return -1;
 		
 		int minpos = -1;
-		float mindistancia = Float.MAX_VALUE;
+		//float mindistancia = Float.MAX_VALUE;
 		
 		int j = 0;
 		while(j < vertices.size)
@@ -237,10 +237,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			float lastpy = convertToPixelYCoordinate(py, screenHeight);
 						
 			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
-			if(distancia < MAX_DISTANCE_PIXELS && distancia < mindistancia)
+			if(distancia < MAX_DISTANCE_PIXELS)// && distancia < mindistancia)
 			{
 				minpos = j/2;
-				mindistancia = distancia;
+				return (short)minpos;
+				//mindistancia = distancia;
 			}
 			
 			j = j+2;
@@ -404,11 +405,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	public DeformDataSaved saveData()
 	{
-		return new DeformDataSaved(handles, indiceHandles, verticesModificados);
+		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado);
 	}
 	
 	public void restoreData(DeformDataSaved data)
 	{
+		this.estado = data.getEstado();
 		this.handles = data.getHandles();
 		this.indiceHandles = data.getIndiceHandles();
 		this.verticesModificados = data.getVerticesModificados();
