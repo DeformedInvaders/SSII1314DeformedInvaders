@@ -10,21 +10,17 @@ import com.project.main.TTouchEstado;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
-	// Renderer
-    private final DeformOpenGLRenderer renderer;
+    private DeformOpenGLRenderer renderer;
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.MultiTouch);
-        
-        // Asignar Renderer al GLSurfaceView
-        renderer = new DeformOpenGLRenderer(context, NUM_HANDLES);
-        setRenderer(renderer);
     }
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
 	{
-		renderer.setParameters(esqueleto, textura);
+		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura);
+		setRenderer(renderer);
 	}
 	
     /* Métodos abstractos OpenGLSurfaceView */

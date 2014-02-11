@@ -11,10 +11,10 @@
     <dimen name="color_spacer">8dp</dimen>
     
     <!-- Botones -->
-    <dimen name="BigImageButton_layoutHeight">30dp</dimen>
-    <dimen name="BigImageButton_layoutWidth">30dp</dimen>
+    <dimen name="BigImageButton_LayoutHeight_Dimen">30dp</dimen>
+    <dimen name="BigImageButton_LayoutWidth_Dimen">30dp</dimen>
     
     <!-- ProgressBar -->
-    <dimen name="ProgressBar_layoutWidth">300dp</dimen>
+    <dimen name="ProgressBar_LayoutWidth_Dimen">300dp</dimen>
     
 </resources>

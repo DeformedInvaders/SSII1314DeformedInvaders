@@ -21,7 +21,11 @@ import com.lib.utils.ShortArray;
 public abstract class OpenGLRenderer implements Renderer
 {	
 	// Parámetros de la Cámara
-	protected float xLeft, xRight, yTop, yBot, xCentro, yCentro;
+	private float xLeft, xRight, yTop, yBot, xCentro, yCentro;
+	
+	// Copia Seguridad de la Cámara
+	private boolean camaraGuardada;
+	private float lastXLeft, lastXRight, lastYTop, lastYBot, lastXCentro, lastYCentro;
 	
 	// Parámetros del Puerto de Vista
 	private int height, width;
@@ -104,6 +108,9 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		GLU.gluOrtho2D(gl, xLeft, xRight, yBot, yTop);
+		
+		// Copia de Seguridad de la Cámara
+		this.camaraGuardada = false;
 
 		// Reiniciar la Matriz de ModeladoVista
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -160,6 +167,35 @@ public abstract class OpenGLRenderer implements Renderer
         this.xCentro = (xRight + xLeft)/2.0f;
         this.yCentro = (yTop + yBot)/2.0f;
 	}
+	
+	/* Copia de Seguridad de la Cámara */
+	
+	protected void salvarCamara()
+	{
+		lastXLeft = xLeft;
+		lastXRight = xRight;
+		lastYTop = yTop;
+		lastYBot = yBot;
+		lastXCentro = xCentro;
+		lastYCentro = yCentro;
+		
+		camaraGuardada = true;
+	}
+	
+	protected void recuperarCamara()
+	{
+		if(camaraGuardada)
+		{
+			xLeft = lastXLeft;
+			xRight = lastXRight;
+			yTop = lastYTop;
+			yBot = lastYBot;
+			xCentro = lastXCentro;
+			yCentro = lastYCentro;
+		}
+	}
+	
+	/* Conversión de Coordenadas */
 	
 	protected float convertToWorldXCoordinate(float pixelX, float screenWidth)
 	{

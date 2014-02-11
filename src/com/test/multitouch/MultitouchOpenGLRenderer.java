@@ -1,4 +1,4 @@
-package com.android.multitouch;
+package com.test.multitouch;
 
 import javax.microedition.khronos.opengles.GL10;
 

@@ -60,11 +60,18 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	/* Constructora*/	
 	
-	public PaintOpenGLRenderer(Context context)
+	public PaintOpenGLRenderer(Context context, Esqueleto esqueleto)
 	{
         super(context);
         
-        this.estado = TPaintEstado.Mano;
+        this.estado = TPaintEstado.Nada;
+        
+        this.contorno = esqueleto.getContorno();
+		this.vertices = esqueleto.getVertices();
+		this.triangulos = esqueleto.getTriangulos();
+		
+		this.bufferVertices = construirBufferListaTriangulosRellenos(triangulos, vertices);
+		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
         
         this.listaLineas = new ArrayList<Polilinea>();
         this.lineaActual = null;
@@ -88,27 +95,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{					
 		if (modoCaptura)
 		{	
-			// Restaurar Camara posición inicial
-			float nxLeft = xLeft;
-			float nxRight = xRight;
-			float nyTop = yTop;
-			float nyBot = yBot;
+			// Guardar posición actual de la Cámara
+			salvarCamara();
 			
+			// Restaurar Cámara posición inicial
 			restore();
 			
-			// Limpiar Buffer Color y Actualizar Camara
-			super.onDrawFrame(gl);
-			
-			// Pintar Esqueleto
-			dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
-			
-			// Pintar Polilineas
-			Iterator<Polilinea> it = listaLineas.iterator();
-			while(it.hasNext())
-			{
-				Polilinea polilinea = it.next();
-				dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
-			}
+			dibujarEsqueleto(gl);
 			
 			// Capturar Pantalla
 		    this.textura = capturaPantalla(gl, canvasHeight, canvasWidth);
@@ -120,20 +113,22 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			this.modoCaptura = false;
 			this.capturaTerminada = true;
 			
-			// Recuperar Camara
-			this.xLeft = nxLeft;
-			this.xRight = nxRight;
-			this.yTop = nyTop;
-			this.yBot = nyBot;
+			// Restaurar posición anterior de la Cámara
+			recuperarCamara();
 		}
 		
+		dibujarEsqueleto(gl);
+		
+		// Contorno
+		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+	}
+	
+	private void dibujarEsqueleto(GL10 gl)
+	{
 		super.onDrawFrame(gl);
 		
 		// Esqueleto
-		if(vertices != null && triangulos != null)
-		{
-			dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
-		}
+		dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
 		
 		// Detalles
 		Iterator<Polilinea> it = listaLineas.iterator();
@@ -147,13 +142,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
 		}
-		
-		// Contorno
-		if(vertices != null && triangulos != null)
-		{
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
-		}
 	}
+	
 
 	/* Selección de Estado */
 	
@@ -221,51 +211,69 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.anteriores.clear();
 		this.siguientes.clear();
 		
+		this.estado = TPaintEstado.Nada;
 		this.color = Color.WHITE;
 		this.sizeLinea = 6;
 	}
 	
 	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
+		if(estado == TPaintEstado.Pincel)
+		{
+			anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
+		}
+		else if(estado == TPaintEstado.Cubo)
+		{			
+			pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
+		}
+	}
+	
+	private synchronized void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 		
-		if(estado == TPaintEstado.Pincel)
+		if(lineaActual == null)
 		{
-			crearPolilinea();
-			
-			boolean anyadir = true;
-			
-			if(lineaActual.size > 0)
-			{
-				float lastWorldX = lineaActual.get(lineaActual.size-2);
-				float lastWorldY = lineaActual.get(lineaActual.size-1);
-				
-				float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-				float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
-				
-				anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
-			}
-			
-			if(anyadir)
-			{
-				lineaActual.add(worldX);
-				lineaActual.add(worldY);
-				
-				bufferLineaActual = construirBufferListaPuntos(lineaActual);
-			}
+			lineaActual = new FloatArray();
 		}
-		else if(estado == TPaintEstado.Cubo)
-		{			
-			if(GeometryUtils.isPointInsideMesh(contorno, vertices, worldX, worldY))
+		
+		boolean anyadir = true;
+		
+		if(lineaActual.size > 0)
+		{
+			float lastWorldX = lineaActual.get(lineaActual.size-2);
+			float lastWorldY = lineaActual.get(lineaActual.size-1);
+			
+			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
+			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+			
+			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
+		}
+		
+		if(anyadir)
+		{
+			lineaActual.add(worldX);
+			lineaActual.add(worldY);
+			
+			bufferLineaActual = construirBufferListaPuntos(lineaActual);
+		}
+	}
+	
+	private synchronized void pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		// Conversión Pixel - Punto	
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+				
+		if(GeometryUtils.isPointInsideMesh(contorno, vertices, worldX, worldY))
+		{
+			if(colorPaleta != color)
 			{
-				if(colorPaleta != color)
-				{
-					color = colorPaleta;
-					this.anteriores.push(new Accion(colorPaleta));
-					this.siguientes.clear();
-				}
+				color = colorPaleta;
+				this.anteriores.push(new Accion(colorPaleta));
+				this.siguientes.clear();
 			}
 		}
 	}
@@ -290,15 +298,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de modificación de Linea Actual */
 	
-	private void crearPolilinea()
-	{
-		if(lineaActual == null)
-		{
-			lineaActual = new FloatArray();
-		}
-	}
-	
-	private void guardarPolilinea()
+	private synchronized void guardarPolilinea()
 	{
 		if(lineaActual != null)
 		{
@@ -313,7 +313,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de modificación de Buffers de estado */
 
-	public void anteriorAccion()
+	public synchronized void anteriorAccion()
 	{
 		guardarPolilinea();
 		
@@ -325,7 +325,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	public void siguienteAccion()
+	public synchronized void siguienteAccion()
 	{
 		guardarPolilinea();
 		
@@ -338,7 +338,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private void actualizarEstado(Stack<Accion> pila)
+	private synchronized void actualizarEstado(Stack<Accion> pila)
 	{
 		this.color = Color.WHITE;
 		this.listaLineas = new ArrayList<Polilinea>();
@@ -377,16 +377,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		this.canvasHeight = height;
 		this.canvasWidth = width;
 		this.modoCaptura = true;
-	}
-	
-	public void setParameters(Esqueleto esqueleto)
-	{
-		this.contorno = esqueleto.getContorno();
-		this.vertices = esqueleto.getVertices();
-		this.triangulos = esqueleto.getTriangulos();
-		
-		this.bufferVertices = construirBufferListaTriangulosRellenos(triangulos, vertices);
-		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 	}
 	
 	public Textura getTextura()

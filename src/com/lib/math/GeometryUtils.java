@@ -182,29 +182,4 @@ public class GeometryUtils {
 		
 		return Intersector.isPointInPolygon(polygon, new Vector2(x, y));
 	}
-	
-	public static int isPointInMesh(FloatArray vertices, float x, float y)
-	{
-		// TODO
-		int minpos = -1;
-		float mindistancia = Float.MAX_VALUE;
-		
-		int j = 0;
-		while(j < vertices.size)
-		{
-			float px = vertices.get(j);
-			float py = vertices.get(j+1);			
-						
-			float distancia = Math.abs(Intersector.distancePoints(x, y, px, py));
-			if(distancia < 10 && distancia < mindistancia)
-			{
-				minpos = j/2;
-				mindistancia = distancia;
-			}
-			
-			j = j+2;
-		}
-		
-		return minpos;
-	}
 }

@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.android.alert.AlertDialogConfirmation;
 import com.android.alert.AlertDialogTextInput;
-import com.android.multitouch.MultitouchFragment;
 import com.android.storage.InternalStorageManager;
 import com.create.deform.AnimationFragment;
 import com.create.design.DesignFragment;
@@ -24,6 +23,7 @@ import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
 import com.project.loading.LoadingFragment;
+import com.test.multitouch.MultitouchFragment;
 import com.view.select.SelectionFragment;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener

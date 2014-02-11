@@ -16,15 +16,12 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     public DisplayGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
-
-        // Asignar Renderer al GLSurfaceView
-        renderer = new DisplayOpenGLRenderer(context);
-        setRenderer(renderer);
     }
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
 	{
-		this.renderer.setParameters(esqueleto, textura);
+		renderer = new DisplayOpenGLRenderer(getContext(), esqueleto, textura);
+        setRenderer(renderer);
 	}
 	
 	/* Métodos abstractos OpenGLSurfaceView */

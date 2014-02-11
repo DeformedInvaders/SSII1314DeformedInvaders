@@ -1,35 +1,35 @@
-<RelativeLayout style="@style/MainFragmentLayout"
+<RelativeLayout style="@style/Layout_Fragment_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.create.deform.DeformGLSurfaceView style="@style/GLSurfaceViewWithButtons"
+    <com.create.deform.DeformGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style"
         android:id="@+id/deformGLSurfaceViewDeform1" />
 
-    <LinearLayout style="@style/BigImageButtonLeftLayout">
+    <LinearLayout style="@style/Layout_Left_BigImageButton_Style">
         
-        <ImageButton style="@style/BigImageButton"
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDeform1"
             android:contentDescription="@string/desc_deform_add"
             android:background="@drawable/icon_add" />
 
-        <ImageButton style="@style/BigImageButton"
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDeform2"
             android:contentDescription="@string/desc_deform_remove"
             android:background="@drawable/icon_remove" />
 
-        <ImageButton style="@style/BigImageButton"
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDeform3"
             android:contentDescription="@string/desc_deform_move"
             android:background="@drawable/icon_hand" />
         
-		<ImageButton style="@style/BigImageButton"
+		<ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDeform4"
             android:contentDescription="@string/desc_deform_reset"
             android:background="@drawable/icon_reset" />
 		
     </LinearLayout>
     
-    <LinearLayout style="@style/BigImageButtonRightLayout">
+    <LinearLayout style="@style/Layout_Right_BigImageButton_Style">
         
     </LinearLayout>
 

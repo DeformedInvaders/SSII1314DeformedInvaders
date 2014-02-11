@@ -2,6 +2,7 @@ package com.create.deform;
 
 import java.nio.FloatBuffer;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -9,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.lib.math.Deformator;
-import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
@@ -46,6 +46,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* Handles */
 	
+	private static final float MAX_DISTANCE_PIXELS = 10;
+	
 	// Coordenadas de Handles
 	private FloatArray handles;
 	
@@ -63,11 +65,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private int[] nombreTextura;
 	private int posTextura;
 	
-	private Bitmap textura;
+	private Bitmap bitmap;
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
 	
-	public DeformOpenGLRenderer(Context context, int num_handles)
+	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura)
 	{
         super(context);
         
@@ -77,6 +79,17 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         estado = TDeformEstado.Nada;
         // modoGrabado = false;
         
+        
+        // Esqueleto
+		contorno = esqueleto.getContorno();
+		vertices = esqueleto.getVertices();
+		verticesModificados = vertices.clone();
+		triangulos = esqueleto.getTriangulos();
+		
+		bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
+		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
+        
+		// Handles
         handles = new FloatArray();
         indiceHandles = new ShortArray();
         
@@ -92,22 +105,39 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         	handleSeleccionado.add(0);
         }
         
+		// Textura
         nombreTextura = new int[numeroTexturas];
+		bitmap = textura.getTextura().getBitmap();
+		coords = textura.getCoordTextura();
+		
+		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
         
         objetoHandle = new Handle(20, POINTWIDTH);
         objetoVertice = new Handle(20, POINTWIDTH/2);
         objetoHandleSeleccionado = new Handle(20, 2*POINTWIDTH);
+        
+		// Deformador
+		deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
 	}
 	
 	/* Métodos de la interfaz Renderer */
+	
+	@Override
+	public void onSurfaceCreated(GL10 gl, EGLConfig config)
+	{
+		super.onSurfaceCreated(gl, config);
+		
+		// Textura
+		cargarTextura(gl, bitmap, nombreTextura, 0);
+	}
+	
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{					
 		super.onDrawFrame(gl);
 		
-		// Textura	
-		cargarTextura(gl, textura, nombreTextura, 0);
+		// Textura
 		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
 		
 		// Contorno
@@ -127,24 +157,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		// Seleccionado
 		dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
-	}
-	
-	public void setParameters(Esqueleto esqueleto, Textura textura)
-	{		
-		this.contorno = esqueleto.getContorno();
-		this.vertices = esqueleto.getVertices();
-		this.verticesModificados = vertices.clone();
-		
-		this.triangulos = esqueleto.getTriangulos();
-		
-		this.textura = textura.getTextura().getBitmap();
-		this.coords = textura.getCoordTextura();
-		
-		this.deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
-
-		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
-		this.bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
-		this.bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
 	}
 	
 	/* Selección de Estado */
@@ -212,9 +224,30 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		if(!inPixelInCanvas(worldX, worldY)) return -1;
 		
-		return (short) GeometryUtils.isPointInMesh(verticesModificados, worldX, worldY);
+		int minpos = -1;
+		float mindistancia = Float.MAX_VALUE;
+		
+		int j = 0;
+		while(j < vertices.size)
+		{
+			float px = verticesModificados.get(j);
+			float py = verticesModificados.get(j+1);	
+			
+			float lastpx = convertToPixelXCoordinate(px, screenWidth);
+			float lastpy = convertToPixelYCoordinate(py, screenHeight);
+						
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
+			if(distancia < MAX_DISTANCE_PIXELS && distancia < mindistancia)
+			{
+				minpos = j/2;
+				mindistancia = distancia;
+			}
+			
+			j = j+2;
+		}
+		
+		return (short)minpos;
 	}
-
 	
 	private void anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{

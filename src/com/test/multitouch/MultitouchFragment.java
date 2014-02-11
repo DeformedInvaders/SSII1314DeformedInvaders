@@ -1,4 +1,4 @@
-package com.android.multitouch;
+package com.test.multitouch;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

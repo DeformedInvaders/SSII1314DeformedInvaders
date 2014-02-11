@@ -459,7 +459,7 @@ public class Matrix implements Cloneable, java.io.Serializable {
    /** Matrix transpose.
    @return    A'
    */
-
+   //TODO:
    public Matrix transpose () {
       Matrix X = new Matrix(n,m);
       double[][] C = X.getArray();
@@ -469,6 +469,18 @@ public class Matrix implements Cloneable, java.io.Serializable {
          }
       }
       return X;
+   }
+   
+   public void transpose (Matrix X) {
+      if (X.m != n || X.n != m) {
+    	  throw new IllegalArgumentException("Matrix inner dimensions must agree.");
+      }
+      double[][] C = X.getArray();
+      for (int i = 0; i < m; i++) {
+         for (int j = 0; j < n; j++) {
+            C[j][i] = A[i][j];
+         }
+      }
    }
 
    /** One norm
@@ -577,6 +589,7 @@ public class Matrix implements Cloneable, java.io.Serializable {
    @return     A - B
    */
 
+   // TODO
    public Matrix minus (Matrix B) {
       checkMatrixDimensions(B);
       Matrix X = new Matrix(m,n);
@@ -588,6 +601,17 @@ public class Matrix implements Cloneable, java.io.Serializable {
       }
       return X;
    }
+   
+   public void minus (Matrix B, Matrix X) {
+	      checkMatrixDimensions(B);
+	      checkMatrixDimensions(X);
+	      double[][] C = X.getArray();
+	      for (int i = 0; i < m; i++) {
+	         for (int j = 0; j < n; j++) {
+	            C[i][j] = A[i][j] - B.A[i][j];
+	         }
+	      }
+	   }
 
    /** A = A - B
    @param B    another matrix
@@ -705,6 +729,7 @@ public class Matrix implements Cloneable, java.io.Serializable {
    @return     s*A
    */
 
+   //TODO:
    public Matrix times (double s) {
       Matrix X = new Matrix(m,n);
       double[][] C = X.getArray();
@@ -714,6 +739,18 @@ public class Matrix implements Cloneable, java.io.Serializable {
          }
       }
       return X;
+   }
+   
+   public void times (double s, Matrix X) {
+      if (X.m != m || X.n != n) {
+    	  throw new IllegalArgumentException("Matrix inner dimensions must agree.");
+      }
+      double[][] C = X.getArray();
+      for (int i = 0; i < m; i++) {
+         for (int j = 0; j < n; j++) {
+            C[i][j] = s*A[i][j];
+         }
+      }
    }
 
    /** Multiply a matrix by a scalar in place, A = s*A
@@ -758,6 +795,31 @@ public class Matrix implements Cloneable, java.io.Serializable {
       }
       return X;
    }
+   
+   public void times (Matrix B, Matrix X) {
+	      if (B.m != n) {
+	         throw new IllegalArgumentException("Matrix inner dimensions must agree.");
+	      }
+	      if (X.m != m || X.n != B.n) {
+	    	  throw new IllegalArgumentException("Matrix inner dimensions must agree.");
+	      }
+	      
+	      double[][] C = X.getArray();
+	      double[] Bcolj = new double[n];
+	      for (int j = 0; j < B.n; j++) {
+	         for (int k = 0; k < n; k++) {
+	            Bcolj[k] = B.A[k][j];
+	         }
+	         for (int i = 0; i < m; i++) {
+	            double[] Arowi = A[i];
+	            double s = 0;
+	            for (int k = 0; k < n; k++) {
+	               s += Arowi[k]*Bcolj[k];
+	            }
+	            C[i][j] = s;
+	         }
+	      }
+	   }
 
    /** LU Decomposition
    @return     LUDecomposition

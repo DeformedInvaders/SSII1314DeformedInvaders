@@ -283,6 +283,7 @@ public class PaintFragment extends Fragment
 		{
 			canvas.reiniciar();
 				
+			reiniciarImagenesBotones();
 			actualizarBotones();
 		}
     }

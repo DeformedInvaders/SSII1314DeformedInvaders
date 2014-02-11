@@ -10,10 +10,10 @@
     <!-- Dialog dimensions -->
     
     <!-- Botones -->
-    <dimen name="BigImageButton_layoutHeight">70dp</dimen>
-    <dimen name="BigImageButton_layoutWidth">70dp</dimen>
+    <dimen name="BigImageButton_LayoutHeight_Dimen">70dp</dimen>
+    <dimen name="BigImageButton_LayoutWidth_Dimen">70dp</dimen>
     
     <!-- ProgressBar -->
-    <dimen name="ProgressBar_layoutWidth">500dp</dimen>
+    <dimen name="ProgressBar_LayoutWidth_Dimen">500dp</dimen>
     
 </resources>

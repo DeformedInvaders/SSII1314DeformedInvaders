@@ -185,6 +185,8 @@ public class DeformFragment extends Fragment
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
+			
+			reiniciarImagenesBotones();
 			actualizarBotones();
 		}	
 	}

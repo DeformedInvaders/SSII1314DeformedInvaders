@@ -31,7 +31,7 @@
     		    android:layout_width="wrap_content"
     		    android:layout_height="wrap_content"
     		    android:background="@null"
-    		    android:src="@drawable/incremento_btn"
+    		    android:src="@drawable/button_increment_selector"
     		    android:contentDescription="@string/desc_dialog_increment" />
     	        		
     		<ImageButton
@@ -47,7 +47,7 @@
     		    android:layout_width="wrap_content"
     		    android:layout_height="wrap_content"
     		    android:background="@null"
-    		    android:src="@drawable/decremento_btn"
+    		    android:src="@drawable/button_decrement_selector"
     		    android:contentDescription="@string/desc_dialog_decrement" />
 
     	</LinearLayout>

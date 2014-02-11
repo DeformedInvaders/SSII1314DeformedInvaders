@@ -1,4 +1,4 @@
-package com.android.multitouch;
+package com.test.multitouch;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -17,7 +17,7 @@ public class MultitouchGLSurfaceView extends OpenGLSurfaceView implements OnTouc
         super(context, attrs, TTouchEstado.MultiTouch);
 
         // Asignar Renderer al GLSurfaceView
-        renderer = new MultitouchOpenGLRenderer(context, NUM_HANDLES);
+        renderer = new MultitouchOpenGLRenderer(getContext(), NUM_HANDLES);
         setRenderer(renderer);
         setOnTouchListener(this);
     }

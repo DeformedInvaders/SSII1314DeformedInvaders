@@ -11,20 +11,18 @@ import com.project.main.TTouchEstado;
 public class PaintGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
-    private final PaintOpenGLRenderer renderer;
+    private PaintOpenGLRenderer renderer;
 
     public PaintGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.Detectors);
-        
-        // Asignar Renderer al GLSurfaceView
-        renderer = new PaintOpenGLRenderer(context);
-        setRenderer(renderer);
     }
     
 	public void setParameters(Esqueleto esqueleto)
 	{
-		renderer.setParameters(esqueleto);
+		// Asignar Renderer al GLSurfaceView
+        renderer = new PaintOpenGLRenderer(getContext(), esqueleto);
+        setRenderer(renderer);
 	}
     
     /* Métodos abstractos OpenGLSurfaceView */

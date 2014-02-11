@@ -19,30 +19,27 @@
     
     <!-- MainLayout -->
     
-    <style name="MainActivityLayout">
+    <style name="Layout_Fragment_Style">
 		<item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">#ffffff</item>
         <item name="android:orientation">horizontal</item>
 	</style>
 	
-    <style name="MainFragmentLayout">
-		<item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+	<style name="Layout_Activity_Style" parent="Layout_Fragment_Style">
         <item name="android:orientation">horizontal</item>
 	</style>
     
     <!-- Botones -->
     
-    <style name="BigImageButton">
-        <item name="android:layout_width">@dimen/BigImageButton_layoutWidth</item>
-        <item name="android:layout_height">@dimen/BigImageButton_layoutHeight</item>
+    <style name="ImageButton_Big_Style">
+        <item name="android:layout_width">@dimen/BigImageButton_LayoutWidth_Dimen</item>
+        <item name="android:layout_height">@dimen/BigImageButton_LayoutHeight_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
 	</style>
 	
     <!-- Canvas -->
 	
-	<style name="GLSurfaceViewWithoutButtons">
+	<style name="GLSurfaceView_Style">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_alignParentBottom">true</item>
@@ -51,36 +48,32 @@
 		<item name="android:layout_alignParentTop">true</item>
 	</style>
 	
-    <style name="GLSurfaceViewWithButtons">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_alignParentBottom">true</item>
-		<item name="android:layout_alignParentLeft">true</item>
-		<item name="android:layout_alignParentRight">true</item>
-		<item name="android:layout_alignParentTop">true</item>
-		<item name="android:layout_marginBottom">@dimen/BigImageButton_layoutHeight</item>
+    <style name="GLSurfaceView_BigImageButton_Style" parent="GLSurfaceView_Style">
+		<item name="android:layout_marginBottom">@dimen/BigImageButton_LayoutHeight_Dimen</item>
 	</style>
+	
+    <style name="ViewPager_Style">
+        <item name="android:layout_width">match_parent</item>
+	    <item name="android:layout_height">match_parent</item>
+    </style>
 	
     <!-- Layout Botones -->
-
-    <style name="BigImageButtonRightLayout">
-		<item name="android:layout_width">wrap_content</item>
+    
+    <style name="Layout_BigImageButton_Style">
+        <item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="Layout_Right_BigImageButton_Style" parent="Layout_BigImageButton_Style">
 		<item name="android:layout_alignParentRight">true</item>
 	</style>
 	
-	<style name="BigImageButtonLeftLayout">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:layout_alignParentBottom">true</item>
+	<style name="Layout_Left_BigImageButton_Style" parent="Layout_BigImageButton_Style">
 		<item name="android:layout_alignParentLeft">true</item>
 	</style>
 
-	<style name="BigImageButtonCenterLayout">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:layout_alignParentBottom">true</item>
+	<style name="Layout_Center_BigImageButton_Style" parent="Layout_BigImageButton_Style">
 		<item name="android:layout_centerHorizontal">true</item>
 	</style>
 	

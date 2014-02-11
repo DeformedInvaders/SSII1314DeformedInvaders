@@ -2,7 +2,7 @@
 <resources>
     <!-- STRINGS -->
     	<!-- ActionBar Titles -->
-		    <string name="title_app">DEFORMS INVADERS</string>
+		    <string name="title_app">DEFORMED INVADERS</string>
 		    <string name="title_design_phase">Define the design.</string>
 		    <string name="title_paint_phase">Define the texture.</string>
 		    <string name="title_animation_phase">Define the animation.</string>
@@ -35,6 +35,9 @@
 			
 			<string name="text_confirmation_yes">Yes</string>
 			<string name="text_confirmation_no">No</string>
+
+			<string name="text_confirmation_ok">OK</string>
+		    <string name="text_confirmation_cancel">Cancel</string>
 			
 		<!-- Errors -->
 			<string name="error_test">The polygon is complex.</string>
@@ -90,9 +93,5 @@
 		<!-- Unknown -->
 			<string name="desc_dialog_content">Content</string>
 		    <string name="desc_dialog_arrow">Arrow</string>
-		    
-		<!-- Botones -->
-		    <string name="cancelar">Cancel</string>
-		    <string name="aceptar">Accept</string>
 
 </resources>

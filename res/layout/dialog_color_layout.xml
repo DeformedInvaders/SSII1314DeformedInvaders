@@ -17,7 +17,6 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:padding="10dip">
 
             <RelativeLayout
@@ -82,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/color_state"
-                    android:text="@string/cancelar" />
+                    android:text="@string/text_confirmation_cancel" />
 
                 <Button
                     android:id="@+id/ibAceptar"
@@ -90,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignRight="@+id/color_cuadroColores"
                     android:layout_below="@+id/color_state"
-                    android:text="@string/aceptar" />
+                    android:text="@string/text_confirmation_ok" />
 
             </RelativeLayout>
 

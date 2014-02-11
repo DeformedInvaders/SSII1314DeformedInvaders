@@ -1,4 +1,4 @@
-<RelativeLayout style="@style/MainActivityLayout"
+<RelativeLayout style="@style/Layout_Activity_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     

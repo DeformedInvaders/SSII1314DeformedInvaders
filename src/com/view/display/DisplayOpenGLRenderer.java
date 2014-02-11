@@ -2,6 +2,7 @@ package com.view.display;
 
 import java.nio.FloatBuffer;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -28,48 +29,52 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private int[] nombreTextura;
 	private int posTextura;
 	
-	private Bitmap textura;
+	private Bitmap bitmap;
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
 	
-	public DisplayOpenGLRenderer(Context context)
+	public DisplayOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura)
 	{
         super(context);
         
-        nombreTextura = new int[numeroTexturas];
+        // Esqueleto
+        contorno = esqueleto.getContorno();
+		vertices = esqueleto.getVertices();
+		
+		triangulos = esqueleto.getTriangulos();
+		
+		bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
+		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
+		
+		// Textura
+		nombreTextura = new int[numeroTexturas];
+		bitmap = textura.getTextura().getBitmap();
+		coords = textura.getCoordTextura();
+
+		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
 	}
 	
 	/* Métodos de la interfaz Renderer */
+	
+	@Override
+	public void onSurfaceCreated(GL10 gl, EGLConfig config)
+	{
+		super.onSurfaceCreated(gl, config);
+		
+		// Textura
+		cargarTextura(gl, bitmap, nombreTextura, 0);
+	}
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{					
 		super.onDrawFrame(gl);
 			
-		if(textura != null)
-		{	
-			// Textura
-			cargarTextura(gl, textura, nombreTextura, 0);
-			dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
+		// Textura
+		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
 			
-			// Contorno
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
-		}
-	}
-	
-	public void setParameters(Esqueleto esqueleto, Textura textura)
-	{
-		this.contorno = esqueleto.getContorno();
-		this.vertices = esqueleto.getVertices();
-		
-		this.triangulos = esqueleto.getTriangulos();
-		
-		this.textura = textura.getTextura().getBitmap();
-		this.coords = textura.getCoordTextura();
-
-		this.bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
-		this.bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
-		this.bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
+		// Contorno
+		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 	}
 	
 	/* Métodos abstractos de OpenGLRenderer */

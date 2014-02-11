@@ -17,7 +17,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
         super(context, attrs, TTouchEstado.SimpleTouch);
 
         // Asignar Renderer al GLSurfaceView
-        renderer = new DesignOpenGLRenderer(context);
+        renderer = new DesignOpenGLRenderer(getContext());
         setRenderer(renderer);
     }
     

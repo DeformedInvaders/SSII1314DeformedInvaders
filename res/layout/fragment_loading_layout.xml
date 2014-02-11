@@ -1,12 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout style="@style/Layout_Fragment_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/MainFragmentLayout"
     android:background="#000000" >
 
-    <ProgressBar
+    <ProgressBar style="?android:attr/progressBarStyleHorizontal"
         android:id="@+id/progressBarLoading1"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="@dimen/ProgressBar_layoutWidth"
+        android:layout_width="@dimen/ProgressBar_LayoutWidth_Dimen"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"

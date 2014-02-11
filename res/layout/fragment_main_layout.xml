@@ -1,23 +1,23 @@
-<RelativeLayout style="@style/MainFragmentLayout"
+<RelativeLayout style="@style/Layout_Fragment_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
-    <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceViewWithButtons"
+    <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style"
         android:id="@+id/DisplayGLSurfaceViewLoading1" />
 
-    <LinearLayout style="@style/BigImageButtonCenterLayout">
+    <LinearLayout style="@style/Layout_Center_BigImageButton_Style">
 
-        <ImageButton style="@style/BigImageButton"
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonLoading1"
             android:contentDescription="@string/desc_loading_new"
             android:background="@drawable/icon_create" />
 
-        <ImageButton style="@style/BigImageButton"
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonLoading2"
             android:contentDescription="@string/desc_loading_play"
             android:background="@drawable/icon_play" />
 
-        <ImageButton style="@style/BigImageButton"
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonLoading3"
             android:contentDescription="@string/desc_loading_select"
             android:background="@drawable/icon_select" />
@@ -25,7 +25,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textViewLoading1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

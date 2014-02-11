@@ -1,34 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/MainFragmentLayout" >
+<RelativeLayout style="@style/Layout_Fragment_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
 
-    <com.create.design.DesignGLSurfaceView
-        android:id="@+id/designGLSurfaceViewDesign1"
-        style="@style/GLSurfaceViewWithButtons" />
+    <com.create.design.DesignGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style" 
+        android:id="@+id/designGLSurfaceViewDesign1" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        style="@style/BigImageButtonLeftLayout" >
+    <LinearLayout style="@style/Layout_Left_BigImageButton_Style">
 
-        <ImageButton
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDesign3"
-            style="@style/BigImageButton"
             android:contentDescription="@string/desc_design_test"
             android:background="@drawable/icon_test" />
 
-        <ImageButton
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDesign2"
-            style="@style/BigImageButton"
             android:contentDescription="@string/desc_design_reset"
             android:background="@drawable/icon_reset" />
     
     </LinearLayout>
 
-    <LinearLayout style="@style/BigImageButtonRightLayout" >
+    <LinearLayout style="@style/Layout_Right_BigImageButton_Style" >
 
-        <ImageButton
+        <ImageButton style="@style/ImageButton_Big_Style"
             android:id="@+id/imageButtonDesign1"
-            style="@style/BigImageButton"
             android:contentDescription="@string/desc_design_ready"
             android:background="@drawable/icon_ready" />
     

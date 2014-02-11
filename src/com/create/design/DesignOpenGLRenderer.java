@@ -24,33 +24,15 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private TDesignEstado estado;
 	
 	private FloatArray puntos;
-	private FloatBuffer bufferPuntos;
-	
-	//private FloatArray puntosDelaunay;
-	
-	//private FloatArray puntosMesh;
-	
-	//private FloatArray lineasBSpline;
-	//private FloatBuffer bufferBSpline;
-	
-	//private FloatArray lineasConvexHull;
-	//private FloatBuffer bufferConvexHull;
-	
-	//private ShortArray triangulosDelaunay;
-	//private FloatBuffer bufferDelaunay;
-	
-	//private ShortArray triangulosEarClipping;
-	//private FloatBuffer bufferEarClipping;
-	
-	//private ShortArray triangulosMesh;
-	//private FloatBuffer bufferMeshTriangles;
-	
-	//private ShortArray lineasSimple;
-	//private FloatBuffer bufferSimple;	
+	private FloatBuffer bufferPuntos;	
 	
 	private FloatArray puntosTest;
 	private ShortArray triangulosTest;
 	private FloatBuffer bufferTest;
+	
+	private final static int NUM_BSPLINE_VERTICES = 60;
+	private final static int DEEP_TRIANGULATOR = 5;
+	private final static float MAX_LONG_EDGE_TRIANGULATOR = 50.0f;
 	
 	public DesignOpenGLRenderer(Context context)
 	{        
@@ -81,30 +63,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 					}
 				}
 			break;
-			/*case BSpline:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.YELLOW, bufferBSpline);
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferBSpline);
-			break;
-			case ConvexHull:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.GREEN, bufferConvexHull);
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferConvexHull);
-			break;
-			case Delaunay:
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLUE, bufferDelaunay);
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
-			break;
-			case EarClipping:
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.GRAY, bufferEarClipping);
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
-			break;
-			case MeshGenerator:
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.MAGENTA, bufferMeshTriangles);
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
-			break;
-			case Simple:
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.LTGRAY, bufferPuntos);
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE+2, Color.RED, bufferSimple);
-			break;*/
 			case Full:
 				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferTest);
 			break;
@@ -120,15 +78,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		estado = TDesignEstado.Dibujar;
 		
 		puntos.clear();
-		/*puntosMesh = null;
-		puntosDelaunay = null;
-		
-		lineasBSpline = null;
-		lineasConvexHull = null;
-		triangulosDelaunay = null;
-		triangulosEarClipping = null;
-		triangulosMesh = null;
-		lineasSimple = null;*/
 		
 		puntosTest = null;
 		triangulosTest = null;
@@ -139,30 +88,36 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if(estado == TDesignEstado.Dibujar)
 		{
-			// Conversión Pixel - Punto	
-			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
+		}
+	}
+	
+	
+	private synchronized void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		// Conversión Pixel - Punto	
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+		
+		boolean anyadir = true;
+		
+		if(puntos.size > 0)
+		{
+			float lastWorldX = puntos.get(puntos.size-2);
+			float lastWorldY = puntos.get(puntos.size-1);
 			
-			boolean anyadir = true;
+			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
+			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
 			
-			if(puntos.size > 0)
-			{
-				float lastWorldX = puntos.get(puntos.size-2);
-				float lastWorldY = puntos.get(puntos.size-1);
-				
-				float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-				float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
-				
-				anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
-			}
+			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > EPSILON;
+		}
+		
+		if(anyadir)
+		{
+			puntos.add(worldX);
+			puntos.add(worldY);
 			
-			if(anyadir)
-			{
-				puntos.add(worldX);
-				puntos.add(worldY);
-				
-				bufferPuntos = construirBufferListaPuntos(puntos);
-			}
+			bufferPuntos = construirBufferListaPuntos(puntos);
 		}
 	}
 	
@@ -189,102 +144,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	
 	/* Selección de Estado */
 	
-	/*public void bSpline()
-	{
-		if(puntos.size > 4)
-		{
-			estado = TDesignEstado.BSpline;
-			
-			if(lineasBSpline == null)
-			{
-				lineasBSpline = calcularBSpline(puntos, 3, 100);
-				bufferBSpline = construirBufferListaPuntos(lineasBSpline);
-			}
-		}
-	}*/
-	
 	private FloatArray calcularBSpline(FloatArray vertices, int grado, int iter)
 	{
 		BSpline<Vector2> bsplineCalculator = new BSpline<Vector2>(vertices, grado, true);
 		return bsplineCalculator.computeBSpline(0.0f, iter);
 	}
-	
-	/*public void convexHull()
-	{		
-		if(puntos.size > 4)
-		{
-			estado = TDesignEstado.ConvexHull;
-			
-			if(lineasConvexHull == null)
-			{
-				lineasConvexHull = calcularConvexHull(puntos, false);
-				bufferConvexHull = construirBufferListaPuntos(lineasConvexHull);
-			}
-		}
-	}*/
-	
-	/*private FloatArray calcularConvexHull(FloatArray vertices, boolean ordenados)
-	{
-		ConvexHull convexHullCalculator = new ConvexHull();
-		return convexHullCalculator.computePolygon(vertices, ordenados);
-	}*/
-	
-	/*public void delaunay()
-	{
-		if(puntos.size > 4)
-		{
-			estado = TDesignEstado.Delaunay;
-			
-			if(triangulosDelaunay == null)
-			{
-				puntosDelaunay = new FloatArray(puntos);
-				triangulosDelaunay = calcularDelaunay(puntosDelaunay, false);
-				bufferDelaunay = construirBufferListaTriangulos(triangulosDelaunay, puntosDelaunay);
-			}
-		}
-	}*/
-	
-	/*private ShortArray calcularDelaunay(FloatArray vertices, boolean ordenados)
-	{
-		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();
-		return delaunayCalculator.computeTriangles(vertices, ordenados);
-	}*/
-
-	/*public void earClipping()
-	{
-		if(puntos.size > 4) 
-		{
-			estado = TDesignEstado.EarClipping;
-			
-			if(triangulosEarClipping == null)
-			{
-				triangulosEarClipping = calcularEarClipping(puntos);
-				bufferEarClipping = construirBufferListaTriangulos(triangulosEarClipping, puntos);
-			}
-		}
-	}*/
-	
-	/*private ShortArray calcularEarClipping(FloatArray vertices)
-	{
-		EarClippingTriangulator earClippingCalculator = new EarClippingTriangulator();
-		return earClippingCalculator.computeTriangles(vertices);
-	}*/
-	
-	/*public void meshGenerator()
-	{
-		if(puntos.size > 4)
-		{
-			estado = TDesignEstado.MeshGenerator;
-			
-			if(triangulosMesh == null)
-			{
-				Mesh m = calcularMeshGenerator(puntos, 3, 10.0f);
-				puntosMesh = m.getVertices();
-				triangulosMesh = m.getTriangulos();
-				bufferMeshTriangles = construirBufferListaTriangulos(triangulosMesh, puntosMesh);
-			}
-		}
-	}*/
 	
 	private Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
 	{
@@ -292,30 +156,12 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		return delaunayMeshGenerator.computeMesh(vertices, profundidad, longitud);
 	}
 	
-	/*public boolean testSimple()
-	{
-		if(puntos.size > 4)
-		{
-			estado = TDesignEstado.Simple;
-			
-			if(lineasSimple == null)
-			{
-				lineasSimple = calcularPoligonoSimple(puntos, false);
-				bufferSimple = construirBufferListaLineas(lineasSimple, puntos);
-			}
-			
-			return lineasSimple.size == 0;
-		}
-		
-		return false;
-	}*/
-	
 	private ShortArray calcularPoligonoSimple(FloatArray vertices, boolean continuo)
 	{
 		return GeometryUtils.isPolygonSimple(vertices, continuo);
 	}
 	
-	/* Captura de Esqueleto */
+	/* Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
 	{
@@ -323,20 +169,20 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			estado = TDesignEstado.Full;
 			
-			int numBSplineVertices = 40;
 			// TODO Calcular Iteraciones en función del Area del Poligono
-			FloatArray bsplineVertices = calcularBSpline(puntos, 3, numBSplineVertices);
+			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
 			
 			ShortArray testSimple = calcularPoligonoSimple(bsplineVertices, false);
 			if(testSimple.size == 0)
 			{
-				Mesh m = calcularMeshGenerator(bsplineVertices, 3, 75.0f);
+				Mesh m = calcularMeshGenerator(bsplineVertices, DEEP_TRIANGULATOR, MAX_LONG_EDGE_TRIANGULATOR);
 				puntosTest = m.getVertices();
 				triangulosTest = m.getTriangulos();
-				ShortArray contornoTest = new ShortArray(numBSplineVertices);
-				for(int i = 0; i < numBSplineVertices; i++) contornoTest.add(i);
-				
 				bufferTest = construirBufferListaTriangulos(triangulosTest, puntosTest);
+				
+				// Contorno
+				ShortArray contornoTest = new ShortArray(NUM_BSPLINE_VERTICES);
+				for(int i = 0; i < NUM_BSPLINE_VERTICES; i++) contornoTest.add(i);
 				
 				return new Esqueleto(contornoTest, puntosTest, triangulosTest);
 			}

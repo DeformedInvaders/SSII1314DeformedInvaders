@@ -2,7 +2,6 @@
 <resources>
     <!-- STRINGS -->
     	<!-- ActionBar Titles -->
-		    <string name="title_app">DEFORMS INVADERS</string>
 		    <string name="title_design_phase">Define el diseño.</string>
 		    <string name="title_paint_phase">Define la textura.</string>
 		    <string name="title_animation_phase">Define las animaciones.</string>
@@ -35,6 +34,9 @@
 			
 			<string name="text_confirmation_yes">Si</string>
 			<string name="text_confirmation_no">No</string>
+
+			<string name="text_confirmation_ok">OK</string>
+		    <string name="text_confirmation_cancel">Cancelar</string>
 			
 		<!-- Errors -->
 			<string name="error_test">El poligono es complejo.</string>
@@ -90,9 +92,5 @@
 		<!-- Unknown -->
 			<string name="desc_dialog_content">Contenido</string>
 		    <string name="desc_dialog_arrow">Flecha</string>
-		    
-		<!-- Botones -->
-		    <string name="cancelar">Cancelar</string>
-		    <string name="aceptar">Aceptar</string>
 
 </resources>
