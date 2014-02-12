@@ -10,16 +10,16 @@
   	    
 	    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style" >
 	        
-			<Button style="@style/ImageButton_Size_Style"
+			<Button style="@style/Button_Size_Style"
 				android:id="@+id/imageButtonSize1"
 				android:text="@string/text_button_plus" />
 			
-			<ImageButton style="@style/ImageButton_Size_Style"
+			<ImageView style="@style/Button_Size_Style"
 				android:id="@+id/imageButtonSize3"
 				android:background="@drawable/image_size_small"
 				android:contentDescription="@string/desc_size_pencil" />
 			
-			<Button style="@style/ImageButton_Size_Style"
+			<Button style="@style/Button_Size_Style"
 				android:id="@+id/imageButtonSize2"
 				android:text="@string/text_button_minus" />
 		

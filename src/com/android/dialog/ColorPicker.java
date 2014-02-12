@@ -19,7 +19,7 @@ public class ColorPicker extends WindowPicker
 	private PaintFragment fragmento;
 	private float[] colorActual = new float[3];
 	
-	private ColorPickerKotak paletaPrincipal;
+	private ColorPalette paletaPrincipal;
 	private ImageView paletaSecundaria;
 	
 	private Button botonAceptar, botonCancelar;
@@ -37,7 +37,7 @@ public class ColorPicker extends WindowPicker
 		botonAceptar.setOnClickListener(new OnAceptarClickListener());
 		botonCancelar.setOnClickListener(new OnCancelarClickListener());
 		
-		paletaPrincipal = (ColorPickerKotak) findViewById(R.id.paletteColor1);
+		paletaPrincipal = (ColorPalette) findViewById(R.id.paletteColor1);
 		paletaSecundaria = (ImageView) findViewById(R.id.paletteColor2);
 		
 		paletaPrincipal.setOnTouchListener(new OnPaletaPrincipalTouchListener());

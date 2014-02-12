@@ -6,58 +6,58 @@
     <com.create.paint.PaintGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style"
         android:id="@+id/paintGLSurfaceViewPaint1" />
 
-    <LinearLayout style="@style/Layout_Left_BigImageButton_Style">
+    <LinearLayout style="@style/Layout_Left_FragmentButton_Style">
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint1"
             android:contentDescription="@string/desc_paint_pencil"
             android:background="@drawable/icon_pencil" />
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint2"
             android:contentDescription="@string/desc_paint_bucket"
             android:background="@drawable/icon_bucket" />
         
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint3"
             android:contentDescription="@string/desc_paint_color"
             android:background="@drawable/icon_color" />
         
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint4"
             android:contentDescription="@string/desc_paint_size"
             android:background="@drawable/icon_size" />
         
-   		<ImageButton style="@style/ImageButton_Big_Style"
+   		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint5"
             android:contentDescription="@string/desc_paint_eye"
             android:background="@drawable/icon_eye" />
     		    
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint6"
             android:contentDescription="@string/desc_paint_hand"
             android:background="@drawable/icon_hand" />
         
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint7"
             android:contentDescription="@string/desc_paint_prev"
             android:background="@drawable/icon_prev" />
                 
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint8"
             android:contentDescription="@string/desc_paint_next"
             android:background="@drawable/icon_next" />
                         
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
 		    android:id="@+id/imageButtonPaint9"
 		    android:contentDescription="@string/desc_paint_reset"
 		    android:background="@drawable/icon_reset" />
 
     </LinearLayout>
     
-    <LinearLayout style="@style/Layout_Right_BigImageButton_Style">
+    <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
 
-	   	<ImageButton style="@style/ImageButton_Big_Style"
+	   	<ImageButton style="@style/Button_Fragment_Style"
 	   	    android:id="@+id/imageButtonPaint10"
 	   	    android:contentDescription="@string/desc_paint_ready"
 	   	    android:background="@drawable/icon_ready" />

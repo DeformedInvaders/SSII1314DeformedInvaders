@@ -36,25 +36,25 @@
     
     <!-- Botones -->
     
-    <style name="ImageButton_Big_Style">
+    <style name="Button_Fragment_Style">
         <item name="android:layout_width">@dimen/BigImageButton_LayoutWidth_Dimen</item>
         <item name="android:layout_height">@dimen/BigImageButton_LayoutHeight_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
 	</style>
 	
-    <style name="ImageButton_Sticker_Style">
+    <style name="Button_Sticker_Style">
         <item name="android:layout_width">@dimen/StickerImageButton_LayoutWidth_Dimen</item>
         <item name="android:layout_height">@dimen/StickerImageButton_LayoutHeight_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
     </style>
     
-    <style name="ImageButton_Size_Style">
+    <style name="Button_Size_Style">
 		<item name="android:layout_width">@dimen/SizeImageButton_LayoutWidth_Dimen</item>
 		<item name="android:layout_height">@dimen/SizeImageButton_LayoutHeight_Dimen</item>
 		<item name="android:layout_marginBottom">10dp</item>
     </style>
     
-     <style name="ImageButton_Color_Style">
+     <style name="Button_Color_Style">
 		<item name="android:layout_width">@dimen/ColorImageButton_LayoutWidth_Dimen</item>
 		<item name="android:layout_height">@dimen/ColorImageButton_LayoutHeight_Dimen</item>
 		<item name="android:layout_marginLeft">10dp</item>
@@ -87,25 +87,35 @@
 		<!-- TODO -->
 	</style>
 	
-    <!-- Layout Botones -->
+    <!-- Layout Fragmentos -->
     
-    <style name="Layout_BigImageButton_Style">
+    <style name="Layout_FragmentButton_Style">
         <item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_alignParentBottom">true</item>
     </style>
 
-    <style name="Layout_Right_BigImageButton_Style" parent="Layout_BigImageButton_Style">
+    <style name="Layout_Right_FragmentButton_Style" parent="Layout_FragmentButton_Style">
 		<item name="android:layout_alignParentRight">true</item>
 	</style>
 	
-	<style name="Layout_Left_BigImageButton_Style" parent="Layout_BigImageButton_Style">
+	<style name="Layout_Left_FragmentButton_Style" parent="Layout_FragmentButton_Style">
 		<item name="android:layout_alignParentLeft">true</item>
 	</style>
 
-	<style name="Layout_Center_BigImageButton_Style" parent="Layout_BigImageButton_Style">
+	<style name="Layout_Center_FragmentButton_Style" parent="Layout_FragmentButton_Style">
 		<item name="android:layout_centerHorizontal">true</item>
 	</style>
+	
+	<!-- Imagenes -->
+	
+	<style name="ImageView_Cursor_Style">
+		<item name="android:layout_width">15dp</item>
+		<item name="android:layout_height">15dp</item>
+		<item name="android:scaleType">matrix</item>
+	</style>
+	
+	<!-- Layout Dialogos -->
 	
 	<style name="Layout_Content_Dialog_Style">
 		<item name="android:layout_width">wrap_content</item>

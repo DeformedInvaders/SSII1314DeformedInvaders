@@ -14,6 +14,12 @@
 			<string name="title_animation_section_down">Agacharse</string>
 			<string name="title_animation_section_attack">Atacar</string>
 			
+			<string name="title_dialog_size">Tamaño:</string>
+			<string name="title_dialog_color">Color:</string>
+			<string name="title_dialog_eyes">Ojos:</string>
+			<string name="title_dialog_mouths">Bocas:</string>
+			<string name="title_dialog_weapons">Armas:</string>
+			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Cargando datos guardados.</string>
 			<string name="text_progressBar_chosen">Cargando personaje seleccionado.</string>
@@ -32,11 +38,11 @@
 			<string name="text_delete_character_description">¿Estás seguro de eliminar este personaje?.</string>
 			<string name="text_delete_character_confirmation">Personaje eliminado.</string>
 			
-			<string name="text_confirmation_yes">Si</string>
-			<string name="text_confirmation_no">No</string>
+			<string name="text_button_yes">Si</string>
+			<string name="text_button_no">No</string>
 
-			<string name="text_confirmation_ok">OK</string>
-		    <string name="text_confirmation_cancel">Cancelar</string>
+			<string name="text_button_ok">OK</string>
+		    <string name="text_button_cancel">Cancelar</string>
 			
 		<!-- Errors -->
 			<string name="error_test">El poligono es complejo.</string>
@@ -85,12 +91,21 @@
 	    	<string name="desc_selection_select">Selecciona un personaje.</string>
 	    	<string name="desc_selection_delete">Elimina el personaje.</string>
 	    	
-	    <!-- Dialogs -->
-		    <string name="desc_dialog_increment">Incrementa el tamaño del pincel.</string>
-		    <string name="desc_dialog_decrement">Decrementa el tamaño del pincel.</string>
-		
-		<!-- Unknown -->
-			<string name="desc_dialog_content">Contenido</string>
+	    <!-- Sticker Dialog -->		    
+		    <string name="desc_sticker_eye">Pegatina Ojo</string>
+		    <string name="desc_sticker_mouth">Pegatina Boca</string>
+		    <string name="desc_sticker_weapon">Pegatina Arma</string>
+
+		<!-- Size Dialog -->	
+		    <string name="desc_size_pencil">Tamaño del Pincel</string>
+
+		<!-- Color Dialog -->	
+		    <string name="desc_color_palette_secondary">Paleta de Colores Secundaria</string>
+		    <string name="desc_color_cursor_main">Cursor de Color Principal</string>
+		    <string name="desc_color_cursor_secondary">Cursor de Color Secundario</string>
+		    <string name="desc_color_selected">Color Seleccionado</string>
+
+		<!-- Dialogs -->	
 		    <string name="desc_dialog_arrow">Flecha</string>
 
 </resources>

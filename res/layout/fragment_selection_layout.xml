@@ -8,14 +8,14 @@
 	    xmlns:tools="http://schemas.android.com/tools"
 	    android:id="@+id/pagerViewSelection1"/>
     
-    <LinearLayout style="@style/Layout_Right_BigImageButton_Style">
+    <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
 
-	    <ImageButton style="@style/ImageButton_Big_Style"
+	    <ImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonSelection1"
 	        android:contentDescription="@string/desc_selection_select"
 	        android:background="@drawable/icon_ready" />
 	
-		<ImageButton style="@style/ImageButton_Big_Style"
+		<ImageButton style="@style/Button_Fragment_Style"
 		    android:id="@+id/imageButtonSelection2"
 		    android:contentDescription="@string/desc_selection_delete"
 		    android:background="@drawable/icon_reset" />

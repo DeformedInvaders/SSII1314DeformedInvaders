@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.create.paint.PaintFragment;
 import com.project.main.R;
@@ -16,7 +16,7 @@ public class SizePicker extends WindowPicker
 	private PaintFragment fragmento;
 	
 	private Button botonMas, botonMenos;
-	private ImageButton botonPincel;
+	private ImageView botonPincel;
 	private int posicion;
 	
 	public SizePicker(Context context, PaintFragment view)
@@ -28,7 +28,7 @@ public class SizePicker extends WindowPicker
 		
 		botonMas = (Button) findViewById(R.id.imageButtonSize1);
 		botonMenos = (Button) findViewById(R.id.imageButtonSize2);
-		botonPincel = (ImageButton) findViewById(R.id.imageButtonSize3);
+		botonPincel = (ImageView) findViewById(R.id.imageButtonSize3);
 		
 		botonMas.setOnClickListener(new OnMasClickListener());
 		botonMenos.setOnClickListener(new OnMenosClickListener());

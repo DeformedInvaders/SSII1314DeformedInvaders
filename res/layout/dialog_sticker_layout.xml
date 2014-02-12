@@ -10,27 +10,27 @@
   	    
 	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
 	        
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker1"
 				android:background="@drawable/texture_eyes1"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker2"
 				android:background="@drawable/texture_eyes2"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker3"
 				android:background="@drawable/texture_eyes3"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker4"
 				android:background="@drawable/texture_eyes4"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker5"
 				android:background="@drawable/texture_eyes5"
 				android:contentDescription="@string/desc_sticker_eye" />
@@ -42,27 +42,27 @@
   	    
 	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
 	        
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker6"
 				android:background="@drawable/texture_mouth1"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker7"
 				android:background="@drawable/texture_mouth2"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker8"
 				android:background="@drawable/texture_mouth3"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker9"
 				android:background="@drawable/texture_mouth4"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
-			<ImageButton style="@style/ImageButton_Sticker_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker10"
 				android:background="@drawable/texture_mouth5"
 				android:contentDescription="@string/desc_sticker_mouth" />

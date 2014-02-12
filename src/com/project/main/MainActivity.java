@@ -186,7 +186,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		{
 			personajeActual.setMovimientos(movimientos);
 		
-			AlertDialogTextInput alert = new AlertDialogTextInput(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_confirmation_yes), getString(R.string.text_confirmation_no)) {
+			AlertDialogTextInput alert = new AlertDialogTextInput(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no)) {
 
 				@Override
 				public void onPossitiveButtonClick()
@@ -238,7 +238,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     public void onSelectionDeleteButtonClicked(final int indice)
     {   
     	
-    	AlertDialogConfirmation alert = new AlertDialogConfirmation(this, getString(R.string.text_delete_character_title), getString(R.string.text_delete_character_description), getString(R.string.text_confirmation_yes), getString(R.string.text_confirmation_no)) {
+    	AlertDialogConfirmation alert = new AlertDialogConfirmation(this, getString(R.string.text_delete_character_title), getString(R.string.text_delete_character_description), getString(R.string.text_button_ok), getString(R.string.text_button_no)) {
 
 			@Override
 			public void onPossitiveButtonClick()

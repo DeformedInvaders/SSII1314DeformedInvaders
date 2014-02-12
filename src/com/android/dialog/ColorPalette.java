@@ -13,18 +13,18 @@ import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class ColorPickerKotak extends View
+public class ColorPalette extends View
 {
 	private Paint paint;
 	private Shader luar;
 	private final float[] color = { 1.f, 1.f, 1.f };
 
-    public ColorPickerKotak(Context context, AttributeSet attrs)
+    public ColorPalette(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
 
-    public ColorPickerKotak(Context context, AttributeSet attrs, int defStyle)
+    public ColorPalette(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);
     }

@@ -6,19 +6,19 @@
     <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style"
         android:id="@+id/displayGLSurfaceViewLoading1" />
 
-    <LinearLayout style="@style/Layout_Center_BigImageButton_Style">
+    <LinearLayout style="@style/Layout_Center_FragmentButton_Style">
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonLoading1"
             android:contentDescription="@string/desc_loading_new"
             android:background="@drawable/icon_create" />
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonLoading2"
             android:contentDescription="@string/desc_loading_play"
             android:background="@drawable/icon_play" />
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonLoading3"
             android:contentDescription="@string/desc_loading_select"
             android:background="@drawable/icon_select" />

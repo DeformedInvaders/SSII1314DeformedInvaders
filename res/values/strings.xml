@@ -104,9 +104,9 @@
 		    <string name="desc_size_pencil">Pencil Size</string>
 
 		<!-- Color Dialog -->	
-		    <string name="desc_color_palette_secondary">Color Palette</string>
-		    <string name="desc_color_cursor_main">Color Cursor</string>
-		    <string name="desc_color_cursor_secondary">Color Target</string>
+		    <string name="desc_color_palette_secondary">Secondary Color Palette</string>
+		    <string name="desc_color_cursor_main">Color Main Cursor</string>
+		    <string name="desc_color_cursor_secondary">Color Secondary Cursor</string>
 		    <string name="desc_color_selected">Selected Color</string>
 
 		<!-- Dialogs -->	

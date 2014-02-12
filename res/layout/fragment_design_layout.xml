@@ -6,23 +6,23 @@
     <com.create.design.DesignGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style" 
         android:id="@+id/designGLSurfaceViewDesign1" />
 
-    <LinearLayout style="@style/Layout_Left_BigImageButton_Style">
+    <LinearLayout style="@style/Layout_Left_FragmentButton_Style">
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign3"
             android:contentDescription="@string/desc_design_test"
             android:background="@drawable/icon_test" />
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign2"
             android:contentDescription="@string/desc_design_reset"
             android:background="@drawable/icon_reset" />
     
     </LinearLayout>
 
-    <LinearLayout style="@style/Layout_Right_BigImageButton_Style" >
+    <LinearLayout style="@style/Layout_Right_FragmentButton_Style" >
 
-        <ImageButton style="@style/ImageButton_Big_Style"
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign1"
             android:contentDescription="@string/desc_design_ready"
             android:background="@drawable/icon_ready" />

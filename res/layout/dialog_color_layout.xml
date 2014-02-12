@@ -12,7 +12,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			
-			<com.android.dialog.ColorPickerKotak
+			<com.android.dialog.ColorPalette
 			    android:id="@+id/paletteColor1"
 			    android:layout_width="@dimen/PaletteMain_LayoutWidth_Dimen"
 			    android:layout_height="@dimen/PaletteMain_LayoutHeight_Dimen"
@@ -25,39 +25,32 @@
 			    android:layout_marginLeft="10dp"
 			    android:layout_toRightOf="@id/paletteColor1"
 			    android:scaleType="fitXY"
-			    android:src="@drawable/image_color_palette"
+			    android:background="@drawable/image_color_palette"
 			    android:contentDescription="@string/desc_color_palette_secondary"/>
 			
-			<ImageView
+			<ImageView style="@style/ImageView_Cursor_Style"
 			    android:id="@+id/imageViewColor1"
-			    android:layout_width="15dp"
-			    android:layout_height="15dp"
-			    android:scaleType="matrix"
-			    android:src="@drawable/image_color_cursor_main"
+			    android:background="@drawable/image_color_cursor_main"
 			    android:contentDescription="@string/desc_color_cursor_main"/>
 						
-			<ImageView
+			<ImageView style="@style/ImageView_Cursor_Style"
 			    android:id="@+id/imageViewColor2"
-			    android:layout_width="15dp"
-			    android:layout_height="15dp"
-			    android:scaleType="matrix"
-			    android:src="@drawable/image_color_cursor_secondary"
+			    android:background="@drawable/image_color_cursor_secondary"
 			    android:contentDescription="@string/desc_color_cursor_secondary"/>
 			
           </RelativeLayout>
   	    
 	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style" >
 	        
-			<Button style="@style/ImageButton_Color_Style"
+			<Button style="@style/Button_Color_Style"
 				android:id="@+id/imageButtonColor1"
 				android:text="@string/text_button_ok" />
 			
-			 <ImageView style="@style/ImageButton_Color_Style"
+			 <ImageView style="@style/Button_Color_Style"
 				android:id="@+id/imageViewColor3"
-				android:background="#aaf"
 				android:contentDescription="@string/desc_color_selected"/>
 			
-			<Button style="@style/ImageButton_Color_Style"
+			<Button style="@style/Button_Color_Style"
 				android:id="@+id/imageButtonColor2"
 				android:text="@string/text_button_cancel" />
 		

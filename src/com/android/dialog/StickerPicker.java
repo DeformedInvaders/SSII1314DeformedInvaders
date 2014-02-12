@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.create.paint.PaintFragment;
 import com.project.main.R;
@@ -13,8 +13,8 @@ public class StickerPicker extends WindowPicker implements OnClickListener
 {
 	private PaintFragment fragmento;
 	
-	private ImageButton botonEye1, botonEye2, botonEye3, botonEye4, botonEye5;
-	private ImageButton botonMouth1, botonMouth2, botonMouth3, botonMouth4, botonMouth5;
+	private ImageView botonEye1, botonEye2, botonEye3, botonEye4, botonEye5;
+	private ImageView botonMouth1, botonMouth2, botonMouth3, botonMouth4, botonMouth5;
 
 	public StickerPicker(Context context, PaintFragment view)
 	{		
@@ -22,17 +22,17 @@ public class StickerPicker extends WindowPicker implements OnClickListener
 		
 		fragmento = view;  
 		
-		botonEye1 = (ImageButton) findViewById(R.id.imageButtonSticker1);
-		botonEye2 = (ImageButton) findViewById(R.id.imageButtonSticker2);
-		botonEye3 = (ImageButton) findViewById(R.id.imageButtonSticker3);
-		botonEye4 = (ImageButton) findViewById(R.id.imageButtonSticker4);
-		botonEye5 = (ImageButton) findViewById(R.id.imageButtonSticker5);
+		botonEye1 = (ImageView) findViewById(R.id.imageButtonSticker1);
+		botonEye2 = (ImageView) findViewById(R.id.imageButtonSticker2);
+		botonEye3 = (ImageView) findViewById(R.id.imageButtonSticker3);
+		botonEye4 = (ImageView) findViewById(R.id.imageButtonSticker4);
+		botonEye5 = (ImageView) findViewById(R.id.imageButtonSticker5);
 		
-		botonMouth1 = (ImageButton) findViewById(R.id.imageButtonSticker6);
-		botonMouth2 = (ImageButton) findViewById(R.id.imageButtonSticker7);
-		botonMouth3 = (ImageButton) findViewById(R.id.imageButtonSticker8);
-		botonMouth4 = (ImageButton) findViewById(R.id.imageButtonSticker9);
-		botonMouth5 = (ImageButton) findViewById(R.id.imageButtonSticker10);
+		botonMouth1 = (ImageView) findViewById(R.id.imageButtonSticker6);
+		botonMouth2 = (ImageView) findViewById(R.id.imageButtonSticker7);
+		botonMouth3 = (ImageView) findViewById(R.id.imageButtonSticker8);
+		botonMouth4 = (ImageView) findViewById(R.id.imageButtonSticker9);
+		botonMouth5 = (ImageView) findViewById(R.id.imageButtonSticker10);
 		
 		botonEye1.setOnClickListener(this);
 		botonEye2.setOnClickListener(this);
