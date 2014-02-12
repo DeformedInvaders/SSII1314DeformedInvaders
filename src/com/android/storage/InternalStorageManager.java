@@ -182,7 +182,7 @@ public class InternalStorageManager
 			fragment.updateProgressBarStatus(100 * i / nombres.size(), name);
 			
 			Personaje p = cargarPersonaje(name);
-			if(p!= null)
+			if(p != null)
 			{
 				lista.add(p);
 			}

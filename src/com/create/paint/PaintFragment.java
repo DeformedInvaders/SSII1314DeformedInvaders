@@ -262,14 +262,11 @@ public class PaintFragment extends Fragment
 		}
 	}
     
-    public void seleccionarPegatina(int pegatina)
+    public void seleccionarPegatina(int pegatina, int tipo)
     {
-    	if(pegatina != -1)
-    	{
-    		reiniciarImagenesBotones();
-			botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
-			canvas.seleccionarPegatina(pegatina);
-    	}
+    	reiniciarImagenesBotones();
+		botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
+		canvas.seleccionarPegatina(pegatina, tipo);
     }
     
     private class OnManoClickListener implements OnClickListener

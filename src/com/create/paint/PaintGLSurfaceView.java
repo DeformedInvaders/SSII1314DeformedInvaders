@@ -1,6 +1,7 @@
 package com.create.paint;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.util.AttributeSet;
 
 import com.project.data.Esqueleto;
@@ -16,13 +17,17 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
     public PaintGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
+        
+        // Activar Formato Texturas transparentes
+        setEGLConfigChooser(8, 8, 8, 8, 0, 0); 
+        getHolder().setFormat(PixelFormat.RGBA_8888);
     }
     
 	public void setParameters(Esqueleto esqueleto)
 	{
 		// Asignar Renderer al GLSurfaceView
         renderer = new PaintOpenGLRenderer(getContext(), esqueleto);
-        setRenderer(renderer);
+        setRenderer(renderer); 
 	}
     
     /* Métodos abstractos OpenGLSurfaceView */
@@ -83,9 +88,9 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarSize(pos);
 	}
 	
-	public void seleccionarPegatina(int pegatina)
+	public void seleccionarPegatina(int pegatina, int tipo)
 	{
-		renderer.seleccionarPegatina(pegatina);
+		renderer.seleccionarPegatina(pegatina, tipo);
 		setEstado(TTouchEstado.SimpleTouch);
 	}
 	

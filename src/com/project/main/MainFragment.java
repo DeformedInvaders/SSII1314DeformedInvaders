@@ -90,8 +90,7 @@ public class MainFragment extends Fragment
 		botonView.setOnClickListener(new OnViewClickListener());
 		botonPlay.setOnClickListener(new OnPlayClickListener());
 		
-		if(listaPersonajes.size() > 0) botonView.setVisibility(View.VISIBLE);
-		
+		if(listaPersonajes.isEmpty()) botonView.setVisibility(View.INVISIBLE);		
         return rootView;
     }
 	

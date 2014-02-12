@@ -82,6 +82,10 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glCullFace(GL10.GL_BACK);
 		
+		// Activar Transparencia
+		gl.glEnable(GL10.GL_BLEND); 
+	    gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
 		// Perspectiva Ortogonal
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
@@ -636,7 +640,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 			
-			gl.glGenTextures(1, nombreTextura, 0);
+			gl.glGenTextures(1, nombreTextura, pos);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTextura[pos]);
 			
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
@@ -648,7 +652,7 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 	
 	// Dibujar Textura para una Lista de Puntos asociada a una Lista de Coordenadas de Textura
-	protected void dibujarTextura(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int[] nombreTextura, int posTextura)
+	private void dibujarTextura(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int[] nombreTextura, int posTextura)
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
@@ -661,11 +665,27 @@ public abstract class OpenGLRenderer implements Renderer
 			
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-				gl.glDrawArrays(GL10.GL_TRIANGLES, 0, bufferPuntos.capacity()/2);
+				gl.glDrawArrays(type, 0, bufferPuntos.capacity()/2);
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		gl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
+	protected void dibujarTextura(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int[] nombreTextura, int posTextura)
+	{
+		dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, nombreTextura, posTextura);
+	}
+	
+	protected void dibujarPegatina(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, float x, float y, int[] nombreTextura, int posTextura)
+	{
+		gl.glPushMatrix();
+		
+			gl.glTranslatef(x, y, 0.0f);
+			
+			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, bufferPuntos, bufferCoordTextura, nombreTextura, posTextura);
+	
+		gl.glPopMatrix();
 	}
 	
 	/* Métodos Genéricos */

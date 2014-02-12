@@ -9,12 +9,16 @@ import android.widget.ImageView;
 import com.create.paint.PaintFragment;
 import com.project.main.R;
 
-public class StickerPicker extends WindowPicker implements OnClickListener
+public class StickerPicker extends WindowPicker
 {
 	private PaintFragment fragmento;
 	
-	private ImageView botonEye1, botonEye2, botonEye3, botonEye4, botonEye5;
-	private ImageView botonMouth1, botonMouth2, botonMouth3, botonMouth4, botonMouth5;
+	private OnEyeClickListener eyeListener;
+	private OnMouthClickListener mouthListener;
+	//private OnWeaponClickListener weaponListener;
+	
+	private ImageView imagenEye1, imagenEye2, imagenEye3, imagenEye4, imagenEye5;
+	private ImageView imagenMouth1, imagenMouth2, imagenMouth3, imagenMouth4, imagenMouth5;
 
 	public StickerPicker(Context context, PaintFragment view)
 	{		
@@ -22,79 +26,82 @@ public class StickerPicker extends WindowPicker implements OnClickListener
 		
 		fragmento = view;  
 		
-		botonEye1 = (ImageView) findViewById(R.id.imageButtonSticker1);
-		botonEye2 = (ImageView) findViewById(R.id.imageButtonSticker2);
-		botonEye3 = (ImageView) findViewById(R.id.imageButtonSticker3);
-		botonEye4 = (ImageView) findViewById(R.id.imageButtonSticker4);
-		botonEye5 = (ImageView) findViewById(R.id.imageButtonSticker5);
+		eyeListener = new OnEyeClickListener();
+		mouthListener = new OnMouthClickListener();
+		//weaponListener = new OnWeaponClickListener();
 		
-		botonMouth1 = (ImageView) findViewById(R.id.imageButtonSticker6);
-		botonMouth2 = (ImageView) findViewById(R.id.imageButtonSticker7);
-		botonMouth3 = (ImageView) findViewById(R.id.imageButtonSticker8);
-		botonMouth4 = (ImageView) findViewById(R.id.imageButtonSticker9);
-		botonMouth5 = (ImageView) findViewById(R.id.imageButtonSticker10);
+		imagenEye1 = (ImageView) findViewById(R.id.imageButtonSticker1);
+		imagenEye2 = (ImageView) findViewById(R.id.imageButtonSticker2);
+		imagenEye3 = (ImageView) findViewById(R.id.imageButtonSticker3);
+		imagenEye4 = (ImageView) findViewById(R.id.imageButtonSticker4);
+		imagenEye5 = (ImageView) findViewById(R.id.imageButtonSticker5);
 		
-		botonEye1.setOnClickListener(this);
-		botonEye2.setOnClickListener(this);
-		botonEye3.setOnClickListener(this);
-		botonEye4.setOnClickListener(this);
-		botonEye5.setOnClickListener(this);
+		imagenEye1.setTag(R.drawable.texture_eyes1);
+		imagenEye2.setTag(R.drawable.texture_eyes2);
+		imagenEye3.setTag(R.drawable.texture_eyes3);
+		imagenEye4.setTag(R.drawable.texture_eyes4);
+		imagenEye5.setTag(R.drawable.texture_eyes5);
 		
-		botonMouth1.setOnClickListener(this);
-		botonMouth2.setOnClickListener(this);
-		botonMouth3.setOnClickListener(this);
-		botonMouth4.setOnClickListener(this);
-		botonMouth5.setOnClickListener(this);
+		imagenMouth1 = (ImageView) findViewById(R.id.imageButtonSticker6);
+		imagenMouth2 = (ImageView) findViewById(R.id.imageButtonSticker7);
+		imagenMouth3 = (ImageView) findViewById(R.id.imageButtonSticker8);
+		imagenMouth4 = (ImageView) findViewById(R.id.imageButtonSticker9);
+		imagenMouth5 = (ImageView) findViewById(R.id.imageButtonSticker10);
+		
+		imagenMouth1.setTag(R.drawable.texture_mouth1);
+		imagenMouth2.setTag(R.drawable.texture_mouth2);
+		imagenMouth3.setTag(R.drawable.texture_mouth3);
+		imagenMouth4.setTag(R.drawable.texture_mouth4);
+		imagenMouth5.setTag(R.drawable.texture_mouth5);
+		
+		imagenEye1.setOnClickListener(eyeListener);
+		imagenEye2.setOnClickListener(eyeListener);
+		imagenEye3.setOnClickListener(eyeListener);
+		imagenEye4.setOnClickListener(eyeListener);
+		imagenEye5.setOnClickListener(eyeListener);
+		
+		imagenMouth1.setOnClickListener(mouthListener);
+		imagenMouth2.setOnClickListener(mouthListener);
+		imagenMouth3.setOnClickListener(mouthListener);
+		imagenMouth4.setOnClickListener(mouthListener);
+		imagenMouth5.setOnClickListener(mouthListener);
 		
 	}
 	
 	@Override
-	public void onClick(View v)
-	{
-		int pegatina = -1;
-		
-		switch(v.getId())
-		{
-			case R.id.imageButtonSticker1:
-				pegatina = 0;
-			break;
-			case R.id.imageButtonSticker2:
-				pegatina = 1;
-			break;
-			case R.id.imageButtonSticker3:
-				pegatina = 2;
-			break;
-			case R.id.imageButtonSticker4:
-				pegatina = 3;
-			break;
-			case R.id.imageButtonSticker5:
-				pegatina = 4;
-			break;
-			case R.id.imageButtonSticker6:
-				pegatina = 5;
-			break;
-			case R.id.imageButtonSticker7:
-				pegatina = 6;
-			break;
-			case R.id.imageButtonSticker8:
-				pegatina = 7;
-			break;
-			case R.id.imageButtonSticker9:
-				pegatina = 8;
-			break;
-			case R.id.imageButtonSticker10:
-				pegatina = 9;
-			break;					
-		}
-		
-		fragmento.seleccionarPegatina(pegatina);
-		dismiss();		
-	}
-
-	@Override
 	protected void onTouchOutsidePopUp(View v, MotionEvent event)
 	{
-		fragmento.seleccionarPegatina(-1);
+		fragmento.seleccionarPegatina(-1, -1);
 		dismiss();
 	}
+	
+	private class OnEyeClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			fragmento.seleccionarPegatina((Integer) v.getTag(), 0);		
+			dismiss();	
+		}
+	}
+	
+	private class OnMouthClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			fragmento.seleccionarPegatina((Integer) v.getTag(), 1);		
+			dismiss();	
+		}
+	}
+	
+	/*private class OnWeaponClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			fragmento.seleccionarPegatina(v.getId(), 2);		
+			dismiss();	
+		}
+	}*/
 }

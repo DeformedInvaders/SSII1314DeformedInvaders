@@ -8,7 +8,7 @@ public class Accion
 	private int color;
 	
 	// Pegatina
-	private int pegatina, vertice;
+	private int pegatina, indice, vertice;
 	
 	// Polilinea
 	private Polilinea linea;
@@ -25,8 +25,9 @@ public class Accion
 		this.tipo = 1;
 	}
 	
-	public Accion(int pegatina, int vertice)
+	public Accion(int indice, int vertice, int pegatina)
 	{
+		this.indice = indice;
 		this.pegatina = pegatina;
 		this.vertice = vertice;
 		this.tipo = 2;
@@ -42,14 +43,19 @@ public class Accion
 		return linea;
 	}
 	
-	public int getPegatina()
+	public int getTipoPegatina()
 	{
 		return pegatina;
 	}
 	
-	public int getVertice()
+	public int getVerticePegatina()
 	{
 		return vertice;
+	}
+	
+	public int getIndicePegatina()
+	{
+		return indice;
 	}
 	
 	public boolean isTipoColor()

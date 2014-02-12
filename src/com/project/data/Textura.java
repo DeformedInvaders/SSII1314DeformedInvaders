@@ -1,7 +1,6 @@
 package com.project.data;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.lib.utils.FloatArray;
 
@@ -11,9 +10,9 @@ public class Textura implements Serializable
 	
 	private MapaBits textura;
 	private FloatArray coordTextura;
-	private List<Integer> pegatinas;
+	private Pegatinas pegatinas;
 	
-	public Textura(MapaBits textura, FloatArray coordTextura, List<Integer> pegatinas)
+	public Textura(MapaBits textura, FloatArray coordTextura, Pegatinas pegatinas)
 	{
 		this.textura = textura;
 		this.coordTextura = coordTextura;
@@ -30,7 +29,7 @@ public class Textura implements Serializable
 		return coordTextura;
 	}
 	
-	public List<Integer> getPegatinas()
+	public Pegatinas getPegatinas()
 	{
 		return pegatinas;
 	}
