@@ -218,15 +218,17 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			int color = canvas.getColorPaleta();
-			canvas.seleccionarColor(color);
-			
 			if (colorPicker == null)
 			{
-				colorPicker = new ColorPicker(mContext, ColorPicker.VERTICAL, canvas, color);    	
+				colorPicker = new ColorPicker(mContext, PaintFragment.this);    	
 			}
 			colorPicker.show(v);
 		}
+    }
+    
+    public void seleccionarColor(int color)
+    {
+    	canvas.seleccionarColor(color);
     }
     
     private class OnSizeClickListener implements OnClickListener
@@ -236,10 +238,15 @@ public class PaintFragment extends Fragment
 		{
 			if (sizePicker == null) 
 			{
-				sizePicker = new SizePicker(mContext, SizePicker.VERTICAL, canvas);    	
+				sizePicker = new SizePicker(mContext, PaintFragment.this);    	
 			}
 			sizePicker.show(v);
 		}
+    }
+    
+    public void seleccionarSize(int pincel)
+    {
+    	canvas.seleccionarSize(pincel);
     }
     
     private class OnPegatinaClickListener implements OnClickListener

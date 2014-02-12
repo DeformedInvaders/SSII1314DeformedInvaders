@@ -1,25 +1,225 @@
 package com.android.dialog;
 
-import android.app.ActionBar.LayoutParams;
-import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.create.paint.PaintGLSurfaceView;
+import com.create.paint.PaintFragment;
 import com.project.main.R;
 
-public class ColorPicker extends PopupWindows implements OnDismissListener {
+public class ColorPicker extends WindowPicker
+{
+	private PaintFragment fragmento;
+	private float[] colorActual = new float[3];
+	
+	private ColorPickerKotak paletaPrincipal;
+	private ImageView paletaSecundaria;
+	
+	private Button botonAceptar, botonCancelar;
+	private ImageView imagenCursorPrincipal, imagenCursorSecundario, imagenSeleccionado;
+	
+	public ColorPicker(Context context, PaintFragment view)
+	{
+		super(context, R.layout.dialog_color_layout);
+		
+		fragmento = view;
+		
+		botonAceptar = (Button) findViewById(R.id.imageButtonColor1);
+		botonCancelar = (Button) findViewById(R.id.imageButtonColor2);
+		
+		botonAceptar.setOnClickListener(new OnAceptarClickListener());
+		botonCancelar.setOnClickListener(new OnCancelarClickListener());
+		
+		paletaPrincipal = (ColorPickerKotak) findViewById(R.id.paletteColor1);
+		paletaSecundaria = (ImageView) findViewById(R.id.paletteColor2);
+		
+		paletaPrincipal.setOnTouchListener(new OnPaletaPrincipalTouchListener());
+		paletaSecundaria.setOnTouchListener(new OnPaletaSecundariaTouchListener());
+		
+		imagenCursorPrincipal = (ImageView) findViewById(R.id.imageViewColor1);
+		imagenCursorSecundario = (ImageView) findViewById(R.id.imageViewColor2);
+		imagenSeleccionado = (ImageView) findViewById(R.id.imageViewColor3);
+		
+		Color.colorToHSV(Color.RED, colorActual);
+		moverCursorPrincipal();
+		moverCursorSecundario();
+		imagenSeleccionado.setBackgroundColor(getColor());
+		
+        // Posicion inicial de los Cursores
+        final ViewTreeObserver vto = getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            
+        	@Override 
+            public void onGlobalLayout()
+            {
+        		moverCursorPrincipal();
+        		moverCursorSecundario();
+                removeGlobalLayoutListener(this);
+            }
+        });
+	}
+
+	@Override
+	protected void onTouchOutsidePopUp(View v, MotionEvent event)
+	{
+		dismiss();
+	}
+	
+	private class OnAceptarClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+			fragmento.seleccionarColor(getColor());
+			dismiss();
+		}
+	}
+	
+	private class OnCancelarClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+			dismiss();
+		}
+	}
+	
+	
+	private int getColor()
+	{
+	    return Color.HSVToColor(colorActual);
+	}
+	
+	private float getHue()
+	{
+	    return colorActual[0];
+	}
+	
+	private float getSat()
+	{
+	    return colorActual[1];
+	}
+	
+	private float getVal()
+	{
+	    return colorActual[2];
+	}
+	
+	private void setHue(float hue)
+	{
+		colorActual[0] = hue;
+	}
+	
+	private void setSat(float sat)
+	{
+		colorActual[1] = sat;
+	}
+	
+	private void setVal(float val)
+	{
+		colorActual[2] = val;
+	}
+	
+	private void moverCursorPrincipal()
+	{
+        float x = getSat() * paletaPrincipal.getMeasuredWidth();
+        float y = (1.0f - getVal()) * paletaPrincipal.getMeasuredHeight();
+        
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imagenCursorPrincipal.getLayoutParams();
+        layoutParams.leftMargin = (int) (paletaPrincipal.getLeft() + x - Math.floor(imagenCursorPrincipal.getMeasuredWidth() / 2));
+        layoutParams.topMargin = (int) (paletaPrincipal.getTop() + y - Math.floor(imagenCursorPrincipal.getMeasuredHeight() / 2));
+        imagenCursorPrincipal.setLayoutParams(layoutParams);		
+	}
+	
+	private void moverCursorSecundario()
+	{
+	    float y = paletaSecundaria.getMeasuredHeight() - (getHue() * paletaSecundaria.getMeasuredHeight() / 360.f);
+	    if (y == paletaSecundaria.getMeasuredHeight()) y = 0.0f;
+	    
+	    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imagenCursorSecundario.getLayoutParams();
+	    layoutParams.leftMargin = (int) (paletaSecundaria.getLeft() - Math.floor(imagenCursorSecundario.getMeasuredWidth() / 2));
+	    layoutParams.topMargin = (int) (paletaSecundaria.getTop() + y - Math.floor(imagenCursorSecundario.getMeasuredHeight() / 2));
+	    imagenCursorSecundario.setLayoutParams(layoutParams);
+	}
+	
+	private class OnPaletaPrincipalTouchListener implements OnTouchListener
+	{
+		@Override
+		public boolean onTouch(View v, MotionEvent event)
+		{
+			int action = event.getAction();
+			
+			if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_UP)
+			{
+				float x = event.getX();
+                float y = event.getY();
+
+                // Control de Dimensiones
+                
+                if (x < 0) x = 0;
+                if (y < 0) y = 0;
+                
+                if (x > paletaPrincipal.getMeasuredWidth()) x = paletaPrincipal.getMeasuredWidth();
+                if (y > paletaPrincipal.getMeasuredHeight()) y = paletaPrincipal.getMeasuredHeight();
+
+                setSat(1.f / paletaPrincipal.getMeasuredWidth() * x);
+                setVal(1.f - (1.f / paletaPrincipal.getMeasuredHeight() * y));
+
+                // Actualizar la vista
+                
+                moverCursorPrincipal();
+                imagenSeleccionado.setBackgroundColor(getColor());
+
+                return true;
+            }
+            
+            return false;
+		}
+	}
+	
+	private class OnPaletaSecundariaTouchListener implements OnTouchListener
+	{
+		@Override
+		public boolean onTouch(View arg0, MotionEvent event)
+		{
+			int action = event.getAction();
+			
+			if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_UP)
+			{
+                float y = event.getY();
+                
+                // Control de Dimensiones
+                
+                if (y < 0) y = 0;
+                
+                if (y > paletaSecundaria.getMeasuredHeight()) y = paletaSecundaria.getMeasuredHeight() - 0.001f;
+                
+                float hue = 360.f - 360.f / paletaSecundaria.getMeasuredHeight() * y;
+                if (hue == 360.f) hue = 0.f;
+                setHue(hue);
+
+                // Actualizar la vista
+                
+                paletaPrincipal.setHue(getHue());
+                moverCursorSecundario();
+                imagenSeleccionado.setBackgroundColor(getColor());
+              
+                return true;
+            }
+			
+            return false;
+		}
+	}
+}
+
+/*public class ColorPicker extends PopupWindows implements OnDismissListener {
 	private View mRootView;
 	private ImageView mArrowDown;
 	private LayoutInflater mInflater;
@@ -43,12 +243,6 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
     final float[] currentColorHsv = new float[3];
 
 
-	/**
-	 * Constructor for default vertical layout
-	 * 
-	 * @param context
-	 *            Context
-	 */
 	public ColorPicker(final Context context, final PaintGLSurfaceView canvas, int color) {
 		this(context, VERTICAL, canvas, color);
 		final Button ibAceptar = (Button)this.getView().findViewById(R.id.ibAceptar);
@@ -146,14 +340,6 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
         });
 	}
 
-	/**
-	 * Constructor allowing orientation override
-	 * 
-	 * @param context
-	 *            Context
-	 * @param orientation
-	 *            Layout orientation, can be vartical or horizontal
-	 */
 	public ColorPicker(final Context context, int orientation, final PaintGLSurfaceView canvas, final int color) {
 		super(context);
 
@@ -264,13 +450,7 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 	public View getView(){
 		return mRootView;
 	}
-	
-	/**
-	 * Set root view.
-	 * 
-	 * @param id
-	 *            Layout resource id
-	 */
+
 	public void setRootViewId(int id) {
 		mRootView = (ViewGroup) mInflater.inflate(id, null);
 		mTrack = (ViewGroup) mRootView.findViewById(R.id.tracks);
@@ -283,12 +463,7 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 		setContentView(mRootView);
 	}
 
-	
-	/**
-	 * Show quickaction popup. Popup is automatically positioned, on top or
-	 * bottom of anchor view.
-	 * 
-	 */
+
 	public void show(View anchor) {
 		preShow();
 
@@ -361,16 +536,6 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 		mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
 	}
 
-	
-
-	/**
-	 * Show arrow
-	 * 
-	 * @param whichArrow
-	 *            arrow type resource id
-	 * @param requestedX
-	 *            distance from left screen
-	 */
 	private void showArrow(int whichArrow, int requestedX) {
 		final View showArrow =mArrowDown;
 
@@ -386,11 +551,6 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 	}
 
 
-	/**
-	 * Set listener for window dismissed. This listener will only be fired if
-	 * the quicakction dialog is dismissed by clicking outside the dialog or
-	 * clicking on sticky item.
-	 */
 	public void setOnDismissListener(ColorPicker.OnDismissListener listener) {
 		setOnDismissListener( (OnDismissListener) this);
 
@@ -404,19 +564,11 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 		}
 	}
 
-	/**
-	 * Listener for item click
-	 * 
-	 */
 	public interface OnActionItemClickListener {
 		public abstract void onItemClick(SizePicker source, int pos,
 				int actionId);
 	}
 
-	/**
-	 * Listener for window dismiss
-	 * 
-	 */
 	public interface OnDismissListener {
 		public abstract void onDismiss();
 	}
@@ -469,5 +621,4 @@ public class ColorPicker extends PopupWindows implements OnDismissListener {
 	private void setVal(float val) {
 	    currentColorHsv[2] = val;
 	}
-
-}
+*/

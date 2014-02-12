@@ -1,20 +1,122 @@
 package com.android.dialog;
 
-import android.app.ActionBar.LayoutParams;
-import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
-import android.graphics.Rect;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.content.res.Resources;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.create.paint.PaintGLSurfaceView;
+import com.create.paint.PaintFragment;
 import com.project.main.R;
 
+public class SizePicker extends WindowPicker
+{
+	private PaintFragment fragmento;
+	
+	private Button botonMas, botonMenos;
+	private ImageButton botonPincel;
+	private int posicion;
+	
+	public SizePicker(Context context, PaintFragment view)
+	{
+		super(context, R.layout.dialog_size_layout);
+		
+		fragmento = view; 
+		posicion = 0;
+		
+		botonMas = (Button) findViewById(R.id.imageButtonSize1);
+		botonMenos = (Button) findViewById(R.id.imageButtonSize2);
+		botonPincel = (ImageButton) findViewById(R.id.imageButtonSize3);
+		
+		botonMas.setOnClickListener(new OnMasClickListener());
+		botonMenos.setOnClickListener(new OnMenosClickListener());
+		botonPincel.setOnClickListener(new OnPincelClickListener());
+		
+		actualizarBotones();
+	}
+	
+	private void actualizarBotones()
+	{
+		if(posicion > 0)
+		{
+			botonMenos.setEnabled(true);
+		}
+		else
+		{
+			botonMenos.setEnabled(false);
+		}
+		
+		if(posicion < 2)
+		{
+			botonMas.setEnabled(true);
+		}
+		else
+		{
+			botonMas.setEnabled(false);
+		}
+		
+		actualizarImagen();
+	}
+	
+	private void actualizarImagen()
+	{
+		
+		Resources resources = fragmento.getActivity().getResources();
+		
+		switch(posicion)
+		{
+			case 0:
+				botonPincel.setBackground(resources.getDrawable(R.drawable.image_size_small));
+			break;
+			case 1:
+				botonPincel.setBackground(resources.getDrawable(R.drawable.image_size_medium));
+			break;
+			case 2:
+				botonPincel.setBackground(resources.getDrawable(R.drawable.image_size_big));
+			break;
+		}
+	}
+	
+	@Override
+	protected void onTouchOutsidePopUp(View v, MotionEvent event)
+	{
+		dismiss();
+	}
+	
+	private class OnMasClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+			posicion++;
+			actualizarBotones();
+		}
+	}
+	
+	private class OnMenosClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+			posicion--;
+			actualizarBotones();
+		}
+	}
+	
+	private class OnPincelClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+			fragmento.seleccionarSize(posicion);
+			dismiss();
+		}
+	}
+}
+
+/*
 public class SizePicker extends PopupWindows implements OnDismissListener {
 	private View mRootView;
 	private ImageView mArrowDown;
@@ -33,12 +135,7 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 	public static final int HORIZONTAL = 0;
 	public static final int VERTICAL = 1;
 
-	/**
-	 * Constructor for default vertical layout
-	 * 
-	 * @param context
-	 *            Context
-	 */
+
 	public SizePicker(final Context context, final PaintGLSurfaceView canvas) {
 		this(context, VERTICAL, canvas);
 		final ImageButton ibincremento = (ImageButton)this.getView().findViewById(R.id.ibIncremento);
@@ -93,14 +190,6 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 		});
 	}
 
-	/**
-	 * Constructor allowing orientation override
-	 * 
-	 * @param context
-	 *            Context
-	 * @param orientation
-	 *            Layout orientation, can be vartical or horizontal
-	 */
 	public SizePicker(final Context context, int orientation, final PaintGLSurfaceView canvas) {
 		super(context);
 
@@ -172,13 +261,7 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 	public View getView(){
 		return mRootView;
 	}
-	
-	/**
-	 * Set root view.
-	 * 
-	 * @param id
-	 *            Layout resource id
-	 */
+
 	public void setRootViewId(int id) {
 		mRootView = (ViewGroup) mInflater.inflate(id, null);
 		mTrack = (ViewGroup) mRootView.findViewById(R.id.tracks);
@@ -191,14 +274,6 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 		setContentView(mRootView);
 	}
 
-
-
-	
-	/**
-	 * Show quickaction popup. Popup is automatically positioned, on top or
-	 * bottom of anchor view.
-	 * 
-	 */
 	public void show(View anchor) {
 		preShow();
 
@@ -271,16 +346,6 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 		mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
 	}
 
-	
-
-	/**
-	 * Show arrow
-	 * 
-	 * @param whichArrow
-	 *            arrow type resource id
-	 * @param requestedX
-	 *            distance from left screen
-	 */
 	private void showArrow(int whichArrow, int requestedX) {
 		final View showArrow =mArrowDown;
 
@@ -311,11 +376,7 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 		}
 	}
 	
-	/**
-	 * Set listener for window dismissed. This listener will only be fired if
-	 * the quicakction dialog is dismissed by clicking outside the dialog or
-	 * clicking on sticky item.
-	 */
+
 	public void setOnDismissListener(SizePicker.OnDismissListener listener) {
 		setOnDismissListener( (OnDismissListener) this);
 
@@ -325,27 +386,19 @@ public class SizePicker extends PopupWindows implements OnDismissListener {
 	@Override
 	public void onDismiss() {
 		if (!mDidAction && mDismissListener != null) {
-			mDismissListener.onDismiss();
+		mDismissListener.onDismiss();
 		}
 	}
 
-	/**
-	 * Listener for item click
-	 * 
-	 */
 	public interface OnActionItemClickListener {
 		public abstract void onItemClick(SizePicker source, int pos,
 				int actionId);
 	}
-
-	/**
-	 * Listener for window dismiss
-	 * 
-	 */
+	
 	public interface OnDismissListener {
 		public abstract void onDismiss();
 	}
 
 
 
-}
+}*/

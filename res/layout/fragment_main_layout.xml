@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     
     <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style"
-        android:id="@+id/DisplayGLSurfaceViewLoading1" />
+        android:id="@+id/displayGLSurfaceViewLoading1" />
 
     <LinearLayout style="@style/Layout_Center_BigImageButton_Style">
 

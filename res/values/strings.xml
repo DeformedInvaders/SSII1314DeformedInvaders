@@ -15,9 +15,11 @@
 			<string name="title_animation_section_down">Down</string>
 			<string name="title_animation_section_attack">Attack</string>
 			
-			<string name="text_sticker_eyes">Eyes:</string>
-			<string name="text_sticker_mouths">Mouths:</string>
-			<string name="text_sticker_weapons">Weapons:</string>
+			<string name="title_dialog_size">Size:</string>
+			<string name="title_dialog_color">Color:</string>
+			<string name="title_dialog_eyes">Eyes:</string>
+			<string name="title_dialog_mouths">Mouths:</string>
+			<string name="title_dialog_weapons">Weapons:</string>
 			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
@@ -37,11 +39,14 @@
 			<string name="text_delete_character_description">Are you sure to delete this character?.</string>
 			<string name="text_delete_character_confirmation">Character deleted.</string>
 			
-			<string name="text_confirmation_yes">Yes</string>
-			<string name="text_confirmation_no">No</string>
+			<string name="text_button_yes">Yes</string>
+			<string name="text_button_no">No</string>
 
-			<string name="text_confirmation_ok">OK</string>
-		    <string name="text_confirmation_cancel">Cancel</string>
+			<string name="text_button_ok">OK</string>
+		    <string name="text_button_cancel">Cancel</string>
+		    
+		    <string name="text_button_plus">+</string>
+		    <string name="text_button_minus">-</string>
 			
 		<!-- Errors -->
 			<string name="error_test">The polygon is complex.</string>
@@ -90,16 +95,21 @@
 	    	<string name="desc_selection_select">Select this character.</string>
 	    	<string name="desc_selection_delete">Delete this character.</string>
 	    	
-	    <!-- Dialogs -->
-		    <string name="desc_dialog_increment">Increment the pencil\'s size.</string>
-		    <string name="desc_dialog_decrement">Decrement the pencil\'s size.</string>
-		    
-		    <string name="desc_dialog_eye">Eye Sticker</string>
-		    <string name="desc_dialog_mouth">Mouth Sticker</string>
-		    <string name="desc_dialog_weapon">Weapon Sticker</string>
-		
-		<!-- Unknown -->
-			<string name="desc_dialog_content">Content</string>
+	    <!-- Sticker Dialog -->		    
+		    <string name="desc_sticker_eye">Eye Sticker</string>
+		    <string name="desc_sticker_mouth">Mouth Sticker</string>
+		    <string name="desc_sticker_weapon">Weapon Sticker</string>
+
+		<!-- Size Dialog -->	
+		    <string name="desc_size_pencil">Pencil Size</string>
+
+		<!-- Color Dialog -->	
+		    <string name="desc_color_palette_secondary">Color Palette</string>
+		    <string name="desc_color_cursor_main">Color Cursor</string>
+		    <string name="desc_color_cursor_secondary">Color Target</string>
+		    <string name="desc_color_selected">Selected Color</string>
+
+		<!-- Dialogs -->	
 		    <string name="desc_dialog_arrow">Arrow</string>
 
 </resources>

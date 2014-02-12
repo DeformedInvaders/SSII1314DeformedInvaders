@@ -13,27 +13,34 @@ import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class ColorPickerKotak extends View {
-    Paint paint;
-    Shader luar;
-    final float[] color = { 1.f, 1.f, 1.f };
+public class ColorPickerKotak extends View
+{
+	private Paint paint;
+	private Shader luar;
+	private final float[] color = { 1.f, 1.f, 1.f };
 
-    public ColorPickerKotak(Context context, AttributeSet attrs) {
+    public ColorPickerKotak(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
     }
 
-    public ColorPickerKotak(Context context, AttributeSet attrs, int defStyle) {
+    public ColorPickerKotak(Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
     }
 
     @SuppressLint("DrawAllocation")
-    @Override 
-    protected void onDraw(Canvas canvas) {
+	@Override 
+    protected void onDraw(Canvas canvas)
+    {
         super.onDraw(canvas);
-        if (paint == null) {
+        
+        if (paint == null)
+        {
             paint = new Paint();
             luar = new LinearGradient(0.f, 0.f, 0.f, this.getMeasuredHeight(), 0xffffffff, 0xff000000, TileMode.CLAMP);
         }
+        
         int rgb = Color.HSVToColor(color);
         Shader dalam = new LinearGradient(0.f, 0.f, this.getMeasuredWidth(), 0.f, 0xffffffff, rgb, TileMode.CLAMP);
         ComposeShader shader = new ComposeShader(luar, dalam, PorterDuff.Mode.MULTIPLY);
@@ -41,7 +48,8 @@ public class ColorPickerKotak extends View {
         canvas.drawRect(0.f, 0.f, this.getMeasuredWidth(), this.getMeasuredHeight(), paint);
     }
 
-    void setHue(float hue) {
+    void setHue(float hue)
+    {
         color[0] = hue;
         invalidate();
     }

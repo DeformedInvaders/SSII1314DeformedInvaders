@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Content_Dialog_Style" >
+        
+  	    <TextView style="@style/Text_Section_Dialog_Style"
+  	        android:text="@string/title_dialog_size" />
+  	    
+	    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style" >
+	        
+			<Button style="@style/ImageButton_Size_Style"
+				android:id="@+id/imageButtonSize1"
+				android:text="@string/text_button_plus" />
+			
+			<ImageButton style="@style/ImageButton_Size_Style"
+				android:id="@+id/imageButtonSize3"
+				android:background="@drawable/image_size_small"
+				android:contentDescription="@string/desc_size_pencil" />
+			
+			<Button style="@style/ImageButton_Size_Style"
+				android:id="@+id/imageButtonSize2"
+				android:text="@string/text_button_minus" />
+		
+		</LinearLayout>
+		
+	</LinearLayout>
+	
+ 	<ImageView style="@style/ImageView_Arrow_Dialog_Style"
+ 	    android:contentDescription="@string/desc_dialog_arrow" />
+
+</LinearLayout>
+
+<!-- <RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
 		
-    	<LinearLayout
-	    	android:id="@+id/tracks"
-	    	android:orientation="vertical"
-	        android:layout_width="wrap_content"
-	   		android:background="@drawable/popup"
-	   		android:fadingEdgeLength="5dip"
-	        android:layout_height="wrap_content"
-	       >
-	       
-	     <!--  OLD
     	 <LinearLayout
 	    	android:id="@+id/tracks"
 	    	android:orientation="vertical"
@@ -24,14 +47,13 @@
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
 	       >
-	       -->
 
     	     <ImageButton
     		    android:id="@+id/ibIncremento"
     		    android:layout_width="wrap_content"
     		    android:layout_height="wrap_content"
     		    android:background="@null"
-    		    android:src="@drawable/button_increment_selector"
+    		    android:src="@drawable/selector_button_plus"
     		    android:contentDescription="@string/desc_dialog_increment" />
     	        		
     		<ImageButton
@@ -39,7 +61,7 @@
     		    android:layout_width="wrap_content"
     		    android:layout_height="wrap_content"
     		    android:background="@null"
-    		    android:src="@drawable/central_fino"
+    		    android:src="@drawable/icon_size_small"
     		    android:contentDescription="@string/desc_dialog_content" />
     		
     		 <ImageButton
@@ -47,7 +69,7 @@
     		    android:layout_width="wrap_content"
     		    android:layout_height="wrap_content"
     		    android:background="@null"
-    		    android:src="@drawable/button_decrement_selector"
+    		    android:src="@drawable/selector_button_minus"
     		    android:contentDescription="@string/desc_dialog_decrement" />
 
     	</LinearLayout>
@@ -61,4 +83,4 @@
         android:src="@drawable/arrow_down"
     	android:contentDescription="@string/desc_dialog_arrow" />
 
-</RelativeLayout>
+</RelativeLayout> -->

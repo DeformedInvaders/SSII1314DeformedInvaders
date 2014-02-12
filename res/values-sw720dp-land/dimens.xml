@@ -8,15 +8,23 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
 
     <!-- Dialog dimensions -->
-    
-    <!-- Botones -->
-    <dimen name="BigImageButton_LayoutHeight_Dimen">70dp</dimen>
-    <dimen name="BigImageButton_LayoutWidth_Dimen">70dp</dimen>
+	<dimen name="PaletteMain_LayoutHeight_Dimen">290dp</dimen>
+    <dimen name="PaletteMain_LayoutWidth_Dimen">290dp</dimen>
     
     <dimen name="StickerImageButton_LayoutHeight_Dimen">50dp</dimen>
     <dimen name="StickerImageButton_LayoutWidth_Dimen">100dp</dimen>
     
-    <!-- ProgressBar -->
+    <dimen name="SizeImageButton_LayoutHeight_Dimen">50dp</dimen>
+    <dimen name="SizeImageButton_LayoutWidth_Dimen">100dp</dimen>
+    
+    <dimen name="ColorImageButton_LayoutHeight_Dimen">50dp</dimen>
+    <dimen name="ColorImageButton_LayoutWidth_Dimen">100dp</dimen>
+    
+   <!-- Boton Fragment dimensions -->
+    <dimen name="BigImageButton_LayoutHeight_Dimen">70dp</dimen>
+    <dimen name="BigImageButton_LayoutWidth_Dimen">70dp</dimen>
+    
+    <!-- ProgressBar dimensions -->
     <dimen name="ProgressBar_LayoutWidth_Dimen">500dp</dimen>
     
 </resources>

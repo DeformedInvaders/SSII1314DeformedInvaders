@@ -1,8 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Content_Dialog_Style" >
+        
+  	    <TextView style="@style/Text_Section_Dialog_Style"
+  	        android:text="@string/title_dialog_color" />
+  	    
+  	    <RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			
+			<com.android.dialog.ColorPickerKotak
+			    android:id="@+id/paletteColor1"
+			    android:layout_width="@dimen/PaletteMain_LayoutWidth_Dimen"
+			    android:layout_height="@dimen/PaletteMain_LayoutHeight_Dimen"
+			    android:layerType="software" />
+			
+			<ImageView
+			    android:id="@+id/paletteColor2"
+			    android:layout_width="@dimen/PaletteSecondary_LayoutWidth_Dimen"
+			    android:layout_height="@dimen/PaletteMain_LayoutHeight_Dimen"
+			    android:layout_marginLeft="10dp"
+			    android:layout_toRightOf="@id/paletteColor1"
+			    android:scaleType="fitXY"
+			    android:src="@drawable/image_color_palette"
+			    android:contentDescription="@string/desc_color_palette_secondary"/>
+			
+			<ImageView
+			    android:id="@+id/imageViewColor1"
+			    android:layout_width="15dp"
+			    android:layout_height="15dp"
+			    android:scaleType="matrix"
+			    android:src="@drawable/image_color_cursor_main"
+			    android:contentDescription="@string/desc_color_cursor_main"/>
+						
+			<ImageView
+			    android:id="@+id/imageViewColor2"
+			    android:layout_width="15dp"
+			    android:layout_height="15dp"
+			    android:scaleType="matrix"
+			    android:src="@drawable/image_color_cursor_secondary"
+			    android:contentDescription="@string/desc_color_cursor_secondary"/>
+			
+          </RelativeLayout>
+  	    
+	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style" >
+	        
+			<Button style="@style/ImageButton_Color_Style"
+				android:id="@+id/imageButtonColor1"
+				android:text="@string/text_button_ok" />
+			
+			 <ImageView style="@style/ImageButton_Color_Style"
+				android:id="@+id/imageViewColor3"
+				android:background="#aaf"
+				android:contentDescription="@string/desc_color_selected"/>
+			
+			<Button style="@style/ImageButton_Color_Style"
+				android:id="@+id/imageButtonColor2"
+				android:text="@string/text_button_cancel" />
+		
+		</LinearLayout>
+		
+	</LinearLayout>
+	
+ 	<ImageView style="@style/ImageView_Arrow_Dialog_Style"
+ 	    android:contentDescription="@string/desc_dialog_arrow" />
+
+</LinearLayout>
+
+<!--  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
-        
+    
     <ScrollView 
         android:id="@+id/scroller"
         android:layout_marginTop="16dip"
@@ -96,12 +167,7 @@
         </LinearLayout>
        
     </ScrollView >
-    
-<!--     <ImageView -->
-<!--         android:id="@+id/arrow_up" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:src="@drawable/arrow_up" /> -->
+
     <ImageView
         android:id="@+id/arrow_down"
         android:layout_width="wrap_content"
@@ -110,4 +176,4 @@
         android:layout_marginTop="-4dip"
         android:src="@drawable/arrow_down" />
 
-</RelativeLayout>
+</RelativeLayout>-->

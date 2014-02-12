@@ -4,8 +4,11 @@ import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.PopupWindow;
 
 public abstract class WindowPicker implements OnTouchListener
@@ -26,16 +29,6 @@ public abstract class WindowPicker implements OnTouchListener
 		popupWindow.setTouchInterceptor(this);
 	}
 	
-	public void show(View view)
-	{
-		rootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		
-		int posX = view.getWidth()/4;
-		int posY = rootView.getMeasuredHeight() + view.getHeight();
-		
-		popupWindow.showAsDropDown(view, posX, -posY);
-	}
-	
 	protected View findViewById(int id)
 	{
 		if(rootView != null)
@@ -46,18 +39,49 @@ public abstract class WindowPicker implements OnTouchListener
 		else return null;
 	}
 	
-	protected void setContextView(int id)
+	protected ViewTreeObserver getViewTreeObserver()
 	{
-		rootView = layoutInflater.inflate(id, null);
-		popupWindow = new PopupWindow(rootView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);  
+		if(rootView != null)
+		{
+			return rootView.getViewTreeObserver();
+		}
 		
-		popupWindow.setBackgroundDrawable(new BitmapDrawable());
-		popupWindow.setOutsideTouchable(true);
-		popupWindow.setTouchInterceptor(this);
+		else return null;
+	}
+	
+	protected void removeGlobalLayoutListener(OnGlobalLayoutListener listener)
+	{
+		rootView.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
+	}
+	
+	public void show(View view)
+	{
+		rootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		
+		int posX = view.getWidth()/4;
+		int posY = rootView.getMeasuredHeight() + view.getHeight();
+		
+		popupWindow.showAsDropDown(view, posX, -posY);
 	}
 	
 	protected void dismiss()
 	{
 		popupWindow.dismiss();
 	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		int action = event.getAction();
+		
+		if(action == MotionEvent.ACTION_OUTSIDE)
+		{
+			onTouchOutsidePopUp(v, event);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	protected abstract void onTouchOutsidePopUp(View v, MotionEvent event);
 }
