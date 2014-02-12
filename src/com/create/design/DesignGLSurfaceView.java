@@ -50,50 +50,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		renderer.reiniciar();
 		requestRender();
 	}
-	
-	/*public void calcularBSpline()
-	{
-		renderer.bSpline();
-		requestRender();
-	}
-	
-	public void calcularConvexHull()
-	{
-		renderer.convexHull();
-		requestRender();
-	}
-	
-	public void calcularDelaunay()
-	{
-		renderer.delaunay();
-		requestRender();
-	}
-	
-	public void calcularEarClipping()
-	{
-		renderer.earClipping();
-		requestRender();
-	}
-	
-	public void calcularMeshTriangles()
-	{
-		renderer.meshGenerator();
-		requestRender();
-	}
-	
-	public boolean calcularTestSimple()
-	{
-		boolean b = renderer.testSimple();
-		requestRender();
-		return b;
-	}
-	
-	/*public void restore()
-	{		
-		renderer.restore();
-		requestRender();
-	}*/
-	
+
 	/* Métodos de Obtención de Información */
 	
 	public boolean pruebaCompleta()

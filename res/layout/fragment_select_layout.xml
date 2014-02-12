@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceView_BigImageButton_Style"
+    <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
         android:id="@+id/displayGLSurfaceViewSelect1" />
 
 </RelativeLayout>

@@ -89,7 +89,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         color = Color.WHITE;
         
-        colorPaleta = Color.GREEN;
+        colorPaleta = Color.RED;
         sizeLinea = 6;
         
         anteriores = new Stack<Accion>();

@@ -37,26 +37,26 @@
     <!-- Botones -->
     
     <style name="Button_Fragment_Style">
-        <item name="android:layout_width">@dimen/BigImageButton_LayoutWidth_Dimen</item>
-        <item name="android:layout_height">@dimen/BigImageButton_LayoutHeight_Dimen</item>
+        <item name="android:layout_width">@dimen/FragmentButton_LayoutWidth_Dimen</item>
+        <item name="android:layout_height">@dimen/FragmentButton_LayoutHeight_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
 	</style>
 	
     <style name="Button_Sticker_Style">
-        <item name="android:layout_width">@dimen/StickerImageButton_LayoutWidth_Dimen</item>
-        <item name="android:layout_height">@dimen/StickerImageButton_LayoutHeight_Dimen</item>
+        <item name="android:layout_width">@dimen/StickerButton_LayoutWidth_Dimen</item>
+        <item name="android:layout_height">@dimen/StickerButton_LayoutHeight_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
     </style>
     
     <style name="Button_Size_Style">
-		<item name="android:layout_width">@dimen/SizeImageButton_LayoutWidth_Dimen</item>
-		<item name="android:layout_height">@dimen/SizeImageButton_LayoutHeight_Dimen</item>
+		<item name="android:layout_width">@dimen/SizeButton_LayoutWidth_Dimen</item>
+		<item name="android:layout_height">@dimen/SizeButton_LayoutHeight_Dimen</item>
 		<item name="android:layout_marginBottom">10dp</item>
     </style>
     
      <style name="Button_Color_Style">
-		<item name="android:layout_width">@dimen/ColorImageButton_LayoutWidth_Dimen</item>
-		<item name="android:layout_height">@dimen/ColorImageButton_LayoutHeight_Dimen</item>
+		<item name="android:layout_width">@dimen/ColorButton_LayoutWidth_Dimen</item>
+		<item name="android:layout_height">@dimen/ColorButton_LayoutHeight_Dimen</item>
 		<item name="android:layout_marginLeft">10dp</item>
     </style>   
 	
@@ -83,7 +83,7 @@
 		<item name="android:layout_alignParentTop">true</item>
 	</style>
 	
-    <style name="GLSurfaceView_BigImageButton_Style" parent="GLSurfaceView_Style">
+    <style name="GLSurfaceView_FragmentButton_Style" parent="GLSurfaceView_Style">
 		<!-- TODO -->
 	</style>
 	

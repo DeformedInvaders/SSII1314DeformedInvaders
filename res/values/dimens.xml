@@ -9,18 +9,18 @@
     <dimen name="PaletteMain_LayoutWidth_Dimen">230dp</dimen>
     <dimen name="PaletteSecondary_LayoutWidth_Dimen">30dp</dimen>
     
-    <dimen name="StickerImageButton_LayoutHeight_Dimen">30dp</dimen>
-    <dimen name="StickerImageButton_LayoutWidth_Dimen">60dp</dimen>
+    <dimen name="StickerButton_LayoutHeight_Dimen">30dp</dimen>
+    <dimen name="StickerButton_LayoutWidth_Dimen">60dp</dimen>
     
-    <dimen name="SizeImageButton_LayoutHeight_Dimen">30dp</dimen>
-    <dimen name="SizeImageButton_LayoutWidth_Dimen">60dp</dimen>
+    <dimen name="SizeButton_LayoutHeight_Dimen">30dp</dimen>
+    <dimen name="SizeButton_LayoutWidth_Dimen">60dp</dimen>
     
-    <dimen name="ColorImageButton_LayoutHeight_Dimen">30dp</dimen>
-    <dimen name="ColorImageButton_LayoutWidth_Dimen">60dp</dimen>
+    <dimen name="ColorButton_LayoutHeight_Dimen">30dp</dimen>
+    <dimen name="ColorButton_LayoutWidth_Dimen">60dp</dimen>
     
     <!-- Boton Fragment dimensions -->
-    <dimen name="BigImageButton_LayoutHeight_Dimen">30dp</dimen>
-    <dimen name="BigImageButton_LayoutWidth_Dimen">30dp</dimen>
+    <dimen name="FragmentButton_LayoutHeight_Dimen">30dp</dimen>
+    <dimen name="FragmentButton_LayoutWidth_Dimen">30dp</dimen>
     
     <!-- ProgressBar dimensions -->
     <dimen name="ProgressBar_LayoutWidth_Dimen">300dp</dimen>

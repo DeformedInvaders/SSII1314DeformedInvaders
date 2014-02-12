@@ -11,14 +11,14 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
+        public static final int ColorButton_LayoutHeight_Dimen=0x7f040009;
+        public static final int ColorButton_LayoutWidth_Dimen=0x7f04000a;
         /**  Boton Fragment dimensions 
  Boton Fragment dimensions 
  Boton Fragment dimensions 
          */
-        public static final int BigImageButton_LayoutHeight_Dimen=0x7f04000b;
-        public static final int BigImageButton_LayoutWidth_Dimen=0x7f04000c;
-        public static final int ColorImageButton_LayoutHeight_Dimen=0x7f040009;
-        public static final int ColorImageButton_LayoutWidth_Dimen=0x7f04000a;
+        public static final int FragmentButton_LayoutHeight_Dimen=0x7f04000b;
+        public static final int FragmentButton_LayoutWidth_Dimen=0x7f04000c;
         /**  Dialog dimensions 
  Dialog dimensions 
  Dialog dimensions 
@@ -31,10 +31,10 @@ public final class R {
  ProgressBar dimensions 
          */
         public static final int ProgressBar_LayoutWidth_Dimen=0x7f04000d;
-        public static final int SizeImageButton_LayoutHeight_Dimen=0x7f040007;
-        public static final int SizeImageButton_LayoutWidth_Dimen=0x7f040008;
-        public static final int StickerImageButton_LayoutHeight_Dimen=0x7f040005;
-        public static final int StickerImageButton_LayoutWidth_Dimen=0x7f040006;
+        public static final int SizeButton_LayoutHeight_Dimen=0x7f040007;
+        public static final int SizeButton_LayoutWidth_Dimen=0x7f040008;
+        public static final int StickerButton_LayoutHeight_Dimen=0x7f040005;
+        public static final int StickerButton_LayoutWidth_Dimen=0x7f040006;
         /**  Default screen margins, per the Android Design guidelines. 
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
@@ -100,7 +100,8 @@ public final class R {
     public static final class id {
         public static final int deformGLSurfaceViewDeform1=0x7f070017;
         public static final int designGLSurfaceViewDesign1=0x7f07001c;
-        public static final int displayGLSurfaceViewSelect1=0x7f070031;
+        public static final int displayGLSurfaceViewMain1=0x7f070022;
+        public static final int displayGLSurfaceViewSelect1=0x7f070032;
         public static final int frameLayoutMain1=0x7f070000;
         public static final int imageButtonAnimation1=0x7f070016;
         public static final int imageButtonColor1=0x7f070005;
@@ -112,21 +113,21 @@ public final class R {
         public static final int imageButtonDesign1=0x7f07001f;
         public static final int imageButtonDesign2=0x7f07001e;
         public static final int imageButtonDesign3=0x7f07001d;
-        public static final int imageButtonLoading1=0x7f070022;
-        public static final int imageButtonLoading2=0x7f070023;
-        public static final int imageButtonLoading3=0x7f070024;
-        public static final int imageButtonPaint1=0x7f070027;
-        public static final int imageButtonPaint10=0x7f070030;
-        public static final int imageButtonPaint2=0x7f070028;
-        public static final int imageButtonPaint3=0x7f070029;
-        public static final int imageButtonPaint4=0x7f07002a;
-        public static final int imageButtonPaint5=0x7f07002b;
-        public static final int imageButtonPaint6=0x7f07002c;
-        public static final int imageButtonPaint7=0x7f07002d;
-        public static final int imageButtonPaint8=0x7f07002e;
-        public static final int imageButtonPaint9=0x7f07002f;
-        public static final int imageButtonSelection1=0x7f070033;
-        public static final int imageButtonSelection2=0x7f070034;
+        public static final int imageButtonLoading1=0x7f070023;
+        public static final int imageButtonLoading2=0x7f070024;
+        public static final int imageButtonLoading3=0x7f070025;
+        public static final int imageButtonPaint1=0x7f070028;
+        public static final int imageButtonPaint10=0x7f070031;
+        public static final int imageButtonPaint2=0x7f070029;
+        public static final int imageButtonPaint3=0x7f07002a;
+        public static final int imageButtonPaint4=0x7f07002b;
+        public static final int imageButtonPaint5=0x7f07002c;
+        public static final int imageButtonPaint6=0x7f07002d;
+        public static final int imageButtonPaint7=0x7f07002e;
+        public static final int imageButtonPaint8=0x7f07002f;
+        public static final int imageButtonPaint9=0x7f070030;
+        public static final int imageButtonSelection1=0x7f070034;
+        public static final int imageButtonSelection2=0x7f070035;
         public static final int imageButtonSize1=0x7f070008;
         public static final int imageButtonSize2=0x7f07000a;
         public static final int imageButtonSize3=0x7f070009;
@@ -143,10 +144,10 @@ public final class R {
         public static final int imageViewColor1=0x7f070003;
         public static final int imageViewColor2=0x7f070004;
         public static final int imageViewColor3=0x7f070006;
-        public static final int multitouchGLSurfaceView1=0x7f070025;
+        public static final int multitouchGLSurfaceView1=0x7f070026;
         public static final int pagerViewAnimation1=0x7f070015;
-        public static final int pagerViewSelection1=0x7f070032;
-        public static final int paintGLSurfaceViewPaint1=0x7f070026;
+        public static final int pagerViewSelection1=0x7f070033;
+        public static final int paintGLSurfaceViewPaint1=0x7f070027;
         public static final int paletteColor1=0x7f070001;
         public static final int paletteColor2=0x7f070002;
         public static final int progressBarLoading1=0x7f070020;
@@ -330,7 +331,7 @@ public final class R {
         public static final int FrameLayout_Style=0x7f060009;
         /**  TODO 
          */
-        public static final int GLSurfaceView_BigImageButton_Style=0x7f06000c;
+        public static final int GLSurfaceView_FragmentButton_Style=0x7f06000c;
         /**  Canvas 
          */
         public static final int GLSurfaceView_Style=0x7f06000b;

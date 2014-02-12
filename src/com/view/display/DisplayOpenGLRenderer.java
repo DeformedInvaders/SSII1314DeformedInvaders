@@ -17,6 +17,8 @@ import com.project.main.OpenGLRenderer;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer
 {
+	private boolean personajeCargado;
+	
 	private ShortArray contorno;
 	private FloatBuffer bufferContorno;
 	
@@ -33,9 +35,18 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
 	
+	public DisplayOpenGLRenderer(Context context)
+	{
+		super(context);
+		
+		personajeCargado = false;
+	}
+	
 	public DisplayOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura)
 	{
         super(context);
+        
+        personajeCargado = true;
         
         // Esqueleto
         contorno = esqueleto.getContorno();
@@ -61,8 +72,11 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceCreated(gl, config);
 		
-		// Textura
-		cargarTextura(gl, bitmap, nombreTextura, 0);
+		if(personajeCargado)
+		{
+			// Textura
+			cargarTextura(gl, bitmap, nombreTextura, 0);
+		}
 	}
 	
 	@Override
@@ -70,11 +84,14 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{					
 		super.onDrawFrame(gl);
 			
-		// Textura
-		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
-			
-		// Contorno
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+		if(personajeCargado)
+		{
+			// Textura
+			dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
+				
+			// Contorno
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+		}
 	}
 	
 	/* Métodos abstractos de OpenGLRenderer */

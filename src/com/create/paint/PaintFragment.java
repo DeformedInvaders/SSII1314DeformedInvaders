@@ -325,6 +325,7 @@ public class PaintFragment extends Fragment
 		{
 			canvas.capturaPantalla();
 			
+			reiniciarImagenesBotones();
 			mCallback.onPaintReadyButtonClicked(canvas.getTextura());
 		}
     }

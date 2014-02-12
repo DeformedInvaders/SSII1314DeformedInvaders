@@ -19,7 +19,7 @@ public class MainFragment extends Fragment
 {
 	private MainFragmentListener mCallback;
 	
-	//private DisplayGLSurfaceView canvas;
+	private DisplayGLSurfaceView canvas;
 	private ImageButton botonAdd, botonPlay, botonView;
 	
 	private List<Personaje> listaPersonajes;
@@ -71,11 +71,15 @@ public class MainFragment extends Fragment
 		actionBar.removeAllTabs();
 		
 		// Instanciar Elementos de la GUI
-		//canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
+		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
 		if(personajeSeleccionado >= 0 && personajeSeleccionado < listaPersonajes.size() && !listaPersonajes.isEmpty())
 		{
 			Personaje p = listaPersonajes.get(personajeSeleccionado);
-			//canvas.setParameters(p.getEsqueleto(), p.getTextura());
+			canvas.setParameters(p.getEsqueleto(), p.getTextura());
+		}
+		else
+		{
+			canvas.setParameters();
 		}
 		
 		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonLoading1);
@@ -96,7 +100,7 @@ public class MainFragment extends Fragment
 	{
 		super.onDestroyView();
 		
-		//canvas = null;
+		canvas = null;
 		botonAdd = null;
 		botonPlay = null;
 		botonView = null;
@@ -106,20 +110,14 @@ public class MainFragment extends Fragment
 	public void onResume()
 	{
 		super.onResume();
-		/*if(canvas != null)
-		{
-			canvas.onResume();
-		}*/
+		canvas.onResume();
 	}
 	
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		/*if(canvas != null)
-		{
-			canvas.onPause();
-		}*/
+		canvas.onPause();
 	}
 	
 	/* Listener de Botones */

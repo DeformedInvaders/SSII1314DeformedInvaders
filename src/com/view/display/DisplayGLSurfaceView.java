@@ -24,6 +24,30 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         setRenderer(renderer);
 	}
 	
+	public void setParameters()
+	{
+		renderer = new DisplayOpenGLRenderer(getContext());
+		setRenderer(renderer);
+	}
+	
+	@Override
+	public void onResume()
+	{
+		if(renderer!= null)
+		{
+			super.onResume();
+		}
+	}
+	
+	@Override
+	public void onPause()
+	{
+		if(renderer != null)
+		{
+			super.onPause();
+		}
+	}
+	
 	/* Métodos abstractos OpenGLSurfaceView */
 	
 	public void onTouchDown(float x, float y, float width, float height, int pos) { }
