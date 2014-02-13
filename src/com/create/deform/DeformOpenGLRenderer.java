@@ -14,6 +14,7 @@ import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.data.Esqueleto;
+import com.project.data.Handle;
 import com.project.data.Pegatinas;
 import com.project.data.Textura;
 import com.project.main.OpenGLRenderer;
@@ -427,10 +428,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	public void restoreData(DeformDataSaved data)
 	{
-		this.estado = data.getEstado();
-		this.handles = data.getHandles();
-		this.indiceHandles = data.getIndiceHandles();
-		this.verticesModificados = data.getVerticesModificados();
+		estado = data.getEstado();
+		handles = data.getHandles();
+		indiceHandles = data.getIndiceHandles();
+		verticesModificados = data.getVerticesModificados();
 		
 		deformator.anyadirHandles(handles, indiceHandles);
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);

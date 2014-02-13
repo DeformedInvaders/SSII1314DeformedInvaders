@@ -10,7 +10,7 @@ import com.project.main.TTouchEstado;
 public class DesignGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
-    private final DesignOpenGLRenderer renderer;
+    private DesignOpenGLRenderer renderer;
  
     public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
@@ -68,5 +68,17 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 	public boolean poligonoCompleto()
 	{
 		return renderer.poligonoCompleto();
+	}
+	
+	/* Métodos de Guardado de Información */
+	
+	public DesignDataSaved saveData()
+	{
+		return renderer.saveData();
+	}
+	
+	public void restoreData(DesignDataSaved data)
+	{
+		renderer.restoreData(data);
 	}
 }

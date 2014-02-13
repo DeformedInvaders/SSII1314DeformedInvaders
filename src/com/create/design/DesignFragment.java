@@ -21,6 +21,8 @@ public class DesignFragment extends Fragment
 	private DesignGLSurfaceView canvas;
 	private ImageButton botonReady, botonNuevo, botonTest;
 	
+	private DesignDataSaved dataSaved;
+	
 	/* Constructora */
 	
 	public static final DesignFragment newInstance()
@@ -96,6 +98,12 @@ public class DesignFragment extends Fragment
 	{
 		super.onResume();
 		canvas.onResume();
+		
+		if(dataSaved != null)
+		{			
+			canvas.restoreData(dataSaved);
+			actualizarBotones();
+		}
 	}
 	
 	@Override
@@ -103,6 +111,8 @@ public class DesignFragment extends Fragment
 	{
 		super.onPause();
 		canvas.onPause();
+		
+		dataSaved = canvas.saveData();
 	}
 	
 	/* Métodos abstractos de OpenGLFragmentListener */

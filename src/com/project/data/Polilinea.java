@@ -1,4 +1,4 @@
-package com.create.paint;
+package com.project.data;
 
 import java.nio.FloatBuffer;
 

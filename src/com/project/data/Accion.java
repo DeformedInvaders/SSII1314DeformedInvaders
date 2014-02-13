@@ -1,7 +1,8 @@
-package com.create.paint;
+package com.project.data;
 
 public class Accion
 {
+	// Tipo de Acción
 	private int tipo;
 	
 	// Color

@@ -17,9 +17,12 @@ import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.data.Accion;
 import com.project.data.Esqueleto;
+import com.project.data.Handle;
 import com.project.data.MapaBits;
 import com.project.data.Pegatinas;
+import com.project.data.Polilinea;
 import com.project.data.Textura;
 import com.project.main.OpenGLRenderer;
 
@@ -66,6 +69,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private MapaBits textura;
 	private FloatArray coordsTextura;
 	
+	private Handle objetoVertice;
+	
 	// Anterior Siguiente Buffers
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
@@ -88,7 +93,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         listaLineas = new ArrayList<Polilinea>();
         lineaActual = null;
         
-		float texture[] = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
+		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
         
         pegatinas = new Pegatinas();
         coordPegatina = construirBufferListaPuntos(texture);
@@ -109,6 +114,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         modoCaptura = false;
         capturaTerminada = false;
+        
+        objetoVertice = new Handle(20, POINTWIDTH);
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -144,6 +151,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+		
+		if(estado == TPaintEstado.Pegatinas)
+		{
+			dibujarListaHandle(gl, Color.BLACK, objetoVertice.getBuffer(), vertices);
+		}
 		
 		// Cargar Pegatinas
 		if(!pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
@@ -275,6 +287,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		lineaActual = null;
 		listaLineas.clear();
 		
+		pegatinas = new Pegatinas();
+        pegatinaActual = 0;
+        pegatinaAnyadida = false;
+        pegatinaOjosCargada = false;
+        pegatinaBocaCargada = false;
+        pegatinaArmaCargada = false;
+		
 		anteriores.clear();
 		siguientes.clear();
 		
@@ -373,8 +392,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			
 			pegatinaAnyadida = true;
 			
-			//anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
-			//siguientes.clear();
+			anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
+			siguientes.clear();
 		}
 	}
 	
@@ -442,7 +461,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		color = Color.WHITE;
 		listaLineas = new ArrayList<Polilinea>();
-		//pegatinas = new Pegatinas();
+		pegatinas = new Pegatinas();
+		pegatinaOjosCargada = false;
+		pegatinaBocaCargada = false;
+		pegatinaArmaCargada = false;
 		
 		Iterator<Accion> it = pila.iterator();
 		while(it.hasNext())
@@ -456,10 +478,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			{
 				listaLineas.add(accion.getLinea());
 			}
-			/*else if(accion.isTipoPegatina())
+			else if(accion.isTipoPegatina())
 			{
 				pegatinas.setPegatina(accion.getIndicePegatina(), accion.getVerticePegatina(), accion.getTipoPegatina());
-			}*/
+			}
 		}
 	}
 	
@@ -523,5 +545,19 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	    MapaBits textura = new MapaBits();
 	    textura.setBitmap(pixelsBuffer, width, height);
 	    return textura;
+	}
+	
+	public PaintDataSaved saveData()
+	{
+		return new PaintDataSaved(anteriores, siguientes, estado);
+	}
+	
+	public void restoreData(PaintDataSaved data)
+	{
+		estado = data.getEstado();
+		anteriores = data.getAnteriores();
+		siguientes = data.getSiguientes();
+	
+		actualizarEstado(anteriores);
 	}
 }

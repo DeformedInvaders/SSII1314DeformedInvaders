@@ -32,6 +32,8 @@ public class PaintFragment extends Fragment
 	
 	private Esqueleto esqueletoActual;
 	
+	private PaintDataSaved dataSaved;
+	
 	/* Constructora */
 	
 	public static final PaintFragment newInstance(Esqueleto e)
@@ -140,6 +142,13 @@ public class PaintFragment extends Fragment
 	{
 		super.onResume();
 		canvas.onResume();
+		
+		if(dataSaved != null)
+		{			
+			canvas.restoreData(dataSaved);
+			actualizarBotones();
+			reiniciarImagenesBotones(dataSaved.getEstado());
+		}
 	}
 	
 	@Override
@@ -147,6 +156,8 @@ public class PaintFragment extends Fragment
 	{
 		super.onPause();
 		canvas.onPause();
+		
+		dataSaved = canvas.saveData();
 	}
 	
 	/* Métodos abstractos de OpenGLFragment */
@@ -185,6 +196,29 @@ public class PaintFragment extends Fragment
 		botonCubo.setBackgroundResource(R.drawable.icon_bucket);
 		botonMano.setBackgroundResource(R.drawable.icon_hand);
 		botonPegatina.setBackgroundResource(R.drawable.icon_eye);
+	}
+	
+	private void reiniciarImagenesBotones(TPaintEstado estado)
+	{
+		reiniciarImagenesBotones();
+		
+		switch(estado)
+		{
+			case Mano:
+				botonMano.setBackgroundResource(R.drawable.icon_hand_selected);
+			break;
+			case Pincel:
+				botonPincel.setBackgroundResource(R.drawable.icon_pencil_selected);
+			break;
+			case Cubo:
+				botonCubo.setBackgroundResource(R.drawable.icon_bucket_selected);
+			break;
+			case Pegatinas:
+				botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
+			break;
+			default:
+			break;
+		}
 	}
 	
 	/* Listener de Botones */

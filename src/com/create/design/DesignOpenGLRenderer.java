@@ -38,9 +38,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{        
 		super(context);
 		
-        this.estado = TDesignEstado.Dibujar;
+        estado = TDesignEstado.Dibujar;
 
-        this.puntos = new FloatArray();
+        puntos = new FloatArray();
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -63,7 +63,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 					}
 				}
 			break;
-			case Full:
+			case Triangular:
 				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferTest);
 			break;
 			default:
@@ -167,7 +167,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if(puntos.size > 4)
 		{
-			estado = TDesignEstado.Full;
+			estado = TDesignEstado.Triangular;
 			
 			// TODO Calcular Iteraciones en función del Area del Poligono
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
@@ -194,5 +194,30 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	public boolean poligonoCompleto()
 	{
 		return puntos.size >= 6;
+	}
+	
+	/* Métodos de Salvados de Información */
+	
+	public DesignDataSaved saveData()
+	{
+		return new DesignDataSaved(puntos, puntosTest, triangulosTest, estado);
+	}
+	
+	public void restoreData(DesignDataSaved data)
+	{
+		estado = data.getEstado();
+		puntos = data.getPuntos();
+		puntosTest = data.getPuntosTest();
+		triangulosTest = data.getTriangulosTest();
+		
+		if(puntos.size > 0)
+		{
+			bufferPuntos = construirBufferListaPuntos(puntos); 
+		}
+		
+		if(puntosTest != null && triangulosTest != null)
+		{
+			bufferTest = construirBufferListaTriangulos(triangulosTest, puntosTest);
+		}
 	}
 }

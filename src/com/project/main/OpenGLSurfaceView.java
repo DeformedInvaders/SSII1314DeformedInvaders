@@ -1,6 +1,7 @@
 package com.project.main;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -31,6 +32,10 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
          // Tipo Multitouch
          this.estado = estado;
          this.mContext = context;
+         
+         // Activar Formato Texturas transparentes
+         setEGLConfigChooser(8, 8, 8, 8, 0, 0); 
+         getHolder().setFormat(PixelFormat.RGBA_8888);
          
          // Crear Contexto OpenGL ES 1.0
          setEGLContextClientVersion(1);

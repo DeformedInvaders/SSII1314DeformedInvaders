@@ -4,8 +4,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 
-import com.create.deform.Handle;
 import com.lib.utils.FloatArray;
+import com.project.data.Handle;
 import com.project.main.OpenGLRenderer;
 
 public class MultitouchOpenGLRenderer extends OpenGLRenderer
