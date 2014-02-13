@@ -15,10 +15,11 @@ public class StickerPicker extends WindowPicker
 	
 	private OnEyeClickListener eyeListener;
 	private OnMouthClickListener mouthListener;
-	//private OnWeaponClickListener weaponListener;
+	private OnWeaponClickListener weaponListener;
 	
 	private ImageView imagenEye1, imagenEye2, imagenEye3, imagenEye4, imagenEye5;
 	private ImageView imagenMouth1, imagenMouth2, imagenMouth3, imagenMouth4, imagenMouth5;
+	private ImageView imagenWeapon1, imagenWeapon2, imagenWeapon3, imagenWeapon4;
 
 	public StickerPicker(Context context, PaintFragment view)
 	{		
@@ -28,7 +29,7 @@ public class StickerPicker extends WindowPicker
 		
 		eyeListener = new OnEyeClickListener();
 		mouthListener = new OnMouthClickListener();
-		//weaponListener = new OnWeaponClickListener();
+		weaponListener = new OnWeaponClickListener();
 		
 		imagenEye1 = (ImageView) findViewById(R.id.imageButtonSticker1);
 		imagenEye2 = (ImageView) findViewById(R.id.imageButtonSticker2);
@@ -42,6 +43,12 @@ public class StickerPicker extends WindowPicker
 		imagenEye4.setTag(R.drawable.texture_eyes4);
 		imagenEye5.setTag(R.drawable.texture_eyes5);
 		
+		imagenEye1.setOnClickListener(eyeListener);
+		imagenEye2.setOnClickListener(eyeListener);
+		imagenEye3.setOnClickListener(eyeListener);
+		imagenEye4.setOnClickListener(eyeListener);
+		imagenEye5.setOnClickListener(eyeListener);
+		
 		imagenMouth1 = (ImageView) findViewById(R.id.imageButtonSticker6);
 		imagenMouth2 = (ImageView) findViewById(R.id.imageButtonSticker7);
 		imagenMouth3 = (ImageView) findViewById(R.id.imageButtonSticker8);
@@ -54,18 +61,26 @@ public class StickerPicker extends WindowPicker
 		imagenMouth4.setTag(R.drawable.texture_mouth4);
 		imagenMouth5.setTag(R.drawable.texture_mouth5);
 		
-		imagenEye1.setOnClickListener(eyeListener);
-		imagenEye2.setOnClickListener(eyeListener);
-		imagenEye3.setOnClickListener(eyeListener);
-		imagenEye4.setOnClickListener(eyeListener);
-		imagenEye5.setOnClickListener(eyeListener);
-		
 		imagenMouth1.setOnClickListener(mouthListener);
 		imagenMouth2.setOnClickListener(mouthListener);
 		imagenMouth3.setOnClickListener(mouthListener);
 		imagenMouth4.setOnClickListener(mouthListener);
 		imagenMouth5.setOnClickListener(mouthListener);
 		
+		imagenWeapon1 = (ImageView) findViewById(R.id.imageButtonSticker11);
+		imagenWeapon2 = (ImageView) findViewById(R.id.imageButtonSticker12);
+		imagenWeapon3 = (ImageView) findViewById(R.id.imageButtonSticker13);
+		imagenWeapon4 = (ImageView) findViewById(R.id.imageButtonSticker14);
+		
+		imagenWeapon1.setTag(R.drawable.texture_weapon1);
+		imagenWeapon2.setTag(R.drawable.texture_weapon2);
+		imagenWeapon3.setTag(R.drawable.texture_weapon3);
+		imagenWeapon4.setTag(R.drawable.texture_weapon4);
+		
+		imagenWeapon1.setOnClickListener(weaponListener);
+		imagenWeapon2.setOnClickListener(weaponListener);
+		imagenWeapon3.setOnClickListener(weaponListener);
+		imagenWeapon4.setOnClickListener(weaponListener);
 	}
 	
 	@Override
@@ -95,13 +110,13 @@ public class StickerPicker extends WindowPicker
 		}
 	}
 	
-	/*private class OnWeaponClickListener implements OnClickListener
+	private class OnWeaponClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			fragmento.seleccionarPegatina(v.getId(), 2);		
+			fragmento.seleccionarPegatina((Integer) v.getTag(), 2);		
 			dismiss();	
 		}
-	}*/
+	}
 }

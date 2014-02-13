@@ -69,6 +69,33 @@
 			
 		</LinearLayout>
 		
+		<TextView style="@style/Text_Section_Dialog_Style"
+  	        android:text="@string/title_dialog_weapons"/>
+  	    
+	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
+	        
+			<ImageView style="@style/Button_Sticker_Big_Style"
+				android:id="@+id/imageButtonSticker11"
+				android:background="@drawable/texture_weapon1"
+				android:contentDescription="@string/desc_sticker_weapon" />
+			
+			<ImageView style="@style/Button_Sticker_Big_Style"
+				android:id="@+id/imageButtonSticker12"
+				android:background="@drawable/texture_weapon2"
+				android:contentDescription="@string/desc_sticker_weapon" />
+			
+			<ImageView style="@style/Button_Sticker_Big_Style"
+				android:id="@+id/imageButtonSticker13"
+				android:background="@drawable/texture_weapon3"
+				android:contentDescription="@string/desc_sticker_weapon" />
+			
+			<ImageView style="@style/Button_Sticker_Big_Style"
+				android:id="@+id/imageButtonSticker14"
+				android:background="@drawable/texture_weapon4"
+				android:contentDescription="@string/desc_sticker_weapon" />
+			
+		</LinearLayout>
+		
 	</LinearLayout>
 	
  	<ImageView style="@style/ImageView_Arrow_Dialog_Style"

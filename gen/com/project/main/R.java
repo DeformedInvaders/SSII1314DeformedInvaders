@@ -95,44 +95,48 @@ public final class R {
         public static final int texture_weapon1=0x7f02002b;
         public static final int texture_weapon2=0x7f02002c;
         public static final int texture_weapon3=0x7f02002d;
-        public static final int texture_weapon6=0x7f02002e;
+        public static final int texture_weapon4=0x7f02002e;
     }
     public static final class id {
-        public static final int deformGLSurfaceViewDeform1=0x7f070017;
-        public static final int designGLSurfaceViewDesign1=0x7f07001c;
-        public static final int displayGLSurfaceViewMain1=0x7f070022;
-        public static final int displayGLSurfaceViewSelect1=0x7f070032;
+        public static final int deformGLSurfaceViewDeform1=0x7f07001b;
+        public static final int designGLSurfaceViewDesign1=0x7f070020;
+        public static final int displayGLSurfaceViewMain1=0x7f070026;
+        public static final int displayGLSurfaceViewSelect1=0x7f070036;
         public static final int frameLayoutMain1=0x7f070000;
-        public static final int imageButtonAnimation1=0x7f070016;
+        public static final int imageButtonAnimation1=0x7f07001a;
         public static final int imageButtonColor1=0x7f070005;
         public static final int imageButtonColor2=0x7f070007;
-        public static final int imageButtonDeform1=0x7f070018;
-        public static final int imageButtonDeform2=0x7f070019;
-        public static final int imageButtonDeform3=0x7f07001a;
-        public static final int imageButtonDeform4=0x7f07001b;
-        public static final int imageButtonDesign1=0x7f07001f;
-        public static final int imageButtonDesign2=0x7f07001e;
-        public static final int imageButtonDesign3=0x7f07001d;
-        public static final int imageButtonLoading1=0x7f070023;
-        public static final int imageButtonLoading2=0x7f070024;
-        public static final int imageButtonLoading3=0x7f070025;
-        public static final int imageButtonPaint1=0x7f070028;
-        public static final int imageButtonPaint10=0x7f070031;
-        public static final int imageButtonPaint2=0x7f070029;
-        public static final int imageButtonPaint3=0x7f07002a;
-        public static final int imageButtonPaint4=0x7f07002b;
-        public static final int imageButtonPaint5=0x7f07002c;
-        public static final int imageButtonPaint6=0x7f07002d;
-        public static final int imageButtonPaint7=0x7f07002e;
-        public static final int imageButtonPaint8=0x7f07002f;
-        public static final int imageButtonPaint9=0x7f070030;
-        public static final int imageButtonSelection1=0x7f070034;
-        public static final int imageButtonSelection2=0x7f070035;
+        public static final int imageButtonDeform1=0x7f07001c;
+        public static final int imageButtonDeform2=0x7f07001d;
+        public static final int imageButtonDeform3=0x7f07001e;
+        public static final int imageButtonDeform4=0x7f07001f;
+        public static final int imageButtonDesign1=0x7f070023;
+        public static final int imageButtonDesign2=0x7f070022;
+        public static final int imageButtonDesign3=0x7f070021;
+        public static final int imageButtonLoading1=0x7f070027;
+        public static final int imageButtonLoading2=0x7f070028;
+        public static final int imageButtonLoading3=0x7f070029;
+        public static final int imageButtonPaint1=0x7f07002c;
+        public static final int imageButtonPaint10=0x7f070035;
+        public static final int imageButtonPaint2=0x7f07002d;
+        public static final int imageButtonPaint3=0x7f07002e;
+        public static final int imageButtonPaint4=0x7f07002f;
+        public static final int imageButtonPaint5=0x7f070030;
+        public static final int imageButtonPaint6=0x7f070031;
+        public static final int imageButtonPaint7=0x7f070032;
+        public static final int imageButtonPaint8=0x7f070033;
+        public static final int imageButtonPaint9=0x7f070034;
+        public static final int imageButtonSelection1=0x7f070038;
+        public static final int imageButtonSelection2=0x7f070039;
         public static final int imageButtonSize1=0x7f070008;
         public static final int imageButtonSize2=0x7f07000a;
         public static final int imageButtonSize3=0x7f070009;
         public static final int imageButtonSticker1=0x7f07000b;
         public static final int imageButtonSticker10=0x7f070014;
+        public static final int imageButtonSticker11=0x7f070015;
+        public static final int imageButtonSticker12=0x7f070016;
+        public static final int imageButtonSticker13=0x7f070017;
+        public static final int imageButtonSticker14=0x7f070018;
         public static final int imageButtonSticker2=0x7f07000c;
         public static final int imageButtonSticker3=0x7f07000d;
         public static final int imageButtonSticker4=0x7f07000e;
@@ -144,14 +148,14 @@ public final class R {
         public static final int imageViewColor1=0x7f070003;
         public static final int imageViewColor2=0x7f070004;
         public static final int imageViewColor3=0x7f070006;
-        public static final int multitouchGLSurfaceView1=0x7f070026;
-        public static final int pagerViewAnimation1=0x7f070015;
-        public static final int pagerViewSelection1=0x7f070033;
-        public static final int paintGLSurfaceViewPaint1=0x7f070027;
+        public static final int multitouchGLSurfaceView1=0x7f07002a;
+        public static final int pagerViewAnimation1=0x7f070019;
+        public static final int pagerViewSelection1=0x7f070037;
+        public static final int paintGLSurfaceViewPaint1=0x7f07002b;
         public static final int paletteColor1=0x7f070001;
         public static final int paletteColor2=0x7f070002;
-        public static final int progressBarLoading1=0x7f070020;
-        public static final int textViewLoading1=0x7f070021;
+        public static final int progressBarLoading1=0x7f070024;
+        public static final int textViewLoading1=0x7f070025;
     }
     public static final class layout {
         public static final int activity_main_layout=0x7f030000;
@@ -320,42 +324,43 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
-        public static final int Button_Color_Style=0x7f060008;
+        public static final int Button_Color_Style=0x7f060009;
         /**  Botones 
          */
         public static final int Button_Fragment_Style=0x7f060005;
-        public static final int Button_Size_Style=0x7f060007;
+        public static final int Button_Size_Style=0x7f060008;
+        public static final int Button_Sticker_Big_Style=0x7f060007;
         public static final int Button_Sticker_Style=0x7f060006;
         /**  FrameLayout 
          */
-        public static final int FrameLayout_Style=0x7f060009;
+        public static final int FrameLayout_Style=0x7f06000a;
         /**  TODO 
          */
-        public static final int GLSurfaceView_FragmentButton_Style=0x7f06000c;
+        public static final int GLSurfaceView_FragmentButton_Style=0x7f06000d;
         /**  Canvas 
          */
-        public static final int GLSurfaceView_Style=0x7f06000b;
-        public static final int ImageView_Arrow_Dialog_Style=0x7f060016;
+        public static final int GLSurfaceView_Style=0x7f06000c;
+        public static final int ImageView_Arrow_Dialog_Style=0x7f060017;
         /**  Imagenes 
          */
-        public static final int ImageView_Cursor_Style=0x7f060011;
+        public static final int ImageView_Cursor_Style=0x7f060012;
         public static final int Layout_Activity_Style=0x7f060003;
-        public static final int Layout_Center_FragmentButton_Style=0x7f060010;
+        public static final int Layout_Center_FragmentButton_Style=0x7f060011;
         /**  Layout Dialogos 
          */
-        public static final int Layout_Content_Dialog_Style=0x7f060012;
+        public static final int Layout_Content_Dialog_Style=0x7f060013;
         public static final int Layout_Dialog_Style=0x7f060004;
         /**  Layout Fragmentos 
          */
-        public static final int Layout_FragmentButton_Style=0x7f06000d;
+        public static final int Layout_FragmentButton_Style=0x7f06000e;
         /**  MainLayout 
          */
         public static final int Layout_Fragment_Style=0x7f060002;
-        public static final int Layout_Horizontal_Section_Dialog_Style=0x7f060014;
-        public static final int Layout_Left_FragmentButton_Style=0x7f06000f;
-        public static final int Layout_Right_FragmentButton_Style=0x7f06000e;
-        public static final int Layout_Vertical_Section_Dialog_Style=0x7f060015;
-        public static final int Text_Section_Dialog_Style=0x7f060013;
-        public static final int ViewPager_Style=0x7f06000a;
+        public static final int Layout_Horizontal_Section_Dialog_Style=0x7f060015;
+        public static final int Layout_Left_FragmentButton_Style=0x7f060010;
+        public static final int Layout_Right_FragmentButton_Style=0x7f06000f;
+        public static final int Layout_Vertical_Section_Dialog_Style=0x7f060016;
+        public static final int Text_Section_Dialog_Style=0x7f060014;
+        public static final int ViewPager_Style=0x7f06000b;
     }
 }

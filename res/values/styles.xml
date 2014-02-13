@@ -48,6 +48,11 @@
         <item name="android:layout_marginLeft">10dp</item>
     </style>
     
+    <style name="Button_Sticker_Big_Style" parent="Button_Sticker_Style">
+    	<item name="android:layout_width">@dimen/StickerButton_LayoutWidth_Dimen</item>
+        <item name="android:layout_height">@dimen/StickerButton_LayoutWidth_Dimen</item>
+    </style>
+    
     <style name="Button_Size_Style">
 		<item name="android:layout_width">@dimen/SizeButton_LayoutWidth_Dimen</item>
 		<item name="android:layout_height">@dimen/SizeButton_LayoutHeight_Dimen</item>
