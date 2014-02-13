@@ -23,7 +23,7 @@ import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
 import com.project.loading.LoadingFragment;
-import com.test.multitouch.MultitouchFragment;
+import com.test.main.TestFragment;
 import com.view.select.SelectionFragment;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener
@@ -129,7 +129,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onMainPlayButtonClicked()
     {
-    	changeFragment(MultitouchFragment.newInstance());
+    	changeFragment(TestFragment.newInstance());
     }
 	
 	/* DESIGN FRAGMENT */
@@ -236,8 +236,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
 	@Override
     public void onSelectionDeleteButtonClicked(final int indice)
-    {   
-    	
+    {   	
     	AlertDialogConfirmation alert = new AlertDialogConfirmation(this, getString(R.string.text_delete_character_title), getString(R.string.text_delete_character_description), getString(R.string.text_button_ok), getString(R.string.text_button_no)) {
 
 			@Override
@@ -309,10 +308,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     			estado = TEstado.Selection;
     			setTitle(R.string.title_selection_phase);
     		}
-    		else if(fragmento instanceof MultitouchFragment)
+    		else if(fragmento instanceof TestFragment)
     		{
-    			estado = TEstado.Game;
-    			setTitle(R.string.title_game_phase);
+    			estado = TEstado.Test;
+    			setTitle(R.string.title_test_phase);
     		}
     	}
     }
