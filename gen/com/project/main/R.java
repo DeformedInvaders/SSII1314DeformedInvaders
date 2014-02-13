@@ -11,14 +11,16 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
-        public static final int ColorButton_LayoutHeight_Dimen=0x7f040009;
-        public static final int ColorButton_LayoutWidth_Dimen=0x7f04000a;
+        public static final int ColorButton_LayoutHeight_Dimen=0x7f04000b;
+        public static final int ColorButton_LayoutWidth_Dimen=0x7f04000c;
         /**  Boton Fragment dimensions 
  Boton Fragment dimensions 
  Boton Fragment dimensions 
          */
-        public static final int FragmentButton_LayoutHeight_Dimen=0x7f04000b;
-        public static final int FragmentButton_LayoutWidth_Dimen=0x7f04000c;
+        public static final int FragmentButton_LayoutHeight_Dimen=0x7f04000d;
+        public static final int FragmentButton_LayoutWidth_Dimen=0x7f04000e;
+        public static final int ImageView_LayoutHeight_Dimen=0x7f040009;
+        public static final int ImageView_LayoutWidth_Dimen=0x7f04000a;
         /**  Dialog dimensions 
  Dialog dimensions 
  Dialog dimensions 
@@ -30,7 +32,7 @@ public final class R {
  ProgressBar dimensions
  ProgressBar dimensions 
          */
-        public static final int ProgressBar_LayoutWidth_Dimen=0x7f04000d;
+        public static final int ProgressBar_LayoutWidth_Dimen=0x7f04000f;
         public static final int SizeButton_LayoutHeight_Dimen=0x7f040007;
         public static final int SizeButton_LayoutWidth_Dimen=0x7f040008;
         public static final int StickerButton_LayoutHeight_Dimen=0x7f040005;
@@ -347,7 +349,7 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
-        public static final int Button_Color_Style=0x7f060009;
+        public static final int Button_Color_Style=0x7f06000a;
         /**  Botones 
          */
         public static final int Button_Fragment_Style=0x7f060005;
@@ -356,34 +358,35 @@ public final class R {
         public static final int Button_Sticker_Style=0x7f060006;
         /**  FrameLayout 
          */
-        public static final int FrameLayout_Style=0x7f06000a;
+        public static final int FrameLayout_Style=0x7f06000b;
         /**  TODO 
          */
-        public static final int GLSurfaceView_FragmentButton_Style=0x7f06000d;
+        public static final int GLSurfaceView_FragmentButton_Style=0x7f06000e;
         /**  Canvas 
          */
-        public static final int GLSurfaceView_Style=0x7f06000c;
-        public static final int ImageView_Arrow_Dialog_Style=0x7f060017;
+        public static final int GLSurfaceView_Style=0x7f06000d;
+        public static final int ImageView_Arrow_Dialog_Style=0x7f060018;
         /**  Imagenes 
          */
-        public static final int ImageView_Cursor_Style=0x7f060012;
+        public static final int ImageView_Cursor_Style=0x7f060013;
+        public static final int ImagenView_Size_Style=0x7f060009;
         public static final int Layout_Activity_Style=0x7f060003;
-        public static final int Layout_Center_FragmentButton_Style=0x7f060011;
+        public static final int Layout_Center_FragmentButton_Style=0x7f060012;
         /**  Layout Dialogos 
          */
-        public static final int Layout_Content_Dialog_Style=0x7f060013;
+        public static final int Layout_Content_Dialog_Style=0x7f060014;
         public static final int Layout_Dialog_Style=0x7f060004;
         /**  Layout Fragmentos 
          */
-        public static final int Layout_FragmentButton_Style=0x7f06000e;
+        public static final int Layout_FragmentButton_Style=0x7f06000f;
         /**  MainLayout 
          */
         public static final int Layout_Fragment_Style=0x7f060002;
-        public static final int Layout_Horizontal_Section_Dialog_Style=0x7f060015;
-        public static final int Layout_Left_FragmentButton_Style=0x7f060010;
-        public static final int Layout_Right_FragmentButton_Style=0x7f06000f;
-        public static final int Layout_Vertical_Section_Dialog_Style=0x7f060016;
-        public static final int Text_Section_Dialog_Style=0x7f060014;
-        public static final int ViewPager_Style=0x7f06000b;
+        public static final int Layout_Horizontal_Section_Dialog_Style=0x7f060016;
+        public static final int Layout_Left_FragmentButton_Style=0x7f060011;
+        public static final int Layout_Right_FragmentButton_Style=0x7f060010;
+        public static final int Layout_Vertical_Section_Dialog_Style=0x7f060017;
+        public static final int Text_Section_Dialog_Style=0x7f060015;
+        public static final int ViewPager_Style=0x7f06000c;
     }
 }

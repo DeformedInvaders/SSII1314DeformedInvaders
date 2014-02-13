@@ -14,7 +14,7 @@
 				android:id="@+id/imageButtonSize1"
 				android:text="@string/text_button_plus" />
 			
-			<ImageView style="@style/Button_Size_Style"
+			<ImageView style="@style/ImagenView_Size_Style"
 				android:id="@+id/imageButtonSize3"
 				android:background="@drawable/image_size_small"
 				android:contentDescription="@string/desc_size_pencil" />

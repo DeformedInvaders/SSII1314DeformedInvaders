@@ -17,6 +17,9 @@
     <dimen name="SizeButton_LayoutHeight_Dimen">50dp</dimen>
     <dimen name="SizeButton_LayoutWidth_Dimen">100dp</dimen>
     
+    <dimen name="ImageView_LayoutHeight_Dimen">50dp</dimen>
+    <dimen name="ImageView_LayoutWidth_Dimen">90dp</dimen>
+    
     <dimen name="ColorButton_LayoutHeight_Dimen">50dp</dimen>
     <dimen name="ColorButton_LayoutWidth_Dimen">100dp</dimen>
     

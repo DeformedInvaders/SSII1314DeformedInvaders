@@ -59,7 +59,14 @@
 		<item name="android:layout_marginBottom">10dp</item>
     </style>
     
-     <style name="Button_Color_Style">
+    <style name="ImagenView_Size_Style">
+		<item name="android:layout_width">@dimen/ImageView_LayoutWidth_Dimen</item>
+		<item name="android:layout_height">@dimen/ImageView_LayoutHeight_Dimen</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:layout_marginLeft">5dp</item>
+    </style>
+    
+    <style name="Button_Color_Style">
 		<item name="android:layout_width">@dimen/ColorButton_LayoutWidth_Dimen</item>
 		<item name="android:layout_height">@dimen/ColorButton_LayoutHeight_Dimen</item>
 		<item name="android:layout_marginLeft">10dp</item>
