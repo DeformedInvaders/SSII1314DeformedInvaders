@@ -28,6 +28,11 @@
             android:contentDescription="@string/desc_deform_reset"
             android:background="@drawable/icon_reset" />
 		
+		<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonDeform5"
+            android:contentDescription="@string/desc_deform_record"
+            android:background="@drawable/icon_record" />
+		
     </LinearLayout>
     
     <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
