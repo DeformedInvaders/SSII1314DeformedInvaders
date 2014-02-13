@@ -11,8 +11,6 @@ import java.util.Stack;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import com.lib.math.GeometryUtils;
@@ -34,10 +32,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private int sizeLinea;
 	private int pegatinaActual;
 	private int tipoPegatinaActual;
-	
-	private boolean pegatinaAnyadida;
-	private boolean pegatinaOjosCargada, pegatinaBocaCargada, pegatinaArmaCargada;
-	
+
 	// Detalles
 	private List<Polilinea> listaLineas;
 	private FloatArray lineaActual;
@@ -47,6 +42,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private Pegatinas pegatinas;
 	private FloatBuffer coordPegatina;
 	private FloatBuffer puntosOjos, puntosBoca, puntosArma;
+	
+	private boolean pegatinaAnyadida;
+	private boolean pegatinaOjosCargada, pegatinaBocaCargada, pegatinaArmaCargada;
 	
 	// Esqueleto
 	private ShortArray contorno;
@@ -65,7 +63,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private boolean modoCaptura;
 	private boolean capturaTerminada;
 	
-	private int[] nombreTexturas;
 	private MapaBits textura;
 	private FloatArray coordsTextura;
 	
@@ -90,8 +87,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         listaLineas = new ArrayList<Polilinea>();
         lineaActual = null;
-        
-        nombreTexturas = new int[4];
         
 		float texture[] = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
         
@@ -153,21 +148,21 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		// Cargar Pegatinas
 		if(!pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
 		{
-			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceOjos(), 1);
+			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceOjos(), nombreTexturas, 1);
 			puntosOjos = construirBufferListaPuntos(puntos);
 			pegatinaOjosCargada = true;
 		}
 		
 		if(!pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
 		{
-			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceBoca(), 2);
+			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceBoca(), nombreTexturas, 2);
 			puntosBoca = construirBufferListaPuntos(puntos);
 			pegatinaBocaCargada = true;
 		}
 		
 		if(!pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
 		{
-			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceArma(), 3);
+			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceArma(), nombreTexturas, 3);
 			puntosArma = construirBufferListaPuntos(puntos);
 			pegatinaArmaCargada = true;
 		}
@@ -190,25 +185,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			int indice = pegatinas.getVerticeArma();
 			dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
 		}
-	}
-	
-	private FloatArray cargarTextura(GL10 gl, int indicePegatina, int posPegatina)
-	{        
-		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), indicePegatina);
-		
-		float height = bitmap.getHeight()/2;
-		float width = bitmap.getWidth()/2;
-		
-		cargarTextura(gl, bitmap, nombreTexturas, posPegatina);
-		bitmap.recycle();
-		
-		FloatArray puntos = new FloatArray();
-		puntos.add(-width);	puntos.add(-height);
-		puntos.add(-width);	puntos.add(height);
-		puntos.add(width);	puntos.add(-height);
-		puntos.add(width);	puntos.add(height);	
-		
-		return puntos;
 	}
 	
 	private void dibujarEsqueleto(GL10 gl)

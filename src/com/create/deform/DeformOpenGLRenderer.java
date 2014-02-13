@@ -14,6 +14,7 @@ import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.data.Esqueleto;
+import com.project.data.Pegatinas;
 import com.project.data.Textura;
 import com.project.main.OpenGLRenderer;
 
@@ -59,9 +60,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* Textura */
 	
-	private static final int numeroTexturas = 1;
-	private int[] nombreTextura;
-	private int posTextura;
+	// Pegatinas
+	private Pegatinas pegatinas;
+	private FloatBuffer coordPegatina;
+	private FloatBuffer puntosOjos, puntosBoca, puntosArma;
+	private boolean pegatinaOjosCargada, pegatinaBocaCargada, pegatinaArmaCargada;
 	
 	private Bitmap bitmap;
 	private FloatArray coords;
@@ -104,7 +107,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         }
         
 		// Textura
-        nombreTextura = new int[numeroTexturas];
+        float texture[] = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
+        
+        pegatinas = textura.getPegatinas();
+        coordPegatina = construirBufferListaPuntos(texture);
+        
+        pegatinaOjosCargada = false;
+        pegatinaBocaCargada = false;
+        pegatinaArmaCargada = false;
+        
 		bitmap = textura.getTextura().getBitmap();
 		coords = textura.getCoordTextura();
 		
@@ -126,7 +137,29 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// Textura
-		cargarTextura(gl, bitmap, nombreTextura, 0);
+		cargarTextura(gl, bitmap, nombreTexturas, 0);
+		
+		// Pegatinas
+        if(!pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+		{
+			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceOjos(), nombreTexturas, 1);
+			puntosOjos = construirBufferListaPuntos(puntos);
+			pegatinaOjosCargada = true;
+		}
+		
+		if(!pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
+		{
+			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceBoca(), nombreTexturas, 2);
+			puntosBoca = construirBufferListaPuntos(puntos);
+			pegatinaBocaCargada = true;
+		}
+		
+		if(!pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
+		{
+			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceArma(), nombreTexturas, 3);
+			puntosArma = construirBufferListaPuntos(puntos);
+			pegatinaArmaCargada = true;
+		}
 	}
 	
 	
@@ -136,10 +169,29 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onDrawFrame(gl);
 		
 		// Textura
-		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
-		
+		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTexturas, 0);
+
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+		
+		// Pegatinas
+		if(pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+		{
+			int indice = pegatinas.getVerticeOjos();
+			dibujarPegatina(gl, puntosOjos, coordPegatina, verticesModificados.get(2*indice), verticesModificados.get(2*indice+1), nombreTexturas, 1);
+		}
+		
+		if(pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
+		{
+			int indice = pegatinas.getVerticeBoca();
+			dibujarPegatina(gl, puntosBoca, coordPegatina, verticesModificados.get(2*indice), verticesModificados.get(2*indice+1), nombreTexturas, 2);
+		}
+		
+		if(pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
+		{
+			int indice = pegatinas.getVerticeArma();
+			dibujarPegatina(gl, puntosArma, coordPegatina, verticesModificados.get(2*indice), verticesModificados.get(2*indice+1), nombreTexturas, 3);
+		}
 		
 		// Vertices
 		if(estado != TDeformEstado.Deformar)

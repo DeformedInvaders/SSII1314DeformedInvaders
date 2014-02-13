@@ -12,6 +12,7 @@ import android.graphics.Color;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.data.Esqueleto;
+import com.project.data.Pegatinas;
 import com.project.data.Textura;
 import com.project.main.OpenGLRenderer;
 
@@ -19,6 +20,13 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 {
 	private boolean personajeCargado;
 	
+	// Pegatinas
+	private Pegatinas pegatinas;
+	private FloatBuffer coordPegatina;
+	private FloatBuffer puntosOjos, puntosBoca, puntosArma;
+	private boolean pegatinaOjosCargada, pegatinaBocaCargada, pegatinaArmaCargada;
+		
+	// Esqueleto	
 	private ShortArray contorno;
 	private FloatBuffer bufferContorno;
 	
@@ -27,10 +35,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private ShortArray triangulos;
 	private FloatBuffer bufferTriangulos;
 	
-	private static final int numeroTexturas = 1;
-	private int[] nombreTextura;
-	private int posTextura;
-	
+	// Textura
 	private Bitmap bitmap;
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
@@ -58,11 +63,20 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
 		
 		// Textura
-		nombreTextura = new int[numeroTexturas];
 		bitmap = textura.getTextura().getBitmap();
 		coords = textura.getCoordTextura();
 
 		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
+		
+		// Pegatinas
+		float texture[] = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
+        
+        pegatinas = textura.getPegatinas();
+        coordPegatina = construirBufferListaPuntos(texture);
+        
+        pegatinaOjosCargada = false;
+        pegatinaBocaCargada = false;
+        pegatinaArmaCargada = false;
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -75,7 +89,28 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		if(personajeCargado)
 		{
 			// Textura
-			cargarTextura(gl, bitmap, nombreTextura, 0);
+			cargarTextura(gl, bitmap, nombreTexturas, 0);
+
+	        if(!pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+			{
+				FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceOjos(), nombreTexturas, 1);
+				puntosOjos = construirBufferListaPuntos(puntos);
+				pegatinaOjosCargada = true;
+			}
+			
+			if(!pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
+			{
+				FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceBoca(), nombreTexturas, 2);
+				puntosBoca = construirBufferListaPuntos(puntos);
+				pegatinaBocaCargada = true;
+			}
+			
+			if(!pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
+			{
+				FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceArma(), nombreTexturas, 3);
+				puntosArma = construirBufferListaPuntos(puntos);
+				pegatinaArmaCargada = true;
+			}
 		}
 	}
 	
@@ -87,10 +122,29 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		if(personajeCargado)
 		{
 			// Textura
-			dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTextura, posTextura);
+			dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTexturas, 0);
 				
 			// Contorno
 			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+			
+			// Pegatinas
+			if(pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+			{
+				int indice = pegatinas.getVerticeOjos();
+				dibujarPegatina(gl, puntosOjos, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 1);
+			}
+			
+			if(pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
+			{
+				int indice = pegatinas.getVerticeBoca();
+				dibujarPegatina(gl, puntosBoca, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 2);
+			}
+			
+			if(pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
+			{
+				int indice = pegatinas.getVerticeArma();
+				dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
+			}
 		}
 	}
 	

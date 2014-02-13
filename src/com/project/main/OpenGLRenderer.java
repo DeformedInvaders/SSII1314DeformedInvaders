@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
@@ -38,6 +39,10 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	protected static final float MAX_DISTANCE_PIXELS = 10;
 	
+	// Parámetros de Texturas
+	protected static final int numeroTexturas = 4;
+	protected int[] nombreTexturas;
+	
 	// Contexto
 	protected Context context;
 	
@@ -46,6 +51,7 @@ public abstract class OpenGLRenderer implements Renderer
 	public OpenGLRenderer(Context context)
 	{
 		this.context = context;
+		this.nombreTexturas = new int[numeroTexturas];
 		
 		// Se inicializan los parámetros de la cámara en el 
 		// método onSurfaceChanged llamado automáticamente
@@ -459,6 +465,25 @@ public abstract class OpenGLRenderer implements Renderer
 			i = i+2;
 		}
 		return textura;
+	}
+	
+	protected FloatArray cargarTextura(GL10 gl, int indicePegatina, int[] nombreTexturas, int posPegatina)
+	{        
+		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), indicePegatina);
+		
+		float height = bitmap.getHeight()/2;
+		float width = bitmap.getWidth()/2;
+		
+		cargarTextura(gl, bitmap, nombreTexturas, posPegatina);
+		bitmap.recycle();
+		
+		FloatArray puntos = new FloatArray();
+		puntos.add(-width);	puntos.add(-height);
+		puntos.add(-width);	puntos.add(height);
+		puntos.add(width);	puntos.add(-height);
+		puntos.add(width);	puntos.add(height);	
+		
+		return puntos;
 	}
 	
 	/* Metodos de Actualización de Buffers de Pintura */
