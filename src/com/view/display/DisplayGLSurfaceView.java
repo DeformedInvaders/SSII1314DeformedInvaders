@@ -30,24 +30,6 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		setRenderer(renderer);
 	}
 	
-	@Override
-	public void onResume()
-	{
-		if(renderer!= null)
-		{
-			super.onResume();
-		}
-	}
-	
-	@Override
-	public void onPause()
-	{
-		if(renderer != null)
-		{
-			super.onPause();
-		}
-	}
-	
 	/* Métodos abstractos OpenGLSurfaceView */
 	
 	public void onTouchDown(float x, float y, float width, float height, int pos) { }
@@ -57,4 +39,9 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public void onTouchUp(float x, float y, float width, float height, int pos) { }
 	
 	public void onMultiTouchEvent() { }
+	
+	public void saveData()
+	{
+		renderer.saveData();
+	}
 }

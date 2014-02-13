@@ -116,6 +116,7 @@ public class MainFragment extends Fragment
 	public void onPause()
 	{
 		super.onPause();
+		canvas.saveData();
 		canvas.onPause();
 	}
 	

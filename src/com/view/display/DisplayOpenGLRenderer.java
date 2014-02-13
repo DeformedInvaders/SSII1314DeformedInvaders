@@ -159,5 +159,11 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
 	public void onMultiTouchEvent() { }
-
+	
+	public void saveData()
+	{
+        pegatinaOjosCargada = false;
+        pegatinaBocaCargada = false;
+        pegatinaArmaCargada = false;
+	}
 }
