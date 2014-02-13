@@ -27,10 +27,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	// TODO: Definir Modo Grabado
 	private TDeformEstado estado;
-	// private boolean modoGrabado;
+	private boolean modoGrabar;
 	
 	// TODO: Información de Movimiento. Posición de los Handles en los pasos intermedios.
-	// private List<FloatArray> movimientos;
+	private FloatArray movimientos;
 	
 	/* Esqueleto */
 	
@@ -79,8 +79,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         
         // TODO: Inicializar Modo Grabado
         estado = TDeformEstado.Nada;
-        // modoGrabado = false;
-        
+        modoGrabar = false;
+        movimientos = new FloatArray();
         
         // Esqueleto
 		contorno = esqueleto.getContorno();
@@ -226,9 +226,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		estado = TDeformEstado.Deformar;
 	}
-	
-	// TODO: Seleccionar Modo Grabado
-	//public void seleccionarGrabado() { }
 
 	/* Métodos abstractos de OpenGLRenderer */
 	
@@ -237,9 +234,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TDeformEstado.Nada;
 		    
 		handles.clear();
-		indiceHandles.clear();
+		indiceHandles.clear();	
 		
 		// TODO: Reiniciar Información de Movimiento
+		movimientos.clear();
 		
         for(int i = 0; i < NUM_HANDLES; i++)
         {
@@ -262,8 +260,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TDeformEstado.Deformar)
-		{	
-			// TODO: Si Modo Grabado Guardar Posición inicial de los Handles			
+		{				
+			// TODO: Si Modo Grabado Guardar Posición inicial de los Handles
+			if(modoGrabar)
+				anyadirMovimiento(pixelX, pixelY, screenWidth, screenHeight);
+			
 			seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}	
 	}
@@ -284,6 +285,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				// Añadir Handle Nuevo
 				deformator.anyadirHandles(handles, indiceHandles);
 			}
+		}
+	}
+	//TODO
+	private void anyadirMovimiento(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
+		if(j != -1)
+		{
+			// Vértice pertenece a los Handles
+			if(indiceHandles.contains((short) j))
+			{
+				movimientos.add(handles.get(2*j));
+				movimientos.add(handles.get(2*j+1));
+			}
+					
 		}
 	}
 	
@@ -340,6 +356,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			else
 			{
 				// TODO: Si Modo Grabado guardar posicion intermedia de los Handles
+				if(modoGrabar)
+					anyadirMovimiento(pixelX, pixelY, screenWidth, screenHeight);
+					
 				moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			}
 		}
@@ -380,6 +399,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			handleSeleccionado.set(4*pointer, -1);
 			handleSeleccionado.set(4*pointer+1, 0);
+			
+			//TODO Cuando se termina la deformación, se termina la grabación
+			modoGrabar = false;
 		}	
 	}
 	
@@ -398,11 +420,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Actualización de Estado */
 	
-	// TODO: Seleccionar Modo Grabación. Actualizar Estado Grabación.
-	// public void seleccionarGrabacion();
+	// TODO: Seleccionar Modo Grabado
+	public void seleccionarGrabado() 
+	{ 
+		modoGrabar = true;
+	}
 	
 	// TODO: Seleccionar Restauracion. Reiniciar posición Inicial de Vertices. Actualizar Estado Grabación.
-	// public void restaurar();
+	public void restaurar()
+	{
+		verticesModificados = vertices.clone();
+		movimientos = null;
+		
+		//Estado de grabacion a true? o se debería pulsar otra vez en la camara?
+	}
 	
 	/* Métodos de Obtención de Información */
 
@@ -412,10 +443,26 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	// TODO: Obtener Estado de Grabación
-	// public boolean estadoGrabacion() { }
+	public boolean estadoGrabacion() 
+	{
+		return modoGrabar;
+	}
 	
 	// TODO: Obtener Información de Movimientos. Reducir a numIter pasos intermedios. Calcular Posición de Vertices en esos pasos y devolverlos.
-	// public List<FloatArray> getMovimientos(int numIter) { }
+	public FloatArray getMovimientos(int numIter) 
+	{ 
+		FloatArray animacion = new FloatArray();
+		int n = movimientos.size;
+		int intermedios = n / numIter;
+		
+		for(int i = 0; i < n; i = i + intermedios)
+		{
+			animacion.add(movimientos.get(i));
+			animacion.add(movimientos.get(i+1));
+		}
+		
+		return animacion;
+	}
 	
 	/* Métodos de Salvados de Información */
 	

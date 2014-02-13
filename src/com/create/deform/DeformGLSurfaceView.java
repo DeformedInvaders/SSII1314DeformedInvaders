@@ -3,6 +3,7 @@ package com.create.deform;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
 import com.project.main.OpenGLSurfaceView;
@@ -75,6 +76,11 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.handlesVacio();
 	}
 	
+	public FloatArray getMovimientos(int numIter)
+	{
+		return renderer.getMovimientos(numIter);
+	}
+	
 	/* Métodos de Guardado de Información */
 	
 	public DeformDataSaved saveData()
@@ -85,5 +91,10 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	public void restoreData(DeformDataSaved data)
 	{
 		renderer.restoreData(data);
+	}
+
+	public void seleccionarGrabado() 
+	{
+		renderer.seleccionarGrabado();
 	}
 }

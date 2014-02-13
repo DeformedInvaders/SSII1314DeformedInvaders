@@ -10,6 +10,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
 import com.project.main.R;
@@ -22,8 +23,7 @@ public class DeformFragment extends Fragment
 	
 	private DeformDataSaved dataSaved;
 	
-	// TODO: Añadir Botón de Grabado de Movimiento
-	private ImageButton botonAdd, botonRemove, botonMove, botonDelete; //, botonRecord;
+	private ImageButton botonAdd, botonRemove, botonMove, botonDelete, botonRecord;
 		
 	/* Constructora */
 	
@@ -53,15 +53,13 @@ public class DeformFragment extends Fragment
 		botonRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
 		botonMove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
-		// TODO: Instanciar Botón de Grabado
-		// botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
+		botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
 		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
 		botonMove.setOnClickListener(new OnMoveClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
-		//TODO: Asignar Listener al Botón de Grabado
-		// botonGrabar.setOnClickListener(new OnRecordClickListener());
+		botonRecord.setOnClickListener(new OnRecordClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -123,7 +121,7 @@ public class DeformFragment extends Fragment
 			botonRemove.setVisibility(View.INVISIBLE);
 			botonMove.setVisibility(View.INVISIBLE);
 			botonDelete.setVisibility(View.INVISIBLE);
-			// botonRecord.setVisibility(View.INVISIBLE);
+			botonRecord.setVisibility(View.INVISIBLE);
 		}
 		else
 		{
@@ -131,7 +129,7 @@ public class DeformFragment extends Fragment
 			botonRemove.setVisibility(View.VISIBLE);
 			botonMove.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
-			// botonRecord.setVisibility(View.VISIBLE);
+			botonRecord.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -213,10 +211,22 @@ public class DeformFragment extends Fragment
 	}
 	
 	// TODO: Añadir Listener para Grabar Movimiento. Cambiar Imagen del boton en modo Grabacíón / Restaurar y actualizar Botones.
-	// private class OnRecordClickListener implements OnClickListener { }
+	private class OnRecordClickListener implements OnClickListener 
+	{ 
+		public void onClick(View v)
+		{
+			canvas.seleccionarGrabado();
+			
+			reiniciarImagenesBotones();
+			botonRecord.setBackgroundResource(R.drawable.icon_pause);
+		}	
+	}
 	
 	/* Métodos de Obtención de Información */
 	
 	// TODO: Añadir Método para Obtener la Grabación
-	// public List<FloatArray> getMovimiento() { }
+	public FloatArray getMovimientos(int numIter) 
+	{ 
+		return canvas.getMovimientos(numIter);
+	}
 }
