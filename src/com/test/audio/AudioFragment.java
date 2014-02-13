@@ -7,7 +7,6 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +17,6 @@ import com.project.main.R;
 
 public class AudioFragment extends Fragment
 {
-    private static final String LOG_TAG = "AudioRecordTest";
     private static String mFileName = null;
 
     private MediaRecorder mRecorder = null;
@@ -111,7 +109,7 @@ public class AudioFragment extends Fragment
         }
         catch (IOException e)
         {
-            Log.e(LOG_TAG, "prepare() failed");
+            e.printStackTrace();
         }
     }
 
@@ -135,7 +133,7 @@ public class AudioFragment extends Fragment
         }
         catch (IOException e)
         {
-            Log.e(LOG_TAG, "prepare() failed");
+        	e.printStackTrace();
         }
 
         mRecorder.start();

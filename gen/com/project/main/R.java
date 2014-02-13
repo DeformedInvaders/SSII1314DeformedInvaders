@@ -194,6 +194,7 @@ public final class R {
         public static final int desc_audio_play=0x7f050043;
         public static final int desc_audio_plus=0x7f050044;
         /**  Audio Fragment 
+ Audio Fragment 
          */
         public static final int desc_audio_record=0x7f050042;
         public static final int desc_color_cursor_main=0x7f05004b;
