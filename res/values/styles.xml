@@ -12,12 +12,13 @@
         -->
     </style>
 
-    <!-- Application theme. -->
+<!-- Application theme. -->
+
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
     
-    <!-- MainLayout -->
+<!-- MainLayout -->
     
     <style name="Layout_Fragment_Style">
 		<item name="android:layout_width">match_parent</item>
@@ -34,14 +35,7 @@
 		<item name="android:layout_margin">5dp</item>
     </style>
     
-	<!-- Input -->
-    <style name="EditText_Dialog_Style">
-       <item name="android:layout_width">wrap_content</item>
-       <item name="android:layout_height">fill_parent</item>
-       <item name="android:ems">10</item>
-	</style>
-    
-    <!-- Botones -->
+<!-- Botones -->
     
     <style name="Button_Fragment_Style">
         <item name="android:layout_width">@dimen/FragmentButton_LayoutWidth_Dimen</item>
@@ -66,20 +60,13 @@
 		<item name="android:layout_marginBottom">10dp</item>
     </style>
     
-    <style name="ImagenView_Size_Style">
-		<item name="android:layout_width">@dimen/ImageView_LayoutWidth_Dimen</item>
-		<item name="android:layout_height">@dimen/ImageView_LayoutHeight_Dimen</item>
-		<item name="android:layout_marginBottom">10dp</item>
-		<item name="android:layout_marginLeft">5dp</item>
-    </style>
-    
     <style name="Button_Color_Style">
 		<item name="android:layout_width">@dimen/ColorButton_LayoutWidth_Dimen</item>
 		<item name="android:layout_height">@dimen/ColorButton_LayoutHeight_Dimen</item>
 		<item name="android:layout_marginLeft">10dp</item>
     </style>   
 	
-    <!-- FrameLayout -->
+<!-- FrameLayout -->
     
     <style name="FrameLayout_Style">
 		<item name="android:layout_width">match_parent</item>
@@ -91,7 +78,7 @@
 	    <item name="android:layout_height">match_parent</item>
     </style>
 	
-    <!-- Canvas -->
+<!-- Canvas -->
 	
 	<style name="GLSurfaceView_Style">
 		<item name="android:layout_width">match_parent</item>
@@ -105,7 +92,7 @@
 		<!-- TODO -->
 	</style>
 	
-    <!-- Layout Fragmentos -->
+<!-- Layout Fragmentos -->
     
     <style name="Layout_FragmentButton_Style">
         <item name="android:layout_width">wrap_content</item>
@@ -125,7 +112,7 @@
 		<item name="android:layout_centerHorizontal">true</item>
 	</style>
 	
-	<!-- Imagenes -->
+<!-- Imagenes -->
 	
 	<style name="ImageView_Cursor_Style">
 		<item name="android:layout_width">15dp</item>
@@ -133,7 +120,14 @@
 		<item name="android:scaleType">matrix</item>
 	</style>
 	
-	<!-- Layout Dialogos -->
+	<style name="ImagenView_Size_Style">
+		<item name="android:layout_width">@dimen/ImageView_LayoutWidth_Dimen</item>
+		<item name="android:layout_height">@dimen/ImageView_LayoutHeight_Dimen</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:layout_marginLeft">5dp</item>
+    </style>
+	
+<!-- Layout Dialogos -->
 	
 	<style name="Layout_Content_Dialog_Style">
 		<item name="android:layout_width">wrap_content</item>

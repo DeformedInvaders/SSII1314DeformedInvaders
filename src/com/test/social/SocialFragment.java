@@ -1,29 +1,46 @@
 package com.test.social;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-import com.android.dialog.ConnectDialog;
-import com.android.dialog.ShareDialog;
+import com.android.alert.AlertDialogTextInput;
 import com.project.main.R;
+import com.temboo.Library.Twitter.OAuth.FinalizeOAuth;
+import com.temboo.Library.Twitter.OAuth.FinalizeOAuth.FinalizeOAuthInputSet;
+import com.temboo.Library.Twitter.OAuth.FinalizeOAuth.FinalizeOAuthResultSet;
+import com.temboo.Library.Twitter.OAuth.InitializeOAuth;
+import com.temboo.Library.Twitter.OAuth.InitializeOAuth.InitializeOAuthInputSet;
+import com.temboo.Library.Twitter.OAuth.InitializeOAuth.InitializeOAuthResultSet;
+import com.temboo.Library.Twitter.Tweets.StatusesUpdate;
+import com.temboo.Library.Twitter.Tweets.StatusesUpdate.StatusesUpdateInputSet;
+import com.temboo.core.TembooException;
+import com.temboo.core.TembooSession;
 
 public class SocialFragment extends Fragment
 {
-	private Context mContext;
+	private TembooSession session;
+	
+	private TTwitterEstado estadoTwitter;
 	
 	private ImageButton botonTwitter, botonFacebook, botonShare;
-	private boolean twitterConectado, facebookConectado;
+	private boolean facebookConectado;
+	private WebView webView;
 	
-	private ConnectDialog twitterDialog, facebookDialog;
-	private ShareDialog shareDialog;
+	/* Twitter */	
+	private InitializeOAuthResultSet twitterOAuthInicial;
+	private FinalizeOAuthResultSet twitterOAuthFinal;
 
 	public static final SocialFragment newInstance()
 	{
@@ -35,22 +52,32 @@ public class SocialFragment extends Fragment
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		mContext = activity.getApplicationContext();
+		
+		try
+		{
+			session = new TembooSession(SocialInformation.ACCOUNT_NAME, SocialInformation.APP_NAME, SocialInformation.APP_KEY);
+		}
+		catch (TembooException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void onDetach()
 	{
 		super.onDetach();
-		mContext = null;
+		
+		session = null;
 	}
 
+	@SuppressLint("SetJavaScriptEnabled")
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{        
 		View rootView = inflater.inflate(R.layout.fragment_social_layout, container, false);
 		
-		twitterConectado = false;
+		estadoTwitter = TTwitterEstado.Desconectado;
 		facebookConectado = false;
 		
 		botonTwitter = (ImageButton) rootView.findViewById(R.id.imageButtonSocial1);
@@ -61,8 +88,36 @@ public class SocialFragment extends Fragment
 		botonFacebook.setOnClickListener(new OnFacebookClickListener());
 		botonShare.setOnClickListener(new OnShareClickListener());
 		
+		webView = (WebView) rootView.findViewById(R.id.webViewSocial1);
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.setWebViewClient(new webClient());
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		actualizarBotones();		
         return rootView;
+    }
+	
+	private class webClient extends WebViewClient
+	{
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url)
+        {
+            return false;
+        }
+        
+        @Override  
+        public void onPageFinished(WebView view, String url)
+        {
+            super.onPageFinished(view, url);
+            
+            if(estadoTwitter == TTwitterEstado.OAuth)
+            {
+            	conectarTwitterFinal();
+            }
+        }  
+
     }
 	
 	@Override
@@ -73,11 +128,12 @@ public class SocialFragment extends Fragment
 		botonTwitter = null;
 		botonFacebook = null;
 		botonShare = null;
+		webView = null;
 	}
 	
 	private void actualizarBotones()
 	{
-		if(twitterConectado || facebookConectado)
+		if(estadoTwitter == TTwitterEstado.Conectado || facebookConectado)
 		{
 			botonShare.setVisibility(View.VISIBLE);
 		}
@@ -89,50 +145,83 @@ public class SocialFragment extends Fragment
 	
 	/* Conexión - Desconexión */
 	
-	public void conectar(String name, String password, int id)
-	{
-		if(id == R.string.title_dialog_twitter)
+	private void conectarTwitterInicial()
+	{		
+		// Instantiate the Choreo, using a previously instantiated TembooSession object, eg:
+		InitializeOAuth initializeOAuthChoreo = new InitializeOAuth(session);
+
+		// Get an InputSet object for the choreo
+		InitializeOAuthInputSet initializeOAuthInputs = initializeOAuthChoreo.newInputSet();
+		initializeOAuthInputs.set_ConsumerSecret(SocialInformation.CONSUMER_SECRET);
+		initializeOAuthInputs.set_ConsumerKey(SocialInformation.CONSUMER_KEY);
+
+		// Execute Choreo
+		try
 		{
-			conectarTwitter(name, password);
+			twitterOAuthInicial = initializeOAuthChoreo.execute(initializeOAuthInputs);	
+			
+			estadoTwitter = TTwitterEstado.OAuth;
+			webView.loadUrl(twitterOAuthInicial.get_AuthorizationURL());
 		}
-		else if(id == R.string.title_dialog_facebook)
+		catch (TembooException e)
 		{
-			conectarFacebook(name, password);
+			Toast.makeText(getActivity(), R.string.error_twitter_oauth_permission, Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
 		}
 	}
 	
-	private void conectarTwitter(String name, String password)
-	{
-		twitterConectado = true;
-		botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);
+	private void conectarTwitterFinal()
+	{		
+		// Instantiate the Choreo, using a previously instantiated TembooSession object, eg:
+		FinalizeOAuth finalizeOAuthChoreo = new FinalizeOAuth(session);
 
-		// TODO Conectar Twitter
-		Log.d("TEST", "Twitter Conectado: "+name+" "+password);
-		actualizarBotones();
+		// Get an InputSet object for the choreo
+		FinalizeOAuthInputSet finalizeOAuthInputs = finalizeOAuthChoreo.newInputSet();
+		finalizeOAuthInputs.set_CallbackID(twitterOAuthInicial.get_CallbackID());
+		finalizeOAuthInputs.set_OAuthTokenSecret(twitterOAuthInicial.get_OAuthTokenSecret());
+		finalizeOAuthInputs.set_ConsumerSecret(SocialInformation.CONSUMER_SECRET);
+		finalizeOAuthInputs.set_ConsumerKey(SocialInformation.CONSUMER_KEY);
+
+		// Execute Choreo
+		try
+		{
+			twitterOAuthFinal = finalizeOAuthChoreo.execute(finalizeOAuthInputs);
+			
+			estadoTwitter = TTwitterEstado.Conectado;
+			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);
+			actualizarBotones();			
+			
+			Toast.makeText(getActivity(), R.string.text_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
+		}
+		catch (TembooException e)
+		{
+			Toast.makeText(getActivity(), R.string.error_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
 	}
 	
 	private void desconectarTwitter()
 	{
-		twitterConectado = false;
+		twitterOAuthInicial = null;
+		twitterOAuthFinal = null;	
+		
+		estadoTwitter = TTwitterEstado.Desconectado;
 		botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter);
-
-		// TODO Desconectar Twitter
-		Log.d("TEST", "Twitter Desconectado");
 		actualizarBotones();
 	}
 	
-	private void conectarFacebook(String name, String password)
+	private void conectarFacebook()
 	{
 		facebookConectado = true;
 		botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook_connected);
 		
 		// TODO Conectar Facebook
-		Log.d("TEST", "Facebook Conectado: "+name+" "+password);
+		Log.d("TEST", "Facebook Conectado");
 		actualizarBotones();
 	}
 	
 	private void desconectarFacebook()
-	{
+	{		
 		facebookConectado = false;
 		botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook);
 		
@@ -145,7 +234,7 @@ public class SocialFragment extends Fragment
 	
 	public void publicar(String text)
 	{
-		if(twitterConectado)
+		if(estadoTwitter == TTwitterEstado.Conectado)
 		{
 			publicarTwitter(text);
 		}
@@ -158,8 +247,28 @@ public class SocialFragment extends Fragment
 	
 	private void publicarTwitter(String text)
 	{
-		// TODO Publicar Twitter
-		Log.d("TEST", "Twitter Publicado: "+text);
+		// Instantiate the Choreo, using a previously instantiated TembooSession object, eg:
+		StatusesUpdate statusesUpdateChoreo = new StatusesUpdate(session);
+
+		// Get an InputSet object for the choreo
+		StatusesUpdateInputSet statusesUpdateInputs = statusesUpdateChoreo.newInputSet();
+		statusesUpdateInputs.set_AccessToken(twitterOAuthFinal.get_AccessToken());
+		statusesUpdateInputs.set_AccessTokenSecret(twitterOAuthFinal.get_AccessTokenSecret());
+		statusesUpdateInputs.set_ConsumerSecret(SocialInformation.CONSUMER_SECRET);
+		statusesUpdateInputs.set_ConsumerKey(SocialInformation.CONSUMER_KEY);
+		statusesUpdateInputs.set_StatusUpdate(text);
+
+		// Execute Choreo
+		try
+		{
+			statusesUpdateChoreo.execute(statusesUpdateInputs);
+			Toast.makeText(getActivity(), R.string.text_twitter_tweet, Toast.LENGTH_SHORT).show();
+		}
+		catch (TembooException e)
+		{
+			Toast.makeText(getActivity(), R.string.error_twitter_tweet, Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
 	}
 	
 	private void publicarFacebook(String text)
@@ -173,17 +282,16 @@ public class SocialFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			if(twitterConectado)
+			switch(estadoTwitter)
 			{
-				desconectarTwitter();
-			}
-			else
-			{
-				if(twitterDialog == null)
-				{
-					twitterDialog = new ConnectDialog(mContext, SocialFragment.this, R.string.title_dialog_twitter);
-				}
-				twitterDialog.show(v);
+				case Desconectado:
+					conectarTwitterInicial();
+				break;
+				case Conectado:
+					desconectarTwitter();
+				break;
+				default:
+				break;
 			}
 		}
 	}
@@ -199,11 +307,7 @@ public class SocialFragment extends Fragment
 			}
 			else
 			{
-				if(facebookDialog == null)
-				{
-					facebookDialog = new ConnectDialog(mContext, SocialFragment.this, R.string.title_dialog_facebook);
-				}
-				facebookDialog.show(v);
+				conectarFacebook();
 			}
 		}
 	}
@@ -213,11 +317,20 @@ public class SocialFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			if(shareDialog == null)
-			{
-				shareDialog = new ShareDialog(mContext, SocialFragment.this);
-			}
-			shareDialog.show(v);
+			AlertDialogTextInput alert = new AlertDialogTextInput(getActivity(), getString(R.string.text_social_title), getString(R.string.text_social_description), getString(R.string.text_button_tweet), getString(R.string.text_button_cancel)) {
+
+				@Override
+				public void onPossitiveButtonClick()
+				{
+					publicar(getText()+" "+getString(R.string.text_social_via));
+				}
+
+				@Override
+				public void onNegativeButtonClick() { }
+				
+			};
+
+			alert.show();
 		}
 	}
 }

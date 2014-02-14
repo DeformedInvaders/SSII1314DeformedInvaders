@@ -1,6 +1,7 @@
 package com.android.dialog;
 
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
@@ -9,17 +10,22 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 
 public abstract class WindowDialog implements OnTouchListener
 {
+	private Context mContext;
 	private View rootView;
 	private PopupWindow popupWindow;
 	private LayoutInflater layoutInflater;
 	
 	public WindowDialog(Context context, int id)
 	{
-		layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mContext = context;
+		
+		layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		rootView = layoutInflater.inflate(id, null);
 		popupWindow = new PopupWindow(rootView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);  
@@ -27,6 +33,7 @@ public abstract class WindowDialog implements OnTouchListener
 		popupWindow.setBackgroundDrawable(new BitmapDrawable());
 		popupWindow.setOutsideTouchable(true);
 		popupWindow.setTouchInterceptor(this);
+		popupWindow.setFocusable(true);
 	}
 	
 	protected View findViewById(int id)
@@ -67,6 +74,18 @@ public abstract class WindowDialog implements OnTouchListener
 	protected void dismiss()
 	{
 		popupWindow.dismiss();
+	}
+	
+	protected void showKeyBoard(Activity activity, EditText editText)
+	{
+		InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+	}
+	
+	protected void dismissKeyBoard(Activity activity, EditText editText)
+	{
+		InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 	}
 	
 	@Override
