@@ -49,7 +49,8 @@
 		    <string name="text_button_cancel">Cancelar</string>
 			
 		<!-- Errors -->
-			<string name="error_test">El poligono es complejo.</string>
+			<string name="error_play">Próximamente</string>
+			<string name="error_triangle">El poligono es complejo.</string>
 			<string name="error_design">El esqueleto está corrupto.</string>
 			<string name="error_paint">La textura está corrupta.</string>
 			<string name="error_animation">Las animaciones están corruptas.</string>
@@ -58,15 +59,16 @@
 			
 	<!-- IMAGE DESCRIPTIONS -->
 	
-	    <!-- Loading Fragment -->
-		    <string name="desc_loading_new">Crear un nuevo personaje.</string>
-		    <string name="desc_loading_select">Selecciona un personajer.</string>
-		    <string name="desc_loading_play">Jugar.</string>
+	    <!-- Main Fragment -->
+		    <string name="desc_main_new">Crear un nuevo personaje.</string>
+		    <string name="desc_main_select">Selecciona un personajer.</string>
+		    <string name="desc_main_play">Jugar</string>
+		    <string name="desc_main_test">Probar características.</string>
 		    
 		<!-- Design Fragment -->
 		    <string name="desc_design_ready">Listo para definir la textura.</string>
 		    <string name="desc_design_reset">Reiniciar el diseño.</string>
-		    <string name="desc_design_test">Probar el diseño.</string>
+		    <string name="desc_design_triangle">Probar el diseño.</string>
 		    
 		<!-- Paint Fragment -->
 		    <string name="desc_paint_bucket">Seleccionar la herramienta cubo.</string>

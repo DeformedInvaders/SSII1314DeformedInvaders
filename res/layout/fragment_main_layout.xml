@@ -9,19 +9,28 @@
     <LinearLayout style="@style/Layout_Center_FragmentButton_Style">
 
         <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonLoading1"
-            android:contentDescription="@string/desc_loading_new"
+            android:id="@+id/imageButtonMain1"
+            android:contentDescription="@string/desc_main_new"
             android:background="@drawable/icon_create" />
 
         <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonLoading2"
-            android:contentDescription="@string/desc_loading_play"
+            android:id="@+id/imageButtonMain4"
+            android:contentDescription="@string/desc_main_play"
             android:background="@drawable/icon_play" />
 
         <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonLoading3"
-            android:contentDescription="@string/desc_loading_select"
+            android:id="@+id/imageButtonMain3"
+            android:contentDescription="@string/desc_main_select"
             android:background="@drawable/icon_select" />
+        
+    </LinearLayout>
+    
+        <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
+
+        <ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonMain2"
+            android:contentDescription="@string/desc_main_test"
+            android:background="@drawable/icon_test" />
         
     </LinearLayout>
 

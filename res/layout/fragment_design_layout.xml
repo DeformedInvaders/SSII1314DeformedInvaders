@@ -10,8 +10,8 @@
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign3"
-            android:contentDescription="@string/desc_design_test"
-            android:background="@drawable/icon_test" />
+            android:contentDescription="@string/desc_design_triangle"
+            android:background="@drawable/icon_triangle" />
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign2"

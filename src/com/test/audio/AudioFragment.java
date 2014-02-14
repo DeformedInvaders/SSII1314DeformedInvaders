@@ -1,8 +1,12 @@
 package com.test.audio;
 
+import java.io.File;
 import java.io.IOException;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,14 +19,15 @@ import android.widget.ImageButton;
 
 import com.project.main.R;
 
-public class AudioFragment extends Fragment
+public class AudioFragment extends Fragment implements OnCompletionListener
 {
-    private static String mFileName = null;
+    private static String nombreFichero;
 
-    private MediaRecorder mRecorder = null;
-    private MediaPlayer mPlayer = null;
+    private MediaRecorder recorder;
+    private MediaPlayer player;
+    private AudioManager audio;
     
-    private boolean mStartRecording, mStartPlaying;
+    private boolean grabar, reproducir, ficheroCreado;
     
 	private ImageButton botonRecord, botonPlay, botonVolumenMas, botonVolumenMenos;
 	
@@ -37,11 +42,16 @@ public class AudioFragment extends Fragment
 	{        
 		View rootView = inflater.inflate(R.layout.fragment_audio_layout, container, false);
 		
-		mStartRecording = true;
-		mStartPlaying = true;
+		recorder = new MediaRecorder();
+		player = new MediaPlayer();
+		audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 		
-		mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
+		nombreFichero = Environment.getExternalStorageDirectory().getAbsolutePath();
+		nombreFichero += "/audiorecordtest.3gp";
+		
+		grabar = true;
+		reproducir = true;
+		ficheroCreado = new File(nombreFichero).exists();
 
 		botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonAudio1);
 		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonAudio2);
@@ -53,59 +63,47 @@ public class AudioFragment extends Fragment
 		botonVolumenMas.setOnClickListener(new OnVolumenMasClickListener());
 		botonVolumenMenos.setOnClickListener(new OnVolumenMenosClickListener());
 		
+		player.setOnCompletionListener(this);
+		
+		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		actualizarBotones();
+		
         return rootView;
     }
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		
+		recorder = null;
+		player = null;
+		audio = null;
+		
+		botonRecord = null;
+		botonPlay = null;
+		botonVolumenMas = null;
+		botonVolumenMenos = null;
+	}
 	
     @Override
     public void onPause()
     {
         super.onPause();
-        if (mRecorder != null)
-        {
-            mRecorder.release();
-            mRecorder = null;
-        }
-
-        if (mPlayer != null)
-        {
-            mPlayer.release();
-            mPlayer = null;
-        }
+        
+    	recorder.release();
+    	player.release();
     }
-	
-	private void onRecord(boolean start)
-	{
-        if (start)
-        {
-            startRecording();
-        }
-        else
-        {
-            stopRecording();
-        }
-    }
-
-    private void onPlay(boolean start)
-    {
-        if (start)
-        {
-            startPlaying();
-        }
-        else
-        {
-            stopPlaying();
-        }
-    }
+    
+    /* Reproducción */
 
     private void startPlaying()
     {
-        mPlayer = new MediaPlayer();
-        
         try
         {
-            mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();
-            mPlayer.start();
+        	player.setDataSource(nombreFichero);
+            player.prepare();
+            player.start();
         }
         catch (IOException e)
         {
@@ -115,54 +113,58 @@ public class AudioFragment extends Fragment
 
     private void stopPlaying()
     {
-        mPlayer.release();
-        mPlayer = null;
+    	player.release();
+    	player = null;
     }
 
+    /* Grabación */
+    
     private void startRecording()
     {
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+    	recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    	recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+    	recorder.setOutputFile(nombreFichero);
+    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try
         {
-            mRecorder.prepare();
+        	recorder.prepare();
         }
         catch (IOException e)
         {
         	e.printStackTrace();
         }
 
-        mRecorder.start();
+        recorder.start();
     }
 
     private void stopRecording()
     {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+    	recorder.stop();
+    	recorder.release();
+    	
+    	ficheroCreado = true;
     }
+    
+    /* Listeners de Botones */
 	
 	private class OnRecordClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
 		{
-			onRecord(mStartRecording);
-			
-            if (mStartRecording)
+            if (grabar)
             {
+            	startRecording();
             	botonRecord.setBackgroundResource(R.drawable.icon_audio_stop);
             }
             else
             {
+            	stopRecording();
             	botonRecord.setBackgroundResource(R.drawable.icon_audio_record);
             }
             
-            mStartRecording = !mStartRecording;
+            grabar = !grabar;
 		}
 	}
 	
@@ -171,19 +173,52 @@ public class AudioFragment extends Fragment
 		@Override
 		public void onClick(View arg0)
 		{
-            onPlay(mStartPlaying);
-            
-            if (mStartPlaying)
+            if (reproducir)
             {
+            	startPlaying();
             	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
             }
             else
             {
+            	stopPlaying();
             	botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
             }
             
-            mStartPlaying = !mStartPlaying;
+            reproducir = !reproducir;
 			
+		}
+	}
+	
+	private void actualizarBotones()
+	{
+		// Reproducir
+		if(ficheroCreado)
+		{
+			botonPlay.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			botonPlay.setVisibility(View.INVISIBLE);
+		}
+		
+		// Volumen
+		
+		if(audio.getStreamVolume(AudioManager.STREAM_MUSIC) == audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC))
+		{
+			botonVolumenMas.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			botonVolumenMas.setVisibility(View.VISIBLE);
+		}
+		
+		if(audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0)
+		{
+			botonVolumenMenos.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			botonVolumenMenos.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -192,8 +227,8 @@ public class AudioFragment extends Fragment
 		@Override
 		public void onClick(View arg0)
 		{
-			// TODO Auto-generated method stub
-			
+			audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+			actualizarBotones();
 		}
 	}
 	
@@ -202,8 +237,16 @@ public class AudioFragment extends Fragment
 		@Override
 		public void onClick(View arg0)
 		{
-			// TODO Auto-generated method stub
-			
+			audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+			actualizarBotones();
 		}
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp)
+	{
+		stopPlaying();
+	    botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
+	    reproducir = true;
 	}
 }

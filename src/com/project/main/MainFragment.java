@@ -20,7 +20,7 @@ public class MainFragment extends Fragment
 	private MainFragmentListener mCallback;
 	
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonAdd, botonPlay, botonView;
+	private ImageButton botonAdd, botonPlay, botonView, botonTest;
 	
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
@@ -44,6 +44,7 @@ public class MainFragment extends Fragment
 	{
 		public void onMainCreateButtonClicked();
 		public void onMainSelectButtonClicked();
+		public void onMainTestButtonClicked();
 		public void onMainPlayButtonClicked();
     }
 	
@@ -82,13 +83,15 @@ public class MainFragment extends Fragment
 			canvas.setParameters();
 		}
 		
-		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonLoading1);
-		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonLoading2);
-		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonLoading3);
+		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
+		botonTest = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
+		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
+		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonMain4);
 		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonView.setOnClickListener(new OnViewClickListener());
-		botonPlay.setOnClickListener(new OnPlayClickListener());
+		botonTest.setOnClickListener(new OnTestClickListener());
+		botonPlay.setOnClickListener(new OnGameClickListener());
 		
 		if(listaPersonajes.isEmpty()) botonView.setVisibility(View.INVISIBLE);		
         return rootView;
@@ -103,6 +106,7 @@ public class MainFragment extends Fragment
 		botonAdd = null;
 		botonPlay = null;
 		botonView = null;
+		botonTest = null;
 	}
 	
 	@Override
@@ -140,12 +144,21 @@ public class MainFragment extends Fragment
 		}
 	}
 	
-	private class OnPlayClickListener implements OnClickListener
+	private class OnGameClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			mCallback.onMainPlayButtonClicked();
+		}
+	}
+	
+	private class OnTestClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			mCallback.onMainTestButtonClicked();
 		}
 	}
 

@@ -129,6 +129,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onMainPlayButtonClicked()
     {
+		Toast.makeText(getApplication(), R.string.error_play, Toast.LENGTH_SHORT).show();
+    }
+	
+	@Override
+    public void onMainTestButtonClicked()
+    {
     	changeFragment(TestFragment.newInstance());
     }
 	
@@ -139,7 +145,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(esqueleto == null)
     	{
-    		Toast.makeText(getApplication(), R.string.error_test, Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplication(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
     	}
     	else
     	{
@@ -153,7 +159,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(!test)
     	{
-    		Toast.makeText(getApplication(), R.string.error_test, Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplication(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
     	}
     }
 	
