@@ -17,6 +17,7 @@ import com.android.view.NonSwipeableViewPager;
 import com.project.main.R;
 import com.test.audio.AudioFragment;
 import com.test.multitouch.MultitouchFragment;
+import com.test.social.SocialFragment;
 
 public class TestFragment extends Fragment
 {
@@ -93,6 +94,8 @@ public class TestFragment extends Fragment
 					return MultitouchFragment.newInstance();
 				case 1:
 					return AudioFragment.newInstance();
+				case 2:
+					return SocialFragment.newInstance();
 			}
 			return null;
 		}
@@ -100,7 +103,7 @@ public class TestFragment extends Fragment
 		@Override
 		public int getCount()
 		{
-			return 2;
+			return 3;
 		}
 
 		@Override
@@ -113,6 +116,8 @@ public class TestFragment extends Fragment
 					return getString(R.string.title_test_section_multitouch).toUpperCase(l);
 				case 1:
 					return getString(R.string.title_test_section_audio).toUpperCase(l);
+				case 2:
+					return getString(R.string.title_test_secton_social).toUpperCase(l);
 			}
 			
 			return null;

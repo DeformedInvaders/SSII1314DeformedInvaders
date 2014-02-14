@@ -34,6 +34,13 @@
 		<item name="android:layout_margin">5dp</item>
     </style>
     
+	<!-- Input -->
+    <style name="EditText_Dialog_Style">
+       <item name="android:layout_width">wrap_content</item>
+       <item name="android:layout_height">fill_parent</item>
+       <item name="android:ems">10</item>
+	</style>
+    
     <!-- Botones -->
     
     <style name="Button_Fragment_Style">
@@ -89,13 +96,12 @@
 	<style name="GLSurfaceView_Style">
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">match_parent</item>
-		<item name="android:layout_alignParentBottom">true</item>
 		<item name="android:layout_alignParentLeft">true</item>
-		<item name="android:layout_alignParentRight">true</item>
 		<item name="android:layout_alignParentTop">true</item>
 	</style>
 	
     <style name="GLSurfaceView_FragmentButton_Style" parent="GLSurfaceView_Style">
+        <item name="android:layout_marginBottom">@dimen/FragmentButton_LayoutHeight_Dimen</item>
 		<!-- TODO -->
 	</style>
 	

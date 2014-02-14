@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Content_Dialog_Style">
+        
+		<TextView style="@style/Text_Section_Dialog_Style"
+  	        android:text="@string/title_dialog_share"/>
+
+	    <EditText style="@style/EditText_Dialog_Style"
+	        android:id="@+id/editTextShare1"
+	        android:inputType="textMultiLine">
+        	
+        	<requestFocus />
+        </EditText>
+  	    
+	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style" >
+	        
+			<Button style="@style/Button_Color_Style"
+				android:id="@+id/imageButtonShare1"
+				android:text="@string/text_button_share" />
+			
+			<Button style="@style/Button_Color_Style"
+				android:id="@+id/imageButtonShare2"
+				android:text="@string/text_button_cancel" />
+		
+		</LinearLayout>
+		
+	</LinearLayout>
+	
+ 	<ImageView style="@style/ImageView_Arrow_Dialog_Style"
+ 	    android:contentDescription="@string/desc_dialog_arrow" />
+
+</LinearLayout>

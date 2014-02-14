@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout style="@style/Layout_Fragment_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+	<LinearLayout style="@style/Layout_Left_FragmentButton_Style">
+
+        <ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonSocial1"
+            android:contentDescription="@string/desc_social_twitter"
+            android:background="@drawable/icon_social_twitter" />
+
+        <ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonSocial2"
+            android:contentDescription="@string/desc_social_facebook"
+            android:background="@drawable/icon_social_facebook" />
+        
+		<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonSocial3"
+            android:contentDescription="@string/desc_social_share"
+            android:background="@drawable/icon_social_share" />
+
+    </LinearLayout>
+    
+</RelativeLayout>

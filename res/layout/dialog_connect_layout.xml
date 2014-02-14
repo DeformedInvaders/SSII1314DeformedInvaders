@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Content_Dialog_Style">
+        
+		<TextView style="@style/Text_Section_Dialog_Style"
+		    android:id="@+id/textViewConnect1"/>
+		
+	    <EditText style="@style/EditText_Dialog_Style"
+	        android:id="@+id/editTextConnect1"
+	        android:inputType="textCapCharacters">
+			
+	        <requestFocus />
+        </EditText>
+
+	    <EditText style="@style/EditText_Dialog_Style"
+	        android:id="@+id/editTextConnect2"
+	        android:inputType="textPassword" />
+  	    
+	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style" >
+	        
+			<Button style="@style/Button_Color_Style"
+				android:id="@+id/imageButtonConnect1"
+				android:text="@string/text_button_connect" />
+			
+			<Button style="@style/Button_Color_Style"
+				android:id="@+id/imageButtonConnect2"
+				android:text="@string/text_button_cancel" />
+		
+		</LinearLayout>
+		
+	</LinearLayout>
+	
+ 	<ImageView style="@style/ImageView_Arrow_Dialog_Style"
+ 	    android:contentDescription="@string/desc_dialog_arrow" />
+
+</LinearLayout>
+

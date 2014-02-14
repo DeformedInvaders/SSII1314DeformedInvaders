@@ -18,12 +18,16 @@
 			
 			<string name="title_test_section_multitouch">Multitouch</string>
 			<string name="title_test_section_audio">Audio</string>
+			<string name="title_test_secton_social">Social</string>
 			
 			<string name="title_dialog_size">Size:</string>
 			<string name="title_dialog_color">Color:</string>
 			<string name="title_dialog_eyes">Eyes:</string>
 			<string name="title_dialog_mouths">Mouths:</string>
 			<string name="title_dialog_weapons">Weapons:</string>
+			<string name="title_dialog_twitter">Twitter:</string>
+			<string name="title_dialog_facebook">Facebook:</string>
+			<string name="title_dialog_share">Share:</string>
 			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
@@ -51,6 +55,9 @@
 		    
 		    <string name="text_button_plus">+</string>
 		    <string name="text_button_minus">-</string>
+		    
+		    <string name="text_button_connect">Connect</string>
+		    <string name="text_button_share">Share</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Coming Soon</string>
@@ -107,6 +114,11 @@
 	    	<string name="desc_audio_plus">Increase the audio volume.</string>
 	    	<string name="desc_audio_minus">Decrease the audio volume.</string>
 	    	
+	    <!-- Social Fragment -->
+	    	<string name="desc_social_twitter">Twitter Account.</string>
+	    	<string name="desc_social_facebook">Facebook Account.</string>
+	    	<string name="desc_social_share">Share status.</string>
+	    
 	    <!-- Sticker Dialog -->		    
 		    <string name="desc_sticker_eye">Eye Sticker</string>
 		    <string name="desc_sticker_mouth">Mouth Sticker</string>
@@ -120,7 +132,7 @@
 		    <string name="desc_color_cursor_main">Color Main Cursor</string>
 		    <string name="desc_color_cursor_secondary">Color Secondary Cursor</string>
 		    <string name="desc_color_selected">Selected Color</string>
-
+		    
 		<!-- Dialogs -->	
 		    <string name="desc_dialog_arrow">Arrow</string>
 

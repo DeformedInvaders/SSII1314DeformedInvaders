@@ -12,9 +12,9 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.dialog.ColorPicker;
-import com.android.dialog.SizePicker;
-import com.android.dialog.StickerPicker;
+import com.android.dialog.ColorDialog;
+import com.android.dialog.SizeDialog;
+import com.android.dialog.StickerDialog;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
 import com.project.main.R;
@@ -25,9 +25,9 @@ public class PaintFragment extends Fragment
 	private Context mContext;
 	
 	private PaintGLSurfaceView canvas;
-	private ColorPicker colorPicker;
-	private SizePicker sizePicker;
-	private StickerPicker stickerPicker;
+	private ColorDialog colorDialog;
+	private SizeDialog sizeDialog;
+	private StickerDialog stickerDialog;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonPegatina;
 	
 	private Esqueleto esqueletoActual;
@@ -122,9 +122,9 @@ public class PaintFragment extends Fragment
 		super.onDestroyView();
 		
 		canvas = null;
-		colorPicker = null;
-		sizePicker = null;
-		stickerPicker = null;
+		colorDialog = null;
+		sizeDialog = null;
+		stickerDialog = null;
 		botonPincel = null;
 		botonCubo = null;
 		botonMano = null;
@@ -252,11 +252,11 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			if (colorPicker == null)
+			if (colorDialog == null)
 			{
-				colorPicker = new ColorPicker(mContext, PaintFragment.this);    	
+				colorDialog = new ColorDialog(mContext, PaintFragment.this);    	
 			}
-			colorPicker.show(v);
+			colorDialog.show(v);
 		}
     }
     
@@ -270,11 +270,11 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			if (sizePicker == null) 
+			if (sizeDialog == null) 
 			{
-				sizePicker = new SizePicker(mContext, PaintFragment.this);    	
+				sizeDialog = new SizeDialog(mContext, PaintFragment.this);    	
 			}
-			sizePicker.show(v);
+			sizeDialog.show(v);
 		}
     }
     
@@ -288,11 +288,11 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			if(stickerPicker == null)
+			if(stickerDialog == null)
 			{
-				stickerPicker = new StickerPicker(mContext, PaintFragment.this);
+				stickerDialog = new StickerDialog(mContext, PaintFragment.this);
 			}
-			stickerPicker.show(v);
+			stickerDialog.show(v);
 		}
 	}
     
