@@ -3,6 +3,7 @@ package com.test.main;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,10 @@ public class TestFragment extends Fragment
 {
 	private ActionBar actionBar;
 	
+	private MultitouchFragment multiTouchFragment;
+	private AudioFragment audioFragment;
+	private SocialFragment socialFragment;
+	
 	private SectionViewPagerAdapter pageAdapter;
 	private NonSwipeableViewPager viewPager;
 	
@@ -32,6 +37,16 @@ public class TestFragment extends Fragment
 	{
 		TestFragment fragment = new TestFragment();
 		return fragment;
+	}
+	
+	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		
+		multiTouchFragment = MultitouchFragment.newInstance();
+		audioFragment = AudioFragment.newInstance();
+		socialFragment = SocialFragment.newInstance();
 	}
 	
 	@Override
@@ -75,6 +90,16 @@ public class TestFragment extends Fragment
 		pageAdapter = null;
 		viewPager = null;
 	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		multiTouchFragment = null;
+		audioFragment = null;
+		socialFragment = null;
+	}
     
     /* Adaptador de PagerViewer */
 
@@ -91,11 +116,11 @@ public class TestFragment extends Fragment
 			switch(position)
 			{
 				case 0:
-					return MultitouchFragment.newInstance();
+					return multiTouchFragment;
 				case 1:
-					return AudioFragment.newInstance();
+					return audioFragment;
 				case 2:
-					return SocialFragment.newInstance();
+					return socialFragment;
 			}
 			return null;
 		}

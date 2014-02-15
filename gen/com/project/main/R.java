@@ -152,9 +152,9 @@ public final class R {
         public static final int imageButtonSize1=0x7f070008;
         public static final int imageButtonSize2=0x7f07000a;
         public static final int imageButtonSize3=0x7f070009;
-        public static final int imageButtonSocial1=0x7f070040;
-        public static final int imageButtonSocial2=0x7f070041;
-        public static final int imageButtonSocial3=0x7f070042;
+        public static final int imageButtonSocial1=0x7f070041;
+        public static final int imageButtonSocial2=0x7f070042;
+        public static final int imageButtonSocial3=0x7f070043;
         public static final int imageButtonSticker1=0x7f07000b;
         public static final int imageButtonSticker10=0x7f070014;
         public static final int imageButtonSticker11=0x7f070015;
@@ -172,10 +172,11 @@ public final class R {
         public static final int imageViewColor1=0x7f070003;
         public static final int imageViewColor2=0x7f070004;
         public static final int imageViewColor3=0x7f070006;
+        public static final int linearLayout1=0x7f070040;
         public static final int multitouchGLSurfaceView1=0x7f070030;
         public static final int pagerViewAnimation1=0x7f070019;
         public static final int pagerViewSelection1=0x7f07003d;
-        public static final int pagerViewTest1=0x7f070043;
+        public static final int pagerViewTest1=0x7f070044;
         public static final int paintGLSurfaceViewPaint1=0x7f070031;
         public static final int paletteColor1=0x7f070001;
         public static final int paletteColor2=0x7f070002;

@@ -3,6 +3,7 @@ package com.test.audio;
 import java.io.File;
 import java.io.IOException;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -36,11 +37,11 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		AudioFragment fragment = new AudioFragment();
 		return fragment;
 	}
-
+	
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{        
-		View rootView = inflater.inflate(R.layout.fragment_audio_layout, container, false);
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
 		
 		recorder = new MediaRecorder();
 		player = new MediaPlayer();
@@ -52,6 +53,12 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		grabar = true;
 		reproducir = true;
 		ficheroCreado = new File(nombreFichero).exists();
+	}
+
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{        
+		View rootView = inflater.inflate(R.layout.fragment_audio_layout, container, false);
 
 		botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonAudio1);
 		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonAudio2);
@@ -76,14 +83,20 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 	{
 		super.onDestroyView();
 		
-		recorder = null;
-		player = null;
-		audio = null;
-		
 		botonRecord = null;
 		botonPlay = null;
 		botonVolumenMas = null;
 		botonVolumenMenos = null;
+	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		recorder = null;
+		player = null;
+		audio = null;
 	}
 	
     @Override

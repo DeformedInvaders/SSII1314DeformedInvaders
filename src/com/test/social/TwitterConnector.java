@@ -1,20 +1,23 @@
 package com.test.social;
 
+import java.io.File;
+
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
 import android.net.Uri;
 
-public class TwitterConnectorTwitter4J implements SocialConnector
+public class TwitterConnector
 {
 	private static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
 	
 	private Twitter twitter;
 	private RequestToken requestToken;
 
-	
-	@Override
 	public boolean iniciarAutorizacion()
 	{
         twitter = new TwitterFactory().getInstance();
@@ -33,13 +36,11 @@ public class TwitterConnectorTwitter4J implements SocialConnector
 		return false;
 	}
 	
-	@Override
 	public String getAuthorizationURL()
 	{
 		return requestToken.getAuthorizationURL();
 	}
 	
-	@Override
 	public boolean finalizarAutorizacion(Uri uri)
 	{
 		try
@@ -55,7 +56,6 @@ public class TwitterConnectorTwitter4J implements SocialConnector
 		return false;
 	}
 	
-	@Override
 	public boolean desconexion()
 	{
 		requestToken = null;
@@ -63,12 +63,13 @@ public class TwitterConnectorTwitter4J implements SocialConnector
 		return true;
 	}
 
-	@Override
-	public boolean enviarPost(String text)
+	public boolean enviarPost(String message)
 	{
         try
         {
-			twitter.updateStatus(text);
+        	StatusUpdate status = new StatusUpdate(message);
+        	
+			twitter.updateStatus(status);
 			return true;
 		}
         catch (TwitterException e)
@@ -78,4 +79,37 @@ public class TwitterConnectorTwitter4J implements SocialConnector
         
 		return true;
 	}	
+	
+	public boolean enviarPost(File file, String message)
+	{
+	    try
+	    {
+	    	StatusUpdate status = new StatusUpdate(message);
+	    	status.setMedia(file);
+	    	
+	    	twitter.updateStatus(status);
+	    	return true;
+    	}
+    	catch (TwitterException e)
+    	{
+    		e.printStackTrace();
+	    }
+	    
+	    return true;
+	}
+	
+	public ResponseList<Status> getTimeLine()
+	{
+		try
+		{
+			ResponseList<Status> timeline =  twitter.getUserTimeline(10);
+			return timeline;
+		}
+		catch (TwitterException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 }

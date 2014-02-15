@@ -46,7 +46,7 @@
 			
 			<string name="text_social_title">Update your status.</string>
 			<string name="text_social_description">Make sure your text is at or under the 140 character.</string>
-			<string name="text_social_via">, via Deformed Invaders.</string>
+			<string name="text_social_via">- via #DeformedInvaders</string>
 			
 			<string name="text_twitter_title">Twitter OAuth.</string>
 			<string name="text_facebook_title">Facebook OAuth.</string>

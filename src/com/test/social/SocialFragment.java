@@ -1,10 +1,10 @@
 package com.test.social;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +19,8 @@ import com.project.main.R;
 public class SocialFragment extends Fragment
 {
 	private TSocialEstado estadoTwitter, estadoFacebook;
-	private SocialConnector conectorTwitter, conectorFacebook;
+	private TwitterConnector conectorTwitter;
+	private FacebookConnector conectorFacebook;
 	
 	private ImageButton botonTwitter, botonFacebook, botonShare;
 	
@@ -28,17 +29,23 @@ public class SocialFragment extends Fragment
 		SocialFragment fragment = new SocialFragment();
 		return fragment;
 	}
+	
+	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		
+		estadoTwitter = TSocialEstado.Desconectado;
+		estadoFacebook = TSocialEstado.Desconectado;
+		
+		conectorTwitter = new TwitterConnector();
+		conectorFacebook = new FacebookConnector();
+	}
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{        
 		View rootView = inflater.inflate(R.layout.fragment_social_layout, container, false);
-		
-		estadoTwitter = TSocialEstado.Desconectado;
-		estadoFacebook = TSocialEstado.Desconectado;
-		
-		conectorTwitter = new TwitterConnectorTwitter4J();
-		conectorFacebook = new FacebookConnectorFacebook4J();
 		
 		botonTwitter = (ImageButton) rootView.findViewById(R.id.imageButtonSocial1);
 		botonFacebook = (ImageButton) rootView.findViewById(R.id.imageButtonSocial2);
@@ -65,6 +72,15 @@ public class SocialFragment extends Fragment
 		botonShare = null;
 	}
 	
+	@Override
+	public void onDetach()
+	{		
+		super.onDetach();
+		
+		conectorTwitter = null;
+		conectorFacebook = null;
+	}
+	
 	private void actualizarBotones()
 	{
 		if(estadoTwitter == TSocialEstado.Conectado || estadoFacebook == TSocialEstado.Conectado)
@@ -83,7 +99,6 @@ public class SocialFragment extends Fragment
 			@Override
 			public boolean evaluarURL(String url)
 			{
-				Log.d("TEST", url);
 		        if(url.toString().startsWith(SocialInformation.TWITTER_CALLBACK_URL))
 		    	{
 		        	if(estadoTwitter == TSocialEstado.OAuth)
