@@ -42,11 +42,26 @@
 			<string name="text_delete_character_description">¿Estás seguro de eliminar este personaje?.</string>
 			<string name="text_delete_character_confirmation">Personaje eliminado.</string>
 			
+			<string name="text_social_title">Actualiza tu estado.</string>
+			<string name="text_social_description">Asegurate que no superas los 140 caracteres.</string>
+			<string name="text_social_via">, via Deformed Invaders.</string>
+			
+			<string name="text_twitter_oauth_permission">Permisos Twitter concedidos.</string>
+			<string name="text_twitter_oauth_sign_in">Cuenta Twitter conectada.</string>
+			<string name="text_twitter_post">Tweet enviado.</string>
+			
+			<string name="text_facebook_oauth_permission">Permisos Facebook concedidos.</string>
+			<string name="text_facebook_oauth_sign_in">Cuenta Facebook conectada.</string>
+			<string name="text_facebook_post">Post enviado.</string>
+			
 			<string name="text_button_yes">Si</string>
 			<string name="text_button_no">No</string>
 
 			<string name="text_button_ok">OK</string>
 		    <string name="text_button_cancel">Cancelar</string>
+		    
+   		    <string name="text_button_send">Enviar</string>
+		    <string name="text_button_close">Cerrar</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Próximamente</string>
@@ -56,6 +71,14 @@
 			<string name="error_animation">Las animaciones están corruptas.</string>
 			<string name="error_save_character">El personaje no se ha podido guardar.</string>
 			<string name="error_delete_character">El pesronaje no se ha podido eliminar.</string>
+			
+			<string name="error_twitter_oauth_permission">Permisos Twitter no concedidos.</string>
+			<string name="error_twitter_oauth_sign_in">Cuenta Twitter no conectada.</string>
+			<string name="error_twitter_post">Tweet no enviado.</string>
+			
+			<string name="error_facebook_oauth_permission">Permisos Facebook no concedidos.</string>
+			<string name="error_facebook_oauth_sign_in">Cuenta Facebook no conectada.</string>
+			<string name="error_facebook_post">Post no enviado.</string>
 			
 	<!-- IMAGE DESCRIPTIONS -->
 	
@@ -102,6 +125,11 @@
 	    	<string name="desc_audio_play">Reproducir audio grabado.</string>
 	    	<string name="desc_audio_plus">Aumentar el volumen.</string>
 	    	<string name="desc_audio_minus">Disminuir el volumen.</string>
+	    	
+   	    <!-- Social Fragment -->
+	    	<string name="desc_social_twitter">Cuenta Twitter.</string>
+	    	<string name="desc_social_facebook">Cuenta Facebook.</string>
+	    	<string name="desc_social_share">Actualiza tu estado.</string>
 	    	
 	    <!-- Sticker Dialog -->		    
 		    <string name="desc_sticker_eye">Pegatina Ojo</string>

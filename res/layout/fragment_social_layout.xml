@@ -2,11 +2,6 @@
 <RelativeLayout style="@style/Layout_Fragment_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    
-    <WebView 
-	    android:id="@+id/webViewSocial1"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" />
 
 	<LinearLayout style="@style/Layout_Left_FragmentButton_Style">
 
