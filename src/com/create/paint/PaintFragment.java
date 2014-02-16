@@ -354,8 +354,6 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.capturaPantalla();
-			
 			reiniciarImagenesBotones();
 			mCallback.onPaintReadyButtonClicked(canvas.getTextura());
 		}

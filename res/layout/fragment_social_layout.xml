@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Layout_Fragment_Style" >
+<RelativeLayout style="@style/Layout_Fragment_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        style="@style/Layout_Left_FragmentButton_Style" >
+    <LinearLayout style="@style/Layout_Left_FragmentButton_Style" >
 
         <ImageButton
             android:id="@+id/imageButtonSocial1"
@@ -19,11 +17,32 @@
             android:background="@drawable/icon_social_facebook"
             android:contentDescription="@string/desc_social_facebook" />
 
+	</LinearLayout>
+        
+    <LinearLayout style="@style/Layout_Center_FragmentButton_Style" >
+        
         <ImageButton
             android:id="@+id/imageButtonSocial3"
             style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_social_share"
             android:contentDescription="@string/desc_social_share" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSocial4"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_social_picture"
+            android:contentDescription="@string/desc_social_photo" />
+        
+    </LinearLayout>
+    
+    <LinearLayout style="@style/Layout_Right_FragmentButton_Style" >
+
+        <ImageButton
+            android:id="@+id/imageButtonSocial5"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_wifi"
+            android:contentDescription="@string/desc_social_wifi" />
+
     </LinearLayout>
 
 </RelativeLayout>

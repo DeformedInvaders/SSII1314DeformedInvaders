@@ -37,6 +37,7 @@
 			<string name="text_save_character_description">Introduce a name for your new character.</string>
 			<string name="text_save_character_confirmation">Character saved.</string>
 			
+			<string name="text_picture_character_confirmation">Character pictured.</string>
 			<string name="text_replace_character_confirmation">Character replaced.</string>
 			<string name="text_select_character_confirmation">Character selected.</string>
 			
@@ -44,9 +45,14 @@
 			<string name="text_delete_character_description">Are you sure to delete this character?.</string>
 			<string name="text_delete_character_confirmation">Character deleted.</string>
 			
-			<string name="text_social_title">Update your status.</string>
-			<string name="text_social_description">Make sure your text is at or under the 140 character.</string>
-			<string name="text_social_via">- via #DeformedInvaders</string>
+			<string name="text_social_share_title">Update your status.</string>
+			<string name="text_social_share_description">Make sure your text is at or under the 140 character.</string>
+			
+			<string name="text_social_photo_title">Upload a picture.</string>
+			
+			<string name="text_social_photo_initial">I just created</string>
+			<string name="text_social_photo_final">using #DeformedInvaders</string>
+			<string name="text_social_via">, via #DeformedInvaders</string>
 			
 			<string name="text_twitter_title">Twitter OAuth.</string>
 			<string name="text_facebook_title">Facebook OAuth.</string>
@@ -77,8 +83,12 @@
 			<string name="error_design">The design is corrupted.</string>
 			<string name="error_paint">The texture is corrupted.</string>
 			<string name="error_animation">The animation is corrupted.</string>
+			
+			<string name="error_picture_character">The character cannot be pictured.</string>
 			<string name="error_save_character">The character cannot be saved.</string>
 			<string name="error_delete_character">The character cannot be deleted.</string>
+			
+			<string name="error_internet_connection">There is no internet connection.</string>
 			
 			<string name="error_twitter_oauth_permission">Twitter permission not granted.</string>
 			<string name="error_twitter_oauth_sign_in">Twitter account not connected.</string>
@@ -128,6 +138,9 @@
 	    	<string name="desc_selection_select">Select this character.</string>
 	    	<string name="desc_selection_delete">Delete this character.</string>
 	    	
+	    <!-- Select Fragment -->
+	    	<string name="desc_select_camera">Save a picture of this character.</string>
+	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Record with the microphone.</string>
 	    	<string name="desc_audio_play">Play the recorded audio.</string>
@@ -138,6 +151,8 @@
 	    	<string name="desc_social_twitter">Twitter Account.</string>
 	    	<string name="desc_social_facebook">Facebook Account.</string>
 	    	<string name="desc_social_share">Share status.</string>
+	    	<string name="desc_social_photo">Share a photo.</string>
+	    	<string name="desc_social_wifi">Conexión Wifi.</string>
 	    
 	    <!-- Sticker Dialog -->		    
 		    <string name="desc_sticker_eye">Eye Sticker</string>

@@ -112,13 +112,9 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	
 	public Textura getTextura()
 	{
-		return renderer.getTextura();
-	}
-	
-	public void capturaPantalla()
-	{
 		renderer.capturaPantalla(getHeight(), getWidth());
 		requestRender();
+		return renderer.getTextura();
 	}
 	
 	public boolean bufferSiguienteVacio()

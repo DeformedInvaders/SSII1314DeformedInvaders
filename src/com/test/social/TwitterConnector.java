@@ -80,7 +80,7 @@ public class TwitterConnector
 		return true;
 	}	
 	
-	public boolean enviarPost(File file, String message)
+	public boolean enviarPost(String message, File file)
 	{
 	    try
 	    {

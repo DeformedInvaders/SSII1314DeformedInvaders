@@ -5,5 +5,15 @@
 
     <com.view.display.DisplayGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
         android:id="@+id/displayGLSurfaceViewSelect1" />
+    
+    <LinearLayout style="@style/Layout_Center_FragmentButton_Style" >
+
+        <ImageButton
+            android:id="@+id/imageButtonSelect1"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_camera"
+            android:contentDescription="@string/desc_select_camera" />
+
+	</LinearLayout>
 
 </RelativeLayout>

@@ -23,8 +23,6 @@ public class FacebookConnector
         facebook = new FacebookFactory().getInstance();
         facebook.setOAuthAppId(SocialInformation.FACEBOOK_APP_ID, SocialInformation.FACEBOOK_APP_SECRET);
         facebook.setOAuthPermissions("publish_actions");
-        //facebook.setOAuthAccessToken(new AccessToken(SocialInformation.FACEBOOK_CLIENT_TOKEN, null));
-
         return true;
 	}
 	
@@ -71,7 +69,7 @@ public class FacebookConnector
 		return true;
 	}
 	
-	public boolean enviarPost(File file, String message)
+	public boolean enviarPost(String message, File file)
 	{
 	    try
 	    {

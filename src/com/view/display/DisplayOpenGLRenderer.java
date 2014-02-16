@@ -12,6 +12,7 @@ import android.graphics.Color;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.data.Esqueleto;
+import com.project.data.MapaBits;
 import com.project.data.Pegatinas;
 import com.project.data.Textura;
 import com.project.main.OpenGLRenderer;
@@ -35,7 +36,14 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private ShortArray triangulos;
 	private FloatBuffer bufferTriangulos;
 	
-	// Textura
+	// Captura Pantalla
+	private Bitmap captura;
+	private int canvasHeight, canvasWidth;
+		
+	private boolean modoCaptura;
+	private boolean capturaTerminada;
+	
+	// Texturas
 	private Bitmap bitmap;
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
@@ -63,6 +71,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
 		
 		// Textura
+		modoCaptura = false;
+        capturaTerminada = false;
+        
 		bitmap = textura.getTextura().getBitmap();
 		coords = textura.getCoordTextura();
 
@@ -121,6 +132,15 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			
 		if(personajeCargado)
 		{
+			if (modoCaptura)
+			{	
+				// Guardar posición actual de la Cámara
+				salvarCamara();
+				
+				// Restaurar Cámara posición inicial
+				restore();
+			}
+			
 			// Textura
 			dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTexturas, 0);
 				
@@ -145,6 +165,20 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 				int indice = pegatinas.getVerticeArma();
 				dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
 			}
+			
+			if(modoCaptura)
+			{
+				// Capturar Pantalla
+			    MapaBits textura = capturaPantalla(gl, canvasHeight, canvasWidth);
+				captura = textura.getBitmap();
+				
+				// Desactivar Modo Captura
+				modoCaptura = false;
+				capturaTerminada = true;
+				
+				// Restaurar posición anterior de la Cámara
+				recuperarCamara();
+			}
 		}
 	}
 	
@@ -159,6 +193,20 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
 	public void onMultiTouchEvent() { }
+	
+	public void capturaPantalla(int height, int width)
+	{
+		canvasHeight = height;
+		canvasWidth = width;
+		modoCaptura = true;
+	}
+	
+	public Bitmap getCapturaPantalla()
+	{
+		while(!capturaTerminada);
+		
+		return captura;
+	}
 	
 	public void saveData()
 	{

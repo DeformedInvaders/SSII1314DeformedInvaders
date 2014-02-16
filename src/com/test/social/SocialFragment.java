@@ -1,6 +1,10 @@
 package com.test.social;
 
+import java.io.File;
+
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -12,17 +16,21 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.alert.ChooseAlert;
 import com.android.alert.TextInputAlert;
 import com.android.alert.WebAlert;
+import com.android.storage.ExternalStorageManager;
 import com.project.main.R;
 
 public class SocialFragment extends Fragment
 {
+	private ExternalStorageManager manager;
+	
 	private TSocialEstado estadoTwitter, estadoFacebook;
 	private TwitterConnector conectorTwitter;
 	private FacebookConnector conectorFacebook;
 	
-	private ImageButton botonTwitter, botonFacebook, botonShare;
+	private ImageButton botonTwitter, botonFacebook, botonShare, botonFoto, botonWifi;
 	
 	public static final SocialFragment newInstance()
 	{
@@ -34,6 +42,8 @@ public class SocialFragment extends Fragment
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
+		
+		manager = new ExternalStorageManager();
 		
 		estadoTwitter = TSocialEstado.Desconectado;
 		estadoFacebook = TSocialEstado.Desconectado;
@@ -50,15 +60,19 @@ public class SocialFragment extends Fragment
 		botonTwitter = (ImageButton) rootView.findViewById(R.id.imageButtonSocial1);
 		botonFacebook = (ImageButton) rootView.findViewById(R.id.imageButtonSocial2);
 		botonShare = (ImageButton) rootView.findViewById(R.id.imageButtonSocial3);
+		botonFoto = (ImageButton) rootView.findViewById(R.id.imageButtonSocial4);
+		botonWifi = (ImageButton) rootView.findViewById(R.id.imageButtonSocial5);
 		
 		botonTwitter.setOnClickListener(new OnTwitterClickListener());
 		botonFacebook.setOnClickListener(new OnFacebookClickListener());
 		botonShare.setOnClickListener(new OnShareClickListener());
+		botonFoto.setOnClickListener(new OnFotoClickListener());
+		botonWifi.setOnClickListener(new OnWifiClickListener());
 		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
-		actualizarBotones();		
+		actualizarBotones();
         return rootView;
     }
 	
@@ -66,6 +80,8 @@ public class SocialFragment extends Fragment
 	public void onDestroyView()
 	{
 		super.onDestroyView();
+		
+		manager = null;
 		
 		botonTwitter = null;
 		botonFacebook = null;
@@ -86,11 +102,66 @@ public class SocialFragment extends Fragment
 		if(estadoTwitter == TSocialEstado.Conectado || estadoFacebook == TSocialEstado.Conectado)
 		{
 			botonShare.setVisibility(View.VISIBLE);
+			botonFoto.setVisibility(View.VISIBLE);
 		}
 		else
 		{
 			botonShare.setVisibility(View.INVISIBLE);
+			botonFoto.setVisibility(View.INVISIBLE);
 		}
+		
+		actualizarImagenesBotones();
+	}
+	
+	private void actualizarImagenesBotones()
+	{
+		if(comprobarConexionInternet())
+		{
+			botonWifi.setBackgroundResource(R.drawable.icon_wifi_connected);
+		}
+		else
+		{
+			botonWifi.setBackgroundResource(R.drawable.icon_wifi);
+		}
+		
+		if(estadoTwitter == TSocialEstado.Conectado)
+		{
+			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);
+		}
+		else
+		{
+			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter);
+		}
+		
+		if(estadoFacebook == TSocialEstado.Conectado)
+		{
+			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook_connected);
+		}
+		else
+		{
+			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook);
+		}
+	}
+	
+	private boolean comprobarConexionInternet()
+	{
+		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		return cm.getActiveNetworkInfo() != null;
+	}
+	
+	private boolean evaluarConexionInternet()
+	{
+		if(!comprobarConexionInternet())
+		{
+			Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+			
+			desconectarTwitter();
+			desconectarFacebook();
+			
+			return false;
+		}
+
+		return true;
 	}
 	
 	private void evaluarRespuestaOAuth(String url, String title)
@@ -146,8 +217,7 @@ public class SocialFragment extends Fragment
 		if(conectorTwitter.finalizarAutorizacion(uri))
 		{
 			estadoTwitter = TSocialEstado.Conectado;
-			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);
-			actualizarBotones();			
+			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);			
 			
 			Toast.makeText(getActivity(), R.string.text_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
@@ -155,6 +225,8 @@ public class SocialFragment extends Fragment
 		{
 			Toast.makeText(getActivity(), R.string.error_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
+	
+		actualizarBotones();
 	}
 	
 	private void desconectarTwitter()
@@ -162,9 +234,9 @@ public class SocialFragment extends Fragment
 		if(conectorTwitter.desconexion())
 		{		
 			estadoTwitter = TSocialEstado.Desconectado;
-			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter);
-			actualizarBotones();
 		}
+		
+		actualizarBotones();
 	}
 	
 	private void conectarFacebookInicial()
@@ -185,8 +257,7 @@ public class SocialFragment extends Fragment
 		if(conectorFacebook.finalizarAutorizacion(uri))
 		{
 			estadoFacebook = TSocialEstado.Conectado;
-			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook_connected);
-			actualizarBotones();			
+			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook_connected);			
 			
 			Toast.makeText(getActivity(), R.string.text_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
@@ -194,6 +265,8 @@ public class SocialFragment extends Fragment
 		{
 			Toast.makeText(getActivity(), R.string.error_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
+		
+		actualizarBotones();
 	}
 	
 	private void desconectarFacebook()
@@ -202,11 +275,10 @@ public class SocialFragment extends Fragment
 		{	
 			estadoFacebook = TSocialEstado.Desconectado;
 			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook);
-			actualizarBotones();
 		}
 	}
 	
-	/* Publicación */
+	/* Publicación Estado */
 	
 	public void publicar(String text)
 	{
@@ -245,19 +317,63 @@ public class SocialFragment extends Fragment
 		}
 	}
 	
+	/* Publicación Foto */
+	
+	public void publicar(String text, File foto)
+	{
+		if(estadoTwitter == TSocialEstado.Conectado)
+		{
+			publicarTwitter(text, foto);
+		}
+		
+		if(estadoFacebook == TSocialEstado.Conectado)
+		{
+			publicarFacebook(text, foto);
+		}
+	}
+	
+	private void publicarTwitter(String text, File foto)
+	{
+		if(conectorTwitter.enviarPost(text, foto))
+		{
+			Toast.makeText(getActivity(), R.string.text_twitter_post, Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			Toast.makeText(getActivity(), R.string.error_twitter_post, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private void publicarFacebook(String text, File foto)
+	{
+		if(conectorFacebook.enviarPost(text, foto))
+		{
+			Toast.makeText(getActivity(), R.string.text_facebook_post, Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			Toast.makeText(getActivity(), R.string.error_facebook_post, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	private class OnTwitterClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			if(estadoTwitter == TSocialEstado.Conectado)
+			if(evaluarConexionInternet())
 			{
-				desconectarTwitter();
+				if(estadoTwitter == TSocialEstado.Conectado)
+				{
+					desconectarTwitter();
+				}
+				else
+				{
+					conectarTwitterInicial();
+				}
 			}
-			else
-			{
-				conectarTwitterInicial();
-			}
+			
+			actualizarBotones();
 		}
 	}
 	
@@ -266,14 +382,19 @@ public class SocialFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			if(estadoFacebook == TSocialEstado.Conectado)
+			if(evaluarConexionInternet())
 			{
-				desconectarFacebook();
+				if(estadoFacebook == TSocialEstado.Conectado)
+				{
+					desconectarFacebook();
+				}
+				else
+				{
+					conectarFacebookInicial();
+				}
 			}
-			else
-			{
-				conectarFacebookInicial();
-			}
+			
+			actualizarBotones();
 		}
 	}
 	
@@ -282,20 +403,71 @@ public class SocialFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_social_title), getString(R.string.text_social_description), getString(R.string.text_button_send), getString(R.string.text_button_cancel)) {
+			if(evaluarConexionInternet())
+			{
+				TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_social_share_title), getString(R.string.text_social_share_description), getString(R.string.text_button_send), getString(R.string.text_button_cancel)) {
+	
+					@Override
+					public void onPossitiveButtonClick()
+					{
+						publicar(anyadirSufijo(getText()));
+					}
+	
+					@Override
+					public void onNegativeButtonClick() { }
+					
+				};
+	
+				alert.show();
+			}
 
-				@Override
-				public void onPossitiveButtonClick()
-				{
-					publicar(getText()+" "+getString(R.string.text_social_via));
-				}
+			actualizarBotones();
+		}
+	}
+	
+	private class OnFotoClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			if(evaluarConexionInternet())
+			{				
+				ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_social_photo_title), getString(R.string.text_button_send), getString(R.string.text_button_cancel), manager.getContenidoDirectorioImagen()) {
+					
+					@Override
+					public void onPossitiveButtonClick()
+					{						
+						String selected = getSelected();
+						if(selected != null)
+						{
+							publicar(getString(R.string.text_social_photo_initial)+" "+selected+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(selected));
+						}
+					}
+	
+					@Override
+					public void onNegativeButtonClick() { }
+					
+				};
+	
+				alert.show();
+			}
 
-				@Override
-				public void onNegativeButtonClick() { }
-				
-			};
-
-			alert.show();
+			actualizarBotones();
+		}
+	}
+	
+	private String anyadirSufijo(String message)
+	{
+		return message+" "+getString(R.string.text_social_via);
+	}
+	
+	private class OnWifiClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			evaluarConexionInternet();
+			actualizarBotones();
 		}
 	}
 }

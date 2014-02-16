@@ -18,11 +18,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.android.storage.ExternalStorageManager;
 import com.project.data.Personaje;
 import com.project.main.R;
 
 public class SelectionFragment extends Fragment
 {
+	private ExternalStorageManager manager;
+	
 	private ActionBar actionBar;
 	private SelectionFragmentListener mCallback;
 	
@@ -58,6 +61,17 @@ public class SelectionFragment extends Fragment
 	{
 		super.onAttach(activity);
 		mCallback = (SelectionFragmentListener) activity;
+		
+		manager = new ExternalStorageManager();
+		
+		listaFragmentos = new ArrayList<SelectFragment>();
+		
+		Iterator<Personaje> it = listaPersonajes.iterator();
+		while(it.hasNext())
+		{
+			Personaje p = it.next();
+			listaFragmentos.add(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura(), p.getNombre(), manager));
+		}
 	}
 	
 	@Override
@@ -65,6 +79,9 @@ public class SelectionFragment extends Fragment
 	{
 		super.onDetach();
 		mCallback = null;
+
+		manager = null;
+		listaFragmentos = null;
 	}
 	
 	@Override
@@ -81,15 +98,6 @@ public class SelectionFragment extends Fragment
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		
 		actionBar = getActivity().getActionBar();
-		
-		listaFragmentos = new ArrayList<SelectFragment>();
-				
-		Iterator<Personaje> it = listaPersonajes.iterator();
-		while(it.hasNext())
-		{
-			Personaje p = it.next();
-			listaFragmentos.add(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura()));
-		}
 
 		pageAdapter = new SectionViewPagerAdapter(getActivity().getSupportFragmentManager());
 
@@ -123,7 +131,6 @@ public class SelectionFragment extends Fragment
 		botonDelete = null;
 		pageAdapter = null;
 		viewPager = null;
-		listaFragmentos = null;
 	}
 	
 	/* Listeners de Botones */

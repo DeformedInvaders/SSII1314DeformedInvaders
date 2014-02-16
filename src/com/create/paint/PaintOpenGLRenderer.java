@@ -1,7 +1,5 @@
 package com.create.paint;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -524,27 +522,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		while(!capturaTerminada);
 		
 		return new Textura(textura, coordsTextura, pegatinas);
-	}
-	
-	private MapaBits capturaPantalla(GL10 gl, int height, int width)
-	{
-	    int screenshotSize = width * height;
-	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
-	    bb.order(ByteOrder.nativeOrder());
-	    
-	    gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
-	    
-	    int pixelsBuffer[] = new int[screenshotSize];
-	    bb.asIntBuffer().get(pixelsBuffer);
-	    bb = null;
-
-	    for (int i = 0; i < screenshotSize; ++i) {
-	        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
-	    }
-	    
-	    MapaBits textura = new MapaBits();
-	    textura.setBitmap(pixelsBuffer, width, height);
-	    return textura;
 	}
 	
 	public PaintDataSaved saveData()

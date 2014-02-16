@@ -44,7 +44,7 @@
 			
 			<string name="text_social_title">Actualiza tu estado.</string>
 			<string name="text_social_description">Asegurate que no superas los 140 caracteres.</string>
-			<string name="text_social_via">, via Deformed Invaders.</string>
+			<string name="text_social_via">- vía #DeformedInvaders</string>
 			
 			<string name="text_twitter_oauth_permission">Permisos Twitter concedidos.</string>
 			<string name="text_twitter_oauth_sign_in">Cuenta Twitter conectada.</string>
@@ -71,6 +71,8 @@
 			<string name="error_animation">Las animaciones están corruptas.</string>
 			<string name="error_save_character">El personaje no se ha podido guardar.</string>
 			<string name="error_delete_character">El pesronaje no se ha podido eliminar.</string>
+			
+			<string name="error_internet_connection">No hay conexión a internet.</string>
 			
 			<string name="error_twitter_oauth_permission">Permisos Twitter no concedidos.</string>
 			<string name="error_twitter_oauth_sign_in">Cuenta Twitter no conectada.</string>
@@ -129,7 +131,9 @@
    	    <!-- Social Fragment -->
 	    	<string name="desc_social_twitter">Cuenta Twitter.</string>
 	    	<string name="desc_social_facebook">Cuenta Facebook.</string>
-	    	<string name="desc_social_share">Actualiza tu estado.</string>
+	    	<string name="desc_social_share">Comparte tu estado.</string>
+	    	<string name="desc_social_photo">Comparte una foto.</string>
+	    	<string name="desc_social_wifi">Wifi connection.</string>
 	    	
 	    <!-- Sticker Dialog -->		    
 		    <string name="desc_sticker_eye">Pegatina Ojo</string>

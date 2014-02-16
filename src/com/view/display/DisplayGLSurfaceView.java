@@ -1,6 +1,7 @@
 package com.view.display;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
 
 import com.project.data.Esqueleto;
@@ -39,6 +40,17 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public void onTouchUp(float x, float y, float width, float height, int pos) { }
 	
 	public void onMultiTouchEvent() { }
+	
+	/* Métodos de Obtención de Información */
+	
+	public Bitmap capturaPantalla()
+	{
+		renderer.capturaPantalla(getHeight(), getWidth());
+		requestRender();
+		return renderer.getCapturaPantalla();
+	}
+	
+	/* Métodos de Guardado de Información */
 	
 	public void saveData()
 	{

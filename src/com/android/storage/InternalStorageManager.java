@@ -140,6 +140,7 @@ public class InternalStorageManager
 				data.writeUTF(it.next());
 			}
 			
+			data.flush();
 			data.close();
 			file.close();
 			
@@ -241,6 +242,7 @@ public class InternalStorageManager
 			// Guardar Personaje Seleccionado
 			data.writeInt(seleccionado);
 			
+			data.flush();
 			data.close();
 			file.close();
 			
@@ -333,6 +335,7 @@ public class InternalStorageManager
 			// Guardar Personajes
 			data.writeObject(personaje);
 			
+			data.flush();
 			data.close();
 			file.close();
 			
