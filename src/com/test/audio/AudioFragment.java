@@ -1,6 +1,5 @@
 package com.test.audio;
 
-import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -10,25 +9,29 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.android.alert.ChooseAlert;
+import com.android.alert.TextInputAlert;
+import com.android.storage.ExternalStorageManager;
 import com.project.main.R;
 
 public class AudioFragment extends Fragment implements OnCompletionListener
 {
-    private static String nombreFichero;
-
-    private MediaRecorder recorder;
+	private ExternalStorageManager manager;
+	
+	private MediaRecorder recorder;
     private MediaPlayer player;
     private AudioManager audio;
     
-    private boolean grabar, reproducir, ficheroCreado;
+    private TRecordEstado estadoGrabar;
+    private TPlayEstado estadoReproducir;
     
 	private ImageButton botonRecord, botonPlay, botonVolumenMas, botonVolumenMenos;
 	
@@ -43,16 +46,16 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 	{
 		super.onAttach(activity);
 		
+		manager = new ExternalStorageManager();
+		
 		recorder = new MediaRecorder();
 		player = new MediaPlayer();
-		audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+		audio = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
 		
-		nombreFichero = Environment.getExternalStorageDirectory().getAbsolutePath();
-		nombreFichero += "/audiorecordtest.3gp";
+		activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
-		grabar = true;
-		reproducir = true;
-		ficheroCreado = new File(nombreFichero).exists();
+		estadoGrabar = TRecordEstado.Parado;
+		estadoReproducir = TPlayEstado.Parado;
 	}
 
 	@Override
@@ -72,9 +75,7 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		
 		player.setOnCompletionListener(this);
 		
-		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		actualizarBotones();
-		
         return rootView;
     }
 	
@@ -94,118 +95,18 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 	{
 		super.onDetach();
 		
+		manager = null;
+		recorder.release();
 		recorder = null;
+		player.release();
 		player = null;
 		audio = null;
 	}
-	
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        
-    	recorder.release();
-    	player.release();
-    }
     
-    /* Reproducción */
-
-    private void startPlaying()
-    {
-        try
-        {
-        	player.setDataSource(nombreFichero);
-            player.prepare();
-            player.start();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    private void stopPlaying()
-    {
-    	player.release();
-    	player = null;
-    }
-
-    /* Grabación */
-    
-    private void startRecording()
-    {
-    	recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-    	recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-    	recorder.setOutputFile(nombreFichero);
-    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        try
-        {
-        	recorder.prepare();
-        }
-        catch (IOException e)
-        {
-        	e.printStackTrace();
-        }
-
-        recorder.start();
-    }
-
-    private void stopRecording()
-    {
-    	recorder.stop();
-    	recorder.release();
-    	
-    	ficheroCreado = true;
-    }
-    
-    /* Listeners de Botones */
-	
-	private class OnRecordClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View arg0)
-		{
-            if (grabar)
-            {
-            	startRecording();
-            	botonRecord.setBackgroundResource(R.drawable.icon_audio_stop);
-            }
-            else
-            {
-            	stopRecording();
-            	botonRecord.setBackgroundResource(R.drawable.icon_audio_record);
-            }
-            
-            grabar = !grabar;
-		}
-	}
-	
-	private class OnPlayClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View arg0)
-		{
-            if (reproducir)
-            {
-            	startPlaying();
-            	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
-            }
-            else
-            {
-            	stopPlaying();
-            	botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
-            }
-            
-            reproducir = !reproducir;
-			
-		}
-	}
-	
 	private void actualizarBotones()
 	{
 		// Reproducir
-		if(ficheroCreado)
+		if(manager.getNumFicherosDirectorioMusica() > 0)
 		{
 			botonPlay.setVisibility(View.VISIBLE);
 		}
@@ -234,6 +135,176 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 			botonVolumenMenos.setVisibility(View.VISIBLE);
 		}
 	}
+    
+    /* Reproducción */
+
+    private void startPlaying()
+    {
+		ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_audio_play_title), getString(R.string.text_button_play), getString(R.string.text_button_cancel), manager.getFicherosDirectorioMusica()) {
+			
+			@Override
+			public void onSelectedPossitiveButtonClick(String selected)
+			{						
+				try
+				{
+					//Idle
+					player.setDataSource(manager.getDirectorioMusica(selected));
+					//Initialized
+					player.prepare();
+					//Prepared
+				    player.start();
+				    //Started
+				    
+				    estadoReproducir = TPlayEstado.Reproduciendo;
+				}
+				catch (IOException e)
+				{
+				    e.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void onNoSelectedPossitiveButtonClick() { }
+
+			@Override
+			public void onNegativeButtonClick() { }
+			
+		};
+
+		alert.show();
+    }
+    
+    private void pausePlaying()
+    {
+    	//Started
+    	player.pause();
+    	//Pause
+    	estadoReproducir = TPlayEstado.Pausado;
+    }
+
+    private void resumePlaying()
+    {
+    	//Pause
+    	player.start();
+    	//Started
+    	estadoReproducir = TPlayEstado.Reproduciendo;
+    }
+    
+   /* private void stopPlaying()
+    {
+    	//Started or Paused
+    	player.stop();
+    	//Stopped
+    	estadoReproducir = TPlayEstado.Parado;
+    }*/
+    
+    private void resetPlaying()
+    {
+    	//Any
+    	player.reset();
+    	//Idle
+    	estadoReproducir = TPlayEstado.Parado;
+    }
+
+    /* Grabación */
+    
+    private void startRecording()
+    {
+    	TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_record), getString(R.string.text_button_cancel)) {
+    		
+			@Override
+			public void onPossitiveButtonClick()
+			{
+		        try
+		        {
+		        	//Initial
+					recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+					//Initialized
+			    	recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+			    	//DataSourceConfigured
+			    	recorder.setOutputFile(manager.getDirectorioMusica(getText()));
+			    	//DataSourceConfigured
+			    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+			    	//DataSourceConfigured
+		        	recorder.prepare();
+		        	//Prepared
+		        	recorder.start();
+		        	//Recording
+		        	
+		        	estadoGrabar = TRecordEstado.Grabando;
+		        }
+		        catch (IOException e)
+		        {
+		        	e.printStackTrace();
+		        }
+			}
+
+			@Override
+			public void onNegativeButtonClick() { }
+			
+		};
+
+		alert.show();
+    }
+
+    private void stopRecording()
+    {
+    	//Recording
+    	recorder.stop();
+    	//Initial
+  
+    	estadoGrabar = TRecordEstado.Parado;
+    }
+    
+    /* Listeners de Botones */
+	
+	private class OnRecordClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+            if(estadoGrabar == TRecordEstado.Parado)
+            {
+            	startRecording();
+            	
+            	botonRecord.setBackgroundResource(R.drawable.icon_audio_stop);
+            }
+            else if(estadoGrabar == TRecordEstado.Grabando)
+            {
+            	stopRecording();
+            	
+            	botonRecord.setBackgroundResource(R.drawable.icon_audio_record);
+            	Toast.makeText(getActivity(), R.string.text_audio_record_confirmation, Toast.LENGTH_SHORT).show();
+            }
+
+            actualizarBotones();
+		}
+	}
+	
+	private class OnPlayClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View arg0)
+		{
+            if(estadoReproducir == TPlayEstado.Parado)
+            {
+            	startPlaying();
+            	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
+            }
+            else if(estadoReproducir == TPlayEstado.Reproduciendo)
+            {
+            	pausePlaying();
+            	botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
+            }
+            else if(estadoReproducir == TPlayEstado.Pausado)
+            {
+            	resumePlaying();
+            	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
+            }
+            
+            actualizarBotones();
+		}
+	}
 	
 	private class OnVolumenMasClickListener implements OnClickListener
 	{
@@ -258,8 +329,9 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 	@Override
 	public void onCompletion(MediaPlayer mp)
 	{
-		stopPlaying();
-	    botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
-	    reproducir = true;
+		resetPlaying();
+		
+	    botonPlay.setBackgroundResource(R.drawable.icon_audio_play);	    
+	    Toast.makeText(getActivity(), R.string.text_audio_play_confirmation, Toast.LENGTH_SHORT).show();
 	}
 }

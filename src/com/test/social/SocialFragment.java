@@ -102,7 +102,11 @@ public class SocialFragment extends Fragment
 		if(estadoTwitter == TSocialEstado.Conectado || estadoFacebook == TSocialEstado.Conectado)
 		{
 			botonShare.setVisibility(View.VISIBLE);
-			botonFoto.setVisibility(View.VISIBLE);
+			
+			if(manager.getNumFicherosDirectorioImagen() > 0)
+			{
+				botonFoto.setVisibility(View.VISIBLE);
+			}
 		}
 		else
 		{
@@ -432,17 +436,16 @@ public class SocialFragment extends Fragment
 		{
 			if(evaluarConexionInternet())
 			{				
-				ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_social_photo_title), getString(R.string.text_button_send), getString(R.string.text_button_cancel), manager.getContenidoDirectorioImagen()) {
+				ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_social_photo_title), getString(R.string.text_button_send), getString(R.string.text_button_cancel), manager.getFicherosDirectorioImagen()) {
 					
 					@Override
-					public void onPossitiveButtonClick()
+					public void onSelectedPossitiveButtonClick(String selected)
 					{						
-						String selected = getSelected();
-						if(selected != null)
-						{
-							publicar(getString(R.string.text_social_photo_initial)+" "+selected+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(selected));
-						}
+						publicar(getString(R.string.text_social_photo_initial)+" "+selected+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(selected));
 					}
+					
+					@Override
+					public void onNoSelectedPossitiveButtonClick() { }
 	
 					@Override
 					public void onNegativeButtonClick() { }

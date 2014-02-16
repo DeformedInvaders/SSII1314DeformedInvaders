@@ -31,7 +31,14 @@ public abstract class ChooseAlert
 		builder.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				onPossitiveButtonClick();
+				if(selected != -1)
+				{
+					onSelectedPossitiveButtonClick(lista[selected]);
+				}
+				else
+				{
+					onNoSelectedPossitiveButtonClick();
+				}
 			}
 		});
 
@@ -43,18 +50,9 @@ public abstract class ChooseAlert
 		});
 	}
 	
-	public abstract void onPossitiveButtonClick();
+	public abstract void onSelectedPossitiveButtonClick(String selected);
+	public abstract void onNoSelectedPossitiveButtonClick();
 	public abstract void onNegativeButtonClick();
-	
-	public String getSelected()
-	{
-		if(selected != -1)
-		{
-			return lista[selected];
-		}
-		
-		return null;
-	}
 	
 	public void show()
 	{

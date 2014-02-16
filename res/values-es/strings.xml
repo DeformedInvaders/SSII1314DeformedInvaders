@@ -42,9 +42,24 @@
 			<string name="text_delete_character_description">¿Estás seguro de eliminar este personaje?.</string>
 			<string name="text_delete_character_confirmation">Personaje eliminado.</string>
 			
-			<string name="text_social_title">Actualiza tu estado.</string>
-			<string name="text_social_description">Asegurate que no superas los 140 caracteres.</string>
-			<string name="text_social_via">- vía #DeformedInvaders</string>
+			<string name="text_audio_record_title">Grabando audio.</string>
+			<string name="text_audio_record_description">Introduce un nombre para el audio.</string>
+			<string name="text_audio_record_confirmation">Audio grabado.</string>
+			
+			<string name="text_audio_play_title">Reproduciendo audio.</string>
+			<string name="text_audio_play_confirmation">Audio reproducido.</string>
+			
+			<string name="text_social_share_title">Actualizando tu estado.</string>
+			<string name="text_social_share_description">Asegurate que no superas los 140 caracteres.</string>
+			
+			<string name="text_social_photo_title">Compartiendo una imagen.</string>
+			
+			<string name="text_social_photo_initial">Acabo de crear a</string>
+			<string name="text_social_photo_final">usando #DeformedInvaders</string>
+			<string name="text_social_via">, vía #DeformedInvaders</string>
+			
+			<string name="text_twitter_title">Twitter OAuth.</string>
+			<string name="text_facebook_title">Facebook OAuth.</string>
 			
 			<string name="text_twitter_oauth_permission">Permisos Twitter concedidos.</string>
 			<string name="text_twitter_oauth_sign_in">Cuenta Twitter conectada.</string>
@@ -60,8 +75,14 @@
 			<string name="text_button_ok">OK</string>
 		    <string name="text_button_cancel">Cancelar</string>
 		    
-   		    <string name="text_button_send">Enviar</string>
+		    <string name="text_button_send">Enviar</string>
 		    <string name="text_button_close">Cerrar</string>
+		    
+		    <string name="text_button_record">Grabar</string>
+		    <string name="text_button_play">Reproducir</string>
+		    
+		    <string name="text_button_plus">+</string>
+		    <string name="text_button_minus">-</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Próximamente</string>
@@ -69,6 +90,8 @@
 			<string name="error_design">El esqueleto está corrupto.</string>
 			<string name="error_paint">La textura está corrupta.</string>
 			<string name="error_animation">Las animaciones están corruptas.</string>
+			
+			<string name="error_picture_character">El personaje no se ha podido dibujar.</string>
 			<string name="error_save_character">El personaje no se ha podido guardar.</string>
 			<string name="error_delete_character">El pesronaje no se ha podido eliminar.</string>
 			
@@ -119,9 +142,12 @@
 		    <string name="desc_animation_ready">Listo para guardar el personaje.</string>
 		    
 		<!-- Selection Fragment -->
-	    	<string name="desc_selection_select">Selecciona un personaje.</string>
-	    	<string name="desc_selection_delete">Elimina el personaje.</string>
+	    	<string name="desc_selection_select">Selecciona este personaje.</string>
+	    	<string name="desc_selection_delete">Elimina este personaje.</string>
 	    		
+	    <!-- Select Fragment -->
+	    	<string name="desc_select_camera">Guarda una imagen de este persoaje.</string>
+	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Grabar con el microfono.</string>
 	    	<string name="desc_audio_play">Reproducir audio grabado.</string>

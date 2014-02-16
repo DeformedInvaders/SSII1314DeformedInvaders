@@ -70,9 +70,30 @@ public class ExternalStorageManager
 		return true;
 	}
 	
-	public String[] getContenidoDirectorioImagen()
+	public int getNumFicherosDirectorio(String file)
 	{
-		File dir = new File(getDirectorioImagen());
+		File dir = new File(file);
+		if(dir.exists())
+		{
+			return dir.list().length;
+		}
+		
+		return 0;
+	}
+	
+	public int getNumFicherosDirectorioMusica()
+	{
+		return getNumFicherosDirectorio(getDirectorioMusica());
+	}
+	
+	public int getNumFicherosDirectorioImagen()
+	{
+		return getNumFicherosDirectorio(getDirectorioImagen());
+	}
+	
+	private String[] getFicherosDirectorio(String file)
+	{
+		File dir = new File(file);
 		if(dir.exists())
 		{
 			String[] list = dir.list();
@@ -88,6 +109,16 @@ public class ExternalStorageManager
 		}
 		
 		return null;
+	}
+	
+	public String[] getFicherosDirectorioMusica()
+	{
+		return getFicherosDirectorio(getDirectorioMusica());
+	}
+	
+	public String[] getFicherosDirectorioImagen()
+	{
+		return getFicherosDirectorio(getDirectorioImagen());
 	}
 	
 	public File cargarImagen(String nombre)

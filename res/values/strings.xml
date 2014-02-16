@@ -45,10 +45,17 @@
 			<string name="text_delete_character_description">Are you sure to delete this character?.</string>
 			<string name="text_delete_character_confirmation">Character deleted.</string>
 			
-			<string name="text_social_share_title">Update your status.</string>
+			<string name="text_audio_record_title">Recording audio.</string>
+			<string name="text_audio_record_description">Introduce a name for the audio.</string>
+			<string name="text_audio_record_confirmation">Audio recorded.</string>
+			
+			<string name="text_audio_play_title">Playing audio.</string>
+			<string name="text_audio_play_confirmation">Audio played.</string>
+			
+			<string name="text_social_share_title">Updating your status.</string>
 			<string name="text_social_share_description">Make sure your text is at or under the 140 character.</string>
 			
-			<string name="text_social_photo_title">Upload a picture.</string>
+			<string name="text_social_photo_title">Uploading a picture.</string>
 			
 			<string name="text_social_photo_initial">I just created</string>
 			<string name="text_social_photo_final">using #DeformedInvaders</string>
@@ -73,6 +80,9 @@
 		    
 		    <string name="text_button_send">Send</string>
 		    <string name="text_button_close">Close</string>
+		    
+		    <string name="text_button_record">Record</string>
+		    <string name="text_button_play">Play</string>
 		    
 		    <string name="text_button_plus">+</string>
 		    <string name="text_button_minus">-</string>
