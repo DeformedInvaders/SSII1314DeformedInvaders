@@ -43,9 +43,19 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	/* Métodos de Obtención de Información */
 	
+	public void retoquePantalla()
+	{
+		renderer.retoquePantalla(getHeight(), getWidth());
+		setEstado(TTouchEstado.Detectors);
+		
+		requestRender();
+	}
+	
 	public Bitmap capturaPantalla()
 	{
 		renderer.capturaPantalla(getHeight(), getWidth());
+		setEstado(TTouchEstado.SimpleTouch);
+		
 		requestRender();
 		return renderer.getCapturaPantalla();
 	}

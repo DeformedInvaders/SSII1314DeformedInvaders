@@ -1,24 +1,15 @@
 package com.create.deform;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.view.NonSwipeableViewPager;
+import com.android.view.SwipeableViewPager;
 import com.project.data.Esqueleto;
 import com.project.data.Movimientos;
 import com.project.data.Textura;
@@ -26,13 +17,10 @@ import com.project.main.R;
 
 public class AnimationFragment extends Fragment
 {
-	private ActionBar actionBar;
 	private AnimationFragmentListener mCallback;
 	
 	private ImageButton botonReady;
-	private SectionViewPagerAdapter pageAdapter;
-	private NonSwipeableViewPager viewPager;
-	private List<DeformFragment> listaFragmentos;
+	private SwipeableViewPager viewPager;
 	
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
@@ -83,35 +71,16 @@ public class AnimationFragment extends Fragment
 		// Instanciar Elementos de la GUI
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);		
 		botonReady.setOnClickListener(new OnReadyClickListener());	
-				
-		actionBar = getActivity().getActionBar();
+
+		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
+		viewPager.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());
+		viewPager.setSwipeable(false);
 		
-		listaFragmentos = new ArrayList<DeformFragment>();
-		
-		for(int i = 0; i < 4; i++)
-		{
-			listaFragmentos.add(DeformFragment.newInstance(esqueletoActual, texturaActual));
-		}
+		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_down));
+		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_attack));
 
-		pageAdapter = new SectionViewPagerAdapter(getActivity().getSupportFragmentManager());
-
-		viewPager = (NonSwipeableViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
-		viewPager.removeAllViews();
-		viewPager.setAdapter(pageAdapter);
-
-		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position)
-			{
-				actionBar.setSelectedNavigationItem(position);
-			}
-		});
-
-		for (int i = 0; i < pageAdapter.getCount(); i++)
-		{
-			actionBar.addTab(actionBar.newTab().setText(pageAdapter.getPageTitle(i)).setTabListener(pageAdapter));
-		}
-				
         return rootView;
     }
 	
@@ -120,11 +89,7 @@ public class AnimationFragment extends Fragment
 	{
 		super.onDestroyView();
 		
-		actionBar = null;
 		botonReady = null;
-		pageAdapter = null;
-		viewPager = null;
-		listaFragmentos = null;
 	}
 	
 	/* Listeners de Botones */
@@ -138,62 +103,4 @@ public class AnimationFragment extends Fragment
 			mCallback.onAnimationReadyButtonClicked(new Movimientos());
 		}
     }
-    
-    /* Adaptador de PagerViewer */
-
-	public class SectionViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
-	{
-		public SectionViewPagerAdapter(FragmentManager fm)
-		{
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position)
-		{
-			if(position >= 0 && position < listaFragmentos.size())
-			{
-				return listaFragmentos.get(position);
-			}
-			
-			return null;
-		}
-
-		@Override
-		public int getCount()
-		{
-			return listaFragmentos.size();
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position)
-		{
-			Locale l = Locale.getDefault();
-			switch (position)
-			{
-				case 0:
-					return getString(R.string.title_animation_section_run).toUpperCase(l);
-				case 1:
-					return getString(R.string.title_animation_section_jump).toUpperCase(l);
-				case 2:
-					return getString(R.string.title_animation_section_down).toUpperCase(l);
-				case 3:
-					return getString(R.string.title_animation_section_attack).toUpperCase(l);
-			}
-			
-			return null;
-		}
-		
-		@Override
-		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-		{
-			viewPager.setCurrentItem(tab.getPosition());
-		}
-	
-		@Override
-		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	
-		@Override
-		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	}
 }

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import com.android.touch.DoubleTouchGestureListener;
-import com.android.touch.DragGestureDetector;
+import com.android.touch.MoveGestureDetector;
 import com.android.touch.ScaleGestureListener;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
@@ -20,10 +18,9 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private Context mContext;
 	private TTouchEstado estado;
 	
-	 // Detectores de Gestos
-    private ScaleGestureDetector scaleDectector;
-    private GestureDetector doubleTouchDetector;
-    private DragGestureDetector dragDetector;
+	// Detectores de Gestos
+	private ScaleGestureDetector scaleDetector;
+	private MoveGestureDetector dragDetector;
     
     public OpenGLSurfaceView(Context context, AttributeSet attrs, TTouchEstado estado)
     {
@@ -55,9 +52,8 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     	super.setRenderMode(RENDERMODE_WHEN_DIRTY);
     	
         // Detectors
-    	scaleDectector = new ScaleGestureDetector(mContext, new ScaleGestureListener(renderer));
-        doubleTouchDetector = new GestureDetector(mContext, new DoubleTouchGestureListener(renderer));
-        dragDetector = new DragGestureDetector(renderer);
+    	scaleDetector = new ScaleGestureDetector(mContext, new ScaleGestureListener(renderer));
+        dragDetector = new MoveGestureDetector(renderer);
     }
     
     public void setEstado(TTouchEstado estado)
@@ -117,21 +113,21 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     private boolean onDetectorsTouch(View v, MotionEvent event)
     {
     	if(event != null)
-    	{
-    		float pixelX = event.getX();
-			float pixelY = event.getY();
-			
-			float screenWidth = getWidth();
-			float screenHeight = getHeight();
-			
+    	{			
 			if(event.getPointerCount() == 1)
 			{
+	    		float pixelX = event.getX();
+				float pixelY = event.getY();
+				
+				float screenWidth = getWidth();
+				float screenHeight = getHeight();
+				
 				dragDetector.onTouchEvent(event, pixelX, pixelY, screenWidth, screenHeight);
-				doubleTouchDetector.onTouchEvent(event);
 			}
 			else
 			{
-				scaleDectector.onTouchEvent(event);
+				scaleDetector.onTouchEvent(event);
+				dragDetector.onStopEvent(event);
 			}
 			
 			requestRender();

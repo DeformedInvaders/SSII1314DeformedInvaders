@@ -40,8 +40,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private Bitmap captura;
 	private int canvasHeight, canvasWidth;
 		
-	private boolean modoCaptura;
-	private boolean capturaTerminada;
+	//private boolean modoCaptura;
+	//private boolean capturaTerminada;
+	private TCapturaEstado estadoCaptura; 
 	
 	// Texturas
 	private Bitmap bitmap;
@@ -71,8 +72,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
 		
 		// Textura
-		modoCaptura = false;
-        capturaTerminada = false;
+		estadoCaptura = TCapturaEstado.Nada;
         
 		bitmap = textura.getTextura().getBitmap();
 		coords = textura.getCoordTextura();
@@ -132,7 +132,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			
 		if(personajeCargado)
 		{
-			if (modoCaptura)
+			if (estadoCaptura == TCapturaEstado.Capturando)
 			{	
 				// Guardar posición actual de la Cámara
 				salvarCamara();
@@ -166,18 +166,22 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 				dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
 			}
 			
-			if(modoCaptura)
+			if(estadoCaptura == TCapturaEstado.Capturando)
 			{
 				// Capturar Pantalla
-			    MapaBits textura = capturaPantalla(gl, canvasHeight, canvasWidth);
+			    MapaBits textura = capturaPantallaPolariod(gl, canvasHeight, canvasWidth);
 				captura = textura.getBitmap();
 				
 				// Desactivar Modo Captura
-				modoCaptura = false;
-				capturaTerminada = true;
+				estadoCaptura = TCapturaEstado.Terminado;
 				
 				// Restaurar posición anterior de la Cámara
 				recuperarCamara();
+			}
+			else if(estadoCaptura == TCapturaEstado.Retocando)
+			{
+				// Marco Oscuro
+				dibujarMarco(gl);
 			}
 		}
 	}
@@ -194,19 +198,37 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	
 	public void onMultiTouchEvent() { }
 	
+	/* Métodos de Modificación de Estado */
+	
+	public void retoquePantalla(float height, float width)
+	{
+		// Construir rectangulos		
+		estadoCaptura = TCapturaEstado.Retocando;
+	}
+	
 	public void capturaPantalla(int height, int width)
 	{
 		canvasHeight = height;
 		canvasWidth = width;
-		modoCaptura = true;
+		
+		estadoCaptura = TCapturaEstado.Capturando;
 	}
+	
+	/* Métodos de Obtención de Información */
 	
 	public Bitmap getCapturaPantalla()
 	{
-		while(!capturaTerminada);
+		if(estadoCaptura == TCapturaEstado.Capturando)
+		{	
+			while(estadoCaptura != TCapturaEstado.Terminado);
 		
-		return captura;
+			return captura;
+		}
+		
+		return null;
 	}
+	
+	/* Métodos de Guardado de Información */
 	
 	public void saveData()
 	{

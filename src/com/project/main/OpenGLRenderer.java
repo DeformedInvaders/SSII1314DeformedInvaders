@@ -44,6 +44,10 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final int numeroTexturas = 4;
 	protected int[] nombreTexturas;
 	
+	// Marco
+	private float marcoA, marcoB, marcoC;
+	private FloatBuffer recMarcoA, recMarcoB;
+	
 	// Contexto
 	protected Context context;
 	
@@ -53,6 +57,9 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		this.context = context;
 		this.nombreTexturas = new int[numeroTexturas];
+		
+		// Marcos
+		actualizarMarcos();
 		
 		// Se inicializan los parámetros de la cámara en el 
 		// método onSurfaceChanged llamado automáticamente
@@ -124,7 +131,10 @@ public abstract class OpenGLRenderer implements Renderer
 		
 		// Copia de Seguridad de la Cámara
 		this.camaraGuardada = false;
-
+		
+		// Marco
+		actualizarMarcos();
+		
 		// Reiniciar la Matriz de ModeladoVista
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -157,17 +167,35 @@ public abstract class OpenGLRenderer implements Renderer
 		this.xLeft = xCentro - newAncho/2.0f;
 		this.yTop = yCentro + newAlto/2.0f;
 		this.yBot = yCentro - newAlto/2.0f;
+		
+		actualizarMarcos();
 	}
 	
-	public void drag(float width, float height, float dx, float dy)
+	public void drag(float dWorldX, float dWorldY)
 	{			
-		this.xLeft += dx * width;
-		this.xRight += dx *width;
-		this.yBot += dy * height;
-		this.yTop += dy * height;
+		this.xLeft += dWorldX;
+		this.xRight += dWorldX;
+		this.yBot += dWorldY;
+		this.yTop += dWorldY;
 		
 		this.xCentro = (xRight + xLeft)/2.0f;
         this.yCentro = (yTop + yBot)/2.0f;
+        
+        actualizarMarcos();
+	}
+	
+	public void drag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	{
+		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+		
+		float lastWorldX = convertToWorldXCoordinate(lastPixelX, screenWidth);
+		float lastWorldY = convertToWorldYCoordinate(lastPixelY, screenHeight);
+		
+		float dWorldX = lastWorldX - worldX;
+		float dWorldY = lastWorldY - worldY;
+		
+		drag(dWorldX, dWorldY);
 	}
 	
 	public void restore()
@@ -179,11 +207,13 @@ public abstract class OpenGLRenderer implements Renderer
         
         this.xCentro = (xRight + xLeft)/2.0f;
         this.yCentro = (yTop + yBot)/2.0f;
+        
+        actualizarMarcos();
 	}
 	
 	/* Copia de Seguridad de la Cámara */
 	
-	protected void salvarCamara()
+	public void salvarCamara()
 	{
 		lastXLeft = xLeft;
 		lastXRight = xRight;
@@ -195,7 +225,7 @@ public abstract class OpenGLRenderer implements Renderer
 		camaraGuardada = true;
 	}
 	
-	protected void recuperarCamara()
+	public void recuperarCamara()
 	{
 		if(camaraGuardada)
 		{
@@ -208,25 +238,53 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	protected MapaBits capturaPantalla(GL10 gl, int height, int width)
+	/* Captura de Pantalla */
+	
+	private MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int height, int width)
 	{
 	    int screenshotSize = width * height;
 	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
 	    bb.order(ByteOrder.nativeOrder());
 	    
-	    gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
+	    gl.glReadPixels(leftX, leftY, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
 	    
 	    int pixelsBuffer[] = new int[screenshotSize];
 	    bb.asIntBuffer().get(pixelsBuffer);
 	    bb = null;
 
-	    for (int i = 0; i < screenshotSize; ++i) {
+	    for (int i = 0; i < screenshotSize; ++i)
+	    {
 	        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 	    }
 	    
 	    MapaBits textura = new MapaBits();
 	    textura.setBitmap(pixelsBuffer, width, height);
 	    return textura;
+	}
+	
+	protected MapaBits capturaPantalla(GL10 gl, int height, int width)
+	{
+		return capturaPantalla(gl, 0, 0, width, height);
+	}
+	
+	/*	
+	____________________________________
+	|			|___________|			| B
+	|			|			|			|
+	|			|			|			| A
+	|			|			|			|
+	|			|___________|			|
+	|___________|___________|___________| B
+		C
+	 */
+	
+	protected MapaBits capturaPantallaPolariod(GL10 gl, int height, int width)
+	{
+		float marcoA = 0.8f * height;
+		float marcoB = 0.1f * height;
+		float marcoC = (width - marcoA)/2;
+		
+		return capturaPantalla(gl, (int) marcoC, (int) marcoB, (int) marcoA, (int) marcoA);
 	}
 	
 	/* Conversión de Coordenadas */
@@ -561,11 +619,65 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	/* Métodos de Pintura en la Tubería Gráfica */
+	/*	
+		____________________________________
+		|			|___________|			| B
+		|			|			|			|
+		|			|			|			| A
+		|			|			|			|
+		|			|___________|			|
+		|___________|___________|___________| B
+			recA		recB			C
+	*/
+	
+	private void actualizarMarcos()
+	{
+		float height = yTop - yBot;
+		float width = xRight - xLeft;
+		
+		marcoA = 0.8f * height;
+		marcoB = 0.1f * height;
+		marcoC = (width - marcoA)/2;
+		
+		float[] recA = {0, 0, 0, height, marcoC, 0, marcoC, height};		
+		recMarcoA = construirBufferListaPuntos(recA);
+		
+		float[] recB = {0, 0, 0, marcoB, marcoA, 0, marcoA, marcoB};
+		recMarcoB = construirBufferListaPuntos(recB);
+	}
+	
+	protected void dibujarMarco(GL10 gl)
+	{
+		gl.glPushMatrix();
+		
+			gl.glTranslatef(xLeft, yBot, 1.0f);
+			
+			gl.glPushMatrix();
+				
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoA);
+				
+				gl.glTranslatef(marcoC + marcoA, 0, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoA);
+			
+			gl.glPopMatrix();
+			
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(marcoC, 0, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
+				
+				gl.glTranslatef(0, marcoB + marcoA, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
+			
+			gl.glPopMatrix();
+			
+		gl.glPopMatrix();
+	}
 	
 	// Pintura de un Buffer de Puntos
 	protected void dibujarBuffer(GL10 gl, int type, int size, int color, FloatBuffer bufferPuntos)
 	{	
-		gl.glColor4f(Color.red(color)/255.0f, Color.green(color)/255.0f, Color.blue(color)/255.0f, 1.0f);
+		gl.glColor4f(Color.red(color)/255.0f, Color.green(color)/255.0f, Color.blue(color)/255.0f, Color.alpha(color)/255.0f);
 		gl.glFrontFace(GL10.GL_CW);
 		
 		if(type == GL10.GL_POINTS)

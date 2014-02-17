@@ -11,7 +11,7 @@
         <ImageButton
             android:id="@+id/imageButtonSelect1"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_camera"
+            android:background="@drawable/icon_social_picture"
             android:contentDescription="@string/desc_select_camera" />
 
 	</LinearLayout>

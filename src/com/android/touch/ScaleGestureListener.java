@@ -19,7 +19,6 @@ public class ScaleGestureListener extends SimpleOnScaleGestureListener
 	@Override
 	public boolean onScale(ScaleGestureDetector detector)
 	{
-		// TODO Eliminar multiplicación para no acumular los factores de zoom.
         mScaleFactor = detector.getScaleFactor();
         
         if(mScaleFactor > 1.02)
