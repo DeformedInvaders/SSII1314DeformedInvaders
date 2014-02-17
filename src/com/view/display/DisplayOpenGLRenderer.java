@@ -169,7 +169,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			if(estadoCaptura == TCapturaEstado.Capturando)
 			{
 				// Capturar Pantalla
-			    MapaBits textura = capturaPantallaPolariod(gl, canvasHeight, canvasWidth);
+			    MapaBits textura = capturaPantallaPolariod(gl, canvasWidth, canvasHeight);
 				captura = textura.getBitmap();
 				
 				// Desactivar Modo Captura

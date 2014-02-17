@@ -132,7 +132,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarEsqueleto(gl);
 			
 			// Capturar Pantalla
-		    textura = capturaPantalla(gl, canvasHeight, canvasWidth);
+		    textura = capturaPantalla(gl, canvasWidth, canvasHeight);
 		    
 		    // Construir Textura
 			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());

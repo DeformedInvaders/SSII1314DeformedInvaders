@@ -240,7 +240,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* Captura de Pantalla */
 	
-	private MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int height, int width)
+	private MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)
 	{
 	    int screenshotSize = width * height;
 	    ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
@@ -262,7 +262,7 @@ public abstract class OpenGLRenderer implements Renderer
 	    return textura;
 	}
 	
-	protected MapaBits capturaPantalla(GL10 gl, int height, int width)
+	protected MapaBits capturaPantalla(GL10 gl, int width, int height)
 	{
 		return capturaPantalla(gl, 0, 0, width, height);
 	}
@@ -278,7 +278,7 @@ public abstract class OpenGLRenderer implements Renderer
 		C
 	 */
 	
-	protected MapaBits capturaPantallaPolariod(GL10 gl, int height, int width)
+	protected MapaBits capturaPantallaPolariod(GL10 gl, int width, int height)
 	{
 		float marcoA = 0.8f * height;
 		float marcoB = 0.1f * height;
