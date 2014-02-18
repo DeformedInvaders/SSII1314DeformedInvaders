@@ -25,8 +25,7 @@ public class AnimationFragment extends Fragment
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
 	
-	// TODO: Inicializar lista de Movimientos
-	//private List<FloatArray> movimientoSalto, movimientoAtaque, movimientoAgacharse, movimientoCorrer;
+	private Movimientos movimientos;
 	
 	/* Constructora */
 	
@@ -99,8 +98,16 @@ public class AnimationFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			// TODO: Comprobar que hay guardado 4 List<FloatArray> distintos
-			mCallback.onAnimationReadyButtonClicked(new Movimientos());
+			for(int i = 0; i < 4; i++)
+			{
+				DeformFragment df = (DeformFragment)viewPager.getView(i);
+				if(df != null)
+				{
+					movimientos.set(df.getMovimientos(), i);
+				}	
+			}	
+			
+			mCallback.onAnimationReadyButtonClicked(movimientos);
 		}
     }
 }

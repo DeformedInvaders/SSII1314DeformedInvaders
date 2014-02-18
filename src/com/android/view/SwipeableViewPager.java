@@ -72,6 +72,11 @@ public class SwipeableViewPager<T extends Fragment> extends ViewPager
     	actionBar.addTab(actionBar.newTab().setText(s).setTabListener(pageAdapter));
     }
     
+    public T getView(int pos)
+    {
+		return (T) pageAdapter.getItem(pos);
+    }
+    
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event)
     {

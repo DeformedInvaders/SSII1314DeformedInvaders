@@ -1,6 +1,8 @@
 package com.create.deform;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -24,13 +26,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private Deformator deformator;
 	
 	private final int NUM_HANDLES;
+	private final static int NUM_ITER = 20;
 	
-	// TODO: Definir Modo Grabado
+	// Modo Grabado
 	private TDeformEstado estado;
 	private boolean modoGrabar;
 	
-	// TODO: Información de Movimiento. Posición de los Handles en los pasos intermedios.
-	private FloatArray movimientos;
+	// Información de Movimiento. Posición de los Handles en los pasos intermedios.
+	private List<FloatArray> listaHandles; 
+	private List<FloatArray> listaVertices; 
 	
 	/* Esqueleto */
 	
@@ -77,10 +81,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         
         NUM_HANDLES = num_handles;
         
-        // TODO: Inicializar Modo Grabado
         estado = TDeformEstado.Nada;
         modoGrabar = false;
-        movimientos = new FloatArray();
+        listaHandles = new ArrayList<FloatArray>();
         
         // Esqueleto
 		contorno = esqueleto.getContorno();
@@ -236,8 +239,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		handles.clear();
 		indiceHandles.clear();	
 		
-		// TODO: Reiniciar Información de Movimiento
-		movimientos.clear();
+		listaHandles.clear();
+		listaVertices = null;
+		modoGrabar = false;
 		
         for(int i = 0; i < NUM_HANDLES; i++)
         {
@@ -260,12 +264,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TDeformEstado.Deformar)
-		{				
-			// TODO: Si Modo Grabado Guardar Posición inicial de los Handles
-			if(modoGrabar)
-				anyadirMovimiento(pixelX, pixelY, screenWidth, screenHeight);
-			
+		{		
 			seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
+			
+			anyadirMovimiento();
 		}	
 	}
 	
@@ -287,20 +289,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 		}
 	}
-	//TODO
-	private void anyadirMovimiento(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	
+	private void anyadirMovimiento()
 	{
-		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
-		if(j != -1)
-		{
-			// Vértice pertenece a los Handles
-			if(indiceHandles.contains((short) j))
-			{
-				movimientos.add(handles.get(2*j));
-				movimientos.add(handles.get(2*j+1));
-			}
-					
-		}
+		if(modoGrabar)
+			listaHandles.add(handles.clone());
 	}
 	
 	private void eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
@@ -355,11 +348,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				// TODO: Si Modo Grabado guardar posicion intermedia de los Handles
-				if(modoGrabar)
-					anyadirMovimiento(pixelX, pixelY, screenWidth, screenHeight);
-					
 				moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
+				
+				anyadirMovimiento();				
 			}
 		}
 	}
@@ -400,9 +391,28 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handleSeleccionado.set(4*pointer, -1);
 			handleSeleccionado.set(4*pointer+1, 0);
 			
-			//TODO Cuando se termina la deformación, se termina la grabación
 			modoGrabar = false;
+			estado = TDeformEstado.Nada;
+			reducirMovimientos();
 		}	
+	}
+	
+	private void reducirMovimientos()
+	{
+		int i = 0;
+		int r = listaHandles.size() / NUM_ITER;
+		FloatArray v = vertices.clone();
+		
+		while(i < listaHandles.size())
+		{
+			deformator.moverHandles(listaHandles.get(i), v);
+			listaVertices.add(v);
+			i = i+r;
+		}
+		
+		deformator.moverHandles(listaHandles.get(listaHandles.size()-1), v);
+		listaVertices.add(v);
+		
 	}
 	
 	@Override
@@ -420,21 +430,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Actualización de Estado */
 	
-	// TODO: Seleccionar Modo Grabado
 	public void seleccionarGrabado() 
 	{ 
 		modoGrabar = true;
-	}
-	
-	// TODO: Seleccionar Restauracion. Reiniciar posición Inicial de Vertices. Actualizar Estado Grabación.
-	public void restaurar()
-	{
 		verticesModificados = vertices.clone();
-		movimientos = null;
-		
-		//Estado de grabacion a true? o se debería pulsar otra vez en la camara?
+		listaHandles.clear();
+		listaVertices = new ArrayList<FloatArray>();
 	}
-	
+
 	/* Métodos de Obtención de Información */
 
 	public boolean handlesVacio()
@@ -442,35 +445,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return indiceHandles.size == 0;
 	}
 	
-	// TODO: Obtener Estado de Grabación
-	public boolean estadoGrabacion() 
+	public boolean getEstadoGrabacion() 
 	{
 		return modoGrabar;
 	}
 	
-	// TODO: Obtener Información de Movimientos. Reducir a numIter pasos intermedios. Calcular Posición de Vertices en esos pasos y devolverlos.
-	public FloatArray getMovimientos(int numIter) 
+	public List<FloatArray> getMovimientos() 
 	{ 
-		FloatArray animacion = new FloatArray();
-		int n = movimientos.size;
-		int intermedios = n / numIter;
-		
-		for(int i = 0; i < n; i = i + intermedios)
-		{
-			animacion.add(movimientos.get(i));
-			animacion.add(movimientos.get(i+1));
-		}
-		
-		return animacion;
+		return listaVertices;
 	}
 	
 	/* Métodos de Salvados de Información */
 	
-	// TODO: Guardar Información del Movimiento
-	
 	public DeformDataSaved saveData()
 	{
-		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado);
+		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVertices);
 	}
 	
 	public void restoreData(DeformDataSaved data)
@@ -479,6 +468,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		handles = data.getHandles();
 		indiceHandles = data.getIndiceHandles();
 		verticesModificados = data.getVerticesModificados();
+		listaVertices = data.getListaVertices();
 		
 		deformator.anyadirHandles(handles, indiceHandles);
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);

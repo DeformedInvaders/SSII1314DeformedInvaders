@@ -190,40 +190,43 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 		else
 		{
-			personajeActual.setMovimientos(movimientos);
-		
-			TextInputAlert alert = new TextInputAlert(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no)) {
-
-				@Override
-				public void onPossitiveButtonClick()
-				{
-					String value = getText().toUpperCase(Locale.getDefault());
-					personajeActual.setNombre(value);
+			if(movimientos.isReady())
+			{
+				personajeActual.setMovimientos(movimientos);
+			
+				TextInputAlert alert = new TextInputAlert(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no)) {
+	
+					@Override
+					public void onPossitiveButtonClick()
+					{
+						String value = getText().toUpperCase(Locale.getDefault());
+						personajeActual.setNombre(value);
+						
+						if(manager.guardarPersonaje(personajeActual))
+						{
+							listaPersonajes.add(personajeActual);
+							personajeActual = null;
+							
+							Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
+						}
+						else
+						{
+							Toast.makeText(getApplication(), R.string.error_save_character, Toast.LENGTH_SHORT).show();
+						}
+							
+						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+					}
+	
+					@Override
+					public void onNegativeButtonClick()
+					{
+						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+					}
 					
-					if(manager.guardarPersonaje(personajeActual))
-					{
-						listaPersonajes.add(personajeActual);
-						personajeActual = null;
-						
-						Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
-					}
-					else
-					{
-						Toast.makeText(getApplication(), R.string.error_save_character, Toast.LENGTH_SHORT).show();
-					}
-						
-					changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
-				}
-
-				@Override
-				public void onNegativeButtonClick()
-				{
-					changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
-				}
-				
-			};
-
-			alert.show();
+				};
+	
+				alert.show();
+			}
 		}
 	}
     

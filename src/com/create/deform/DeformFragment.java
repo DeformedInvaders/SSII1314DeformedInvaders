@@ -1,5 +1,7 @@
 package com.create.deform;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,7 +18,7 @@ import com.project.data.Textura;
 import com.project.main.R;
 
 public class DeformFragment extends Fragment
-{
+{	
 	private DeformGLSurfaceView canvas;
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
@@ -115,7 +117,6 @@ public class DeformFragment extends Fragment
 	
 	private void actualizarBotones()
 	{
-		// TODO: Actualizar Estado del Botón Record.
 		if(canvas.handlesVacio())
 		{
 			botonRemove.setVisibility(View.INVISIBLE);
@@ -125,11 +126,17 @@ public class DeformFragment extends Fragment
 		}
 		else
 		{
-			// TODO: Comprobar Si estado de Grabación bloquear botones de modifiación de Handles
 			botonRemove.setVisibility(View.VISIBLE);
 			botonMove.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 			botonRecord.setVisibility(View.VISIBLE);
+			
+			if(canvas.getEstadoGrabacion())
+			{	
+				botonRemove.setVisibility(View.INVISIBLE);
+				botonMove.setVisibility(View.INVISIBLE);
+				botonDelete.setVisibility(View.INVISIBLE);
+			}
 		}
 	}
 	
@@ -210,7 +217,6 @@ public class DeformFragment extends Fragment
 		}	
 	}
 	
-	// TODO: Añadir Listener para Grabar Movimiento. Cambiar Imagen del boton en modo Grabacíón / Restaurar y actualizar Botones.
 	private class OnRecordClickListener implements OnClickListener 
 	{ 
 		public void onClick(View v)
@@ -218,15 +224,14 @@ public class DeformFragment extends Fragment
 			canvas.seleccionarGrabado();
 			
 			reiniciarImagenesBotones();
-			botonRecord.setBackgroundResource(R.drawable.icon_pause);
+			botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
 		}	
 	}
 	
 	/* Métodos de Obtención de Información */
 	
-	// TODO: Añadir Método para Obtener la Grabación
-	public FloatArray getMovimientos(int numIter) 
+	public List<FloatArray> getMovimientos() 
 	{ 
-		return canvas.getMovimientos(numIter);
+		return canvas.getMovimientos();
 	}
 }

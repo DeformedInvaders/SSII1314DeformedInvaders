@@ -1,5 +1,7 @@
 package com.create.deform;
 
+import java.util.List;
+
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -76,9 +78,14 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.handlesVacio();
 	}
 	
-	public FloatArray getMovimientos(int numIter)
+	public List<FloatArray> getMovimientos()
 	{
-		return renderer.getMovimientos(numIter);
+		return renderer.getMovimientos();
+	}
+	
+	public boolean getEstadoGrabacion()
+	{
+		return renderer.getEstadoGrabacion();
 	}
 	
 	/* Métodos de Guardado de Información */
