@@ -55,4 +55,20 @@ public class Movimientos implements Serializable
 	{
 		return (run != null && jump != null && down != null && attack != null);
 	}
+	
+	public List<FloatArray> get(int pos) 
+	{
+		switch(pos)
+		{
+			case 0: return run;
+			
+			case 1: return jump;
+			
+			case 2: return down;
+			
+			case 3: return attack;
+			
+			default: return null;
+		}
+	}
 }

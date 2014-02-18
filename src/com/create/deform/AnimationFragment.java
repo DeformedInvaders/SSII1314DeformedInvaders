@@ -1,8 +1,12 @@
 package com.create.deform;
 
+import java.util.Iterator;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.android.view.SwipeableViewPager;
+import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Movimientos;
 import com.project.data.Textura;
@@ -52,6 +57,7 @@ public class AnimationFragment extends Fragment
 	{
 		super.onAttach(activity);
 		mCallback = (AnimationFragmentListener) activity;
+		movimientos = new Movimientos();
 	}
 	
 	@Override
@@ -98,15 +104,23 @@ public class AnimationFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			for(int i = 0; i < 4; i++)
+			int i = 0;
+			Iterator<DeformFragment> it = viewPager.iterator();
+			while(it.hasNext())
 			{
-				DeformFragment df = (DeformFragment)viewPager.getView(i);
-				if(df != null)
-				{
-					movimientos.set(df.getMovimientos(), i);
-				}	
-			}	
-			
+				List<FloatArray> movimiento = it.next().getMovimientos();
+				
+				if(movimiento != null)
+					movimientos.set(movimiento, i);
+				
+
+				if(movimientos.get(i) == null)
+					Log.d("TEST", "null "+i);
+				else
+					Log.d("TEST", "NO null "+i);
+				
+				i++;	
+			}
 			mCallback.onAnimationReadyButtonClicked(movimientos);
 		}
     }

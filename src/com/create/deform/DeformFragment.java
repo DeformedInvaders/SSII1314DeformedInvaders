@@ -83,11 +83,18 @@ public class DeformFragment extends Fragment
 	{
 		super.onDestroyView();
 		
-		canvas = null;
 		botonAdd = null;
 		botonRemove = null;
 		botonMove = null;
 		botonDelete = null;
+	}
+	
+	@Override	
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		canvas = null;
 	}
 	
 	@Override
@@ -123,6 +130,7 @@ public class DeformFragment extends Fragment
 			botonMove.setVisibility(View.INVISIBLE);
 			botonDelete.setVisibility(View.INVISIBLE);
 			botonRecord.setVisibility(View.INVISIBLE);
+			botonAdd.setVisibility(View.VISIBLE);
 		}
 		else
 		{
@@ -130,13 +138,19 @@ public class DeformFragment extends Fragment
 			botonMove.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 			botonRecord.setVisibility(View.VISIBLE);
+			botonAdd.setVisibility(View.VISIBLE);
 			
 			if(canvas.getEstadoGrabacion())
 			{	
+				botonAdd.setVisibility(View.INVISIBLE);
 				botonRemove.setVisibility(View.INVISIBLE);
 				botonMove.setVisibility(View.INVISIBLE);
 				botonDelete.setVisibility(View.INVISIBLE);
 			}
+		}
+		if(!canvas.getEstadoGrabacion())
+		{
+			botonRecord.setBackgroundResource(R.drawable.icon_record);
 		}
 	}
 	
@@ -225,6 +239,8 @@ public class DeformFragment extends Fragment
 			
 			reiniciarImagenesBotones();
 			botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
+			
+			actualizarBotones();
 		}	
 	}
 	
@@ -232,6 +248,10 @@ public class DeformFragment extends Fragment
 	
 	public List<FloatArray> getMovimientos() 
 	{ 
-		return canvas.getMovimientos();
+		if(canvas != null)
+		{
+			return canvas.getMovimientos();
+		}
+		return null;
 	}
 }

@@ -237,7 +237,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TDeformEstado.Nada;
 		    
 		handles.clear();
-		indiceHandles.clear();	
+		indiceHandles.clear();
+		
+		verticesModificados = vertices.clone();
 		
 		listaHandles.clear();
 		listaVertices = null;
@@ -391,16 +393,29 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handleSeleccionado.set(4*pointer, -1);
 			handleSeleccionado.set(4*pointer+1, 0);
 			
-			modoGrabar = false;
-			estado = TDeformEstado.Nada;
-			reducirMovimientos();
+			if(modoGrabar)
+			{
+				modoGrabar = false;
+				estado = TDeformEstado.Nada;
+				reducirMovimientos();
+			}
 		}	
 	}
 	
 	private void reducirMovimientos()
 	{
 		int i = 0;
-		int r = listaHandles.size() / NUM_ITER;
+		int r = 0;
+		
+		if(listaHandles.size() < NUM_ITER)
+		{
+			r = 1;
+		}
+		else
+		{
+			r = listaHandles.size() / NUM_ITER;
+		}
+		
 		FloatArray v = vertices.clone();
 		
 		while(i < listaHandles.size())
@@ -433,6 +448,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarGrabado() 
 	{ 
 		modoGrabar = true;
+		estado = TDeformEstado.Deformar;
 		verticesModificados = vertices.clone();
 		listaHandles.clear();
 		listaVertices = new ArrayList<FloatArray>();

@@ -1,6 +1,7 @@
 package com.android.view;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,9 +73,9 @@ public class SwipeableViewPager<T extends Fragment> extends ViewPager
     	actionBar.addTab(actionBar.newTab().setText(s).setTabListener(pageAdapter));
     }
     
-    public T getView(int pos)
+    public Iterator<T> iterator()
     {
-		return (T) pageAdapter.getItem(pos);
+		return listaFragmentos.iterator();
     }
     
     @Override

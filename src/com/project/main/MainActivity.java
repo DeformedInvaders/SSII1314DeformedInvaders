@@ -227,6 +227,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	
 				alert.show();
 			}
+			else
+			{
+				Toast.makeText(getApplication(), R.string.error_animation, Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
     
