@@ -159,7 +159,7 @@ public class DesignFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onDesignTestButtonClicked(canvas.pruebaCompleta());
+			mCallback.onDesignTestButtonClicked(canvas.seleccionarTriangular());
 		}
 	}
 }

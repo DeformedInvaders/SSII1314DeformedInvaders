@@ -7,13 +7,9 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.lib.math.BSpline;
-import com.lib.math.DelaunayMeshGenerator;
-import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
-import com.lib.math.Vector2;
+import com.lib.math.Triangulator;
 import com.lib.utils.FloatArray;
-import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
 import com.project.data.Esqueleto;
 import com.project.main.OpenGLRenderer;
@@ -22,25 +18,26 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 {		
 	//Estructura de Datos de la Escena
 	private TDesignEstado estado;
+	private Triangulator triangulator;
 	
-	private FloatArray puntos;
-	private FloatBuffer bufferPuntos;	
+	private FloatArray puntos;	
+	private FloatArray vertices;
+	private ShortArray triangulos;
+	private ShortArray contorno;
 	
-	private FloatArray puntosTest;
-	private ShortArray triangulosTest;
-	private FloatBuffer bufferTest;
+	private FloatBuffer bufferPoligono;	
+	private FloatBuffer bufferMalla;
 	
-	private final static int NUM_BSPLINE_VERTICES = 60;
-	private final static int DEEP_TRIANGULATOR = 3;
-	private final static float MAX_LONG_EDGE_TRIANGULATOR = 100.0f;
+	private boolean poligonoSimple;
 	
 	public DesignOpenGLRenderer(Context context)
 	{        
 		super(context);
 		
-        estado = TDesignEstado.Dibujar;
+        estado = TDesignEstado.Dibujando;
 
         puntos = new FloatArray();
+        poligonoSimple = false;
 	}
 	
 	/* Métodos de la interfaz Renderer */
@@ -52,19 +49,20 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		
 		switch(estado)
 		{
-			case Dibujar:
+			case Dibujando:
 				if(puntos.size > 0)
 				{
-					dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPuntos);
+					dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
 					
 					if(puntos.size > 2)
 					{
-						dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPuntos);
+						dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
 					}
 				}
 			break;
-			case Triangular:
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferTest);
+			case Triangulando:
+			case Terminado:
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
 			break;
 			default:
 			break;
@@ -75,18 +73,19 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	
 	public void reiniciar()
 	{
-		estado = TDesignEstado.Dibujar;
+		estado = TDesignEstado.Dibujando;
 		
 		puntos.clear();
 		
-		puntosTest = null;
-		triangulosTest = null;
+		vertices = null;
+		triangulos = null;
+		contorno = null;
 	}
 	
 	@Override
 	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if(estado == TDesignEstado.Dibujar)
+		if(estado == TDesignEstado.Dibujando)
 		{
 			anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
 		}
@@ -117,14 +116,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			puntos.add(worldX);
 			puntos.add(worldY);
 			
-			bufferPuntos = construirBufferListaPuntos(puntos);
+			bufferPoligono = construirBufferListaPuntos(puntos);
 		}
 	}
 	
 	@Override
 	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if(estado == TDesignEstado.Dibujar)
+		if(estado == TDesignEstado.Dibujando)
 		{
 			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
@@ -133,9 +132,21 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if(estado == TDesignEstado.Dibujar)
+		if(estado == TDesignEstado.Dibujando)
 		{
 			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
+			
+			triangulator = new Triangulator(puntos);
+			
+			poligonoSimple = triangulator.getPoligonSimple();
+			vertices = triangulator.getVertices();
+			triangulos = triangulator.getTriangulos();
+			contorno = triangulator.getContorno();
+			
+			if(poligonoSimple)
+			{
+				bufferMalla = construirBufferListaTriangulos(triangulos, vertices);
+			}
 		}
 	}
 	
@@ -144,48 +155,25 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	
 	/* Selección de Estado */
 	
-	private FloatArray calcularBSpline(FloatArray vertices, int grado, int iter)
+	public boolean seleccionarTriangular()
 	{
-		BSpline<Vector2> bsplineCalculator = new BSpline<Vector2>(vertices, grado, true);
-		return bsplineCalculator.computeBSpline(0.0f, iter);
-	}
-	
-	private Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
-	{
-		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
-		return delaunayMeshGenerator.computeMesh(vertices, profundidad, longitud);
-	}
-	
-	private ShortArray calcularPoligonoSimple(FloatArray vertices, boolean continuo)
-	{
-		return GeometryUtils.isPolygonSimple(vertices, continuo);
+		if(poligonoSimple)
+		{
+			estado = TDesignEstado.Triangulando;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/* Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
 	{
-		if(puntos.size > 4)
+		if(poligonoSimple)
 		{
-			estado = TDesignEstado.Triangular;
-			
-			// TODO Calcular Iteraciones en función del Area del Poligono
-			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
-			
-			ShortArray testSimple = calcularPoligonoSimple(bsplineVertices, false);
-			if(testSimple.size == 0)
-			{
-				Mesh m = calcularMeshGenerator(bsplineVertices, DEEP_TRIANGULATOR, MAX_LONG_EDGE_TRIANGULATOR);
-				puntosTest = m.getVertices();
-				triangulosTest = m.getTriangulos();
-				bufferTest = construirBufferListaTriangulos(triangulosTest, puntosTest);
-				
-				// Contorno
-				ShortArray contornoTest = new ShortArray(NUM_BSPLINE_VERTICES);
-				for(int i = 0; i < NUM_BSPLINE_VERTICES; i++) contornoTest.add(i);
-				
-				return new Esqueleto(contornoTest, puntosTest, triangulosTest);
-			}
+			estado = TDesignEstado.Terminado;
+			return new Esqueleto(contorno, vertices, triangulos);
 		}
 		
 		return null;
@@ -200,24 +188,22 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	
 	public DesignDataSaved saveData()
 	{
-		return new DesignDataSaved(puntos, puntosTest, triangulosTest, estado);
+		return new DesignDataSaved(puntos, vertices, triangulos, contorno, estado, poligonoSimple);
 	}
 	
 	public void restoreData(DesignDataSaved data)
 	{
 		estado = data.getEstado();
 		puntos = data.getPuntos();
-		puntosTest = data.getPuntosTest();
-		triangulosTest = data.getTriangulosTest();
+		vertices = data.getVertices();
+		triangulos = data.getTriangulos();
+		contorno = data.getContorno();
+		poligonoSimple = data.getPoligonoSimple();
 		
-		if(puntos.size > 0)
+		if(poligonoSimple)
 		{
-			bufferPuntos = construirBufferListaPuntos(puntos); 
-		}
-		
-		if(puntosTest != null && triangulosTest != null)
-		{
-			bufferTest = construirBufferListaTriangulos(triangulosTest, puntosTest);
+			bufferPoligono = construirBufferListaPuntos(puntos); 
+			bufferMalla = construirBufferListaTriangulos(triangulos, vertices);
 		}
 	}
 }

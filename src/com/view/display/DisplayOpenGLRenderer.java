@@ -80,7 +80,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
 		
 		// Pegatinas
-		float texture[] = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
+		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
         
         pegatinas = textura.getPegatinas();
         coordPegatina = construirBufferListaPuntos(texture);
@@ -176,6 +176,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 				estadoCaptura = TCapturaEstado.Terminado;
 				
 				// Restaurar posición anterior de la Cámara
+				restore();
 				recuperarCamara();
 			}
 			else if(estadoCaptura == TCapturaEstado.Retocando)

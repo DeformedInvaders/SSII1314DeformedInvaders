@@ -43,22 +43,22 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		
 	}
 	
-	/* Métodos de modifiación del Renderer */
-	
 	public void reiniciar()
 	{
 		renderer.reiniciar();
 		requestRender();
 	}
 
-	/* Métodos de Obtención de Información */
+	/* Métodos de Selección de Estado */
 	
-	public boolean pruebaCompleta()
+	public boolean seleccionarTriangular()
 	{
-		Esqueleto e = renderer.getEsqueleto();
+		boolean triangulado = renderer.seleccionarTriangular();
 		requestRender();
-		return e != null;
+		return triangulado;
 	}
+	
+	/* Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
 	{

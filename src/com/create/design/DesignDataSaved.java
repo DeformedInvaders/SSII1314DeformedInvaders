@@ -6,18 +6,21 @@ import com.lib.utils.ShortArray;
 public class DesignDataSaved
 {
 	private FloatArray puntos;	
-	
-	private FloatArray puntosTest;
-	private ShortArray triangulosTest;
+	private FloatArray vertices;
+	private ShortArray triangulos;
+	private ShortArray contorno;
 	
 	private TDesignEstado estado;
+	private boolean poligonoSimple;
 	
-	public DesignDataSaved(FloatArray puntos, FloatArray puntosTest, ShortArray triangulosTest, TDesignEstado estado)
+	public DesignDataSaved(FloatArray puntos, FloatArray vertices, ShortArray triangulos, ShortArray contorno, TDesignEstado estado, boolean poligonoSimple)
 	{
 		this.puntos = puntos;
-		this.puntosTest = puntosTest;
-		this.triangulosTest = triangulosTest;
+		this.vertices = vertices;
+		this.triangulos = triangulos;
+		this.contorno = contorno;
 		this.estado = estado;
+		this.poligonoSimple = poligonoSimple;
 	}
 
 	public FloatArray getPuntos()
@@ -25,18 +28,28 @@ public class DesignDataSaved
 		return puntos;
 	}
 
-	public FloatArray getPuntosTest()
+	public FloatArray getVertices()
 	{
-		return puntosTest;
+		return vertices;
 	}
 
-	public ShortArray getTriangulosTest()
+	public ShortArray getTriangulos()
 	{
-		return triangulosTest;
+		return triangulos;
+	}
+	
+	public ShortArray getContorno()
+	{
+		return contorno;
 	}
 
 	public TDesignEstado getEstado()
 	{
 		return estado;
+	}
+	
+	public boolean getPoligonoSimple()
+	{
+		return poligonoSimple;
 	}
 }
