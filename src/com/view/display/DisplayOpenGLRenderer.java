@@ -39,9 +39,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	// Captura Pantalla
 	private Bitmap captura;
 	private int canvasHeight, canvasWidth;
-		
-	//private boolean modoCaptura;
-	//private boolean capturaTerminada;
 	private TCapturaEstado estadoCaptura; 
 	
 	// Texturas
@@ -132,39 +129,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			
 		if(personajeCargado)
 		{
-			if (estadoCaptura == TCapturaEstado.Capturando)
-			{	
-				// Guardar posición actual de la Cámara
-				salvarCamara();
-				
-				// Restaurar Cámara posición inicial
-				restore();
-			}
-			
-			// Textura
-			dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTexturas, 0);
-				
-			// Contorno
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
-			
-			// Pegatinas
-			if(pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
-			{
-				int indice = pegatinas.getVerticeOjos();
-				dibujarPegatina(gl, puntosOjos, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 1);
-			}
-			
-			if(pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
-			{
-				int indice = pegatinas.getVerticeBoca();
-				dibujarPegatina(gl, puntosBoca, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 2);
-			}
-			
-			if(pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
-			{
-				int indice = pegatinas.getVerticeArma();
-				dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
-			}
+			dibujarEsqueleto(gl);
 			
 			if(estadoCaptura == TCapturaEstado.Capturando)
 			{
@@ -177,13 +142,44 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 				
 				// Restaurar posición anterior de la Cámara
 				restore();
-				recuperarCamara();
+				
+				dibujarEsqueleto(gl);
 			}
 			else if(estadoCaptura == TCapturaEstado.Retocando)
 			{
 				// Marco Oscuro
 				dibujarMarco(gl);
 			}
+		}
+	}
+	
+	private void dibujarEsqueleto(GL10 gl)
+	{
+		super.onDrawFrame(gl);
+		
+		// Textura
+		dibujarTextura(gl, bufferTriangulos, bufferCoords, nombreTexturas, 0);
+			
+		// Contorno
+		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+		
+		// Pegatinas
+		if(pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+		{
+			int indice = pegatinas.getVerticeOjos();
+			dibujarPegatina(gl, puntosOjos, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 1);
+		}
+		
+		if(pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
+		{
+			int indice = pegatinas.getVerticeBoca();
+			dibujarPegatina(gl, puntosBoca, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 2);
+		}
+		
+		if(pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
+		{
+			int indice = pegatinas.getVerticeArma();
+			dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
 		}
 	}
 	
