@@ -140,7 +140,14 @@ public class DesignFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onDesignReadyButtonClicked(canvas.getEsqueleto());
+			if(canvas.seleccionarTriangular())
+			{
+				mCallback.onDesignReadyButtonClicked(canvas.getEsqueleto());
+			}
+			else
+			{
+				mCallback.onDesignTestButtonClicked(false);
+			}
 		}
 	}
 	

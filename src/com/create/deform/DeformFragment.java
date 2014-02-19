@@ -252,6 +252,7 @@ public class DeformFragment extends Fragment
 		{
 			return canvas.getMovimientos();
 		}
+		
 		return null;
 	}
 }

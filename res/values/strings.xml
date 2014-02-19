@@ -13,7 +13,7 @@
 	    <!-- ActionBar PagerView Section Titles -->
 			<string name="title_animation_section_run">Run</string>
 			<string name="title_animation_section_jump">Jump</string>
-			<string name="title_animation_section_down">Down</string>
+			<string name="title_animation_section_down">Crouch</string>
 			<string name="title_animation_section_attack">Attack</string>
 			
 			<string name="title_test_section_multitouch">Multitouch</string>
@@ -94,10 +94,11 @@
 			
 		<!-- Errors -->
 			<string name="error_play">Coming Soon</string>
-			<string name="error_triangle">The polygon is complex.</string>
-			<string name="error_design">The design is corrupted.</string>
-			<string name="error_paint">The texture is corrupted.</string>
-			<string name="error_animation">The animation is corrupted.</string>
+			<string name="error_design">Something wrong happened with the skeleton.</string>
+			<string name="error_triangle">The polygon is not simple.</string>
+			<string name="error_paint">Something wrong happened with the texture.</string>
+			<string name="error_deform">There are movements undefined.</string>
+			<string name="error_animation">Something wrong happened with the movements.</string>
 			
 			<string name="error_picture_character">The character cannot be pictured.</string>
 			<string name="error_save_character">The character cannot be saved.</string>

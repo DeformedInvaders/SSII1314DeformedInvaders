@@ -17,16 +17,16 @@
             android:id="@+id/imageButtonDeform2"
             android:contentDescription="@string/desc_deform_remove"
             android:background="@drawable/icon_remove" />
+        
+      	<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonDeform4"
+            android:contentDescription="@string/desc_deform_reset"
+            android:background="@drawable/icon_reset" />
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform3"
             android:contentDescription="@string/desc_deform_move"
             android:background="@drawable/icon_hand" />
-        
-		<ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonDeform4"
-            android:contentDescription="@string/desc_deform_reset"
-            android:background="@drawable/icon_reset" />
 		
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform5"

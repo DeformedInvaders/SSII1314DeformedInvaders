@@ -191,7 +191,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
     	if(esqueleto == null)
     	{
-    		Toast.makeText(getApplication(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
+    		Toast.makeText(getApplication(), R.string.error_design, Toast.LENGTH_SHORT).show();
     	}
     	else
     	{
@@ -275,7 +275,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			}
 			else
 			{
-				Toast.makeText(getApplication(), R.string.error_animation, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplication(), R.string.error_deform, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

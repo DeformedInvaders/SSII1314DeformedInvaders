@@ -99,16 +99,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         indiceHandles = new ShortArray();
         
         handleSeleccionado = new FloatArray();
-        for(int i = 0; i < NUM_HANDLES; i++)
-        {
-        	// Indice Handle
-        	handleSeleccionado.add(-1);
-        	// Estado Handle
-        	handleSeleccionado.add(0);
-        	// Posicion Handle
-        	handleSeleccionado.add(0);
-        	handleSeleccionado.add(0);
-        }
+        reinciarHandlesSeleccionados();
         
 		// Textura
         float texture[] = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
@@ -165,7 +156,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			pegatinaArmaCargada = true;
 		}
 	}
-	
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -235,23 +225,18 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void reiniciar()
 	{
 		estado = TDeformEstado.Nada;
-		    
+		modoGrabar = false;
+		
 		handles.clear();
 		indiceHandles.clear();
+		reinciarHandlesSeleccionados();
 		
 		verticesModificados = vertices.clone();
+		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 		
 		listaHandles.clear();
 		listaVertices = null;
-		modoGrabar = false;
-		
-        for(int i = 0; i < NUM_HANDLES; i++)
-        {
-        	// Indice Handle
-        	handleSeleccionado.set(4*i, -1);
-        	// Estado Handle
-        	handleSeleccionado.set(4*i+1, 0);
-        }
 	}
 	
 	@Override
@@ -295,7 +280,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private void anyadirMovimiento()
 	{
 		if(modoGrabar)
+		{
 			listaHandles.add(handles.clone());
+		}
 	}
 	
 	private void eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
@@ -449,9 +436,44 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{ 
 		modoGrabar = true;
 		estado = TDeformEstado.Deformar;
-		verticesModificados = vertices.clone();
+		
 		listaHandles.clear();
 		listaVertices = new ArrayList<FloatArray>();
+		
+		reiniciarHandles();
+		
+		verticesModificados = vertices.clone();
+		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+	}
+	
+	private void reiniciarHandles()
+	{
+		// Handles
+		for(int i = 0; i < indiceHandles.size; i++)
+		{
+			short pos = indiceHandles.get(i);
+			
+			float x = vertices.get(2*pos);
+			float y = vertices.get(2*pos+1);
+			
+			handles.set(2*i, x);
+			handles.set(2*i+1, y);
+		}
+	}
+	
+	private void reinciarHandlesSeleccionados()
+	{
+        for(int i = 0; i < NUM_HANDLES; i++)
+        {
+        	// Indice Handle
+        	handleSeleccionado.add(-1);
+        	// Estado Handle
+        	handleSeleccionado.add(0);
+        	// Posicion Handle
+        	handleSeleccionado.add(0);
+        	handleSeleccionado.add(0);
+        }
 	}
 
 	/* Métodos de Obtención de Información */

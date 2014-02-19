@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -111,16 +110,13 @@ public class AnimationFragment extends Fragment
 				List<FloatArray> movimiento = it.next().getMovimientos();
 				
 				if(movimiento != null)
+				{
 					movimientos.set(movimiento, i);
-				
+				}
 
-				if(movimientos.get(i) == null)
-					Log.d("TEST", "null "+i);
-				else
-					Log.d("TEST", "NO null "+i);
-				
 				i++;	
 			}
+			
 			mCallback.onAnimationReadyButtonClicked(movimientos);
 		}
     }
