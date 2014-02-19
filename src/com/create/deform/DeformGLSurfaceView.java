@@ -105,4 +105,18 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarGrabado();
 		requestRender();
 	}
+
+	public void seleccionarPlay() 
+	{
+		renderer.selecionarPlay();
+		requestRender();
+		
+	}
+	
+	public boolean isGrabacionReady() 
+	{
+		return renderer.isGrabacionReady();
+	}
+
+	
 }

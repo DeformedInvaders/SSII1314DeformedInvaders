@@ -145,7 +145,8 @@
 		    <string name="desc_deform_move">Move a handle.</string>
 		    <string name="desc_deform_reset">Reset the animation.</string>
 		    <string name="desc_deform_record">Record an animation.</string>
-		    <string name="desc_deform_ready">Ready to save the animation.</string>
+		    <string name="desc_deform_audio">Audio an animation.</string>
+		    <string name="desc_deform_play">Play animation.</string>
 		    
 		<!-- Animation Fragment -->
 		    <string name="desc_animation_ready">Ready to save the character.</string>
@@ -156,6 +157,10 @@
 	    	
 	    <!-- Select Fragment -->
 	    	<string name="desc_select_camera">Save a picture of this character.</string>
+	    	<string name="desc_select_run">Select Run</string>
+	    	<string name="desc_select_jump">Select Jump</string>
+	    	<string name="desc_select_crouch">Select Crouch</string>
+	    	<string name="desc_select_attack">Select Attack</string>
 	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Record with the microphone.</string>

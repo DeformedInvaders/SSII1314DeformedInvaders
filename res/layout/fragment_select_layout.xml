@@ -15,5 +15,33 @@
             android:contentDescription="@string/desc_select_camera" />
 
 	</LinearLayout>
+	
+    <LinearLayout style="@style/Layout_Left_FragmentButton_Style" >
+
+        <ImageButton
+            android:id="@+id/imageButtonSelect2"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_run"
+            android:contentDescription="@string/desc_select_run" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSelect3"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_jump"
+            android:contentDescription="@string/desc_select_jump" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSelect4"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_crouch"
+            android:contentDescription="@string/desc_select_crouch" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSelect5"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_attack"
+            android:contentDescription="@string/desc_select_attack" />
+
+	</LinearLayout>
 
 </RelativeLayout>

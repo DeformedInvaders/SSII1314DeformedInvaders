@@ -90,7 +90,7 @@ public class SelectionFragment extends Fragment
 		while(it.hasNext())
 		{
 			Personaje p = it.next();
-			viewPager.addView(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura(), p.getNombre(), viewPager, manager, connector), p.getNombre());
+			viewPager.addView(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura(), p.getMovimientos(), p.getNombre(), viewPager, manager, connector), p.getNombre());
 		}
 		
         return rootView;

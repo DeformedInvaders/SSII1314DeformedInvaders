@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.project.data.Esqueleto;
+import com.project.data.Movimientos;
 import com.project.data.Textura;
 import com.project.main.R;
 import com.project.social.SocialConnector;
@@ -29,25 +30,27 @@ public class SelectFragment extends Fragment
 	
 	private Esqueleto esqueletoActual;
 	private Textura texturaActual;
+	private Movimientos movimientoActual;
 	private String nombreActual;
 
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCamara;
+	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack;
 	private boolean estadoCamara;
 	
 	/* Constructora */
 	
-	public static final SelectFragment newInstance(Esqueleto e, Textura t, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
+	public static final SelectFragment newInstance(Esqueleto e, Textura t, Movimientos v, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{
 		SelectFragment fragment = new SelectFragment();
-		fragment.setParameters(e, t, n, s, m, c);
+		fragment.setParameters(e, t, v, n, s, m, c);
 		return fragment;
 	}
 	
-	private void setParameters(Esqueleto e, Textura t, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
+	private void setParameters(Esqueleto e, Textura t, Movimientos v, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{	
 		esqueletoActual = e;
 		texturaActual = t;
+		movimientoActual = v;
 		nombreActual = n;
 		pager = s;
 		manager = m;
@@ -69,10 +72,18 @@ public class SelectFragment extends Fragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
-		canvas.setParameters(esqueletoActual, texturaActual);
+		canvas.setParameters(esqueletoActual, texturaActual, movimientoActual);
 		
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
 		botonCamara.setOnClickListener(new OnCamaraClickListener());
+		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonSelect2);
+		botonRun.setOnClickListener(new OnRunClickListener());
+		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonSelect3);
+		botonJump.setOnClickListener(new OnJumpClickListener());
+		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonSelect4);
+		botonCrouch.setOnClickListener(new OnCrouchClickListener());
+		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonSelect5);
+		botonAttack.setOnClickListener(new OnAttackClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -153,6 +164,42 @@ public class SelectFragment extends Fragment
 			
 			estadoCamara = !estadoCamara;
 			actualizarBotones();
+		}
+	}
+	
+	private class OnRunClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.selecionarRun();
+		}
+	}
+	
+	private class OnJumpClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.selecionarJump();
+		}
+	}
+	
+	private class OnCrouchClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.selecionarCrouch();
+		}
+	}
+	
+	private class OnAttackClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			canvas.selecionarAttack();
 		}
 	}
 }

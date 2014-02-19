@@ -57,73 +57,75 @@ public final class R {
         public static final int icon_attack=0x7f020003;
         public static final int icon_audio_pause=0x7f020004;
         public static final int icon_audio_play=0x7f020005;
-        public static final int icon_audio_record=0x7f020006;
-        public static final int icon_audio_stop=0x7f020007;
-        public static final int icon_bucket=0x7f020008;
-        public static final int icon_bucket_selected=0x7f020009;
-        public static final int icon_camera=0x7f02000a;
-        public static final int icon_color=0x7f02000b;
-        public static final int icon_create=0x7f02000c;
-        public static final int icon_crouch=0x7f02000d;
-        public static final int icon_eye=0x7f02000e;
-        public static final int icon_eye_selected=0x7f02000f;
-        public static final int icon_hand=0x7f020010;
-        public static final int icon_hand_selected=0x7f020011;
-        public static final int icon_jump=0x7f020012;
-        public static final int icon_magic=0x7f020013;
-        public static final int icon_next=0x7f020014;
-        public static final int icon_pencil=0x7f020015;
-        public static final int icon_pencil_selected=0x7f020016;
-        public static final int icon_play=0x7f020017;
-        public static final int icon_prev=0x7f020018;
-        public static final int icon_ready=0x7f020019;
-        public static final int icon_record=0x7f02001a;
-        public static final int icon_record_selected=0x7f02001b;
-        public static final int icon_remove=0x7f02001c;
-        public static final int icon_remove_selected=0x7f02001d;
-        public static final int icon_reset=0x7f02001e;
-        public static final int icon_run=0x7f02001f;
-        public static final int icon_select=0x7f020020;
-        public static final int icon_size=0x7f020021;
-        public static final int icon_social_facebook=0x7f020022;
-        public static final int icon_social_facebook_connected=0x7f020023;
-        public static final int icon_social_picture=0x7f020024;
-        public static final int icon_social_share=0x7f020025;
-        public static final int icon_social_twitter=0x7f020026;
-        public static final int icon_social_twitter_connected=0x7f020027;
-        public static final int icon_test=0x7f020028;
-        public static final int icon_triangle=0x7f020029;
-        public static final int icon_volume_minus=0x7f02002a;
-        public static final int icon_volume_plus=0x7f02002b;
-        public static final int icon_wifi=0x7f02002c;
-        public static final int icon_wifi_connected=0x7f02002d;
-        public static final int image_color_cursor_main=0x7f02002e;
-        public static final int image_color_cursor_secondary=0x7f02002f;
-        public static final int image_color_palette=0x7f020030;
-        public static final int image_dialog_arrow=0x7f020031;
-        public static final int image_size_big=0x7f020032;
-        public static final int image_size_medium=0x7f020033;
-        public static final int image_size_small=0x7f020034;
-        public static final int texture_eyes1=0x7f020035;
-        public static final int texture_eyes2=0x7f020036;
-        public static final int texture_eyes3=0x7f020037;
-        public static final int texture_eyes4=0x7f020038;
-        public static final int texture_eyes5=0x7f020039;
-        public static final int texture_mouth1=0x7f02003a;
-        public static final int texture_mouth2=0x7f02003b;
-        public static final int texture_mouth3=0x7f02003c;
-        public static final int texture_mouth4=0x7f02003d;
-        public static final int texture_mouth5=0x7f02003e;
-        public static final int texture_weapon1=0x7f02003f;
-        public static final int texture_weapon2=0x7f020040;
-        public static final int texture_weapon3=0x7f020041;
-        public static final int texture_weapon4=0x7f020042;
+        public static final int icon_audio_play_selected=0x7f020006;
+        public static final int icon_audio_record=0x7f020007;
+        public static final int icon_audio_record_selected=0x7f020008;
+        public static final int icon_audio_stop=0x7f020009;
+        public static final int icon_bucket=0x7f02000a;
+        public static final int icon_bucket_selected=0x7f02000b;
+        public static final int icon_camera=0x7f02000c;
+        public static final int icon_color=0x7f02000d;
+        public static final int icon_create=0x7f02000e;
+        public static final int icon_crouch=0x7f02000f;
+        public static final int icon_eye=0x7f020010;
+        public static final int icon_eye_selected=0x7f020011;
+        public static final int icon_hand=0x7f020012;
+        public static final int icon_hand_selected=0x7f020013;
+        public static final int icon_jump=0x7f020014;
+        public static final int icon_magic=0x7f020015;
+        public static final int icon_next=0x7f020016;
+        public static final int icon_pencil=0x7f020017;
+        public static final int icon_pencil_selected=0x7f020018;
+        public static final int icon_play=0x7f020019;
+        public static final int icon_prev=0x7f02001a;
+        public static final int icon_ready=0x7f02001b;
+        public static final int icon_record=0x7f02001c;
+        public static final int icon_record_selected=0x7f02001d;
+        public static final int icon_remove=0x7f02001e;
+        public static final int icon_remove_selected=0x7f02001f;
+        public static final int icon_reset=0x7f020020;
+        public static final int icon_run=0x7f020021;
+        public static final int icon_select=0x7f020022;
+        public static final int icon_size=0x7f020023;
+        public static final int icon_social_facebook=0x7f020024;
+        public static final int icon_social_facebook_connected=0x7f020025;
+        public static final int icon_social_picture=0x7f020026;
+        public static final int icon_social_share=0x7f020027;
+        public static final int icon_social_twitter=0x7f020028;
+        public static final int icon_social_twitter_connected=0x7f020029;
+        public static final int icon_test=0x7f02002a;
+        public static final int icon_triangle=0x7f02002b;
+        public static final int icon_volume_minus=0x7f02002c;
+        public static final int icon_volume_plus=0x7f02002d;
+        public static final int icon_wifi=0x7f02002e;
+        public static final int icon_wifi_connected=0x7f02002f;
+        public static final int image_color_cursor_main=0x7f020030;
+        public static final int image_color_cursor_secondary=0x7f020031;
+        public static final int image_color_palette=0x7f020032;
+        public static final int image_dialog_arrow=0x7f020033;
+        public static final int image_size_big=0x7f020034;
+        public static final int image_size_medium=0x7f020035;
+        public static final int image_size_small=0x7f020036;
+        public static final int texture_eyes1=0x7f020037;
+        public static final int texture_eyes2=0x7f020038;
+        public static final int texture_eyes3=0x7f020039;
+        public static final int texture_eyes4=0x7f02003a;
+        public static final int texture_eyes5=0x7f02003b;
+        public static final int texture_mouth1=0x7f02003c;
+        public static final int texture_mouth2=0x7f02003d;
+        public static final int texture_mouth3=0x7f02003e;
+        public static final int texture_mouth4=0x7f02003f;
+        public static final int texture_mouth5=0x7f020040;
+        public static final int texture_weapon1=0x7f020041;
+        public static final int texture_weapon2=0x7f020042;
+        public static final int texture_weapon3=0x7f020043;
+        public static final int texture_weapon4=0x7f020044;
     }
     public static final class id {
         public static final int deformGLSurfaceViewDeform1=0x7f08001f;
-        public static final int designGLSurfaceViewDesign1=0x7f080025;
-        public static final int displayGLSurfaceViewMain1=0x7f08002b;
-        public static final int displayGLSurfaceViewSelect1=0x7f08003c;
+        public static final int designGLSurfaceViewDesign1=0x7f080027;
+        public static final int displayGLSurfaceViewMain1=0x7f08002d;
+        public static final int displayGLSurfaceViewSelect1=0x7f08003e;
         public static final int frameLayoutMain1=0x7f080000;
         public static final int imageButtonAnimation1=0x7f08001a;
         public static final int imageButtonAudio1=0x7f08001b;
@@ -137,34 +139,40 @@ public final class R {
         public static final int imageButtonDeform3=0x7f080023;
         public static final int imageButtonDeform4=0x7f080022;
         public static final int imageButtonDeform5=0x7f080024;
-        public static final int imageButtonDesign1=0x7f080028;
-        public static final int imageButtonDesign2=0x7f080027;
-        public static final int imageButtonDesign3=0x7f080026;
-        public static final int imageButtonMain1=0x7f08002c;
-        public static final int imageButtonMain2=0x7f08002f;
-        public static final int imageButtonMain3=0x7f08002e;
-        public static final int imageButtonMain4=0x7f08002d;
-        public static final int imageButtonPaint1=0x7f080032;
-        public static final int imageButtonPaint10=0x7f08003b;
-        public static final int imageButtonPaint2=0x7f080033;
-        public static final int imageButtonPaint3=0x7f080034;
-        public static final int imageButtonPaint4=0x7f080035;
-        public static final int imageButtonPaint5=0x7f080036;
-        public static final int imageButtonPaint6=0x7f080037;
-        public static final int imageButtonPaint7=0x7f080038;
-        public static final int imageButtonPaint8=0x7f080039;
-        public static final int imageButtonPaint9=0x7f08003a;
-        public static final int imageButtonSelect1=0x7f08003d;
-        public static final int imageButtonSelection1=0x7f08003f;
-        public static final int imageButtonSelection2=0x7f080040;
+        public static final int imageButtonDeform6=0x7f080025;
+        public static final int imageButtonDeform7=0x7f080026;
+        public static final int imageButtonDesign1=0x7f08002a;
+        public static final int imageButtonDesign2=0x7f080029;
+        public static final int imageButtonDesign3=0x7f080028;
+        public static final int imageButtonMain1=0x7f08002e;
+        public static final int imageButtonMain2=0x7f080031;
+        public static final int imageButtonMain3=0x7f080030;
+        public static final int imageButtonMain4=0x7f08002f;
+        public static final int imageButtonPaint1=0x7f080034;
+        public static final int imageButtonPaint10=0x7f08003d;
+        public static final int imageButtonPaint2=0x7f080035;
+        public static final int imageButtonPaint3=0x7f080036;
+        public static final int imageButtonPaint4=0x7f080037;
+        public static final int imageButtonPaint5=0x7f080038;
+        public static final int imageButtonPaint6=0x7f080039;
+        public static final int imageButtonPaint7=0x7f08003a;
+        public static final int imageButtonPaint8=0x7f08003b;
+        public static final int imageButtonPaint9=0x7f08003c;
+        public static final int imageButtonSelect1=0x7f08003f;
+        public static final int imageButtonSelect2=0x7f080040;
+        public static final int imageButtonSelect3=0x7f080041;
+        public static final int imageButtonSelect4=0x7f080042;
+        public static final int imageButtonSelect5=0x7f080043;
+        public static final int imageButtonSelection1=0x7f080045;
+        public static final int imageButtonSelection2=0x7f080046;
         public static final int imageButtonSize1=0x7f080008;
         public static final int imageButtonSize2=0x7f08000a;
         public static final int imageButtonSize3=0x7f080009;
-        public static final int imageButtonSocial1=0x7f080041;
-        public static final int imageButtonSocial2=0x7f080042;
-        public static final int imageButtonSocial3=0x7f080043;
-        public static final int imageButtonSocial4=0x7f080044;
-        public static final int imageButtonSocial5=0x7f080045;
+        public static final int imageButtonSocial1=0x7f080047;
+        public static final int imageButtonSocial2=0x7f080048;
+        public static final int imageButtonSocial3=0x7f080049;
+        public static final int imageButtonSocial4=0x7f08004a;
+        public static final int imageButtonSocial5=0x7f08004b;
         public static final int imageButtonSticker1=0x7f08000b;
         public static final int imageButtonSticker10=0x7f080014;
         public static final int imageButtonSticker11=0x7f080015;
@@ -182,17 +190,17 @@ public final class R {
         public static final int imageViewColor1=0x7f080003;
         public static final int imageViewColor2=0x7f080004;
         public static final int imageViewColor3=0x7f080006;
-        public static final int menuIcon1=0x7f080047;
-        public static final int menuIcon2=0x7f080048;
-        public static final int multitouchGLSurfaceView1=0x7f080030;
+        public static final int menuIcon1=0x7f08004d;
+        public static final int menuIcon2=0x7f08004e;
+        public static final int multitouchGLSurfaceView1=0x7f080032;
         public static final int pagerViewAnimation1=0x7f080019;
-        public static final int pagerViewSelection1=0x7f08003e;
-        public static final int pagerViewTest1=0x7f080046;
-        public static final int paintGLSurfaceViewPaint1=0x7f080031;
+        public static final int pagerViewSelection1=0x7f080044;
+        public static final int pagerViewTest1=0x7f08004c;
+        public static final int paintGLSurfaceViewPaint1=0x7f080033;
         public static final int paletteColor1=0x7f080001;
         public static final int paletteColor2=0x7f080002;
-        public static final int progressBarLoading1=0x7f080029;
-        public static final int textViewLoading1=0x7f08002a;
+        public static final int progressBarLoading1=0x7f08002b;
+        public static final int textViewLoading1=0x7f08002c;
     }
     public static final class layout {
         public static final int activity_main_layout=0x7f030000;
@@ -219,27 +227,29 @@ public final class R {
         /**  Animation Fragment 
  Animation Fragment 
          */
-        public static final int desc_animation_ready=0x7f050066;
-        public static final int desc_audio_minus=0x7f05006d;
-        public static final int desc_audio_play=0x7f05006b;
-        public static final int desc_audio_plus=0x7f05006c;
+        public static final int desc_animation_ready=0x7f050067;
+        public static final int desc_audio_minus=0x7f050072;
+        public static final int desc_audio_play=0x7f050070;
+        public static final int desc_audio_plus=0x7f050071;
         /**  Audio Fragment 
  Audio Fragment 
          */
-        public static final int desc_audio_record=0x7f05006a;
-        public static final int desc_color_cursor_main=0x7f050078;
-        public static final int desc_color_cursor_secondary=0x7f050079;
+        public static final int desc_audio_record=0x7f05006f;
+        public static final int desc_color_cursor_main=0x7f05007d;
+        public static final int desc_color_cursor_secondary=0x7f05007e;
         /**  Color Dialog 
  Color Dialog 
          */
-        public static final int desc_color_palette_secondary=0x7f050077;
-        public static final int desc_color_selected=0x7f05007a;
+        public static final int desc_color_palette_secondary=0x7f05007c;
+        public static final int desc_color_selected=0x7f05007f;
         /**  Deform Fragment 
  Deform Fragment 
          */
         public static final int desc_deform_add=0x7f050060;
+        public static final int desc_deform_audio=0x7f050065;
         public static final int desc_deform_move=0x7f050062;
-        public static final int desc_deform_ready=0x7f050065;
+        public static final int desc_deform_play=0x7f050066;
+        public static final int desc_deform_ready=0x7f050081;
         public static final int desc_deform_record=0x7f050064;
         public static final int desc_deform_remove=0x7f050061;
         public static final int desc_deform_reset=0x7f050063;
@@ -252,7 +262,7 @@ public final class R {
         /**  Dialogs 
  Dialogs 
          */
-        public static final int desc_dialog_arrow=0x7f05007b;
+        public static final int desc_dialog_arrow=0x7f050080;
         /**  IMAGE DESCRIPTIONS 
  Main Fragment 
  IMAGE DESCRIPTIONS 
@@ -275,33 +285,37 @@ public final class R {
         public static final int desc_paint_ready=0x7f05005f;
         public static final int desc_paint_reset=0x7f05005b;
         public static final int desc_paint_size=0x7f05005d;
+        public static final int desc_select_attack=0x7f05006e;
         /**  Select Fragment 
  Select Fragment 
          */
-        public static final int desc_select_camera=0x7f050069;
-        public static final int desc_selection_delete=0x7f050068;
+        public static final int desc_select_camera=0x7f05006a;
+        public static final int desc_select_crouch=0x7f05006d;
+        public static final int desc_select_jump=0x7f05006c;
+        public static final int desc_select_run=0x7f05006b;
+        public static final int desc_selection_delete=0x7f050069;
         /**  Selection Fragment 
  Selection Fragment 
          */
-        public static final int desc_selection_select=0x7f050067;
+        public static final int desc_selection_select=0x7f050068;
         /**  Size Dialog 
  Size Dialog 
          */
-        public static final int desc_size_pencil=0x7f050076;
-        public static final int desc_social_facebook=0x7f05006f;
-        public static final int desc_social_photo=0x7f050071;
-        public static final int desc_social_share=0x7f050070;
+        public static final int desc_size_pencil=0x7f05007b;
+        public static final int desc_social_facebook=0x7f050074;
+        public static final int desc_social_photo=0x7f050076;
+        public static final int desc_social_share=0x7f050075;
         /**  Social Fragment 
  Social Fragment 
          */
-        public static final int desc_social_twitter=0x7f05006e;
-        public static final int desc_social_wifi=0x7f050072;
+        public static final int desc_social_twitter=0x7f050073;
+        public static final int desc_social_wifi=0x7f050077;
         /**  Sticker Dialog 
  Sticker Dialog 
          */
-        public static final int desc_sticker_eye=0x7f050073;
-        public static final int desc_sticker_mouth=0x7f050074;
-        public static final int desc_sticker_weapon=0x7f050075;
+        public static final int desc_sticker_eye=0x7f050078;
+        public static final int desc_sticker_mouth=0x7f050079;
+        public static final int desc_sticker_weapon=0x7f05007a;
         public static final int error_animation=0x7f050044;
         public static final int error_deform=0x7f050043;
         public static final int error_delete_character=0x7f050047;

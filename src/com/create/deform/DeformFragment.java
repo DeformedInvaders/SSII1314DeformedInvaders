@@ -25,7 +25,7 @@ public class DeformFragment extends Fragment
 	
 	private DeformDataSaved dataSaved;
 	
-	private ImageButton botonAdd, botonRemove, botonMove, botonDelete, botonRecord;
+	private ImageButton botonAdd, botonRemove, botonMove, botonDelete, botonRecord, botonAudio, botonPlay;
 		
 	/* Constructora */
 	
@@ -56,12 +56,16 @@ public class DeformFragment extends Fragment
 		botonMove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
 		botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
+		botonAudio = (ImageButton) rootView.findViewById(R.id.imageButtonDeform6);
+		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonDeform7);
 		
 		botonAdd.setOnClickListener(new OnAddClickListener());
 		botonRemove.setOnClickListener(new OnRemoveClickListener());
 		botonMove.setOnClickListener(new OnMoveClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		botonRecord.setOnClickListener(new OnRecordClickListener());
+		botonAudio.setOnClickListener(new OnAudioClickListener());
+		botonPlay.setOnClickListener(new OnPlayClickListener());
 		
 		canvas.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -87,6 +91,8 @@ public class DeformFragment extends Fragment
 		botonRemove = null;
 		botonMove = null;
 		botonDelete = null;
+		botonPlay = null;
+		botonAudio = null;
 	}
 	
 	@Override	
@@ -130,6 +136,9 @@ public class DeformFragment extends Fragment
 			botonMove.setVisibility(View.INVISIBLE);
 			botonDelete.setVisibility(View.INVISIBLE);
 			botonRecord.setVisibility(View.INVISIBLE);
+			botonPlay.setVisibility(View.INVISIBLE);
+			botonAudio.setVisibility(View.INVISIBLE);
+			
 			botonAdd.setVisibility(View.VISIBLE);
 		}
 		else
@@ -139,6 +148,7 @@ public class DeformFragment extends Fragment
 			botonDelete.setVisibility(View.VISIBLE);
 			botonRecord.setVisibility(View.VISIBLE);
 			botonAdd.setVisibility(View.VISIBLE);
+			botonAudio.setVisibility(View.VISIBLE);
 			
 			if(canvas.getEstadoGrabacion())
 			{	
@@ -146,6 +156,12 @@ public class DeformFragment extends Fragment
 				botonRemove.setVisibility(View.INVISIBLE);
 				botonMove.setVisibility(View.INVISIBLE);
 				botonDelete.setVisibility(View.INVISIBLE);
+				botonAudio.setVisibility(View.INVISIBLE);
+			}
+			//TODO audio ready
+			if(canvas.isGrabacionReady() )
+			{
+				botonPlay.setVisibility(View.VISIBLE);
 			}
 		}
 		if(!canvas.getEstadoGrabacion())
@@ -159,6 +175,9 @@ public class DeformFragment extends Fragment
 		botonAdd.setBackgroundResource(R.drawable.icon_add);
 		botonRemove.setBackgroundResource(R.drawable.icon_remove);
 		botonMove.setBackgroundResource(R.drawable.icon_hand);
+		botonRecord.setBackgroundResource(R.drawable.icon_record);
+		botonAudio.setBackgroundResource(R.drawable.icon_audio_record);
+		botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
 	}
 	
 	private void reiniciarImagenesBotones(TDeformEstado estado)
@@ -175,6 +194,16 @@ public class DeformFragment extends Fragment
 			break;
 			case Deformar:
 				botonMove.setBackgroundResource(R.drawable.icon_hand_selected);
+				if(canvas.getEstadoGrabacion())
+				{
+					botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
+				}
+			break;
+			case Audio:
+				botonAudio.setBackgroundResource(R.drawable.icon_audio_record_selected);
+			break;
+			case Reproducir:
+				botonPlay.setBackgroundResource(R.drawable.icon_audio_play_selected);
 			break;
 			default:
 			break;
@@ -239,7 +268,29 @@ public class DeformFragment extends Fragment
 			
 			reiniciarImagenesBotones();
 			botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
+			actualizarBotones();
+		}	
+	}
+	
+	//TODO
+	private class OnAudioClickListener implements OnClickListener 
+	{ 
+		public void onClick(View v)
+		{
+			reiniciarImagenesBotones();	
+			botonAudio.setBackgroundResource(R.drawable.icon_audio_record_selected);
+			actualizarBotones();
+		}	
+	}
+	
+	private class OnPlayClickListener implements OnClickListener 
+	{ 
+		public void onClick(View v)
+		{
+			canvas.seleccionarPlay();
 			
+			reiniciarImagenesBotones();	
+			botonPlay.setBackgroundResource(R.drawable.icon_audio_play_selected);
 			actualizarBotones();
 		}	
 	}
