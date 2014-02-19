@@ -18,11 +18,13 @@ import com.android.view.SwipeableViewPager;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
 import com.project.main.R;
+import com.project.social.SocialConnector;
 import com.view.display.DisplayGLSurfaceView;
 
 public class SelectFragment extends Fragment
 {
 	private ExternalStorageManager manager;
+	private SocialConnector connector;
 	private SwipeableViewPager pager;
 	
 	private Esqueleto esqueletoActual;
@@ -35,20 +37,21 @@ public class SelectFragment extends Fragment
 	
 	/* Constructora */
 	
-	public static final SelectFragment newInstance(Esqueleto e, Textura t, String n, SwipeableViewPager s, ExternalStorageManager m)
+	public static final SelectFragment newInstance(Esqueleto e, Textura t, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{
 		SelectFragment fragment = new SelectFragment();
-		fragment.setParameters(e, t, n, s, m);
+		fragment.setParameters(e, t, n, s, m, c);
 		return fragment;
 	}
 	
-	private void setParameters(Esqueleto e, Textura t, String n, SwipeableViewPager s, ExternalStorageManager m)
+	private void setParameters(Esqueleto e, Textura t, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{	
 		esqueletoActual = e;
 		texturaActual = t;
 		nombreActual = n;
 		pager = s;
 		manager = m;
+		connector = c;
 	}
 	
 	@Override
@@ -133,7 +136,7 @@ public class SelectFragment extends Fragment
 				Bitmap bitmap = canvas.capturaPantalla();
 				if(manager.guardarImagen(bitmap, nombreActual))
 				{
-					Toast.makeText(getActivity(), R.string.text_picture_character_confirmation, Toast.LENGTH_SHORT).show();
+					connector.publicar(getString(R.string.text_social_photo_initial)+" "+nombreActual+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(nombreActual));					
 				}
 				else
 				{

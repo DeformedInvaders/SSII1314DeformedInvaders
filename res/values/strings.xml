@@ -20,6 +20,11 @@
 			<string name="title_test_section_audio">Audio</string>
 			<string name="title_test_secton_social">Social</string>
 			
+		<!-- ActionBar Icons -->
+			<string name="title_menu_twitter">Twitter</string>
+			<string name="title_menu_facebook">Facebook</string>
+		
+		<!-- Dialog Section Titles -->	
 			<string name="title_dialog_size">Size:</string>
 			<string name="title_dialog_color">Color:</string>
 			<string name="title_dialog_eyes">Eyes:</string>

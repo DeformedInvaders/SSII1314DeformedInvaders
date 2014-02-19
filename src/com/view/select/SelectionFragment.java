@@ -17,10 +17,12 @@ import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.project.data.Personaje;
 import com.project.main.R;
+import com.project.social.SocialConnector;
 
 public class SelectionFragment extends Fragment
 {
 	private ExternalStorageManager manager;
+	private SocialConnector connector;
 	
 	private SelectionFragmentListener mCallback;
 	
@@ -31,16 +33,18 @@ public class SelectionFragment extends Fragment
 	
 	/* Constructora */
 	
-	public static final SelectionFragment newInstance(List<Personaje> lista)
+	public static final SelectionFragment newInstance(List<Personaje> l, ExternalStorageManager m, SocialConnector c)
 	{
 		SelectionFragment fragment = new SelectionFragment();
-		fragment.setParameters(lista);
+		fragment.setParameters(l, m, c);
 		return fragment;
 	}
 	
-	private void setParameters(List<Personaje> lista)
+	private void setParameters(List<Personaje> l, ExternalStorageManager m, SocialConnector c)
 	{
-		listaPersonajes = lista;
+		listaPersonajes = l;
+		manager = m;
+		connector = c;
 	}
 	
 	public interface SelectionFragmentListener
@@ -54,8 +58,6 @@ public class SelectionFragment extends Fragment
 	{
 		super.onAttach(activity);
 		mCallback = (SelectionFragmentListener) activity;
-		
-		manager = new ExternalStorageManager();
 	}
 	
 	@Override
@@ -63,8 +65,9 @@ public class SelectionFragment extends Fragment
 	{
 		super.onDetach();
 		mCallback = null;
-
 		manager = null;
+		connector = null;
+		listaPersonajes = null;
 	}
 	
 	@Override
@@ -87,7 +90,7 @@ public class SelectionFragment extends Fragment
 		while(it.hasNext())
 		{
 			Personaje p = it.next();
-			viewPager.addView(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura(), p.getNombre(), viewPager, manager), p.getNombre());
+			viewPager.addView(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura(), p.getNombre(), viewPager, manager, connector), p.getNombre());
 		}
 		
         return rootView;

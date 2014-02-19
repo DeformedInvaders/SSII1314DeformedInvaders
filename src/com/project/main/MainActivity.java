@@ -5,15 +5,19 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.FrameLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.alert.ConfirmationAlert;
 import com.android.alert.TextInputAlert;
+import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
 import com.create.deform.AnimationFragment;
 import com.create.design.DesignFragment;
@@ -23,18 +27,29 @@ import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
 import com.project.loading.LoadingFragment;
+import com.project.social.SocialConnector;
 import com.test.main.TestFragment;
 import com.view.select.SelectionFragment;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener
 {	
+	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
 	private int personajeSeleccionado;
 
+	/* Almacenamiento */
+	private InternalStorageManager internalManager;
+	private ExternalStorageManager externalManager;
+	
+	/* Conectores Sociales */
+	private SocialConnector connector;
+	
+	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
-	private InternalStorageManager manager;
-	private FrameLayout layout;
+	private MenuItem botonTwitter, botonFacebook;
+	
+	/* Estado */
 	private TEstado estado;
 
 	@Override
@@ -46,13 +61,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
-		manager = new InternalStorageManager(this);
-		layout = (FrameLayout) findViewById(R.id.frameLayoutMain1);
-        
-		if(layout != null)
-        {
-    		changeFragment(LoadingFragment.newInstance(manager));
-        }
+		internalManager = new InternalStorageManager(this);
+		externalManager = new ExternalStorageManager();
+		connector = new SocialConnector(this);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
+		changeFragment(LoadingFragment.newInstance(internalManager));
 	}
 	
 	@Override
@@ -66,6 +82,36 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			actualizarEstado();
 		}
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    
+	    botonTwitter = menu.getItem(0);
+	    botonFacebook = menu.getItem(1);
+	    
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+	    switch (item.getItemId())
+	    {
+	        case R.id.menuIcon1:
+	            onMenuTwitterButtonClicked();
+	            return true;
+	        case R.id.menuIcon2:
+	        	onMenuFacebookButtonClicked();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	/* Métodos de Modificación del FrameLayout */
 	
 	private void changeFragment(Fragment fragmento)
 	{
@@ -123,7 +169,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onMainSelectButtonClicked()
     {
-    	changeFragment(SelectionFragment.newInstance(listaPersonajes));
+    	changeFragment(SelectionFragment.newInstance(listaPersonajes, externalManager, connector));
     }
     
 	@Override
@@ -202,7 +248,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 						String value = getText().toUpperCase(Locale.getDefault());
 						personajeActual.setNombre(value);
 						
-						if(manager.guardarPersonaje(personajeActual))
+						if(internalManager.guardarPersonaje(personajeActual))
 						{
 							listaPersonajes.add(personajeActual);
 							personajeActual = null;
@@ -241,7 +287,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     {
 		personajeSeleccionado = indice;
 		
-		manager.guardarSeleccionado(personajeSeleccionado);
+		internalManager.guardarSeleccionado(personajeSeleccionado);
 		Toast.makeText(getApplication(), R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
 
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
@@ -255,14 +301,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				if(manager.eliminarPersonaje(listaPersonajes.get(indice)))
+				if(internalManager.eliminarPersonaje(listaPersonajes.get(indice)))
 		    	{
 		    		listaPersonajes.remove(indice);
 		    		
 		    		if(personajeSeleccionado == indice)
 		    		{
 		    			personajeSeleccionado = -1;
-		    			manager.guardarSeleccionado(personajeSeleccionado);
+		    			internalManager.guardarSeleccionado(personajeSeleccionado);
 		    		}
 		    		
 		    		Toast.makeText(getApplication(), R.string.text_delete_character_confirmation, Toast.LENGTH_SHORT).show();
@@ -281,11 +327,62 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 		alert.show();
     }
+	
+	/* Métodos de Conexión Social */
+	
+	/* Métodos de Modificación de la ActionBar */
     
+	public void onMenuTwitterButtonClicked()
+	{
+		if(connector.isTwitterConnected())
+		{
+			connector.desconectarTwitter();
+		}
+		else
+		{
+			connector.conectarTwitter();
+		}
+	}
+	
+	public void onMenuFacebookButtonClicked()
+	{
+		if(connector.isFacebookConnected())
+		{
+			connector.desconectarFacebook();
+		}
+		else
+		{
+			connector.conectarFacebook();
+		}
+	}
+	
+	public void actualizarActionBar()
+	{
+		if(connector.isTwitterConnected())
+		{
+			botonTwitter.setIcon(R.drawable.icon_social_twitter_connected);
+		}
+		else
+		{
+			botonTwitter.setIcon(R.drawable.icon_social_twitter);
+		}
+		
+		if(connector.isFacebookConnected())
+		{
+			botonFacebook.setIcon(R.drawable.icon_social_facebook_connected);
+		}
+		else
+		{
+			botonFacebook.setIcon(R.drawable.icon_social_facebook);
+		}
+	}
+	
     private void limpiarActionBar()
     {
     	actionBar.removeAllTabs();
     }
+    
+    /* Métodos de Modificación del Estado */
     
     private void actualizarEstado(Fragment fragmento)
     {

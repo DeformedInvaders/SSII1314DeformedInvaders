@@ -21,6 +21,8 @@ import com.android.alert.TextInputAlert;
 import com.android.alert.WebAlert;
 import com.android.storage.ExternalStorageManager;
 import com.project.main.R;
+import com.project.social.FacebookConnector;
+import com.project.social.TwitterConnector;
 
 public class SocialFragment extends Fragment
 {
