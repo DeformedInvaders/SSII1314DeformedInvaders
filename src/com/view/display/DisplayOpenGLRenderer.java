@@ -273,7 +273,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estado = TDisplayEstado.Jump;
 		
 		posicionAnimacion = 0;
-		//TODO
 		listaVertices = movimiento.get(1);
 		verticesAnimacion = listaVertices.get(posicionAnimacion);
 		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
@@ -285,7 +284,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estado = TDisplayEstado.Crouch;
 		
 		posicionAnimacion = 0;
-		//TODO
 		listaVertices = movimiento.get(2);
 		verticesAnimacion = listaVertices.get(posicionAnimacion);
 		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
@@ -297,7 +295,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estado = TDisplayEstado.Attack;
 		
 		posicionAnimacion = 0;
-		//TODO
 		listaVertices = movimiento.get(3);
 		verticesAnimacion = listaVertices.get(posicionAnimacion);
 		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);

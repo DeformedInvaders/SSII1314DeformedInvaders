@@ -485,11 +485,18 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TDeformEstado.Reproducir;
 		
 		posicionAnimacion = 0;
-		//TODO
 		verticesAnimacion = listaVertices.get(posicionAnimacion);
 		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
 		contornoAnimacion = this.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
 		
+	}
+	
+	public void animar()
+	{
+		verticesAnimacion = listaVertices.get(posicionAnimacion);
+		actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
+		actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
+		posicionAnimacion = (posicionAnimacion + 1)  % listaVertices.size();
 	}
 	
 	private void reiniciarHandles()
@@ -561,8 +568,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public boolean isGrabacionReady() 
 	{
 		return listaVertices != null && listaVertices.size() > 0;
-	}
-	
+	}	
 	
 	
 }

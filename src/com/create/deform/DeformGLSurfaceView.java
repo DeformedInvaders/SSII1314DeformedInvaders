@@ -3,6 +3,7 @@ package com.create.deform;
 import java.util.List;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 
 import com.lib.utils.FloatArray;
@@ -14,10 +15,30 @@ import com.project.main.TTouchEstado;
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
     private DeformOpenGLRenderer renderer;
+    
+    
+    private CountDownTimer timer;
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.MultiTouch);
+        
+        timer = new CountDownTimer(3000, 80){
+
+			@Override
+			public void onFinish() 
+			{
+				
+			}
+
+			@Override
+			public void onTick(long arg0) 
+			{
+				renderer.animar();
+				requestRender();
+			}
+        	
+        };
     }
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura)
@@ -110,6 +131,8 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.selecionarPlay();
 		requestRender();
+		
+		timer.start();
 		
 	}
 	
