@@ -38,8 +38,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferTriangulos;
 	
 	// Animación
-	private List<FloatArray> listaVertices;
-	private Movimientos movimiento;
+	private Movimientos movimientos;
+	private List<FloatArray> listaVerticesAnimacion;
 	private FloatArray verticesAnimacion;
 	private FloatBuffer triangulosAnimacion;
 	private FloatBuffer contornoAnimacion;
@@ -88,7 +88,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
 		
-		movimiento = personaje.getMovimientos();
+		movimientos = personaje.getMovimientos();
 		
 		// Pegatinas
 		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
@@ -209,22 +209,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	
 	public void reiniciar() { }
 	
-	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
-	{
-		
-	}
+	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
-	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) 
-	{
-		if(estado != TDisplayEstado.Nada)
-		{
-			verticesAnimacion = listaVertices.get(posicionAnimacion);
-			actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
-			actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
-			posicionAnimacion = (posicionAnimacion + 1)  % listaVertices.size();
-			
-		}	
-	}
+	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
 	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
@@ -232,14 +219,14 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Modificación de Estado */
 	
-	public void retoquePantalla(float height, float width)
+	public void seleccionarRetoque(float height, float width)
 	{
 		// Construir rectangulos	
 		estado = TDisplayEstado.Nada;
 		estadoCaptura = TCapturaEstado.Retocando;
 	}
 	
-	public void capturaPantalla(int height, int width)
+	public void seleccionarCaptura(int height, int width)
 	{
 		canvasHeight = height;
 		canvasWidth = width;
@@ -247,59 +234,60 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TCapturaEstado.Capturando;
 	}
 	
-	public void animar()
+	public void iniciarAnimacion()
 	{
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
+		posicionAnimacion = 0;
+		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
+		triangulosAnimacion = construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
+		contornoAnimacion = construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+	}
+	
+	public void reproducirAnimacion()
+	{
+		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
 		actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1)  % listaVertices.size();
+		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();
 	}
 	
 	public void selecionarRun() 
 	{
 		estado = TDisplayEstado.Run;
-		posicionAnimacion = 0;
 		
-		listaVertices = movimiento.get(0);
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
-		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = this.construirBufferListaIndicePuntos(contorno, verticesAnimacion);	
+		listaVerticesAnimacion = movimientos.get(0);
+		iniciarAnimacion();	
 	}
 	
 	public void selecionarJump() 
 	{
 		estado = TDisplayEstado.Jump;
 		
-		posicionAnimacion = 0;
-		listaVertices = movimiento.get(1);
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
-		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = this.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		listaVerticesAnimacion = movimientos.get(1);
+		iniciarAnimacion();
 	}
 	
 	public void selecionarCrouch() 
 	{
 		estado = TDisplayEstado.Crouch;
 		
-		posicionAnimacion = 0;
-		listaVertices = movimiento.get(2);
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
-		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = this.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		listaVerticesAnimacion = movimientos.get(2);
+		iniciarAnimacion();
 	}
 	
 	public void selecionarAttack() 
 	{
 		estado = TDisplayEstado.Attack;
 		
-		posicionAnimacion = 0;
-		listaVertices = movimiento.get(3);
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
-		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = this.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		listaVerticesAnimacion = movimientos.get(3);
+		iniciarAnimacion();
 	}
 	
 	/* Métodos de Obtención de Información */
+	
+	public boolean isEstadoRetoque()
+	{
+		return estado == TDisplayEstado.Nada && estadoCaptura == TCapturaEstado.Retocando;
+	}
 	
 	public Bitmap getCapturaPantalla()
 	{

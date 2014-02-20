@@ -1,14 +1,14 @@
 package com.test.multitouch;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.main.OpenGLFragment;
 import com.project.main.R;
 
-public class MultitouchFragment extends Fragment
+public class MultitouchFragment extends OpenGLFragment
 {
 	private MultitouchGLSurfaceView canvas;
 	
@@ -26,6 +26,8 @@ public class MultitouchFragment extends Fragment
 		// Instanciar Elementos de la GUI
 		canvas = (MultitouchGLSurfaceView) rootView.findViewById(R.id.multitouchGLSurfaceView1);
 		
+		setCanvasListener(canvas);
+		
         return rootView;
     }
 	
@@ -42,4 +44,10 @@ public class MultitouchFragment extends Fragment
 		super.onPause();
 		canvas.onPause();
 	}
+
+	@Override
+	protected void reiniciarInterfaz() { }
+
+	@Override
+	protected void actualizarInterfaz() { }
 }

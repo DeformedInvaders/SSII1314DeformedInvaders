@@ -3,12 +3,9 @@ package com.create.paint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
@@ -17,20 +14,22 @@ import com.android.dialog.SizeDialog;
 import com.android.dialog.StickerDialog;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
+import com.project.main.OpenGLFragment;
 import com.project.main.R;
 
-public class PaintFragment extends Fragment
+public class PaintFragment extends OpenGLFragment
 {
 	private PaintFragmentListener mCallback;
 	private Context mContext;
 	
-	private PaintGLSurfaceView canvas;
 	private ColorDialog colorDialog;
 	private SizeDialog sizeDialog;
 	private StickerDialog stickerDialog;
-	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonReady, botonColor, botonSize, botonPegatina;
 	
-	private Esqueleto esqueletoActual;
+	private PaintGLSurfaceView canvas;
+	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
+	
+	private Esqueleto esqueleto;
 	
 	private PaintDataSaved dataSaved;
 	
@@ -45,7 +44,7 @@ public class PaintFragment extends Fragment
 	
 	private void setParameters(Esqueleto e)
 	{
-		esqueletoActual = e;
+		esqueleto = e;
 	}
 	
 	public interface PaintFragmentListener
@@ -65,8 +64,8 @@ public class PaintFragment extends Fragment
 	public void onDetach()
 	{
 		super.onDetach();
+		
 		mCallback = null;
-		mContext = null;
 	}
 	
 	@Override
@@ -77,7 +76,7 @@ public class PaintFragment extends Fragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
-		canvas.setParameters(esqueletoActual);
+		canvas.setParameters(esqueleto);
 		
 		botonPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
 		botonCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
@@ -88,7 +87,7 @@ public class PaintFragment extends Fragment
 		botonPrev = (ImageButton) rootView.findViewById(R.id.imageButtonPaint7);
 		botonNext = (ImageButton) rootView.findViewById(R.id.imageButtonPaint8);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonPaint9);
-		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonPaint10);
+		botonListo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint10);
 
 		botonPincel.setOnClickListener(new OnPincelClickListener());	
 		botonCubo.setOnClickListener(new OnCuboClickListener());
@@ -99,20 +98,12 @@ public class PaintFragment extends Fragment
 		botonNext.setOnClickListener(new OnNextClickListener());
 		botonPrev.setOnClickListener(new OnPrevClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
-		botonReady.setOnClickListener(new OnReadyClickListener());
+		botonListo.setOnClickListener(new OnReadyClickListener());
 		
-		canvas.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent event)
-			{
-				canvas.onTouch(view, event);
-				actualizarBotones();
-				
-				return true;
-			}
-		});
+		setCanvasListener(canvas);
 		
-		actualizarBotones();
+		reiniciarInterfaz();
+		actualizarInterfaz();
 		return rootView;
     }
 	
@@ -131,7 +122,7 @@ public class PaintFragment extends Fragment
 		botonNext = null;
 		botonPrev = null;
 		botonDelete = null;
-		botonReady = null;
+		botonListo = null;
 		botonColor = null;
 		botonSize = null;
 		botonPegatina = null;		
@@ -146,8 +137,9 @@ public class PaintFragment extends Fragment
 		if(dataSaved != null)
 		{			
 			canvas.restoreData(dataSaved);
-			actualizarBotones();
-			reiniciarImagenesBotones(dataSaved.getEstado());
+
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 	
@@ -162,63 +154,49 @@ public class PaintFragment extends Fragment
 	
 	/* Métodos abstractos de OpenGLFragment */
 	
-	private void actualizarBotones()
-	{
-		if(canvas.bufferSiguienteVacio())
-		{
-			botonNext.setVisibility(View.INVISIBLE);
-		}
-		else
+	@Override
+	protected void actualizarInterfaz()
+	{		
+		if(!canvas.isBufferSiguienteVacio())
 		{
 			botonNext.setVisibility(View.VISIBLE);
 		}
 		
-		if(canvas.bufferAnteriorVacio())
-		{
-			botonPrev.setVisibility(View.INVISIBLE);
-			botonDelete.setVisibility(View.INVISIBLE);
-		}
-		else
+		if(!canvas.isBufferAnteriorVacio())
 		{
 			botonPrev.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 		}
 		
-		if(canvas.pegatinaAnyadida())
+		if(canvas.isEstadoPincel())
 		{
-			reiniciarImagenesBotones();
+			botonPincel.setBackgroundResource(R.drawable.icon_pencil_selected);
+		}
+		else if(canvas.isEstadoCubo())
+		{
+			botonCubo.setBackgroundResource(R.drawable.icon_bucket_selected);
+		}
+		else if(canvas.isEstadoMover())
+		{
+			botonMano.setBackgroundResource(R.drawable.icon_hand_selected);
+		}
+		else if(canvas.isEstadoPegatinas())
+		{
+			botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
 		}
 	}
 	
-	private void reiniciarImagenesBotones()
+	@Override
+	protected void reiniciarInterfaz()
 	{
+		botonNext.setVisibility(View.INVISIBLE);
+		botonPrev.setVisibility(View.INVISIBLE);
+		botonDelete.setVisibility(View.INVISIBLE);
+		
 		botonPincel.setBackgroundResource(R.drawable.icon_pencil);
 		botonCubo.setBackgroundResource(R.drawable.icon_bucket);
 		botonMano.setBackgroundResource(R.drawable.icon_hand);
 		botonPegatina.setBackgroundResource(R.drawable.icon_eye);
-	}
-	
-	private void reiniciarImagenesBotones(TPaintEstado estado)
-	{
-		reiniciarImagenesBotones();
-		
-		switch(estado)
-		{
-			case Mano:
-				botonMano.setBackgroundResource(R.drawable.icon_hand_selected);
-			break;
-			case Pincel:
-				botonPincel.setBackgroundResource(R.drawable.icon_pencil_selected);
-			break;
-			case Cubo:
-				botonCubo.setBackgroundResource(R.drawable.icon_bucket_selected);
-			break;
-			case Pegatinas:
-				botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
-			break;
-			default:
-			break;
-		}
 	}
 	
 	/* Listener de Botones */
@@ -230,8 +208,8 @@ public class PaintFragment extends Fragment
 		{
 			canvas.seleccionarPincel();
 			
-			reiniciarImagenesBotones();
-			botonPincel.setBackgroundResource(R.drawable.icon_pencil_selected);
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
     }
     
@@ -242,8 +220,8 @@ public class PaintFragment extends Fragment
 		{
 			canvas.seleccionarCubo();
 			
-			reiniciarImagenesBotones();
-			botonCubo.setBackgroundResource(R.drawable.icon_bucket_selected);
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
     }
     
@@ -298,9 +276,10 @@ public class PaintFragment extends Fragment
     
     public void seleccionarPegatina(int pegatina, int tipo)
     {
-    	reiniciarImagenesBotones();
-		botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
 		canvas.seleccionarPegatina(pegatina, tipo);
+		
+		reiniciarInterfaz();
+		actualizarInterfaz();
     }
     
     private class OnManoClickListener implements OnClickListener
@@ -310,8 +289,8 @@ public class PaintFragment extends Fragment
 		{
 			canvas.seleccionarMano();
 			
-			reiniciarImagenesBotones();
-			botonMano.setBackgroundResource(R.drawable.icon_hand_selected);
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
     }
     
@@ -322,7 +301,8 @@ public class PaintFragment extends Fragment
 		{
 			canvas.anteriorAccion();
 			
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
     }
     
@@ -333,7 +313,8 @@ public class PaintFragment extends Fragment
 		{
 			canvas.siguienteAccion();
 	
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
     }
     
@@ -344,8 +325,8 @@ public class PaintFragment extends Fragment
 		{
 			canvas.reiniciar();
 				
-			reiniciarImagenesBotones();
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
     }
 
@@ -354,7 +335,9 @@ public class PaintFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			reiniciarImagenesBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
+			
 			mCallback.onPaintReadyButtonClicked(canvas.getTextura());
 		}
     }

@@ -5,7 +5,6 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,12 +14,12 @@ import android.widget.ImageButton;
 import com.project.data.Personaje;
 import com.view.display.DisplayGLSurfaceView;
 
-public class MainFragment extends Fragment
+public class MainFragment extends OpenGLFragment
 {
 	private MainFragmentListener mCallback;
 	
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonAdd, botonPlay, botonView, botonTest;
+	private ImageButton botonCrear, botonJugar, botonSeleccionar, botonTest;
 	
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
@@ -59,7 +58,9 @@ public class MainFragment extends Fragment
 	public void onDetach()
 	{
 		super.onDetach();
+		
 		mCallback = null;
+		listaPersonajes = null;
 	}
 	
 	@Override
@@ -83,17 +84,18 @@ public class MainFragment extends Fragment
 			canvas.setParameters();
 		}
 		
-		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
+		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
 		botonTest = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
-		botonView = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
-		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonMain4);
+		botonSeleccionar = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
+		botonJugar = (ImageButton) rootView.findViewById(R.id.imageButtonMain4);
 		
-		botonAdd.setOnClickListener(new OnAddClickListener());
-		botonView.setOnClickListener(new OnViewClickListener());
+		botonCrear.setOnClickListener(new OnAddClickListener());
+		botonSeleccionar.setOnClickListener(new OnViewClickListener());
 		botonTest.setOnClickListener(new OnTestClickListener());
-		botonPlay.setOnClickListener(new OnGameClickListener());
+		botonJugar.setOnClickListener(new OnGameClickListener());
 		
-		if(listaPersonajes.isEmpty()) botonView.setVisibility(View.INVISIBLE);		
+		reiniciarInterfaz();
+		actualizarInterfaz();
         return rootView;
     }
 	
@@ -103,9 +105,9 @@ public class MainFragment extends Fragment
 		super.onDestroyView();
 		
 		canvas = null;
-		botonAdd = null;
-		botonPlay = null;
-		botonView = null;
+		botonCrear = null;
+		botonJugar = null;
+		botonSeleccionar = null;
 		botonTest = null;
 	}
 	
@@ -122,6 +124,23 @@ public class MainFragment extends Fragment
 		super.onPause();
 		canvas.saveData();
 		canvas.onPause();
+	}
+	
+	/* Métodos abstractos de OpenGLFragment */
+	
+	@Override
+	protected void reiniciarInterfaz()
+	{
+		botonSeleccionar.setVisibility(View.INVISIBLE);	
+	}
+
+	@Override
+	protected void actualizarInterfaz()
+	{
+		if(!listaPersonajes.isEmpty())
+		{
+			botonSeleccionar.setVisibility(View.VISIBLE);		
+		}
 	}
 	
 	/* Listener de Botones */
@@ -161,5 +180,4 @@ public class MainFragment extends Fragment
 			mCallback.onMainTestButtonClicked();
 		}
 	}
-
 }

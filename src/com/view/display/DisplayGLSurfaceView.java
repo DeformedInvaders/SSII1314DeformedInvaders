@@ -28,7 +28,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void onTick(long arg0) 
 			{
-				renderer.animar();
+				renderer.reproducirAnimacion();
 				requestRender();
 			}
         };
@@ -48,15 +48,19 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	/* Métodos abstractos OpenGLSurfaceView */
 	
-	public void onTouchDown(float x, float y, float width, float height, int pos) { }
+	@Override
+	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+	@Override
+	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		renderer.onTouchMove(x, y, width, height, pos);
+		renderer.onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height, int pos) { }
+	@Override
+	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
+	@Override
 	public void onMultiTouchEvent() { }
 	
 	/* Métodos de Selección de Estado */
@@ -93,19 +97,24 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		timer.start();
 	}
 	
-	/* Métodos de Obtención de Información */
-	
-	public void retoquePantalla()
+	public void seleccionarRetoque()
 	{
-		renderer.retoquePantalla(getHeight(), getWidth());
+		renderer.seleccionarRetoque(getHeight(), getWidth());
 		setEstado(TTouchEstado.Detectors);
 		
 		requestRender();
 	}
 	
-	public Bitmap capturaPantalla()
+	/* Métodos de Obtención de Información */
+	
+	public boolean isEstadoRetoque()
 	{
-		renderer.capturaPantalla(getHeight(), getWidth());
+		return renderer.isEstadoRetoque();
+	}
+	
+	public Bitmap seleccionarCaptura()
+	{
+		renderer.seleccionarCaptura(getHeight(), getWidth());
 		setEstado(TTouchEstado.SimpleTouch);
 		
 		requestRender();

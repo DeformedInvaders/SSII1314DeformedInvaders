@@ -218,66 +218,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Selección de Estado */
-	
-	public void seleccionarMano()
-	{
-		guardarPolilinea();
-		estado = TPaintEstado.Mano;
-	}
-	
-	public void seleccionarPincel()
-	{
-		guardarPolilinea();
-		estado = TPaintEstado.Pincel;
-	}
-	
-	public void seleccionarCubo()
-	{
-		guardarPolilinea();
-		estado = TPaintEstado.Cubo;
-	}
-	
-	public void seleccionarColor(int color)
-	{
-		colorPaleta = color;
-	}
-	
-	public int getColorPaleta()
-	{
-		return colorPaleta;
-	}
-
-	public void setColorPaleta(int colorPaleta)
-	{
-		this.colorPaleta = colorPaleta;
-	}
-	
-	public void seleccionarSize(int pos)
-	{
-		if(pos == 0)
-		{
-			sizeLinea = 6;
-		}
-		else if(pos == 1)
-		{
-			sizeLinea = 11;
-		}
-		else if(pos == 2)
-		{
-			sizeLinea = 16;
-		}
-	}
-	
-	public void seleccionarPegatina(int pegatina, int tipo)
-	{
-		guardarPolilinea();
-		
-		pegatinaActual = pegatina;
-		tipoPegatinaActual = tipo;
-		estado = TPaintEstado.Pegatinas;
-	}
-	
 	/* Métodos abstractos de OpenGLRenderer */
 	
 	public void reiniciar()
@@ -413,8 +353,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	public void onMultiTouchEvent() {}
 	
-	/* Métodos de modificación de Linea Actual */
-	
 	private synchronized void guardarPolilinea()
 	{
 		if(lineaActual != null)
@@ -426,6 +364,75 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			siguientes.clear();
 			lineaActual = null;
 		}
+	}
+	
+	/* Selección de Estado */
+	
+	public void seleccionarMano()
+	{
+		guardarPolilinea();
+		estado = TPaintEstado.Mano;
+	}
+	
+	public void seleccionarPincel()
+	{
+		guardarPolilinea();
+		estado = TPaintEstado.Pincel;
+	}
+	
+	public void seleccionarCubo()
+	{
+		guardarPolilinea();
+		estado = TPaintEstado.Cubo;
+	}
+	
+	public void seleccionarColor(int color)
+	{
+		colorPaleta = color;
+	}
+	
+	public int getColorPaleta()
+	{
+		return colorPaleta;
+	}
+
+	public void setColorPaleta(int colorPaleta)
+	{
+		this.colorPaleta = colorPaleta;
+	}
+	
+	public void seleccionarSize(int pos)
+	{
+		if(pos == 0)
+		{
+			sizeLinea = 6;
+		}
+		else if(pos == 1)
+		{
+			sizeLinea = 11;
+		}
+		else if(pos == 2)
+		{
+			sizeLinea = 16;
+		}
+	}
+	
+	public void seleccionarPegatina(int pegatina, int tipo)
+	{
+		guardarPolilinea();
+		
+		pegatinaActual = pegatina;
+		tipoPegatinaActual = tipo;
+		estado = TPaintEstado.Pegatinas;
+	}
+	
+	public void seleccionarCaptura(int height, int width)
+	{
+		guardarPolilinea();
+		
+		canvasHeight = height;
+		canvasWidth = width;
+		modoCaptura = true;
 	}
 	
 	/* Métodos de modificación de Buffers de estado */
@@ -485,17 +492,17 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Obtención de Información */
 	
-	public boolean bufferSiguienteVacio()
+	public boolean isBufferSiguienteVacio()
 	{
 		return siguientes.isEmpty();
 	}
 
-	public boolean bufferAnteriorVacio()
+	public boolean isBufferAnteriorVacio()
 	{
 		return anteriores.isEmpty();
 	}
 	
-	public boolean pegatinaAnyadida()
+	public boolean isPegatinaAnyadida()
 	{
 		if(pegatinaAnyadida)
 		{
@@ -508,13 +515,24 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 	
-	public void capturaPantalla(int height, int width)
+	public boolean isEstadoPincel()
 	{
-		guardarPolilinea();
-		
-		canvasHeight = height;
-		canvasWidth = width;
-		modoCaptura = true;
+		return estado == TPaintEstado.Pincel;
+	}
+	
+	public boolean isEstadoCubo()
+	{
+		return estado == TPaintEstado.Cubo;
+	}
+	
+	public boolean isEstadoMover()
+	{
+		return estado == TPaintEstado.Mano;
+	}
+	
+	public boolean isEstadoPegatinas()
+	{
+		return estado == TPaintEstado.Pegatinas;
 	}
 	
 	public Textura getTextura()
@@ -523,6 +541,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		return new Textura(textura, coordsTextura, pegatinas);
 	}
+	
+	/* Métodos de Guardado de Información */
 	
 	public PaintDataSaved saveData()
 	{

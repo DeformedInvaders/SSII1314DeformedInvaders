@@ -1,14 +1,10 @@
 package com.view.select;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -17,21 +13,21 @@ import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.project.data.Personaje;
+import com.project.main.OpenGLFragment;
 import com.project.main.R;
 import com.view.display.DisplayGLSurfaceView;
 
-public class SelectFragment extends Fragment
+public class SelectFragment extends OpenGLFragment
 {
 	private ExternalStorageManager manager;
 	private SocialConnector connector;
 	private SwipeableViewPager pager;
 	
-	private Personaje personajeActual;
+	private Personaje personaje;
 
 	private DisplayGLSurfaceView canvas;
 	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack;
-	private boolean estadoCamara;
-	
+
 	/* Constructora */
 	
 	public static final SelectFragment newInstance(Personaje p, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
@@ -43,20 +39,12 @@ public class SelectFragment extends Fragment
 	
 	private void setParameters(Personaje p, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{	
-		personajeActual = p;
+		personaje = p;
 		pager = s;
 		manager = m;
 		connector = c;
 	}
-	
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
 		
-		estadoCamara = false;
-	}
-	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -64,30 +52,24 @@ public class SelectFragment extends Fragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
-		canvas.setParameters(personajeActual);
+		canvas.setParameters(personaje);
 		
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
-		botonCamara.setOnClickListener(new OnCamaraClickListener());
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonSelect2);
-		botonRun.setOnClickListener(new OnRunClickListener());
 		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonSelect3);
-		botonJump.setOnClickListener(new OnJumpClickListener());
 		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonSelect4);
-		botonCrouch.setOnClickListener(new OnCrouchClickListener());
 		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonSelect5);
+		
+		botonCamara.setOnClickListener(new OnCamaraClickListener());
+		botonRun.setOnClickListener(new OnRunClickListener());
+		botonJump.setOnClickListener(new OnJumpClickListener());
+		botonCrouch.setOnClickListener(new OnCrouchClickListener());
 		botonAttack.setOnClickListener(new OnAttackClickListener());
 		
-		canvas.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent event)
-			{
-				canvas.onTouch(view, event);
-				actualizarBotones();
-				
-				return true;
-			}
-		});
+		setCanvasListener(canvas);
 		
+		reiniciarInterfaz();
+		actualizarInterfaz();
         return rootView;
     }
 	
@@ -116,30 +98,50 @@ public class SelectFragment extends Fragment
 		canvas.onPause();
 	}	
 	
-	private void actualizarBotones()
+	/* Métodos abstractos de OpenGLFragment */
+	
+	@Override
+	protected void reiniciarInterfaz()
 	{
-		if(estadoCamara)
+		botonRun.setVisibility(View.INVISIBLE);
+		botonJump.setVisibility(View.INVISIBLE);
+		botonCrouch.setVisibility(View.INVISIBLE);
+		botonAttack.setVisibility(View.INVISIBLE);
+		
+		botonCamara.setBackgroundResource(R.drawable.icon_social_picture);
+	}
+	
+	@Override
+	protected void actualizarInterfaz()
+	{
+		if(!canvas.isEstadoRetoque())
+		{
+			botonRun.setVisibility(View.VISIBLE);
+			botonJump.setVisibility(View.VISIBLE);
+			botonCrouch.setVisibility(View.VISIBLE);
+			botonAttack.setVisibility(View.VISIBLE);
+		}
+		
+		if(canvas.isEstadoRetoque())
 		{
 			botonCamara.setBackgroundResource(R.drawable.icon_camera);
 		}
-		else
-		{
-			botonCamara.setBackgroundResource(R.drawable.icon_social_picture);
-		}
 	}
+	
+	/* Listener de Botones */
 	
 	private class OnCamaraClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			if(estadoCamara)
+			if(canvas.isEstadoRetoque())
 			{
 				// Captura
-				Bitmap bitmap = canvas.capturaPantalla();
-				if(manager.guardarImagen(bitmap, personajeActual.getNombre()))
+				Bitmap bitmap = canvas.seleccionarCaptura();
+				if(manager.guardarImagen(bitmap, personaje.getNombre()))
 				{
-					connector.publicar(getString(R.string.text_social_photo_initial)+" "+personajeActual.getNombre()+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(personajeActual.getNombre()));					
+					connector.publicar(getString(R.string.text_social_photo_initial)+" "+personaje.getNombre()+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(personaje.getNombre()));					
 				}
 				else
 				{
@@ -150,12 +152,12 @@ public class SelectFragment extends Fragment
 			else
 			{
 				//Retoque
-				canvas.retoquePantalla();
+				canvas.seleccionarRetoque();
 				pager.setSwipeable(false);
 			}			
 			
-			estadoCamara = !estadoCamara;
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 	

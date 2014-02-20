@@ -3,29 +3,27 @@ package com.create.deform;
 import java.util.List;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
+import com.project.main.OpenGLFragment;
 import com.project.main.R;
 
-public class DeformFragment extends Fragment
+public class DeformFragment extends OpenGLFragment
 {	
 	private DeformGLSurfaceView canvas;
-	private Esqueleto esqueletoActual;
-	private Textura texturaActual;
+	private Esqueleto esqueleto;
+	private Textura textura;
 	
 	private DeformDataSaved dataSaved;
 	
-	private ImageButton botonAdd, botonRemove, botonMove, botonDelete, botonRecord, botonAudio, botonPlay;
+	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 		
 	/* Constructora */
 	
@@ -38,8 +36,8 @@ public class DeformFragment extends Fragment
 	
 	private void setParameters(Esqueleto e, Textura t)
 	{	
-		esqueletoActual = e;
-		texturaActual = t;
+		esqueleto = e;
+		textura = t;
 	}
 
 	@Override
@@ -49,36 +47,28 @@ public class DeformFragment extends Fragment
 		
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(esqueletoActual, texturaActual);
+		canvas.setParameters(esqueleto, textura);
 		
-		botonAdd = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
-		botonRemove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
-		botonMove = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
-		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
-		botonRecord = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
+		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
+		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
+		botonDeformar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
+		botonReiniciar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
+		botonGrabar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
 		botonAudio = (ImageButton) rootView.findViewById(R.id.imageButtonDeform6);
-		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonDeform7);
+		botonReproducir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform7);
 		
-		botonAdd.setOnClickListener(new OnAddClickListener());
-		botonRemove.setOnClickListener(new OnRemoveClickListener());
-		botonMove.setOnClickListener(new OnMoveClickListener());
-		botonDelete.setOnClickListener(new OnDeleteClickListener());
-		botonRecord.setOnClickListener(new OnRecordClickListener());
+		botonAnyadir.setOnClickListener(new OnAddClickListener());
+		botonEliminar.setOnClickListener(new OnRemoveClickListener());
+		botonDeformar.setOnClickListener(new OnMoveClickListener());
+		botonReiniciar.setOnClickListener(new OnResetClickListener());
+		botonGrabar.setOnClickListener(new OnRecordClickListener());
 		botonAudio.setOnClickListener(new OnAudioClickListener());
-		botonPlay.setOnClickListener(new OnPlayClickListener());
+		botonReproducir.setOnClickListener(new OnPlayClickListener());
 		
-		canvas.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent event)
-			{
-				canvas.onTouch(view, event);
-				actualizarBotones();
-				
-				return true;
-			}
-		});
+		setCanvasListener(canvas);
 		
-		actualizarBotones();
+		reiniciarInterfaz();
+		actualizarInterfaz();
         return rootView;
     }
 	
@@ -87,11 +77,12 @@ public class DeformFragment extends Fragment
 	{
 		super.onDestroyView();
 		
-		botonAdd = null;
-		botonRemove = null;
-		botonMove = null;
-		botonDelete = null;
-		botonPlay = null;
+		botonAnyadir = null;
+		botonEliminar = null;
+		botonDeformar = null;
+		botonReiniciar = null;
+		botonGrabar = null;
+		botonReproducir = null;
 		botonAudio = null;
 	}
 	
@@ -112,8 +103,9 @@ public class DeformFragment extends Fragment
 		if(dataSaved != null)
 		{			
 			canvas.restoreData(dataSaved);
-			actualizarBotones();
-			reiniciarImagenesBotones(dataSaved.getEstado());
+			
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 	
@@ -128,86 +120,76 @@ public class DeformFragment extends Fragment
 	
 	/* Métodos abstractos de OpenGLFramgent */
 	
-	private void actualizarBotones()
+	@Override
+	protected void actualizarInterfaz()
 	{
-		if(canvas.handlesVacio())
+		if(canvas.isHandlesVacio())
 		{
-			botonRemove.setVisibility(View.INVISIBLE);
-			botonMove.setVisibility(View.INVISIBLE);
-			botonDelete.setVisibility(View.INVISIBLE);
-			botonRecord.setVisibility(View.INVISIBLE);
-			botonPlay.setVisibility(View.INVISIBLE);
-			botonAudio.setVisibility(View.INVISIBLE);
-			
-			botonAdd.setVisibility(View.VISIBLE);
+			botonAnyadir.setVisibility(View.VISIBLE);
 		}
-		else
+		else 
 		{
-			botonRemove.setVisibility(View.VISIBLE);
-			botonMove.setVisibility(View.VISIBLE);
-			botonDelete.setVisibility(View.VISIBLE);
-			botonRecord.setVisibility(View.VISIBLE);
-			botonAdd.setVisibility(View.VISIBLE);
-			botonAudio.setVisibility(View.VISIBLE);
+			botonGrabar.setVisibility(View.VISIBLE);
 			
-			if(canvas.getEstadoGrabacion())
-			{	
-				botonAdd.setVisibility(View.INVISIBLE);
-				botonRemove.setVisibility(View.INVISIBLE);
-				botonMove.setVisibility(View.INVISIBLE);
-				botonDelete.setVisibility(View.INVISIBLE);
-				botonAudio.setVisibility(View.INVISIBLE);
-			}
-			//TODO audio ready
-			if(canvas.isGrabacionReady() )
+			if(!canvas.isEstadoGrabacion())
 			{
-				botonPlay.setVisibility(View.VISIBLE);
+				botonAnyadir.setVisibility(View.VISIBLE);
+				botonEliminar.setVisibility(View.VISIBLE);
+				botonDeformar.setVisibility(View.VISIBLE);
+				botonReiniciar.setVisibility(View.VISIBLE);
+				botonAudio.setVisibility(View.VISIBLE);
+					
+				//TODO audio ready
+				if(canvas.isGrabacionReady())
+				{
+					botonReproducir.setVisibility(View.VISIBLE);
+				}
 			}
 		}
-		if(!canvas.getEstadoGrabacion())
-		{
-			botonRecord.setBackgroundResource(R.drawable.icon_record);
-		}
-	}
-	
-	private void reiniciarImagenesBotones()
-	{
-		botonAdd.setBackgroundResource(R.drawable.icon_add);
-		botonRemove.setBackgroundResource(R.drawable.icon_remove);
-		botonMove.setBackgroundResource(R.drawable.icon_hand);
-		botonRecord.setBackgroundResource(R.drawable.icon_record);
-		botonAudio.setBackgroundResource(R.drawable.icon_audio_record);
-		botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
-	}
-	
-	private void reiniciarImagenesBotones(TDeformEstado estado)
-	{
-		reiniciarImagenesBotones();
 		
-		switch(estado)
+		if(canvas.isEstadoAnyadir())
 		{
-			case Anyadir:
-				botonAdd.setBackgroundResource(R.drawable.icon_add_selected);
-			break;
-			case Eliminar:
-				botonRemove.setBackgroundResource(R.drawable.icon_remove_selected);
-			break;
-			case Deformar:
-				botonMove.setBackgroundResource(R.drawable.icon_hand_selected);
-				if(canvas.getEstadoGrabacion())
-				{
-					botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
-				}
-			break;
-			case Audio:
-				botonAudio.setBackgroundResource(R.drawable.icon_audio_record_selected);
-			break;
-			case Reproducir:
-				botonPlay.setBackgroundResource(R.drawable.icon_audio_play_selected);
-			break;
-			default:
-			break;
+			botonAnyadir.setBackgroundResource(R.drawable.icon_add_selected);
 		}
+		else if(canvas.isEstadoEliminar())
+		{
+			botonEliminar.setBackgroundResource(R.drawable.icon_remove_selected);
+		}
+		else if(canvas.isEstadoGrabacion())
+		{
+			botonGrabar.setBackgroundResource(R.drawable.icon_record_selected);
+		}
+		else if(canvas.isEstadoDeformar())
+		{
+			botonDeformar.setBackgroundResource(R.drawable.icon_hand_selected);
+		}
+		else if(canvas.isEstadoAudio())
+		{
+			botonAudio.setBackgroundResource(R.drawable.icon_audio_record_selected);
+		}
+		else if(canvas.isEstadoReproduccion())
+		{
+			botonReproducir.setBackgroundResource(R.drawable.icon_audio_play_selected);
+		}
+	}
+	
+	@Override
+	protected void reiniciarInterfaz()
+	{
+		botonAnyadir.setVisibility(View.INVISIBLE);
+		botonEliminar.setVisibility(View.INVISIBLE);
+		botonDeformar.setVisibility(View.INVISIBLE);
+		botonReiniciar.setVisibility(View.INVISIBLE);
+		botonGrabar.setVisibility(View.INVISIBLE);
+		botonReproducir.setVisibility(View.INVISIBLE);
+		botonAudio.setVisibility(View.INVISIBLE);
+		
+		botonAnyadir.setBackgroundResource(R.drawable.icon_add);
+		botonEliminar.setBackgroundResource(R.drawable.icon_remove);
+		botonDeformar.setBackgroundResource(R.drawable.icon_hand);
+		botonGrabar.setBackgroundResource(R.drawable.icon_record);
+		botonAudio.setBackgroundResource(R.drawable.icon_audio_record);
+		botonReproducir.setBackgroundResource(R.drawable.icon_audio_play);
 	}
 	
 	/* Listener de Botones */
@@ -219,8 +201,8 @@ public class DeformFragment extends Fragment
 		{
 			canvas.seleccionarAnyadir();
 			
-			reiniciarImagenesBotones();
-			botonAdd.setBackgroundResource(R.drawable.icon_add_selected);
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	
@@ -231,8 +213,8 @@ public class DeformFragment extends Fragment
 		{
 			canvas.seleccionarEliminar();
 			
-			reiniciarImagenesBotones();
-			botonRemove.setBackgroundResource(R.drawable.icon_remove_selected);
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	
@@ -243,20 +225,20 @@ public class DeformFragment extends Fragment
 		{
 			canvas.seleccionarMover();
 			
-			reiniciarImagenesBotones();
-			botonMove.setBackgroundResource(R.drawable.icon_hand_selected);
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	
-	private class OnDeleteClickListener implements OnClickListener
+	private class OnResetClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
 			
-			reiniciarImagenesBotones();
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	
@@ -266,9 +248,8 @@ public class DeformFragment extends Fragment
 		{
 			canvas.seleccionarGrabado();
 			
-			reiniciarImagenesBotones();
-			botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	
@@ -277,9 +258,10 @@ public class DeformFragment extends Fragment
 	{ 
 		public void onClick(View v)
 		{
-			reiniciarImagenesBotones();	
-			botonAudio.setBackgroundResource(R.drawable.icon_audio_record_selected);
-			actualizarBotones();
+			canvas.seleccionarAudio();
+			
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	
@@ -289,9 +271,8 @@ public class DeformFragment extends Fragment
 		{
 			canvas.seleccionarPlay();
 			
-			reiniciarImagenesBotones();	
-			botonPlay.setBackgroundResource(R.drawable.icon_audio_play_selected);
-			actualizarBotones();
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}	
 	}
 	

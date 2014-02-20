@@ -471,11 +471,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// TODO Añadir Audio
 		estado = TDeformEstado.Reproducir;
 		
+		iniciarAnimacion();
+	}
+	
+	public void iniciarAnimacion()
+	{
 		posicionAnimacion = 0;
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		triangulosAnimacion = construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
 		contornoAnimacion = construirBufferListaIndicePuntos(contorno, verticesAnimacion);
-		
 	}
 	
 	public void reproducirAnimacion()
@@ -514,17 +518,47 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         	handleSeleccionado.add(0);
         }
 	}
+	
+	public void seleccionarAudio()
+	{
+		estado = TDeformEstado.Audio;
+	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean handlesVacio()
+	public boolean isHandlesVacio()
 	{
 		return indiceHandles.size == 0;
 	}
 	
-	public boolean getEstadoGrabacion() 
+	public boolean isEstadoAnyadir() 
 	{
-		return modoGrabar;
+		return estado == TDeformEstado.Anyadir;
+	}
+	
+	public boolean isEstadoEliminar() 
+	{
+		return estado == TDeformEstado.Eliminar;
+	}
+	
+	public boolean isEstadoDeformar() 
+	{
+		return estado == TDeformEstado.Deformar;
+	}
+	
+	public boolean isEstadoGrabacion() 
+	{
+		return estado == TDeformEstado.Deformar && modoGrabar;
+	}
+	
+	public boolean isEstadoAudio()
+	{
+		return estado == TDeformEstado.Audio;
+	}
+	
+	public boolean isEstadoReproduccion()
+	{
+		return estado == TDeformEstado.Reproducir;
 	}
 	
 	public List<FloatArray> getMovimientos() 

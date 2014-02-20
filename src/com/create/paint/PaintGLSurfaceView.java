@@ -112,24 +112,44 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	
 	public Textura getTextura()
 	{
-		renderer.capturaPantalla(getHeight(), getWidth());
+		renderer.seleccionarCaptura(getHeight(), getWidth());
 		requestRender();
 		return renderer.getTextura();
 	}
 	
-	public boolean bufferSiguienteVacio()
+	public boolean isBufferSiguienteVacio()
 	{
-		return renderer.bufferSiguienteVacio();
+		return renderer.isBufferSiguienteVacio();
 	}
 	
-	public boolean bufferAnteriorVacio()
+	public boolean isBufferAnteriorVacio()
 	{
-		return renderer.bufferAnteriorVacio();
+		return renderer.isBufferAnteriorVacio();
 	}
 	
-	public boolean pegatinaAnyadida()
+	public boolean isPegatinaAnyadida()
 	{
-		return renderer.pegatinaAnyadida();
+		return renderer.isPegatinaAnyadida();
+	}
+	
+	public boolean isEstadoPincel()
+	{
+		return renderer.isEstadoPincel();
+	}
+	
+	public boolean isEstadoCubo()
+	{
+		return renderer.isEstadoCubo();
+	}
+	
+	public boolean isEstadoMover()
+	{
+		return renderer.isEstadoMover();
+	}
+	
+	public boolean isEstadoPegatinas()
+	{
+		return renderer.isEstadoPegatinas();
 	}
 	
 	/* Métodos de Guardado de Información */

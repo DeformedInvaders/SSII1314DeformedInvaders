@@ -100,27 +100,57 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		
 		timer.start();
 	}
+	
+	public void seleccionarAudio()
+	{
+		renderer.seleccionarAudio();
+	}
 
 	/* Métodos de Obtención de Información */
 	
-	public boolean handlesVacio()
+	public boolean isHandlesVacio()
 	{
-		return renderer.handlesVacio();
+		return renderer.isHandlesVacio();
 	}
 	
-	public List<FloatArray> getMovimientos()
+	public boolean isEstadoAnyadir()
 	{
-		return renderer.getMovimientos();
+		return renderer.isEstadoAnyadir();
 	}
 	
-	public boolean getEstadoGrabacion()
+	public boolean isEstadoEliminar()
 	{
-		return renderer.getEstadoGrabacion();
+		return renderer.isEstadoEliminar();
+	}
+	
+	public boolean isEstadoDeformar()
+	{
+		return renderer.isEstadoDeformar();
+	}
+	
+	public boolean isEstadoGrabacion()
+	{
+		return renderer.isEstadoGrabacion();
 	}
 	
 	public boolean isGrabacionReady() 
 	{
 		return renderer.isGrabacionReady();
+	}
+
+	public boolean isEstadoAudio()
+	{
+		return renderer.isEstadoAudio();
+	}
+	
+	public boolean isEstadoReproduccion()
+	{
+		return renderer.isEstadoReproduccion();
+	}
+	
+	public List<FloatArray> getMovimientos()
+	{
+		return renderer.getMovimientos();
 	}
 	
 	/* Métodos de Guardado de Información */

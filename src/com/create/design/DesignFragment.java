@@ -2,24 +2,22 @@ package com.create.design;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.project.data.Esqueleto;
+import com.project.main.OpenGLFragment;
 import com.project.main.R;
 
-public class DesignFragment extends Fragment
+public class DesignFragment extends OpenGLFragment
 {
 	private DesignFragmentListener mCallback;
 	
 	private DesignGLSurfaceView canvas;
-	private ImageButton botonReady, botonNuevo, botonTest;
+	private ImageButton botonReset, botonTriangular, botonListo;
 	
 	private DesignDataSaved dataSaved;
 	
@@ -59,26 +57,19 @@ public class DesignFragment extends Fragment
 		
 		// Instanciar Elementos de la GUI
 		canvas = (DesignGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
-		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonDesign1);
-		botonNuevo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
-		botonTest = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);
 		
-		botonReady.setOnClickListener(new OnReadyClickListener());
-		botonNuevo.setOnClickListener(new onNewClickListener());
-		botonTest.setOnClickListener(new onTestClickListener());
+		botonListo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign1);
+		botonReset = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
+		botonTriangular = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);
 		
-		canvas.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent event)
-			{
-				canvas.onTouch(view, event);
-				actualizarBotones();
-				
-				return true;
-			}
-		});
+		botonListo.setOnClickListener(new OnReadyClickListener());
+		botonReset.setOnClickListener(new onResetClickListener());
+		botonTriangular.setOnClickListener(new onTriangularClickListener());
 		
-		actualizarBotones();
+		setCanvasListener(canvas);
+		
+		reiniciarInterfaz();
+		actualizarInterfaz();
         return rootView;
     }
 	
@@ -88,9 +79,9 @@ public class DesignFragment extends Fragment
 		super.onDestroyView();
 		
 		canvas = null;
-		botonReady = null;
-		botonNuevo = null;
-		botonTest = null;
+		botonListo = null;
+		botonReset = null;
+		botonTriangular = null;
 	}
 	
 	@Override
@@ -102,7 +93,9 @@ public class DesignFragment extends Fragment
 		if(dataSaved != null)
 		{			
 			canvas.restoreData(dataSaved);
-			actualizarBotones();
+
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 	
@@ -117,19 +110,22 @@ public class DesignFragment extends Fragment
 	
 	/* Métodos abstractos de OpenGLFragmentListener */
 	
-	private void actualizarBotones()
+	@Override
+	protected void reiniciarInterfaz()
+	{
+		botonListo.setVisibility(View.INVISIBLE);
+		botonReset.setVisibility(View.INVISIBLE);
+		botonTriangular.setVisibility(View.INVISIBLE);
+	}
+	
+	@Override
+	protected void actualizarInterfaz()
 	{
 		if(canvas.poligonoCompleto())
 		{
-			botonReady.setVisibility(View.VISIBLE);
-			botonNuevo.setVisibility(View.VISIBLE);
-			botonTest.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			botonReady.setVisibility(View.INVISIBLE);
-			botonNuevo.setVisibility(View.INVISIBLE);
-			botonTest.setVisibility(View.INVISIBLE);
+			botonListo.setVisibility(View.VISIBLE);
+			botonReset.setVisibility(View.VISIBLE);
+			botonTriangular.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -151,22 +147,27 @@ public class DesignFragment extends Fragment
 		}
 	}
 	
-	private class onNewClickListener implements OnClickListener
+	private class onResetClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
-			actualizarBotones();
+			
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 	
-	private class onTestClickListener implements OnClickListener
+	private class onTriangularClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			mCallback.onDesignTestButtonClicked(canvas.seleccionarTriangular());
+			
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 }

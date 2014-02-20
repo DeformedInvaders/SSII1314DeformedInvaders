@@ -26,8 +26,8 @@ public class AnimationFragment extends Fragment
 	private ImageButton botonReady;
 	private SwipeableViewPager viewPager;
 	
-	private Esqueleto esqueletoActual;
-	private Textura texturaActual;
+	private Esqueleto esqueleto;
+	private Textura textura;
 	
 	private Movimientos movimientos;
 	
@@ -42,8 +42,8 @@ public class AnimationFragment extends Fragment
 	
 	private void setParameters(Esqueleto e, Textura t)
 	{
-		esqueletoActual = e;
-		texturaActual = t;
+		esqueleto = e;
+		textura = t;
 	}
 	
 	public interface AnimationFragmentListener
@@ -80,10 +80,10 @@ public class AnimationFragment extends Fragment
 		viewPager.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 		
-		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_down));
-		viewPager.addView(DeformFragment.newInstance(esqueletoActual, texturaActual), getString(R.string.title_animation_section_attack));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_down));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_attack));
 
         return rootView;
     }
@@ -98,24 +98,30 @@ public class AnimationFragment extends Fragment
 	
 	/* Listeners de Botones */
 	
+	private void actualizarMovimientos()
+	{
+		int i = 0;
+		Iterator<DeformFragment> it = viewPager.iterator();
+		while(it.hasNext())
+		{
+			List<FloatArray> movimiento = it.next().getMovimientos();
+			
+			if(movimiento != null && movimiento.size() > 0)
+			{
+				movimientos.set(movimiento, i);
+			}
+
+			i++;	
+		}
+	}
+	
     private class OnReadyClickListener implements OnClickListener
     {
 		@Override
 		public void onClick(View v)
 		{
-			int i = 0;
-			Iterator<DeformFragment> it = viewPager.iterator();
-			while(it.hasNext())
-			{
-				List<FloatArray> movimiento = it.next().getMovimientos();
-				
-				if(movimiento != null)
-				{
-					movimientos.set(movimiento, i);
-				}
-
-				i++;	
-			}
+			// TODO Llamar a actualizarMovimientos en onClick del ActionBar
+			actualizarMovimientos();
 			
 			mCallback.onAnimationReadyButtonClicked(movimientos);
 		}
