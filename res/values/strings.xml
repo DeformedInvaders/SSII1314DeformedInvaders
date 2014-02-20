@@ -42,7 +42,6 @@
 			<string name="text_save_character_description">Introduce a name for your new character.</string>
 			<string name="text_save_character_confirmation">Character saved.</string>
 			
-			<string name="text_picture_character_confirmation">Character pictured.</string>
 			<string name="text_replace_character_confirmation">Character replaced.</string>
 			<string name="text_select_character_confirmation">Character selected.</string>
 			

@@ -205,16 +205,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
 		
 		// Detalles
+		if(lineaActual != null)
+		{
+			dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
+		}
+		
 		Iterator<Polilinea> it = listaLineas.iterator();
 		while(it.hasNext())
 		{
 			Polilinea polilinea = it.next();
 			dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
-		}
-		
-		if(lineaActual != null)
-		{
-			dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
 		}
 	}
 	
@@ -256,7 +256,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private synchronized void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -289,7 +289,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private synchronized void pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private void pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -307,7 +307,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private synchronized void anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private void anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
 		short j = buscarPixel(contorno, vertices, pixelX, pixelY, screenWidth, screenHeight);
@@ -353,7 +353,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	public void onMultiTouchEvent() {}
 	
-	private synchronized void guardarPolilinea()
+	private void guardarPolilinea()
 	{
 		if(lineaActual != null)
 		{
@@ -437,7 +437,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de modificación de Buffers de estado */
 
-	public synchronized void anteriorAccion()
+	public void anteriorAccion()
 	{
 		guardarPolilinea();
 		
@@ -449,7 +449,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	public synchronized void siguienteAccion()
+	public void siguienteAccion()
 	{
 		guardarPolilinea();
 		
@@ -462,7 +462,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private synchronized void actualizarEstado(Stack<Accion> pila)
+	private void actualizarEstado(Stack<Accion> pila)
 	{
 		color = Color.WHITE;
 		listaLineas = new ArrayList<Polilinea>();

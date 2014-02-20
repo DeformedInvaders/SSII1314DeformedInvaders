@@ -2,6 +2,7 @@
 <resources>
     <!-- STRINGS -->
     	<!-- ActionBar Titles -->
+    		<string name="title_app">DEFORMED INVADERS</string>
 		    <string name="title_design_phase">Define el diseño.</string>
 		    <string name="title_paint_phase">Define la textura.</string>
 		    <string name="title_animation_phase">Define las animaciones.</string>
@@ -17,7 +18,13 @@
 			
 			<string name="title_test_section_multitouch">Multitouch</string>
 			<string name="title_test_section_audio">Audio</string>
+			<string name="title_test_secton_social">Social</string>
 			
+		<!-- ActionBar Icons -->
+			<string name="title_menu_twitter">Twitter</string>
+			<string name="title_menu_facebook">Facebook</string>
+		
+		<!-- Dialog Section Titles -->	
 			<string name="title_dialog_size">Tamaño:</string>
 			<string name="title_dialog_color">Color:</string>
 			<string name="title_dialog_eyes">Ojos:</string>
@@ -80,16 +87,14 @@
 		    
 		    <string name="text_button_record">Grabar</string>
 		    <string name="text_button_play">Reproducir</string>
-		    
-		    <string name="text_button_plus">+</string>
-		    <string name="text_button_minus">-</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Próximamente</string>
-			<string name="error_triangle">El poligono es complejo.</string>
-			<string name="error_design">El esqueleto está corrupto.</string>
-			<string name="error_paint">La textura está corrupta.</string>
-			<string name="error_animation">Las animaciones están corruptas.</string>
+			<string name="error_design">Ha ocurrido un problema con el esqueleto.</string>
+			<string name="error_triangle">El poligono no es simple.</string>
+			<string name="error_paint">Ha ocurrido un problema con la textura.</string>
+			<string name="error_deform">Hay movimientos sin definir.</string>
+			<string name="error_animation">Ha ocurrido un problema con los movimientos.</string>
 			
 			<string name="error_picture_character">El personaje no se ha podido dibujar.</string>
 			<string name="error_save_character">El personaje no se ha podido guardar.</string>
@@ -147,6 +152,10 @@
 	    		
 	    <!-- Select Fragment -->
 	    	<string name="desc_select_camera">Guarda una imagen de este persoaje.</string>
+	    	<string name="desc_select_run">Reproducir la animación de correr.</string>
+	    	<string name="desc_select_jump">Reproducir la animación de saltar.</string>
+	    	<string name="desc_select_crouch">Reproducir la animación de agacharse.</string>
+	    	<string name="desc_select_attack">Reproducir la animación de atacar.</string>
 	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Grabar con el microfono.</string>
