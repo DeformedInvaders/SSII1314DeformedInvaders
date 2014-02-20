@@ -1,8 +1,9 @@
-package com.lib.math;
+package com.create.deform;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.lib.math.Intersector;
 import com.lib.matrix.Matrix;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;

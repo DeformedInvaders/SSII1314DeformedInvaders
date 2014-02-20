@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.android.alert.WebAlert;
 import com.project.main.MainActivity;
 import com.project.main.R;
-import com.test.social.SocialInformation;
 
 public class SocialConnector
 {

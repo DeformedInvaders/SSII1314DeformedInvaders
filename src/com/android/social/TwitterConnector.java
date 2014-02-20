@@ -2,8 +2,6 @@ package com.android.social;
 
 import java.io.File;
 
-import com.test.social.SocialInformation;
-
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;

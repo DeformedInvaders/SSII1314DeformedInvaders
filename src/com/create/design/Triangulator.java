@@ -1,5 +1,12 @@
-package com.lib.math;
+package com.create.design;
 
+import com.lib.math.BSpline;
+import com.lib.math.ConvexHull;
+import com.lib.math.DelaunayMeshGenerator;
+import com.lib.math.DelaunayTriangulator;
+import com.lib.math.EarClippingTriangulator;
+import com.lib.math.GeometryUtils;
+import com.lib.math.Vector2;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
@@ -57,19 +64,37 @@ public class Triangulator
 		return contorno;
 	}
 	
-	private FloatArray calcularBSpline(FloatArray vertices, int grado, int iter)
+	public static FloatArray calcularConvexHull(FloatArray vertices, boolean ordenados)
+	{
+		ConvexHull convexHullCalculator = new ConvexHull();
+		return convexHullCalculator.computePolygon(vertices, ordenados);
+	}
+	
+	public static FloatArray calcularBSpline(FloatArray vertices, int grado, int iter)
 	{
 		BSpline<Vector2> bsplineCalculator = new BSpline<Vector2>(vertices, grado, true);
 		return bsplineCalculator.computeBSpline(0.0f, iter);
 	}
 	
-	private Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
+	public static ShortArray calcularDelaunay(FloatArray vertices, boolean ordenados)
+	{
+		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();
+		return delaunayCalculator.computeTriangles(vertices, ordenados);
+	}
+	
+	public static ShortArray calcularEarClipping(FloatArray vertices)
+	{
+		EarClippingTriangulator earClippingCalculator = new EarClippingTriangulator();
+		return earClippingCalculator.computeTriangles(vertices);
+	}
+	
+	public static Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
 	{
 		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
 		return delaunayMeshGenerator.computeMesh(vertices, profundidad, longitud);
 	}
 	
-	private ShortArray calcularPoligonoSimple(FloatArray vertices, boolean continuo)
+	public static ShortArray calcularPoligonoSimple(FloatArray vertices, boolean continuo)
 	{
 		return GeometryUtils.isPolygonSimple(vertices, continuo);
 	}

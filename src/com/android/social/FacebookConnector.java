@@ -2,8 +2,6 @@ package com.android.social;
 
 import java.io.File;
 
-import com.test.social.SocialInformation;
-
 import android.net.Uri;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;

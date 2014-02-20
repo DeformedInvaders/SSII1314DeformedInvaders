@@ -20,6 +20,7 @@ import com.android.alert.ChooseAlert;
 import com.android.alert.TextInputAlert;
 import com.android.alert.WebAlert;
 import com.android.social.FacebookConnector;
+import com.android.social.SocialInformation;
 import com.android.social.TSocialEstado;
 import com.android.social.TwitterConnector;
 import com.android.storage.ExternalStorageManager;

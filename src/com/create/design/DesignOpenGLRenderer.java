@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.lib.math.Intersector;
-import com.lib.math.Triangulator;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.data.Esqueleto;
@@ -92,7 +91,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	
-	private synchronized void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
