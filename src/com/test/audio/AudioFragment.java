@@ -1,13 +1,6 @@
 package com.test.audio;
 
-import java.io.IOException;
-
 import android.app.Activity;
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,19 +12,19 @@ import android.widget.Toast;
 
 import com.android.alert.ChooseAlert;
 import com.android.alert.TextInputAlert;
+import com.android.audio.AudioPlayerManager;
+import com.android.audio.AudioRecorderManager;
+import com.android.audio.AudioVolumeManager;
 import com.android.storage.ExternalStorageManager;
 import com.project.main.R;
 
-public class AudioFragment extends Fragment implements OnCompletionListener
+public class AudioFragment extends Fragment
 {
 	private ExternalStorageManager manager;
 	
-	private MediaRecorder recorder;
-    private MediaPlayer player;
-    private AudioManager audio;
-    
-    private TRecordEstado estadoGrabar;
-    private TPlayEstado estadoReproducir;
+	private AudioRecorderManager recorder;
+    private AudioPlayerManager player;
+    private AudioVolumeManager audio;
     
 	private ImageButton botonRecord, botonPlay, botonVolumenMas, botonVolumenMenos;
 	
@@ -48,14 +41,16 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		
 		manager = new ExternalStorageManager();
 		
-		recorder = new MediaRecorder();
-		player = new MediaPlayer();
-		audio = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-		
-		activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
-		estadoGrabar = TRecordEstado.Parado;
-		estadoReproducir = TPlayEstado.Parado;
+		audio = new AudioVolumeManager(activity);
+		recorder = new AudioRecorderManager(manager);
+		player = new AudioPlayerManager(manager) {
+			@Override
+			public void onPlayerCompletion()
+			{
+			    botonPlay.setBackgroundResource(R.drawable.icon_audio_play);	    
+			    Toast.makeText(getActivity(), R.string.text_audio_play_confirmation, Toast.LENGTH_SHORT).show();
+			}
+		};
 	}
 
 	@Override
@@ -72,8 +67,6 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		botonPlay.setOnClickListener(new OnPlayClickListener());
 		botonVolumenMas.setOnClickListener(new OnVolumenMasClickListener());
 		botonVolumenMenos.setOnClickListener(new OnVolumenMenosClickListener());
-		
-		player.setOnCompletionListener(this);
 		
 		actualizarBotones();
         return rootView;
@@ -96,9 +89,9 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		super.onDetach();
 		
 		manager = null;
-		recorder.release();
+		recorder.releaseRecorder();
 		recorder = null;
-		player.release();
+		player.releasePlayer();
 		player = null;
 		audio = null;
 	}
@@ -117,7 +110,7 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		
 		// Volumen
 		
-		if(audio.getStreamVolume(AudioManager.STREAM_MUSIC) == audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC))
+		if(audio.isMaxVolume())
 		{
 			botonVolumenMas.setVisibility(View.INVISIBLE);
 		}
@@ -126,7 +119,7 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 			botonVolumenMas.setVisibility(View.VISIBLE);
 		}
 		
-		if(audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0)
+		if(audio.isMinVolume())
 		{
 			botonVolumenMenos.setVisibility(View.INVISIBLE);
 		}
@@ -136,126 +129,6 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		}
 	}
     
-    /* Reproducción */
-
-    private void startPlaying()
-    {
-		ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_audio_play_title), getString(R.string.text_button_play), getString(R.string.text_button_cancel), manager.getFicherosDirectorioMusica()) {
-			
-			@Override
-			public void onSelectedPossitiveButtonClick(String selected)
-			{						
-				try
-				{
-					//Idle
-					player.setDataSource(manager.getDirectorioMusica(selected));
-					//Initialized
-					player.prepare();
-					//Prepared
-				    player.start();
-				    //Started
-				    
-				    estadoReproducir = TPlayEstado.Reproduciendo;
-				}
-				catch (IOException e)
-				{
-				    e.printStackTrace();
-				}
-			}
-			
-			@Override
-			public void onNoSelectedPossitiveButtonClick() { }
-
-			@Override
-			public void onNegativeButtonClick() { }
-			
-		};
-
-		alert.show();
-    }
-    
-    private void pausePlaying()
-    {
-    	//Started
-    	player.pause();
-    	//Pause
-    	estadoReproducir = TPlayEstado.Pausado;
-    }
-
-    private void resumePlaying()
-    {
-    	//Pause
-    	player.start();
-    	//Started
-    	estadoReproducir = TPlayEstado.Reproduciendo;
-    }
-    
-   /* private void stopPlaying()
-    {
-    	//Started or Paused
-    	player.stop();
-    	//Stopped
-    	estadoReproducir = TPlayEstado.Parado;
-    }*/
-    
-    private void resetPlaying()
-    {
-    	//Any
-    	player.reset();
-    	//Idle
-    	estadoReproducir = TPlayEstado.Parado;
-    }
-
-    /* Grabación */
-    
-    private void startRecording()
-    {
-    	TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_record), getString(R.string.text_button_cancel)) {
-    		
-			@Override
-			public void onPossitiveButtonClick()
-			{
-		        try
-		        {
-		        	//Initial
-					recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-					//Initialized
-			    	recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-			    	//DataSourceConfigured
-			    	recorder.setOutputFile(manager.getDirectorioMusica(getText()));
-			    	//DataSourceConfigured
-			    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-			    	//DataSourceConfigured
-		        	recorder.prepare();
-		        	//Prepared
-		        	recorder.start();
-		        	//Recording
-		        	
-		        	estadoGrabar = TRecordEstado.Grabando;
-		        }
-		        catch (IOException e)
-		        {
-		        	e.printStackTrace();
-		        }
-			}
-
-			@Override
-			public void onNegativeButtonClick() { }
-			
-		};
-
-		alert.show();
-    }
-
-    private void stopRecording()
-    {
-    	//Recording
-    	recorder.stop();
-    	//Initial
-  
-    	estadoGrabar = TRecordEstado.Parado;
-    }
-    
     /* Listeners de Botones */
 	
 	private class OnRecordClickListener implements OnClickListener
@@ -263,15 +136,28 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		@Override
 		public void onClick(View arg0)
 		{
-            if(estadoGrabar == TRecordEstado.Parado)
+            if(recorder.isStopped())
             {
-            	startRecording();
-            	
-            	botonRecord.setBackgroundResource(R.drawable.icon_audio_stop);
+            	TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_record), getString(R.string.text_button_cancel)) {
+            		
+        			@Override
+        			public void onPossitiveButtonClick()
+        			{
+    		        	recorder.startRecording(manager.getDirectorioMusica(getText()));
+    	            	
+    	            	botonRecord.setBackgroundResource(R.drawable.icon_audio_stop);
+        			}
+
+        			@Override
+        			public void onNegativeButtonClick() { }
+        			
+        		};
+
+        		alert.show();
             }
-            else if(estadoGrabar == TRecordEstado.Grabando)
+            else if(recorder.isRecording())
             {
-            	stopRecording();
+            	recorder.stopRecording();
             	
             	botonRecord.setBackgroundResource(R.drawable.icon_audio_record);
             	Toast.makeText(getActivity(), R.string.text_audio_record_confirmation, Toast.LENGTH_SHORT).show();
@@ -286,19 +172,35 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		@Override
 		public void onClick(View arg0)
 		{
-            if(estadoReproducir == TPlayEstado.Parado)
+            if(player.isStoped())
             {
-            	startPlaying();
-            	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
+        		ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_audio_play_title), getString(R.string.text_button_play), getString(R.string.text_button_cancel), manager.getFicherosDirectorioMusica()) {
+        			
+        			@Override
+        			public void onSelectedPossitiveButtonClick(String selected)
+        			{						
+        				player.startPlaying(selected);
+        				botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
+        			}
+        			
+        			@Override
+        			public void onNoSelectedPossitiveButtonClick() { }
+
+        			@Override
+        			public void onNegativeButtonClick() { }
+        			
+        		};
+
+        		alert.show();
             }
-            else if(estadoReproducir == TPlayEstado.Reproduciendo)
+            else if(player.isPlaying())
             {
-            	pausePlaying();
+            	player.pausePlaying();
             	botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
             }
-            else if(estadoReproducir == TPlayEstado.Pausado)
+            else if(player.isPaused())
             {
-            	resumePlaying();
+            	player.resumePlaying();
             	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
             }
             
@@ -311,7 +213,7 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		@Override
 		public void onClick(View arg0)
 		{
-			audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+			audio.increaseVolume();
 			actualizarBotones();
 		}
 	}
@@ -321,17 +223,8 @@ public class AudioFragment extends Fragment implements OnCompletionListener
 		@Override
 		public void onClick(View arg0)
 		{
-			audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+			audio.decreaseVolume();
 			actualizarBotones();
 		}
-	}
-
-	@Override
-	public void onCompletion(MediaPlayer mp)
-	{
-		resetPlaying();
-		
-	    botonPlay.setBackgroundResource(R.drawable.icon_audio_play);	    
-	    Toast.makeText(getActivity(), R.string.text_audio_play_confirmation, Toast.LENGTH_SHORT).show();
 	}
 }

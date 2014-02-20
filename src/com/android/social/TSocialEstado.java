@@ -1,4 +1,4 @@
-package com.test.social;
+package com.android.social;
 
 public enum TSocialEstado
 {

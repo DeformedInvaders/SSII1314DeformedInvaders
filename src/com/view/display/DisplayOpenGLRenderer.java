@@ -12,11 +12,10 @@ import android.graphics.Color;
 
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.data.Esqueleto;
 import com.project.data.MapaBits;
 import com.project.data.Movimientos;
 import com.project.data.Pegatinas;
-import com.project.data.Textura;
+import com.project.data.Personaje;
 import com.project.main.OpenGLRenderer;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer
@@ -65,7 +64,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estado = TDisplayEstado.Nada;
 	}
 	
-	public DisplayOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura, Movimientos mov)
+	public DisplayOpenGLRenderer(Context context, Personaje personaje)
 	{
         super(context);
         
@@ -73,11 +72,10 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
         estado = TDisplayEstado.Nada;
         
         // Esqueleto
-        contorno = esqueleto.getContorno();
-		vertices = esqueleto.getVertices();
+        contorno = personaje.getEsqueleto().getContorno();
+		vertices = personaje.getEsqueleto().getVertices();
 		
-		
-		triangulos = esqueleto.getTriangulos();
+		triangulos = personaje.getEsqueleto().getTriangulos();
 		
 		bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
 		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
@@ -85,17 +83,17 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		// Textura
 		estadoCaptura = TCapturaEstado.Nada;
         
-		bitmap = textura.getTextura().getBitmap();
-		coords = textura.getCoordTextura();
+		bitmap = personaje.getTextura().getMapaBits().getBitmap();
+		coords = personaje.getTextura().getCoordTextura();
 
 		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
 		
-		movimiento = mov;
+		movimiento = personaje.getMovimientos();
 		
 		// Pegatinas
 		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
         
-        pegatinas = textura.getPegatinas();
+        pegatinas = personaje.getTextura().getPegatinas();
         coordPegatina = construirBufferListaPuntos(texture);
         
         pegatinaOjosCargada = false;

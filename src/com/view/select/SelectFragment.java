@@ -13,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
-import com.project.data.Esqueleto;
-import com.project.data.Movimientos;
-import com.project.data.Textura;
+import com.project.data.Personaje;
 import com.project.main.R;
-import com.project.social.SocialConnector;
 import com.view.display.DisplayGLSurfaceView;
 
 public class SelectFragment extends Fragment
@@ -28,10 +26,7 @@ public class SelectFragment extends Fragment
 	private SocialConnector connector;
 	private SwipeableViewPager pager;
 	
-	private Esqueleto esqueletoActual;
-	private Textura texturaActual;
-	private Movimientos movimientoActual;
-	private String nombreActual;
+	private Personaje personajeActual;
 
 	private DisplayGLSurfaceView canvas;
 	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack;
@@ -39,19 +34,16 @@ public class SelectFragment extends Fragment
 	
 	/* Constructora */
 	
-	public static final SelectFragment newInstance(Esqueleto e, Textura t, Movimientos v, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
+	public static final SelectFragment newInstance(Personaje p, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{
 		SelectFragment fragment = new SelectFragment();
-		fragment.setParameters(e, t, v, n, s, m, c);
+		fragment.setParameters(p, s, m, c);
 		return fragment;
 	}
 	
-	private void setParameters(Esqueleto e, Textura t, Movimientos v, String n, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
+	private void setParameters(Personaje p, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
 	{	
-		esqueletoActual = e;
-		texturaActual = t;
-		movimientoActual = v;
-		nombreActual = n;
+		personajeActual = p;
 		pager = s;
 		manager = m;
 		connector = c;
@@ -72,7 +64,7 @@ public class SelectFragment extends Fragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
-		canvas.setParameters(esqueletoActual, texturaActual, movimientoActual);
+		canvas.setParameters(personajeActual);
 		
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
 		botonCamara.setOnClickListener(new OnCamaraClickListener());
@@ -145,9 +137,9 @@ public class SelectFragment extends Fragment
 			{
 				// Captura
 				Bitmap bitmap = canvas.capturaPantalla();
-				if(manager.guardarImagen(bitmap, nombreActual))
+				if(manager.guardarImagen(bitmap, personajeActual.getNombre()))
 				{
-					connector.publicar(getString(R.string.text_social_photo_initial)+" "+nombreActual+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(nombreActual));					
+					connector.publicar(getString(R.string.text_social_photo_initial)+" "+personajeActual.getNombre()+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(personajeActual.getNombre()));					
 				}
 				else
 				{

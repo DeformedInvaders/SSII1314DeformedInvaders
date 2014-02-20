@@ -16,28 +16,23 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
     private DeformOpenGLRenderer renderer;
     
-    
     private CountDownTimer timer;
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.MultiTouch);
         
-        timer = new CountDownTimer(3000, 80){
+        timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
 
 			@Override
-			public void onFinish() 
-			{
-				
-			}
+			public void onFinish() { }
 
 			@Override
 			public void onTick(long arg0) 
 			{
-				renderer.animar();
+				renderer.reproducirAnimacion();
 				requestRender();
 			}
-        	
         };
     }
 	
@@ -91,6 +86,20 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		renderer.reiniciar();
 		requestRender();
 	}
+	
+	public void seleccionarGrabado() 
+	{
+		renderer.seleccionarGrabado();
+		requestRender();
+	}
+
+	public void seleccionarPlay() 
+	{
+		renderer.selecionarPlay();
+		requestRender();
+		
+		timer.start();
+	}
 
 	/* Métodos de Obtención de Información */
 	
@@ -109,6 +118,11 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.getEstadoGrabacion();
 	}
 	
+	public boolean isGrabacionReady() 
+	{
+		return renderer.isGrabacionReady();
+	}
+	
 	/* Métodos de Guardado de Información */
 	
 	public DeformDataSaved saveData()
@@ -120,26 +134,4 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.restoreData(data);
 	}
-
-	public void seleccionarGrabado() 
-	{
-		renderer.seleccionarGrabado();
-		requestRender();
-	}
-
-	public void seleccionarPlay() 
-	{
-		renderer.selecionarPlay();
-		requestRender();
-		
-		timer.start();
-		
-	}
-	
-	public boolean isGrabacionReady() 
-	{
-		return renderer.isGrabacionReady();
-	}
-
-	
 }

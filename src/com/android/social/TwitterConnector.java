@@ -1,4 +1,4 @@
-package com.project.social;
+package com.android.social;
 
 import java.io.File;
 

@@ -31,9 +31,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private TDeformEstado estado;
 	private boolean modoGrabar;
 	
-	// Información de Movimiento. Posición de los Handles en los pasos intermedios.
-	private List<FloatArray> listaHandles; 
-	private List<FloatArray> listaVertices; 
+	/* Movimientos */
+	
+	// Información de Movimiento
+	private List<FloatArray> listaHandlesAnimacion; 
+	private List<FloatArray> listaVerticesAnimacion; 
 	
 	//Informacion para la reproduccion de la animacion
 	private FloatArray verticesAnimacion;
@@ -88,7 +90,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         
         estado = TDeformEstado.Nada;
         modoGrabar = false;
-        listaHandles = new ArrayList<FloatArray>();
+        listaHandlesAnimacion = new ArrayList<FloatArray>();
         
         // Esqueleto
 		contorno = esqueleto.getContorno();
@@ -116,7 +118,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         pegatinaBocaCargada = false;
         pegatinaArmaCargada = false;
         
-		bitmap = textura.getTextura().getBitmap();
+		bitmap = textura.getMapaBits().getBitmap();
 		coords = textura.getCoordTextura();
 		
 		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
@@ -169,13 +171,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		if(estado == TDeformEstado.Reproducir)
 		{			
-			dibujarEsqueleto(gl, triangulosAnimacion, contornoAnimacion);
-			dibujarPegatinas(gl, verticesAnimacion);
+			dibujarEsqueleto(gl, triangulosAnimacion, contornoAnimacion, verticesAnimacion);
 		}
 		else
 		{
-			dibujarEsqueleto(gl, bufferTriangulos, bufferContorno);
-			dibujarPegatinas(gl, verticesModificados);
+			dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, verticesModificados);
 			
 			if(estado != TDeformEstado.Deformar)
 			{
@@ -193,17 +193,16 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	private void dibujarEsqueleto(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno)
+	private void dibujarEsqueleto(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatArray vertices)
 	{
+		super.onDrawFrame(gl);
+		
 		// Textura
 		dibujarTextura(gl, triangulos, bufferCoords, nombreTexturas, 0);
-
+			
 		// Contorno
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
-	}
-	
-	private void dibujarPegatinas(GL10 gl, FloatArray vertices)
-	{
+		
 		// Pegatinas
 		if(pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
 		{
@@ -222,8 +221,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			int indice = pegatinas.getVerticeArma();
 			dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
 		}
-				
 	}
+	
 	/* Selección de Estado */
 	
 	public void seleccionarAnyadir()
@@ -256,8 +255,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 		
-		listaHandles.clear();
-		listaVertices = null;
+		listaHandlesAnimacion.clear();
+		listaVerticesAnimacion = null;
 	}
 	
 	@Override
@@ -275,7 +274,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{		
 			seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			
-			anyadirMovimiento();
+			if(modoGrabar)
+			{
+				listaHandlesAnimacion.add(handles.clone());
+			}
 		}	
 	}
 	
@@ -295,14 +297,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				// Añadir Handle Nuevo
 				deformator.anyadirHandles(handles, indiceHandles);
 			}
-		}
-	}
-	
-	private void anyadirMovimiento()
-	{
-		if(modoGrabar)
-		{
-			listaHandles.add(handles.clone());
 		}
 	}
 	
@@ -360,18 +354,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			{
 				moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 				
-				anyadirMovimiento();				
+				if(modoGrabar)
+				{
+					listaHandlesAnimacion.add(handles.clone());
+				}				
 			}
-		}
-		else if(estado == TDeformEstado.Reproducir)
-		{
-			//TODO
-			verticesAnimacion = listaVertices.get(posicionAnimacion);
-			actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
-			actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
-			posicionAnimacion = (posicionAnimacion + 1)  % listaVertices.size();
-			
-			
 		}
 	}
 	
@@ -415,37 +402,37 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			{
 				modoGrabar = false;
 				estado = TDeformEstado.Nada;
-				reducirMovimientos();
+				construirListadeMovimientos();
 			}
 		}	
 	}
 	
-	private void reducirMovimientos()
+	private void construirListadeMovimientos()
 	{
 		int i = 0;
 		int r = 0;
 		
-		if(listaHandles.size() < NUM_ITER)
+		if(listaHandlesAnimacion.size() < NUM_ITER)
 		{
 			r = 1;
 		}
 		else
 		{
-			r = listaHandles.size() / NUM_ITER;
+			r = listaHandlesAnimacion.size() / NUM_ITER;
 		}
 		
 		FloatArray v = vertices.clone();
 		
-		while(i < listaHandles.size())
+		while(i < listaHandlesAnimacion.size())
 		{
-			deformator.moverHandles(listaHandles.get(i), v);
+			deformator.moverHandles(listaHandlesAnimacion.get(i), v);
 			
-			listaVertices.add(v.clone());
+			listaVerticesAnimacion.add(v.clone());
 			i = i+r;
 		}
 		
-		deformator.moverHandles(listaHandles.get(listaHandles.size()-1), v);
-		listaVertices.add(v.clone());
+		deformator.moverHandles(listaHandlesAnimacion.get(listaHandlesAnimacion.size()-1), v);
+		listaVerticesAnimacion.add(v.clone());
 		
 	}
 	
@@ -469,8 +456,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		modoGrabar = true;
 		estado = TDeformEstado.Deformar;
 		
-		listaHandles.clear();
-		listaVertices = new ArrayList<FloatArray>();
+		listaHandlesAnimacion.clear();
+		listaVerticesAnimacion = new ArrayList<FloatArray>();
 		
 		reiniciarHandles();
 		
@@ -481,22 +468,22 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	public void selecionarPlay() 
 	{
-		// TODO
+		// TODO Añadir Audio
 		estado = TDeformEstado.Reproducir;
 		
 		posicionAnimacion = 0;
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
-		triangulosAnimacion = this.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = this.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
+		triangulosAnimacion = construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
+		contornoAnimacion = construirBufferListaIndicePuntos(contorno, verticesAnimacion);
 		
 	}
 	
-	public void animar()
+	public void reproducirAnimacion()
 	{
-		verticesAnimacion = listaVertices.get(posicionAnimacion);
+		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
 		actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1)  % listaVertices.size();
+		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();
 	}
 	
 	private void reiniciarHandles()
@@ -542,33 +529,33 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	public List<FloatArray> getMovimientos() 
 	{ 
-		return listaVertices;
+		return listaVerticesAnimacion;
 	}
+	
+	public boolean isGrabacionReady() 
+	{
+		return listaVerticesAnimacion != null && listaVerticesAnimacion.size() > 0;
+	}	
+	
 	
 	/* Métodos de Salvados de Información */
 	
 	public DeformDataSaved saveData()
 	{
-		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVertices);
+		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVerticesAnimacion);
 	}
 	
 	public void restoreData(DeformDataSaved data)
 	{
+		modoGrabar = false;
 		estado = data.getEstado();
 		handles = data.getHandles();
 		indiceHandles = data.getIndiceHandles();
 		verticesModificados = data.getVerticesModificados();
-		listaVertices = data.getListaVertices();
-		//TODO
+		listaVerticesAnimacion = data.getListaVertices();
+		
 		deformator.anyadirHandles(handles, indiceHandles);
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
-	}
-
-	public boolean isGrabacionReady() 
-	{
-		return listaVertices != null && listaVertices.size() > 0;
 	}	
-	
-	
 }

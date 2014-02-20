@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.alert.ConfirmationAlert;
 import com.android.alert.TextInputAlert;
+import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
 import com.create.deform.AnimationFragment;
@@ -27,7 +28,6 @@ import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
 import com.project.loading.LoadingFragment;
-import com.project.social.SocialConnector;
 import com.test.main.TestFragment;
 import com.view.select.SelectionFragment;
 

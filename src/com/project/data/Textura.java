@@ -8,20 +8,20 @@ public class Textura implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	private MapaBits textura;
+	private MapaBits mapaBits;
 	private FloatArray coordTextura;
 	private Pegatinas pegatinas;
 	
-	public Textura(MapaBits textura, FloatArray coordTextura, Pegatinas pegatinas)
+	public Textura(MapaBits mapaBits, FloatArray coordTextura, Pegatinas pegatinas)
 	{
-		this.textura = textura;
+		this.mapaBits = mapaBits;
 		this.coordTextura = coordTextura;
 		this.pegatinas = pegatinas;
 	}
 
-	public MapaBits getTextura()
+	public MapaBits getMapaBits()
 	{
-		return textura;
+		return mapaBits;
 	}
 
 	public FloatArray getCoordTextura()

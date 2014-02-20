@@ -145,8 +145,8 @@
 		    <string name="desc_deform_move">Move a handle.</string>
 		    <string name="desc_deform_reset">Reset the animation.</string>
 		    <string name="desc_deform_record">Record an animation.</string>
-		    <string name="desc_deform_audio">Audio an animation.</string>
-		    <string name="desc_deform_play">Play animation.</string>
+		    <string name="desc_deform_audio">Record an audio.</string>
+		    <string name="desc_deform_play">Play the animation.</string>
 		    
 		<!-- Animation Fragment -->
 		    <string name="desc_animation_ready">Ready to save the character.</string>
@@ -157,10 +157,10 @@
 	    	
 	    <!-- Select Fragment -->
 	    	<string name="desc_select_camera">Save a picture of this character.</string>
-	    	<string name="desc_select_run">Select Run</string>
-	    	<string name="desc_select_jump">Select Jump</string>
-	    	<string name="desc_select_crouch">Select Crouch</string>
-	    	<string name="desc_select_attack">Select Attack</string>
+	    	<string name="desc_select_run">Play run animation.</string>
+	    	<string name="desc_select_jump">Play jump animation.</string>
+	    	<string name="desc_select_crouch">Play crouch animation.</string>
+	    	<string name="desc_select_attack">Play attack animation.</string>
 	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Record with the microphone.</string>
@@ -169,25 +169,25 @@
 	    	<string name="desc_audio_minus">Decrease the audio volume.</string>
 	    	
 	    <!-- Social Fragment -->
-	    	<string name="desc_social_twitter">Twitter Account.</string>
-	    	<string name="desc_social_facebook">Facebook Account.</string>
+	    	<string name="desc_social_twitter">Twitter account.</string>
+	    	<string name="desc_social_facebook">Facebook account.</string>
 	    	<string name="desc_social_share">Share status.</string>
 	    	<string name="desc_social_photo">Share a photo.</string>
-	    	<string name="desc_social_wifi">Conexión Wifi.</string>
+	    	<string name="desc_social_wifi">Wifi connection.</string>
 	    
 	    <!-- Sticker Dialog -->		    
-		    <string name="desc_sticker_eye">Eye Sticker</string>
-		    <string name="desc_sticker_mouth">Mouth Sticker</string>
-		    <string name="desc_sticker_weapon">Weapon Sticker</string>
+		    <string name="desc_sticker_eye">Eye sticker</string>
+		    <string name="desc_sticker_mouth">Mouth sticker</string>
+		    <string name="desc_sticker_weapon">Weapon sticker</string>
 
 		<!-- Size Dialog -->	
-		    <string name="desc_size_pencil">Pencil Size</string>
+		    <string name="desc_size_pencil">Pencil size</string>
 
 		<!-- Color Dialog -->	
-		    <string name="desc_color_palette_secondary">Secondary Color Palette</string>
-		    <string name="desc_color_cursor_main">Color Main Cursor</string>
-		    <string name="desc_color_cursor_secondary">Color Secondary Cursor</string>
-		    <string name="desc_color_selected">Selected Color</string>
+		    <string name="desc_color_palette_secondary">Secondary color palette</string>
+		    <string name="desc_color_cursor_main">Color main cursor</string>
+		    <string name="desc_color_cursor_secondary">Color secondary cursor</string>
+		    <string name="desc_color_selected">Selected color</string>
 		    
 		<!-- Dialogs -->	
 		    <string name="desc_dialog_arrow">Arrow</string>

@@ -1,4 +1,4 @@
-package com.project.social;
+package com.android.social;
 
 import java.io.File;
 
@@ -11,7 +11,6 @@ import com.android.alert.WebAlert;
 import com.project.main.MainActivity;
 import com.project.main.R;
 import com.test.social.SocialInformation;
-import com.test.social.TSocialEstado;
 
 public class SocialConnector
 {

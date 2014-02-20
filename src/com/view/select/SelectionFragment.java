@@ -13,11 +13,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.project.data.Personaje;
 import com.project.main.R;
-import com.project.social.SocialConnector;
 
 public class SelectionFragment extends Fragment
 {
@@ -90,7 +90,7 @@ public class SelectionFragment extends Fragment
 		while(it.hasNext())
 		{
 			Personaje p = it.next();
-			viewPager.addView(SelectFragment.newInstance(p.getEsqueleto(), p.getTextura(), p.getMovimientos(), p.getNombre(), viewPager, manager, connector), p.getNombre());
+			viewPager.addView(SelectFragment.newInstance(p, viewPager, manager, connector), p.getNombre());
 		}
 		
         return rootView;

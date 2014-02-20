@@ -76,7 +76,7 @@ public class MainFragment extends Fragment
 		if(personajeSeleccionado >= 0 && personajeSeleccionado < listaPersonajes.size() && !listaPersonajes.isEmpty())
 		{
 			Personaje p = listaPersonajes.get(personajeSeleccionado);
-			canvas.setParameters(p.getEsqueleto(), p.getTextura(), p.getMovimientos());
+			canvas.setParameters(p);
 		}
 		else
 		{

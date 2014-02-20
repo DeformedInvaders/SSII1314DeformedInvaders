@@ -15,6 +15,10 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
 	protected static final int NUM_HANDLES = 10;
 	
+	// Animación
+	protected static final long TIME_DURATION = 3000;
+	protected static final long TIME_INTERVAL = 80;
+	
 	private Context mContext;
 	private TTouchEstado estado;
 	

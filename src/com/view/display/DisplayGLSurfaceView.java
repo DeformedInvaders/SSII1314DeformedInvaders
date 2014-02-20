@@ -5,9 +5,7 @@ import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 
-import com.project.data.Esqueleto;
-import com.project.data.Movimientos;
-import com.project.data.Textura;
+import com.project.data.Personaje;
 import com.project.main.OpenGLSurfaceView;
 import com.project.main.TTouchEstado;
 
@@ -22,13 +20,10 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
         
-        timer = new CountDownTimer(3000, 80){
+        timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
 
 			@Override
-			public void onFinish() 
-			{
-				
-			}
+			public void onFinish() { }
 
 			@Override
 			public void onTick(long arg0) 
@@ -36,13 +31,12 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 				renderer.animar();
 				requestRender();
 			}
-        	
         };
     }
 	
-	public void setParameters(Esqueleto esqueleto, Textura textura, Movimientos movimientos)
+	public void setParameters(Personaje personaje)
 	{
-		renderer = new DisplayOpenGLRenderer(getContext(), esqueleto, textura, movimientos);
+		renderer = new DisplayOpenGLRenderer(getContext(), personaje);
         setRenderer(renderer);
 	}
 	
@@ -65,32 +59,8 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	public void onMultiTouchEvent() { }
 	
-	/* Métodos de Obtención de Información */
+	/* Métodos de Selección de Estado */
 	
-	public void retoquePantalla()
-	{
-		renderer.retoquePantalla(getHeight(), getWidth());
-		setEstado(TTouchEstado.Detectors);
-		
-		requestRender();
-	}
-	
-	public Bitmap capturaPantalla()
-	{
-		renderer.capturaPantalla(getHeight(), getWidth());
-		setEstado(TTouchEstado.SimpleTouch);
-		
-		requestRender();
-		return renderer.getCapturaPantalla();
-	}
-	
-	/* Métodos de Guardado de Información */
-	
-	public void saveData()
-	{
-		renderer.saveData();
-	}
-
 	public void selecionarRun() 
 	{
 		renderer.selecionarRun();
@@ -123,4 +93,29 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		timer.start();
 	}
 	
+	/* Métodos de Obtención de Información */
+	
+	public void retoquePantalla()
+	{
+		renderer.retoquePantalla(getHeight(), getWidth());
+		setEstado(TTouchEstado.Detectors);
+		
+		requestRender();
+	}
+	
+	public Bitmap capturaPantalla()
+	{
+		renderer.capturaPantalla(getHeight(), getWidth());
+		setEstado(TTouchEstado.SimpleTouch);
+		
+		requestRender();
+		return renderer.getCapturaPantalla();
+	}
+	
+	/* Métodos de Guardado de Información */
+	
+	public void saveData()
+	{
+		renderer.saveData();
+	}
 }
