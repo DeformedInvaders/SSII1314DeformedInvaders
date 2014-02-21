@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 	<item 
 		android:id="@+id/menuIcon1"
-		android:icon="@drawable/icon_social_twitter"
+		android:icon="@drawable/menu_twitter"
 		android:title="@string/title_menu_twitter"
 		android:showAsAction="always"/>
 	
 	<item android:id="@+id/menuIcon2"
-		android:icon="@drawable/icon_social_facebook"
+		android:icon="@drawable/menu_facebook"
 		android:title="@string/title_menu_facebook"
 		android:showAsAction="always"/>
 </menu>

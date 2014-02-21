@@ -178,11 +178,11 @@ public class PaintFragment extends OpenGLFragment
 		}
 		else if(canvas.isEstadoMover())
 		{
-			botonMano.setBackgroundResource(R.drawable.icon_hand_selected);
+			botonMano.setBackgroundResource(R.drawable.icon_zoom_selected);
 		}
 		else if(canvas.isEstadoPegatinas())
 		{
-			botonPegatina.setBackgroundResource(R.drawable.icon_eye_selected);
+			botonPegatina.setBackgroundResource(R.drawable.icon_sticker_selected);
 		}
 	}
 	
@@ -195,8 +195,8 @@ public class PaintFragment extends OpenGLFragment
 		
 		botonPincel.setBackgroundResource(R.drawable.icon_pencil);
 		botonCubo.setBackgroundResource(R.drawable.icon_bucket);
-		botonMano.setBackgroundResource(R.drawable.icon_hand);
-		botonPegatina.setBackgroundResource(R.drawable.icon_eye);
+		botonMano.setBackgroundResource(R.drawable.icon_zoom);
+		botonPegatina.setBackgroundResource(R.drawable.icon_sticker);
 	}
 	
 	/* Listener de Botones */

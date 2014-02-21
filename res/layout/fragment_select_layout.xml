@@ -11,7 +11,7 @@
         <ImageButton
             android:id="@+id/imageButtonSelect1"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_social_picture"
+            android:background="@drawable/icon_share_picture"
             android:contentDescription="@string/desc_select_camera" />
 
 	</LinearLayout>
@@ -21,25 +21,25 @@
         <ImageButton
             android:id="@+id/imageButtonSelect2"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_run"
+            android:background="@drawable/icon_animation_run"
             android:contentDescription="@string/desc_select_run" />
         
         <ImageButton
             android:id="@+id/imageButtonSelect3"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_jump"
+            android:background="@drawable/icon_animation_jump"
             android:contentDescription="@string/desc_select_jump" />
         
         <ImageButton
             android:id="@+id/imageButtonSelect4"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_crouch"
+            android:background="@drawable/icon_animation_crouch"
             android:contentDescription="@string/desc_select_crouch" />
         
         <ImageButton
             android:id="@+id/imageButtonSelect5"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_attack"
+            android:background="@drawable/icon_animation_attack"
             android:contentDescription="@string/desc_select_attack" />
 
 	</LinearLayout>

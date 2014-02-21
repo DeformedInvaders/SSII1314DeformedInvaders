@@ -108,7 +108,7 @@ public class SelectFragment extends OpenGLFragment
 		botonCrouch.setVisibility(View.INVISIBLE);
 		botonAttack.setVisibility(View.INVISIBLE);
 		
-		botonCamara.setBackgroundResource(R.drawable.icon_social_picture);
+		botonCamara.setBackgroundResource(R.drawable.icon_share_picture);
 	}
 	
 	@Override
@@ -124,7 +124,7 @@ public class SelectFragment extends OpenGLFragment
 		
 		if(canvas.isEstadoRetoque())
 		{
-			botonCamara.setBackgroundResource(R.drawable.icon_camera);
+			botonCamara.setBackgroundResource(R.drawable.icon_share_camara);
 		}
 	}
 	

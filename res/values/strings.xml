@@ -129,13 +129,13 @@
 		<!-- Paint Fragment -->
 		    <string name="desc_paint_bucket">Select bucket tool.</string>
 		    <string name="desc_paint_pencil">Select pencil tool.</string>
-		    <string name="desc_paint_hand">Select hand tool.</string>
+		    <string name="desc_paint_zoom">Select hand tool.</string>
 		    <string name="desc_paint_next">Redo last action.</string>
 		    <string name="desc_paint_prev">Undo last action.</string>
 		    <string name="desc_paint_reset">Reset the texture.</string>
 		    <string name="desc_paint_color">Change the bucket\'s color.</string>
 		    <string name="desc_paint_size">Change the pencil\'s size.</string>
-		    <string name="desc_paint_eye">Add a new sticker.</string>
+		    <string name="desc_paint_sticker">Add a new sticker.</string>
 		    <string name="desc_paint_ready">Ready to define the animations.</string>
 		    
 		<!-- Deform Fragment -->

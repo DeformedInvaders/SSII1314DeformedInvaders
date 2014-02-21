@@ -134,20 +134,20 @@ public class SocialFragment extends Fragment
 		
 		if(estadoTwitter == TSocialEstado.Conectado)
 		{
-			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);
+			botonTwitter.setBackgroundResource(R.drawable.icon_twitter_connected);
 		}
 		else
 		{
-			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter);
+			botonTwitter.setBackgroundResource(R.drawable.icon_twitter);
 		}
 		
 		if(estadoFacebook == TSocialEstado.Conectado)
 		{
-			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook_connected);
+			botonFacebook.setBackgroundResource(R.drawable.icon_facebook_connected);
 		}
 		else
 		{
-			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook);
+			botonFacebook.setBackgroundResource(R.drawable.icon_facebook);
 		}
 	}
 	
@@ -225,7 +225,7 @@ public class SocialFragment extends Fragment
 		if(conectorTwitter.finalizarAutorizacion(uri))
 		{
 			estadoTwitter = TSocialEstado.Conectado;
-			botonTwitter.setBackgroundResource(R.drawable.icon_social_twitter_connected);			
+			botonTwitter.setBackgroundResource(R.drawable.icon_twitter_connected);			
 			
 			Toast.makeText(getActivity(), R.string.text_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
@@ -265,7 +265,7 @@ public class SocialFragment extends Fragment
 		if(conectorFacebook.finalizarAutorizacion(uri))
 		{
 			estadoFacebook = TSocialEstado.Conectado;
-			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook_connected);			
+			botonFacebook.setBackgroundResource(R.drawable.icon_facebook_connected);			
 			
 			Toast.makeText(getActivity(), R.string.text_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
@@ -282,7 +282,7 @@ public class SocialFragment extends Fragment
 		if(conectorFacebook.desconexion())
 		{	
 			estadoFacebook = TSocialEstado.Desconectado;
-			botonFacebook.setBackgroundResource(R.drawable.icon_social_facebook);
+			botonFacebook.setBackgroundResource(R.drawable.icon_facebook);
 		}
 	}
 	

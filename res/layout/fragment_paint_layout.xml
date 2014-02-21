@@ -30,13 +30,13 @@
         
    		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint5"
-            android:contentDescription="@string/desc_paint_eye"
-            android:background="@drawable/icon_eye" />
+            android:contentDescription="@string/desc_paint_sticker"
+            android:background="@drawable/icon_sticker" />
     		    
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint6"
-            android:contentDescription="@string/desc_paint_hand"
-            android:background="@drawable/icon_hand" />
+            android:contentDescription="@string/desc_paint_zoom"
+            android:background="@drawable/icon_zoom" />
         
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint7"

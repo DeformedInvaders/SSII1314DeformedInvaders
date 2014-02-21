@@ -8,13 +8,13 @@
         <ImageButton
             android:id="@+id/imageButtonSocial1"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_social_twitter"
+            android:background="@drawable/icon_twitter"
             android:contentDescription="@string/desc_social_twitter" />
 
         <ImageButton
             android:id="@+id/imageButtonSocial2"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_social_facebook"
+            android:background="@drawable/icon_facebook"
             android:contentDescription="@string/desc_social_facebook" />
 
 	</LinearLayout>
@@ -24,13 +24,13 @@
         <ImageButton
             android:id="@+id/imageButtonSocial3"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_social_share"
+            android:background="@drawable/icon_share_post"
             android:contentDescription="@string/desc_social_share" />
         
         <ImageButton
             android:id="@+id/imageButtonSocial4"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_social_picture"
+            android:background="@drawable/icon_share_picture"
             android:contentDescription="@string/desc_social_photo" />
         
     </LinearLayout>

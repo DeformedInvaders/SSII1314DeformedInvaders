@@ -161,15 +161,15 @@ public class DeformFragment extends OpenGLFragment
 		}
 		else if(canvas.isEstadoDeformar())
 		{
-			botonDeformar.setBackgroundResource(R.drawable.icon_hand_selected);
+			botonDeformar.setBackgroundResource(R.drawable.icon_deform_selected);
 		}
 		else if(canvas.isEstadoAudio())
 		{
-			botonAudio.setBackgroundResource(R.drawable.icon_audio_record_selected);
+			botonAudio.setBackgroundResource(R.drawable.icon_microphone_selected);
 		}
 		else if(canvas.isEstadoReproduccion())
 		{
-			botonReproducir.setBackgroundResource(R.drawable.icon_audio_play_selected);
+			botonReproducir.setBackgroundResource(R.drawable.icon_play_selected);
 		}
 	}
 	
@@ -186,10 +186,10 @@ public class DeformFragment extends OpenGLFragment
 		
 		botonAnyadir.setBackgroundResource(R.drawable.icon_add);
 		botonEliminar.setBackgroundResource(R.drawable.icon_remove);
-		botonDeformar.setBackgroundResource(R.drawable.icon_hand);
+		botonDeformar.setBackgroundResource(R.drawable.icon_deform);
 		botonGrabar.setBackgroundResource(R.drawable.icon_record);
-		botonAudio.setBackgroundResource(R.drawable.icon_audio_record);
-		botonReproducir.setBackgroundResource(R.drawable.icon_audio_play);
+		botonAudio.setBackgroundResource(R.drawable.icon_record);
+		botonReproducir.setBackgroundResource(R.drawable.icon_play);
 	}
 	
 	/* Listener de Botones */

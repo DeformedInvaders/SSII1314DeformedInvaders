@@ -8,12 +8,12 @@
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonAudio1"
             android:contentDescription="@string/desc_audio_record"
-            android:background="@drawable/icon_audio_record" />
+            android:background="@drawable/icon_microphone" />
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonAudio2"
             android:contentDescription="@string/desc_audio_play"
-            android:background="@drawable/icon_audio_play" />
+            android:background="@drawable/icon_play" />
         
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonAudio3"

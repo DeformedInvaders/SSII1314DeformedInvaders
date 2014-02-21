@@ -47,7 +47,7 @@ public class AudioFragment extends Fragment
 			@Override
 			public void onPlayerCompletion()
 			{
-			    botonPlay.setBackgroundResource(R.drawable.icon_audio_play);	    
+			    botonPlay.setBackgroundResource(R.drawable.icon_play);	    
 			    Toast.makeText(getActivity(), R.string.text_audio_play_confirmation, Toast.LENGTH_SHORT).show();
 			}
 		};
@@ -145,7 +145,7 @@ public class AudioFragment extends Fragment
         			{
     		        	recorder.startRecording(manager.getDirectorioMusica(getText()));
     	            	
-    	            	botonRecord.setBackgroundResource(R.drawable.icon_audio_stop);
+    	            	botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
         			}
 
         			@Override
@@ -159,7 +159,7 @@ public class AudioFragment extends Fragment
             {
             	recorder.stopRecording();
             	
-            	botonRecord.setBackgroundResource(R.drawable.icon_audio_record);
+            	botonRecord.setBackgroundResource(R.drawable.icon_record);
             	Toast.makeText(getActivity(), R.string.text_audio_record_confirmation, Toast.LENGTH_SHORT).show();
             }
 
@@ -180,7 +180,7 @@ public class AudioFragment extends Fragment
         			public void onSelectedPossitiveButtonClick(String selected)
         			{						
         				player.startPlaying(selected);
-        				botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
+        				botonPlay.setBackgroundResource(R.drawable.icon_pause);
         			}
         			
         			@Override
@@ -196,12 +196,12 @@ public class AudioFragment extends Fragment
             else if(player.isPlaying())
             {
             	player.pausePlaying();
-            	botonPlay.setBackgroundResource(R.drawable.icon_audio_play);
+            	botonPlay.setBackgroundResource(R.drawable.icon_pause);
             }
             else if(player.isPaused())
             {
             	player.resumePlaying();
-            	botonPlay.setBackgroundResource(R.drawable.icon_audio_pause);
+            	botonPlay.setBackgroundResource(R.drawable.icon_play);
             }
             
             actualizarBotones();

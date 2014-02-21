@@ -26,7 +26,7 @@
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform3"
             android:contentDescription="@string/desc_deform_move"
-            android:background="@drawable/icon_hand" />
+            android:background="@drawable/icon_deform" />
 		
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform5"
@@ -36,12 +36,12 @@
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform6"
             android:contentDescription="@string/desc_deform_audio"
-            android:background="@drawable/icon_audio_record" />
+            android:background="@drawable/icon_microphone" />
 		
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform7"
             android:contentDescription="@string/desc_deform_play"
-            android:background="@drawable/icon_audio_play" />
+            android:background="@drawable/icon_play" />
 		
     </LinearLayout>
     
