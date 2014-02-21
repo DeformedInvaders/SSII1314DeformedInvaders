@@ -221,7 +221,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	else
     	{
     		personajeActual.setTextura(textura);
-    		changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura()));
+    		changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura(), externalManager));
     	}
     }
     

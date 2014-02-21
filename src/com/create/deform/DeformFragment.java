@@ -1,6 +1,7 @@
 package com.create.deform;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,10 +9,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.android.alert.AudioAlert;
+import com.android.alert.TextInputAlert;
+import com.android.storage.ExternalStorageManager;
 import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
+import com.project.main.MainFragment;
 import com.project.main.OpenGLFragment;
 import com.project.main.R;
 
@@ -22,22 +28,24 @@ public class DeformFragment extends OpenGLFragment
 	private Textura textura;
 	
 	private DeformDataSaved dataSaved;
+	private ExternalStorageManager manager;
 	
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 		
 	/* Constructora */
 	
-	public static final DeformFragment newInstance(Esqueleto e, Textura t)
+	public static final DeformFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(e, t);
+		fragment.setParameters(e, t, m);
 		return fragment;
 	}
 	
-	private void setParameters(Esqueleto e, Textura t)
+	private void setParameters(Esqueleto e, Textura t, ExternalStorageManager m)
 	{	
 		esqueleto = e;
 		textura = t;
+		manager = m;
 	}
 
 	@Override
@@ -47,7 +55,7 @@ public class DeformFragment extends OpenGLFragment
 		
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(esqueleto, textura);
+		canvas.setParameters(esqueleto, textura, this);
 		
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
@@ -259,9 +267,34 @@ public class DeformFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarAudio();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
+			
+			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, "gg") 
+			{
+				
+				@Override
+				public void onPossitiveButtonClick()
+				{
+					canvas.seleccionarReposo();
+
+					reiniciarInterfaz();
+					actualizarInterfaz();
+				}
+
+				@Override
+				public void onNegativeButtonClick()
+				{
+					canvas.seleccionarReposo();
+
+					reiniciarInterfaz();
+					actualizarInterfaz();
+				}
+				
+			};
+
+			alert.show();
 		}	
 	}
 	

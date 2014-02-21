@@ -590,5 +590,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		deformator.anyadirHandles(handles, indiceHandles);
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+	}
+
+	public void seleccionarReposo() 
+	{
+		estado = TDeformEstado.Nada;
 	}	
 }

@@ -20,12 +20,24 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
-        super(context, attrs, TTouchEstado.MultiTouch);
-        
-        timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
+        super(context, attrs, TTouchEstado.MultiTouch); 
+    }
+	
+	public void setParameters(Esqueleto esqueleto, Textura textura, final DeformFragment fragmento)
+	{
+		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura);
+		setRenderer(renderer);
+		
+		timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) 
+		{
 
 			@Override
-			public void onFinish() { }
+			public void onFinish() 
+			{ 
+				renderer.seleccionarReposo();
+				fragmento.reiniciarInterfaz();
+				fragmento.actualizarInterfaz();
+			}
 
 			@Override
 			public void onTick(long arg0) 
@@ -34,12 +46,6 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 				requestRender();
 			}
         };
-    }
-	
-	public void setParameters(Esqueleto esqueleto, Textura textura)
-	{
-		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura);
-		setRenderer(renderer);
 	}
 	
     /* Métodos abstractos OpenGLSurfaceView */
@@ -163,5 +169,10 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	public void restoreData(DeformDataSaved data)
 	{
 		renderer.restoreData(data);
+	}
+
+	public void seleccionarReposo() 
+	{
+		renderer.seleccionarReposo();
 	}
 }

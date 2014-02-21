@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
@@ -29,20 +30,22 @@ public class AnimationFragment extends ViewPagerFragment
 	private Textura textura;
 	
 	private Movimientos movimientos;
+	private ExternalStorageManager manager;
 	
 	/* Constructora */
 	
-	public static final AnimationFragment newInstance(Esqueleto e, Textura t)
+	public static final AnimationFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m)
 	{
 		AnimationFragment fragment = new AnimationFragment();
-		fragment.setParameters(e, t);
+		fragment.setParameters(e, t, m);
 		return fragment;
 	}
 	
-	private void setParameters(Esqueleto e, Textura t)
+	private void setParameters(Esqueleto e, Textura t, ExternalStorageManager m)
 	{
 		esqueleto = e;
 		textura = t;
+		manager = m;
 	}
 	
 	public interface AnimationFragmentListener
@@ -79,10 +82,10 @@ public class AnimationFragment extends ViewPagerFragment
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 		
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_down));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_attack));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager), getString(R.string.title_animation_section_down));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager), getString(R.string.title_animation_section_attack));
 
         return rootView;
     }
