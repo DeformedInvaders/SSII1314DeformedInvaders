@@ -10,7 +10,7 @@ public abstract class TextInputAlert
 	private AlertDialog.Builder alert;
 	private EditText input;
 	
-	public TextInputAlert(Context context, String title, String messege, String textYes, String textNo)
+	public TextInputAlert(Context context, String title, String messege, String text, String textYes, String textNo)
 	{
 		alert = new AlertDialog.Builder(context);
 		
@@ -18,6 +18,7 @@ public abstract class TextInputAlert
 		alert.setMessage(messege);
 
 		input = new EditText(context);
+		input.setText(text);
 		alert.setView(input);
 
 		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
@@ -33,6 +34,11 @@ public abstract class TextInputAlert
 				onNegativeButtonClick();
 			}
 		});
+	}
+	
+	public TextInputAlert(Context context, String title, String messege, String textYes, String textNo)
+	{
+		this(context, title, messege, "", textYes, textNo);
 	}
 	
 	public abstract void onPossitiveButtonClick();

@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +17,9 @@ import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.project.data.Personaje;
 import com.project.main.R;
+import com.project.main.ViewPagerFragment;
 
-public class SelectionFragment extends Fragment
+public class SelectionFragment extends ViewPagerFragment
 {
 	private ExternalStorageManager manager;
 	private SocialConnector connector;
@@ -27,7 +27,6 @@ public class SelectionFragment extends Fragment
 	private SelectionFragmentListener mCallback;
 	
 	private ImageButton botonReady, botonDelete;
-	private SwipeableViewPager viewPager;
 	
 	private List<Personaje> listaPersonajes;
 	
@@ -84,7 +83,7 @@ public class SelectionFragment extends Fragment
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 
 		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewSelection1);
-		viewPager.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());
+		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		
 		Iterator<Personaje> it = listaPersonajes.iterator();
 		while(it.hasNext())
@@ -127,4 +126,9 @@ public class SelectionFragment extends Fragment
 			mCallback.onSelectionDeleteButtonClicked(actionBar.getSelectedNavigationIndex());
 		}
     }
+    
+    /* Métodos abstractos de ViewPagerFragment */
+    
+    @Override
+    public void onPageSelected() { }
 }

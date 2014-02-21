@@ -36,6 +36,11 @@ public class SocialConnector
 		return cm.getActiveNetworkInfo() != null;
 	}
 	
+	private boolean comprobarConexionSocial()
+	{
+		return isTwitterConnected() || isFacebookConnected();
+	}
+	
 	private boolean evaluarConexionInternet()
 	{
 		if(!comprobarConexionInternet())
@@ -48,6 +53,18 @@ public class SocialConnector
 			return false;
 		}
 
+		return true;
+	}
+	
+	private boolean evaluarConexionSocial()
+	{
+		if(!comprobarConexionSocial())
+		{
+			Toast.makeText(activity, R.string.error_social_connection, Toast.LENGTH_SHORT).show();
+			
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -192,14 +209,17 @@ public class SocialConnector
 	
 	public void publicar(String text)
 	{
-		if(estadoTwitter == TSocialEstado.Conectado)
+		if(evaluarConexionInternet() && evaluarConexionSocial())
 		{
-			publicarTwitter(text);
-		}
-		
-		if(estadoFacebook == TSocialEstado.Conectado)
-		{
-			publicarFacebook(text);
+			if(isTwitterConnected())
+			{
+				publicarTwitter(text);
+			}
+			
+			if(isFacebookConnected())
+			{
+				publicarFacebook(text);
+			}
 		}
 	}
 	
@@ -231,14 +251,17 @@ public class SocialConnector
 	
 	public void publicar(String text, File foto)
 	{
-		if(estadoTwitter == TSocialEstado.Conectado)
+		if(evaluarConexionInternet() && evaluarConexionSocial())
 		{
-			publicarTwitter(text, foto);
-		}
-		
-		if(estadoFacebook == TSocialEstado.Conectado)
-		{
-			publicarFacebook(text, foto);
+			if(estadoTwitter == TSocialEstado.Conectado)
+			{
+				publicarTwitter(text, foto);
+			}
+			
+			if(estadoFacebook == TSocialEstado.Conectado)
+			{
+				publicarFacebook(text, foto);
+			}
 		}
 	}
 	

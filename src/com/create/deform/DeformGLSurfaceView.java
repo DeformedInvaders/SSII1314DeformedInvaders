@@ -6,11 +6,11 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 
+import com.android.touch.TTouchEstado;
 import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
 import com.project.main.OpenGLSurfaceView;
-import com.project.main.TTouchEstado;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {

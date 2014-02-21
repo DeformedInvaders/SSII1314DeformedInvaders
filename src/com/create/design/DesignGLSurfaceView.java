@@ -3,9 +3,9 @@ package com.create.design;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.android.touch.TTouchEstado;
 import com.project.data.Esqueleto;
 import com.project.main.OpenGLSurfaceView;
-import com.project.main.TTouchEstado;
 
 public class DesignGLSurfaceView extends OpenGLSurfaceView
 {

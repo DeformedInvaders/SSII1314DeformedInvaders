@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,13 +17,13 @@ import com.project.data.Esqueleto;
 import com.project.data.Movimientos;
 import com.project.data.Textura;
 import com.project.main.R;
+import com.project.main.ViewPagerFragment;
 
-public class AnimationFragment extends Fragment
+public class AnimationFragment extends ViewPagerFragment
 {
 	private AnimationFragmentListener mCallback;
 	
 	private ImageButton botonReady;
-	private SwipeableViewPager viewPager;
 	
 	private Esqueleto esqueleto;
 	private Textura textura;
@@ -77,7 +76,7 @@ public class AnimationFragment extends Fragment
 		botonReady.setOnClickListener(new OnReadyClickListener());	
 
 		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
-		viewPager.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());
+		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 		
 		viewPager.addView(DeformFragment.newInstance(esqueleto, textura), getString(R.string.title_animation_section_run));
@@ -120,10 +119,17 @@ public class AnimationFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			// TODO Llamar a actualizarMovimientos en onClick del ActionBar
 			actualizarMovimientos();
 			
 			mCallback.onAnimationReadyButtonClicked(movimientos);
 		}
+    }
+    
+    /* Métodos abstractos de ViewPagerFragment */
+    
+    @Override
+    public void onPageSelected()
+    {
+    	actualizarMovimientos();
     }
 }

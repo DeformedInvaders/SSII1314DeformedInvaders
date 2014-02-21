@@ -188,7 +188,7 @@ public class DeformFragment extends OpenGLFragment
 		botonEliminar.setBackgroundResource(R.drawable.icon_remove);
 		botonDeformar.setBackgroundResource(R.drawable.icon_deform);
 		botonGrabar.setBackgroundResource(R.drawable.icon_record);
-		botonAudio.setBackgroundResource(R.drawable.icon_record);
+		botonAudio.setBackgroundResource(R.drawable.icon_microphone);
 		botonReproducir.setBackgroundResource(R.drawable.icon_play);
 	}
 	

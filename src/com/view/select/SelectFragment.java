@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
@@ -103,6 +104,7 @@ public class SelectFragment extends OpenGLFragment
 	@Override
 	protected void reiniciarInterfaz()
 	{
+		botonCamara.setVisibility(View.INVISIBLE);
 		botonRun.setVisibility(View.INVISIBLE);
 		botonJump.setVisibility(View.INVISIBLE);
 		botonCrouch.setVisibility(View.INVISIBLE);
@@ -114,7 +116,12 @@ public class SelectFragment extends OpenGLFragment
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if(!canvas.isEstadoRetoque())
+		if(canvas.isEstadoReposo() || !canvas.isEstadoAnimacion())
+		{
+			botonCamara.setVisibility(View.VISIBLE);
+		}
+		
+		if(canvas.isEstadoReposo() || canvas.isEstadoAnimacion())
 		{
 			botonRun.setVisibility(View.VISIBLE);
 			botonJump.setVisibility(View.VISIBLE);
@@ -126,6 +133,10 @@ public class SelectFragment extends OpenGLFragment
 		{
 			botonCamara.setBackgroundResource(R.drawable.icon_share_camara);
 		}
+		else if(canvas.isEstadoTerminado())
+		{
+			botonCamara.setBackgroundResource(R.drawable.icon_share_post);
+		}
 	}
 	
 	/* Listener de Botones */
@@ -135,26 +146,54 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if(canvas.isEstadoRetoque())
+			if(canvas.isEstadoReposo())
 			{
-				// Captura
-				Bitmap bitmap = canvas.seleccionarCaptura();
+				canvas.seleccionarRetoque();
+				pager.setSwipeable(false);
+			}	
+			else if(canvas.isEstadoRetoque())
+			{
+				Bitmap bitmap = canvas.getCapturaPantalla();
 				if(manager.guardarImagen(bitmap, personaje.getNombre()))
 				{
-					connector.publicar(getString(R.string.text_social_photo_initial)+" "+personaje.getNombre()+" "+getString(R.string.text_social_photo_final), manager.cargarImagen(personaje.getNombre()));					
+					String text = getString(R.string.text_social_photo_initial)+" "+personaje.getNombre()+" "+getString(R.string.text_social_photo_final);
+					
+					TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_social_share_title), getString(R.string.text_social_share_description), text, getString(R.string.text_button_send), getString(R.string.text_button_cancel)) {
+			
+						@Override
+						public void onPossitiveButtonClick()
+						{
+							connector.publicar(getText(), manager.cargarImagen(personaje.getNombre()));
+							canvas.seleccionarTerminado();
+							pager.setSwipeable(true);
+							
+							reiniciarInterfaz();
+							actualizarInterfaz();
+						}
+		
+						@Override
+						public void onNegativeButtonClick()
+						{
+							canvas.seleccionarTerminado();
+							pager.setSwipeable(true);
+							
+							reiniciarInterfaz();
+							actualizarInterfaz();
+						}
+						
+					};
+		
+					reiniciarInterfaz();
+					actualizarInterfaz();
+					alert.show();
 				}
 				else
 				{
 					Toast.makeText(getActivity(), R.string.error_picture_character, Toast.LENGTH_SHORT).show();
 				}
-				pager.setSwipeable(true);
-			}
-			else
-			{
-				//Retoque
-				canvas.seleccionarRetoque();
+				
 				pager.setSwipeable(false);
-			}			
+			}	
 			
 			reiniciarInterfaz();
 			actualizarInterfaz();

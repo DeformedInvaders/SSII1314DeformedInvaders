@@ -143,29 +143,31 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			
 		if(personajeCargado)
 		{
-			
-			if(estado == TDisplayEstado.Nada)
+			if(estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
 			{
 				dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, vertices);
 			
-				if(estadoCaptura == TCapturaEstado.Capturando)
+				if(estado == TDisplayEstado.Captura)
 				{
-					// Capturar Pantalla
-				    MapaBits textura = capturaPantallaPolariod(gl, canvasWidth, canvasHeight);
-					captura = textura.getBitmap();
-					
-					// Desactivar Modo Captura
-					estadoCaptura = TCapturaEstado.Terminado;
-					
-					// Restaurar posición anterior de la Cámara
-					restore();
-					
-					dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, vertices);
-				}
-				else if(estadoCaptura == TCapturaEstado.Retocando)
-				{
-					// Marco Oscuro
-					dibujarMarco(gl);
+					if(estadoCaptura == TCapturaEstado.Capturando)
+					{
+						// Capturar Pantalla
+					    MapaBits textura = capturaPantallaPolariod(gl, canvasWidth, canvasHeight);
+						captura = textura.getBitmap();
+						
+						// Desactivar Modo Captura
+						estadoCaptura = TCapturaEstado.Terminado;
+						
+						// Restaurar posición anterior de la Cámara
+						restore();
+						
+						dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, vertices);
+					}
+					else if(estadoCaptura == TCapturaEstado.Retocando)
+					{
+						// Marco Oscuro
+						dibujarMarco(gl);
+					}
 				}
 			}
 			else
@@ -222,16 +224,28 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarRetoque(float height, float width)
 	{
 		// Construir rectangulos	
-		estado = TDisplayEstado.Nada;
+		estado = TDisplayEstado.Captura;
 		estadoCaptura = TCapturaEstado.Retocando;
 	}
 	
 	public void seleccionarCaptura(int height, int width)
 	{
-		canvasHeight = height;
-		canvasWidth = width;
-		estado = TDisplayEstado.Nada;
-		estadoCaptura = TCapturaEstado.Capturando;
+		if(estado == TDisplayEstado.Captura)
+		{
+			canvasHeight = height;
+			canvasWidth = width;
+			
+			estadoCaptura = TCapturaEstado.Capturando;
+		}
+	}
+	
+	public void seleccionarTerminado()
+	{
+		if(estado == TDisplayEstado.Captura)
+		{
+			estado = TDisplayEstado.Nada;
+			estadoCaptura = TCapturaEstado.Nada;
+		}
 	}
 	
 	public void iniciarAnimacion()
@@ -284,9 +298,29 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Obtención de Información */
 	
+	public boolean isEstadoReposo()
+	{
+		return estado == TDisplayEstado.Nada;
+	}
+	
 	public boolean isEstadoRetoque()
 	{
-		return estado == TDisplayEstado.Nada && estadoCaptura == TCapturaEstado.Retocando;
+		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Retocando;
+	}
+	
+	public boolean isEstadoCapturando()
+	{
+		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Retocando;
+	}
+	
+	public boolean isEstadoTerminado()
+	{
+		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Terminado;
+	}
+	
+	public boolean isEstadoAnimacion()
+	{
+		return estado != TDisplayEstado.Nada && estado != TDisplayEstado.Captura;
 	}
 	
 	public Bitmap getCapturaPantalla()

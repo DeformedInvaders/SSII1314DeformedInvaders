@@ -3,8 +3,8 @@ package com.test.multitouch;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.android.touch.TTouchEstado;
 import com.project.main.OpenGLSurfaceView;
-import com.project.main.TTouchEstado;
 
 public class MultitouchGLSurfaceView extends OpenGLSurfaceView
 {

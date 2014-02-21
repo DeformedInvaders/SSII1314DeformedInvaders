@@ -88,9 +88,7 @@
 	</style>
 	
     <style name="GLSurfaceView_FragmentButton_Style" parent="GLSurfaceView_Style">
-        <!--
-        	<item name="android:paddingBottom">@dimen/FragmentButton_LayoutHeight_Dimen</item>
-		-->
+        <item name="android:layout_marginBottom">@dimen/FragmentButton_LayoutHeight_Dimen</item>
 	</style>
 	
 <!-- Layout Fragmentos -->

@@ -1,21 +1,19 @@
 package com.test.main;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.view.SwipeableViewPager;
 import com.project.main.R;
+import com.project.main.ViewPagerFragment;
 import com.test.audio.AudioFragment;
 import com.test.multitouch.MultitouchFragment;
 import com.test.social.SocialFragment;
 
-public class TestFragment extends Fragment
-{
-	private SwipeableViewPager viewPager;
-	
+public class TestFragment extends ViewPagerFragment
+{	
 	/* Constructora */
 	
 	public static final TestFragment newInstance()
@@ -33,7 +31,7 @@ public class TestFragment extends Fragment
 		// Instanciar Elementos de la GUI
 
 		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewTest1);
-		viewPager.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());
+		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 		
 		viewPager.addView(MultitouchFragment.newInstance(), getString(R.string.title_test_section_multitouch));
@@ -50,4 +48,9 @@ public class TestFragment extends Fragment
 		
 		viewPager = null;
 	}
+
+	/* Métodos abstractos ViewPagerFragment */
+	
+	@Override
+	public void onPageSelected() { }
 }

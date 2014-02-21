@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import com.project.main.ViewPagerFragment;
+
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -48,7 +50,7 @@ public class SwipeableViewPager<T extends Fragment> extends ViewPager
 		swipeable = swipe;
 	}
 	
-	public void setAdapter(FragmentManager manager, ActionBar bar)
+	public void setAdapter(final ViewPagerFragment fragment, FragmentManager manager, ActionBar bar)
 	{
 		actionBar = bar;
 		pageAdapter = new SectionViewPagerAdapter(manager);
@@ -61,6 +63,7 @@ public class SwipeableViewPager<T extends Fragment> extends ViewPager
 			public void onPageSelected(int position)
 			{
 				actionBar.setSelectedNavigationItem(position);
+				fragment.onPageSelected();
 			}
 		});
 	}

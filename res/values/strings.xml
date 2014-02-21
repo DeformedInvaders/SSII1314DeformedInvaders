@@ -104,6 +104,7 @@
 			<string name="error_delete_character">The character cannot be deleted.</string>
 			
 			<string name="error_internet_connection">There is no internet connection.</string>
+			<string name="error_social_connection">There is no social connection.</string>
 			
 			<string name="error_twitter_oauth_permission">Twitter permission not granted.</string>
 			<string name="error_twitter_oauth_sign_in">Twitter account not connected.</string>

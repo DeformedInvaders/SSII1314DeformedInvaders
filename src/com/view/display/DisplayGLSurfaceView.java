@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 
+import com.android.touch.TTouchEstado;
 import com.project.data.Personaje;
 import com.project.main.OpenGLSurfaceView;
-import com.project.main.TTouchEstado;
 
 public class DisplayGLSurfaceView extends OpenGLSurfaceView
 {
@@ -105,14 +105,35 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 	
+	public void seleccionarTerminado()
+	{
+		renderer.seleccionarTerminado();
+		requestRender();
+	}
+	
 	/* Métodos de Obtención de Información */
+	
+	public boolean isEstadoReposo()
+	{
+		return renderer.isEstadoReposo();
+	}
 	
 	public boolean isEstadoRetoque()
 	{
 		return renderer.isEstadoRetoque();
 	}
 	
-	public Bitmap seleccionarCaptura()
+	public boolean isEstadoTerminado()
+	{
+		return renderer.isEstadoTerminado();
+	}
+	
+	public boolean isEstadoAnimacion()
+	{
+		return renderer.isEstadoAnimacion();
+	}
+	
+	public Bitmap getCapturaPantalla()
 	{
 		renderer.seleccionarCaptura(getHeight(), getWidth());
 		setEstado(TTouchEstado.SimpleTouch);

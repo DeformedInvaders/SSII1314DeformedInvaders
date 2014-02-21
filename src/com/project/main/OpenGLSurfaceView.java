@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.android.touch.MoveGestureDetector;
 import com.android.touch.ScaleGestureListener;
+import com.android.touch.TTouchEstado;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
