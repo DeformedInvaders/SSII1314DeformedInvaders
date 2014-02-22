@@ -13,6 +13,8 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	// Renderer
     private PaintOpenGLRenderer renderer;
 
+    /* SECTION Constructora */
+    
     public PaintGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
@@ -25,29 +27,33 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
         setRenderer(renderer); 
 	}
     
-    /* Métodos abstractos OpenGLSurfaceView */
+    /* SECTION Métodos Abstráctos OpenGLSurfaceView */
 	
-	public void onTouchDown(float x, float y, float width, float height, int pos)
+	@Override
+	protected void onTouchDown(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchDown(x, y, width, height, pos);
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+	@Override
+	protected void onTouchMove(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchMove(x, y, width, height, pos);
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height, int pos)
+	@Override
+	protected void onTouchUp(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchUp(x, y, width, height, pos);
 	}
 	
-	public void onMultiTouchEvent()
+	@Override
+	protected void onMultiTouchEvent()
 	{
 		
 	}
 	
-	/* Métodos de modifiación del Renderer */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public void seleccionarMano()
 	{
@@ -108,7 +114,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public Textura getTextura()
 	{
@@ -152,7 +158,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		return renderer.isEstadoPegatinas();
 	}
 	
-	/* Métodos de Guardado de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public PaintDataSaved saveData()
 	{

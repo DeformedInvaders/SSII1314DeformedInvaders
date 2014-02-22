@@ -81,6 +81,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
 	
+	/* SECTION Constructora */
+	
 	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura)
 	{
         super(context);
@@ -130,7 +132,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
 	}
 	
-	/* Métodos de la interfaz Renderer */
+	/* SECTION Métodos Renderer */
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -222,7 +224,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Selección de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public void seleccionarAnyadir()
 	{
@@ -239,9 +241,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TDeformEstado.Deformar;
 	}
 
-	/* Métodos abstractos de OpenGLRenderer */
+	/* SECTION Métodos Abstractos de OpenGLRenderer */
 	
-	public void reiniciar()
+	@Override
+	protected void reiniciar()
 	{
 		estado = TDeformEstado.Nada;
 		modoGrabar = false;
@@ -259,7 +262,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{		
 		if(estado == TDeformEstado.Anyadir)
 		{			
@@ -287,7 +290,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if(j != -1)
 		{
 			// Vértice no pertenece a los Handles
-			if(!indiceHandles.contains((short) j))
+			if(!indiceHandles.contains(j))
 			{
 				indiceHandles.add(j);
 				handles.add(verticesModificados.get(2*j));
@@ -306,7 +309,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if(j != -1)
 		{
 			// Vértice no pertenece a los Handles
-			if(indiceHandles.contains((short) j))
+			if(indiceHandles.contains(j))
 			{		
 				int pos = indiceHandles.indexOf(j);
 				indiceHandles.removeIndex(pos);
@@ -340,7 +343,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
@@ -388,7 +391,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
@@ -436,7 +439,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onMultiTouchEvent()
+	protected void onMultiTouchEvent()
 	{
 		if(estado == TDeformEstado.Deformar)
 		{
@@ -448,7 +451,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Métodos de Actualización de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public void seleccionarGrabado() 
 	{ 
@@ -522,8 +525,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		estado = TDeformEstado.Audio;
 	}
+	
+	public void seleccionarReposo() 
+	{
+		estado = TDeformEstado.Nada;
+	}	
 
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 
 	public boolean isHandlesVacio()
 	{
@@ -570,8 +578,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return listaVerticesAnimacion != null && listaVerticesAnimacion.size() > 0;
 	}	
 	
-	
-	/* Métodos de Salvados de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public DeformDataSaved saveData()
 	{
@@ -591,9 +598,4 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
-
-	public void seleccionarReposo() 
-	{
-		estado = TDeformEstado.Nada;
-	}	
 }

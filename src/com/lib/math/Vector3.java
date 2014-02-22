@@ -35,14 +35,17 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	/** @deprecated
 	 * Static temporary vector. Use with care! Use only when sure other code will not also use this.
 	 * @see #tmp() **/
+	@Deprecated
 	public final static Vector3 tmp = new Vector3();
 	/** @deprecated
 	 * Static temporary vector. Use with care! Use only when sure other code will not also use this.
 	 * @see #tmp() **/
+	@Deprecated
 	public final static Vector3 tmp2 = new Vector3();
 	/** @deprecated
 	 * Static temporary vector. Use with care! Use only when sure other code will not also use this.
 	 * @see #tmp() **/
+	@Deprecated
 	public final static Vector3 tmp3 = new Vector3();
 
 	public final static Vector3 X = new Vector3(1, 0, 0);
@@ -102,6 +105,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * 
 	 * @param vector The vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 set (final Vector3 vector) {
 		return this.set(vector.x, vector.y, vector.z);
 	}
@@ -124,6 +128,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	}
 
 	/** @return a copy of this vector */
+	@Override
 	public Vector3 cpy () {
 		return new Vector3(this);
 	}
@@ -133,6 +138,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * as well.
 	 * 
 	 * @return a temporary copy of this vector */
+	@Deprecated
 	public Vector3 tmp () {
 		return tmp.set(this);
 	}
@@ -142,6 +148,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * as well.
 	 * 
 	 * @return a temporary copy of this vector */
+	@Deprecated
 	public Vector3 tmp2 () {
 		return tmp2.set(this);
 	}
@@ -151,6 +158,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * as well.
 	 * 
 	 * @return a temporary copy of this vector */
+	@Deprecated
 	Vector3 tmp3 () {
 		return tmp3.set(this);
 	}
@@ -159,6 +167,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * 
 	 * @param vector The other vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 add (final Vector3 vector) {
 		return this.add(vector.x, vector.y, vector.z);
 	}
@@ -183,6 +192,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	/** Subtracts the given vector from this vector
 	 * @param a_vec The other vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 sub (final Vector3 a_vec) {
 		return this.sub(a_vec.x, a_vec.y, a_vec.z);
 	}
@@ -208,11 +218,13 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	/** Scales this vector by the given value
 	 * @param value The value
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 scl (float value) {
 		return this.set(this.x * value, this.y * value, this.z * value);
 	}
 	
 	/** @deprecated Use {@link #scl(float)} instead. */
+	@Deprecated
 	public Vector3 mul (float value) {
 		return scl(value);
 	}
@@ -220,11 +232,13 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	/** Scales this vector by the given vector3's values
 	 * @param other The vector3 to multiply by
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 scl (final Vector3 other) {
 		return this.set(x * other.x, y * other.y, z * other.z);
 	}
 	
 	/** @deprecated Use {@link #scl(Vector3)} instead. */
+	@Deprecated
 	public Vector3 mul (final Vector3 other) {
 		return scl(other);
 	}
@@ -239,11 +253,13 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	}
 	
 	/** @deprecated Use {@link #scl(float, float, float)} instead. */
+	@Deprecated
 	public Vector3 mul (float vx, float vy, float vz) {
 		return scl(vx, vy, vz);
 	}
 
 	/** @deprecated Use {@link #scl(float, float, float)} instead. */
+	@Deprecated
 	public Vector3 scale (float scalarX, float scalarY, float scalarZ) {
 		return scl(scalarX, scalarY, scalarZ);
 	}
@@ -252,18 +268,21 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * Divides all components of this vector by the given value
 	 * @param value The value
 	 * @return This vector for chaining */
+	@Deprecated
 	public Vector3 div (float value) {
 		return this.scl(1f/value);
 	}
 
 	/** @deprecated Use {@link #scl(float, float, float)} instead.
 	 * Divides this vector by the given vector */
+	@Deprecated
 	public Vector3 div (float vx, float vy, float vz) {
 		return this.set(x/vx, y/vy, z/vz);
 	}
 
 	/** @deprecated Use {@link #scl(Vector3)} instead. 
 	 * Divides this vector by the given vector */
+	@Deprecated
 	public Vector3 div (final Vector3 other) {
 		return this.set(x/other.x, y/other.y, z/other.z);
 	}
@@ -274,6 +293,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	}
 
 	/** @return The euclidian length */
+	@Override
 	public float len () {
 		return (float)Math.sqrt(x * x + y * y + z * z);
 	}
@@ -284,6 +304,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	}
 	
 	/** @return The squared euclidian length */
+	@Override
 	public float len2 () {
 		return x * x + y * y + z * z;
 	}
@@ -304,6 +325,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 
 	/** @param vector The other vector
 	 * @return The euclidian distance between this and the other vector */
+	@Override
 	public float dst (final Vector3 vector) {
 		final float a = vector.x - x;
 		final float b = vector.y - y;
@@ -330,6 +352,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	/** Returns the squared distance between this point and the given point
 	 * @param point The other point
 	 * @return The squared distance */
+	@Override
 	public float dst2 (Vector3 point) {
 		final float a = point.x - x;
 		final float b = point.y - y;
@@ -351,6 +374,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 
 	/** Normalizes this vector to unit length. Does nothing if it is zero.
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 nor () {
 		final float len2 = this.len2();
 		if (len2 == 0f || len2 == 1f)
@@ -365,6 +389,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 
 	/** @param vector The other vector
 	 * @return The dot product between this and the other vector */
+	@Override
 	public float dot (final Vector3 vector) {
 		return x * vector.x + y * vector.y + z * vector.z;
 	}
@@ -480,6 +505,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * @param target The target vector
 	 * @param alpha The interpolation coefficient
 	 * @return This vector for chaining. */
+	@Override
 	public Vector3 lerp (final Vector3 target, float alpha) {
 		scl(1.0f - alpha);
 		add(target.x * alpha, target.y * alpha, target.z * alpha);
@@ -513,6 +539,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 		return scl((float)Math.cos(theta)).add(tx * dl, ty * dl, tz * dl).nor();
 	}
 
+	@Override
 	public String toString () {
 		return x + "," + y + "," + z;
 	}
@@ -520,6 +547,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	/** Limits this vector's length to given value
 	 * @param limit Max length
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 limit (float limit) {
 		if (len2() > limit * limit)
 			nor().scl(limit);
@@ -530,6 +558,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 	 * @param min Min length
 	 * @param max Max length
 	 * @return This vector for chaining */
+	@Override
 	public Vector3 clamp (float min, float max) {
 		final float l2 = len2();
 		if (l2 == 0f)

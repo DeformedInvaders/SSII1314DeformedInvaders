@@ -10,6 +10,8 @@ public abstract class ChooseAlert
 	private int selected;
 	private String[] lista;
 	
+	/* SECTION Constructora */
+	
 	public ChooseAlert(Context context, String title, String textYes, String textNo, String[] list)
 	{
 		selected = -1;
@@ -29,6 +31,7 @@ public abstract class ChooseAlert
 		});	
 
 		builder.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				if(selected != -1)
@@ -43,6 +46,7 @@ public abstract class ChooseAlert
 		});
 
 		builder.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				onNegativeButtonClick();
@@ -50,9 +54,13 @@ public abstract class ChooseAlert
 		});
 	}
 	
+	/* SECTION Métodos Abstractos */
+	
 	public abstract void onSelectedPossitiveButtonClick(String selected);
 	public abstract void onNoSelectedPossitiveButtonClick();
 	public abstract void onNegativeButtonClick();
+	
+	/* SECTION Métodos Públicos */
 	
 	public void show()
 	{

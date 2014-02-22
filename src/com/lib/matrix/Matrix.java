@@ -192,7 +192,8 @@ public class Matrix implements Cloneable, java.io.Serializable {
    /** Clone the Matrix object.
    */
 
-   public Object clone () {
+   @Override
+public Object clone () {
       return this.copy();
    }
 

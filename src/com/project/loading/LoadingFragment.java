@@ -30,6 +30,8 @@ public class LoadingFragment extends Fragment
 	private ProgressBar progressBar;
     private int progressBarStatus;
     private boolean progressCompleted;
+    
+    /* SECTION Constructora */
 	
 	public static final LoadingFragment newInstance(InternalStorageManager manager)
 	{
@@ -47,6 +49,8 @@ public class LoadingFragment extends Fragment
 	{
 		public void onLoadingListCharacters(List<Personaje> lista, int seleccionado);
     }
+	
+	/* SECTION Métodos Fragment */
 	
 	@Override
 	public void onAttach(Activity activity)
@@ -128,6 +132,8 @@ public class LoadingFragment extends Fragment
 		progressBar = null;
 	}
 	
+	/* SECTION Métodos Públicos */
+	
 	public void updateProgressBarStatus(final int progress, final String name)
 	{
 		progressBarStatus = progress;
@@ -140,6 +146,8 @@ public class LoadingFragment extends Fragment
             }
         });
 	}
+	
+	/* SECTION Métodos Privados */
 	
 	private void completeProgressBar()
 	{

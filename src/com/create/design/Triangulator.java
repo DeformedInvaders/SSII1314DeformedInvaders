@@ -22,6 +22,8 @@ public class Triangulator
 	private ShortArray contorno;
 	private boolean poligonoSimple;
 	
+	/* SECTION Constructora */
+	
 	public Triangulator(FloatArray puntos)
 	{
 		poligonoSimple = false;
@@ -44,6 +46,8 @@ public class Triangulator
 		}
 	}
 	
+	/* SECTION Métodos de Obtención de Información */
+	
 	public boolean getPoligonSimple()
 	{
 		return poligonoSimple;
@@ -63,6 +67,8 @@ public class Triangulator
 	{
 		return contorno;
 	}
+	
+	/* SECTION Métodos Públicos Estáticos */
 	
 	public static FloatArray calcularConvexHull(FloatArray vertices, boolean ordenados)
 	{

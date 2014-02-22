@@ -287,6 +287,7 @@ public class IntArray {
 		return array;
 	}
 
+	@Override
 	public boolean equals (Object object) {
 		if (object == this) return true;
 		if (!(object instanceof IntArray)) return false;
@@ -298,6 +299,7 @@ public class IntArray {
 		return true;
 	}
 
+	@Override
 	public String toString () {
 		if (size == 0) return "[]";
 		int[] items = this.items;

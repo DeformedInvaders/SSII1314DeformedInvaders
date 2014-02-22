@@ -52,6 +52,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Estado */
 	private TEstado estado;
 
+	/* SECTION Métodos Activity */
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -111,7 +113,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	    }
 	}
 	
-	/* Métodos de Modificación del FrameLayout */
+	/* SECTION Métodos de Modificación del FrameLayout */
 	
 	private void changeFragment(Fragment fragmento)
 	{
@@ -145,7 +147,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 	
-	/* LOADING FRAGMENT */
+	/* SECTION Métodos Loading Fragment */
 	
 	@Override
 	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado)
@@ -156,7 +158,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
 	}
 	
-	/* MAIN FRAGMENT */
+	/* SECTION Métodos Main Fragment */
 	
 	@Override
 	public void onMainCreateButtonClicked()
@@ -184,7 +186,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	changeFragment(TestFragment.newInstance());
     }
 	
-	/* DESIGN FRAGMENT */
+	/* SECTION Métodos Design Fragment */
     
 	@Override
     public void onDesignReadyButtonClicked(Esqueleto esqueleto)
@@ -209,7 +211,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	}
     }
 	
-	/* PAINT FRAGMENT */
+	/* SECTION Métodos Paint Fragment */
     
 	@Override
     public void onPaintReadyButtonClicked(Textura textura)
@@ -225,7 +227,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	}
     }
     
-	/* ANIMATION FRAGMENT */
+	/* SECTION Métodos Animation Fragment */
     
 	@Override
     public void onAnimationReadyButtonClicked(Movimientos movimientos)
@@ -280,7 +282,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
     
-	/* SELECTION FRAGMENT */
+	/* SECTION Métodos Selection Fragment */
     
 	@Override
     public void onSelectionSelectClicked(int indice)
@@ -328,9 +330,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		alert.show();
     }
 	
-	/* Métodos de Conexión Social */
-	
-	/* Métodos de Modificación de la ActionBar */
+	/* SECTION Métodos de Modificación de la ActionBar */
     
 	public void onMenuTwitterButtonClicked()
 	{
@@ -382,7 +382,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	actionBar.removeAllTabs();
     }
     
-    /* Métodos de Modificación del Estado */
+    /* SECTION Métodos de Modificación del Estado */
     
     private void actualizarEstado(Fragment fragmento)
     {

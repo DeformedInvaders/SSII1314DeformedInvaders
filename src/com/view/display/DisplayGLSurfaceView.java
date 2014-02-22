@@ -16,6 +16,8 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     
 	private CountDownTimer timer;
     
+	/* SECTION Constructora */
+	
     public DisplayGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
@@ -46,24 +48,21 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		setRenderer(renderer);
 	}
 	
-	/* Métodos abstractos OpenGLSurfaceView */
+	/* SECTION Métodos abstractos OpenGLSurfaceView */
 	
 	@Override
-	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
 	@Override
-	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
-	{
-		renderer.onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
-	}
+	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
 	@Override
-	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
 	@Override
-	public void onMultiTouchEvent() { }
+	protected void onMultiTouchEvent() { }
 	
-	/* Métodos de Selección de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public void selecionarRun() 
 	{
@@ -111,7 +110,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean isEstadoReposo()
 	{
@@ -142,7 +141,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		return renderer.getCapturaPantalla();
 	}
 	
-	/* Métodos de Guardado de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public void saveData()
 	{

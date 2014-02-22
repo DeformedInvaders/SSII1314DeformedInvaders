@@ -19,13 +19,15 @@ public class ExternalStorageManager
 	private static final String MUSICEXTENSION = ".3gp";
 	private static final String IMAGEEXTENSION = ".png";
 	
+	/* SECTION Constructora */
+	
 	public ExternalStorageManager()
 	{		
 		comprobarDirectorioRaiz();
 		comprobarDirectorioTemp();
 	}
 	
-	/* Dirección de Ficheros y Directorios */
+	/* SECTION Métodos Dirección de Ficheros y Directorios */
 	
 	private String getDirectorioRaiz()
 	{
@@ -62,7 +64,7 @@ public class ExternalStorageManager
 		return getDirectorioTemp() + "/" + nombre.toUpperCase(Locale.getDefault()) + MUSICEXTENSION; 
 	}
 	
-	/* Comprobar existencia y creación de Directorios */
+	/* SECTION Métodos Comprobación existencia y creación de Directorios */
 	
 	private boolean comprobarDirectorio(String file)
 	{
@@ -96,7 +98,7 @@ public class ExternalStorageManager
 		return comprobarDirectorio(getDirectorioTemp());
 	}
 	
-	/* Número de ficheros de Directorios */
+	/* SECTION Métodos Número de ficheros de Directorios */
 	
 	private int getNumFicherosDirectorio(String file)
 	{
@@ -124,7 +126,7 @@ public class ExternalStorageManager
 		return getNumFicherosDirectorio(getDirectorioTemp());
 	}
 	
-	/* Ficheros de Directorios */
+	/* SECTION Métodos Ficheros de Directorios */
 	
 	private String[] getFicherosDirectorio(String file)
 	{
@@ -161,7 +163,7 @@ public class ExternalStorageManager
 		return getFicherosDirectorio(getDirectorioTemp());
 	}
 	
-	/* Lectura y Escritura */
+	/* SECTION Métodos Lectura y Escritura */
 	
 	public String cargarAudio(String nombre, String movimiento)
 	{
@@ -219,7 +221,7 @@ public class ExternalStorageManager
 		return false;
 	}
 	
-	/* Lectura y Escritura Temporal */
+	/* SECTION Métodos Lectura y Escritura Temporal */
 	
 	public String cargarAudioTemp(String movimiento)
 	{

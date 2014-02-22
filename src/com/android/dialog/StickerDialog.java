@@ -6,13 +6,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.create.paint.PaintFragment;
 import com.project.main.R;
 
-public class StickerDialog extends WindowDialog
+public abstract class StickerDialog extends WindowDialog
 {
-	private PaintFragment fragmento;
-	
 	private OnEyeClickListener eyeListener;
 	private OnMouthClickListener mouthListener;
 	private OnWeaponClickListener weaponListener;
@@ -21,11 +18,11 @@ public class StickerDialog extends WindowDialog
 	private ImageView imagenMouth1, imagenMouth2, imagenMouth3, imagenMouth4, imagenMouth5;
 	private ImageView imagenWeapon1, imagenWeapon2, imagenWeapon3, imagenWeapon4;
 
-	public StickerDialog(Context context, PaintFragment view)
+	/* SECTION Constructora */
+	
+	public StickerDialog(Context context)
 	{		
 		super(context, R.layout.dialog_sticker_layout);
-		
-		fragmento = view;  
 		
 		eyeListener = new OnEyeClickListener();
 		mouthListener = new OnMouthClickListener();
@@ -83,19 +80,26 @@ public class StickerDialog extends WindowDialog
 		imagenWeapon4.setOnClickListener(weaponListener);
 	}
 	
+	/* SECTION Métodos Abstractos */
+	
+	public abstract void onStickerSelected(int tag, int tipo);
+	
+	/* SECTION Métodos Abstractos WindowDialog */
+	
 	@Override
 	protected void onTouchOutsidePopUp(View v, MotionEvent event)
 	{
-		fragmento.seleccionarPegatina(-1, -1);
 		dismiss();
 	}
+	
+	/* SECTION Métodos Listener onClick */
 	
 	private class OnEyeClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			fragmento.seleccionarPegatina((Integer) v.getTag(), 0);		
+			onStickerSelected((Integer) v.getTag(), 0);		
 			dismiss();	
 		}
 	}
@@ -105,7 +109,7 @@ public class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			fragmento.seleccionarPegatina((Integer) v.getTag(), 1);		
+			onStickerSelected((Integer) v.getTag(), 1);		
 			dismiss();	
 		}
 	}
@@ -115,7 +119,7 @@ public class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			fragmento.seleccionarPegatina((Integer) v.getTag(), 2);		
+			onStickerSelected((Integer) v.getTag(), 2);		
 			dismiss();	
 		}
 	}

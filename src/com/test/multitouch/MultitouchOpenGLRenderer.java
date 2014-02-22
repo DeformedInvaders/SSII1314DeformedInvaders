@@ -40,8 +40,10 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos abstractos de OpenGLRenderer */
 	
+	@Override
 	public void reiniciar() { }
 	
+	@Override
 	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{		
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -52,6 +54,7 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 		handles.set(3*pointer+2, worldY);
 	}
 	
+	@Override
 	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(handles.get(3*pointer) == 1)
@@ -68,6 +71,7 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
+	@Override
 	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(handles.get(3*pointer) == 1)
@@ -78,5 +82,6 @@ public class MultitouchOpenGLRenderer extends OpenGLRenderer
 		}	
 	}
 	
+	@Override
 	public void onMultiTouchEvent() { }
 }

@@ -29,6 +29,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	
 	private boolean poligonoSimple;
 	
+	/* SECTION Constructora */
+	
 	public DesignOpenGLRenderer(Context context)
 	{        
 		super(context);
@@ -39,7 +41,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
         poligonoSimple = false;
 	}
 	
-	/* Métodos de la interfaz Renderer */
+	/* SECTION Métodos Renderer */
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -68,9 +70,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Métodos abstractos de OpenGLRenderer */
+	/* SECTION Métodos Abstractos de OpenGLRenderer */
 	
-	public void reiniciar()
+	@Override
+	protected void reiniciar()
 	{
 		estado = TDesignEstado.Dibujando;
 		
@@ -82,7 +85,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TDesignEstado.Dibujando)
 		{
@@ -120,7 +123,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TDesignEstado.Dibujando)
 		{
@@ -129,7 +132,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TDesignEstado.Dibujando)
 		{
@@ -150,9 +153,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void onMultiTouchEvent() { }
+	protected void onMultiTouchEvent() { }
 	
-	/* Selección de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public boolean seleccionarTriangular()
 	{
@@ -165,7 +168,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
 	{
@@ -183,7 +186,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		return puntos.size >= 6;
 	}
 	
-	/* Métodos de Salvados de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public DesignDataSaved saveData()
 	{

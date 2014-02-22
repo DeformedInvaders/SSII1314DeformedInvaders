@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -19,12 +20,15 @@ public abstract class WebAlert
 	
 	private WebView webView;
 	
+	/* SECTION Constructora */
+	
 	public WebAlert(Context context, String title, String textNo)
 	{	
 		alert = new AlertDialog.Builder(context);
 		alert.setTitle(title);
 		
 		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				dismiss();
@@ -41,13 +45,19 @@ public abstract class WebAlert
 		keyboardHack.setVisibility(View.GONE);
 		
 		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.addView(webView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-		layout.addView(keyboardHack, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); 
+		layout.addView(webView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		layout.addView(keyboardHack, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT); 
 		
 		alert.setView(layout);
 		
 		dialog = alert.create();
 	}
+	
+	/* SECTION Métodos Abstractos */
+	
+	public abstract boolean evaluarURL(String url);
+	
+	/* SECTION Métodos Públicos */
 	
 	public void loadURL(String url)
 	{
@@ -64,7 +74,7 @@ public abstract class WebAlert
 		dialog.dismiss();
 	}
 	
-	public abstract boolean evaluarURL(String url);
+	/* SECTION Listener WebClient */
 	
 	public class WebClient extends WebViewClient
 	{

@@ -30,7 +30,7 @@ public class SelectionFragment extends ViewPagerFragment
 	
 	private List<Personaje> listaPersonajes;
 	
-	/* Constructora */
+	/* SECTION Constructora */
 	
 	public static final SelectionFragment newInstance(List<Personaje> l, ExternalStorageManager m, SocialConnector c)
 	{
@@ -51,6 +51,8 @@ public class SelectionFragment extends ViewPagerFragment
         public void onSelectionSelectClicked(int indice);
         public void onSelectionDeleteButtonClicked(int indice);
     }
+	
+	/* SECTION Métodos Fragment */
 	
 	@Override
 	public void onAttach(Activity activity)
@@ -105,7 +107,7 @@ public class SelectionFragment extends ViewPagerFragment
 		viewPager = null;
 	}
 	
-	/* Listeners de Botones */
+	/* SECTION Métodos Listener onClick */
 	 
 	private class OnReadyClickListener implements OnClickListener
     {
@@ -127,7 +129,7 @@ public class SelectionFragment extends ViewPagerFragment
 		}
     }
     
-    /* Métodos abstractos de ViewPagerFragment */
+    /* SECTION Métodos abstractos de ViewPagerFragment */
     
     @Override
     public void onPageSelected() { }

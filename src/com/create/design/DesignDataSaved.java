@@ -13,6 +13,8 @@ public class DesignDataSaved
 	private TDesignEstado estado;
 	private boolean poligonoSimple;
 	
+	/* SECTION Constructora */
+	
 	public DesignDataSaved(FloatArray puntos, FloatArray vertices, ShortArray triangulos, ShortArray contorno, TDesignEstado estado, boolean poligonoSimple)
 	{
 		this.puntos = puntos;
@@ -22,6 +24,8 @@ public class DesignDataSaved
 		this.estado = estado;
 		this.poligonoSimple = poligonoSimple;
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
 
 	public FloatArray getPuntos()
 	{

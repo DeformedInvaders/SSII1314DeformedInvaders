@@ -16,6 +16,8 @@ public class MoveGestureDetector
 	
 	private long lastTap;
 	
+	/* SECTION Constructora */
+	
 	public MoveGestureDetector(OpenGLRenderer renderer)
 	{
 		this.renderer = renderer;
@@ -23,6 +25,8 @@ public class MoveGestureDetector
 		this.bloqueado = false;
 		this.lastTap = System.currentTimeMillis();
 	}
+	
+	/* SECTION Métodos Listener onTouch */
 	
     public boolean onTouchEvent(MotionEvent event, float pixelX, float pixelY, float screenWidth, float screenHeight) 
     {

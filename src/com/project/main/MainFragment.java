@@ -24,7 +24,7 @@ public class MainFragment extends OpenGLFragment
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
 	
-	/* Constructora */
+	/* SECTION Constructora */
 	
 	public static final MainFragment newInstance(List<Personaje> lista, int indice)
 	{
@@ -46,6 +46,8 @@ public class MainFragment extends OpenGLFragment
 		public void onMainTestButtonClicked();
 		public void onMainPlayButtonClicked();
     }
+	
+	/* SECTION Métodos Fragment */
 	
 	@Override
 	public void onAttach(Activity activity)
@@ -126,7 +128,7 @@ public class MainFragment extends OpenGLFragment
 		canvas.onPause();
 	}
 	
-	/* Métodos abstractos de OpenGLFragment */
+	/* SECTION Métodos abstractos de OpenGLFragment */
 	
 	@Override
 	protected void reiniciarInterfaz()
@@ -143,7 +145,7 @@ public class MainFragment extends OpenGLFragment
 		}
 	}
 	
-	/* Listener de Botones */
+	/* SECTION Métodos Listener onClick */
 	
 	private class OnAddClickListener implements OnClickListener
 	{

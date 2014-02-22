@@ -8,6 +8,8 @@ public class Handle
 {
 	private FloatBuffer buffer;
 	
+	/* SECTION Constructora */
+	
 	public Handle(int numIter, float radio)
 	{
 		int longVertices = (numIter+1)*2;
@@ -19,7 +21,7 @@ public class Handle
 		int i = 0;
 		while(i < longVertices)
 		{
-			double theta = (double) (2.0f * Math.PI * i) / (double) numIter;
+			double theta = 2.0f * Math.PI * i / numIter;
 			
 			vertices[longArray-1-(i+1)] = radio *(float) Math.cos(theta);
 			vertices[longArray-1-i] = radio * (float) Math.sin(theta);
@@ -33,6 +35,8 @@ public class Handle
 		buffer.put(vertices);
 		buffer.position(0);
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
 	
 	public FloatBuffer getBuffer()
 	{

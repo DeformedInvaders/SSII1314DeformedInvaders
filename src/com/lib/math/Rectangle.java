@@ -312,6 +312,7 @@ public class Rectangle implements Serializable {
 		return this;
 	}
 
+	@Override
 	public String toString () {
 		return x + "," + y + "," + width + "," + height;
 	}

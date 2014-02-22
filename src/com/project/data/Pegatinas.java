@@ -17,6 +17,8 @@ public class Pegatinas implements Serializable
 	// Coordenadas Textura
 	private FloatArray puntosOjos, puntosBoca, puntosArma;
 	
+	/* SECTION Constructora */
+	
 	public Pegatinas()
 	{
 		indiceOjos = -1;
@@ -27,6 +29,8 @@ public class Pegatinas implements Serializable
 		verticeBoca = -1;
 		verticeArma = -1;
 	}
+	
+	/* SECTION Métodos de Modificación de Información */
 	
 	public void setPegatina(int indice, int vertice, int tipo)
 	{
@@ -46,6 +50,35 @@ public class Pegatinas implements Serializable
 			break;
 		}
 	}
+	
+	// TODO Comprimir en un solo método
+	
+	public void setPuntosOjos(FloatArray puntosOjos)
+	{
+		this.puntosOjos = puntosOjos;
+	}
+
+	public FloatArray getPuntosBoca()
+	{
+		return puntosBoca;
+	}
+
+	public void setPuntosBoca(FloatArray puntosBoca)
+	{
+		this.puntosBoca = puntosBoca;
+	}
+
+	public FloatArray getPuntosArma()
+	{
+		return puntosArma;
+	}
+
+	public void setPuntosArma(FloatArray puntosArma)
+	{
+		this.puntosArma = puntosArma;
+	}
+	
+	/* SECTION Métodos de Obtención de Información */
 
 	public int getIndiceOjos()
 	{
@@ -80,30 +113,5 @@ public class Pegatinas implements Serializable
 	public FloatArray getPuntosOjos()
 	{
 		return puntosOjos;
-	}
-
-	public void setPuntosOjos(FloatArray puntosOjos)
-	{
-		this.puntosOjos = puntosOjos;
-	}
-
-	public FloatArray getPuntosBoca()
-	{
-		return puntosBoca;
-	}
-
-	public void setPuntosBoca(FloatArray puntosBoca)
-	{
-		this.puntosBoca = puntosBoca;
-	}
-
-	public FloatArray getPuntosArma()
-	{
-		return puntosArma;
-	}
-
-	public void setPuntosArma(FloatArray puntosArma)
-	{
-		this.puntosArma = puntosArma;
 	}
 }

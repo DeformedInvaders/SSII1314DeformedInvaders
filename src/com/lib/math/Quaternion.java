@@ -104,6 +104,7 @@ public class Quaternion implements Serializable {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	public String toString () {
 		return "[" + x + "|" + y + "|" + z + "|" + w + "]";
 	}
@@ -418,6 +419,7 @@ public class Quaternion implements Serializable {
 		return this;
 	}
 
+	@Override
 	public boolean equals (final Object o) {
 		if (this == o) {
 			return true;

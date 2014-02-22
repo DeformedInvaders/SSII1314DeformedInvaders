@@ -287,6 +287,7 @@ public class LongArray {
 		return array;
 	}
 
+	@Override
 	public boolean equals (Object object) {
 		if (object == this) return true;
 		if (!(object instanceof LongArray)) return false;
@@ -298,6 +299,7 @@ public class LongArray {
 		return true;
 	}
 
+	@Override
 	public String toString () {
 		if (size == 0) return "[]";
 		long[] items = this.items;

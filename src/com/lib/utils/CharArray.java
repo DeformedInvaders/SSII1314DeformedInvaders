@@ -287,6 +287,7 @@ public class CharArray {
 		return array;
 	}
 
+	@Override
 	public boolean equals (Object object) {
 		if (object == this) return true;
 		if (!(object instanceof CharArray)) return false;
@@ -298,6 +299,7 @@ public class CharArray {
 		return true;
 	}
 
+	@Override
 	public String toString () {
 		if (size == 0) return "[]";
 		char[] items = this.items;

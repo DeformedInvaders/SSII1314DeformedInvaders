@@ -14,6 +14,8 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	private MediaPlayer player;
     private TPlayEstado estado;
     
+    /* SECTION Constructora */
+    
     public AudioPlayerManager(ExternalStorageManager manager)
     {
     	this.manager = manager;
@@ -24,9 +26,11 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		this.estado = TPlayEstado.Parado;
     }
     
+    /* SECTION Métodos Abstractos */
+    
     public abstract void onPlayerCompletion();
     
-    /* Métodos de Selección de Estado */
+    /* SECTION Métodos de Selección de Estado */
     
     public void startPlaying(String nombre)
     {			
@@ -84,16 +88,8 @@ public abstract class AudioPlayerManager implements OnCompletionListener
     {
     	player.release();
     }
-    
-	@Override
-	public void onCompletion(MediaPlayer mp)
-	{
-		resetPlaying();
-		
-		onPlayerCompletion();
-	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean isPlaying()
 	{
@@ -108,5 +104,15 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	public boolean isStoped()
 	{
 		return estado == TPlayEstado.Parado;
+	}
+	
+	/* SECTION Métodos Listener onCompletition */
+	
+	@Override
+	public void onCompletion(MediaPlayer mp)
+	{
+		resetPlaying();
+		
+		onPlayerCompletion();
 	}
 }

@@ -33,7 +33,7 @@ public class PaintFragment extends OpenGLFragment
 	
 	private PaintDataSaved dataSaved;
 	
-	/* Constructora */
+	/* SECTION Constructora */
 	
 	public static final PaintFragment newInstance(Esqueleto e)
 	{
@@ -51,6 +51,8 @@ public class PaintFragment extends OpenGLFragment
 	{
         public void onPaintReadyButtonClicked(Textura t);
     }
+	
+	/* SECTION Métodos Fragment */
 	
 	@Override
 	public void onAttach(Activity activity)
@@ -152,7 +154,7 @@ public class PaintFragment extends OpenGLFragment
 		dataSaved = canvas.saveData();
 	}
 	
-	/* Métodos abstractos de OpenGLFragment */
+	/* SECTION Métodos Abstráctos OpenGLFragment */
 	
 	@Override
 	protected void actualizarInterfaz()
@@ -199,7 +201,7 @@ public class PaintFragment extends OpenGLFragment
 		botonPegatina.setBackgroundResource(R.drawable.icon_sticker);
 	}
 	
-	/* Listener de Botones */
+	/* SECTION Métodos Listener onClick */
 	
 	private class OnPincelClickListener implements OnClickListener
     {
@@ -232,15 +234,17 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if (colorDialog == null)
 			{
-				colorDialog = new ColorDialog(mContext, PaintFragment.this);    	
+				colorDialog = new ColorDialog(mContext) {
+
+					@Override
+					public void onColorSelected(int color)
+					{
+						canvas.seleccionarColor(color);
+					}
+				};    	
 			}
 			colorDialog.show(v);
 		}
-    }
-    
-    public void seleccionarColor(int color)
-    {
-    	canvas.seleccionarColor(color);
     }
     
     private class OnSizeClickListener implements OnClickListener
@@ -250,15 +254,17 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if (sizeDialog == null) 
 			{
-				sizeDialog = new SizeDialog(mContext, PaintFragment.this);    	
+				sizeDialog = new SizeDialog(mContext) {
+
+					@Override
+					public void onSizeSelected(int size)
+					{
+						canvas.seleccionarSize(size);
+					}
+				};    	
 			}
 			sizeDialog.show(v);
 		}
-    }
-    
-    public void seleccionarSize(int pincel)
-    {
-    	canvas.seleccionarSize(pincel);
     }
     
     private class OnPegatinaClickListener implements OnClickListener
@@ -268,19 +274,21 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if(stickerDialog == null)
 			{
-				stickerDialog = new StickerDialog(mContext, PaintFragment.this);
+				stickerDialog = new StickerDialog(mContext) {
+
+					@Override
+					public void onStickerSelected(int tag, int tipo)
+					{
+						canvas.seleccionarPegatina(tag, tipo);
+						
+						reiniciarInterfaz();
+						actualizarInterfaz();
+					}
+				};
 			}
 			stickerDialog.show(v);
 		}
 	}
-    
-    public void seleccionarPegatina(int pegatina, int tipo)
-    {
-		canvas.seleccionarPegatina(pegatina, tipo);
-		
-		reiniciarInterfaz();
-		actualizarInterfaz();
-    }
     
     private class OnManoClickListener implements OnClickListener
     {

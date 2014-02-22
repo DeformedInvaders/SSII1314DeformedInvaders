@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,12 +25,16 @@ public abstract class AudioAlert
 	private TextView cuenta;
 	private ProgressBar progressBar;
 	private ImageButton botonRecAudio, botonPlayAudio;
+	
 	private CountDownTimer timer;
 	private long tiempo;
 	private int progreso;
+	
 	private AudioRecorderManager audioRecord;
 	private AudioPlayerManager audioPlayer;
 	private String movimiento;
+	
+	/* SECTION Constructora */
 	
 	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, ExternalStorageManager manager, String nombre)
 	{		
@@ -76,14 +81,15 @@ public abstract class AudioAlert
 			layoutBotones.addView(botonPlayAudio);
 			layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
 		
-		layout.addView(cuenta, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		layout.addView(progressBar, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		layout.addView(layoutBotones, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		layout.addView(cuenta, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		layout.addView(progressBar, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		layout.addView(layoutBotones, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		
 		alert.setView(layout);
 		        
 		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				onPossitiveButtonClick();
@@ -91,6 +97,7 @@ public abstract class AudioAlert
 		});
 
 		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				onNegativeButtonClick();
@@ -120,6 +127,11 @@ public abstract class AudioAlert
         reiniciarContadores();
 	}
 	
+	/* SECTION Métodos Abstractos */
+	
+	public abstract void onPossitiveButtonClick();
+	public abstract void onNegativeButtonClick();
+	
 	private void reiniciarContadores()
 	{
 		tiempo = 2500;
@@ -127,6 +139,15 @@ public abstract class AudioAlert
 		
 		actualizarProgreso();
 	}
+	
+	/* SECTION Métodos Públicos */
+	
+	public void show()
+	{
+		alert.show();
+	}
+	
+	/* SECTION Métodos Privados */
 	
 	private void actualizarContadores(long interval)
 	{
@@ -141,6 +162,8 @@ public abstract class AudioAlert
 		cuenta.setText(tiempo/1000 + ":" + tiempo%100);
 		progressBar.setProgress(progreso);
 	}
+	
+	/* SECTION Métodos Listener onClick */
 	
 	private class OnRecAudioClickListener implements OnClickListener
 	{
@@ -162,13 +185,5 @@ public abstract class AudioAlert
 			botonPlayAudio.setBackgroundResource(R.drawable.icon_play_selected);
 			audioPlayer.startPlaying(movimiento);
 		}	
-	}
-	
-	public abstract void onPossitiveButtonClick();
-	public abstract void onNegativeButtonClick();
-	
-	public void show()
-	{
-		alert.show();
 	}
 }

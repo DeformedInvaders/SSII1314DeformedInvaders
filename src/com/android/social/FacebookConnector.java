@@ -18,6 +18,8 @@ public class FacebookConnector
 	
 	private Facebook facebook;
 
+	/* SECTION Métodos Públicos */
+	
 	public boolean iniciarAutorizacion()
 	{
         facebook = new FacebookFactory().getInstance();

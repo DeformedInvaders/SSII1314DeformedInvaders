@@ -73,7 +73,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
 	
-	/* Constructora */	
+	/* SECTION Constructora */	
 	
 	public PaintOpenGLRenderer(Context context, Esqueleto esqueleto)
 	{
@@ -116,7 +116,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         objetoVertice = new Handle(20, POINTWIDTH);
 	}
 	
-	/* Métodos de la interfaz Renderer */
+	/* SECTION Métodos Renderer */
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -218,9 +218,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Métodos abstractos de OpenGLRenderer */
+	/* SECTION Métodos Abstráctos OpenGLRenderer */
 	
-	public void reiniciar()
+	@Override
+	protected void reiniciar()
 	{
 		lineaActual = null;
 		listaLineas.clear();
@@ -240,7 +241,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		sizeLinea = 6;
 	}
 	
-	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	@Override
+	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TPaintEstado.Pincel)
 		{
@@ -335,7 +337,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	@Override
+	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
@@ -343,7 +346,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	@Override
+	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
@@ -351,7 +355,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}		
 	}
 	
-	public void onMultiTouchEvent() {}
+	@Override
+	protected void onMultiTouchEvent() {}
 	
 	private void guardarPolilinea()
 	{
@@ -366,7 +371,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Selección de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public void seleccionarMano()
 	{
@@ -435,7 +440,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		modoCaptura = true;
 	}
 	
-	/* Métodos de modificación de Buffers de estado */
+	/* SECTION Métodos de modificación de Buffers de estado */
 
 	public void anteriorAccion()
 	{
@@ -490,7 +495,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean isBufferSiguienteVacio()
 	{
@@ -542,7 +547,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return new Textura(textura, coordsTextura, pegatinas);
 	}
 	
-	/* Métodos de Guardado de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public PaintDataSaved saveData()
 	{

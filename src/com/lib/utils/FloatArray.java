@@ -292,6 +292,7 @@ public class FloatArray implements Serializable {
 		return array;
 	}
 
+	@Override
 	public boolean equals (Object object) {
 		if (object == this) return true;
 		if (!(object instanceof FloatArray)) return false;
@@ -303,6 +304,7 @@ public class FloatArray implements Serializable {
 		return true;
 	}
 
+	@Override
 	public String toString () {
 		if (size == 0) return "[]";
 		float[] items = this.items;
@@ -329,6 +331,7 @@ public class FloatArray implements Serializable {
 		return buffer.toString();
 	}
 	
+	@Override
 	public FloatArray clone() {
 		// TODO
 		FloatArray f = new FloatArray();

@@ -12,6 +12,8 @@ public class AudioRecorderManager
 	
 	private MediaRecorder recorder;
     private TRecordEstado estado;
+    
+    /* SECTION Constructora */
 
 	public AudioRecorderManager(ExternalStorageManager manager)
 	{
@@ -20,7 +22,7 @@ public class AudioRecorderManager
 		this.estado = TRecordEstado.Parado;
 	}
 	
-	/* Métodos de Selección de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
     public void startRecording(String nombre)
     {
@@ -62,7 +64,7 @@ public class AudioRecorderManager
     	recorder.release();
     }
     
-    /* Métodos de Obtención de Información */
+    /* SECTION Métodos de Obtención de Información */
     
     public boolean isRecording()
     {

@@ -19,6 +19,8 @@ public class SocialConnector
 	private TwitterConnector conectorTwitter;
 	private FacebookConnector conectorFacebook;
 	
+	/* SECTION Constructora */
+	
 	public SocialConnector(MainActivity context)
 	{
 		activity = context;
@@ -29,6 +31,8 @@ public class SocialConnector
 		conectorTwitter = new TwitterConnector();
 		conectorFacebook = new FacebookConnector();
 	}
+	
+	/* SECTION Métodos Comprobación de Conexión */
 	
 	private boolean comprobarConexionInternet()
 	{
@@ -101,7 +105,7 @@ public class SocialConnector
 		alert.show();
 	}
 	
-	/* Conexión - Desconexión */
+	/* SECTION Métodos Conexión y Desconexión */
 	
 	public void conectarTwitter()
 	{
@@ -205,7 +209,7 @@ public class SocialConnector
 		activity.actualizarActionBar();
 	}
 	
-	/* Publicación Estado */
+	/* SECTION Métodos Publicación de Estados */
 	
 	public void publicar(String text)
 	{
@@ -247,7 +251,7 @@ public class SocialConnector
 		}
 	}
 	
-	/* Publicación Foto */
+	/* SECTION Métodos Publicación de Fotos */
 	
 	public void publicar(String text, File foto)
 	{
@@ -288,6 +292,8 @@ public class SocialConnector
 			Toast.makeText(activity, R.string.error_facebook_post, Toast.LENGTH_SHORT).show();
 		}
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean isTwitterConnected()
 	{

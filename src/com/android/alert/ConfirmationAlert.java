@@ -8,6 +8,8 @@ public abstract class ConfirmationAlert
 {
 	private AlertDialog.Builder alert;
 	
+	/* SECTION Constructora */
+	
 	public ConfirmationAlert(Context context, String title, String messege, String textYes, String textNo)
 	{
 		alert = new AlertDialog.Builder(context);
@@ -16,6 +18,7 @@ public abstract class ConfirmationAlert
 		alert.setMessage(messege);
 
 		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				onPossitiveButtonClick();
@@ -23,6 +26,7 @@ public abstract class ConfirmationAlert
 		});
 
 		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				onNegativeButtonClick();
@@ -30,8 +34,12 @@ public abstract class ConfirmationAlert
 		});
 	}
 	
+	/* SECTION Métodos Abstractos */
+	
 	public abstract void onPossitiveButtonClick();
 	public abstract void onNegativeButtonClick();
+	
+	/* SECTION Métodos Públicos */
 	
 	public void show()
 	{

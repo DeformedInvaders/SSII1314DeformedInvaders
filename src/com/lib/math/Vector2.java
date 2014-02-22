@@ -53,16 +53,19 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	}
 
 	/** @return a copy of this vector */
+	@Override
 	public Vector2 cpy () {
 		return new Vector2(this);
 	}
 
 	/** @return The euclidian length */
+	@Override
 	public float len () {
 		return (float)Math.sqrt(x * x + y * y);
 	}
 
 	/** @return The squared euclidian length */
+	@Override
 	public float len2 () {
 		return x * x + y * y;
 	}
@@ -70,6 +73,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	/** Sets this vector from the given vector
 	 * @param v The vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 set (Vector2 v) {
 		x = v.x;
 		y = v.y;
@@ -89,6 +93,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	/** Subtracts the given vector from this vector.
 	 * @param v The vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 sub (Vector2 v) {
 		x -= v.x;
 		y -= v.y;
@@ -97,6 +102,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 
 	/** Normalizes this vector. Does nothing if it is zero.
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 nor () {
 		float len = len();
 		if (len != 0) {
@@ -109,6 +115,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	/** Adds the given vector to this vector
 	 * @param v The vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 add (Vector2 v) {
 		x += v.x;
 		y += v.y;
@@ -127,6 +134,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 
 	/** @param v The other vector
 	 * @return The dot product between this and the other vector */
+	@Override
 	public float dot (Vector2 v) {
 		return x * v.x + y * v.y;
 	}
@@ -134,6 +142,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	/** Multiplies this vector by a scalar
 	 * @param scalar The scalar
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 scl (float scalar) {
 		x *= scalar;
 		y *= scalar;
@@ -141,6 +150,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	}
 	
 	/** @deprecated Use {@link #scl(float)} instead. */
+	@Deprecated
 	public Vector2 mul (float scalar) {
 		return scl(scalar);
 	}
@@ -154,12 +164,14 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	}
 	
 	/** @deprecated Use {@link #scl(float, float)} instead. */
+	@Deprecated
 	public Vector2 mul (float x, float y) {
 		return scl(x,y);
 	}
 	
 	/** Multiplies this vector by a vector
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 scl (Vector2 v) {
 		this.x *= v.x;
 		this.y *= v.y;
@@ -167,6 +179,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	}
 	
 	/** @deprecated Use {@link #scl(Vector2)} instead. */
+	@Deprecated
 	public Vector2 mul (Vector2 v) {
 		return scl(v);
 	}
@@ -185,6 +198,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 
 	/** @param v The other vector
 	 * @return the distance between this and the other vector */
+	@Override
 	public float dst (Vector2 v) {
 		final float x_d = v.x - x;
 		final float y_d = v.y - y;
@@ -202,6 +216,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 
 	/** @param v The other vector
 	 * @return the squared distance between this and the other vector */
+	@Override
 	public float dst2 (Vector2 v) {
 		final float x_d = v.x - x;
 		final float y_d = v.y - y;
@@ -220,6 +235,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	/** Limits this vector's length to given value
 	 * @param limit Max length
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 limit (float limit) {
 		if (len2() > limit * limit) {
 			nor();
@@ -232,6 +248,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	 * @param min Min length
 	 * @param max Max length
 	 * @return This vector for chaining */
+	@Override
 	public Vector2 clamp (float min, float max) {
 		final float l2 = len2();
 		if (l2 == 0f)
@@ -243,6 +260,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 		return this;
 	}
 
+	@Override
 	public String toString () {
 		return "[" + x + ":" + y + "]";
 	}
@@ -322,6 +340,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 	 * @param target The target vector
 	 * @param alpha The interpolation coefficient
 	 * @return This vector for chaining. */
+	@Override
 	public Vector2 lerp (Vector2 target, float alpha) {
 		final float invAlpha = 1.0f - alpha;
 		this.x = (x * invAlpha) + (target.x * alpha);

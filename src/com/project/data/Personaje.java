@@ -11,19 +11,40 @@ public class Personaje implements Serializable
 	private Movimientos movimientos;
 	private String nombre;
 	
+	/* SECTION Constructora */
+	
 	public Personaje()
 	{
 		
 	}
+	
+	/* SECTION Métodos de Modificación de Información */
+	
+	public void setEsqueleto(Esqueleto esqueleto)
+	{
+		this.esqueleto = esqueleto;
+	}
+	
+	public void setTextura(Textura textura)
+	{
+		this.textura = textura;
+	}
+	
+	public void setMovimientos(Movimientos movimientos)
+	{
+		this.movimientos = movimientos;
+	}
+	
+	public void setNombre(String nombre)
+	{
+		this.nombre = nombre;
+	}
+	
+	/* SECTION Métodos de Obtención de Información */
 
 	public Esqueleto getEsqueleto()
 	{
 		return esqueleto;
-	}
-
-	public void setEsqueleto(Esqueleto esqueleto)
-	{
-		this.esqueleto = esqueleto;
 	}
 
 	public Textura getTextura()
@@ -31,28 +52,13 @@ public class Personaje implements Serializable
 		return textura;
 	}
 
-	public void setTextura(Textura textura)
-	{
-		this.textura = textura;
-	}
-
 	public Movimientos getMovimientos()
 	{
 		return movimientos;
 	}
 
-	public void setMovimientos(Movimientos movimientos)
-	{
-		this.movimientos = movimientos;
-	}
-
 	public String getNombre()
 	{
 		return nombre;
-	}
-
-	public void setNombre(String nombre)
-	{
-		this.nombre = nombre;
 	}
 }

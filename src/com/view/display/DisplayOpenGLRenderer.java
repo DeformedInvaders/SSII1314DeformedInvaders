@@ -56,6 +56,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private FloatArray coords;
 	private FloatBuffer bufferCoords;
 	
+	/* SECTION Constructura */
+	
 	public DisplayOpenGLRenderer(Context context)
 	{
 		super(context);
@@ -101,7 +103,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
         pegatinaArmaCargada = false;
 	}
 	
-	/* Métodos de la interfaz Renderer */
+	/* SECTION Métodos Renderer */
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -207,19 +209,24 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	/* Métodos abstractos de OpenGLRenderer */
+	/* SECTION Métodos abstractos de OpenGLRenderer */
 	
-	public void reiniciar() { }
+	@Override
+	protected void reiniciar() { }
 	
-	public void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	@Override
+	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
-	public void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	@Override
+	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
-	public void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	@Override
+	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
 	
-	public void onMultiTouchEvent() { }
+	@Override
+	protected void onMultiTouchEvent() { }
 	
-	/* Métodos de Modificación de Estado */
+	/* SECTION Métodos de Modificación de Estado */
 	
 	public void seleccionarRetoque(float height, float width)
 	{
@@ -296,7 +303,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		iniciarAnimacion();
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean isEstadoReposo()
 	{
@@ -335,7 +342,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		return null;
 	}
 	
-	/* Métodos de Guardado de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public void saveData()
 	{

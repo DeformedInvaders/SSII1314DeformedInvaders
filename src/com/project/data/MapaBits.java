@@ -12,6 +12,8 @@ public class MapaBits implements Serializable
 	private ArrayList<Integer> pixelsCompressed;
 	private int width, height;
 	
+	/* SECTION Constructora */
+	
 	public MapaBits()
 	{
 		
@@ -19,7 +21,12 @@ public class MapaBits implements Serializable
 	
 	public MapaBits(int[] pixelsBuffer, int width, int height)
 	{
-		setBitmap(pixelsBuffer, width, height);
+		this.width = width;
+		this.height = height;
+		
+		this.pixelsCompressed = new ArrayList<Integer>();
+		
+		comprimirBitmap(pixelsBuffer);
 	}
 	
 	public MapaBits(ArrayList<Integer> pixels, int width, int height)
@@ -30,16 +37,8 @@ public class MapaBits implements Serializable
 		this.pixelsCompressed = pixels;
 	}
 	
-	public void setBitmap(int[] pixelsBuffer, int width, int height)
-	{
-		this.width = width;
-		this.height = height;
-		
-		this.pixelsCompressed = new ArrayList<Integer>();
-		
-		comprimirBitmap(pixelsBuffer);
-	}
-	
+	/* SECTION Métodos de Obtención de Información */
+
 	public int getWidth()
 	{
 		return width;
@@ -59,6 +58,8 @@ public class MapaBits implements Serializable
 	    bitmap.setPixels(buffer, arrayLong-width, -width, 0, 0, width, height);
 	    return bitmap;
 	}
+	
+	/* SECTION Métodos Privados */
 	
 	private void comprimirBitmap(int[] array)
 	{

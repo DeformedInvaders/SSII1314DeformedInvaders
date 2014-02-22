@@ -17,6 +17,8 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
     private DeformOpenGLRenderer renderer;
     
     private CountDownTimer timer;
+    
+    /* SECTION Constructora */
 
     public DeformGLSurfaceView(Context context, AttributeSet attrs)
     {
@@ -48,29 +50,33 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
         };
 	}
 	
-    /* Métodos abstractos OpenGLSurfaceView */
+    /* SECTION Métodos Abstráctos OpenGLSurfaceView */
 	
-	public void onTouchDown(float x, float y, float width, float height, int pos)
+	@Override
+	protected void onTouchDown(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchDown(x, y, width, height, pos);
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+	@Override
+	protected void onTouchMove(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchMove(x, y, width, height, pos);
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height, int pos)
+	@Override
+	protected void onTouchUp(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchUp(x, y, width, height, pos);
 	}
 	
-	public void onMultiTouchEvent()
+	@Override
+	protected void onMultiTouchEvent()
 	{
 		renderer.onMultiTouchEvent();
 	}
 	
-	/* Métodos de modifiación del Renderer */
+	/* SECTION Métodos de modifiación del Renderer */
 
 	public void seleccionarAnyadir()
 	{
@@ -111,8 +117,13 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.seleccionarAudio();
 	}
+	
+	public void seleccionarReposo() 
+	{
+		renderer.seleccionarReposo();
+	}
 
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean isHandlesVacio()
 	{
@@ -159,7 +170,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.getMovimientos();
 	}
 	
-	/* Métodos de Guardado de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public DeformDataSaved saveData()
 	{
@@ -171,8 +182,4 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		renderer.restoreData(data);
 	}
 
-	public void seleccionarReposo() 
-	{
-		renderer.seleccionarReposo();
-	}
 }

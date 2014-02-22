@@ -30,14 +30,17 @@ public class InternalStorageManager
 	private Activity activity;
 	private List<String> nombres;
 	
+	/* SECTION Constructora */
+	
 	public InternalStorageManager(Activity activity)
 	{
 		this.activity = activity;
 		this.nombres = new ArrayList<String>();
 		
-		// Cargar Lista de Nombres
 		cargarNombres();		
 	}
+	
+	/* SECTION Métodos Nombre de Directorios */
 	
 	private String getCharactersFileName()
 	{
@@ -68,7 +71,7 @@ public class InternalStorageManager
 		return nombres.contains(nombre);
 	}
 	
-	/* LISTA NOMBRES */
+	/* SECTION Métodos Lista de Nombres */
 	
 	private boolean cargarNombres()
 	{
@@ -167,7 +170,7 @@ public class InternalStorageManager
 		return false;
 	}
 	
-	/* LISTA DE PERSONAJES */
+	/* SECTION Métodos Lista de Personajes */
 	
 	public List<Personaje> cargarListaPersonajes(LoadingFragment fragment)
 	{
@@ -194,7 +197,7 @@ public class InternalStorageManager
 		return lista;
 	}
 	
-	/* PERSONAJE SELECCIONADO */
+	/* SECTION Métodos Personaje Seleccionado */
 	
 	public int cargarSeleccionado()
 	{
@@ -269,7 +272,7 @@ public class InternalStorageManager
 		return false;
 	}
 	
-	/* PERSONAJE ACTUAL */
+	/* SECTION Métodos Personaje Actual */
 	
 	public Personaje cargarPersonaje(String nombre)
 	{

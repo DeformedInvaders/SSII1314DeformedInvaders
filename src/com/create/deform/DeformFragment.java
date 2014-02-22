@@ -28,7 +28,7 @@ public class DeformFragment extends OpenGLFragment
 	
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 		
-	/* Constructora */
+	/* SECTION Constructora */
 	
 	public static final DeformFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m)
 	{
@@ -43,6 +43,8 @@ public class DeformFragment extends OpenGLFragment
 		textura = t;
 		manager = m;
 	}
+	
+	/* SECTION Métodos Fragment */
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -122,7 +124,7 @@ public class DeformFragment extends OpenGLFragment
 		dataSaved = canvas.saveData();
 	}
 	
-	/* Métodos abstractos de OpenGLFramgent */
+	/* SECTION Métodos Abstractos OpenGLFramgent */
 	
 	@Override
 	protected void actualizarInterfaz()
@@ -197,7 +199,7 @@ public class DeformFragment extends OpenGLFragment
 		botonReproducir.setBackgroundResource(R.drawable.icon_play);
 	}
 	
-	/* Listener de Botones */
+	/* SECTION Métodos Listener onClick */
 	
 	private class OnAddClickListener implements OnClickListener
 	{
@@ -249,6 +251,7 @@ public class DeformFragment extends OpenGLFragment
 	
 	private class OnRecordClickListener implements OnClickListener 
 	{ 
+		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarGrabado();
@@ -261,6 +264,7 @@ public class DeformFragment extends OpenGLFragment
 	//TODO
 	private class OnAudioClickListener implements OnClickListener 
 	{ 
+		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarAudio();
@@ -297,6 +301,7 @@ public class DeformFragment extends OpenGLFragment
 	
 	private class OnPlayClickListener implements OnClickListener 
 	{ 
+		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarPlay();
@@ -306,7 +311,7 @@ public class DeformFragment extends OpenGLFragment
 		}	
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public List<FloatArray> getMovimientos() 
 	{ 

@@ -21,7 +21,7 @@ public class DesignFragment extends OpenGLFragment
 	
 	private DesignDataSaved dataSaved;
 	
-	/* Constructora */
+	/* SECTION Constructora */
 	
 	public static final DesignFragment newInstance()
 	{
@@ -34,6 +34,8 @@ public class DesignFragment extends OpenGLFragment
         public void onDesignReadyButtonClicked(Esqueleto e);
         public void onDesignTestButtonClicked(boolean test);
     }
+	
+	/* SECTION Métodos Fragment */
 	
 	@Override
 	public void onAttach(Activity activity)
@@ -108,7 +110,7 @@ public class DesignFragment extends OpenGLFragment
 		dataSaved = canvas.saveData();
 	}
 	
-	/* Métodos abstractos de OpenGLFragmentListener */
+	/* SECTION Métodos Abstractos OpenGLFragment */
 	
 	@Override
 	protected void reiniciarInterfaz()
@@ -129,7 +131,7 @@ public class DesignFragment extends OpenGLFragment
 		}
 	}
 	
-	/* Listener de Botones */
+	/* SECTION Métodos Listener onClick */
 	
 	public class OnReadyClickListener implements OnClickListener
 	{

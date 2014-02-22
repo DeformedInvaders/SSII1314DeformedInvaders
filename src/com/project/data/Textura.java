@@ -12,12 +12,16 @@ public class Textura implements Serializable
 	private FloatArray coordTextura;
 	private Pegatinas pegatinas;
 	
+	/* SECTION Constructora */
+	
 	public Textura(MapaBits mapaBits, FloatArray coordTextura, Pegatinas pegatinas)
 	{
 		this.mapaBits = mapaBits;
 		this.coordTextura = coordTextura;
 		this.pegatinas = pegatinas;
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
 
 	public MapaBits getMapaBits()
 	{

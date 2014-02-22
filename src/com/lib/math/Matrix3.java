@@ -174,6 +174,7 @@ public class Matrix3 implements Serializable {
 		return this;
 	}
 
+	@Override
 	public String toString () {
 		return "[" + val[0] + "|" + val[3] + "|" + val[6] + "]\n" + "[" + val[1] + "|" + val[4] + "|" + val[7] + "]\n" + "["
 				+ val[2] + "|" + val[5] + "|" + val[8] + "]";

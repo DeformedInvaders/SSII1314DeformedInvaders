@@ -13,12 +13,16 @@ public class PaintDataSaved
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
 	
+	/* SECTION Constructora */
+	
 	public PaintDataSaved(Stack<Accion> anteriores, Stack<Accion> siguientes, TPaintEstado estado)
 	{
 		this.anteriores = anteriores;
 		this.siguientes = siguientes;
 		this.estado = estado;
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
 
 	public TPaintEstado getEstado()
 	{

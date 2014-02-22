@@ -12,6 +12,8 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 	// Renderer
     private DesignOpenGLRenderer renderer;
  
+    /* SECTION Constructora */
+    
     public DesignGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
@@ -21,35 +23,39 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
         setRenderer(renderer);
     }
     
-    /* Métodos abstractos OpenGLSurfaceView */
+    /* SECTION Métodos Abstráctos OpenGLSurfaceView */
 	
-	public void onTouchDown(float x, float y, float width, float height, int pos)
+    @Override
+	protected void onTouchDown(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchDown(x, y, width, height, pos);
 	}
 	
-	public void onTouchMove(float x, float y, float width, float height, int pos)
+    @Override
+	protected void onTouchMove(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchMove(x, y, width, height, pos);
 	}
 	
-	public void onTouchUp(float x, float y, float width, float height, int pos)
+    @Override
+	protected void onTouchUp(float x, float y, float width, float height, int pos)
 	{
 		renderer.onTouchUp(x, y, width, height, pos);
 	}
 	
-	public void onMultiTouchEvent()
+    @Override
+	protected void onMultiTouchEvent()
 	{
 		
 	}
 	
-	public void reiniciar()
+    protected void reiniciar()
 	{
 		renderer.reiniciar();
 		requestRender();
 	}
 
-	/* Métodos de Selección de Estado */
+	/* SECTION Métodos de Selección de Estado */
 	
 	public boolean seleccionarTriangular()
 	{
@@ -58,7 +64,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		return triangulado;
 	}
 	
-	/* Métodos de Obtención de Información */
+	/* SECTION Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
 	{
@@ -70,7 +76,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		return renderer.poligonoCompleto();
 	}
 	
-	/* Métodos de Guardado de Información */
+	/* SECTION Métodos de Guardado de Información */
 	
 	public DesignDataSaved saveData()
 	{

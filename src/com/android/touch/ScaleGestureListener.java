@@ -11,10 +11,14 @@ public class ScaleGestureListener extends SimpleOnScaleGestureListener
 
     private float mScaleFactor = 1.0f;
 	
+    /* SECTION Contructora */
+    
 	public ScaleGestureListener(OpenGLRenderer renderer)
 	{
 		this.renderer = renderer;
 	}
+	
+	/* SECTION Métodos Listener onScale */
 	
 	@Override
 	public boolean onScale(ScaleGestureDetector detector)

@@ -7,8 +7,12 @@ import android.view.View.OnTouchListener;
 
 public abstract class OpenGLFragment <T extends OpenGLSurfaceView> extends Fragment
 {
+	/* SECTION Métodos Abstractos */
+	
 	protected abstract void reiniciarInterfaz();
 	protected abstract void actualizarInterfaz();
+	
+	/* SECTION Métodos Protegidos */
 	
 	protected void setCanvasListener(final T canvas)
 	{

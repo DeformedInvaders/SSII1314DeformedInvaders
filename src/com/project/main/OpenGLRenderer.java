@@ -51,7 +51,7 @@ public abstract class OpenGLRenderer implements Renderer
 	// Contexto
 	protected Context context;
 	
-	/* Constructoras */
+	/* SECTION Constructoras */
 	
 	public OpenGLRenderer(Context context)
 	{
@@ -66,15 +66,15 @@ public abstract class OpenGLRenderer implements Renderer
 		// después de la constructora.
 	}
 	
-	/* Métodos abstractos a implementar */
+	/* SECTION Métodos Abstractos */
 	
-	public abstract void onTouchDown(float x, float y, float width, float height, int pos);
-	public abstract void onTouchMove(float x, float y, float width, float height, int pos);
-	public abstract void onTouchUp(float x, float y, float width, float height, int pos);
-	public abstract void onMultiTouchEvent();
-	public abstract void reiniciar();
+	protected abstract void onTouchDown(float x, float y, float width, float height, int pos);
+	protected abstract void onTouchMove(float x, float y, float width, float height, int pos);
+	protected abstract void onTouchUp(float x, float y, float width, float height, int pos);
+	protected abstract void onMultiTouchEvent();
+	protected abstract void reiniciar();
 	
-	/* Métodos de la interfaz Renderer */
+	/* SECTION Métodos Renderer */
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -156,7 +156,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glLoadIdentity();
 	}
 	
-	/* Métodos de Modificación de Cámara */
+	/* SECTION Métodos de Modificación de Cámara */
 	
 	public void zoom(float factor)
 	{	
@@ -238,7 +238,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	/* Captura de Pantalla */
+	/* SECTION Métodos de Captura de Pantalla */
 	
 	private MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)
 	{
@@ -257,8 +257,7 @@ public abstract class OpenGLRenderer implements Renderer
 	        pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 	    }
 	    
-	    MapaBits textura = new MapaBits();
-	    textura.setBitmap(pixelsBuffer, width, height);
+	    MapaBits textura = new MapaBits(pixelsBuffer, width, height);
 	    return textura;
 	}
 	
@@ -287,7 +286,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return capturaPantalla(gl, (int) marcoC, (int) marcoB, (int) marcoA, (int) marcoA);
 	}
 	
-	/* Conversión de Coordenadas */
+	/* SECTION Métodos de Conversión de Coordenadas */
 	
 	protected float convertToWorldXCoordinate(float pixelX, float screenWidth)
 	{
@@ -314,7 +313,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return worldX >= xLeft && worldX <= xRight && worldY >= yBot && worldY <= yTop;
 	}
 	
-	/* Búsqueda de Pixeles */
+	/* SECTION Métodos de Búsqueda de Pixeles */
 	
 	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
@@ -379,7 +378,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return (short)minpos;
 	}	
 	
-	/* Métodos de Construcción de Buffer de Pintura */
+	/* SECTION Métodos de Construcción de Buffer de Pintura */
 	
 	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP
@@ -566,7 +565,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return puntos;
 	}
 	
-	/* Metodos de Actualización de Buffers de Pintura */
+	/* SECTION Metodos de Actualización de Buffers de Pintura */
 	
 	// Actualiza los valores de un buffer de pintura para puntos
 	protected void actualizarBufferListaPuntos(FloatBuffer buffer, FloatArray vertices)
@@ -618,7 +617,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	/* Métodos de Pintura en la Tubería Gráfica */
+	/* SECTION Métodos de Pintura en la Tubería Gráfica */
 	/*	
 		____________________________________
 		|			|___________|			| B
@@ -746,7 +745,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
-	/* TESTING */
+	/* FIXME TESTING */
 	protected void dibujarListaHandleMultitouch(GL10 gl, FloatBuffer handle, FloatArray posiciones)
 	{
 		gl.glPushMatrix();
@@ -847,7 +846,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
-	/* Métodos Genéricos */
+	/* SECTION Métodos Genéricos */
 	
 	// Generar Color Aleatorio
 	protected int generarColorAleatorio()

@@ -36,6 +36,8 @@ public class Deformator
 	
 	/*private Matrix matrizA2, matrizA2t, matrizA2tA2;*/
 	
+	/* SECTION Constructora */
+	
 	public Deformator(FloatArray puntos, ShortArray triangulos, FloatArray handles, ShortArray indiceHandles)
 	{
 		/*this.escaladoActivado = false;*/
@@ -238,7 +240,7 @@ public class Deformator
 		
 		matrizG.transpose(matrizGt);
 		matrizGtG = matrizGt.times(matrizG);
-		Matrix gtginv = matrizGtG.inverse();//TODO
+		Matrix gtginv = matrizGtG.inverse();
 		
 		calcularMatrizE(a, b, puntos, matrizE);
 		

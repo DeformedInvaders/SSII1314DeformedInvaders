@@ -1,6 +1,5 @@
 package com.android.dialog;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,6 +20,8 @@ public abstract class WindowDialog implements OnTouchListener
 	private PopupWindow popupWindow;
 	private LayoutInflater layoutInflater;
 	
+	/* SECTION Constructora */
+	
 	public WindowDialog(Context context, int id)
 	{
 		mContext = context;
@@ -28,13 +29,19 @@ public abstract class WindowDialog implements OnTouchListener
 		layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		rootView = layoutInflater.inflate(id, null);
-		popupWindow = new PopupWindow(rootView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);  
+		popupWindow = new PopupWindow(rootView, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);  
 		
 		popupWindow.setBackgroundDrawable(new BitmapDrawable());
 		popupWindow.setOutsideTouchable(true);
 		popupWindow.setTouchInterceptor(this);
 		popupWindow.setFocusable(true);
 	}
+	
+	/* SECTION Métodos Abstractos */
+	
+	protected abstract void onTouchOutsidePopUp(View v, MotionEvent event);
+	
+	/* SECTION Métodos Protegidos */
 	
 	protected View findViewById(int id)
 	{
@@ -61,16 +68,6 @@ public abstract class WindowDialog implements OnTouchListener
 		rootView.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
 	}
 	
-	public void show(View view)
-	{
-		rootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		
-		int posX = view.getWidth()/4;
-		int posY = rootView.getMeasuredHeight() + view.getHeight();
-		
-		popupWindow.showAsDropDown(view, posX, -posY);
-	}
-	
 	protected void dismiss()
 	{
 		popupWindow.dismiss();
@@ -88,6 +85,20 @@ public abstract class WindowDialog implements OnTouchListener
 		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 	}
 	
+	/* SECTION Métodos Públicos */
+	
+	public void show(View view)
+	{
+		rootView.measure(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		
+		int posX = view.getWidth()/4;
+		int posY = rootView.getMeasuredHeight() + view.getHeight();
+		
+		popupWindow.showAsDropDown(view, posX, -posY);
+	}
+	
+	/* SECTION Métodos Listener onTouch */
+	
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
@@ -101,6 +112,4 @@ public abstract class WindowDialog implements OnTouchListener
 		
 		return false;
 	}
-	
-	protected abstract void onTouchOutsidePopUp(View v, MotionEvent event);
 }

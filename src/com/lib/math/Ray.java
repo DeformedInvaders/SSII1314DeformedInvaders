@@ -44,6 +44,7 @@ public class Ray implements Serializable {
 	 * Returns the endpoint given the distance. This is calculated as startpoint + distance * direction.
 	 * @param distance The distance from the end point to the start point.
 	 * @return The end point */
+	@Deprecated
 	public Vector3 getEndPoint (float distance) {
 		return getEndPoint(new Vector3(), distance);
 	}
@@ -71,6 +72,7 @@ public class Ray implements Serializable {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	public String toString () {
 		return "ray [" + origin + ":" + direction + "]";
 	}

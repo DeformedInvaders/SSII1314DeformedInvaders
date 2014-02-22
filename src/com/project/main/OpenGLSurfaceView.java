@@ -27,6 +27,8 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private ScaleGestureDetector scaleDetector;
 	private MoveGestureDetector dragDetector;
     
+	/* SECTION Constructora */
+	
     public OpenGLSurfaceView(Context context, AttributeSet attrs, TTouchEstado estado)
     {
     	 super(context, attrs);
@@ -43,14 +45,14 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
          setEGLContextClientVersion(1);
     }
     
-    /* Métodos abstractos a implementar */
+    /* SECTION Métodos Abstractos */
 	
-	public abstract void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	public abstract void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	public abstract void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	public abstract void onMultiTouchEvent();
+    protected abstract void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract void onMultiTouchEvent();
     
-    public void setRenderer(OpenGLRenderer renderer)
+    protected void setRenderer(OpenGLRenderer renderer)
     {	
     	// Renderer
     	super.setRenderer(renderer);
@@ -66,7 +68,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     	this.estado = estado;
     }
     
-    /* Método abstractos de OnTouchListener */
+    /* SECTION Métodos Listener onTouch */
     
     public boolean onTouch(View v, MotionEvent event)
     {

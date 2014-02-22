@@ -100,6 +100,7 @@ public class Bezier<T extends Vector<T>> implements Path<T> {
 		return this;
 	}
 	
+	@Override
 	public T valueAt(final T out, final float t) {
 		final int n = points.size; 
 		if (n == 2)
@@ -111,6 +112,7 @@ public class Bezier<T extends Vector<T>> implements Path<T> {
 		return out;
 	}
 	
+	@Override
 	public float approximate(final T v) {
 		// TODO: make a real approximate method
 		T p1 = points.get(0);

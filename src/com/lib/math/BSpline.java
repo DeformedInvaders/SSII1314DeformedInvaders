@@ -34,7 +34,7 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 		final int n = continuous ? points.length : points.length - 3;
 		float u = t * n;
 		int i = (t >= 1f) ? (n - 1) : (int)u;
-		u -= (float)i;
+		u -= i;
 		return cubic(out, i, u, points, continuous, tmp);
 	}
 	
@@ -70,7 +70,7 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 		final int n = continuous ? points.length : points.length - degree;
 		float u = t * n;
 		int i = (t >= 1f) ? (n - 1) : (int)u;
-		u -= (float)i;
+		u -= i;
 		return calculate(out, i, u, points, degree, continuous, tmp);
 	}
 	
@@ -141,7 +141,7 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 		final int n = spanCount;
 		float u = t * n;
 		int i = (t >= 1f) ? (n - 1) : (int)u;
-		u -= (float)i;
+		u -= i;
 		return valueAt(out, i, u);
 	}
 	
@@ -203,7 +203,7 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 		float L3 = P3.dst(P1);
 		float s = (L2*L2 + L1*L1 - L3*L3) / (2*L1);
 		float u = MathUtils.clamp((L1-s)/L1, 0f, 1f);
-		return ((float)n + u) / spanCount;
+		return (n + u) / spanCount;
 	}
 	
 	@Override
@@ -223,7 +223,7 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 			spline.add(pos.x);
 			spline.add(pos.y);
 							
-			t += (1.0f/(float)iter);
+			t += (1.0f/iter);
 		}
 		
 		return spline;

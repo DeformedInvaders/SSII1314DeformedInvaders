@@ -13,6 +13,8 @@ public class DeformDataSaved
 	private List<FloatArray> listaVertices;
 	private TDeformEstado estado;
 	
+	/* SECTION Constructora */
+	
 	public DeformDataSaved(FloatArray handles, ShortArray indiceHandles, FloatArray verticesModificados, TDeformEstado estado, List<FloatArray> listaVertices)
 	{
 		this.handles = handles;
@@ -22,6 +24,8 @@ public class DeformDataSaved
 		this.listaVertices = listaVertices;
 		
 	}
+	
+	/* SECTION Métodos Obtención de Información */
 
 	public FloatArray getHandles()
 	{

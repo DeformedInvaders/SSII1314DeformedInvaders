@@ -32,7 +32,7 @@ public class AnimationFragment extends ViewPagerFragment
 	private Movimientos movimientos;
 	private ExternalStorageManager manager;
 	
-	/* Constructora */
+	/* SECTION Constructora */
 	
 	public static final AnimationFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m)
 	{
@@ -52,6 +52,8 @@ public class AnimationFragment extends ViewPagerFragment
 	{
         public void onAnimationReadyButtonClicked(Movimientos m);
     }
+	
+	/* SECTION Métodos Fragment */
 	
 	@Override
 	public void onAttach(Activity activity)
@@ -98,7 +100,7 @@ public class AnimationFragment extends ViewPagerFragment
 		botonReady = null;
 	}
 	
-	/* Listeners de Botones */
+	/* SECTION Métodos Listener onClick */
 	
 	private void actualizarMovimientos()
 	{
@@ -128,7 +130,7 @@ public class AnimationFragment extends ViewPagerFragment
 		}
     }
     
-    /* Métodos abstractos de ViewPagerFragment */
+    /* SECTION Métodos Abstractos ViewPagerFragment */
     
     @Override
     public void onPageSelected()

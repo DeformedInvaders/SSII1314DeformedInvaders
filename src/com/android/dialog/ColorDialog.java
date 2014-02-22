@@ -11,12 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.create.paint.PaintFragment;
 import com.project.main.R;
 
-public class ColorDialog extends WindowDialog
+public abstract class ColorDialog extends WindowDialog
 {
-	private PaintFragment fragmento;
 	private float[] colorActual = new float[3];
 	
 	private ColorPalette paletaPrincipal;
@@ -25,11 +23,11 @@ public class ColorDialog extends WindowDialog
 	private Button botonAceptar, botonCancelar;
 	private ImageView imagenCursorPrincipal, imagenCursorSecundario, imagenSeleccionado;
 	
-	public ColorDialog(Context context, PaintFragment view)
+	/* SECTION Constructora */
+	
+	public ColorDialog(Context context)
 	{
 		super(context, R.layout.dialog_color_layout);
-		
-		fragmento = view;
 		
 		botonAceptar = (Button) findViewById(R.id.imageButtonColor1);
 		botonCancelar = (Button) findViewById(R.id.imageButtonColor2);
@@ -65,19 +63,27 @@ public class ColorDialog extends WindowDialog
             }
         });
 	}
-
+	
+	/* SECTION Métodos Abstractos */
+	
+	public abstract void onColorSelected(int color);
+	
+	/* SECTION Métodos Abstractos WindowDialog */
+	
 	@Override
 	protected void onTouchOutsidePopUp(View v, MotionEvent event)
 	{
 		dismiss();
 	}
 	
+	/* SECTION Métodos Listener onClick */
+	
 	private class OnAceptarClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
 		{
-			fragmento.seleccionarColor(getColor());
+			onColorSelected(getColor());
 			dismiss();
 		}
 	}
@@ -91,6 +97,7 @@ public class ColorDialog extends WindowDialog
 		}
 	}
 	
+	/* SECTION Métodos Privados */
 	
 	private int getColor()
 	{
@@ -148,6 +155,8 @@ public class ColorDialog extends WindowDialog
 	    layoutParams.topMargin = (int) (paletaSecundaria.getTop() + y - Math.floor(imagenCursorSecundario.getMeasuredHeight() / 2));
 	    imagenCursorSecundario.setLayoutParams(layoutParams);
 	}
+	
+	/* SECTION Métodos Listener onTouch */
 	
 	private class OnPaletaPrincipalTouchListener implements OnTouchListener
 	{

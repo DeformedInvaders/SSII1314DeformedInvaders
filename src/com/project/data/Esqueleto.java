@@ -13,6 +13,8 @@ public class Esqueleto implements Serializable
 	private FloatArray vertices;
 	private ShortArray triangulos;
 	
+	/* SECTION Constructora */
+	
 	public Esqueleto()
 	{
 		
@@ -24,6 +26,8 @@ public class Esqueleto implements Serializable
 		this.vertices = vertices;
 		this.triangulos = triangulos;
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
 
 	public ShortArray getContorno()
 	{
