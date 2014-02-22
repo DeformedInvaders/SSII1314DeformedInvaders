@@ -33,7 +33,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		try
 		{
 			//Idle
-			player.setDataSource(manager.getDirectorioMusica(nombre));
+			player.setDataSource(manager.cargarAudioTemp(nombre));
 			//Initialized
 			player.prepare();
 			//Prepared

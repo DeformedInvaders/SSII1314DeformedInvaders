@@ -99,7 +99,7 @@ public class AudioFragment extends Fragment
 	private void actualizarBotones()
 	{
 		// Reproducir
-		if(manager.getNumFicherosDirectorioMusica() > 0)
+		if(manager.getNumFicherosDirectorioTemp() > 0)
 		{
 			botonPlay.setVisibility(View.VISIBLE);
 		}
@@ -143,7 +143,7 @@ public class AudioFragment extends Fragment
         			@Override
         			public void onPossitiveButtonClick()
         			{
-    		        	recorder.startRecording(manager.getDirectorioMusica(getText()));
+    		        	recorder.startRecording(manager.guardarAudioTemp(getText()));
     	            	
     	            	botonRecord.setBackgroundResource(R.drawable.icon_record_selected);
         			}
@@ -174,7 +174,7 @@ public class AudioFragment extends Fragment
 		{
             if(player.isStoped())
             {
-        		ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_audio_play_title), getString(R.string.text_button_play), getString(R.string.text_button_cancel), manager.getFicherosDirectorioMusica()) {
+        		ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_audio_play_title), getString(R.string.text_button_play), getString(R.string.text_button_cancel), manager.getFicherosDirectorioTemp()) {
         			
         			@Override
         			public void onSelectedPossitiveButtonClick(String selected)

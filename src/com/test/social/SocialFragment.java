@@ -107,7 +107,7 @@ public class SocialFragment extends Fragment
 		{
 			botonShare.setVisibility(View.VISIBLE);
 			
-			if(manager.getNumFicherosDirectorioImagen() > 0)
+			if(manager.getNumFicherosDirectorioTemp() > 0)
 			{
 				botonFoto.setVisibility(View.VISIBLE);
 			}
@@ -440,7 +440,7 @@ public class SocialFragment extends Fragment
 		{
 			if(evaluarConexionInternet())
 			{				
-				ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_social_photo_title), getString(R.string.text_button_send), getString(R.string.text_button_cancel), manager.getFicherosDirectorioImagen()) {
+				ChooseAlert alert = new ChooseAlert(getActivity(), getString(R.string.text_social_photo_title), getString(R.string.text_button_send), getString(R.string.text_button_cancel), manager.getFicherosDirectorioTemp()) {
 					
 					@Override
 					public void onSelectedPossitiveButtonClick(String selected)

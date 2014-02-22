@@ -31,7 +31,7 @@ public class AudioRecorderManager
 			//Initialized
 	    	recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 	    	//DataSourceConfigured
-	    	recorder.setOutputFile(manager.getDirectorioMusica(nombre));
+	    	recorder.setOutputFile(manager.guardarAudioTemp(nombre));
 	    	//DataSourceConfigured
 	    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 	    	//DataSourceConfigured

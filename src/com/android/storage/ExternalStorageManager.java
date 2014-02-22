@@ -12,56 +12,62 @@ import android.util.Log;
 
 public class ExternalStorageManager
 {
-	private static final String ROOTDIRECTORY = "/DeformInvaders";
-	private static final String MUSICDIRECTORY = "/Music";
-	private static final String IMAGEDICRETORY = "/Image";
+	private static final String ROOTDIRECTORY = "/DEFORMINVADERS";
+	private static final String MUSICDIRECTORY = "/MUSIC";
+	private static final String IMAGEDIRECTORY = "/IMAGE";
+	private static final String TEMPDIRECTORY = "/TMP";
+	private static final String MUSICEXTENSION = ".3gp";
+	private static final String IMAGEEXTENSION = ".png";
 	
 	public ExternalStorageManager()
 	{		
-		comprobarDirectorio(getDirectorioRaiz());
-		comprobarDirectorio(getDirectorioMusica());
-		comprobarDirectorio(getDirectorioImagen());
+		comprobarDirectorioRaiz();
+		comprobarDirectorioTemp();
 	}
+	
+	/* Dirección de Ficheros y Directorios */
 	
 	private String getDirectorioRaiz()
 	{
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + ROOTDIRECTORY;
 	}
 	
-	private String getDirectorioMusica()
+	private String getDirectorioAudio(String nombre)
 	{
-		return Environment.getExternalStorageDirectory().getAbsolutePath() + ROOTDIRECTORY + MUSICDIRECTORY;
+		return getDirectorioRaiz() + "/" + nombre.toUpperCase(Locale.getDefault()) + MUSICDIRECTORY;
 	}
 	
-	public String getDirectorioMusica(String name)
+	private String getFicheroAudio(String nombre, String movimiento)
 	{
-		return getDirectorioMusica(name, "3gp");
+		return getDirectorioAudio(nombre) + "/" + movimiento.toUpperCase(Locale.getDefault()) + MUSICEXTENSION;
 	}
 	
-	public String getDirectorioMusica(String name, String extension)
+	private String getDirectorioImagen(String nombre)
 	{
-		return getDirectorioMusica() + "/" + name.toUpperCase(Locale.getDefault()) + "." + extension;
+		return getDirectorioRaiz() + "/" + nombre.toUpperCase(Locale.getDefault()) + IMAGEDIRECTORY;
 	}
 	
-	private String getDirectorioImagen()
+	private String getFicheroImagen(String nombre)
 	{
-		return Environment.getExternalStorageDirectory().getAbsolutePath() + ROOTDIRECTORY + IMAGEDICRETORY;
+		return getDirectorioImagen(nombre) + "/" + nombre.toUpperCase(Locale.getDefault()) + IMAGEEXTENSION;
 	}
 	
-	public String getDirectorioImagen(String name)
+	private String getDirectorioTemp()
 	{
-		return getDirectorioImagen(name, "png");
+		return getDirectorioRaiz() + TEMPDIRECTORY;
 	}
 	
-	public String getDirectorioImagen(String name, String extension)
+	private String getFicheroTemp(String nombre)
 	{
-		return getDirectorioImagen() + "/" + name.toUpperCase(Locale.getDefault()) + "." + extension;
+		return getDirectorioTemp() + "/" + nombre.toUpperCase(Locale.getDefault()) + MUSICEXTENSION; 
 	}
 	
-	private boolean comprobarDirectorio(String directory)
+	/* Comprobar existencia y creación de Directorios */
+	
+	private boolean comprobarDirectorio(String file)
 	{
-		File dir = new File(directory);
-		if(!dir.exists())
+		File dir = new File(file);
+		if(dir.isDirectory() && !dir.exists())
 		{
 			dir.mkdirs();
 			return false;
@@ -70,10 +76,32 @@ public class ExternalStorageManager
 		return true;
 	}
 	
-	public int getNumFicherosDirectorio(String file)
+	private boolean comprobarDirectorioRaiz()
+	{
+		return comprobarDirectorio(getDirectorioRaiz());
+	}
+	
+	private boolean comprobarDirectorioAudio(String nombre)
+	{
+		return comprobarDirectorio(getDirectorioAudio(nombre));
+	}
+	
+	private boolean comprobarDirectorioImagen(String nombre)
+	{
+		return comprobarDirectorio(getDirectorioImagen(nombre));
+	}
+	
+	private boolean comprobarDirectorioTemp()
+	{
+		return comprobarDirectorio(getDirectorioTemp());
+	}
+	
+	/* Número de ficheros de Directorios */
+	
+	private int getNumFicherosDirectorio(String file)
 	{
 		File dir = new File(file);
-		if(dir.exists())
+		if(dir.isDirectory() && dir.exists())
 		{
 			return dir.list().length;
 		}
@@ -81,15 +109,22 @@ public class ExternalStorageManager
 		return 0;
 	}
 	
-	public int getNumFicherosDirectorioMusica()
+	public int getNumFicherosDirectorioAudio(String nombre)
 	{
-		return getNumFicherosDirectorio(getDirectorioMusica());
+		return getNumFicherosDirectorio(getDirectorioAudio(nombre));
 	}
 	
-	public int getNumFicherosDirectorioImagen()
+	public int getNumFicherosDirectorioImagen(String nombre)
 	{
-		return getNumFicherosDirectorio(getDirectorioImagen());
+		return getNumFicherosDirectorio(getDirectorioImagen(nombre));
 	}
+	
+	public int getNumFicherosDirectorioTemp()
+	{
+		return getNumFicherosDirectorio(getDirectorioTemp());
+	}
+	
+	/* Ficheros de Directorios */
 	
 	private String[] getFicherosDirectorio(String file)
 	{
@@ -111,30 +146,57 @@ public class ExternalStorageManager
 		return null;
 	}
 	
-	public String[] getFicherosDirectorioMusica()
+	public String[] getFicherosDirectorioAudio(String nombre)
 	{
-		return getFicherosDirectorio(getDirectorioMusica());
+		return getFicherosDirectorio(getDirectorioAudio(nombre));
 	}
 	
-	public String[] getFicherosDirectorioImagen()
+	public String[] getFicherosDirectorioImagen(String nombre)
 	{
-		return getFicherosDirectorio(getDirectorioImagen());
+		return getFicherosDirectorio(getDirectorioImagen(nombre));
 	}
+	
+	public String[] getFicherosDirectorioTemp()
+	{
+		return getFicherosDirectorio(getDirectorioTemp());
+	}
+	
+	/* Lectura y Escritura */
+	
+	public String cargarAudio(String nombre, String movimiento)
+	{
+		comprobarDirectorioAudio(nombre);
+		
+		return getFicheroAudio(nombre, movimiento);
+	}
+	
+	public boolean guardarAudio(String nombre, String movimiento)
+	{
+		comprobarDirectorioAudio(nombre);
+		
+		File audiotemp = new File(cargarAudioTemp(nombre));
+		if(audiotemp.exists())
+		{
+			return audiotemp.renameTo(new File(getFicheroAudio(nombre, movimiento)));
+		}
+		
+		return false;
+	}	
 	
 	public File cargarImagen(String nombre)
 	{
-		comprobarDirectorio(getDirectorioImagen());
+		comprobarDirectorioImagen(nombre);
 		
-		return new File(getDirectorioImagen(nombre));
+		return new File(getFicheroImagen(nombre));
 	}
 	
 	public boolean guardarImagen(Bitmap bitmap, String nombre)
 	{
-		comprobarDirectorio(getDirectorioImagen());
+		comprobarDirectorioImagen(nombre);
 	
 		try
 		{
-			File file = new File(getDirectorioImagen(nombre));
+			File file = new File(getFicheroImagen(nombre));
 			FileOutputStream data = new FileOutputStream(file);
 			
 			bitmap.compress(Bitmap.CompressFormat.PNG, 85, data);
@@ -155,5 +217,21 @@ public class ExternalStorageManager
 		}
 		
 		return false;
+	}
+	
+	/* Lectura y Escritura Temporal */
+	
+	public String cargarAudioTemp(String movimiento)
+	{
+		comprobarDirectorioTemp();
+		
+		return getFicheroTemp(movimiento);
+	}
+	
+	public String guardarAudioTemp(String movimiento)
+	{
+		comprobarDirectorioTemp();
+		
+		return getFicheroTemp(movimiento);
 	}
 }

@@ -29,78 +29,60 @@ public abstract class AudioAlert
 	private int progreso;
 	private AudioRecorderManager audioRecord;
 	private AudioPlayerManager audioPlayer;
-	private String personaje;
+	private String movimiento;
 	
-	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, ExternalStorageManager manager, String personaje)
-	{
-		alert = new AlertDialog.Builder(context);
+	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, ExternalStorageManager manager, String nombre)
+	{		
+		movimiento = nombre;
 		
-		alert.setTitle(title);
-		alert.setMessage(messege);
-		
-		tiempo = 2500;
-		progreso = 0;
-		
-		this.personaje = personaje;
 		audioRecord = new AudioRecorderManager(manager);
-		audioPlayer = new AudioPlayerManager(manager){
+		audioPlayer = new AudioPlayerManager(manager) {
+			
+			@Override
 			public void onPlayerCompletion()
 			{
 				botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
 			}
 		};
 		
+		alert = new AlertDialog.Builder(context);
+		
+		alert.setTitle(title);
+		alert.setMessage(messege);
+		
 		LinearLayout layout = new LinearLayout(context);
+		
 		cuenta = new TextView(context);
-		cuenta.setText(tiempo/1000 + ":" + tiempo%100);
 		cuenta.setTextSize(20);
 		cuenta.setGravity(Gravity.CENTER);
+		
 		progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
 		progressBar.setProgress(progreso);
 		
-		LinearLayout layoutBotones = new LinearLayout(context);
-		botonRecAudio = new ImageButton(context);
-		botonPlayAudio = new ImageButton(context);
-		botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
-		botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
-		botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
-		botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
-		
-		botonPlayAudio.setVisibility(View.INVISIBLE);
-		
-		layoutBotones.addView(botonRecAudio);
-		layoutBotones.addView(botonPlayAudio);
-		layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
+			LinearLayout layoutBotones = new LinearLayout(context);
+			
+			botonRecAudio = new ImageButton(context);
+			botonPlayAudio = new ImageButton(context);
+			
+			botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
+			botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
+			
+			botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
+			botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
+			
+			botonPlayAudio.setVisibility(View.INVISIBLE);
+			
+			layoutBotones.addView(botonRecAudio);
+			layoutBotones.addView(botonPlayAudio);
+			layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
 		
 		layout.addView(cuenta, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		layout.addView(progressBar, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		layout.addView(layoutBotones, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		layout.setOrientation(LinearLayout.VERTICAL);
-		alert.setView(layout);
 		
-		timer = new CountDownTimer(2500, 10) 
-		{
-
-			@Override
-			public void onFinish() 
-			{ 
-				actualizarBotones();
-				audioRecord.stopRecording();
-				tiempo = 2500;
-				progreso = 0;
-			}
-
-			@Override
-			public void onTick(long arg0) 
-			{
-				tiempo = tiempo-arg0;
-				progreso = (int) (100 - 100*tiempo/2500);
-				
-				cuenta.setText(tiempo/1000 + ":" + tiempo%100);
-				progressBar.setProgress(progreso);
-			}
-        };
-        
+		alert.setView(layout);
+		        
 		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -114,12 +96,50 @@ public abstract class AudioAlert
 				onNegativeButtonClick();
 			}
 		});
+		
+		timer = new CountDownTimer(2500, 10) {
+			
+			@Override
+			public void onFinish() 
+			{ 
+				audioRecord.stopRecording();
+				
+				botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
+				botonPlayAudio.setVisibility(View.VISIBLE);
+				
+				reiniciarContadores();
+			}
+
+			@Override
+			public void onTick(long interval) 
+			{				
+				actualizarContadores(interval);
+			}
+        };
+        
+        reiniciarContadores();
 	}
 	
-	private void actualizarBotones()
+	private void reiniciarContadores()
 	{
-		botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
-		botonPlayAudio.setVisibility(View.VISIBLE);
+		tiempo = 2500;
+		progreso = 0;
+		
+		actualizarProgreso();
+	}
+	
+	private void actualizarContadores(long interval)
+	{
+		tiempo = tiempo - interval;
+		progreso = (int) (100 - 100*tiempo/2500);
+		
+		actualizarProgreso();
+	}
+	
+	private void actualizarProgreso()
+	{
+		cuenta.setText(tiempo/1000 + ":" + tiempo%100);
+		progressBar.setProgress(progreso);
 	}
 	
 	private class OnRecAudioClickListener implements OnClickListener
@@ -127,10 +147,10 @@ public abstract class AudioAlert
 		@Override
 		public void onClick(View v)
 		{
-			//TODO Grabar audio
 			botonRecAudio.setBackgroundResource(R.drawable.icon_record_started);
+			
 			timer.start();
-			audioRecord.startRecording(personaje);
+			audioRecord.startRecording(movimiento);
 		}	
 	}
 	
@@ -139,9 +159,8 @@ public abstract class AudioAlert
 		@Override
 		public void onClick(View v)
 		{
-			//TODO Reproducir audio
 			botonPlayAudio.setBackgroundResource(R.drawable.icon_play_selected);
-			audioPlayer.startPlaying(personaje);
+			audioPlayer.startPlaying(movimiento);
 		}	
 	}
 	

@@ -1,7 +1,6 @@
 package com.create.deform;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,15 +8,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.android.alert.AudioAlert;
-import com.android.alert.TextInputAlert;
 import com.android.storage.ExternalStorageManager;
 import com.lib.utils.FloatArray;
 import com.project.data.Esqueleto;
 import com.project.data.Textura;
-import com.project.main.MainFragment;
 import com.project.main.OpenGLFragment;
 import com.project.main.R;
 
@@ -138,6 +134,7 @@ public class DeformFragment extends OpenGLFragment
 		else 
 		{
 			botonGrabar.setVisibility(View.VISIBLE);
+			botonAudio.setVisibility(View.VISIBLE);
 			
 			if(!canvas.isEstadoGrabacion())
 			{
@@ -145,11 +142,11 @@ public class DeformFragment extends OpenGLFragment
 				botonEliminar.setVisibility(View.VISIBLE);
 				botonDeformar.setVisibility(View.VISIBLE);
 				botonReiniciar.setVisibility(View.VISIBLE);
-				botonAudio.setVisibility(View.VISIBLE);
 					
 				//TODO audio ready
 				if(canvas.isGrabacionReady())
 				{
+					botonAudio.setVisibility(View.VISIBLE);
 					botonReproducir.setVisibility(View.VISIBLE);
 				}
 			}
