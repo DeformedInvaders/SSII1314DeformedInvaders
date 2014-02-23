@@ -25,7 +25,7 @@ import com.project.data.MapaBits;
 public abstract class OpenGLRenderer implements Renderer
 {	
 	// Parámetros de la Cámara
-	private float xLeft, xRight, yTop, yBot, xCentro, yCentro;
+	private float xLeft, xRight, yTop, yBottom, xCentro, yCentro;
 	
 	// Copia Seguridad de la Cámara
 	private boolean camaraGuardada;
@@ -41,25 +41,44 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final float MAX_DISTANCE_PIXELS = 10;
 	
 	// Parámetros de Texturas
-	protected static final int numeroTexturas = 4;
-	protected int[] nombreTexturas;
+	private static final int NUM_TEXTURES = 5;
+	private int[] nombreTexturas;
+	
+	private static final int POS_TEXTURE_BACKGROUND = 0;
+	protected static final int POS_TEXTURE_SKELETON = 1;
+	private static final int POS_TEXTURE_STICKER = 2;
+	
+	private FloatBuffer coordTextura;
+	private FloatBuffer[] vertTextura;
+	
+	protected int indiceTexturaFondo;
+	protected boolean[] cargadaTextura;
 	
 	// Marco
 	private float marcoA, marcoB, marcoC;
 	private FloatBuffer recMarcoA, recMarcoB;
 	
 	// Contexto
-	protected Context context;
+	protected Context mContext;
 	
 	/* SECTION Constructoras */
 	
 	public OpenGLRenderer(Context context)
-	{
-		this.context = context;
-		this.nombreTexturas = new int[numeroTexturas];
+	{				
+		mContext = context;
 		
 		// Marcos
 		actualizarMarcos();
+		
+		// Textura
+		indiceTexturaFondo = -1;
+		
+		nombreTexturas = new int[NUM_TEXTURES];
+		cargadaTextura = new boolean[NUM_TEXTURES];
+		vertTextura = new FloatBuffer[NUM_TEXTURES];
+		
+		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
+		coordTextura = construirBufferListaPuntos(texture);
 		
 		// Se inicializan los parámetros de la cámara en el 
 		// método onSurfaceChanged llamado automáticamente
@@ -78,7 +97,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{		
+	{			
 		// Sombreado Suave
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		
@@ -103,7 +122,7 @@ public abstract class OpenGLRenderer implements Renderer
 		// Perspectiva Ortogonal
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, xLeft, xRight, yBot, yTop);
+		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
 		
 		// Reiniciar Matriz de ModeladoVista
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -111,26 +130,26 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height)
+	public void onSurfaceChanged(GL10 gl, int screenWidth, int screenHeight)
 	{		
 		// Cambio de Puerto de Vista
-		this.width = width;
-		this.height = height;
+		width = screenWidth;
+		height = screenHeight;
 		gl.glViewport(0, 0, width, height);
 		
 		// Perspectiva Ortogonal proporcional al Puerto de Vista
-		this.xRight = width;
-		this.xLeft = 0.0f;
-		this.yTop = height;
-		this.yBot = 0.0f;
-		this.xCentro = (xRight + xLeft)/2.0f;
-		this.yCentro = (yTop + yBot)/2.0f;
+		xRight = width;
+		xLeft = 0.0f;
+		yTop = height;
+		yBottom = 0.0f;
+		xCentro = (xRight + xLeft)/2.0f;
+		yCentro = (yTop + yBottom)/2.0f;
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, xLeft, xRight, yBot, yTop);
+		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
 		
 		// Copia de Seguridad de la Cámara
-		this.camaraGuardada = false;
+		camaraGuardada = false;
 		
 		// Marco
 		actualizarMarcos();
@@ -138,6 +157,15 @@ public abstract class OpenGLRenderer implements Renderer
 		// Reiniciar la Matriz de ModeladoVista
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		
+		// Fondo 
+		if(indiceTexturaFondo != -1)
+		{
+			cargarTexturaFondo(gl, indiceTexturaFondo, POS_TEXTURE_BACKGROUND);
+			cargadaTextura[POS_TEXTURE_BACKGROUND] = true;
+		}
+		
+		actualizarFondo();
 	}
 	
 	@Override
@@ -146,7 +174,7 @@ public abstract class OpenGLRenderer implements Renderer
 		// Persepectiva Ortogonal para métodos de modificación de la cámara
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, xLeft, xRight, yBot, yTop);
+		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
 		
 		// Limpiar Buffer de Color y de Profundidad
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -161,27 +189,29 @@ public abstract class OpenGLRenderer implements Renderer
 	public void zoom(float factor)
 	{	
 		float newAncho = (xRight-xLeft)*factor;
-		float newAlto = (yTop-yBot)*factor;
+		float newAlto = (yTop-yBottom)*factor;
 		
-		this.xRight = xCentro + newAncho/2.0f;
-		this.xLeft = xCentro - newAncho/2.0f;
-		this.yTop = yCentro + newAlto/2.0f;
-		this.yBot = yCentro - newAlto/2.0f;
+		xRight = xCentro + newAncho/2.0f;
+		xLeft = xCentro - newAncho/2.0f;
+		yTop = yCentro + newAlto/2.0f;
+		yBottom = yCentro - newAlto/2.0f;
 		
 		actualizarMarcos();
+		actualizarFondo();
 	}
 	
 	public void drag(float dWorldX, float dWorldY)
 	{			
-		this.xLeft += dWorldX;
-		this.xRight += dWorldX;
-		this.yBot += dWorldY;
-		this.yTop += dWorldY;
+		xLeft += dWorldX;
+		xRight += dWorldX;
+		yBottom += dWorldY;
+		yTop += dWorldY;
 		
-		this.xCentro = (xRight + xLeft)/2.0f;
-        this.yCentro = (yTop + yBot)/2.0f;
+		xCentro = (xRight + xLeft)/2.0f;
+        yCentro = (yTop + yBottom)/2.0f;
         
         actualizarMarcos();
+        actualizarFondo();
 	}
 	
 	public void drag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
@@ -200,15 +230,16 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	public void restore()
 	{
-        this.xRight = width; 
-        this.xLeft = 0.0f;
-        this.yTop = height;
-        this.yBot = 0.0f;
+        xRight = width; 
+        xLeft = 0.0f;
+        yTop = height;
+        yBottom = 0.0f;
         
-        this.xCentro = (xRight + xLeft)/2.0f;
-        this.yCentro = (yTop + yBot)/2.0f;
+        xCentro = (xRight + xLeft)/2.0f;
+        yCentro = (yTop + yBottom)/2.0f;
         
         actualizarMarcos();
+        actualizarFondo();
 	}
 	
 	/* Copia de Seguridad de la Cámara */
@@ -218,7 +249,7 @@ public abstract class OpenGLRenderer implements Renderer
 		lastXLeft = xLeft;
 		lastXRight = xRight;
 		lastYTop = yTop;
-		lastYBot = yBot;
+		lastYBot = yBottom;
 		lastXCentro = xCentro;
 		lastYCentro = yCentro;
 		
@@ -232,7 +263,7 @@ public abstract class OpenGLRenderer implements Renderer
 			xLeft = lastXLeft;
 			xRight = lastXRight;
 			yTop = lastYTop;
-			yBot = lastYBot;
+			yBottom = lastYBot;
 			xCentro = lastXCentro;
 			yCentro = lastYCentro;
 		}
@@ -295,7 +326,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	protected float convertToWorldYCoordinate(float pixelY, float screenHeight)
 	{
-		return yBot + (yTop-yBot)*(screenHeight-pixelY)/screenHeight;
+		return yBottom + (yTop-yBottom)*(screenHeight-pixelY)/screenHeight;
 	}
 	
 	protected float convertToPixelXCoordinate(float worldX, float screenWidth)
@@ -305,12 +336,12 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	protected float convertToPixelYCoordinate(float worldY, float screenHeight)
 	{
-		return screenHeight - (worldY - yBot)*screenHeight/(yTop-yBot);
+		return screenHeight - (worldY - yBottom)*screenHeight/(yTop-yBottom);
 	}
 	
 	protected boolean inPixelInCanvas(float worldX, float worldY)
 	{
-		return worldX >= xLeft && worldX <= xRight && worldY >= yBot && worldY <= yTop;
+		return worldX >= xLeft && worldX <= xRight && worldY >= yBottom && worldY <= yTop;
 	}
 	
 	/* SECTION Métodos de Búsqueda de Pixeles */
@@ -519,52 +550,6 @@ public abstract class OpenGLRenderer implements Renderer
 		return construirBufferListaPuntos(arrayVertices);
 	}
 	
-	// Construcción de Coordenadas de Textura a partir de una lista de puntos.
-	protected FloatArray construirTextura(FloatArray puntos, float width, float height)
-	{
-		FloatArray textura = new FloatArray(puntos.size);
-		
-		int i = 0;
-		while(i < puntos.size)
-		{
-			float x = puntos.get(i);
-			float y = puntos.get(i+1);
-			
-			// Conversión a Pixeles
-			float px = (x - xLeft)*width/(xRight-xLeft);
-			float py = (y - yBot)*height/(yTop-yBot);
-			
-			// Conversión a Coordenadas de Textura
-			float cx = px / width;
-			float cy = (height - py)/ height;
-			
-			textura.add(cx);
-			textura.add(cy);
-			
-			i = i+2;
-		}
-		return textura;
-	}
-	
-	protected FloatArray cargarTextura(GL10 gl, int indicePegatina, int[] nombreTexturas, int posPegatina)
-	{        
-		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), indicePegatina);
-		
-		float height = bitmap.getHeight()/2;
-		float width = bitmap.getWidth()/2;
-		
-		cargarTextura(gl, bitmap, nombreTexturas, posPegatina);
-		bitmap.recycle();
-		
-		FloatArray puntos = new FloatArray();
-		puntos.add(-width);	puntos.add(-height);
-		puntos.add(-width);	puntos.add(height);
-		puntos.add(width);	puntos.add(-height);
-		puntos.add(width);	puntos.add(height);	
-		
-		return puntos;
-	}
-	
 	/* SECTION Metodos de Actualización de Buffers de Pintura */
 	
 	// Actualiza los valores de un buffer de pintura para puntos
@@ -631,7 +616,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private void actualizarMarcos()
 	{
-		float height = yTop - yBot;
+		float height = yTop - yBottom;
 		float width = xRight - xLeft;
 		
 		marcoA = 0.8f * height;
@@ -649,7 +634,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 		
-			gl.glTranslatef(xLeft, yBot, 1.0f);
+			gl.glTranslatef(xLeft, yBottom, 1.0f);
 			
 			gl.glPushMatrix();
 				
@@ -793,13 +778,42 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 	/* TESTING */
 	
+	/* SECTION Métodos Texturas */
+	
+	// Construcción de Coordenadas de Textura a partir de una lista de puntos.
+	protected FloatArray construirTextura(FloatArray puntos, float width, float height)
+	{
+		FloatArray textura = new FloatArray(puntos.size);
+		
+		int i = 0;
+		while(i < puntos.size)
+		{
+			float x = puntos.get(i);
+			float y = puntos.get(i+1);
+			
+			// Conversión a Pixeles
+			float px = (x - xLeft)*width/(xRight-xLeft);
+			float py = (y - yBottom)*height/(yTop-yBottom);
+			
+			// Conversión a Coordenadas de Textura
+			float cx = px / width;
+			float cy = (height - py)/ height;
+			
+			textura.add(cx);
+			textura.add(cy);
+			
+			i = i+2;
+		}
+		return textura;
+	}
+	
 	// Cargado de Textura
-	protected void cargarTextura(GL10 gl, Bitmap textura, int[] nombreTextura, int pos)
+	protected void cargarTextura(GL10 gl, Bitmap textura, int posTextura)
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 			
-			gl.glGenTextures(1, nombreTextura, pos);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTextura[pos]);
+			gl.glGenTextures(1, nombreTexturas, posTextura);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
 			
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
@@ -809,12 +823,52 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
+	protected void cargarTexturaPegatinas(GL10 gl, int indiceTextura, int pos)
+	{     
+		int posTextura = POS_TEXTURE_STICKER + pos;
+		
+		if(!cargadaTextura[posTextura])
+		{
+			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+			
+			float height = bitmap.getHeight()/2;
+			float width = bitmap.getWidth()/2;
+			
+			cargarTextura(gl, bitmap, posTextura);
+			bitmap.recycle();
+			
+			FloatArray puntos = new FloatArray();
+			puntos.add(-width);	puntos.add(-height);
+			puntos.add(-width);	puntos.add(height);
+			puntos.add(width);	puntos.add(-height);
+			puntos.add(width);	puntos.add(height);	
+			
+			vertTextura[posTextura] = construirBufferListaPuntos(puntos);
+			cargadaTextura[posTextura] = true;
+		}
+	}
+	
+	protected void descargarTexturaPegatinas(int pos)
+	{
+		int posTextura = POS_TEXTURE_STICKER + pos;
+		
+		cargadaTextura[posTextura] = false;
+	}
+	
+	protected void cargarTexturaFondo(GL10 gl, int indiceTextura, int posTextura)
+	{        
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		
+		cargarTextura(gl, bitmap, posTextura);
+		bitmap.recycle();
+	}
+	
 	// Dibujar Textura para una Lista de Puntos asociada a una Lista de Coordenadas de Textura
-	private void dibujarTextura(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int[] nombreTextura, int posTextura)
+	private void dibujarTextura(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int posTextura)
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTextura[posTextura]);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
 			gl.glFrontFace(GL10.GL_CW);
 			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			
@@ -830,20 +884,47 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
-	protected void dibujarTextura(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int[] nombreTextura, int posTextura)
+	protected void dibujarTextura(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int posTextura)
 	{
-		dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, nombreTextura, posTextura);
+		dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, posTextura);
 	}
 	
-	protected void dibujarPegatina(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, float x, float y, int[] nombreTextura, int posTextura)
+	protected void dibujarPegatina(GL10 gl, float x, float y, int pos)
 	{
-		gl.glPushMatrix();
+		int posTextura = POS_TEXTURE_STICKER + pos;
 		
-			gl.glTranslatef(x, y, 0.0f);
+		if(cargadaTextura[posTextura])
+		{
+			gl.glPushMatrix();
 			
-			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, bufferPuntos, bufferCoordTextura, nombreTextura, posTextura);
+				gl.glTranslatef(x, y, 0.0f);
+				
+				dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
+		
+			gl.glPopMatrix();
+		}
+	}
 	
-		gl.glPopMatrix();
+	protected void dibujarTexturaFondo(GL10 gl)
+	{
+		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
+		{
+			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[POS_TEXTURE_BACKGROUND], coordTextura, POS_TEXTURE_BACKGROUND);
+		}
+	}
+	
+	private void actualizarFondo()
+	{
+		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
+		{			
+			FloatArray puntos = new FloatArray();
+			puntos.add(xLeft);	puntos.add(yBottom);
+			puntos.add(xLeft);	puntos.add(yTop);
+			puntos.add(xRight);	puntos.add(yBottom);
+			puntos.add(xRight);	puntos.add(yTop);	
+			
+			vertTextura[POS_TEXTURE_BACKGROUND] = construirBufferListaPuntos(puntos);
+		}
 	}
 	
 	/* SECTION Métodos Genéricos */

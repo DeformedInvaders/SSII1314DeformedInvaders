@@ -40,12 +40,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferLineaActual;
 	
 	// Pegatinas
-	private Pegatinas pegatinas;
-	private FloatBuffer coordPegatina;
-	private FloatBuffer puntosOjos, puntosBoca, puntosArma;
-	
+	private Pegatinas pegatinas;	
 	private boolean pegatinaAnyadida;
-	private boolean pegatinaOjosCargada, pegatinaBocaCargada, pegatinaArmaCargada;
 	
 	// Esqueleto
 	private ShortArray contorno;
@@ -91,16 +87,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         listaLineas = new ArrayList<Polilinea>();
         lineaActual = null;
         
-		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
-        
-        pegatinas = new Pegatinas();
-        coordPegatina = construirBufferListaPuntos(texture);
-        
+        pegatinas = new Pegatinas();        
         pegatinaActual = 0;
         pegatinaAnyadida = false;
-        pegatinaOjosCargada = false;
-        pegatinaBocaCargada = false;
-        pegatinaArmaCargada = false;
         
         color = Color.WHITE;
         
@@ -156,44 +145,22 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Cargar Pegatinas
-		if(!pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
-			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceOjos(), nombreTexturas, 1);
-			puntosOjos = construirBufferListaPuntos(puntos);
-			pegatinaOjosCargada = true;
-		}
-		
-		if(!pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
-		{
-			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceBoca(), nombreTexturas, 2);
-			puntosBoca = construirBufferListaPuntos(puntos);
-			pegatinaBocaCargada = true;
-		}
-		
-		if(!pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
-		{
-			FloatArray puntos = cargarTextura(gl, pegatinas.getIndiceArma(), nombreTexturas, 3);
-			puntosArma = construirBufferListaPuntos(puntos);
-			pegatinaArmaCargada = true;
+			if(pegatinas.isCargada(i))
+			{
+				cargarTexturaPegatinas(gl, pegatinas.getIndice(i), i);
+			}
 		}
 		
 		// Dibujar Pegatinas
-		if(pegatinaOjosCargada && pegatinas.getIndiceOjos() != -1)
+		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
-			int indice = pegatinas.getVerticeOjos();
-			dibujarPegatina(gl, puntosOjos, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 1);
-		}
-		
-		if(pegatinaBocaCargada && pegatinas.getIndiceBoca() != -1)
-		{
-			int indice = pegatinas.getVerticeBoca();
-			dibujarPegatina(gl, puntosBoca, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 2);
-		}
-		
-		if(pegatinaArmaCargada && pegatinas.getIndiceArma() != -1)
-		{
-			int indice = pegatinas.getVerticeArma();
-			dibujarPegatina(gl, puntosArma, coordPegatina, vertices.get(2*indice), vertices.get(2*indice+1), nombreTexturas, 3);
+			if(pegatinas.isCargada(i))
+			{
+				int indice = pegatinas.getVertice(i);
+				dibujarPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+			}
 		}
 	}
 	
@@ -229,10 +196,12 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		pegatinas = new Pegatinas();
         pegatinaActual = 0;
         pegatinaAnyadida = false;
-        pegatinaOjosCargada = false;
-        pegatinaBocaCargada = false;
-        pegatinaArmaCargada = false;
-		
+        
+        for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
+        {
+        	descargarTexturaPegatinas(i);
+        }
+        
 		anteriores.clear();
 		siguientes.clear();
 		
@@ -317,19 +286,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			pegatinas.setPegatina(pegatinaActual, j, tipoPegatinaActual);
 			
-			switch(tipoPegatinaActual)
-			{
-				case 0:
-					pegatinaOjosCargada = false;
-				break;
-				case 1:
-					pegatinaBocaCargada = false;
-				break;
-				case 2:
-					pegatinaArmaCargada = false;
-				break;
-			}
-			
+			descargarTexturaPegatinas(tipoPegatinaActual);			
 			pegatinaAnyadida = true;
 			
 			anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
@@ -472,9 +429,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		color = Color.WHITE;
 		listaLineas = new ArrayList<Polilinea>();
 		pegatinas = new Pegatinas();
-		pegatinaOjosCargada = false;
-		pegatinaBocaCargada = false;
-		pegatinaArmaCargada = false;
+
+		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
+        {
+        	descargarTexturaPegatinas(i);
+        }
 		
 		Iterator<Accion> it = pila.iterator();
 		while(it.hasNext())

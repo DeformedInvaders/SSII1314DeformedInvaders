@@ -9,7 +9,7 @@ import com.project.main.OpenGLSurfaceView;
 public class MultitouchGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
-    private final MultitouchOpenGLRenderer renderer;
+    private MultitouchOpenGLRenderer renderer;
 
     public MultitouchGLSurfaceView(Context context, AttributeSet attrs)
     {

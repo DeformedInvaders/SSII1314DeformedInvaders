@@ -34,9 +34,14 @@ public class ExternalStorageManager
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + ROOTDIRECTORY;
 	}
 	
+	private String getDirectorioPersonaje(String nombre)
+	{
+		return getDirectorioRaiz() + "/" + nombre.toUpperCase(Locale.getDefault());
+	}
+	
 	private String getDirectorioAudio(String nombre)
 	{
-		return getDirectorioRaiz() + "/" + nombre.toUpperCase(Locale.getDefault()) + MUSICDIRECTORY;
+		return getDirectorioPersonaje(nombre) + MUSICDIRECTORY;
 	}
 	
 	private String getFicheroAudio(String nombre, String movimiento)
@@ -46,7 +51,7 @@ public class ExternalStorageManager
 	
 	private String getDirectorioImagen(String nombre)
 	{
-		return getDirectorioRaiz() + "/" + nombre.toUpperCase(Locale.getDefault()) + IMAGEDIRECTORY;
+		return getDirectorioPersonaje(nombre) + IMAGEDIRECTORY;
 	}
 	
 	private String getFicheroImagen(String nombre)
@@ -69,33 +74,30 @@ public class ExternalStorageManager
 	private boolean comprobarDirectorio(String file)
 	{
 		File dir = new File(file);
-		if(dir.isDirectory() && !dir.exists())
+		if(!dir.exists())
 		{
 			dir.mkdirs();
 			return false;
 		}
 		
-		return true;
+		return dir.isDirectory();
 	}
 	
-	private boolean comprobarDirectorioRaiz()
+	private void comprobarDirectorioRaiz()
 	{
-		return comprobarDirectorio(getDirectorioRaiz());
+		comprobarDirectorio(getDirectorioRaiz());
 	}
 	
-	private boolean comprobarDirectorioAudio(String nombre)
+	private void comprobarDirectorioPersonaje(String nombre)
 	{
-		return comprobarDirectorio(getDirectorioAudio(nombre));
+		comprobarDirectorio(getDirectorioPersonaje(nombre));
+		comprobarDirectorio(getDirectorioImagen(nombre)); 
+		comprobarDirectorio(getDirectorioAudio(nombre));
 	}
 	
-	private boolean comprobarDirectorioImagen(String nombre)
+	private void comprobarDirectorioTemp()
 	{
-		return comprobarDirectorio(getDirectorioImagen(nombre));
-	}
-	
-	private boolean comprobarDirectorioTemp()
-	{
-		return comprobarDirectorio(getDirectorioTemp());
+		comprobarDirectorio(getDirectorioTemp());
 	}
 	
 	/* SECTION Métodos Número de ficheros de Directorios */
@@ -167,14 +169,14 @@ public class ExternalStorageManager
 	
 	public String cargarAudio(String nombre, String movimiento)
 	{
-		comprobarDirectorioAudio(nombre);
+		comprobarDirectorioPersonaje(nombre);
 		
 		return getFicheroAudio(nombre, movimiento);
 	}
 	
 	public boolean guardarAudio(String nombre, String movimiento)
 	{
-		comprobarDirectorioAudio(nombre);
+		comprobarDirectorioPersonaje(nombre);
 		
 		File audiotemp = new File(cargarAudioTemp(nombre));
 		if(audiotemp.exists())
@@ -187,14 +189,14 @@ public class ExternalStorageManager
 	
 	public File cargarImagen(String nombre)
 	{
-		comprobarDirectorioImagen(nombre);
+		comprobarDirectorioPersonaje(nombre);
 		
 		return new File(getFicheroImagen(nombre));
 	}
 	
 	public boolean guardarImagen(Bitmap bitmap, String nombre)
 	{
-		comprobarDirectorioImagen(nombre);
+		comprobarDirectorioPersonaje(nombre);
 	
 		try
 		{

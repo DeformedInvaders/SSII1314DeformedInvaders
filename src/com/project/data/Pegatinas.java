@@ -2,116 +2,61 @@ package com.project.data;
 
 import java.io.Serializable;
 
-import com.lib.utils.FloatArray;
-
 public class Pegatinas implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+	private static final int NUM_PEGATINAS = 3;
 	
 	// ID Drawable
-	private int indiceOjos, indiceBoca, indiceArma;
+	private int[] indicePegatinas;
 
 	// Vertice Asociado
-	private int verticeOjos, verticeBoca, verticeArma;
-	
-	// Coordenadas Textura
-	private FloatArray puntosOjos, puntosBoca, puntosArma;
+	private int[] verticePegatinas;
 	
 	/* SECTION Constructora */
 	
 	public Pegatinas()
 	{
-		indiceOjos = -1;
-		indiceBoca = -1;
-		indiceArma = -1;
+		indicePegatinas = new int[NUM_PEGATINAS];
+		verticePegatinas = new int[NUM_PEGATINAS];
 		
-		verticeOjos = -1;
-		verticeBoca = -1;
-		verticeArma = -1;
+		for(int i = 0; i < NUM_PEGATINAS; i++)
+		{
+			indicePegatinas[i] = -1;
+			verticePegatinas[i] = -1;
+		}
 	}
 	
 	/* SECTION Métodos de Modificación de Información */
 	
 	public void setPegatina(int indice, int vertice, int tipo)
 	{
-		switch(tipo)
+		if(tipo >= 0 && tipo < NUM_PEGATINAS)
 		{
-			case 0:
-				indiceOjos = indice;
-				verticeOjos = vertice;
-			break;
-			case 1:
-				indiceBoca = indice;
-				verticeBoca = vertice;
-			break;
-			case 2:
-				indiceArma = indice;
-				verticeArma = vertice;
-			break;
+			indicePegatinas[tipo] = indice;
+			verticePegatinas[tipo] = vertice;
 		}
-	}
-	
-	// TODO Comprimir en un solo método
-	
-	public void setPuntosOjos(FloatArray puntosOjos)
-	{
-		this.puntosOjos = puntosOjos;
-	}
-
-	public FloatArray getPuntosBoca()
-	{
-		return puntosBoca;
-	}
-
-	public void setPuntosBoca(FloatArray puntosBoca)
-	{
-		this.puntosBoca = puntosBoca;
-	}
-
-	public FloatArray getPuntosArma()
-	{
-		return puntosArma;
-	}
-
-	public void setPuntosArma(FloatArray puntosArma)
-	{
-		this.puntosArma = puntosArma;
 	}
 	
 	/* SECTION Métodos de Obtención de Información */
 
-	public int getIndiceOjos()
+	public boolean isCargada(int tipo)
 	{
-		return indiceOjos;
+		return indicePegatinas[tipo] != -1;
 	}
-
-	public int getIndiceBoca()
+	
+	public int getIndice(int tipo)
 	{
-		return indiceBoca;
+		return indicePegatinas[tipo];
 	}
-
-	public int getIndiceArma()
+	
+	public int getVertice(int tipo)
 	{
-		return indiceArma;
+		return verticePegatinas[tipo];
 	}
-
-	public int getVerticeOjos()
+	
+	public int getNumPegatinas()
 	{
-		return verticeOjos;
-	}
-
-	public int getVerticeBoca()
-	{
-		return verticeBoca;
-	}
-
-	public int getVerticeArma()
-	{
-		return verticeArma;
-	}
-
-	public FloatArray getPuntosOjos()
-	{
-		return puntosOjos;
+		return NUM_PEGATINAS;
 	}
 }
