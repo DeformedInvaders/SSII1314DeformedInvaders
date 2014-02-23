@@ -58,7 +58,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarMano()
 	{
 		renderer.seleccionarMano();
-		setEstado(TTouchEstado.Detectors);
+		setEstado(TTouchEstado.CamaraDetectors);
 	}
 	
 	public void seleccionarPincel()

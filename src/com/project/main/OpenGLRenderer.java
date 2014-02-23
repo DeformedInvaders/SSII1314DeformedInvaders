@@ -186,7 +186,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* SECTION Métodos de Modificación de Cámara */
 	
-	public void zoom(float factor)
+	public void camaraZoom(float factor)
 	{	
 		float newAncho = (xRight-xLeft)*factor;
 		float newAlto = (yTop-yBottom)*factor;
@@ -199,6 +199,8 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarMarcos();
 		actualizarFondo();
 	}
+	
+	public void coordZoom(float factor) { }
 	
 	public void drag(float dWorldX, float dWorldY)
 	{			
@@ -213,6 +215,8 @@ public abstract class OpenGLRenderer implements Renderer
         actualizarMarcos();
         actualizarFondo();
 	}
+	
+	public void coordsDrag(float dWorldX, float dWorldY) { }
 	
 	public void drag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{

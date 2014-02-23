@@ -4,8 +4,10 @@ import android.view.MotionEvent;
 
 import com.project.main.OpenGLRenderer;
 
-public class MoveGestureDetector
+public class MoveDetector
 {
+	private static final long MAX_TAP_DURATION = 300;
+	
 	private OpenGLRenderer renderer;
 	
 	private boolean started;
@@ -16,14 +18,24 @@ public class MoveGestureDetector
 	
 	private long lastTap;
 	
+	private boolean camara;
+	
 	/* SECTION Constructora */
 	
-	public MoveGestureDetector(OpenGLRenderer renderer)
+	public MoveDetector(OpenGLRenderer renderer)
 	{
 		this.renderer = renderer;
 		this.started = false;
 		this.bloqueado = false;
 		this.lastTap = System.currentTimeMillis();
+		this.camara = true;
+	}
+	
+	/* SECTION Métodos de Modificación de Estado */
+	
+	public void setEstado(boolean camara)
+	{
+		this.camara = camara;
 	}
 	
 	/* SECTION Métodos Listener onTouch */
@@ -37,13 +49,34 @@ public class MoveGestureDetector
     		switch(action)
 			{
 				case MotionEvent.ACTION_DOWN:
-					dragOnDown(pixelX, pixelY, screenWidth, screenHeight);
+					if(camara)
+		    		{
+						dragOnCamaraDown(pixelX, pixelY, screenWidth, screenHeight);
+		    		}
+					else
+					{
+						dragOnCoordDown(pixelX, pixelY, screenWidth, screenHeight);
+					}
 				break;
 				case MotionEvent.ACTION_MOVE:
-					dragOnMove(pixelX, pixelY, screenWidth, screenHeight);
+					if(camara)
+		    		{
+						dragOnCamaraMove(pixelX, pixelY, screenWidth, screenHeight);
+		    		}
+					else
+					{
+						dragOnCoordMove(pixelX, pixelY, screenWidth, screenHeight);
+					}
 				break;
 				case MotionEvent.ACTION_UP:
-					dragOnUp();
+					if(camara)
+		    		{
+						dragOnCamaraUp();
+		    		}
+					else
+					{
+						dragOnCoordUp();
+					}
 				break;
 			}
     	}
@@ -60,19 +93,19 @@ public class MoveGestureDetector
     
     public boolean onStopEvent(MotionEvent event)
     {
-    	dragOnUp();
+    	dragOnCamaraUp();
     	bloqueado = true;
     	
     	return true;
     }
     
-    private void dragOnDown(float pixelX, float pixelY, float screenWith, float screenHeight)
+    private void dragOnCamaraDown(float pixelX, float pixelY, float screenWith, float screenHeight)
     {
     	if(!started)
     	{	    	
     		long time = System.currentTimeMillis();
     		
-    		if(Math.abs(lastTap - time) < 500)
+    		if(Math.abs(lastTap - time) < MAX_TAP_DURATION)
     		{
     			// Double Touch
     			renderer.restore();
@@ -91,7 +124,7 @@ public class MoveGestureDetector
     	}
     }
     
-    private void dragOnMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
+    private void dragOnCamaraMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
     {
     	if(started)
     	{
@@ -100,7 +133,35 @@ public class MoveGestureDetector
     	}
     }
     
-    private void dragOnUp()
+    private void dragOnCamaraUp()
+    {
+    	if(started)
+    	{	    	
+	    	started = false;
+    	}
+    }
+    
+    private void dragOnCoordDown(float pixelX, float pixelY, float screenWith, float screenHeight)
+    {
+    	if(!started)
+    	{	    	
+			// Drag
+	    	lastPixelX = pixelX;
+	    	lastPixelY = pixelY;
+	    	
+			started = true;
+    	}
+    }
+    
+    private void dragOnCoordMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
+    {
+    	if(started)
+    	{
+			renderer.drag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
+    	}
+    }
+    
+    private void dragOnCoordUp()
     {
     	if(started)
     	{	    	

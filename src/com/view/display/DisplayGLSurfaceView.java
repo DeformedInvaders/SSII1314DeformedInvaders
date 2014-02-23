@@ -99,7 +99,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarRetoque()
 	{
 		renderer.seleccionarRetoque(getHeight(), getWidth());
-		setEstado(TTouchEstado.Detectors);
+		setEstado(TTouchEstado.CamaraDetectors);
 		
 		requestRender();
 	}

@@ -5,11 +5,10 @@ import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import com.android.touch.MoveGestureDetector;
-import com.android.touch.ScaleGestureListener;
+import com.android.touch.MoveDetector;
+import com.android.touch.ScaleDetector;
 import com.android.touch.TTouchEstado;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
@@ -24,8 +23,8 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private TTouchEstado estado;
 	
 	// Detectores de Gestos
-	private ScaleGestureDetector scaleDetector;
-	private MoveGestureDetector dragDetector;
+	private ScaleDetector scaleDetector;
+	private MoveDetector moveDetector;
     
 	/* SECTION Constructora */
 	
@@ -59,13 +58,18 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     	super.setRenderMode(RENDERMODE_WHEN_DIRTY);
     	
         // Detectors
-    	scaleDetector = new ScaleGestureDetector(mContext, new ScaleGestureListener(renderer));
-        dragDetector = new MoveGestureDetector(renderer);
+    	scaleDetector = new ScaleDetector(mContext, renderer);
+        moveDetector = new MoveDetector(renderer);
+        
+        setEstado(estado);
     }
     
     public void setEstado(TTouchEstado estado)
     {
     	this.estado = estado;
+    	
+    	scaleDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
+    	moveDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
     }
     
     /* SECTION Métodos Listener onTouch */
@@ -76,10 +80,11 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     	{
     		case SimpleTouch:
     			return onSingleTouch(v, event);
-    		case Detectors:
-    			return onDetectorsTouch(v, event);
     		case MultiTouch:
     			return onMultiTouch(v, event);
+    		case CamaraDetectors:
+    		case CoordDetectors:
+    			return onDetectorsTouch(v, event);
     	}
     	
     	return false;
@@ -129,12 +134,12 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 				float screenWidth = getWidth();
 				float screenHeight = getHeight();
 				
-				dragDetector.onTouchEvent(event, pixelX, pixelY, screenWidth, screenHeight);
+				moveDetector.onTouchEvent(event, pixelX, pixelY, screenWidth, screenHeight);
 			}
 			else
 			{
 				scaleDetector.onTouchEvent(event);
-				dragDetector.onStopEvent(event);
+				moveDetector.onStopEvent(event);
 			}
 			
 			requestRender();
