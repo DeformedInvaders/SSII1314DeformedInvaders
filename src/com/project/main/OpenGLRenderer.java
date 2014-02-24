@@ -33,7 +33,7 @@ public abstract class OpenGLRenderer implements Renderer
 	private float lastXLeft, lastXRight, lastYTop, lastYBot, lastXCentro, lastYCentro;
 	
 	// Parámetros del Puerto de Vista
-	private int height, width;
+	private int screenHeight, screenWidth;
 	
 	//Parámetros de la Escena
 	protected static final int SIZELINE = 3;
@@ -88,9 +88,9 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* SECTION Métodos Abstractos */
 	
-	protected abstract void onTouchDown(float x, float y, float width, float height, int pos);
-	protected abstract void onTouchMove(float x, float y, float width, float height, int pos);
-	protected abstract void onTouchUp(float x, float y, float width, float height, int pos);
+	protected abstract void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
 	protected abstract void onMultiTouchEvent();
 	protected abstract void reiniciar();
 	
@@ -131,17 +131,17 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 gl, int screenWidth, int screenHeight)
+	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
 		// Cambio de Puerto de Vista
-		width = screenWidth;
-		height = screenHeight;
-		gl.glViewport(0, 0, width, height);
+		screenWidth = width;
+		screenHeight = height;
+		gl.glViewport(0, 0, screenWidth, screenHeight);
 		
 		// Perspectiva Ortogonal proporcional al Puerto de Vista
-		xRight = width;
+		xRight = screenWidth;
 		xLeft = 0.0f;
-		yTop = height;
+		yTop = screenHeight;
 		yBottom = 0.0f;
 		xCentro = (xRight + xLeft)/2.0f;
 		yCentro = (yTop + yBottom)/2.0f;
@@ -231,9 +231,9 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	public void camaraRestore()
 	{
-        xRight = width; 
+        xRight = screenWidth; 
         xLeft = 0.0f;
-        yTop = height;
+        yTop = screenHeight;
         yBottom = 0.0f;
         
         xCentro = (xRight + xLeft)/2.0f;
@@ -348,14 +348,14 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private void actualizarMarcos()
 	{
-		float height = yTop - yBottom;
-		float width = xRight - xLeft;
+		float camaraHeight = yTop - yBottom;
+		float camaraWidth = xRight - xLeft;
 		
-		marcoB = 0.1f * height;
-		marcoA = height - 2*marcoB;
-		marcoC = (width - marcoA)/2;
+		marcoB = 0.1f * camaraHeight;
+		marcoA = camaraHeight - 2*marcoB;
+		marcoC = (camaraWidth - marcoA)/2;
 		
-		float[] recA = {0, 0, 0, height, marcoC, 0, marcoC, height};		
+		float[] recA = {0, 0, 0, camaraHeight, marcoC, 0, marcoC, camaraHeight};		
 		recMarcoA = construirBufferListaPuntos(recA);
 		
 		float[] recB = {0, 0, 0, marcoB, marcoA, 0, marcoA, marcoB};
@@ -962,7 +962,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* SECTION Métodos de Construcción de Texturas */
 	
-	protected FloatArray construirTextura(FloatArray puntos, float width, float height)
+	protected FloatArray construirTextura(FloatArray puntos, float textureWidth, float textureHeight)
 	{
 		FloatArray textura = new FloatArray(puntos.size);
 		
@@ -972,15 +972,9 @@ public abstract class OpenGLRenderer implements Renderer
 			float frameX = puntos.get(i);
 			float frameY = puntos.get(i+1);
 			
-			float worldX = convertFromFrameXCoordinate(frameX);
-			float worldY = convertFromFrameYCoordinate(frameY);
-			
-			float pixelX = convertToPixelXCoordinate(worldX, width);
-			float pixelY = convertToPixelYCoordinate(worldY, height);
-			
 			// Conversión a Coordenadas de Textura
-			float coordX = pixelX / width;
-			float coordY = pixelY/ height;
+			float coordX = frameX / textureWidth;
+			float coordY = (textureHeight - frameY) / textureHeight;
 			
 			textura.add(coordX);
 			textura.add(coordY);
@@ -1018,17 +1012,17 @@ public abstract class OpenGLRenderer implements Renderer
 		{
 			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 			
-			float height = bitmap.getHeight()/2;
-			float width = bitmap.getWidth()/2;
+			float textureHeight = bitmap.getHeight()/2;
+			float textureWidth = bitmap.getWidth()/2;
 			
 			cargarTextura(gl, bitmap, posTextura);
 			bitmap.recycle();
 			
 			FloatArray puntos = new FloatArray();
-			puntos.add(-width);	puntos.add(-height);
-			puntos.add(-width);	puntos.add(height);
-			puntos.add(width);	puntos.add(-height);
-			puntos.add(width);	puntos.add(height);	
+			puntos.add(-textureWidth);	puntos.add(-textureHeight);
+			puntos.add(-textureWidth);	puntos.add(textureHeight);
+			puntos.add(textureWidth);	puntos.add(-textureHeight);
+			puntos.add(textureWidth);	puntos.add(textureHeight);	
 			
 			vertTextura[posTextura] = construirBufferListaPuntos(puntos);
 			cargadaTextura[posTextura] = true;
