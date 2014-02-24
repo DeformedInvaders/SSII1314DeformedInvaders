@@ -25,23 +25,25 @@ public class DeformFragment extends OpenGLFragment
 	
 	private DeformDataSaved dataSaved;
 	private ExternalStorageManager manager;
+	private String nombreMovimiento;
 	
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 		
 	/* SECTION Constructora */
 	
-	public static final DeformFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m)
+	public static final DeformFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m, String n)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(e, t, m);
+		fragment.setParameters(e, t, m, n);
 		return fragment;
 	}
 	
-	private void setParameters(Esqueleto e, Textura t, ExternalStorageManager m)
+	private void setParameters(Esqueleto e, Textura t, ExternalStorageManager m, String n)
 	{	
 		esqueleto = e;
 		textura = t;
 		manager = m;
+		nombreMovimiento = n;
 	}
 	
 	/* SECTION Métodos Fragment */
@@ -272,7 +274,7 @@ public class DeformFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 			
-			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, "gg") 
+			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_animation_title), getString(R.string.text_audio_animation), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, nombreMovimiento) 
 			{
 				
 				@Override

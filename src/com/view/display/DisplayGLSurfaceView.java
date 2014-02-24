@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 
+import com.android.audio.AudioPlayerManager;
 import com.android.touch.TTouchEstado;
 import com.project.data.Personaje;
 import com.project.main.OpenGLSurfaceView;
@@ -15,6 +16,8 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     private DisplayOpenGLRenderer renderer;
     
 	private CountDownTimer timer;
+	
+	private AudioPlayerManager audioPlayer;
     
 	/* SECTION Constructora */
 	

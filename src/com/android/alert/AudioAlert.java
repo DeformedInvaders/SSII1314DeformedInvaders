@@ -41,8 +41,8 @@ public abstract class AudioAlert
 		movimiento = nombre;
 		
 		audioRecord = new AudioRecorderManager(manager);
-		audioPlayer = new AudioPlayerManager(manager) {
-			
+		audioPlayer = new AudioPlayerManager(manager) 
+		{
 			@Override
 			public void onPlayerCompletion()
 			{
@@ -60,26 +60,28 @@ public abstract class AudioAlert
 		cuenta = new TextView(context);
 		cuenta.setTextSize(20);
 		cuenta.setGravity(Gravity.CENTER);
+		cuenta.setText("0"+tiempo/1000+":"+tiempo%100+"0");
 		
 		progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
 		progressBar.setProgress(progreso);
 		
-			LinearLayout layoutBotones = new LinearLayout(context);
-			
-			botonRecAudio = new ImageButton(context);
-			botonPlayAudio = new ImageButton(context);
-			
-			botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
-			botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
-			
-			botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
-			botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
-			
-			botonPlayAudio.setVisibility(View.INVISIBLE);
-			
-			layoutBotones.addView(botonRecAudio);
-			layoutBotones.addView(botonPlayAudio);
-			layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
+		LinearLayout layoutBotones = new LinearLayout(context);
+		
+		botonRecAudio = new ImageButton(context);
+		botonPlayAudio = new ImageButton(context);
+		
+		botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
+		botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
+		
+		botonRecAudio.setBackgroundResource(R.drawable.icon_record_started);
+		botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
+		
+		botonPlayAudio.setVisibility(View.INVISIBLE);
+		
+		layoutBotones.addView(botonRecAudio);
+		layoutBotones.addView(botonPlayAudio);
+		layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
+		layoutBotones.setGravity(Gravity.CENTER);
 		
 		layout.addView(cuenta, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.addView(progressBar, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -88,7 +90,8 @@ public abstract class AudioAlert
 		
 		alert.setView(layout);
 		        
-		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() 
+		{
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -96,7 +99,8 @@ public abstract class AudioAlert
 			}
 		});
 
-		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() 
+		{
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -104,23 +108,24 @@ public abstract class AudioAlert
 			}
 		});
 		
-		timer = new CountDownTimer(2500, 10) {
+		timer = new CountDownTimer(3000, 1) 
+		{
 			
 			@Override
 			public void onFinish() 
 			{ 
 				audioRecord.stopRecording();
 				
-				botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
 				botonPlayAudio.setVisibility(View.VISIBLE);
+				botonRecAudio.setVisibility(View.VISIBLE);
 				
 				reiniciarContadores();
 			}
 
 			@Override
-			public void onTick(long interval) 
+			public void onTick(long millisUntilFinished) 
 			{				
-				actualizarContadores(interval);
+				actualizarContadores(millisUntilFinished);
 			}
         };
         
@@ -134,10 +139,11 @@ public abstract class AudioAlert
 	
 	private void reiniciarContadores()
 	{
-		tiempo = 2500;
-		progreso = 0;
+		tiempo = 3000;
+		progreso = 0;	
 		
-		actualizarProgreso();
+		cuenta.setText("0"+tiempo/1000+":"+tiempo%100+"0");
+		progressBar.setProgress(progreso);
 	}
 	
 	/* SECTION Métodos Públicos */
@@ -149,17 +155,16 @@ public abstract class AudioAlert
 	
 	/* SECTION Métodos Privados */
 	
-	private void actualizarContadores(long interval)
+	private void actualizarContadores(long millisUntilFinished)
 	{
-		tiempo = tiempo - interval;
-		progreso = (int) (100 - 100*tiempo/2500);
-		
-		actualizarProgreso();
+		progreso = (int) (100*(tiempo - millisUntilFinished)/tiempo);	
+		actualizarProgreso(millisUntilFinished);
 	}
 	
-	private void actualizarProgreso()
+	private void actualizarProgreso(long millisUntilFinished)
 	{
-		cuenta.setText(tiempo/1000 + ":" + tiempo%100);
+		cuenta.setText("0" + millisUntilFinished/1000 + ":" + (millisUntilFinished%100));
+		
 		progressBar.setProgress(progreso);
 	}
 	
@@ -170,7 +175,7 @@ public abstract class AudioAlert
 		@Override
 		public void onClick(View v)
 		{
-			botonRecAudio.setBackgroundResource(R.drawable.icon_record_started);
+			botonRecAudio.setVisibility(View.INVISIBLE);
 			
 			timer.start();
 			audioRecord.startRecording(movimiento);

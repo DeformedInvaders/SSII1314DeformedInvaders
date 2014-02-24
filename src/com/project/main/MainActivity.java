@@ -236,6 +236,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 						
 						if(internalManager.guardarPersonaje(personajeActual))
 						{
+							//TODO grabar Audio
+							externalManager.guardarAudio(value, getString(R.string.title_animation_section_run));
+							externalManager.guardarAudio(value, getString(R.string.title_animation_section_jump));
+							externalManager.guardarAudio(value, getString(R.string.title_animation_section_down));
+							externalManager.guardarAudio(value, getString(R.string.title_animation_section_attack));
+							
 							listaPersonajes.add(personajeActual);
 							personajeActual = null;
 							
