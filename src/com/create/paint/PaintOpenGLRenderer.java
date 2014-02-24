@@ -56,7 +56,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private int color;
 	
 	// Texturas
-	private int canvasHeight, canvasWidth;
 	private TCapturaEstado estadoCaptura;
 	
 	private MapaBits textura;
@@ -119,7 +118,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarEsqueleto(gl);
 			
 			// Capturar Pantalla
-		    textura = capturaPantallaPolariod(gl, canvasWidth, canvasHeight);
+		    textura = capturaPantalla(gl);
 		    
 		    // Construir Textura
 			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
@@ -400,12 +399,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		estado = TPaintEstado.Pegatinas;
 	}
 	
-	public void seleccionarCaptura(int height, int width)
+	public void seleccionarCaptura()
 	{
 		guardarPolilinea();
-		
-		canvasHeight = height;
-		canvasWidth = width;
 		
 		estado = TPaintEstado.Captura;
 		estadoCaptura = TCapturaEstado.Capturando;

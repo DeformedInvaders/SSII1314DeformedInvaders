@@ -477,7 +477,7 @@ public abstract class OpenGLRenderer implements Renderer
 	    return textura;
 	}
 		
-	protected MapaBits capturaPantallaPolariod(GL10 gl, int width, int height)
+	protected MapaBits capturaPantalla(GL10 gl)
 	{		
 		return capturaPantalla(gl, (int) marcoC, (int) marcoB, (int) marcoA, (int) marcoA);
 	}

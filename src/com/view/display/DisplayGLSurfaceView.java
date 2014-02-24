@@ -134,7 +134,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	public Bitmap getCapturaPantalla()
 	{
-		renderer.seleccionarCaptura(getHeight(), getWidth());
+		renderer.seleccionarCaptura();
 		setEstado(TTouchEstado.SimpleTouch);
 		
 		requestRender();

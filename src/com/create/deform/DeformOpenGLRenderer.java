@@ -323,6 +323,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
 		
+		float frameX = convertToFrameXCoordinate(worldX);
+		float frameY = convertToFrameYCoordinate(worldY);
+		
 		if(inPixelInCanvas(worldX, worldY))
 		{
 			int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pointer);
@@ -337,11 +340,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*MAX_DISTANCE_PIXELS)
 			{
-				handles.set(2*indiceHandleSeleccionado, worldX);
-				handles.set(2*indiceHandleSeleccionado+1, worldY);
+				handles.set(2*indiceHandleSeleccionado, frameX);
+				handles.set(2*indiceHandleSeleccionado+1, frameY);
 				
-				handleSeleccionado.set(4*pointer+2, worldX);
-				handleSeleccionado.set(4*pointer+3, worldY);
+				handleSeleccionado.set(4*pointer+2, frameX);
+				handleSeleccionado.set(4*pointer+3, frameY);
 			}
 		}
 	}

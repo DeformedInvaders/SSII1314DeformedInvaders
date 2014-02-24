@@ -46,7 +46,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	
 	// Captura Pantalla
 	private Bitmap captura;
-	private int canvasHeight, canvasWidth;
 	private TCapturaEstado estadoCaptura; 
 	
 	// Texturas
@@ -139,7 +138,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 					if(estadoCaptura == TCapturaEstado.Capturando)
 					{
 						// Capturar Pantalla
-					    MapaBits textura = capturaPantallaPolariod(gl, canvasWidth, canvasHeight);
+					    MapaBits textura = capturaPantalla(gl);
 						captura = textura.getBitmap();
 						
 						// Desactivar Modo Captura
@@ -194,13 +193,10 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TCapturaEstado.Retocando;
 	}
 	
-	public void seleccionarCaptura(int height, int width)
+	public void seleccionarCaptura()
 	{
 		if(estado == TDisplayEstado.Captura)
-		{
-			canvasHeight = height;
-			canvasWidth = width;
-			
+		{			
 			estadoCaptura = TCapturaEstado.Capturando;
 		}
 	}
