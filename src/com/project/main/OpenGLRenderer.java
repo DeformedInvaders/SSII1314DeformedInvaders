@@ -969,19 +969,21 @@ public abstract class OpenGLRenderer implements Renderer
 		int i = 0;
 		while(i < puntos.size)
 		{
-			float x = puntos.get(i);
-			float y = puntos.get(i+1);
+			float frameX = puntos.get(i);
+			float frameY = puntos.get(i+1);
 			
-			// Conversión a Pixeles
-			float px = (x - xLeft)*width/(xRight-xLeft);
-			float py = (y - yBottom)*height/(yTop-yBottom);
+			float worldX = convertFromFrameXCoordinate(frameX);
+			float worldY = convertFromFrameYCoordinate(frameY);
+			
+			float pixelX = convertToPixelXCoordinate(worldX, width);
+			float pixelY = convertToPixelYCoordinate(worldY, height);
 			
 			// Conversión a Coordenadas de Textura
-			float cx = px / width;
-			float cy = (height - py)/ height;
+			float coordX = pixelX / width;
+			float coordY = pixelY/ height;
 			
-			textura.add(cx);
-			textura.add(cy);
+			textura.add(coordX);
+			textura.add(coordY);
 			
 			i = i+2;
 		}
