@@ -83,6 +83,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     		case MultiTouch:
     			return onMultiTouch(v, event);
     		case CamaraDetectors:
+    			return onDetectorsTouch(v, event);
     		case CoordDetectors:
     			return onDetectorsTouch(v, event);
     	}
@@ -126,19 +127,19 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     {
     	if(event != null)
     	{			
+			float screenWidth = getWidth();
+			float screenHeight = getHeight();
+			
 			if(event.getPointerCount() == 1)
 			{
 	    		float pixelX = event.getX();
 				float pixelY = event.getY();
 				
-				float screenWidth = getWidth();
-				float screenHeight = getHeight();
-				
 				moveDetector.onTouchEvent(event, pixelX, pixelY, screenWidth, screenHeight);
 			}
 			else
 			{
-				scaleDetector.onTouchEvent(event);
+				scaleDetector.onTouchEvent(event, screenWidth, screenHeight);
 				moveDetector.onStopEvent(event);
 			}
 			

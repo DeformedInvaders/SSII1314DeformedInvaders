@@ -64,6 +64,11 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		return triangulado;
 	}
 	
+	public boolean seleccionarRetoque()
+	{
+		return renderer.seleccionarRetoque();
+	}
+	
 	/* SECTION Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
@@ -71,9 +76,9 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		return renderer.getEsqueleto();
 	}
 
-	public boolean poligonoCompleto()
+	public boolean isPoligonoCompleto()
 	{
-		return renderer.poligonoCompleto();
+		return renderer.isPoligonoCompleto();
 	}
 	
 	/* SECTION Métodos de Guardado de Información */

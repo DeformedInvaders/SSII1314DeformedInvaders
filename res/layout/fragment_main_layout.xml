@@ -14,7 +14,7 @@
             android:background="@drawable/icon_main_create" />
 
         <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonMain4"
+            android:id="@+id/imageButtonMain2"
             android:contentDescription="@string/desc_main_play"
             android:background="@drawable/icon_main_game" />
 
@@ -22,15 +22,6 @@
             android:id="@+id/imageButtonMain3"
             android:contentDescription="@string/desc_main_select"
             android:background="@drawable/icon_main_select" />
-        
-    </LinearLayout>
-    
-        <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
-
-        <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonMain2"
-            android:contentDescription="@string/desc_main_test"
-            android:background="@drawable/icon_main_test" />
         
     </LinearLayout>
 

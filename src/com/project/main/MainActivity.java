@@ -28,7 +28,6 @@ import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
 import com.project.loading.LoadingFragment;
-import com.test.main.TestFragment;
 import com.view.select.SelectionFragment;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener
@@ -180,12 +179,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		Toast.makeText(getApplication(), R.string.error_play, Toast.LENGTH_SHORT).show();
     }
 	
-	@Override
-    public void onMainTestButtonClicked()
-    {
-    	changeFragment(TestFragment.newInstance());
-    }
-	
 	/* SECTION Métodos Design Fragment */
     
 	@Override
@@ -199,15 +192,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	{
     		personajeActual.setEsqueleto(esqueleto);    		
     		changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto()));
-    	}
-    }
-    
-	@Override
-    public void onDesignTestButtonClicked(boolean test)
-    {
-    	if(!test)
-    	{
-    		Toast.makeText(getApplication(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
     	}
     }
 	
@@ -417,11 +401,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     		{
     			estado = TEstado.Selection;
     			setTitle(R.string.title_selection_phase);
-    		}
-    		else if(fragmento instanceof TestFragment)
-    		{
-    			estado = TEstado.Test;
-    			setTitle(R.string.title_test_phase);
     		}
     	}
     }

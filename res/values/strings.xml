@@ -95,6 +95,7 @@
 			<string name="error_play">Coming Soon</string>
 			<string name="error_design">Something wrong happened with the skeleton.</string>
 			<string name="error_triangle">The polygon is not simple.</string>
+			<string name="error_retouch">The polygon is not inside the frame.</string>
 			<string name="error_paint">Something wrong happened with the texture.</string>
 			<string name="error_deform">There are movements undefined.</string>
 			<string name="error_animation">Something wrong happened with the movements.</string>

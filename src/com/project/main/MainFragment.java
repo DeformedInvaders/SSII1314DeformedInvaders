@@ -19,7 +19,7 @@ public class MainFragment extends OpenGLFragment
 	private MainFragmentListener mCallback;
 	
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCrear, botonJugar, botonSeleccionar, botonTest;
+	private ImageButton botonCrear, botonJugar, botonSeleccionar;
 	
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
@@ -43,7 +43,6 @@ public class MainFragment extends OpenGLFragment
 	{
 		public void onMainCreateButtonClicked();
 		public void onMainSelectButtonClicked();
-		public void onMainTestButtonClicked();
 		public void onMainPlayButtonClicked();
     }
 	
@@ -87,13 +86,11 @@ public class MainFragment extends OpenGLFragment
 		}
 		
 		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
-		botonTest = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
 		botonSeleccionar = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
-		botonJugar = (ImageButton) rootView.findViewById(R.id.imageButtonMain4);
+		botonJugar = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
 		
 		botonCrear.setOnClickListener(new OnAddClickListener());
 		botonSeleccionar.setOnClickListener(new OnViewClickListener());
-		botonTest.setOnClickListener(new OnTestClickListener());
 		botonJugar.setOnClickListener(new OnGameClickListener());
 		
 		reiniciarInterfaz();
@@ -110,7 +107,6 @@ public class MainFragment extends OpenGLFragment
 		botonCrear = null;
 		botonJugar = null;
 		botonSeleccionar = null;
-		botonTest = null;
 	}
 	
 	@Override
@@ -171,15 +167,6 @@ public class MainFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			mCallback.onMainPlayButtonClicked();
-		}
-	}
-	
-	private class OnTestClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			mCallback.onMainTestButtonClicked();
 		}
 	}
 }

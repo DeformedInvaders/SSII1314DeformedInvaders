@@ -2,5 +2,5 @@ package com.create.design;
 
 public enum TDesignEstado
 {
-	Dibujando, Triangulando, Terminado
+	Dibujando, Triangulando, Retocando, Terminado
 }

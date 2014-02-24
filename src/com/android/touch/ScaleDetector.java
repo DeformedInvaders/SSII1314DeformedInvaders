@@ -16,8 +16,10 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 	private OpenGLRenderer renderer;
 	private ScaleGestureDetector detector;
 	
+	private float lastPixelX, lastPixelY;
+	private float screenWidth, screenHeight;
+	
 	private boolean camara;
-    private float factor;
 	
     /* SECTION Contructora */
     
@@ -26,7 +28,6 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 		this.renderer = renderer;
 		this.detector = new ScaleGestureDetector(context, this);
 		this.camara = true;
-		this.factor = NULL_SCALE_FACTOR;
 	}
 	
 	/* SECTION Métodos de Modificación de Estado */
@@ -38,38 +39,53 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 	
 	/* SECTION Métodos Listener onTouch */
 	
-	public boolean onTouchEvent(MotionEvent event) 
+	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight) 
     {
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		
 		return detector.onTouchEvent(event);
     }
 	
 	/* SECTION Métodos Listener onScale */
 	
 	@Override
+	public boolean onScaleBegin(ScaleGestureDetector detector)
+	{
+		lastPixelX = detector.getFocusX();
+		lastPixelY = detector.getFocusY();
+		
+		return true;
+	}
+	
+	@Override
 	public boolean onScale(ScaleGestureDetector detector)
 	{
-        factor = detector.getScaleFactor();
+        float factor = detector.getScaleFactor();
         
-        if(factor > MAX_SCALE_FACTOR)
-        {
-        	factor = MIN_SCALE_FACTOR;
-        }
-        else if(factor < MIN_SCALE_FACTOR)
+        if(factor >= MAX_SCALE_FACTOR)
         {
         	factor = MAX_SCALE_FACTOR;
+        }
+        else if(factor <= MIN_SCALE_FACTOR)
+        {
+        	factor = MIN_SCALE_FACTOR;
         }
         
     	if(camara)
     	{
+    		factor = 2 * NULL_SCALE_FACTOR - factor;
+    		
     		renderer.camaraZoom(factor);
     	}
     	else
     	{
-    		renderer.coordZoom(factor);
+    		float pixelX = detector.getFocusX();
+    		float pixelY = detector.getFocusY();    		
+    		
+    		renderer.coordZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
     	}
-        
-    	factor = NULL_SCALE_FACTOR;
-        
+    	
         return true;
     }
 

@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.android.touch.TTouchEstado;
 import com.project.data.Esqueleto;
 import com.project.main.OpenGLFragment;
 import com.project.main.R;
@@ -32,7 +34,6 @@ public class DesignFragment extends OpenGLFragment
 	public interface DesignFragmentListener
 	{
         public void onDesignReadyButtonClicked(Esqueleto e);
-        public void onDesignTestButtonClicked(boolean test);
     }
 	
 	/* SECTION Métodos Fragment */
@@ -123,7 +124,7 @@ public class DesignFragment extends OpenGLFragment
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if(canvas.poligonoCompleto())
+		if(canvas.isPoligonoCompleto())
 		{
 			botonListo.setVisibility(View.VISIBLE);
 			botonReset.setVisibility(View.VISIBLE);
@@ -140,11 +141,22 @@ public class DesignFragment extends OpenGLFragment
 		{
 			if(canvas.seleccionarTriangular())
 			{
-				mCallback.onDesignReadyButtonClicked(canvas.getEsqueleto());
+				canvas.setEstado(TTouchEstado.CoordDetectors);
+				
+				if(canvas.seleccionarRetoque())
+				{
+					mCallback.onDesignReadyButtonClicked(canvas.getEsqueleto());
+				}
+				else
+				{
+					Toast.makeText(getActivity(), R.string.error_retouch, Toast.LENGTH_SHORT).show();
+				}
 			}
 			else
 			{
-				mCallback.onDesignTestButtonClicked(false);
+				canvas.setEstado(TTouchEstado.SimpleTouch);
+				
+				Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -155,6 +167,7 @@ public class DesignFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
+			canvas.setEstado(TTouchEstado.SimpleTouch);
 			
 			reiniciarInterfaz();
 			actualizarInterfaz();
@@ -166,7 +179,10 @@ public class DesignFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onDesignTestButtonClicked(canvas.seleccionarTriangular());
+			if(!canvas.seleccionarTriangular())
+			{
+				Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
+			}
 			
 			reiniciarInterfaz();
 			actualizarInterfaz();

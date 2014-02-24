@@ -8,7 +8,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
@@ -38,11 +37,12 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	// Animación
 	private Movimientos movimientos;
 	private List<FloatArray> listaVerticesAnimacion;
-	private FloatArray verticesAnimacion;
-	private FloatBuffer triangulosAnimacion;
-	private FloatBuffer contornoAnimacion;
 	private int posicionAnimacion;
 	private TDisplayEstado estado;
+	
+	private FloatArray verticesAnimacion;
+	private FloatBuffer bufferTriangulosAnimacion;
+	private FloatBuffer bufferContornoAnimacion;
 	
 	// Captura Pantalla
 	private Bitmap captura;
@@ -107,7 +107,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		if(personajeCargado)
 		{
 			// Textura
-			cargarTextura(gl, bitmap, POS_TEXTURE_SKELETON);
+			cargarTexturaEsqueleto(gl, bitmap);
 			
 			// Pegatinas
 			for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
@@ -132,7 +132,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		{
 			if(estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
 			{
-				dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, vertices);
+				dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, vertices);
 			
 				if(estado == TDisplayEstado.Captura)
 				{
@@ -146,13 +146,13 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						estadoCaptura = TCapturaEstado.Terminado;
 						
 						// Restaurar posición anterior de la Cámara
-						restore();
+						camaraRestore();
 						
 						super.onDrawFrame(gl);
 						
 						dibujarTexturaFondo(gl);
 						
-						dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, vertices);
+						dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, vertices);
 					}
 					else if(estadoCaptura == TCapturaEstado.Retocando)
 					{
@@ -163,26 +163,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				dibujarEsqueleto(gl, triangulosAnimacion, contornoAnimacion, verticesAnimacion);
-			}
-		}
-	}
-	
-	private void dibujarEsqueleto(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatArray vertices)
-	{				
-		// Textura
-		dibujarTextura(gl, triangulos, bufferCoords, POS_TEXTURE_SKELETON);
-			
-		// Contorno
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
-		
-		// Pegatinas
-		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
-		{
-			if(pegatinas.isCargada(i))
-			{
-				int indice = pegatinas.getVertice(i);
-				dibujarPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+				dibujarPersonaje(gl, bufferTriangulosAnimacion, bufferContornoAnimacion, bufferCoords, pegatinas, verticesAnimacion);
 			}
 		}
 	}
@@ -237,15 +218,15 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		posicionAnimacion = 0;
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-		triangulosAnimacion = construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		bufferTriangulosAnimacion = construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
+		bufferContornoAnimacion = construirBufferListaIndicePuntos(contorno, verticesAnimacion);
 	}
 	
 	public void reproducirAnimacion()
 	{
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-		actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
-		actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
+		actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
+		actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
 		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();
 	}
 	

@@ -130,7 +130,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// Textura
-		cargarTextura(gl, bitmap, POS_TEXTURE_SKELETON);
+		cargarTexturaEsqueleto(gl, bitmap);
 		
 		// Pegatinas
 		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
@@ -149,11 +149,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		if(estado == TDeformEstado.Reproducir)
 		{			
-			dibujarEsqueleto(gl, triangulosAnimacion, contornoAnimacion, verticesAnimacion);
+			dibujarPersonaje(gl, triangulosAnimacion, contornoAnimacion, bufferCoords, pegatinas, verticesAnimacion);
 		}
 		else
 		{
-			dibujarEsqueleto(gl, bufferTriangulos, bufferContorno, verticesModificados);
+			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, verticesModificados);
 			
 			if(estado != TDeformEstado.Deformar)
 			{
@@ -168,25 +168,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			// Seleccionado
 			dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
-		}
-	}
-	
-	private void dibujarEsqueleto(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatArray vertices)
-	{
-		// Textura
-		dibujarTextura(gl, triangulos, bufferCoords, POS_TEXTURE_SKELETON);
-			
-		// Contorno
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
-		
-		// Pegatinas
-		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
-		{
-			if(pegatinas.isCargada(i))
-			{
-				int indice = pegatinas.getVertice(i);
-				dibujarPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
-			}
 		}
 	}
 	

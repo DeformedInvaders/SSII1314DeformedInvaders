@@ -116,7 +116,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			salvarCamara();
 			
 			// Restaurar Cámara posición inicial
-			restore();
+			camaraRestore();
 			
 			dibujarEsqueleto(gl);
 			
@@ -159,7 +159,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			if(pegatinas.isCargada(i))
 			{
 				int indice = pegatinas.getVertice(i);
-				dibujarPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+				dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
 			}
 		}
 	}

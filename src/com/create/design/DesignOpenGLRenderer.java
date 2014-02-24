@@ -48,25 +48,27 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 		
-		switch(estado)
+		if(estado == TDesignEstado.Dibujando)
 		{
-			case Dibujando:
-				if(puntos.size > 0)
+			if(puntos.size > 0)
+			{
+				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
+				
+				if(puntos.size > 2)
 				{
-					dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
-					
-					if(puntos.size > 2)
-					{
-						dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
-					}
+					dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
 				}
-			break;
-			case Triangulando:
-			case Terminado:
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
-			break;
-			default:
-			break;
+			}
+		}
+		else
+		{
+			dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
+			
+			if(estado == TDesignEstado.Retocando)
+			{
+				// Marco Oscuro
+				dibujarMarco(gl);
+			}
 		}
 	}
 	
@@ -92,7 +94,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
 		}
 	}
-	
 	
 	private void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
@@ -155,6 +156,44 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected void onMultiTouchEvent() { }
 	
+	@Override
+	public void coordZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	{
+		if(estado == TDesignEstado.Retocando)
+		{
+			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			
+			float lastWorldX = convertToWorldXCoordinate(lastPixelX, screenWidth);
+			float lastWorldY = convertToWorldYCoordinate(lastPixelY, screenHeight);
+			
+			float cWorldX = (lastWorldX + worldX) / 2.0f;
+			float cWorldY = (lastWorldY + worldY) / 2.0f;
+			
+			escalarVertices(factor, factor, cWorldX, cWorldY, vertices);
+			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+		}
+	}
+	
+	@Override
+	public void coordsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	{
+		if(estado == TDesignEstado.Retocando)
+		{
+			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
+			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			
+			float lastWorldX = convertToWorldXCoordinate(lastPixelX, screenWidth);
+			float lastWorldY = convertToWorldYCoordinate(lastPixelY, screenHeight);
+
+			float dWorldX = worldX - lastWorldX;
+			float dWorldY = worldY - lastWorldY;
+			
+			trasladarVertices(dWorldX, dWorldY, vertices);
+			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+		}
+	}
+	
 	/* SECTION Métodos de Selección de Estado */
 	
 	public boolean seleccionarTriangular()
@@ -168,20 +207,35 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 	
+	public boolean seleccionarRetoque()
+	{
+		if(estado == TDesignEstado.Triangulando)
+		{
+			estado = TDesignEstado.Retocando;
+			
+			if(isPoligonoDentroMarco(vertices))
+			{
+				estado = TDesignEstado.Terminado;
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/* SECTION Métodos de Obtención de Información */
 	
 	public Esqueleto getEsqueleto()
 	{
-		if(poligonoSimple)
+		if(estado == TDesignEstado.Terminado)
 		{
-			estado = TDesignEstado.Terminado;
 			return new Esqueleto(contorno, vertices, triangulos);
 		}
 		
 		return null;
 	}
 
-	public boolean poligonoCompleto()
+	public boolean isPoligonoCompleto()
 	{
 		return puntos.size >= 6;
 	}
