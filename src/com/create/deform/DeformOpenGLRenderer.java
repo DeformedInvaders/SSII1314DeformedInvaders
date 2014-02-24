@@ -155,6 +155,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, verticesModificados);
 			
+			// Centrado de Marco
+			centrarPersonajeEnMarcoInicio(gl);
+			
 			if(estado != TDeformEstado.Deformar)
 			{
 				dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
@@ -168,6 +171,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			// Seleccionado
 			dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
+			
+			// Centrado de Marco
+			centrarPersonajeEnMarcoFinal(gl);
 		}
 	}
 	
@@ -320,11 +326,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if(inPixelInCanvas(worldX, worldY))
 		{
 			int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pointer);
-			float lastWorldX = handles.get(2*indiceHandleSeleccionado);
-			float lastWorldY = handles.get(2*indiceHandleSeleccionado);
+			float lastFrameX = handles.get(2*indiceHandleSeleccionado);
+			float lastFrameY = handles.get(2*indiceHandleSeleccionado);
+			
+			float lastWorldX = convertFromFrameXCoordinate(lastFrameX);
+			float lastWorldY = convertFromFrameYCoordinate(lastFrameY);
 			
 			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);			
 			
 			if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*MAX_DISTANCE_PIXELS)
 			{

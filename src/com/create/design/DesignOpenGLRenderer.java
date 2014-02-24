@@ -229,6 +229,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if(estado == TDesignEstado.Terminado)
 		{
+			recortarPoligonoDentroMarco(vertices);
+			
 			return new Esqueleto(contorno, vertices, triangulos);
 		}
 		

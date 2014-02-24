@@ -335,9 +335,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	/* SECTION Métodos de Captura de Pantalla y Marcos */
-	
-	/*	
+	/* SECTION Métodos de Captura de Pantalla y Marcos 	
 		____________________________________
 		|			|___________|			| B
 		|			|			|			|
@@ -362,6 +360,72 @@ public abstract class OpenGLRenderer implements Renderer
 		
 		float[] recB = {0, 0, 0, marcoB, marcoA, 0, marcoA, marcoB};
 		recMarcoB = construirBufferListaPuntos(recB);
+	}
+	
+	protected float convertToFrameXCoordinate(float worldX)
+	{
+		return worldX - marcoC;
+	}
+	
+	protected float convertToFrameYCoordinate(float worldY)
+	{
+		return worldY - marcoB;
+	}
+	
+	protected float convertFromFrameXCoordinate(float frameX)
+	{
+		return frameX + marcoC;
+	}
+	
+	protected float convertFromFrameYCoordinate(float frameY)
+	{
+		return frameY + marcoB;
+	}
+	
+	protected boolean isPoligonoDentroMarco(FloatArray vertices)
+	{
+		int i = 0;
+		while(i < vertices.size)
+		{
+			float x = vertices.get(i);
+			float y = vertices.get(i+1);
+			
+			if(x <= marcoC || x >= marcoC + marcoA || y <= marcoB || y >= marcoB + marcoA)
+			{
+				return false;
+			}
+			
+			i = i+2;
+		}
+		
+		return true;
+	}
+	
+	protected boolean recortarPoligonoDentroMarco(FloatArray vertices)
+	{
+		int i = 0;
+		while(i < vertices.size)
+		{
+			float frameX = convertToFrameXCoordinate(vertices.get(i));
+			float frameY = convertToFrameYCoordinate(vertices.get(i+1));
+			
+			vertices.set(i, frameX);
+			vertices.set(i+1, frameY);
+			
+			i = i+2;
+		}
+		
+		return true;
+	}
+	
+	protected void centrarPersonajeEnMarcoInicio(GL10 gl)
+	{
+		gl.glTranslatef(marcoC, marcoB, 0.0f);
+	}
+	
+	protected void centrarPersonajeEnMarcoFinal(GL10 gl)
+	{
+		gl.glTranslatef(-marcoC, -marcoB, 0.0f);
 	}
 	
 	protected void dibujarMarco(GL10 gl)
@@ -412,35 +476,10 @@ public abstract class OpenGLRenderer implements Renderer
 	    MapaBits textura = new MapaBits(pixelsBuffer, width, height);
 	    return textura;
 	}
-	
-	// FIXME Deprecated
-	protected MapaBits capturaPantalla(GL10 gl, int width, int height)
-	{
-		return capturaPantalla(gl, 0, 0, width, height);
-	}
 		
 	protected MapaBits capturaPantallaPolariod(GL10 gl, int width, int height)
 	{		
 		return capturaPantalla(gl, (int) marcoC, (int) marcoB, (int) marcoA, (int) marcoA);
-	}
-	
-	protected boolean isPoligonoDentroMarco(FloatArray vertices)
-	{
-		int i = 0;
-		while(i < vertices.size)
-		{
-			float x = vertices.get(i);
-			float y = vertices.get(i+1);
-			
-			if(x <= marcoC || x >= marcoC + marcoA || y <= marcoB || y >= marcoB + marcoA)
-			{
-				return false;
-			}
-			
-			i = i+2;
-		}
-		
-		return true;
 	}
 	
 	/* SECTION Métodos de Conversión de Coordenadas */
@@ -484,13 +523,16 @@ public abstract class OpenGLRenderer implements Renderer
 		int j = 0;
 		while(j < vertices.size)
 		{
-			float px = vertices.get(j);
-			float py = vertices.get(j+1);	
+			float framepX = vertices.get(j);
+			float framepY = vertices.get(j+1);
 			
-			float lastpx = convertToPixelXCoordinate(px, screenWidth);
-			float lastpy = convertToPixelYCoordinate(py, screenHeight);
+			float worldpX = convertFromFrameXCoordinate(framepX);
+			float worldpY = convertFromFrameYCoordinate(framepY);
+			
+			float lastpX = convertToPixelXCoordinate(worldpX, screenWidth);
+			float lastpY = convertToPixelYCoordinate(worldpY, screenHeight);
 						
-			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
 			if(distancia < MAX_DISTANCE_PIXELS)
 			{
 				minpos = j/2;
@@ -507,8 +549,11 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+		
+		float frameX = convertToFrameXCoordinate(worldX);
+		float frameY = convertToFrameYCoordinate(worldY);
 				
-		if(!GeometryUtils.isPointInsideMesh(contorno, vertices, worldX, worldY)) return -1;
+		if(!GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY)) return -1;
 		
 		float mindistancia = Float.MAX_VALUE;
 		int minpos = -1;
@@ -516,13 +561,16 @@ public abstract class OpenGLRenderer implements Renderer
 		int j = 0;
 		while(j < vertices.size)
 		{
-			float px = vertices.get(j);
-			float py = vertices.get(j+1);	
+			float framepX = vertices.get(j);
+			float framepY = vertices.get(j+1);
 			
-			float lastpx = convertToPixelXCoordinate(px, screenWidth);
-			float lastpy = convertToPixelYCoordinate(py, screenHeight);
+			float worldpX = convertFromFrameXCoordinate(framepX);
+			float worldpY = convertFromFrameYCoordinate(framepY);
+			
+			float lastpX = convertToPixelXCoordinate(worldpX, screenWidth);
+			float lastpY = convertToPixelYCoordinate(worldpY, screenHeight);
 						
-			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpx, lastpy));
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
 			if(distancia < mindistancia)
 			{
 				minpos = j/2;
@@ -888,7 +936,10 @@ public abstract class OpenGLRenderer implements Renderer
 	/* SECTION Métodos de Pintura de Personajes */
 	
 	protected void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
-	{				
+	{			
+		// Centrado de Marco
+		centrarPersonajeEnMarcoInicio(gl);
+		
 		// Textura
 		dibujarTexturaEsqueleto(gl, triangulos, coordTriangulos);
 			
@@ -904,6 +955,9 @@ public abstract class OpenGLRenderer implements Renderer
 				dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
 			}
 		}
+		
+		// Centrado de Marco
+		centrarPersonajeEnMarcoFinal(gl);
 	}
 	
 	/* SECTION Métodos de Construcción de Texturas */

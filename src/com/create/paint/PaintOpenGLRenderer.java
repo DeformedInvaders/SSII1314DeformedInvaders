@@ -23,6 +23,7 @@ import com.project.data.Pegatinas;
 import com.project.data.Polilinea;
 import com.project.data.Textura;
 import com.project.main.OpenGLRenderer;
+import com.view.display.TCapturaEstado;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {		
@@ -56,9 +57,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	// Texturas
 	private int canvasHeight, canvasWidth;
-	
-	private boolean modoCaptura;
-	private boolean capturaTerminada;
+	private TCapturaEstado estadoCaptura;
 	
 	private MapaBits textura;
 	private FloatArray coordsTextura;
@@ -99,8 +98,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         anteriores = new Stack<Accion>();
         siguientes = new Stack<Accion>();
         
-        modoCaptura = false;
-        capturaTerminada = false;
+        estadoCaptura = TCapturaEstado.Nada;
         
         objetoVertice = new Handle(20, POINTWIDTH);
 	}
@@ -110,7 +108,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{					
-		if (modoCaptura)
+		if(estado == TPaintEstado.Captura && estadoCaptura == TCapturaEstado.Capturando)
 		{	
 			// Guardar posición actual de la Cámara
 			salvarCamara();
@@ -121,27 +119,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarEsqueleto(gl);
 			
 			// Capturar Pantalla
-		    textura = capturaPantalla(gl, canvasWidth, canvasHeight);
+		    textura = capturaPantallaPolariod(gl, canvasWidth, canvasHeight);
 		    
 		    // Construir Textura
 			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
 			
 			// Desactivar Modo Captura
-			modoCaptura = false;
-			capturaTerminada = true;
+			estadoCaptura = TCapturaEstado.Terminado;
 			
 			// Restaurar posición anterior de la Cámara
 			recuperarCamara();
-		}
-		
-		dibujarEsqueleto(gl);
-		
-		// Contorno
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
-		
-		if(estado == TPaintEstado.Pegatinas)
-		{
-			dibujarListaHandle(gl, Color.BLACK, objetoVertice.getBuffer(), vertices);
 		}
 		
 		// Cargar Pegatinas
@@ -153,20 +140,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			}
 		}
 		
-		// Dibujar Pegatinas
-		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
-		{
-			if(pegatinas.isCargada(i))
-			{
-				int indice = pegatinas.getVertice(i);
-				dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
-			}
-		}
+		dibujarEsqueleto(gl);
 	}
 	
 	private void dibujarEsqueleto(GL10 gl)
 	{
 		super.onDrawFrame(gl);
+		
+		// Centrado de Marco
+		centrarPersonajeEnMarcoInicio(gl);
 		
 		// Esqueleto
 		dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
@@ -183,6 +165,30 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			Polilinea polilinea = it.next();
 			dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
 		}
+		
+		if(estado != TPaintEstado.Captura)
+		{
+			// Contorno
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+			
+			// Dibujar Pegatinas
+			for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
+			{
+				if(pegatinas.isCargada(i))
+				{
+					int indice = pegatinas.getVertice(i);
+					dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+				}
+			}
+			
+			if(estado == TPaintEstado.Pegatinas)
+			{
+				dibujarListaHandle(gl, Color.BLACK, objetoVertice.getBuffer(), vertices);
+			}
+		}
+		
+		// Centrado de Marco
+		centrarPersonajeEnMarcoFinal(gl);
 	}
 	
 	/* SECTION Métodos Abstráctos OpenGLRenderer */
@@ -253,8 +259,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		if(anyadir)
 		{
-			lineaActual.add(worldX);
-			lineaActual.add(worldY);
+			float frameX = convertToFrameXCoordinate(worldX);
+			float frameY = convertToFrameYCoordinate(worldY);
+			
+			lineaActual.add(frameX);
+			lineaActual.add(frameY);
 			
 			bufferLineaActual = construirBufferListaPuntos(lineaActual);
 		}
@@ -265,8 +274,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+		
+		float frameX = convertToFrameXCoordinate(worldX);
+		float frameY = convertToFrameYCoordinate(worldY);
 				
-		if(GeometryUtils.isPointInsideMesh(contorno, vertices, worldX, worldY))
+		if(GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
 		{
 			if(colorPaleta != color)
 			{
@@ -394,7 +406,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		canvasHeight = height;
 		canvasWidth = width;
-		modoCaptura = true;
+		
+		estado = TPaintEstado.Captura;
+		estadoCaptura = TCapturaEstado.Capturando;
 	}
 	
 	/* SECTION Métodos de modificación de Buffers de estado */
@@ -501,9 +515,17 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	public Textura getTextura()
 	{
-		while(!capturaTerminada);
+		if(estadoCaptura == TCapturaEstado.Capturando)
+		{	
+			while(estadoCaptura != TCapturaEstado.Terminado);
+			
+			estado = TPaintEstado.Nada;
+			estadoCaptura = TCapturaEstado.Nada;
 		
-		return new Textura(textura, coordsTextura, pegatinas);
+			return new Textura(textura, coordsTextura, pegatinas);
+		}
+		
+		return null;
 	}
 	
 	/* SECTION Métodos de Guardado de Información */
