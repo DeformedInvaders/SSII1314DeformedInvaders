@@ -165,7 +165,7 @@ public class ExternalStorageManager
 		return getFicherosDirectorio(getDirectorioTemp());
 	}
 	
-	/* SECTION Métodos de Comprobación de Existencia de ficheros */
+	/* SECTION Métodos de Comprobación de Existencia de Ficheros */
 	
 	private boolean existeFichero(String nombre)
 	{
@@ -186,6 +186,32 @@ public class ExternalStorageManager
 	public boolean existeFicheroTemp(String nombre)
 	{
 		return existeFichero(getFicheroTemp(nombre));
+	}
+	
+	/* SECTION Métodos de Eliminación de Directorios */
+	
+	private void eliminarFichero(String nombre)
+	{
+		File file = new File(nombre);
+		if(file.isDirectory())
+		{
+			String[] list = file.list();
+			for(int i = 0; i < list.length; i++)
+			{
+				eliminarFichero(list[i]);
+			}
+			
+			file.delete();
+		}
+		else if(file.isFile())
+		{
+			file.delete();
+		}
+	}
+	
+	public void eliminarDirectorioPersonaje(String nombre)
+	{
+		eliminarFichero(getDirectorioPersonaje(nombre));
 	}
 	
 	/* SECTION Métodos Lectura y Escritura */

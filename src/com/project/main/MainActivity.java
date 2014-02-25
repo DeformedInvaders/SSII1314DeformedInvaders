@@ -294,6 +294,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			{
 				if(internalManager.eliminarPersonaje(listaPersonajes.get(indice)))
 		    	{
+					externalManager.eliminarDirectorioPersonaje(listaPersonajes.get(indice).getNombre());
 		    		listaPersonajes.remove(indice);
 		    		
 		    		if(personajeSeleccionado == indice)
