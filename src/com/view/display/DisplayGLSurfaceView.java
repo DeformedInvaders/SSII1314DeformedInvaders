@@ -4,11 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
+import com.create.design.TPadre;
 import com.project.data.Personaje;
 import com.project.main.OpenGLSurfaceView;
 import com.project.main.R;
@@ -20,6 +20,8 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     private Context mContext;
     
     private String nombre;
+    
+    private TPadre padre;
     
     private ExternalStorageManager manager;
 	private CountDownTimer timer;
@@ -54,11 +56,12 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         };
     }
 	
-	public void setParameters(Personaje p, ExternalStorageManager m)
+	public void setParameters(Personaje p, ExternalStorageManager m, TPadre e)
 	{
 		renderer = new DisplayOpenGLRenderer(getContext(), p);
 		nombre = p.getNombre();
 		manager = m;
+		padre = e;
         setRenderer(renderer);
         
         player = new AudioPlayerManager(manager) {
@@ -79,26 +82,32 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) 
 	{ 
-		int n = (int) Math.floor(Math.random()*4);
-		Log.d("TEST", ""+n);
-		if(animacionFinalizada)
+		if(padre == TPadre.Main)
 		{
-			switch (n)
+			if(nombre != null)
 			{
-				case 0:
-					seleccionarRun();
-				break;
-				case 1:
-					seleccionarJump();
-				break;
-				case 2:
-					seleccionarCrouch();
-				break;
-				case 3:
-					seleccionarAttack();
-				break;
+				int n = (int) Math.floor(Math.random()*4);
+				
+				if(animacionFinalizada)
+				{
+					switch (n)
+					{
+						case 0:
+							seleccionarRun();
+						break;
+						case 1:
+							seleccionarJump();
+						break;
+						case 2:
+							seleccionarCrouch();
+						break;
+						case 3:
+							seleccionarAttack();
+						break;
+					}
+					animacionFinalizada = false;
+				}
 			}
-			animacionFinalizada = false;
 		}
 	}
 	

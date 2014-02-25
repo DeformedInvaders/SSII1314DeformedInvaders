@@ -13,6 +13,7 @@ import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
+import com.create.design.TPadre;
 import com.project.data.Personaje;
 import com.project.main.OpenGLFragment;
 import com.project.main.R;
@@ -55,7 +56,7 @@ public class SelectFragment extends OpenGLFragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
-		canvas.setParameters(personaje, manager);
+		canvas.setParameters(personaje, manager, TPadre.Select);
 		
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonSelect2);
