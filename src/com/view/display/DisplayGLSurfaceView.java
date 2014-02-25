@@ -6,24 +6,31 @@ import android.os.CountDownTimer;
 import android.util.AttributeSet;
 
 import com.android.audio.AudioPlayerManager;
+import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
 import com.project.data.Personaje;
 import com.project.main.OpenGLSurfaceView;
+import com.project.main.R;
 
 public class DisplayGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
     private DisplayOpenGLRenderer renderer;
+    private Context mContext;
     
+    private String nombre;
+    
+    private ExternalStorageManager manager;
 	private CountDownTimer timer;
-	
-	private AudioPlayerManager audioPlayer;
+	private AudioPlayerManager player;
     
 	/* SECTION Constructora */
 	
     public DisplayGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.SimpleTouch);
+       
+        mContext = context;
         
         timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
 
@@ -39,9 +46,23 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         };
     }
 	
-	public void setParameters(Personaje personaje)
+	public void setParameters(Personaje p, ExternalStorageManager m)
 	{
-		renderer = new DisplayOpenGLRenderer(getContext(), personaje);
+		renderer = new DisplayOpenGLRenderer(getContext(), p);
+		nombre = p.getNombre();
+		manager = m;
+        setRenderer(renderer);
+        
+        player = new AudioPlayerManager(manager) {
+
+			@Override
+			public void onPlayerCompletion() { }
+        };
+	}
+	
+	public void setParameters(Personaje p)
+	{
+		renderer = new DisplayOpenGLRenderer(getContext(), p);
         setRenderer(renderer);
 	}
 	
@@ -72,7 +93,9 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		renderer.selecionarRun();
 		requestRender();
 		
+		
 		timer.start();
+		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_run));
 	}
 
 	public void selecionarJump() 
@@ -81,6 +104,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 		
 		timer.start();
+		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_jump));
 	}
 
 	public void selecionarCrouch()
@@ -89,6 +113,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 		
 		timer.start();
+		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_crouch));
 	}
 
 	public void selecionarAttack() 
@@ -97,6 +122,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 		
 		timer.start();
+		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_attack));
 	}
 	
 	public void seleccionarRetoque()

@@ -1,7 +1,6 @@
 package com.project.main;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -231,16 +230,16 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					@Override
 					public void onPossitiveButtonClick()
 					{
-						String value = getText().toUpperCase(Locale.getDefault());
-						personajeActual.setNombre(value);
+						String nombre = getText();
+						
+						personajeActual.setNombre(nombre);
 						
 						if(internalManager.guardarPersonaje(personajeActual))
 						{
-							//TODO grabar Audio
-							externalManager.guardarAudio(value, getString(R.string.title_animation_section_run));
-							externalManager.guardarAudio(value, getString(R.string.title_animation_section_jump));
-							externalManager.guardarAudio(value, getString(R.string.title_animation_section_down));
-							externalManager.guardarAudio(value, getString(R.string.title_animation_section_attack));
+							externalManager.guardarAudio(nombre, getString(R.string.title_animation_section_run));
+							externalManager.guardarAudio(nombre, getString(R.string.title_animation_section_jump));
+							externalManager.guardarAudio(nombre, getString(R.string.title_animation_section_crouch));
+							externalManager.guardarAudio(nombre, getString(R.string.title_animation_section_attack));
 							
 							listaPersonajes.add(personajeActual);
 							personajeActual = null;

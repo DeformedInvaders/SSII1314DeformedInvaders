@@ -55,7 +55,7 @@ public class SelectFragment extends OpenGLFragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
-		canvas.setParameters(personaje);
+		canvas.setParameters(personaje, manager);
 		
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonSelect2);

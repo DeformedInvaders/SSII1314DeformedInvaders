@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.alert.AudioAlert;
 import com.android.storage.ExternalStorageManager;
@@ -274,13 +275,14 @@ public class DeformFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 			
-			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_animation_title), getString(R.string.text_audio_animation), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, nombreMovimiento) 
+			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, nombreMovimiento) 
 			{
-				
 				@Override
 				public void onPossitiveButtonClick()
 				{
 					canvas.seleccionarReposo();
+					
+					Toast.makeText(getActivity(), R.string.text_audio_record_confirmation, Toast.LENGTH_SHORT).show();
 
 					reiniciarInterfaz();
 					actualizarInterfaz();
@@ -294,7 +296,6 @@ public class DeformFragment extends OpenGLFragment
 					reiniciarInterfaz();
 					actualizarInterfaz();
 				}
-				
 			};
 
 			alert.show();

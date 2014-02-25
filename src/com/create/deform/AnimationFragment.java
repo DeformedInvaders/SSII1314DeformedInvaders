@@ -86,7 +86,7 @@ public class AnimationFragment extends ViewPagerFragment
 		
 		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_run)), getString(R.string.title_animation_section_run));
 		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_jump)), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_down)), getString(R.string.title_animation_section_down));
+		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_crouch)), getString(R.string.title_animation_section_crouch));
 		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_attack)), getString(R.string.title_animation_section_attack));
 
         return rootView;

@@ -13,7 +13,7 @@
 	    <!-- ActionBar PagerView Section Titles -->
 			<string name="title_animation_section_run">Correr</string>
 			<string name="title_animation_section_jump">Saltar</string>
-			<string name="title_animation_section_down">Agacharse</string>
+			<string name="title_animation_section_crouch">Agacharse</string>
 			<string name="title_animation_section_attack">Atacar</string>
 			
 			<string name="title_test_section_multitouch">Multitouch</string>

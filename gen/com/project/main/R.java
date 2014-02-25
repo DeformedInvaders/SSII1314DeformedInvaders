@@ -398,7 +398,7 @@ public final class R {
         public static final int text_twitter_title=0x7f05002c;
         public static final int title_animation_phase=0x7f050003;
         public static final int title_animation_section_attack=0x7f05000a;
-        public static final int title_animation_section_down=0x7f050009;
+        public static final int title_animation_section_crouch=0x7f050009;
         public static final int title_animation_section_jump=0x7f050008;
         /**  ActionBar PagerView Section Titles 
  ActionBar PagerView Section Titles 

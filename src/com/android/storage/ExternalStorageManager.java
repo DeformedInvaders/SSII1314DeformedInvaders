@@ -165,6 +165,29 @@ public class ExternalStorageManager
 		return getFicherosDirectorio(getDirectorioTemp());
 	}
 	
+	/* SECTION Métodos de Comprobación de Existencia de ficheros */
+	
+	private boolean existeFichero(String nombre)
+	{
+		File file = new File(nombre);
+		return file.exists();
+	}
+	
+	public boolean existeFicheroAudio(String nombre, String movimiento)
+	{
+		return existeFichero(getFicheroAudio(nombre, movimiento));
+	}
+	
+	public boolean existeFicheroImagen(String nombre)
+	{
+		return existeFichero(getFicheroImagen(nombre));
+	}
+	
+	public boolean existeFicheroTemp(String nombre)
+	{
+		return existeFichero(getFicheroTemp(nombre));
+	}
+	
 	/* SECTION Métodos Lectura y Escritura */
 	
 	public String cargarAudio(String nombre, String movimiento)
@@ -178,10 +201,13 @@ public class ExternalStorageManager
 	{
 		comprobarDirectorioPersonaje(nombre);
 		
-		File audiotemp = new File(cargarAudioTemp(nombre));
-		if(audiotemp.exists())
+		if(existeFicheroTemp(movimiento))
 		{
-			return audiotemp.renameTo(new File(getFicheroAudio(nombre, movimiento)));
+			File audiotemp = new File(cargarAudioTemp(movimiento));
+			if(audiotemp.exists())
+			{
+				return audiotemp.renameTo(new File(getFicheroAudio(nombre, movimiento)));
+			}
 		}
 		
 		return false;

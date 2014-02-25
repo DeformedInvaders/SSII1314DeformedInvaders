@@ -13,7 +13,7 @@
 	    <!-- ActionBar PagerView Section Titles -->
 			<string name="title_animation_section_run">Run</string>
 			<string name="title_animation_section_jump">Jump</string>
-			<string name="title_animation_section_down">Crouch</string>
+			<string name="title_animation_section_crouch">Crouch</string>
 			<string name="title_animation_section_attack">Attack</string>
 			
 			<string name="title_test_section_multitouch">Multitouch</string>
@@ -50,7 +50,7 @@
 			<string name="text_delete_character_confirmation">Character deleted.</string>
 			
 			<string name="text_audio_record_title">Recording audio.</string>
-			<string name="text_audio_record_description">Introduce a name for the audio.</string>
+			<string name="text_audio_record_description">Record a sound for this animation.</string>
 			<string name="text_audio_record_confirmation">Audio recorded.</string>
 			
 			<string name="text_audio_play_title">Playing audio.</string>

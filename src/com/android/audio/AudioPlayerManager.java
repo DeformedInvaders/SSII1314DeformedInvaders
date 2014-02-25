@@ -23,7 +23,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
     	this.player = new MediaPlayer();
 		this.player.setOnCompletionListener(this);
 		
-		this.estado = TPlayEstado.Parado;
+		this.estado = TPlayEstado.Libre;
     }
     
     /* SECTION Métodos Abstractos */
@@ -32,56 +32,113 @@ public abstract class AudioPlayerManager implements OnCompletionListener
     
     /* SECTION Métodos de Selección de Estado */
     
-    public void startPlaying(String nombre)
-    {			
-		try
-		{
-			//Idle
-			player.setDataSource(manager.cargarAudioTemp(nombre));
-			//Initialized
-			player.prepare();
-			//Prepared
-		    player.start();
-		    //Started
-		    
-		    estado = TPlayEstado.Reproduciendo;
-		}
-		catch (IOException e)
-		{
-		    e.printStackTrace();
-		}
+    public boolean startPlaying(String nombre, String movimiento)
+    {	
+    	if(manager.existeFicheroAudio(nombre, movimiento))
+    	{
+			try
+			{	
+				if(estado == TPlayEstado.Libre)
+				{
+					//Idle
+					player.setDataSource(manager.cargarAudio(nombre, movimiento));
+					//Initialized
+					player.prepare();
+					//Prepared
+				    player.start();
+				    //Started
+				    
+				    estado = TPlayEstado.Reproduciendo;
+				    return true;
+				}
+			}
+			catch (IOException e)
+			{
+			    e.printStackTrace();
+			}
+	    }
+    	
+    	return false;
     }
     
-    public void pausePlaying()
+    public boolean startPlaying(String nombre)
     {
-    	//Started
-    	player.pause();
-    	//Pause
-    	estado = TPlayEstado.Pausado;
+    	if(manager.existeFicheroTemp(nombre))
+    	{
+			try
+			{
+				if(estado == TPlayEstado.Libre)
+				{
+					//Idle
+					player.setDataSource(manager.cargarAudioTemp(nombre));
+					//Initialized
+					player.prepare();
+					//Prepared
+				    player.start();
+				    //Started
+				    
+				    estado = TPlayEstado.Reproduciendo;
+				    return true;
+				}
+			}
+			catch (IOException e)
+			{
+			    e.printStackTrace();
+			} 	
+    	}
+    	
+    	return false;
+    }
+    
+    public boolean pausePlaying()
+    {
+    	if(estado == TPlayEstado.Reproduciendo)
+    	{
+	    	//Started
+	    	player.pause();
+	    	//Pause
+	    	estado = TPlayEstado.Pausado;
+	    	return true;
+    	}
+    	
+    	return false;
     }
 
-    public void resumePlaying()
+    public boolean resumePlaying()
     {
-    	//Pause
-    	player.start();
-    	//Started
-    	estado = TPlayEstado.Reproduciendo;
+    	if(estado == TPlayEstado.Pausado)
+    	{
+	    	//Pause
+	    	player.start();
+	    	//Started
+	    	estado = TPlayEstado.Reproduciendo;
+	    	return true;
+    	}
+    	
+    	return false;
     }
     
-    public void stopPlaying()
+    public boolean stopPlaying()
     {
-    	//Started or Paused
-    	player.stop();
-    	//Stopped
-    	estado = TPlayEstado.Parado;
+    	if(estado == TPlayEstado.Reproduciendo || estado == TPlayEstado.Pausado)
+    	{
+	    	//Started or Paused
+	    	player.stop();
+	    	//Stopped
+	    	
+	    	resetPlaying();
+	    	return true;
+    	}
+    	
+    	return false;
     }
     
-    public void resetPlaying()
+    private void resetPlaying()
     {
     	//Any
     	player.reset();
     	//Idle
-    	estado = TPlayEstado.Parado;
+    	estado = TPlayEstado.Libre;
     }
     
     public void releasePlayer()
@@ -103,7 +160,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean isStoped()
 	{
-		return estado == TPlayEstado.Parado;
+		return estado == TPlayEstado.Libre;
 	}
 	
 	/* SECTION Métodos Listener onCompletition */
