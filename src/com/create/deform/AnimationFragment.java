@@ -84,10 +84,10 @@ public class AnimationFragment extends ViewPagerFragment
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 		
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_run)), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_jump)), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_crouch)), getString(R.string.title_animation_section_crouch));
-		viewPager.addView(DeformFragment.newInstance(esqueleto, textura, manager, getString(R.string.title_animation_section_attack)), getString(R.string.title_animation_section_attack));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_run), TDeformTipo.Run), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_jump), TDeformTipo.Jump), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_crouch), TDeformTipo.Crouch), getString(R.string.title_animation_section_crouch));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_attack), TDeformTipo.Attack), getString(R.string.title_animation_section_attack));
 
         return rootView;
     }

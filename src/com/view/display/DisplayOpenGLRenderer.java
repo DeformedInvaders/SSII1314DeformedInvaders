@@ -156,7 +156,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 					else if(estadoCaptura == TCapturaEstado.Retocando)
 					{
 						// Marco Oscuro
-						dibujarMarco(gl);
+						dibujarMarcoLateral(gl);
+						dibujarMarcoCentral(gl);
 					}
 				}
 			}

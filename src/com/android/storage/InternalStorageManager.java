@@ -71,6 +71,11 @@ public class InternalStorageManager
 		return nombres.contains(nombre);
 	}
 	
+	private String evaluarNombre(String nombre)
+	{
+		return nombre.toUpperCase(Locale.getDefault());
+	}
+	
 	/* SECTION Métodos Lista de Nombres */
 	
 	private boolean cargarNombres()
@@ -327,7 +332,7 @@ public class InternalStorageManager
 			Toast.makeText(activity.getApplication(), R.string.text_replace_character_confirmation, Toast.LENGTH_SHORT).show();
 		}
 		
-		String nombreActual = personaje.getNombre().toUpperCase(Locale.getDefault());
+		String nombreActual = evaluarNombre(personaje.getNombre());
 		nombres.add(nombreActual);
 		
 		try
@@ -367,10 +372,12 @@ public class InternalStorageManager
 	
 	public boolean eliminarPersonaje(Personaje personaje)
 	{
-		if(activity.deleteFile(personaje.getNombre()))
+		String nombreActual = evaluarNombre(personaje.getNombre());
+		
+		if(activity.deleteFile(nombreActual))
 		{
 			Log.d("TEST", "File deleted");
-			return eliminarNombre(personaje.getNombre());
+			return eliminarNombre(nombreActual);
 		}
 		
 		Log.d("TEST", "File not deleted");

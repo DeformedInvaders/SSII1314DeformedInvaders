@@ -25,9 +25,9 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
         super(context, attrs, TTouchEstado.MultiTouch); 
     }
 	
-	public void setParameters(Esqueleto esqueleto, Textura textura, final DeformFragment fragmento)
+	public void setParameters(Esqueleto esqueleto, Textura textura, TDeformTipo tipo, final DeformFragment fragmento)
 	{
-		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura);
+		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura, tipo);
 		setRenderer(renderer);
 		
 		timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) 

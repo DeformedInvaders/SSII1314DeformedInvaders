@@ -67,7 +67,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if(estado == TDesignEstado.Retocando)
 			{
 				// Marco Oscuro
-				dibujarMarco(gl);
+				dibujarMarcoLateral(gl);
+				dibujarMarcoCentral(gl);
 			}
 		}
 	}

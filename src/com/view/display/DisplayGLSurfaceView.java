@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
-import com.create.design.TPadre;
+import com.create.design.TDisplayTipo;
 import com.project.data.Personaje;
 import com.project.main.OpenGLSurfaceView;
 import com.project.main.R;
@@ -19,15 +19,14 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     private DisplayOpenGLRenderer renderer;
     private Context mContext;
     
-    private String nombre;
+    private TDisplayTipo tipoDisplay;
     
-    private TPadre padre;
+    private String nombre;
+    private boolean personajeCargado, animacionFinalizada;
     
     private ExternalStorageManager manager;
 	private CountDownTimer timer;
 	private AudioPlayerManager player;
-	
-	private boolean animacionFinalizada;
     
 	/* SECTION Constructora */
 	
@@ -56,12 +55,14 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         };
     }
 	
-	public void setParameters(Personaje p, ExternalStorageManager m, TPadre e)
+	public void setParameters(Personaje p, ExternalStorageManager m, TDisplayTipo e)
 	{
-		renderer = new DisplayOpenGLRenderer(getContext(), p);
 		nombre = p.getNombre();
 		manager = m;
-		padre = e;
+		tipoDisplay = e;
+		personajeCargado = true;
+		
+		renderer = new DisplayOpenGLRenderer(getContext(), p);
         setRenderer(renderer);
         
         player = new AudioPlayerManager(manager) {
@@ -71,8 +72,11 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         };
 	}
 	
-	public void setParameters()
+	public void setParameters(TDisplayTipo e)
 	{
+		personajeCargado = false;
+		tipoDisplay = e;
+		
 		renderer = new DisplayOpenGLRenderer(getContext());
 		setRenderer(renderer);
 	}
@@ -82,15 +86,15 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) 
 	{ 
-		if(padre == TPadre.Main)
+		if(tipoDisplay == TDisplayTipo.Main)
 		{
-			if(nombre != null)
+			if(personajeCargado)
 			{
-				int n = (int) Math.floor(Math.random()*4);
+				int animacion = (int) Math.floor(Math.random()*4);
 				
 				if(animacionFinalizada)
 				{
-					switch (n)
+					switch(animacion)
 					{
 						case 0:
 							seleccionarRun();
@@ -105,7 +109,6 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 							seleccionarAttack();
 						break;
 					}
-					animacionFinalizada = false;
 				}
 			}
 		}
@@ -124,39 +127,59 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	public void seleccionarRun() 
 	{
-		renderer.seleccionarRun();
-		requestRender();
-		
-		
-		timer.start();
-		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_run));
+		if(animacionFinalizada)
+		{
+			renderer.seleccionarRun();
+			requestRender();
+			
+			
+			timer.start();
+			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_run));
+			
+			animacionFinalizada = false;
+		}
 	}
 
 	public void seleccionarJump() 
 	{
-		renderer.seleccionarJump();
-		requestRender();
-		
-		timer.start();
-		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_jump));
+		if(animacionFinalizada)
+		{
+			renderer.seleccionarJump();
+			requestRender();
+			
+			timer.start();
+			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_jump));
+			
+			animacionFinalizada = false;
+		}
 	}
 
 	public void seleccionarCrouch()
 	{
-		renderer.seleccionarCrouch();
-		requestRender();
-		
-		timer.start();
-		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_crouch));
+		if(animacionFinalizada)
+		{
+			renderer.seleccionarCrouch();
+			requestRender();
+			
+			timer.start();
+			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_crouch));
+			
+			animacionFinalizada = false;
+		}
 	}
 
 	public void seleccionarAttack() 
 	{
-		renderer.seleccionarAttack();
-		requestRender();
-		
-		timer.start();
-		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_attack));
+		if(animacionFinalizada)
+		{
+			renderer.seleccionarAttack();
+			requestRender();
+			
+			timer.start();
+			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_attack));
+			
+			animacionFinalizada = false;
+		}
 	}
 	
 	public void seleccionarRetoque()
@@ -209,15 +232,5 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public void saveData()
 	{
 		renderer.saveData();
-	}
-
-	public boolean getAnimacionFinalizada() 
-	{
-		return animacionFinalizada;
-	}
-	
-	public void setAnimacionFinalizada(boolean a) 
-	{
-		animacionFinalizada = a;
 	}
 }

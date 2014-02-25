@@ -428,7 +428,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glTranslatef(-marcoC, -marcoB, 0.0f);
 	}
 	
-	protected void dibujarMarco(GL10 gl)
+	protected void dibujarMarcoLateral(GL10 gl)
 	{
 		gl.glPushMatrix();
 		
@@ -443,6 +443,15 @@ public abstract class OpenGLRenderer implements Renderer
 			
 			gl.glPopMatrix();
 			
+		gl.glPopMatrix();
+	}
+	
+	protected void dibujarMarcoCentral(GL10 gl)
+	{
+		gl.glPushMatrix();
+		
+		gl.glTranslatef(xLeft, yBottom, 1.0f);
+		
 			gl.glPushMatrix();
 			
 				gl.glTranslatef(marcoC, 0, 0);

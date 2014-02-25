@@ -13,7 +13,7 @@ import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
-import com.create.design.TPadre;
+import com.create.design.TDisplayTipo;
 import com.project.data.Personaje;
 import com.project.main.OpenGLFragment;
 import com.project.main.R;
@@ -56,7 +56,7 @@ public class SelectFragment extends OpenGLFragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
-		canvas.setParameters(personaje, manager, TPadre.Select);
+		canvas.setParameters(personaje, manager, TDisplayTipo.Selection);
 		
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonSelect2);
@@ -208,11 +208,7 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if(canvas.getAnimacionFinalizada())
-			{
-				canvas.seleccionarRun();
-				canvas.setAnimacionFinalizada(false);
-			}
+			canvas.seleccionarRun();
 		}
 	}
 	
@@ -221,11 +217,7 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if(canvas.getAnimacionFinalizada())
-			{
-				canvas.seleccionarJump();
-				canvas.setAnimacionFinalizada(false);
-			}
+			canvas.seleccionarJump();
 		}
 	}
 	
@@ -234,12 +226,7 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if(canvas.getAnimacionFinalizada())
-			{
-				canvas.seleccionarCrouch();
-				canvas.setAnimacionFinalizada(false);
-			}
-			
+			canvas.seleccionarCrouch();			
 		}
 	}
 	
@@ -248,12 +235,7 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if(canvas.getAnimacionFinalizada())
-			{
-				canvas.seleccionarAttack();
-				canvas.setAnimacionFinalizada(false);
-			}
-			
+			canvas.seleccionarAttack();
 		}
 	}
 }

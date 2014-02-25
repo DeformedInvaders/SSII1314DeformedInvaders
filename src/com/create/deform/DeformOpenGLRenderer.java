@@ -21,6 +21,7 @@ import com.project.main.OpenGLRenderer;
 
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
+	private TDeformTipo tipoDeformacion;
 	private Deformator deformator;
 	
 	private final int NUM_HANDLES;
@@ -80,12 +81,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Constructora */
 	
-	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura)
+	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura, TDeformTipo tipo)
 	{
         super(context);
         
         NUM_HANDLES = num_handles;
         
+        tipoDeformacion = tipo;
         estado = TDeformEstado.Nada;
         modoGrabar = false;
         listaHandlesAnimacion = new ArrayList<FloatArray>();
@@ -171,6 +173,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			// Seleccionado
 			dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
+			
+			// Marcos
+			if(tipoDeformacion == TDeformTipo.Run || tipoDeformacion == TDeformTipo.Attack)
+			{
+				dibujarMarcoCentral(gl);
+			}
+			
+			dibujarMarcoLateral(gl);
 			
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
