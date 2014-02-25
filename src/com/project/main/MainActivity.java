@@ -153,7 +153,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		listaPersonajes = lista;
 		personajeSeleccionado = seleccionado;
 		
-		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 	}
 	
 	/* SECTION Métodos Main Fragment */
@@ -251,13 +251,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 							Toast.makeText(getApplication(), R.string.error_save_character, Toast.LENGTH_SHORT).show();
 						}
 							
-						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 					}
 	
 					@Override
 					public void onNegativeButtonClick()
 					{
-						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 					}
 					
 				};
@@ -281,7 +281,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		internalManager.guardarSeleccionado(personajeSeleccionado);
 		Toast.makeText(getApplication(), R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
 
-		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
     }
     
 	@Override
@@ -310,7 +310,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		    		Toast.makeText(getApplication(), R.string.error_delete_character, Toast.LENGTH_SHORT).show();
 		    	}
 		    	
-				changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado));
+				changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 			}
 
 			@Override

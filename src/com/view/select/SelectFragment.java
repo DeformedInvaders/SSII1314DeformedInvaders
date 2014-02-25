@@ -207,7 +207,11 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.selecionarRun();
+			if(canvas.getAnimacionFinalizada())
+			{
+				canvas.seleccionarRun();
+				canvas.setAnimacionFinalizada(false);
+			}
 		}
 	}
 	
@@ -216,7 +220,11 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.selecionarJump();
+			if(canvas.getAnimacionFinalizada())
+			{
+				canvas.seleccionarJump();
+				canvas.setAnimacionFinalizada(false);
+			}
 		}
 	}
 	
@@ -225,7 +233,12 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.selecionarCrouch();
+			if(canvas.getAnimacionFinalizada())
+			{
+				canvas.seleccionarCrouch();
+				canvas.setAnimacionFinalizada(false);
+			}
+			
 		}
 	}
 	
@@ -234,7 +247,12 @@ public class SelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.selecionarAttack();
+			if(canvas.getAnimacionFinalizada())
+			{
+				canvas.seleccionarAttack();
+				canvas.setAnimacionFinalizada(false);
+			}
+			
 		}
 	}
 }

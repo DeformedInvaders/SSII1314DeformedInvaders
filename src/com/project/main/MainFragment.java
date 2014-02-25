@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.android.storage.ExternalStorageManager;
 import com.project.data.Personaje;
 import com.view.display.DisplayGLSurfaceView;
 
@@ -24,19 +25,22 @@ public class MainFragment extends OpenGLFragment
 	private List<Personaje> listaPersonajes;
 	private int personajeSeleccionado;
 	
+	private ExternalStorageManager externalManager;
+	
 	/* SECTION Constructora */
 	
-	public static final MainFragment newInstance(List<Personaje> lista, int indice)
+	public static final MainFragment newInstance(List<Personaje> lista, int indice, ExternalStorageManager m)
 	{
 		MainFragment fragment = new MainFragment();
-		fragment.setParameters(lista, indice);
+		fragment.setParameters(lista, indice, m);
 		return fragment;
 	}
 	
-	private void setParameters(List<Personaje> lista, int indice)
+	private void setParameters(List<Personaje> lista, int indice, ExternalStorageManager m)
 	{
 		listaPersonajes = lista;
 		personajeSeleccionado = indice;
+		externalManager = m;
 	}
 	
 	public interface MainFragmentListener
@@ -78,7 +82,7 @@ public class MainFragment extends OpenGLFragment
 		if(personajeSeleccionado >= 0 && personajeSeleccionado < listaPersonajes.size() && !listaPersonajes.isEmpty())
 		{
 			Personaje p = listaPersonajes.get(personajeSeleccionado);
-			canvas.setParameters(p);
+			canvas.setParameters(p, externalManager);
 		}
 		else
 		{
@@ -93,6 +97,8 @@ public class MainFragment extends OpenGLFragment
 		botonSeleccionar.setOnClickListener(new OnViewClickListener());
 		botonJugar.setOnClickListener(new OnGameClickListener());
 		
+		setCanvasListener(canvas);
+
 		reiniciarInterfaz();
 		actualizarInterfaz();
         return rootView;

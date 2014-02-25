@@ -226,7 +226,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();
 	}
 	
-	public void selecionarRun() 
+	public void seleccionarRun() 
 	{
 		estado = TDisplayEstado.Run;
 		
@@ -234,7 +234,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		iniciarAnimacion();	
 	}
 	
-	public void selecionarJump() 
+	public void seleccionarJump() 
 	{
 		estado = TDisplayEstado.Jump;
 		
@@ -242,7 +242,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		iniciarAnimacion();
 	}
 	
-	public void selecionarCrouch() 
+	public void seleccionarCrouch() 
 	{
 		estado = TDisplayEstado.Crouch;
 		
@@ -250,7 +250,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		iniciarAnimacion();
 	}
 	
-	public void selecionarAttack() 
+	public void seleccionarAttack() 
 	{
 		estado = TDisplayEstado.Attack;
 		

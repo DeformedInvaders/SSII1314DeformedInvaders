@@ -429,7 +429,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	public void selecionarPlay() 
 	{
-		// TODO Añadir Audio
 		estado = TDeformEstado.Reproducir;
 		
 		iniciarAnimacion();

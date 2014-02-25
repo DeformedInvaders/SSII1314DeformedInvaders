@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
@@ -23,6 +24,8 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     private ExternalStorageManager manager;
 	private CountDownTimer timer;
 	private AudioPlayerManager player;
+	
+	private boolean animacionFinalizada;
     
 	/* SECTION Constructora */
 	
@@ -32,10 +35,15 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
        
         mContext = context;
         
+        animacionFinalizada = true;
+        
         timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
 
 			@Override
-			public void onFinish() { }
+			public void onFinish() 
+			{ 
+				animacionFinalizada = true;
+			}
 
 			@Override
 			public void onTick(long arg0) 
@@ -60,12 +68,6 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         };
 	}
 	
-	public void setParameters(Personaje p)
-	{
-		renderer = new DisplayOpenGLRenderer(getContext(), p);
-        setRenderer(renderer);
-	}
-	
 	public void setParameters()
 	{
 		renderer = new DisplayOpenGLRenderer(getContext());
@@ -75,7 +77,30 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	/* SECTION Métodos abstractos OpenGLSurfaceView */
 	
 	@Override
-	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) 
+	{ 
+		int n = (int) Math.floor(Math.random()*4);
+		Log.d("TEST", ""+n);
+		if(animacionFinalizada)
+		{
+			switch (n)
+			{
+				case 0:
+					seleccionarRun();
+				break;
+				case 1:
+					seleccionarJump();
+				break;
+				case 2:
+					seleccionarCrouch();
+				break;
+				case 3:
+					seleccionarAttack();
+				break;
+			}
+			animacionFinalizada = false;
+		}
+	}
 	
 	@Override
 	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
@@ -88,9 +113,9 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	/* SECTION Métodos de Selección de Estado */
 	
-	public void selecionarRun() 
+	public void seleccionarRun() 
 	{
-		renderer.selecionarRun();
+		renderer.seleccionarRun();
 		requestRender();
 		
 		
@@ -98,27 +123,27 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_run));
 	}
 
-	public void selecionarJump() 
+	public void seleccionarJump() 
 	{
-		renderer.selecionarJump();
+		renderer.seleccionarJump();
 		requestRender();
 		
 		timer.start();
 		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_jump));
 	}
 
-	public void selecionarCrouch()
+	public void seleccionarCrouch()
 	{
-		renderer.selecionarCrouch();
+		renderer.seleccionarCrouch();
 		requestRender();
 		
 		timer.start();
 		player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_crouch));
 	}
 
-	public void selecionarAttack() 
+	public void seleccionarAttack() 
 	{
-		renderer.selecionarAttack();
+		renderer.seleccionarAttack();
 		requestRender();
 		
 		timer.start();
@@ -175,5 +200,15 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public void saveData()
 	{
 		renderer.saveData();
+	}
+
+	public boolean getAnimacionFinalizada() 
+	{
+		return animacionFinalizada;
+	}
+	
+	public void setAnimacionFinalizada(boolean a) 
+	{
+		animacionFinalizada = a;
 	}
 }

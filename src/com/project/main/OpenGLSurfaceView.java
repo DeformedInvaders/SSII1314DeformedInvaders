@@ -102,7 +102,6 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			
 			float screenWidth = getWidth();
 			float screenHeight = getHeight();
-			
 			switch(action)
 			{
 				case MotionEvent.ACTION_DOWN:
