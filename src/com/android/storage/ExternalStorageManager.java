@@ -290,4 +290,17 @@ public class ExternalStorageManager
 		
 		return getFicheroTemp(movimiento);
 	}
+	
+	public boolean eliminarAudioTemp(String movimiento)
+	{
+		if(existeFicheroTemp(movimiento))
+		{
+			File file = new File(getFicheroTemp(movimiento));
+			file.delete();
+			
+			return true;
+		}
+		
+		return false;
+	}
 }

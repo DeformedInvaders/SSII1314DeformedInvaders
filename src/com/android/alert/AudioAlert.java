@@ -26,8 +26,9 @@ public abstract class AudioAlert extends WindowAlert
 	private ImageButton botonRecAudio, botonPlayAudio;
 	
 	private CountDownTimer timer;
-	private AudioRecorderManager audioRecord;
+	private AudioRecorderManager audioRecorder;
 	private AudioPlayerManager audioPlayer;
+	private ExternalStorageManager externalManager;
 	
 	private String movimiento;
 	
@@ -38,9 +39,10 @@ public abstract class AudioAlert extends WindowAlert
 		super(context, title);
 		
 		movimiento = nombre;
+		externalManager = manager;
 		
-		audioRecord = new AudioRecorderManager(manager);
-		audioPlayer = new AudioPlayerManager(manager) {
+		audioRecorder = new AudioRecorderManager(externalManager);
+		audioPlayer = new AudioPlayerManager(externalManager) {
 			
 			@Override
 			public void onPlayerCompletion()
@@ -67,10 +69,8 @@ public abstract class AudioAlert extends WindowAlert
 		botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
 		botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
 		
-		botonRecAudio.setBackgroundResource(R.drawable.icon_record_started);
+		botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
 		botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
-		
-		botonPlayAudio.setVisibility(View.INVISIBLE);
 		
 		layoutBotones.addView(botonRecAudio);
 		layoutBotones.addView(botonPlayAudio);
@@ -89,6 +89,8 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
+				audioPlayer.stopPlaying();
+				audioRecorder.stopRecording();
 				onPossitiveButtonClick();
 			}
 		});
@@ -98,20 +100,23 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
+				audioPlayer.stopPlaying();
+				audioRecorder.stopRecording();
+				externalManager.eliminarAudioTemp(movimiento);
+
 				onNegativeButtonClick();
 			}
 		});
 		
-		timer = new CountDownTimer(3000, 1) {
+		timer = new CountDownTimer(DURATION, 1) {
 			
 			@Override
 			public void onFinish() 
 			{ 
-				audioRecord.stopRecording();
+				audioRecorder.stopRecording();
+				botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
 				
-				botonPlayAudio.setVisibility(View.VISIBLE);
-				botonRecAudio.setVisibility(View.VISIBLE);
-				
+				actualizarInterfaz();				
 				reiniciarContadores();
 			}
 
@@ -123,6 +128,7 @@ public abstract class AudioAlert extends WindowAlert
         };
         
         reiniciarContadores();
+        actualizarInterfaz();
 	}
 	
 	/* SECTION Métodos Abstractos */
@@ -144,6 +150,20 @@ public abstract class AudioAlert extends WindowAlert
 		progressBar.setProgress((int) (100*(DURATION - millisUntilFinished)/DURATION));
 	}
 	
+	private void actualizarInterfaz()
+	{
+		if(externalManager.existeFicheroTemp(movimiento))
+		{
+			botonPlayAudio.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			botonPlayAudio.setVisibility(View.INVISIBLE);
+		}
+		
+		botonRecAudio.setVisibility(View.VISIBLE);
+	}
+	
 	/* SECTION Métodos Listener onClick */
 	
 	private class OnRecAudioClickListener implements OnClickListener
@@ -151,10 +171,11 @@ public abstract class AudioAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			botonRecAudio.setVisibility(View.INVISIBLE);
-			
 			timer.start();
-			audioRecord.startRecording(movimiento);
+			audioRecorder.startRecording(movimiento);
+			
+			botonRecAudio.setBackgroundResource(R.drawable.icon_record_started);
+			actualizarInterfaz();
 		}	
 	}
 	
@@ -163,8 +184,9 @@ public abstract class AudioAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			botonPlayAudio.setBackgroundResource(R.drawable.icon_play_selected);
 			audioPlayer.startPlaying(movimiento);
+			
+			botonPlayAudio.setBackgroundResource(R.drawable.icon_play_selected);
 		}	
 	}
 }

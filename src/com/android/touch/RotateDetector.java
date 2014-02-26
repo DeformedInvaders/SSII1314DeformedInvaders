@@ -106,6 +106,6 @@ public class RotateDetector
     private boolean rotateOnCoordUp()
     {
     	started = false;
-    	return false;
+    	return true;
     }
 }
