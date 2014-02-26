@@ -383,7 +383,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     			estado = TEstado.Loading;
     			setTitle(R.string.title_app);
     		}
-    		if(fragmento instanceof MainFragment)
+    		else if(fragmento instanceof MainFragment)
     		{
     			estado = TEstado.Main;
     			setTitle(R.string.title_app);

@@ -139,11 +139,22 @@ public class DesignFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if(canvas.seleccionarTriangular())
+			if(canvas.isEstadoDibujando() || canvas.isEstadoTriangulando())
 			{
-				canvas.setEstado(TTouchEstado.CoordDetectors);
-				
-				if(canvas.seleccionarRetoque())
+				if(canvas.seleccionarTriangular())
+				{
+					canvas.setEstado(TTouchEstado.CoordDetectors);
+					canvas.seleccionarRetoque();
+				}
+				else
+				{
+					canvas.setEstado(TTouchEstado.SimpleTouch);
+					Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
+				}
+			}
+			else if(canvas.isEstadoRetocando())
+			{
+				if(canvas.isPoligonoDentroMarco())
 				{
 					mCallback.onDesignReadyButtonClicked(canvas.getEsqueleto());
 				}
@@ -151,13 +162,7 @@ public class DesignFragment extends OpenGLFragment
 				{
 					Toast.makeText(getActivity(), R.string.error_retouch, Toast.LENGTH_SHORT).show();
 				}
-			}
-			else
-			{
-				canvas.setEstado(TTouchEstado.SimpleTouch);
-				
-				Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
-			}
+			}			
 		}
 	}
 	

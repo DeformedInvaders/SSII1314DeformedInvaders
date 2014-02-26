@@ -173,17 +173,25 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			// Seleccionado
 			dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
+						
+			// Centrado de Marco
+			centrarPersonajeEnMarcoFinal(gl);
 			
 			// Marcos
 			if(tipoDeformacion == TDeformTipo.Run || tipoDeformacion == TDeformTipo.Attack)
 			{
 				dibujarMarcoCentral(gl);
 			}
+			else if(tipoDeformacion == TDeformTipo.Jump)
+			{
+				dibujarMarcoInferior(gl);
+			}
+			else if(tipoDeformacion == TDeformTipo.Crouch)
+			{
+				dibujarMarcoSuperior(gl);
+			}
 			
 			dibujarMarcoLateral(gl);
-			
-			// Centrado de Marco
-			centrarPersonajeEnMarcoFinal(gl);
 		}
 	}
 	

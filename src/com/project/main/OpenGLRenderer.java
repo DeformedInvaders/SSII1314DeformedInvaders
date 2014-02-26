@@ -448,21 +448,40 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	protected void dibujarMarcoCentral(GL10 gl)
 	{
+		dibujarMarcoSuperior(gl);
+		dibujarMarcoInferior(gl);
+	}
+	
+	protected void dibujarMarcoSuperior(GL10 gl)
+	{
 		gl.glPushMatrix();
 		
-		gl.glTranslatef(xLeft, yBottom, 1.0f);
+			gl.glTranslatef(xLeft, yBottom, 1.0f);
+		
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(marcoC, marcoB + marcoA, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
+			
+			gl.glPopMatrix();
+			
+		gl.glPopMatrix();		
+	}
+	
+	protected void dibujarMarcoInferior(GL10 gl)
+	{
+		gl.glPushMatrix();
+		
+			gl.glTranslatef(xLeft, yBottom, 1.0f);
 		
 			gl.glPushMatrix();
 			
 				gl.glTranslatef(marcoC, 0, 0);
 				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
 				
-				gl.glTranslatef(0, marcoB + marcoA, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
-			
 			gl.glPopMatrix();
 			
-		gl.glPopMatrix();
+		gl.glPopMatrix();		
 	}
 	
 	private MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)

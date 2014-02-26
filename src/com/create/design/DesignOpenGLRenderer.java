@@ -208,20 +208,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 	
-	public boolean seleccionarRetoque()
+	public void seleccionarRetoque()
 	{
-		if(estado == TDesignEstado.Triangulando)
-		{
-			estado = TDesignEstado.Retocando;
-			
-			if(isPoligonoDentroMarco(vertices))
-			{
-				estado = TDesignEstado.Terminado;
-				return true;
-			}
-		}
-		
-		return false;
+		estado = TDesignEstado.Retocando;
 	}
 	
 	/* SECTION Métodos de Obtención de Información */
@@ -237,10 +226,36 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		
 		return null;
 	}
+	
+	public boolean isEstadoDibujando()
+	{
+		return estado == TDesignEstado.Dibujando;
+	}
+	
+	public boolean isEstadoTriangulando()
+	{
+		return estado == TDesignEstado.Triangulando;
+	}
+	
+	public boolean isEstadoRetocando()
+	{
+		return estado == TDesignEstado.Retocando;
+	}
 
 	public boolean isPoligonoCompleto()
 	{
 		return puntos.size >= 6;
+	}
+	
+	public boolean isPoligonoDentroMarco()
+	{
+		if(isPoligonoDentroMarco(vertices))
+		{
+			estado = TDesignEstado.Terminado;
+			return true;
+		}
+				
+		return false;
 	}
 	
 	/* SECTION Métodos de Guardado de Información */
