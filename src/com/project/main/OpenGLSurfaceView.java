@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.android.touch.MoveDetector;
+import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
 import com.android.touch.TTouchEstado;
 
@@ -25,6 +26,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	// Detectores de Gestos
 	private ScaleDetector scaleDetector;
 	private MoveDetector moveDetector;
+	private RotateDetector rotateDetector;
     
 	/* SECTION Constructora */
 	
@@ -60,6 +62,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
         // Detectors
     	scaleDetector = new ScaleDetector(mContext, renderer);
         moveDetector = new MoveDetector(renderer);
+        rotateDetector = new RotateDetector(renderer);
         
         setEstado(estado);
     }
@@ -70,6 +73,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     	
     	scaleDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
     	moveDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
+    	rotateDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
     }
     
     /* SECTION Métodos Listener onTouch */
@@ -130,16 +134,20 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			float screenHeight = getHeight();
 			
 			if(event.getPointerCount() == 1)
-			{
-	    		float pixelX = event.getX();
-				float pixelY = event.getY();
-				
-				moveDetector.onTouchEvent(event, pixelX, pixelY, screenWidth, screenHeight);
+			{				
+				moveDetector.onTouchEvent(event, screenWidth, screenHeight);
 			}
-			else
+			else if(event.getPointerCount() == 2)
 			{
-				scaleDetector.onTouchEvent(event, screenWidth, screenHeight);
-				moveDetector.onStopEvent(event);
+				if(rotateDetector.onTouchEvent(event, screenWidth, screenHeight))
+				{
+					moveDetector.onStopEvent(event);
+				}
+				else
+				{
+					scaleDetector.onTouchEvent(event, screenWidth, screenHeight);
+					moveDetector.onStopEvent(event);
+				}
 			}
 			
 			requestRender();

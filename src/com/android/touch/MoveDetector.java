@@ -35,12 +35,15 @@ public class MoveDetector
 	
 	/* SECTION Métodos Listener onTouch */
 	
-    public boolean onTouchEvent(MotionEvent event, float pixelX, float pixelY, float screenWidth, float screenHeight) 
+    public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight) 
     {
     	int action = event.getActionMasked();
     	
     	if(!bloqueado)
     	{	    
+        	float pixelX = event.getX();
+        	float pixelY = event.getY();
+        	
     		switch(action)
 			{
 				case MotionEvent.ACTION_DOWN:

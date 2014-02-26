@@ -308,6 +308,15 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 		if (angle < 0) angle += 360;
 		return angle;
 	}
+	
+	/** @return the angle in degrees of this vector (point) relative to the x-axis.
+	 * Angles are towards the positive y-axis (typically counter-clockwise) and between 0 and 360. */
+	public float angleRad () {
+		float angle = (float)Math.atan2(y, x);
+		if (angle < 0) angle += 2*Math.PI;
+		return angle;
+	}
+
 
 	/** Sets the angle of the vector in degrees relative to the x-axis, towards the positive y-axis (typically counter-clockwise).
 	 * @param degrees The angle to set. */

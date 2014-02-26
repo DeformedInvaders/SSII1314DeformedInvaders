@@ -245,9 +245,11 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* SECTION Métodos de modificación de puntos */
 	
-	public void coordZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
+	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
 	
 	public void coordsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
+	
+	public void coordsRotate(float ang, float pixelX, float pixelY, float screenWidth, float screenHeight) { }
 	
 	protected void trasladarVertices(float vx, float vy, FloatArray vertices)
 	{

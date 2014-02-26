@@ -158,7 +158,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	protected void onMultiTouchEvent() { }
 	
 	@Override
-	public void coordZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
 		if(estado == TDesignEstado.Retocando)
 		{
@@ -191,6 +191,19 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float dWorldY = worldY - lastWorldY;
 			
 			trasladarVertices(dWorldX, dWorldY, vertices);
+			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+		}
+	}
+
+	@Override
+	public void coordsRotate(float ang, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		if(estado == TDesignEstado.Retocando)
+		{
+			float cWorldX = convertToWorldXCoordinate(pixelX, screenWidth);
+			float cWorldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			
+			rotarVertices(ang, cWorldX, cWorldY, vertices);
 			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
