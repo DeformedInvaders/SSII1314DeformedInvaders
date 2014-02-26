@@ -532,22 +532,11 @@ public abstract class OpenGLRenderer implements Renderer
 		return screenHeight - (worldY - yBottom)*screenHeight/(yTop-yBottom);
 	}
 	
-	protected boolean inPixelInCanvas(float worldX, float worldY)
-	{
-		return worldX >= xLeft && worldX <= xRight && worldY >= yBottom && worldY <= yTop;
-	}
-	
 	/* SECTION Métodos de Búsqueda de Pixeles */
 	
 	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-		
-		if(!inPixelInCanvas(worldX, worldY)) return -1;
-		
 		int minpos = -1;
-		
 		int j = 0;
 		while(j < vertices.size)
 		{

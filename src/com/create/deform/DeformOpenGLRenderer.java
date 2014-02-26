@@ -10,6 +10,8 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
+
 import com.lib.math.Intersector;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
@@ -172,7 +174,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 			
 			// Seleccionado
-			dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
+			if(estado == TDeformEstado.Deformar)
+			{
+				dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
+			}
 						
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
@@ -297,19 +302,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private void seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarPixel(handles, pixelX, pixelY, screenWidth, screenHeight);
+		Log.d("TEST", "POS: "+j);
 		if(j != -1)
 		{	
-			// Vértice pertenece a los Handles
-			if(indiceHandles.contains(j))
-			{
-				// Seleccionar Handle
-				int indiceHandleSeleccionado = indiceHandles.indexOf(j);
-				handleSeleccionado.set(4*pointer, indiceHandleSeleccionado);
-				handleSeleccionado.set(4*pointer+1, 1);
-				handleSeleccionado.set(4*pointer+2, handles.get(2*indiceHandleSeleccionado));
-				handleSeleccionado.set(4*pointer+3, handles.get(2*indiceHandleSeleccionado+1));
-			}
+			// Seleccionar Handle
+			handleSeleccionado.set(4*pointer, j);
+			handleSeleccionado.set(4*pointer+1, 1);
+			handleSeleccionado.set(4*pointer+2, handles.get(2*j));
+			handleSeleccionado.set(4*pointer+3, handles.get(2*j+1));
 		}
 	}
 	
@@ -344,26 +345,23 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float frameX = convertToFrameXCoordinate(worldX);
 		float frameY = convertToFrameYCoordinate(worldY);
 		
-		if(inPixelInCanvas(worldX, worldY))
+		int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pointer);
+		float lastFrameX = handles.get(2*indiceHandleSeleccionado);
+		float lastFrameY = handles.get(2*indiceHandleSeleccionado);
+		
+		float lastWorldX = convertFromFrameXCoordinate(lastFrameX);
+		float lastWorldY = convertFromFrameYCoordinate(lastFrameY);
+		
+		float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
+		float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);			
+		
+		if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*MAX_DISTANCE_PIXELS)
 		{
-			int indiceHandleSeleccionado = (int) handleSeleccionado.get(4*pointer);
-			float lastFrameX = handles.get(2*indiceHandleSeleccionado);
-			float lastFrameY = handles.get(2*indiceHandleSeleccionado);
+			handles.set(2*indiceHandleSeleccionado, frameX);
+			handles.set(2*indiceHandleSeleccionado+1, frameY);
 			
-			float lastWorldX = convertFromFrameXCoordinate(lastFrameX);
-			float lastWorldY = convertFromFrameYCoordinate(lastFrameY);
-			
-			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);			
-			
-			if(Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3*MAX_DISTANCE_PIXELS)
-			{
-				handles.set(2*indiceHandleSeleccionado, frameX);
-				handles.set(2*indiceHandleSeleccionado+1, frameY);
-				
-				handleSeleccionado.set(4*pointer+2, frameX);
-				handleSeleccionado.set(4*pointer+3, frameY);
-			}
+			handleSeleccionado.set(4*pointer+2, frameX);
+			handleSeleccionado.set(4*pointer+3, frameY);
 		}
 	}
 	
@@ -377,7 +375,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handleSeleccionado.set(4*pointer, -1);
 			handleSeleccionado.set(4*pointer+1, 0);
 			
-			if(modoGrabar)
+			if(modoGrabar && listaHandlesAnimacion.size() > 0)
 			{
 				modoGrabar = false;
 				estado = TDeformEstado.Nada;
