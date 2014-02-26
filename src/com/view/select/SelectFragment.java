@@ -164,9 +164,9 @@ public class SelectFragment extends OpenGLFragment
 					TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_social_share_title), getString(R.string.text_social_share_description), text, getString(R.string.text_button_send), getString(R.string.text_button_cancel)) {
 			
 						@Override
-						public void onPossitiveButtonClick()
+						public void onPossitiveButtonClick(String text)
 						{
-							connector.publicar(getText(), manager.cargarImagen(personaje.getNombre()));
+							connector.publicar(text, manager.cargarImagen(personaje.getNombre()));
 							canvas.seleccionarTerminado();
 							pager.setSwipeable(true);
 							
@@ -175,7 +175,7 @@ public class SelectFragment extends OpenGLFragment
 						}
 		
 						@Override
-						public void onNegativeButtonClick()
+						public void onNegativeButtonClick(String text)
 						{
 							canvas.seleccionarTerminado();
 							pager.setSwipeable(true);

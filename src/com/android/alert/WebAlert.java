@@ -1,7 +1,6 @@
 package com.android.alert;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -13,21 +12,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 @SuppressLint("SetJavaScriptEnabled")
-public abstract class WebAlert
-{
-	private AlertDialog.Builder alert;
-	private AlertDialog dialog;
-	
+public abstract class WebAlert extends WindowAlert
+{	
 	private WebView webView;
 	
 	/* SECTION Constructora */
 	
 	public WebAlert(Context context, String title, String textNo)
 	{	
-		alert = new AlertDialog.Builder(context);
-		alert.setTitle(title);
+		super(context, title);
 		
-		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+		setNegativeButton(textNo, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -48,9 +43,7 @@ public abstract class WebAlert
 		layout.addView(webView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		layout.addView(keyboardHack, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT); 
 		
-		alert.setView(layout);
-		
-		dialog = alert.create();
+		setView(layout);
 	}
 	
 	/* SECTION Métodos Abstractos */
@@ -62,16 +55,6 @@ public abstract class WebAlert
 	public void loadURL(String url)
 	{
 		webView.loadUrl(url);
-	}
-	
-	public void show()
-	{
-		dialog.show();
-	}
-	
-	public void dismiss()
-	{
-		dialog.dismiss();
 	}
 	
 	/* SECTION Listener WebClient */

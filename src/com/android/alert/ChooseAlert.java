@@ -1,12 +1,10 @@
 package com.android.alert;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-public abstract class ChooseAlert
+public abstract class ChooseAlert extends WindowAlert
 {
-	private AlertDialog.Builder builder;
 	private int selected;
 	private String[] lista;
 	
@@ -14,14 +12,12 @@ public abstract class ChooseAlert
 	
 	public ChooseAlert(Context context, String title, String textYes, String textNo, String[] list)
 	{
+		super(context, title);
+		
 		selected = -1;
 		lista = list;
 		
-		builder = new AlertDialog.Builder(context);
-		
-		builder.setTitle(title);
-		
-		builder.setSingleChoiceItems(lista, selected, new DialogInterface.OnClickListener() {
+		setSingleChoiceItems(lista, selected, new DialogInterface.OnClickListener() {
             
 			@Override
 			public void onClick(DialogInterface dialog, int which)
@@ -30,7 +26,7 @@ public abstract class ChooseAlert
             }
 		});	
 
-		builder.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -45,7 +41,7 @@ public abstract class ChooseAlert
 			}
 		});
 
-		builder.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+		setNegativeButton(textNo, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -59,11 +55,5 @@ public abstract class ChooseAlert
 	public abstract void onSelectedPossitiveButtonClick(String selected);
 	public abstract void onNoSelectedPossitiveButtonClick();
 	public abstract void onNegativeButtonClick();
-	
-	/* SECTION Métodos Públicos */
-	
-	public void show()
-	{
-		builder.show();
-	}
+
 }

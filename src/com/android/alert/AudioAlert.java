@@ -1,6 +1,5 @@
 package com.android.alert;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.CountDownTimer;
@@ -18,11 +17,9 @@ import com.android.audio.AudioRecorderManager;
 import com.android.storage.ExternalStorageManager;
 import com.project.main.R;
 
-public abstract class AudioAlert 
+public abstract class AudioAlert extends WindowAlert
 {
 	private static final long DURATION = 3000;
-	
-	private AlertDialog.Builder alert;
 	
 	private TextView cuenta;
 	private ProgressBar progressBar;
@@ -38,6 +35,8 @@ public abstract class AudioAlert
 	
 	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, ExternalStorageManager manager, String nombre)
 	{		
+		super(context, title);
+		
 		movimiento = nombre;
 		
 		audioRecord = new AudioRecorderManager(manager);
@@ -50,10 +49,7 @@ public abstract class AudioAlert
 			}
 		};
 		
-		alert = new AlertDialog.Builder(context);
-		
-		alert.setTitle(title);
-		alert.setMessage(messege);
+		setMessage(messege);
 		
 		LinearLayout layout = new LinearLayout(context);
 		
@@ -86,9 +82,9 @@ public abstract class AudioAlert
 		layout.addView(layoutBotones, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		
-		alert.setView(layout);
+		setView(layout);
 		        
-		alert.setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
@@ -97,7 +93,7 @@ public abstract class AudioAlert
 			}
 		});
 
-		alert.setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+		setNegativeButton(textNo, new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
@@ -138,13 +134,6 @@ public abstract class AudioAlert
 	{
 		cuenta.setText("0" + DURATION/1000 + ":" + DURATION%100 + "0");
 		progressBar.setProgress(0);
-	}
-	
-	/* SECTION Métodos Públicos */
-	
-	public void show()
-	{
-		alert.show();
 	}
 	
 	/* SECTION Métodos Privados */
