@@ -2,7 +2,7 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
-import com.project.main.OpenGLRenderer;
+import com.android.view.OpenGLRenderer;
 
 public class MoveDetector
 {

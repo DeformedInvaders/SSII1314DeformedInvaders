@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.android.storage.ExternalStorageManager;
-import com.create.design.TDisplayTipo;
+import com.android.view.OpenGLFragment;
+import com.creation.design.TDisplayTipo;
 import com.project.data.Personaje;
-import com.view.display.DisplayGLSurfaceView;
+import com.selection.display.DisplayGLSurfaceView;
 
 public class MainFragment extends OpenGLFragment
 {
@@ -73,7 +74,7 @@ public class MainFragment extends OpenGLFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{		
 		// Seleccionar Layout
-		View rootView = inflater.inflate(R.layout.fragment_main_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_project_main_layout, container, false);
 		
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.removeAllTabs();

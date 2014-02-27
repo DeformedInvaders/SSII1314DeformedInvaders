@@ -6,9 +6,8 @@
 		    <string name="title_design_phase">Define the design.</string>
 		    <string name="title_paint_phase">Define the texture.</string>
 		    <string name="title_animation_phase">Define the animation.</string>
-		    <string name="title_selection_phase">Select a character.</string>
-		    <string name="title_game_phase">Enjoy the game.</string>
-		    <string name="title_test_phase">Testing features.</string>
+		    <string name="title_character_selection_phase">Select a character.</string>
+		    <string name="title_level_selection_phase">Select a level.</string>
 	    
 	    <!-- ActionBar PagerView Section Titles -->
 			<string name="title_animation_section_run">Run</string>
@@ -16,9 +15,17 @@
 			<string name="title_animation_section_crouch">Crouch</string>
 			<string name="title_animation_section_attack">Attack</string>
 			
-			<string name="title_test_section_multitouch">Multitouch</string>
-			<string name="title_test_section_audio">Audio</string>
-			<string name="title_test_secton_social">Social</string>
+			<string name="title_level_section_moon">Moon</string>
+			<string name="title_level_section_stonehenge">Stonehenge</string>
+			<string name="title_level_section_egypt">Egypt</string>
+			<string name="title_level_section_rome">Rome</string>
+			<string name="title_level_section_newyork">New York</string>
+			
+			<string name="text_level_section_moon">Moon 2014 BC.</string>
+			<string name="text_level_section_stonehenge">Stonehenge 3000 BC.</string>
+			<string name="text_level_section_egypt">Egypt 2560 BC.</string>
+			<string name="text_level_section_rome">Rome 35 BC.</string>
+			<string name="text_level_section_newyork">New York 1960 AC.</string>
 			
 		<!-- ActionBar Icons -->
 			<string name="title_menu_twitter">Twitter</string>
@@ -152,11 +159,11 @@
 		<!-- Animation Fragment -->
 		    <string name="desc_animation_ready">Ready to save the character.</string>
 		    
-		<!-- Selection Fragment -->
+		<!-- Character Selection Fragment -->
 	    	<string name="desc_selection_select">Select this character.</string>
 	    	<string name="desc_selection_delete">Delete this character.</string>
 	    	
-	    <!-- Select Fragment -->
+	    <!-- Character Select Fragment -->
 	    	<string name="desc_select_camera">Save a picture of this character.</string>
 	    	<string name="desc_select_run">Play run animation.</string>
 	    	<string name="desc_select_jump">Play jump animation.</string>
@@ -176,6 +183,9 @@
 	    	<string name="desc_social_photo">Share a photo.</string>
 	    	<string name="desc_social_wifi">Wifi connection.</string>
 	    
+	    <!-- Level Select Fragment -->
+	    	<string name="desc_select_background">Level Background</string>
+	    	
 	    <!-- Sticker Dialog -->		    
 		    <string name="desc_sticker_eye">Eye sticker</string>
 		    <string name="desc_sticker_mouth">Mouth sticker</string>

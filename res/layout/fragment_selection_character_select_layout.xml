@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout style="@style/Layout_Fragment_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.selection.display.DisplayGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
+        android:id="@+id/displayGLSurfaceViewSelect1" />
+    
+    <LinearLayout style="@style/Layout_Center_FragmentButton_Style" >
+
+        <ImageButton
+            android:id="@+id/imageButtonSelect1"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_share_picture"
+            android:contentDescription="@string/desc_select_camera" />
+
+	</LinearLayout>
+	
+    <LinearLayout style="@style/Layout_Left_FragmentButton_Style" >
+
+        <ImageButton
+            android:id="@+id/imageButtonSelect2"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_run"
+            android:contentDescription="@string/desc_select_run" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSelect3"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_jump"
+            android:contentDescription="@string/desc_select_jump" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSelect4"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_crouch"
+            android:contentDescription="@string/desc_select_crouch" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonSelect5"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_attack"
+            android:contentDescription="@string/desc_select_attack" />
+
+	</LinearLayout>
+
+</RelativeLayout>

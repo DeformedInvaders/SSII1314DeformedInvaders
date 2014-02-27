@@ -75,7 +75,7 @@ public class LoadingFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{		
 		// Seleccionar Layout
-		View rootView = inflater.inflate(R.layout.fragment_loading_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_project_loading_layout, container, false);
 		
 		// Instanciar Elementos de la GUI
 		textView = (TextView) rootView.findViewById(R.id.textViewLoading1);		

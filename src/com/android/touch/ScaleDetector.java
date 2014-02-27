@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
 
-import com.project.main.OpenGLRenderer;
+import com.android.view.OpenGLRenderer;
 
 public class ScaleDetector extends SimpleOnScaleGestureListener
 {

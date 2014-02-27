@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import com.project.main.ViewPagerFragment;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;

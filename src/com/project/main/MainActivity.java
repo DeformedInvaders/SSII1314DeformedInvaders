@@ -19,17 +19,18 @@ import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
-import com.create.deform.AnimationFragment;
-import com.create.design.DesignFragment;
-import com.create.paint.PaintFragment;
+import com.creation.deform.AnimationFragment;
+import com.creation.design.DesignFragment;
+import com.creation.paint.PaintFragment;
+import com.game.select.LevelSelectionFragment;
 import com.project.data.Esqueleto;
 import com.project.data.Movimientos;
 import com.project.data.Personaje;
 import com.project.data.Textura;
 import com.project.loading.LoadingFragment;
-import com.view.select.SelectionFragment;
+import com.selection.select.CharacterSelectionFragment;
 
-public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, SelectionFragment.SelectionFragmentListener
+public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener
 {	
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
@@ -118,7 +119,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		boolean clearBackStack = false;
 		boolean addToBackStack = true;
 		
-		if(estado == TEstado.Selection) addToBackStack = false;
+		if(estado == TEstado.CharacterSelection) addToBackStack = false;
 		
 		actualizarEstado(fragmento);
 		limpiarActionBar();
@@ -169,13 +170,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onMainSelectButtonClicked()
     {
-    	changeFragment(SelectionFragment.newInstance(listaPersonajes, externalManager, connector));
+    	changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, externalManager, connector));
     }
     
 	@Override
     public void onMainPlayButtonClicked()
     {
-		Toast.makeText(getApplication(), R.string.error_play, Toast.LENGTH_SHORT).show();
+		changeFragment(LevelSelectionFragment.newInstance());
     }
 	
 	/* SECTION Métodos Design Fragment */
@@ -272,7 +273,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Selection Fragment */
     
 	@Override
-    public void onSelectionSelectClicked(int indice)
+    public void onCharacterSelectionSelectClicked(int indice)
     {
 		personajeSeleccionado = indice;
 		
@@ -283,7 +284,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     }
     
 	@Override
-    public void onSelectionDeleteButtonClicked(final int indice)
+    public void onCharacterSelectionDeleteButtonClicked(final int indice)
     {   	
     	ConfirmationAlert alert = new ConfirmationAlert(this, getString(R.string.text_delete_character_title), getString(R.string.text_delete_character_description), getString(R.string.text_button_ok), getString(R.string.text_button_no)) {
 
@@ -401,10 +402,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     			estado = TEstado.Animation;
     			setTitle(R.string.title_animation_phase);
     		}
-    		else if(fragmento instanceof SelectionFragment)
+    		else if(fragmento instanceof CharacterSelectionFragment)
     		{
-    			estado = TEstado.Selection;
-    			setTitle(R.string.title_selection_phase);
+    			estado = TEstado.CharacterSelection;
+    			setTitle(R.string.title_character_selection_phase);
+    		}
+    		else if(fragmento instanceof LevelSelectionFragment)
+    		{
+    			estado = TEstado.LevelSelection;
+    			setTitle(R.string.title_level_selection_phase);
     		}
     	}
     }

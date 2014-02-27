@@ -2,5 +2,5 @@ package com.project.main;
 
 public enum TEstado
 {
-	Loading, Main, Design, Paint, Animation, Selection, Test
+	Loading, Main, Design, Paint, Animation, CharacterSelection, LevelSelection
 }
