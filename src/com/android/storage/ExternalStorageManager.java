@@ -190,12 +190,11 @@ public class ExternalStorageManager
 	
 	/* SECTION Métodos de Eliminación de Directorios */
 	
-	private void eliminarFichero(String nombre)
+	private void eliminarFichero(File file)
 	{
-		File file = new File(nombre);
 		if(file.isDirectory())
 		{
-			String[] list = file.list();
+			File[] list = file.listFiles();
 			for(int i = 0; i < list.length; i++)
 			{
 				eliminarFichero(list[i]);
@@ -211,7 +210,7 @@ public class ExternalStorageManager
 	
 	public void eliminarDirectorioPersonaje(String nombre)
 	{
-		eliminarFichero(getDirectorioPersonaje(nombre));
+		eliminarFichero(new File(getDirectorioPersonaje(nombre)));
 	}
 	
 	/* SECTION Métodos Lectura y Escritura */
