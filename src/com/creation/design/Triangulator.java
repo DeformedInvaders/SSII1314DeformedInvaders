@@ -14,8 +14,8 @@ import com.lib.utils.ShortArray;
 public class Triangulator
 {
 	private final static int NUM_BSPLINE_VERTICES = 60;
-	private final static int DEEP_TRIANGULATOR = 4;
-	private final static float MAX_LONG_EDGE_TRIANGULATOR = 100.0f;
+	private final static int DEEP_TRIANGULATOR = 2;
+	private final static float MAX_LONG_EDGE_TRIANGULATOR = 20.0f;
 	
 	private FloatArray vertices;
 	private ShortArray triangulos;
@@ -36,6 +36,12 @@ public class Triangulator
 			poligonoSimple = calcularPoligonoSimple(bsplineVertices, false).size == 0;
 			if(poligonoSimple)
 			{
+				/*	float areaMesh = calcularAreaMesh(bsplineVertices);
+				int profundidad = 0;
+				if (areaMesh>50000)
+					profundidad = 2;
+				else if (areaMesh<=50000)
+					profundidad = 2; */
 				Mesh m = calcularMeshGenerator(bsplineVertices, DEEP_TRIANGULATOR, MAX_LONG_EDGE_TRIANGULATOR);
 				vertices = m.getVertices();
 				triangulos = m.getTriangulos();
@@ -92,6 +98,11 @@ public class Triangulator
 	{
 		EarClippingTriangulator earClippingCalculator = new EarClippingTriangulator();
 		return earClippingCalculator.computeTriangles(vertices);
+	}
+	
+	public float calcularAreaMesh(FloatArray bsplineVertices) {
+		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
+		return delaunayMeshGenerator.calcularAreaMesh(bsplineVertices);
 	}
 	
 	public static Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
