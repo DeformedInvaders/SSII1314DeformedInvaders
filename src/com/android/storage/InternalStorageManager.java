@@ -23,9 +23,12 @@ import com.project.main.R;
 
 public class InternalStorageManager
 {
-	private static final String CHARACTERSFILE = "CharactersDataBase";
-	private static final String CHARACTERCHOSENFILE = "CharacterChosen";
-	private static final String CHARACTERSNAMESFILE = "CharactersNamesDataBase";
+	private static final int NUM_LEVELS = 5;
+	
+	private static final String CHARACTERS_FILE = "CharactersDataBase";
+	private static final String CHARACTER_CHOSEN_FILE = "CharacterChosen";
+	private static final String CHARACTERS_NAMES_FILE = "CharactersNamesDataBase";
+	private static final String LEVELS_FILE = "LevelDataBase";
 	
 	private Activity activity;
 	private List<String> nombres;
@@ -44,17 +47,22 @@ public class InternalStorageManager
 	
 	private String getCharactersFileName()
 	{
-		return CHARACTERSFILE;
+		return CHARACTERS_FILE;
 	}
 	
 	private String getCharacterChosenFileName()
 	{
-		return CHARACTERCHOSENFILE;
+		return CHARACTER_CHOSEN_FILE;
 	}
 	
 	private String getCharacterNamesFileName()
 	{
-		return CHARACTERSNAMESFILE;
+		return CHARACTERS_NAMES_FILE;
+	}
+	
+	private String getLevelsFileName()
+	{
+		return LEVELS_FILE;
 	}
 	
 	private boolean comprobarNombresInternos(String nombre)
@@ -62,6 +70,7 @@ public class InternalStorageManager
 		if(nombre.equals(getCharactersFileName())) return false;
 		if(nombre.equals(getCharacterChosenFileName())) return false;
 		if(nombre.equals(getCharacterNamesFileName())) return false;
+		if(nombre.equals(getLevelsFileName())) return false;
 		
 		return true;
 	}
@@ -383,4 +392,90 @@ public class InternalStorageManager
 		Log.d("TEST", "File not deleted");
 		return false;
 	}
+
+	/* SECTION Métodos Niveles */
+	
+	public boolean[] cargarNiveles()
+	{
+		boolean[] niveles = new boolean[NUM_LEVELS];
+		
+		try
+		{
+			FileInputStream file = activity.openFileInput(getLevelsFileName());
+			ObjectInputStream data = new ObjectInputStream(file);
+			
+			// Cargar Niveles Jugados
+			for(int i = 0; i < NUM_LEVELS; i++)
+			{
+				niveles[i] = data.readBoolean();
+			}
+			
+			data.close();
+			file.close();
+			
+			Log.d("TEST", "Levels loadead");
+			return niveles;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Levels file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Levels sream corrupted");
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "File Levels ioexception");
+			e.printStackTrace();
+		}
+		
+		Log.d("TEST", "Levels not loadead");
+		niveles[0] = true;
+		
+		return niveles;
+	}
+	
+	public boolean guardarNiveles(boolean[] niveles)
+	{
+		try
+		{
+			FileOutputStream file = activity.openFileOutput(getLevelsFileName(), Context.MODE_PRIVATE);
+			ObjectOutputStream data = new ObjectOutputStream(file);
+			
+			// Guardar Personaje Seleccionado
+			for(int i = 0; i < niveles.length; i++)
+			{
+				data.writeBoolean(niveles[i]);
+			}
+			
+			data.flush();
+			data.close();
+			file.close();
+			
+			Log.d("TEST", "Chosen saved");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Chosen file not found");
+			e.printStackTrace();
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Chosen sream corrupted");
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "File Chosen ioexception");
+			e.printStackTrace();
+		}
+		
+		Log.d("TEST", "Chosen not saved");
+		return false;
+	}
+
 }

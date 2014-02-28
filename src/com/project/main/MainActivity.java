@@ -36,6 +36,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
 	private int personajeSeleccionado;
+	private boolean[] estadoNiveles;
 
 	/* Almacenamiento */
 	private InternalStorageManager internalManager;
@@ -149,10 +150,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Loading Fragment */
 	
 	@Override
-	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado)
+	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles)
 	{
 		listaPersonajes = lista;
 		personajeSeleccionado = seleccionado;
+		estadoNiveles = niveles;
 		
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 	}
@@ -176,7 +178,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onMainPlayButtonClicked()
     {
-		changeFragment(LevelSelectionFragment.newInstance());
+		changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
     }
 	
 	/* SECTION Métodos Design Fragment */

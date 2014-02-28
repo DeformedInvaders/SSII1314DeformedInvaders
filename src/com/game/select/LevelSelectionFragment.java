@@ -11,12 +11,20 @@ import com.project.main.R;
 
 public class LevelSelectionFragment extends ViewPagerFragment
 {	
+	private boolean[] estadoNiveles;
+	
 	/* SECTION Constructora */
 	
-	public static final LevelSelectionFragment newInstance()
+	public static final LevelSelectionFragment newInstance(boolean[] niveles)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
+		fragment.setParameters(niveles);
 		return fragment;
+	}
+	
+	private void setParameters(boolean[] niveles)
+	{
+		estadoNiveles = niveles;
 	}
 	
 	/* SECTION Métodos Fragment */
@@ -29,11 +37,13 @@ public class LevelSelectionFragment extends ViewPagerFragment
 
 		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewLevelSelection1);
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
-		viewPager.addView(LevelSelectFragment.newInstance(R.drawable.background_moon, R.string.text_level_section_moon), getString(R.string.title_level_section_moon));
-		viewPager.addView(LevelSelectFragment.newInstance(R.drawable.background_stonehenge, R.string.text_level_section_stonehenge), getString(R.string.title_level_section_stonehenge));
-		viewPager.addView(LevelSelectFragment.newInstance(R.drawable.background_egypt, R.string.text_level_section_egypt), getString(R.string.title_level_section_egypt));
-		viewPager.addView(LevelSelectFragment.newInstance(R.drawable.background_rome, R.string.text_level_section_rome), getString(R.string.title_level_section_rome));
-		viewPager.addView(LevelSelectFragment.newInstance(R.drawable.background_newyork, R.string.text_level_section_newyork), getString(R.string.title_level_section_newyork));
+		
+		//FIXME
+		viewPager.addView(LevelSelectFragment.newInstance(estadoNiveles[0], TLevelTipo.Moon), getString(R.string.title_level_section_moon));
+		viewPager.addView(LevelSelectFragment.newInstance(estadoNiveles[1], TLevelTipo.NewYork), getString(R.string.title_level_section_newyork));
+		viewPager.addView(LevelSelectFragment.newInstance(estadoNiveles[2], TLevelTipo.Rome), getString(R.string.title_level_section_rome));
+		viewPager.addView(LevelSelectFragment.newInstance(estadoNiveles[3], TLevelTipo.Egypt), getString(R.string.title_level_section_egypt));
+		viewPager.addView(LevelSelectFragment.newInstance(estadoNiveles[4], TLevelTipo.Stonehenge), getString(R.string.title_level_section_stonehenge));
 		
         return rootView;
     }

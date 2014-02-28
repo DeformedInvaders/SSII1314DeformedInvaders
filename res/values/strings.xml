@@ -40,6 +40,7 @@
 			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
+			<string name="text_progressBar_level">Loading level data.</string>
 			<string name="text_progressBar_chosen">Loading chosen character.</string>
 			<string name="text_progressBar_character_list">Loading character: </string>
 			<string name="text_progressBar_completed">Loading stored data completed.</string>
@@ -82,6 +83,9 @@
 			<string name="text_facebook_oauth_permission">Facebook permission granted.</string>
 			<string name="text_facebook_oauth_sign_in">Facebook account connected.</string>
 			<string name="text_facebook_post">Post sent.</string>
+
+			<string name="text_level_enabled">The level is unlocked!</string>
+			<string name="text_level_disabled">The level is still locked!</string>
 			
 			<string name="text_button_yes">Yes</string>
 			<string name="text_button_no">No</string>
@@ -127,8 +131,6 @@
 	    <!-- Main Fragment -->
 		    <string name="desc_main_new">Create a new character.</string>
 		    <string name="desc_main_select">Select a character.</string>
-		    <string name="desc_main_play">Play the Game.</string>
-		    <string name="desc_main_test">Test features.</string>
 		    
 		<!-- Design Fragment -->
 		    <string name="desc_design_ready">Ready to define the texture.</string>
@@ -153,7 +155,7 @@
 		    <string name="desc_deform_move">Move a handle.</string>
 		    <string name="desc_deform_reset">Reset the animation.</string>
 		    <string name="desc_deform_record">Record an animation.</string>
-		    <string name="desc_deform_audio">Record an audio.</string>
+		    <string name="desc_deform_audio">Record the animation audio.</string>
 		    <string name="desc_deform_play">Play the animation.</string>
 		    
 		<!-- Animation Fragment -->
@@ -184,23 +186,24 @@
 	    	<string name="desc_social_wifi">Wifi connection.</string>
 	    
 	    <!-- Level Select Fragment -->
-	    	<string name="desc_select_background">Level Background</string>
+	    	<string name="desc_select_background">Level Background.</string>
+	    	<string name="desc_magic">Play this level.</string>
 	    	
 	    <!-- Sticker Dialog -->		    
-		    <string name="desc_sticker_eye">Eye sticker</string>
-		    <string name="desc_sticker_mouth">Mouth sticker</string>
-		    <string name="desc_sticker_weapon">Weapon sticker</string>
+		    <string name="desc_sticker_eye">Eye sticker.</string>
+		    <string name="desc_sticker_mouth">Mouth sticker.</string>
+		    <string name="desc_sticker_weapon">Weapon sticker.</string>
 
 		<!-- Size Dialog -->	
-		    <string name="desc_size_pencil">Pencil size</string>
+		    <string name="desc_size_pencil">Pencil size.</string>
 
 		<!-- Color Dialog -->	
-		    <string name="desc_color_palette_secondary">Secondary color palette</string>
-		    <string name="desc_color_cursor_main">Color main cursor</string>
-		    <string name="desc_color_cursor_secondary">Color secondary cursor</string>
-		    <string name="desc_color_selected">Selected color</string>
+		    <string name="desc_color_palette_secondary">Secondary color palette.</string>
+		    <string name="desc_color_cursor_main">Color main cursor.</string>
+		    <string name="desc_color_cursor_secondary">Color secondary cursor.</string>
+		    <string name="desc_color_selected">Selected color.</string>
 		    
 		<!-- Dialogs -->	
-		    <string name="desc_dialog_arrow">Arrow</string>
+		    <string name="desc_dialog_arrow">Dialog arrow.</string>
 
 </resources>
