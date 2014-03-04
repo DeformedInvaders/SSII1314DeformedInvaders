@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.android.alert.AudioAlert;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
+import com.creation.data.Esqueleto;
+import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
-import com.project.data.Esqueleto;
-import com.project.data.Textura;
 import com.project.main.R;
 
 public class DeformFragment extends OpenGLFragment

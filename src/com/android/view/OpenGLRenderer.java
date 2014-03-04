@@ -16,12 +16,13 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 
+import com.creation.data.MapaBits;
+import com.creation.data.Pegatinas;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.data.MapaBits;
-import com.project.data.Pegatinas;
 
 public abstract class OpenGLRenderer implements Renderer
 {	
@@ -79,7 +80,7 @@ public abstract class OpenGLRenderer implements Renderer
 		vertTextura = new FloatBuffer[NUM_TEXTURES];
 		
 		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
-		coordTextura = construirBufferListaPuntos(texture);
+		coordTextura = BufferManager.construirBufferListaPuntos(texture);
 		
 		// Se inicializan los parámetros de la cámara en el 
 		// método onSurfaceChanged llamado automáticamente
@@ -358,10 +359,10 @@ public abstract class OpenGLRenderer implements Renderer
 		marcoC = (camaraWidth - marcoA)/2;
 		
 		float[] recA = {0, 0, 0, camaraHeight, marcoC, 0, marcoC, camaraHeight};		
-		recMarcoA = construirBufferListaPuntos(recA);
+		recMarcoA = BufferManager.construirBufferListaPuntos(recA);
 		
 		float[] recB = {0, 0, 0, marcoB, marcoA, 0, marcoA, marcoB};
-		recMarcoB = construirBufferListaPuntos(recB);
+		recMarcoB = BufferManager.construirBufferListaPuntos(recB);
 	}
 	
 	protected float convertToFrameXCoordinate(float worldX)
@@ -601,235 +602,6 @@ public abstract class OpenGLRenderer implements Renderer
 		
 		return (short)minpos;
 	}	
-	
-	/* SECTION Métodos de Construcción de Buffer de Pintura */
-	
-	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
-	// Uso para GL_POINTS o GL_LINE_LOOP
-	protected FloatBuffer construirBufferListaPuntos(float[] vertices)
-	{			
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		FloatBuffer buffer = byteBuf.asFloatBuffer();
-		buffer.put(vertices);
-		buffer.position(0);
-		
-		return buffer;
-	}
-	
-	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
-	// Uso para GL_POINTS o GL_LINE_LOOP
-	protected FloatBuffer construirBufferListaPuntos(FloatArray vertices)
-	{			
-		float[] arrayVertices = new float[vertices.size];
-		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
-		
-		return construirBufferListaPuntos(arrayVertices);
-	}
-	
-	// Construcción de un buffer de pintura para puntos a partir de una lista de indice de vertices
-	protected FloatBuffer construirBufferListaIndicePuntos(ShortArray indices, FloatArray vertices)
-	{
-		float[] arrayVertices = new float[2*indices.size];
-		
-		int i = 0;
-		while(i < indices.size)
-		{
-			int pos = indices.get(i);
-			arrayVertices[2*pos] = vertices.get(2*pos);
-			arrayVertices[2*pos+1] = vertices.get(2*pos+1);
-			
-			i++;
-		}
-		
-		return construirBufferListaPuntos(arrayVertices);
-	}
-	
-	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos. 
-	// Uso para GL_LINES
-	protected FloatBuffer construirBufferListaLineas(ShortArray triangulos, FloatArray vertices)
-	{
-		int arrayLong = 2*(triangulos.size-1);
-		float[] arrayVertices = new float[2*arrayLong];
-		
-		int j = 0;
-		int i = 0;
-		while(j < triangulos.size)
-		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j+1);
-			
-			arrayVertices[i] = vertices.get(2*a);
-			arrayVertices[i+1] = vertices.get(2*a+1);
-			
-			arrayVertices[i+2] = vertices.get(2*b);
-			arrayVertices[i+3] = vertices.get(2*b+1);
-			
-			j = j+1;
-			i = i+4;
-		}	
-		
-		return construirBufferListaPuntos(arrayVertices);
-	}
-	
-	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
-	// Uso para GL_LINES
-	protected FloatBuffer construirBufferListaTriangulos(ShortArray triangulos, FloatArray vertices)
-	{
-		int arrayLong = 2*triangulos.size;
-		float[] arrayVertices = new float[2*arrayLong];
-		
-		int j = 0;
-		int i = 0;
-		while(j < triangulos.size)
-		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j+1);
-			short c = triangulos.get(j+2);
-			
-			arrayVertices[i] = vertices.get(2*a);
-			arrayVertices[i+1] = vertices.get(2*a+1);
-			
-			arrayVertices[i+2] = vertices.get(2*b);
-			arrayVertices[i+3] = vertices.get(2*b+1);
-			
-			arrayVertices[i+4] = vertices.get(2*b);
-			arrayVertices[i+5] = vertices.get(2*b+1);
-			
-			arrayVertices[i+6] = vertices.get(2*c);
-			arrayVertices[i+7] = vertices.get(2*c+1);		
-			
-			arrayVertices[i+8] = vertices.get(2*c);
-			arrayVertices[i+9] = vertices.get(2*c+1);
-			
-			arrayVertices[i+10] = vertices.get(2*a);
-			arrayVertices[i+11] = vertices.get(2*a+1);
-			
-			j = j+3;
-			i = i+12;
-		}	
-		
-		return construirBufferListaPuntos(arrayVertices);
-	}
-	
-	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
-	// Uso para GL_TRIANGLES
-	protected FloatBuffer construirBufferListaTriangulosRellenos(ShortArray triangulos, FloatArray vertices)
-	{
-		int arrayLong = triangulos.size;
-		float[] arrayVertices = new float[2*arrayLong];
-		
-		int j = 0;
-		int i = 0;
-		while(j < triangulos.size)
-		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j+1);
-			short c = triangulos.get(j+2);
-			
-			arrayVertices[i] = vertices.get(2*a);
-			arrayVertices[i+1] = vertices.get(2*a+1);
-			
-			arrayVertices[i+2] = vertices.get(2*b);
-			arrayVertices[i+3] = vertices.get(2*b+1);
-			
-			arrayVertices[i+4] = vertices.get(2*c);
-			arrayVertices[i+5] = vertices.get(2*c+1);
-			
-			j = j+3;
-			i = i+6;
-		}	
-		
-		return construirBufferListaPuntos(arrayVertices);
-	}
-	
-	/* SECTION Metodos de Actualización de Buffers de Pintura */
-	
-	// Actualiza los valores de un buffer de pintura para puntos
-	protected void actualizarBufferListaPuntos(FloatBuffer buffer, FloatArray vertices)
-	{
-		float[] arrayVertices = new float[vertices.size];
-		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
-
-		buffer.put(arrayVertices);
-		buffer.position(0);
-	}
-	
-	// Actualizar los valores de un buffer de pintura para triangulos.
-	// Uso para GL_LINES
-	protected void construirBufferListaTriangulos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
-	{
-		int j = 0;
-		int i = 0;
-		while(j < triangulos.size)
-		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j+1);
-			short c = triangulos.get(j+2);
-			
-			buffer.put(i, vertices.get(2*a));
-			buffer.put(i+1, vertices.get(2*a+1));
-			
-			buffer.put(i+2, vertices.get(2*b));
-			buffer.put(i+3, vertices.get(2*b+1));
-			
-			buffer.put(i+4, vertices.get(2*b));
-			buffer.put(i+5, vertices.get(2*b+1));
-			
-			buffer.put(i+6, vertices.get(2*c));
-			buffer.put(i+7, vertices.get(2*c+1));
-			
-			buffer.put(i+8, vertices.get(2*c));
-			buffer.put(i+9, vertices.get(2*c+1));
-			
-			buffer.put(i+10, vertices.get(2*a));
-			buffer.put(i+11, vertices.get(2*a+1));
-			
-			j = j+3;
-			i = i+12;
-		}
-	}
-	
-	// Actualiza los valores de un buffer de pintura para triangulos
-	// Uso para GL_TRIANGLES
-	protected void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
-	{
-		int j = 0;
-		int i = 0;
-		while(j < triangulos.size)
-		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j+1);
-			short c = triangulos.get(j+2);
-			
-			buffer.put(i, vertices.get(2*a));
-			buffer.put(i+1, vertices.get(2*a+1));
-			
-			buffer.put(i+2, vertices.get(2*b));
-			buffer.put(i+3, vertices.get(2*b+1));
-			
-			buffer.put(i+4, vertices.get(2*c));
-			buffer.put(i+5, vertices.get(2*c+1));
-			
-			j = j+3;
-			i = i+6;
-		}
-	}
-	
-	// Actualiza los valores de un buffer de pintura para indice puntos
-	protected void actualizarBufferListaIndicePuntos(FloatBuffer buffer, ShortArray contorno, FloatArray vertices)
-	{
-		int j = 0;
-		while(j < contorno.size)
-		{
-			short a = contorno.get(j);
-			
-			buffer.put(2*j, vertices.get(2*a));
-			buffer.put(2*j+1, vertices.get(2*a+1));
-			
-			j++;
-		}
-	}
 
 	/* SECTION Métodos de Pintura en la Tubería Gráfica */
 	
@@ -852,6 +624,11 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+	}
+	
+	protected void dibujarBuffer(GL10 gl, FloatBuffer bufferPuntos)
+	{	
+		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPuntos);
 	}
 	
 	// Pintura de una Lista de Handles
@@ -905,56 +682,9 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
-	// FIXME TESTING
-	protected void dibujarListaHandleMultitouch(GL10 gl, FloatBuffer handle, FloatArray posiciones)
-	{
-		gl.glPushMatrix();
-		
-		int i = 0;
-		while(i < posiciones.size)
-		{
-			float estado = posiciones.get(i);
-			
-			// estado = 0 SUELTO
-			// estado = 1 PULSADO
-			if(estado == 1)
-			{
-				float x = posiciones.get(i+1);
-				float y = posiciones.get(i+2);
-				float z = 0.0f;
-				
-				int color = Color.BLACK;
-				switch(i/3)
-				{
-					case 0:
-						color = Color.BLUE;
-					break;
-					case 1:
-						color = Color.YELLOW;
-					break;
-					case 2:
-						color = Color.RED;
-					break;
-					case 3:
-						color = Color.GREEN;
-					break;
-				}
-				
-				gl.glPushMatrix();
-					gl.glTranslatef(x, y, z);
-					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);
-				gl.glPopMatrix();
-			}
-			
-			i = i+3;
-		}
-	
-		gl.glPopMatrix();
-	}
-	
 	/* SECTION Métodos de Pintura de Personajes */
 	
-	protected void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
+	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
 	{			
 		// Centrado de Marco
 		centrarPersonajeEnMarcoInicio(gl);
@@ -1018,12 +748,12 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
-	protected void cargarTexturaEsqueleto(GL10 gl, Bitmap textura)
+	public void cargarTexturaEsqueleto(GL10 gl, Bitmap textura)
 	{
 		cargarTextura(gl, textura, POS_TEXTURE_SKELETON);
 	}
 	
-	protected void cargarTexturaPegatinas(GL10 gl, int indiceTextura, int pos)
+	public void cargarTexturaPegatinas(GL10 gl, int indiceTextura, int pos)
 	{     
 		int posTextura = POS_TEXTURE_STICKER + pos;
 		
@@ -1043,12 +773,12 @@ public abstract class OpenGLRenderer implements Renderer
 			puntos.add(textureWidth);	puntos.add(-textureHeight);
 			puntos.add(textureWidth);	puntos.add(textureHeight);	
 			
-			vertTextura[posTextura] = construirBufferListaPuntos(puntos);
+			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
 			cargadaTextura[posTextura] = true;
 		}
 	}
 	
-	protected void descargarTexturaPegatinas(int pos)
+	public void descargarTexturaPegatinas(int pos)
 	{
 		int posTextura = POS_TEXTURE_STICKER + pos;
 		
@@ -1124,7 +854,7 @@ public abstract class OpenGLRenderer implements Renderer
 			puntos.add(xRight);	puntos.add(yBottom);
 			puntos.add(xRight);	puntos.add(yTop);	
 			
-			vertTextura[POS_TEXTURE_BACKGROUND] = construirBufferListaPuntos(puntos);
+			vertTextura[POS_TEXTURE_BACKGROUND] = BufferManager.construirBufferListaPuntos(puntos);
 		}
 	}
 	

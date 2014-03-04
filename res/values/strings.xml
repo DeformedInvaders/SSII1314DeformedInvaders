@@ -8,6 +8,7 @@
 		    <string name="title_animation_phase">Define the animation.</string>
 		    <string name="title_character_selection_phase">Select a character.</string>
 		    <string name="title_level_selection_phase">Select a level.</string>
+		    <string name="title_game_phase">Enjoy the game.</string>
 	    
 	    <!-- ActionBar PagerView Section Titles -->
 			<string name="title_animation_section_run">Run</string>
@@ -131,6 +132,7 @@
 	    <!-- Main Fragment -->
 		    <string name="desc_main_new">Create a new character.</string>
 		    <string name="desc_main_select">Select a character.</string>
+		    <string name="desc_main_play">Select a level.</string>
 		    
 		<!-- Design Fragment -->
 		    <string name="desc_design_ready">Ready to define the texture.</string>

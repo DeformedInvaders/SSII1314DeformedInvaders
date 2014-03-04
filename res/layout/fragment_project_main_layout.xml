@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
-    <com.selection.display.DisplayGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
+    <com.project.display.DisplayGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
         android:id="@+id/displayGLSurfaceViewMain1" />
 
     <LinearLayout style="@style/Layout_Center_FragmentButton_Style">

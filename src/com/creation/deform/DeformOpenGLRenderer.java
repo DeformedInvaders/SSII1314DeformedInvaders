@@ -13,13 +13,14 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.android.view.OpenGLRenderer;
+import com.creation.data.Esqueleto;
+import com.creation.data.Handle;
+import com.creation.data.Pegatinas;
+import com.creation.data.Textura;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.data.Esqueleto;
-import com.project.data.Handle;
-import com.project.data.Pegatinas;
-import com.project.data.Textura;
 
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
@@ -100,8 +101,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		verticesModificados = vertices.clone();
 		triangulos = esqueleto.getTriangulos();
 		
-		bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
-		bufferTriangulos = construirBufferListaTriangulosRellenos(triangulos, vertices);
+		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
+		bufferTriangulos = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
         
 		// Handles
         handles = new FloatArray();
@@ -116,7 +117,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		bitmap = textura.getMapaBits().getBitmap();
 		coords = textura.getCoordTextura();
 		
-		bufferCoords = construirBufferListaTriangulosRellenos(triangulos, coords);
+		bufferCoords = BufferManager.construirBufferListaTriangulosRellenos(triangulos, coords);
         
         objetoHandle = new Handle(20, POINTWIDTH);
         objetoVertice = new Handle(20, POINTWIDTH/2);
@@ -230,8 +231,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		reinciarHandlesSeleccionados();
 		
 		verticesModificados = vertices.clone();
-		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 		
 		listaHandlesAnimacion.clear();
 		listaVerticesAnimacion = null;
@@ -421,8 +422,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			// Cambiar Posicion de los Handles
 			deformator.moverHandles(handles, verticesModificados);
 			
-			actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-			actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 		}
 	}
 	
@@ -439,8 +440,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		reiniciarHandles();
 		
 		verticesModificados = vertices.clone();
-		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
 	
 	public void selecionarPlay() 
@@ -454,15 +455,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		posicionAnimacion = 0;
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-		triangulosAnimacion = construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		contornoAnimacion = construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		triangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
+		contornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
 	}
 	
 	public void reproducirAnimacion()
 	{
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-		actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
-		actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
+		BufferManager.actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
+		BufferManager.actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
 		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();
 	}
 	
@@ -569,7 +570,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		listaVerticesAnimacion = data.getListaVertices();
 		
 		deformator.anyadirHandles(handles, indiceHandles);
-		actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-		actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
 }

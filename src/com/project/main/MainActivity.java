@@ -19,18 +19,20 @@ import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
+import com.creation.data.Esqueleto;
+import com.creation.data.Movimientos;
+import com.creation.data.Textura;
 import com.creation.deform.AnimationFragment;
 import com.creation.design.DesignFragment;
 import com.creation.paint.PaintFragment;
+import com.game.data.Personaje;
+import com.game.game.GameFragment;
 import com.game.select.LevelSelectionFragment;
-import com.project.data.Esqueleto;
-import com.project.data.Movimientos;
-import com.project.data.Personaje;
-import com.project.data.Textura;
+import com.game.select.LevelSelectFragment;
 import com.project.loading.LoadingFragment;
 import com.selection.select.CharacterSelectionFragment;
 
-public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener
+public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectFragment.LevelSelectionFragmentListener 
 {	
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
@@ -76,7 +78,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onBackPressed()
 	{
-		if(estado != TEstado.Main)
+		if(estado != TEstado.Main && estado != TEstado.Game)
 		{	
 			limpiarActionBar();
 			
@@ -272,7 +274,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
     
-	/* SECTION Métodos Selection Fragment */
+	/* SECTION Métodos Character Selection Fragment */
     
 	@Override
     public void onCharacterSelectionSelectClicked(int indice)
@@ -319,6 +321,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     	};
 
 		alert.show();
+    }
+	
+	/* SECTION Métodos Level Selection Fragment */
+    
+	@Override
+    public void onLevelSelectionSelectClicked()
+    {
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado)));
     }
 	
 	/* SECTION Métodos de Modificación de la ActionBar */
@@ -413,6 +423,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     		{
     			estado = TEstado.LevelSelection;
     			setTitle(R.string.title_level_selection_phase);
+    		}
+    		else if(fragmento instanceof GameFragment)
+    		{
+    			estado = TEstado.Game;
+    			setTitle(R.string.title_game_phase);
     		}
     	}
     }

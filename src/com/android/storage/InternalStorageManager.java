@@ -17,7 +17,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.project.data.Personaje;
+import com.creation.data.Esqueleto;
+import com.creation.data.Movimientos;
+import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.project.loading.LoadingFragment;
 import com.project.main.R;
 
@@ -296,7 +299,11 @@ public class InternalStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 			
 			// Cargar Personajes
-			Personaje p = (Personaje) data.readObject();
+			Personaje p = new Personaje();
+			p.setEsqueleto((Esqueleto) data.readObject());
+			p.setTextura((Textura) data.readObject());
+			p.setMovimientos((Movimientos) data.readObject());
+			p.setNombre(nombre);
 			
 			data.close();
 			file.close();
@@ -350,7 +357,9 @@ public class InternalStorageManager
 			ObjectOutputStream data = new ObjectOutputStream(file);
 			
 			// Guardar Personajes
-			data.writeObject(personaje);
+			data.writeObject(personaje.getEsqueleto());
+			data.writeObject(personaje.getTextura());
+			data.writeObject(personaje.getMovimientos());
 			
 			data.flush();
 			data.close();

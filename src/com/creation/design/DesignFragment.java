@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLFragment;
-import com.project.data.Esqueleto;
+import com.creation.data.Esqueleto;
 import com.project.main.R;
 
 public class DesignFragment extends OpenGLFragment

@@ -5,8 +5,8 @@ import android.util.AttributeSet;
 
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
-import com.project.data.Esqueleto;
-import com.project.data.Textura;
+import com.creation.data.Esqueleto;
+import com.creation.data.Textura;
 
 public class PaintGLSurfaceView extends OpenGLSurfaceView
 {

@@ -8,9 +8,9 @@ import android.util.AttributeSet;
 
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
+import com.creation.data.Esqueleto;
+import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
-import com.project.data.Esqueleto;
-import com.project.data.Textura;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {

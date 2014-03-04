@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.storage.InternalStorageManager;
-import com.project.data.Personaje;
+import com.game.data.Personaje;
 import com.project.main.R;
 
 public class LoadingFragment extends Fragment

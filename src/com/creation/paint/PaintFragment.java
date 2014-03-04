@@ -13,8 +13,8 @@ import com.android.dialog.ColorDialog;
 import com.android.dialog.SizeDialog;
 import com.android.dialog.StickerDialog;
 import com.android.view.OpenGLFragment;
-import com.project.data.Esqueleto;
-import com.project.data.Textura;
+import com.creation.data.Esqueleto;
+import com.creation.data.Textura;
 import com.project.main.R;
 
 public class PaintFragment extends OpenGLFragment

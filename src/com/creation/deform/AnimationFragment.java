@@ -14,10 +14,10 @@ import android.widget.ImageButton;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.android.view.ViewPagerFragment;
+import com.creation.data.Esqueleto;
+import com.creation.data.Movimientos;
+import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
-import com.project.data.Esqueleto;
-import com.project.data.Movimientos;
-import com.project.data.Textura;
 import com.project.main.R;
 
 public class AnimationFragment extends ViewPagerFragment

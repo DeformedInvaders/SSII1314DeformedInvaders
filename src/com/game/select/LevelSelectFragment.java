@@ -1,11 +1,12 @@
 package com.game.select;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import com.project.main.R;
 
 public class LevelSelectFragment extends OpenGLFragment
 {	
+	private LevelSelectionFragmentListener mCallback;
+	
 	private ImageButton botonNivel;
 	
 	private boolean nivelBloqueado;
@@ -56,9 +59,29 @@ public class LevelSelectFragment extends OpenGLFragment
 		textTitle = text;
 		textColor = color;
 	}
+	
+	public interface LevelSelectionFragmentListener
+	{
+        public void onLevelSelectionSelectClicked();
+    }
 
 	/* SECTION Métodos Fragment */
 		
+	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		mCallback = (LevelSelectionFragmentListener) activity;
+	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+		botonNivel = null;
+	}
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -106,6 +129,8 @@ public class LevelSelectFragment extends OpenGLFragment
 			if(nivelBloqueado)
 			{
 				Toast.makeText(getActivity(), R.string.text_level_enabled, Toast.LENGTH_SHORT).show();
+				
+				mCallback.onLevelSelectionSelectClicked();
 			}
 			else
 			{

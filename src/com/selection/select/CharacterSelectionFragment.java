@@ -16,7 +16,7 @@ import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.SwipeableViewPager;
 import com.android.view.ViewPagerFragment;
-import com.project.data.Personaje;
+import com.game.data.Personaje;
 import com.project.main.R;
 
 public class CharacterSelectionFragment extends ViewPagerFragment

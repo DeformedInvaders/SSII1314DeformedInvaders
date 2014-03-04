@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
-import com.project.data.Esqueleto;
+import com.creation.data.Esqueleto;
 
 public class DesignGLSurfaceView extends OpenGLSurfaceView
 {

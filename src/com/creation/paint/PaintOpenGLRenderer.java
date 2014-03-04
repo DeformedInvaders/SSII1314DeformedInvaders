@@ -12,18 +12,19 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
+import com.creation.data.Accion;
+import com.creation.data.Esqueleto;
+import com.creation.data.Handle;
+import com.creation.data.MapaBits;
+import com.creation.data.Pegatinas;
+import com.creation.data.Polilinea;
+import com.creation.data.Textura;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.data.Accion;
-import com.project.data.Esqueleto;
-import com.project.data.Handle;
-import com.project.data.MapaBits;
-import com.project.data.Pegatinas;
-import com.project.data.Polilinea;
-import com.project.data.Textura;
-import com.selection.display.TCapturaEstado;
+import com.project.display.TCapturaEstado;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {		
@@ -79,8 +80,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		vertices = esqueleto.getVertices();
 		triangulos = esqueleto.getTriangulos();
 		
-		bufferVertices = construirBufferListaTriangulosRellenos(triangulos, vertices);
-		bufferContorno = construirBufferListaIndicePuntos(contorno, vertices);
+		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
+		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
         
         listaLineas = new ArrayList<Polilinea>();
         lineaActual = null;
@@ -264,7 +265,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			lineaActual.add(frameX);
 			lineaActual.add(frameY);
 			
-			bufferLineaActual = construirBufferListaPuntos(lineaActual);
+			bufferLineaActual = BufferManager.construirBufferListaPuntos(lineaActual);
 		}
 	}
 	

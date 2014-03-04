@@ -15,9 +15,9 @@ import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.android.view.SwipeableViewPager;
 import com.creation.design.TDisplayTipo;
-import com.project.data.Personaje;
+import com.game.data.Personaje;
+import com.project.display.DisplayGLSurfaceView;
 import com.project.main.R;
-import com.selection.display.DisplayGLSurfaceView;
 
 public class CharacterSelectFragment extends OpenGLFragment
 {

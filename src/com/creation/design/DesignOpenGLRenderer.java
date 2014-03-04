@@ -8,10 +8,11 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
+import com.creation.data.Esqueleto;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.data.Esqueleto;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {		
@@ -120,7 +121,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			puntos.add(worldX);
 			puntos.add(worldY);
 			
-			bufferPoligono = construirBufferListaPuntos(puntos);
+			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
 		}
 	}
 	
@@ -149,7 +150,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			
 			if(poligonoSimple)
 			{
-				bufferMalla = construirBufferListaTriangulos(triangulos, vertices);
+				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
 			}
 		}
 	}
@@ -172,7 +173,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float cWorldY = (lastWorldY + worldY) / 2.0f;
 			
 			escalarVertices(factor, factor, cWorldX, cWorldY, vertices);
-			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
 	
@@ -191,7 +192,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float dWorldY = worldY - lastWorldY;
 			
 			trasladarVertices(dWorldX, dWorldY, vertices);
-			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
 
@@ -204,7 +205,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float cWorldY = convertToWorldYCoordinate(pixelY, screenHeight);
 			
 			rotarVertices(ang, cWorldX, cWorldY, vertices);
-			construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
 	
@@ -289,8 +290,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		
 		if(poligonoSimple)
 		{
-			bufferPoligono = construirBufferListaPuntos(puntos); 
-			bufferMalla = construirBufferListaTriangulos(triangulos, vertices);
+			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos); 
+			bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
 		}
 	}
 }
