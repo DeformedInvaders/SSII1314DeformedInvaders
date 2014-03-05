@@ -192,7 +192,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 				}
 			}
 			
-			onMultiTouchEvent();
+			onMultiTouchEvent();			
 			requestRender();
 			return true;
 		}

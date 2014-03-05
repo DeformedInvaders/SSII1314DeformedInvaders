@@ -10,11 +10,7 @@ import com.lib.utils.ShortArray;
 
 public class Deformator
 {
-	/*private boolean escaladoActivado;*/
-	
-	private ArrayList<Arista> aristas;
-	private FloatArray puntos;
-	private ShortArray triangulos;
+	private FloatArray vertices;
 	private ShortArray vecinos;
 	
 	private int numVertices, numAristas, numHandles;
@@ -30,127 +26,145 @@ public class Deformator
 	private Matrix matrizH;
 	
 	private Matrix matrizA1, matrizA1t, matrizA1tA1;
-	private Matrix matrizB1;
+	private Matrix matrizB1, matrizA1tB1;
 	
 	// Cálculo de Matrices A2 y B2
 	
-	/*private Matrix matrizA2, matrizA2t, matrizA2tA2;*/
+	private Matrix matrizGtGinvGt, matrizV;
+	private Matrix matrizTk, matrizT;
+	
+	private Matrix matrizA2, matrizA2t, matrizA2tA2;
+	private Matrix matrizB2x, matrizB2y, matrizA2tB2x, matrizA2tB2y;
 	
 	/* SECTION Constructora */
 	
 	public Deformator(FloatArray puntos, ShortArray triangulos, FloatArray handles, ShortArray indiceHandles)
-	{
-		/*this.escaladoActivado = false;*/
+	{		
+		vertices = puntos.clone();
+		vecinos = construirAristas(triangulos);
 		
-		this.puntos = puntos.clone();
-		this.triangulos = triangulos;
+		numVertices = vertices.size/2;
+		numAristas = vecinos.size/4;
+		numHandles = indiceHandles.size;
 		
-		this.aristas = new ArrayList<Arista>();
-		this.vecinos = computeTriangles();
-		
-		this.numVertices = puntos.size/2;
-		this.numAristas = vecinos.size/4;
-		this.numHandles = indiceHandles.size;
+		// Calcular Matriz G
+		matrizG = new Matrix(8, 2);
+		matrizGt = new Matrix(2, 8);
+		matrizGtG = new Matrix(2, 2);
 		
 		// Calcular Matriz H		
-		this.matrizH = new Matrix(2, 8);
-		this.matrizh1 = new Matrix(2, 8);
-		this.matrizh1.set(0, 0, -1);
-		this.matrizh1.set(0, 2, 1);
-		this.matrizh1.set(1, 1, -1);
-		this.matrizh1.set(1, 3, 1);
+		matrizH = new Matrix(2, 8);
 		
-		this.matrizh2 = new Matrix(2, 8);
+		matrizh1 = new Matrix(2, 8);
+		matrizh1.set(0, 0, -1);
+		matrizh1.set(0, 2, 1);
+		matrizh1.set(1, 1, -1);
+		matrizh1.set(1, 3, 1);
 		
-		this.matrizG = new Matrix(8, 2);
-		this.matrizGt = new Matrix(2, 8);
-		this.matrizGtG = new Matrix(2, 2);
+		matrizh2 = new Matrix(2, 8);
 		
-		this.matrizE = new Matrix(2, 2);
-		this.matrizEGtGinv = new Matrix(2, 2);
+		matrizE = new Matrix(2, 2);
+		matrizEGtGinv = new Matrix(2, 2);
+		
+		// Calcular Matriz T
+		matrizV = new Matrix(8, 1);
+		matrizGtGinvGt = new Matrix(2, 8);
+		matrizTk = new Matrix(2, 1);
+		matrizT = new Matrix(2, 2);
 		
 		// Calcular MatrizA1
-		this.matrizA1 = calcularMatrizA1(puntos, handles, indiceHandles);
-		this.matrizA1t = matrizA1.transpose();
-		this.matrizA1tA1 = matrizA1t.times(matrizA1);
-		
-		// Calcular MatrizB1
-		this.matrizB1 = calcularMatrizB1(handles);
+		matrizA1tA1 = new Matrix(2*numVertices, 2*numVertices);
 		
 		// Calcular MatrizA2
-		/*this.matrizA2 = calcularMatrizA2(indiceHandles);
-		this.matrizA2t = matrizA2.transpose();
-		this.matrizA2tA2 = matrizA2t.times(matrizA2);*/
-	}
-	
-	// Modificación de Posición de Handles
-	public void moverHandles(FloatArray handles, FloatArray vertices)
-	{
-		// Actualizar MatrizB
-		actualizarMatrizB1(handles);
+		matrizA2tA2 = new Matrix(numVertices, numVertices);
 		
-		// Cálculo de Ajuste de Traslación y Rotación
-		//
-		// A1t * A1 * X = A1t * B1
+		// Calcular MatrizB1
+		matrizA1tB1 = new Matrix(2*numVertices, 1);
 		
-		Matrix matrizA1tB1 = matrizA1t.times(matrizB1);
+		// Calcular Matriz B2		
+		matrizA2tB2x = new Matrix(numVertices, 1);
+		matrizA2tB2y = new Matrix(numVertices, 1);
 		
-		Matrix m = matrizA1tA1.solve(matrizA1tB1);
-		
-		// Actualizar Valores de los Vertices
-		for(int i = 0; i < 2*numVertices; i++)
-		{
-			vertices.set(i, (float) m.get(i, 0));
-		}
-		
-		// Cálculo de Ajuste de Escalación
-		//
-		// A2t * A2 * X = A2t * B2
-		
-		/*if(escaladoActivado)
-		{		
-			Matrix matrizB2 = calcularMatrizB2(vertices, handles);
-			Matrix matrizB2x = matrizB2.getMatrix(0, matrizB2.getRowDimension() - 1, 0, 0);
-			Matrix matrizB2y = matrizB2.getMatrix(0, matrizB2.getRowDimension() - 1, 1, 1);
-			
-			Matrix matrizA2tB2x = matrizA2t.times(matrizB2x);
-			Matrix matrizA2tB2y = matrizA2t.times(matrizB2y);
-			
-			Matrix m2x = matrizA2tA2.solve(matrizA2tB2x);
-			Matrix m2y = matrizA2tA2.solve(matrizA2tB2y);
-			
-			// Actualizar Valores de los Vertices
-			for(int i = 0; i < numVertices; i++)
-			{
-				vertices.set(2*i, (float) m2x.get(i, 0));
-				vertices.set(2*i+1, (float) m2y.get(i, 0));
-			}
-		}*/
+		anyadirHandles(handles, indiceHandles);
 	}
 	
 	// Añadir nuevos Handles
 	public void anyadirHandles(FloatArray handles, ShortArray indiceHandles)
 	{
-		this.numHandles = indiceHandles.size;
+		numHandles = indiceHandles.size;
 		
 		// Calcular MatrizA1
-		this.matrizA1 = actualizarMatrizA1(handles, indiceHandles);
-		this.matrizA1t = matrizA1.transpose();
-		this.matrizA1tA1 = matrizA1t.times(matrizA1);
+		matrizA1 = new Matrix(2*numAristas + 2*numHandles, 2*numVertices);
+		calcularMatrizA1(vertices, handles, indiceHandles, matrizA1);
+		
+		matrizA1t = new Matrix(2*numVertices, 2*numAristas + 2*numHandles);
+		matrizA1.transpose(matrizA1t);
+		
+		matrizA1t.times(matrizA1, matrizA1tA1);
 		
 		// Calcular MatrizB1
-		this.matrizB1 = calcularMatrizB1(handles);
+		matrizB1 = new Matrix(2*numAristas + 2*numHandles, 1);
+		calcularMatrizB1(handles, matrizB1);
 		
 		// Calcular MatrizA2
-		/*this.matrizA2 = actualizarMatrizA2(indiceHandles);
-		this.matrizA2t = matrizA2.transpose();
-		this.matrizA2tA2 = matrizA2t.times(matrizA2);*/
+		matrizA2 = new Matrix(numAristas + numHandles, numVertices);
+		calcularMatrizA2(indiceHandles, matrizA2);
+		
+		matrizA2t = new Matrix(numVertices, numAristas + numHandles);
+		matrizA2.transpose(matrizA2t);
+		
+		matrizA2t.times(matrizA2, matrizA2tA2);
+		
+		// Calcular Matriz B2
+		matrizB2x = new Matrix(numAristas + numHandles, 1);
+		matrizB2y = new Matrix(numAristas + numHandles, 1);
 	}
 	
 	// Borrar Handles
 	public void eliminarHandles(FloatArray handles, ShortArray indiceHandles)
 	{
 		anyadirHandles(handles, indiceHandles);
+	}
+	
+	// Modificación de Posición de Handles
+	public void moverHandles(FloatArray handles, FloatArray verticesModificados)
+	{
+		// Actualizar MatrizB
+		actualizarMatrizB1(handles, matrizB1);
+		
+		// Cálculo de Ajuste de Traslación y Rotación
+		//
+		// A1t * A1 * X = A1t * B1
+		
+		matrizA1t.times(matrizB1, matrizA1tB1);
+		
+		Matrix m1 = matrizA1tA1.solve(matrizA1tB1);
+		
+		// Actualizar Valores de los Vertices después del Ajuste de Traslación y Rotación
+		FloatArray verticesTrasRot = vertices.clone();
+		for(int i = 0; i < 2*numVertices; i++)
+		{
+			verticesTrasRot.set(i, (float) m1.get(i, 0));
+		}
+		
+		// Cálculo de Ajuste de Escalación
+		//
+		// A2t * A2 * X = A2t * B2
+			
+		calcularMatrizB2(vertices, verticesTrasRot, handles, matrizB2x, matrizB2y);
+		
+		matrizA2t.times(matrizB2x, matrizA2tB2x);
+		matrizA2t.times(matrizB2y, matrizA2tB2y);
+		
+		Matrix m2x = matrizA2tA2.solve(matrizA2tB2x);
+		Matrix m2y = matrizA2tA2.solve(matrizA2tB2y);
+		
+		// Actualizar Valores de los Vertices después del Ajuste de Escala
+		for(int i = 0; i < numVertices; i++)
+		{
+			verticesModificados.set(2*i, (float) m2x.get(i, 0));
+			verticesModificados.set(2*i+1, (float) m2y.get(i, 0));
+		}
 	}
 	
 	/* Ajuste de Traslación y Rotación */
@@ -165,13 +179,13 @@ public class Deformator
 	//		|	vly		-vlx	|
 	//		|	vrx		vry		|
 	//		|	vry		-vrx	|
-	private void calcularMatrizG(int a, int b, int c, int d, FloatArray puntos, Matrix m)
+	private void calcularMatrizG(int a, int b, int c, int d, FloatArray vertices, Matrix m)
 	{
-		float vix = puntos.get(2*a);
-		float viy = puntos.get(2*a+1);
+		float vix = vertices.get(2*a);
+		float viy = vertices.get(2*a+1);
 		
-		float vjx = puntos.get(2*b);
-		float vjy = puntos.get(2*b+1);
+		float vjx = vertices.get(2*b);
+		float vjy = vertices.get(2*b+1);
 		
 		float vlx = 0;
 		float vly = 0;
@@ -181,14 +195,14 @@ public class Deformator
 		
 		if(c != -1)
 		{
-			vlx = puntos.get(2*c);
-			vly = puntos.get(2*c+1);
+			vlx = vertices.get(2*c);
+			vly = vertices.get(2*c+1);
 		}
 		
 		if(d != -1)
 		{
-			vrx = puntos.get(2*d);
-			vry = puntos.get(2*d+1);
+			vrx = vertices.get(2*d);
+			vry = vertices.get(2*d+1);
 		}
 				
 		m.set(0, 0, vix);	m.set(0, 1, viy);
@@ -209,12 +223,12 @@ public class Deformator
 	//
 	// E =	|	ekx		eky		|
 	//		|	eky		-ekx	|
-	private void calcularMatrizE(int a, int b, FloatArray puntos, Matrix m)
+	private void calcularMatrizE(int a, int b, FloatArray vertices, Matrix m)
 	{
-		float vix = puntos.get(2*a);
-		float viy = puntos.get(2*a+1);
-		float vjx = puntos.get(2*b);
-		float vjy = puntos.get(2*b+1);
+		float vix = vertices.get(2*a);
+		float viy = vertices.get(2*a+1);
+		float vjx = vertices.get(2*b);
+		float vjy = vertices.get(2*b+1);
 		
 		float ex = vjx - vix;
 		float ey = vjy - viy;
@@ -230,19 +244,19 @@ public class Deformator
 	//
 	//	=	|	Hk00	Hk10	Hk20	Hk30	Hk40	Hk50	Hk60	Hk70	|
 	//		|	Hk01	Hk11	Hk21	Hk31	Hk41	Hk51	Hk61	Hk71	|
-	private void calcularMatrizH(int a, int b, int c, int d, FloatArray puntos, Matrix m)
+	private void calcularMatrizH(int a, int b, int c, int d, FloatArray vertices, Matrix m)
 	{
 		// Matriz h1 constante inicializada en la constructora.
 		
 		// Matriz h2
 		
-		calcularMatrizG(a, b, c, d, puntos, matrizG);
+		calcularMatrizG(a, b, c, d, vertices, matrizG);
 		
 		matrizG.transpose(matrizGt);
 		matrizGtG = matrizGt.times(matrizG);
 		Matrix gtginv = matrizGtG.inverse();
 		
-		calcularMatrizE(a, b, puntos, matrizE);
+		calcularMatrizE(a, b, vertices, matrizE);
 		
 		matrizE.times(gtginv, matrizEGtGinv);
 		matrizEGtGinv.times(matrizGt, matrizh2);
@@ -263,10 +277,8 @@ public class Deformator
 	//		|							w					|	|	2*NumHandles
 	//		|						...						|	V
 	//							-> 2*NumVertices
-	private Matrix calcularMatrizA1(FloatArray puntos, FloatArray handles, ShortArray indiceHandles)
-	{
-		Matrix m = new Matrix(2*numAristas + 2*numHandles, 2*numVertices);
-		
+	private void calcularMatrizA1(FloatArray vertices, FloatArray handles, ShortArray indiceHandles, Matrix m)
+	{		
 		int i = 0;
 		int j = 0;
 		while(i < vecinos.size)
@@ -276,7 +288,7 @@ public class Deformator
 			int c = vecinos.get(i+2);
 			int d = vecinos.get(i+3);
 			
-			calcularMatrizH(a, b, c, d, puntos, matrizH);
+			calcularMatrizH(a, b, c, d, vertices, matrizH);
 			
 			m.set(j, 2*a, matrizH.get(0, 0));		m.set(j, 2*a+1, matrizH.get(0, 1));
 			m.set(j+1, 2*a, matrizH.get(1, 0));		m.set(j+1, 2*a+1, matrizH.get(1, 1));
@@ -307,32 +319,6 @@ public class Deformator
 			
 			m.set(pos, 2*h, w);		m.set(pos+1, 2*h+1, w);
 		}
-		
-		return m;
-	}
-	
-	// Actualizar Matriz A1
-	private Matrix actualizarMatrizA1(FloatArray handles, ShortArray indiceHandles)
-	{
-		Matrix m = new Matrix(2*numAristas + 2*numHandles, 2*numVertices);
-		
-		for(int i = 0; i < 2*numAristas; i++)
-		{
-			for(int j = 0; j < 2*numVertices; j++)
-			{
-				m.set(i, j, matrizA1.get(i, j));
-			}
-		}
-		
-		for(int k = 0; k < numHandles; k++)
-		{
-			int pos = 2*numAristas + 2*k;
-			int h = indiceHandles.get(k);
-			
-			m.set(pos, 2*h, w);		m.set(pos+1, 2*h+1, w);
-		}
-		
-		return m;
 	}
 	
 	// Cálculo Matriz B1
@@ -347,10 +333,8 @@ public class Deformator
 	//		|	wc0y	|	|	2*NumHandles
 	//		|	wc1x	|	V				
 	//		|	...		|
-	private Matrix calcularMatrizB1(FloatArray handles)
+	private void calcularMatrizB1(FloatArray handles, Matrix m)
 	{
-		Matrix m = new Matrix(2*numAristas + 2*numHandles, 1);
-
 		for(int i = 0; i < numHandles; i++)
 		{
 			int pos = 2*numAristas + 2*i;
@@ -360,12 +344,10 @@ public class Deformator
 			m.set(pos, 0, w*x);
 			m.set(pos+1, 0, w*y);
 		}
-		
-		return m;
 	}
 	
 	// Actualizar Matriz B1
-	private void actualizarMatrizB1(FloatArray handles)
+	private void actualizarMatrizB1(FloatArray handles, Matrix m)
 	{
 		for(int i = 0; i < numHandles; i++)
 		{
@@ -373,8 +355,8 @@ public class Deformator
 			float x = handles.get(2*i);
 			float y = handles.get(2*i+1);
 			
-			matrizB1.set(pos, 0, w*x);
-			matrizB1.set(pos+1, 0, w*y);
+			m.set(pos, 0, w*x);
+			m.set(pos+1, 0, w*y);
 		}
 	}
 	
@@ -390,10 +372,8 @@ public class Deformator
 	//		|	w					|	|	NumHandles
 	//		|		...				|	V
 	//				-> NumVertices
-	/*private Matrix calcularMatrizA2(ShortArray indiceHandles)
+	private void calcularMatrizA2(ShortArray indiceHandles, Matrix m)
 	{
-		Matrix m = new Matrix(numAristas + numHandles, numVertices);
-		
 		int i = 0;
 		int j = 0;
 		while(i < vecinos.size)
@@ -415,33 +395,7 @@ public class Deformator
 			
 			m.set(pos, h, w);
 		}
-		
-		return m;
-	}*/
-	
-	// Actualizar Matriz A2
-	/*private Matrix actualizarMatrizA2(ShortArray indiceHandles)
-	{
-		Matrix m = new Matrix(numAristas + numHandles, numVertices);
-		
-		for(int i = 0; i < numAristas; i++)
-		{
-			for(int j = 0; j < numVertices; j++)
-			{
-				m.set(i, j, matrizA2.get(i, j));
-			}
-		}
-		
-		for(int k = 0; k < numHandles; k++)
-		{
-			int pos = numAristas + k;
-			int h = indiceHandles.get(k);
-			
-			m.set(pos, h, w);
-		}
-		
-		return m;
-	}*/
+	}
 	
 	// Cálculo Matriz V
 	//
@@ -453,13 +407,13 @@ public class Deformator
 	//		|	Vly	|
 	//		|	Vrx	|
 	//		|	Vry	|
-	/*private Matrix calcularMatrizV(int a, int b, int c, int d, FloatArray puntos)
+	private void calcularMatrizV(int a, int b, int c, int d, FloatArray vertices, Matrix m)
 	{
-		float vix = puntos.get(2*a);
-		float viy = puntos.get(2*a+1);
+		float vix = vertices.get(2*a);
+		float viy = vertices.get(2*a+1);
 		
-		float vjx = puntos.get(2*b);
-		float vjy = puntos.get(2*b+1);
+		float vjx = vertices.get(2*b);
+		float vjy = vertices.get(2*b+1);
 		
 		float vlx = 0;
 		float vly = 0;
@@ -469,17 +423,15 @@ public class Deformator
 		
 		if(c != -1)
 		{
-			vlx = puntos.get(2*c);
-			vly = puntos.get(2*c+1);
+			vlx = vertices.get(2*c);
+			vly = vertices.get(2*c+1);
 		}
 		
 		if(d != -1)
 		{
-			vrx = puntos.get(2*d);
-			vry = puntos.get(2*d+1);
+			vrx = vertices.get(2*d);
+			vry = vertices.get(2*d+1);
 		}
-		
-		Matrix m = new Matrix(8, 1);
 		
 		m.set(0, 0, vix);
 		m.set(1, 0, viy);
@@ -492,9 +444,7 @@ public class Deformator
 	
 		m.set(6, 0, vrx);
 		m.set(7, 0, vry);
-		
-		return m;
-	}*/
+	}
 	
 	// Cálculo Matriz T
 	//
@@ -503,29 +453,29 @@ public class Deformator
 	//
 	//	Tk = 1/(ck^2 + sk^2) *	|	ck		sk	|
 	//							|	-sk		ck	|
-	/*private Matrix calcularMatrizT(int a, int b, int c, int d, FloatArray puntos)
+	private void calcularMatrizT(int a, int b, int c, int d, FloatArray vertices, Matrix m)
 	{
-		Matrix g = calcularMatrizG(a, b, c, d, puntos);
-		Matrix gt = g.transpose();
-		Matrix gtg = gt.times(g);
-		Matrix gtginv = gtg.inverse();
+		calcularMatrizG(a, b, c, d, vertices, matrizG);
 		
-		Matrix gfinal = gtginv.times(gt);
+		matrizG.transpose(matrizGt);
+		matrizGtG = matrizGt.times(matrizG);
+		Matrix gtginv = matrizGtG.inverse();
 		
-		Matrix v = calcularMatrizV(a, b, c, d, puntos);
+		gtginv.times(matrizGt, matrizGtGinvGt);
 		
-		Matrix tk = gfinal.times(v);
-		double ck = tk.get(0, 0);
-		double sk = tk.get(1, 0);
+		calcularMatrizV(a, b, c, d, vertices, matrizV);
 		
-		Matrix m = new Matrix(2, 2);
+		matrizGtGinvGt.times(matrizV, matrizTk);
+		double ck = matrizTk.get(0, 0);
+		double sk = matrizTk.get(1, 0);
+		
 		m.set(0, 0, ck);	m.set(0, 1, sk);
 		m.set(1, 0, -sk);	m.set(1, 1, ck);	
 		
 		double k = 1.0/(Math.pow(ck, 2) + Math.pow(sk, 2));
 				
-		return m.times(k);
-	}*/
+		m.times(k);
+	}
 	
 	// Cálculo Matriz B2
 	//
@@ -536,10 +486,8 @@ public class Deformator
 	//		|	wC0x		wC0y		|	|	NumHandles
 	//		|	wC1x		wC1y		|	V
 	//		|			...				|
-	/*private Matrix calcularMatrizB2(FloatArray puntos, FloatArray handles)
+	private void calcularMatrizB2(FloatArray vertices, FloatArray verticesTrasRot, FloatArray handles, Matrix m, Matrix n)
 	{
-		Matrix m = new Matrix(numAristas + numHandles, 2);
-		
 		int i = 0;
 		int j = 0;
 		while(i < vecinos.size)
@@ -549,21 +497,21 @@ public class Deformator
 			int c = vecinos.get(i+2);
 			int d = vecinos.get(i+3);
 			
-			Matrix t = calcularMatrizT(a, b, c, d, puntos);
+			calcularMatrizT(a, b, c, d, verticesTrasRot, matrizT);
 			
-			float vix = puntos.get(2*a);
-			float viy = puntos.get(2*a+1);
-			float vjx = puntos.get(2*b);
-			float vjy = puntos.get(2*b+1);
+			float vix = vertices.get(2*a);
+			float viy = vertices.get(2*a+1);
+			float vjx = vertices.get(2*b);
+			float vjy = vertices.get(2*b+1);
 			
 			float ex = vjx - vix;
 			float ey = vjy - viy;
 			
-			double tex = t.get(0, 0) * ex + t.get(0, 1) * ey;
-			double tey = t.get(1, 0) * ex + t.get(1, 1) * ey;		
+			double tex = matrizT.get(0, 0) * ex + matrizT.get(0, 1) * ey;
+			double tey = matrizT.get(1, 0) * ex + matrizT.get(1, 1) * ey;		
 			
 			m.set(j, 0, tex);
-			m.set(j, 1, tey);
+			n.set(j, 0, tey);
 			
 			i = i+4;
 			j = j+1;
@@ -576,16 +524,16 @@ public class Deformator
 			float y = handles.get(2*k+1);
 			
 			m.set(pos, 0, w*x);
-			m.set(pos, 1, w*y);
+			n.set(pos, 0, w*y);
 		}
-		
-		return m;
-	}*/
+	}
 	
 	/* Cálculo de Vecinos */
 	
-	private ShortArray computeTriangles()
+	private ShortArray construirAristas(ShortArray triangulos)
 	{
+		ArrayList<Arista> aristas = new ArrayList<Arista>();		
+		
 		int i = 0;
 		while(i < triangulos.size)
 		{
@@ -593,9 +541,9 @@ public class Deformator
 			int b = triangulos.get(i+1);
 			int c = triangulos.get(i+2);
 			
-			anyadirArista(a, b, c);
-			anyadirArista(b, c, a);
-			anyadirArista(c, a, b);
+			anyadirArista(a, b, c, aristas);
+			anyadirArista(b, c, a, aristas);
+			anyadirArista(c, a, b, aristas);
 			
 			i = i + 3;
 		}
@@ -615,7 +563,7 @@ public class Deformator
 		return vecinos;
 	}
 	
-	private boolean anyadirArista(int a, int b, int c)
+	private boolean anyadirArista(int a, int b, int c, ArrayList<Arista> aristas)
 	{
 		Iterator<Arista> it = aristas.iterator();
 		while(it.hasNext())
@@ -635,7 +583,7 @@ public class Deformator
 			}
 		}
 		
-		aristas.add(new Arista(a, b, c, puntos));
+		aristas.add(new Arista(a, b, c, vertices));
 		return true;
 	}
 	
