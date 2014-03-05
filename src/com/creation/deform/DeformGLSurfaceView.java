@@ -53,27 +53,27 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
     /* SECTION Métodos Abstráctos OpenGLSurfaceView */
 	
 	@Override
-	protected void onTouchDown(float x, float y, float width, float height, int pos)
+	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
 	{
-		renderer.onTouchDown(x, y, width, height, pos);
+		return renderer.onTouchDown(x, y, width, height, pos);
 	}
 	
 	@Override
-	protected void onTouchMove(float x, float y, float width, float height, int pos)
+	protected boolean onTouchMove(float x, float y, float width, float height, int pos)
 	{
-		renderer.onTouchMove(x, y, width, height, pos);
+		return renderer.onTouchMove(x, y, width, height, pos);
 	}
 	
 	@Override
-	protected void onTouchUp(float x, float y, float width, float height, int pos)
+	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
-		renderer.onTouchUp(x, y, width, height, pos);
+		return renderer.onTouchUp(x, y, width, height, pos);
 	}
 	
 	@Override
-	protected void onMultiTouchEvent()
+	protected boolean onMultiTouchEvent()
 	{
-		renderer.onMultiTouchEvent();
+		return renderer.onMultiTouchEvent();
 	}
 	
 	/* SECTION Métodos de modifiación del Renderer */

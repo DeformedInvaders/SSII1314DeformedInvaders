@@ -48,10 +48,10 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     
     /* SECTION Métodos Abstractos */
 	
-    protected abstract void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	protected abstract void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	protected abstract void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	protected abstract void onMultiTouchEvent();
+    protected abstract boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract boolean onMultiTouchEvent();
     
     protected void setRenderer(OpenGLRenderer renderer)
     {	
@@ -161,6 +161,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	{
 		if(event != null)
 		{
+			boolean activo = false;
 			int pointCount = event.getPointerCount();
 			int action = event.getActionMasked();
 			
@@ -180,19 +181,23 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 				{
 					case MotionEvent.ACTION_DOWN:
 					case MotionEvent.ACTION_POINTER_DOWN:
-						onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
+						activo |= onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 					case MotionEvent.ACTION_MOVE:
-						onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);	
+						activo |= onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);	
 					break;
 					case MotionEvent.ACTION_UP:
 					case MotionEvent.ACTION_POINTER_UP:
-						onTouchUp(pixelX, pixelY, screenWidth, screenHeight, pointer);
+						activo |= onTouchUp(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 				}
 			}
 			
-			onMultiTouchEvent();			
+			if(action == MotionEvent.ACTION_MOVE && activo)
+			{
+				onMultiTouchEvent();			
+			}
+				
 			requestRender();
 			return true;
 		}

@@ -77,7 +77,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	/* SECTION Métodos Abstractos de OpenGLRenderer */
 	
 	@Override
-	protected void reiniciar()
+	protected boolean reiniciar()
 	{
 		estado = TDesignEstado.Dibujando;
 		
@@ -86,18 +86,22 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		vertices = null;
 		triangulos = null;
 		contorno = null;
+		
+		return true;
 	}
 	
 	@Override
-	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TDesignEstado.Dibujando)
 		{
-			anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
+			return anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
 		}
+		
+		return false;
 	}
 	
-	private void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -122,20 +126,26 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			puntos.add(worldY);
 			
 			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TDesignEstado.Dibujando)
 		{
-			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
+			return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TDesignEstado.Dibujando)
 		{
@@ -152,11 +162,18 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			{
 				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
 			}
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onMultiTouchEvent() { }
+	protected boolean onMultiTouchEvent()
+	{
+		return false;
+	}
 	
 	@Override
 	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)

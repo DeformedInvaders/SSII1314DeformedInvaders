@@ -28,16 +28,28 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 	/* SECTION Métodos abstractos OpenGLSurfaceView */
 	
 	@Override
-	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
 	
 	@Override
-	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
 	
 	@Override
-	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer) { }
+	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
 	
 	@Override
-	protected void onMultiTouchEvent() { }
+	protected boolean onMultiTouchEvent()
+	{
+		return false;
+	}
 	
 	/* SECTION Métodos de Selección de Estado */
 	

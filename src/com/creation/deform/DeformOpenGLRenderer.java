@@ -10,7 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
@@ -124,7 +123,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
         objetoHandleSeleccionado = new Handle(20, 2*POINTWIDTH);
         
 		// Deformador
-		deformator = new Deformator(vertices, triangulos, handles, indiceHandles);
+		deformator = new Deformator(verticesModificados, triangulos, handles, indiceHandles);
 	}
 	
 	/* SECTION Métodos Renderer */
@@ -221,7 +220,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	/* SECTION Métodos Abstractos de OpenGLRenderer */
 	
 	@Override
-	protected void reiniciar()
+	protected boolean reiniciar()
 	{
 		estado = TDeformEstado.Nada;
 		modoGrabar = false;
@@ -236,31 +235,35 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		listaHandlesAnimacion.clear();
 		listaVerticesAnimacion = null;
+		
+		return true;
 	}
 	
 	@Override
-	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{		
 		if(estado == TDeformEstado.Anyadir)
 		{			
-			anyadirHandle(pixelX, pixelY, screenWidth, screenHeight);
+			return anyadirHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TDeformEstado.Eliminar)
 		{
-			eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
+			return eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TDeformEstado.Deformar)
-		{		
-			seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
-			
+		{	
 			if(modoGrabar)
 			{
 				listaHandlesAnimacion.add(handles.clone());
 			}
-		}	
+			
+			return seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
+		}
+		
+		return false;
 	}
 	
-	private void anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
 		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
@@ -276,10 +279,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				// Añadir Handle Nuevo
 				deformator.anyadirHandles(handles, indiceHandles);
 			}
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
-	private void eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
 		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
@@ -297,14 +304,17 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				// Eliminar Handle
 				deformator.anyadirHandles(handles, indiceHandles);
 			}
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
-	private void seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	private boolean seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Pixel pertenece a los Vértices
 		short j = buscarPixel(handles, pixelX, pixelY, screenWidth, screenHeight);
-		Log.d("TEST", "POS: "+j);
 		if(j != -1)
 		{	
 			// Seleccionar Handle
@@ -312,32 +322,38 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handleSeleccionado.set(4*pointer+1, 1);
 			handleSeleccionado.set(4*pointer+2, handles.get(2*j));
 			handleSeleccionado.set(4*pointer+3, handles.get(2*j+1));
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
 			// Handle sin Pulsar
 			if(handleSeleccionado.get(4*pointer+1) == 0)
 			{
-				onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
+				return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			}
 			else
 			{
-				moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
-				
 				if(modoGrabar)
 				{
 					listaHandlesAnimacion.add(handles.clone());
-				}				
+				}	
+				
+				return moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);			
 			}
 		}
+		
+		return false;
 	}
 	
-	private void moverHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	private boolean moverHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -363,11 +379,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			handleSeleccionado.set(4*pointer+2, frameX);
 			handleSeleccionado.set(4*pointer+3, frameY);
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TDeformEstado.Deformar)
 		{
@@ -381,8 +401,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				modoGrabar = false;
 				estado = TDeformEstado.Nada;
 				construirListadeMovimientos();
-			}
+				
+				return true;
+			}			
 		}	
+		
+		return false;
 	}
 	
 	private void construirListadeMovimientos()
@@ -415,7 +439,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	protected void onMultiTouchEvent()
+	protected boolean onMultiTouchEvent()
 	{
 		if(estado == TDeformEstado.Deformar)
 		{
@@ -424,7 +448,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			
 			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	/* SECTION Métodos de Selección de Estado */

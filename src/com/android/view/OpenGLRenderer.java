@@ -89,11 +89,11 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* SECTION Métodos Abstractos */
 	
-	protected abstract void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	protected abstract void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	protected abstract void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-	protected abstract void onMultiTouchEvent();
-	protected abstract void reiniciar();
+	protected abstract boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected abstract boolean onMultiTouchEvent();
+	protected abstract boolean reiniciar();
 	
 	/* SECTION Métodos Renderer */
 	

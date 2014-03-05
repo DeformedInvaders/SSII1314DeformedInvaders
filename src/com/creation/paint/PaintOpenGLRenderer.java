@@ -194,7 +194,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	/* SECTION Métodos Abstráctos OpenGLRenderer */
 	
 	@Override
-	protected void reiniciar()
+	protected boolean reiniciar()
 	{
 		lineaActual = null;
 		listaLineas.clear();
@@ -214,26 +214,30 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		estado = TPaintEstado.Nada;
 		color = Color.WHITE;
 		sizeLinea = 6;
+		
+		return true;
 	}
 	
 	@Override
-	protected void onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{	
 		if(estado == TPaintEstado.Pincel)
 		{
-			anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
+			return anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TPaintEstado.Cubo)
 		{			
-			pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
+			return pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
 		}
 		else if(estado == TPaintEstado.Pegatinas)
 		{
-			anyadirPegatina(pixelX, pixelY, screenWidth, screenHeight);
+			return anyadirPegatina(pixelX, pixelY, screenWidth, screenHeight);
 		}
+		
+		return false;
 	}
 	
-	private void anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -266,10 +270,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			lineaActual.add(frameY);
 			
 			bufferLineaActual = BufferManager.construirBufferListaPuntos(lineaActual);
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
-	private void pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Conversión Pixel - Punto	
 		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
@@ -286,11 +294,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				
 				anteriores.push(new Accion(colorPaleta));
 				siguientes.clear();
+				
+				return true;
 			}
 		}
+		
+		return false;
 	}
 	
-	private void anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
 		short j = buscarPixel(contorno, vertices, pixelX, pixelY, screenWidth, screenHeight);
@@ -303,31 +315,42 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			
 			anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
 			siguientes.clear();
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
-			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
+			return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
+		
+		return false;
 	}
 	
 	@Override
-	protected void onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if(estado == TPaintEstado.Pincel)
 		{
-			guardarPolilinea();
+			return guardarPolilinea();
 		}		
+		
+		return false;
 	}
 	
 	@Override
-	protected void onMultiTouchEvent() {}
+	protected boolean onMultiTouchEvent()
+	{
+		return false;
+	}
 	
-	private void guardarPolilinea()
+	private boolean guardarPolilinea()
 	{
 		if(lineaActual != null)
 		{
@@ -337,7 +360,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			anteriores.push(new Accion(polilinea));
 			siguientes.clear();
 			lineaActual = null;
+			
+			return true;
 		}
+		
+		return false;
 	}
 	
 	/* SECTION Métodos de Selección de Estado */

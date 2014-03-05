@@ -469,8 +469,8 @@ public class Deformator
 		double ck = matrizTk.get(0, 0);
 		double sk = matrizTk.get(1, 0);
 		
-		m.set(0, 0, ck);	m.set(0, 1, sk);
-		m.set(1, 0, -sk);	m.set(1, 1, ck);	
+		m.set(0, 0, -ck);	m.set(0, 1, sk);
+		m.set(1, 0, sk);	m.set(1, 1, -ck);	
 		
 		double k = 1.0/(Math.pow(ck, 2) + Math.pow(sk, 2));
 				
