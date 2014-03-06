@@ -45,8 +45,15 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		// Background
 		dibujarTexturaFondo(gl);	
 		
-		// Protagonista
-		personaje.dibujar(gl, this);
+		// Escala del Juego
+		gl.glPushMatrix();
+		
+			gl.glScalef(0.5f, 0.5f, 0.0f);
+			
+			// Protagonista
+			personaje.dibujar(gl, this);
+		
+		gl.glPopMatrix();
 	}
 	
 	/* SECTION Métodos abstractos de OpenGLRenderer */

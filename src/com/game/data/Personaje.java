@@ -15,7 +15,7 @@ import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 
-public class Personaje
+public class Personaje extends Entidad
 {	
 	// Nombre
 	private String nombre;
@@ -76,13 +76,13 @@ public class Personaje
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		renderer.dibujarPersonaje(gl, bufferTriangulosAnimacion, bufferContornoAnimacion, bufferCoords, pegatinas, verticesAnimacion);
+		renderer.dibujarPersonaje(gl, bufferTriangulosAnimacion, bufferContornoAnimacion, bufferCoords, pegatinas, verticesAnimacion, posicion);
 	}
 	
 	public void mover() 
 	{
 		listaVerticesAnimacion = movimientos.get(0);
-		iniciarAnimacion();	
+		iniciarAnimacion();
 	}
 	
 	public void saltar() 
@@ -123,7 +123,10 @@ public class Personaje
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1) % listaVerticesAnimacion.size();		
+		posicionAnimacion = (posicionAnimacion + 1) % listaVerticesAnimacion.size();
+	
+		//FIXME
+		posicion += 10;
 	}
 	
 	public void setEsqueleto(Esqueleto e)

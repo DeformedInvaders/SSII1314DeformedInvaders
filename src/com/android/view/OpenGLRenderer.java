@@ -684,23 +684,34 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* SECTION Métodos de Pintura de Personajes */
 	
-	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
-	{			
-		// Textura
-		dibujarTexturaEsqueleto(gl, triangulos, coordTriangulos);
-			
-		// Contorno
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
+	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices, float posicion)
+	{		
+		gl.glPushMatrix();
 		
-		// Pegatinas
-		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
-		{
-			if(pegatinas.isCargada(i))
+			gl.glTranslatef(posicion, 0.0f, 0.0f);
+			
+			// Textura
+			dibujarTexturaEsqueleto(gl, triangulos, coordTriangulos);
+				
+			// Contorno
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
+			
+			// Pegatinas
+			for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
 			{
-				int indice = pegatinas.getVertice(i);
-				dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+				if(pegatinas.isCargada(i))
+				{
+					int indice = pegatinas.getVertice(i);
+					dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+				}
 			}
-		}
+		
+		gl.glPopMatrix();
+	}
+	
+	protected void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
+	{
+		dibujarPersonaje(gl, triangulos, contorno, coordTriangulos, pegatinas, vertices, 0.0f);
 	}
 	
 	/* SECTION Métodos de Construcción de Texturas */
