@@ -42,9 +42,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{					
 		super.onDrawFrame(gl);
 		
-		// Background
-		dibujarTexturaFondo(gl);	
-		
 		// Escala del Juego
 		gl.glPushMatrix();
 		
@@ -124,4 +121,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Métodos de Guardado de Información */
 	
+	public void saveData()
+	{
+		personaje.descargarTextura(this);
+	}
 }

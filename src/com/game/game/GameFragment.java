@@ -83,6 +83,7 @@ public class GameFragment extends OpenGLFragment
 	public void onPause()
 	{
 		super.onPause();
+		canvas.saveData();
 		canvas.onPause();
 	}	
 	

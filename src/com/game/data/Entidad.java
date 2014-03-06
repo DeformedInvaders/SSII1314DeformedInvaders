@@ -6,6 +6,7 @@ import com.android.view.OpenGLRenderer;
 
 public abstract class Entidad
 {
+	protected TTipoEntidad tipo;
 	protected float posicion = 0.0f;
 	
 	public abstract void cargarTextura(GL10 gl, OpenGLRenderer renderer);

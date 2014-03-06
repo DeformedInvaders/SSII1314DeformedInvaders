@@ -15,9 +15,10 @@ import android.graphics.Color;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import com.creation.data.MapaBits;
-import com.creation.data.Pegatinas;
+import com.game.data.TTipoEntidad;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
@@ -43,12 +44,16 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final float MAX_DISTANCE_PIXELS = 10;
 	
 	// Parámetros de Texturas
-	private static final int NUM_TEXTURES = 5;
+	private static final int NUM_TEXTURES = 13;
 	private int[] nombreTexturas;
 	
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_SKELETON = 1;
-	private static final int POS_TEXTURE_STICKER = 2;
+	private static final int POS_TEXTURE_OBSTACLE = 1;
+	private static final int POS_TEXTURE_FISSURE = 2;
+	private static final int POS_TEXTURE_CHARACTER_SKELETON = 3;
+	private static final int POS_TEXTURE_CHARACTER_STICKER = 4;
+	private static final int POS_TEXTURE_ENEMY_SKELETON = 8;
+	private static final int POS_TEXTURE_ENEMY_STICKER = 9;
 	
 	private FloatBuffer coordTextura;
 	private FloatBuffer[] vertTextura;
@@ -163,11 +168,11 @@ public abstract class OpenGLRenderer implements Renderer
 		// Fondo 
 		if(indiceTexturaFondo != -1)
 		{
-			cargarTexturaFondo(gl, indiceTexturaFondo, POS_TEXTURE_BACKGROUND);
+			cargarTexturaFondo(gl, indiceTexturaFondo);
 			cargadaTextura[POS_TEXTURE_BACKGROUND] = true;
 		}
 		
-		actualizarFondo();
+		actualizarTexturaFondo();
 	}
 	
 	@Override
@@ -184,6 +189,9 @@ public abstract class OpenGLRenderer implements Renderer
 		// Activar Matriz de ModeladoVista
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		
+		// Background
+		dibujarTexturaFondo(gl);	
 	}
 	
 	/* SECTION Métodos de Modificación de Cámara */
@@ -199,7 +207,7 @@ public abstract class OpenGLRenderer implements Renderer
 		yBottom = yCentro - newAlto/2.0f;
 		
 		actualizarMarcos();
-		actualizarFondo();
+		actualizarTexturaFondo();
 	}
 	
 	public void camaradrag(float dWorldX, float dWorldY)
@@ -213,7 +221,7 @@ public abstract class OpenGLRenderer implements Renderer
         yCentro = (yTop + yBottom)/2.0f;
         
         actualizarMarcos();
-        actualizarFondo();
+        actualizarTexturaFondo();
 	}
 	
 	public void camaradrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
@@ -241,7 +249,7 @@ public abstract class OpenGLRenderer implements Renderer
         yCentro = (yTop + yBottom)/2.0f;
         
         actualizarMarcos();
-        actualizarFondo();
+        actualizarTexturaFondo();
 	}
 	
 	/* SECTION Métodos de modificación de puntos */
@@ -363,26 +371,6 @@ public abstract class OpenGLRenderer implements Renderer
 		
 		float[] recB = {0, 0, 0, marcoB, marcoA, 0, marcoA, marcoB};
 		recMarcoB = BufferManager.construirBufferListaPuntos(recB);
-	}
-	
-	protected float convertToFrameXCoordinate(float worldX)
-	{
-		return worldX - marcoC;
-	}
-	
-	protected float convertToFrameYCoordinate(float worldY)
-	{
-		return worldY - marcoB;
-	}
-	
-	protected float convertFromFrameXCoordinate(float frameX)
-	{
-		return frameX + marcoC;
-	}
-	
-	protected float convertFromFrameYCoordinate(float frameY)
-	{
-		return frameY + marcoB;
 	}
 	
 	protected boolean isPoligonoDentroMarco(FloatArray vertices)
@@ -535,6 +523,26 @@ public abstract class OpenGLRenderer implements Renderer
 		return screenHeight - (worldY - yBottom)*screenHeight/(yTop-yBottom);
 	}
 	
+	protected float convertToFrameXCoordinate(float worldX)
+	{
+		return worldX - marcoC;
+	}
+	
+	protected float convertToFrameYCoordinate(float worldY)
+	{
+		return worldY - marcoB;
+	}
+	
+	protected float convertFromFrameXCoordinate(float frameX)
+	{
+		return frameX + marcoC;
+	}
+	
+	protected float convertFromFrameYCoordinate(float frameY)
+	{
+		return frameY + marcoB;
+	}
+	
 	/* SECTION Métodos de Búsqueda de Pixeles */
 	
 	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
@@ -626,9 +634,9 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
-	protected void dibujarBuffer(GL10 gl, FloatBuffer bufferPuntos)
+	public void dibujarBuffer(GL10 gl, int color, FloatBuffer bufferPuntos)
 	{	
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPuntos);
+		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, color, bufferPuntos);
 	}
 	
 	// Pintura de una Lista de Handles
@@ -682,39 +690,37 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
-	/* SECTION Métodos de Pintura de Personajes */
-	
-	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices, float posicion)
-	{		
-		gl.glPushMatrix();
-		
-			gl.glTranslatef(posicion, 0.0f, 0.0f);
-			
-			// Textura
-			dibujarTexturaEsqueleto(gl, triangulos, coordTriangulos);
-				
-			// Contorno
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
-			
-			// Pegatinas
-			for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
-			{
-				if(pegatinas.isCargada(i))
-				{
-					int indice = pegatinas.getVertice(i);
-					dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
-				}
-			}
-		
-		gl.glPopMatrix();
-	}
-	
-	protected void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
-	{
-		dibujarPersonaje(gl, triangulos, contorno, coordTriangulos, pegatinas, vertices, 0.0f);
-	}
-	
 	/* SECTION Métodos de Construcción de Texturas */
+	
+	private int obtenerPosicionTexturaMalla(TTipoEntidad tipo)
+	{
+		switch(tipo)
+		{
+			case Personaje:
+				return POS_TEXTURE_CHARACTER_SKELETON;
+			case Enemigo:
+				return POS_TEXTURE_ENEMY_SKELETON;
+			default:
+				return -1;
+		}
+	}
+	
+	private int obtenerPosicionTexturaRectangulo(TTipoEntidad tipo, int pos)
+	{
+		switch(tipo)
+		{
+			case Personaje:
+				return POS_TEXTURE_CHARACTER_STICKER + pos;
+			case Enemigo:
+				return POS_TEXTURE_ENEMY_STICKER + pos;
+			case Obstaculo:
+				return POS_TEXTURE_OBSTACLE + pos;
+			case Grieta:
+				return POS_TEXTURE_FISSURE + pos;
+			default:
+				return -1;
+		}
+	}
 	
 	protected FloatArray construirTextura(FloatArray puntos, float textureWidth, float textureHeight)
 	{
@@ -751,18 +757,53 @@ public abstract class OpenGLRenderer implements Renderer
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, textura, 0);
 		
 		gl.glDisable(GL10.GL_TEXTURE_2D);
-	}
-	
-	public void cargarTexturaEsqueleto(GL10 gl, Bitmap textura)
-	{
-		cargarTextura(gl, textura, POS_TEXTURE_SKELETON);
-	}
-	
-	public void cargarTexturaPegatinas(GL10 gl, int indiceTextura, int pos)
-	{     
-		int posTextura = POS_TEXTURE_STICKER + pos;
 		
-		if(!cargadaTextura[posTextura])
+		cargadaTextura[posTextura] = true;
+	}
+	
+	private void descargarTextura(int posTextura)
+	{
+		cargadaTextura[posTextura] = false;
+	}
+	
+	public void cargarTexturaMalla(GL10 gl, Bitmap textura, TTipoEntidad tipo)
+	{
+		int posTextura = obtenerPosicionTexturaMalla(tipo);
+		Log.d("TEST", "TEXTURA CARGADA POS "+posTextura);
+		
+		if(posTextura != -1 && !cargadaTextura[posTextura])
+		{
+			cargarTextura(gl, textura, posTextura);
+		}
+	}
+	
+	protected void cargarTexturaMalla(GL10 gl, Bitmap textura)
+	{
+		cargarTexturaMalla(gl, textura, TTipoEntidad.Personaje);
+	}
+
+	public void descargarTexturaMalla(TTipoEntidad tipo)
+	{
+		int posTextura = obtenerPosicionTexturaMalla(tipo);
+		Log.d("TEST", "TEXTURA DESCARGADA POS "+posTextura);
+		
+		if(posTextura != -1)
+		{
+			descargarTextura(posTextura);
+		}
+	}
+	
+	protected void descargarTexturaMalla()
+	{
+		descargarTexturaMalla(TTipoEntidad.Personaje);
+	}
+	
+	public void cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipo, int pos)
+	{     
+		int posTextura = obtenerPosicionTexturaRectangulo(tipo, pos);
+		Log.d("TEST", "TEXTURA CARGADA POS "+posTextura);
+		
+		if(posTextura != -1 && !cargadaTextura[posTextura])
 		{
 			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 			
@@ -779,23 +820,28 @@ public abstract class OpenGLRenderer implements Renderer
 			puntos.add(textureWidth);	puntos.add(textureHeight);	
 			
 			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
-			cargadaTextura[posTextura] = true;
 		}
 	}
 	
-	public void descargarTexturaPegatinas(int pos)
+	protected void cargarTexturaRectangulo(GL10 gl, int indiceTextura, int pos)
 	{
-		int posTextura = POS_TEXTURE_STICKER + pos;
-		
-		cargadaTextura[posTextura] = false;
+		cargarTexturaRectangulo(gl, indiceTextura, TTipoEntidad.Personaje, pos);
 	}
 	
-	protected void cargarTexturaFondo(GL10 gl, int indiceTextura, int posTextura)
-	{        
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+	public void descargarTexturaRectangulo(TTipoEntidad tipo, int pos)
+	{
+		int posTextura = obtenerPosicionTexturaRectangulo(tipo, pos);
+		Log.d("TEST", "TEXTURA DESCARGADA POS "+posTextura);
 		
-		cargarTextura(gl, bitmap, posTextura);
-		bitmap.recycle();
+		if(posTextura != -1)
+		{
+			descargarTextura(posTextura);
+		}
+	}
+	
+	protected void descargarTexturaRectangulo(int pos)
+	{
+		descargarTexturaRectangulo(TTipoEntidad.Personaje, pos);
 	}
 	
 	/* SECTION Métodos de Pintura de Texturas */
@@ -820,16 +866,28 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 
-	protected void dibujarTexturaEsqueleto(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura)
+	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTipoEntidad tipo)
 	{
-		dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, POS_TEXTURE_SKELETON);
+		int posTextura = obtenerPosicionTexturaMalla(tipo);
+		Log.d("TEST", "TEXTURA DIBUJADA POS "+posTextura);
+		
+		if(posTextura != -1 && cargadaTextura[posTextura])
+		{
+			dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, posTextura);
+		}
 	}
 	
-	protected void dibujarTexturaPegatina(GL10 gl, float x, float y, int pos)
+	protected void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura)
 	{
-		int posTextura = POS_TEXTURE_STICKER + pos;
+		dibujarTexturaMalla(gl, bufferPuntos, bufferCoordTextura, TTipoEntidad.Personaje);
+	}
+	
+	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipo, int pos)
+	{
+		int posTextura = obtenerPosicionTexturaRectangulo(tipo, pos);
+		Log.d("TEST", "TEXTURA DIBUJADA POS "+posTextura);
 		
-		if(cargadaTextura[posTextura])
+		if(posTextura != -1 && cargadaTextura[posTextura])
 		{
 			gl.glPushMatrix();
 			
@@ -841,7 +899,22 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	protected void dibujarTexturaFondo(GL10 gl)
+	protected void dibujarTexturaRectangulo(GL10 gl, float x, float y, int pos)
+	{
+		dibujarTexturaRectangulo(gl, x, y, TTipoEntidad.Personaje, pos);
+	}
+	
+	/* SECTION Métodos de Pintura de Fondo */
+	
+	private void cargarTexturaFondo(GL10 gl, int indiceTextura)
+	{        
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		
+		cargarTextura(gl, bitmap, POS_TEXTURE_BACKGROUND);
+		bitmap.recycle();
+	}
+	
+	private void dibujarTexturaFondo(GL10 gl)
 	{
 		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
 		{
@@ -849,7 +922,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	private void actualizarFondo()
+	private void actualizarTexturaFondo()
 	{
 		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
 		{			

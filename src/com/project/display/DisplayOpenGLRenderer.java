@@ -65,10 +65,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{					
-		super.onDrawFrame(gl);
-		
-		// Background
-		dibujarTexturaFondo(gl);	
+		super.onDrawFrame(gl);	
 		
 		if(personajeCargado)
 		{
@@ -96,8 +93,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						// Restaurar posición anterior de la Cámara
 						camaraRestore();
 						
+						// Reiniciar Renderer
 						super.onDrawFrame(gl);
-						dibujarTexturaFondo(gl);
 						
 						// Centrado de Marco
 						centrarPersonajeEnMarcoInicio(gl);

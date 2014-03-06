@@ -136,7 +136,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			if(pegatinas.isCargada(i))
 			{
-				cargarTexturaPegatinas(gl, pegatinas.getIndice(i), i);
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), i);
 			}
 		}
 		
@@ -177,7 +177,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				if(pegatinas.isCargada(i))
 				{
 					int indice = pegatinas.getVertice(i);
-					dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+					dibujarTexturaRectangulo(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
 				}
 			}
 			
@@ -205,7 +205,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
         
         for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
         {
-        	descargarTexturaPegatinas(i);
+        	descargarTexturaRectangulo(i);
         }
         
 		anteriores.clear();
@@ -310,7 +310,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			pegatinas.setPegatina(pegatinaActual, j, tipoPegatinaActual);
 			
-			descargarTexturaPegatinas(tipoPegatinaActual);			
+			descargarTexturaRectangulo(tipoPegatinaActual);			
 			pegatinaAnyadida = true;
 			
 			anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
@@ -470,7 +470,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
         {
-        	descargarTexturaPegatinas(i);
+        	descargarTexturaRectangulo(i);
         }
 		
 		Iterator<Accion> it = pila.iterator();

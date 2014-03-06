@@ -156,4 +156,8 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 	
 	/* SECTION Métodos de Guardado de Información */
 	
+	public void saveData()
+	{
+		renderer.saveData();
+	}
 }

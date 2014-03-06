@@ -134,14 +134,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// Textura
-		cargarTexturaEsqueleto(gl, bitmap);
+		cargarTexturaMalla(gl, bitmap);
 		
 		// Pegatinas
 		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
 			if(pegatinas.isCargada(i))
 			{
-				cargarTexturaPegatinas(gl, pegatinas.getIndice(i), i);
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), i);
 			}
 		}
 	}
@@ -203,6 +203,25 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 			
 			dibujarMarcoLateral(gl);
+		}
+	}
+	
+	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
+	{		
+		// Textura
+		dibujarTexturaMalla(gl, triangulos, coordTriangulos);
+			
+		// Contorno
+		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
+		
+		// Pegatinas
+		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		{
+			if(pegatinas.isCargada(i))
+			{
+				int indice = pegatinas.getVertice(i);
+				dibujarTexturaRectangulo(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
+			}
 		}
 	}
 	
@@ -591,6 +610,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	public DeformDataSaved saveData()
 	{
+		// Textura
+		descargarTexturaMalla();
+		
+		// Pegatinas
+		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
+        {
+			descargarTexturaRectangulo(i);
+        }
+				
 		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVerticesAnimacion);
 	}
 	

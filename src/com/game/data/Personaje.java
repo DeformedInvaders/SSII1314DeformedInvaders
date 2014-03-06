@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Color;
+
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
 import com.creation.data.MapaBits;
@@ -46,38 +48,68 @@ public class Personaje extends Entidad
 	// Pegatinas
 	private Pegatinas pegatinas;
 	
+	/* SECTION Constructora */
+	
 	public Personaje()
 	{
-		
+		tipo = TTipoEntidad.Personaje;
 	}
+	
+	/* SECTION Métodos abstractos de Entidad */
 	
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer)
 	{
 		// Textura
-		renderer.cargarTexturaEsqueleto(gl, mapaBits.getBitmap());
+		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipo);
 		
 		// Pegatinas
 		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
 			if(pegatinas.isCargada(i))
 			{
-				renderer.cargarTexturaPegatinas(gl, pegatinas.getIndice(i), i);
+				renderer.cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipo, i);
 			}
 		}
 	}
 	
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
+		// Textura
+		renderer.descargarTexturaMalla(tipo);
+		
+		// Pegatinas
 		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
         {
-			renderer.descargarTexturaPegatinas(i);
+			renderer.descargarTexturaRectangulo(tipo, i);
         }
 	}
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
-	{
-		renderer.dibujarPersonaje(gl, bufferTriangulosAnimacion, bufferContornoAnimacion, bufferCoords, pegatinas, verticesAnimacion, posicion);
+	{			
+		gl.glPushMatrix();
+		
+			gl.glTranslatef(posicion, 0.0f, 0.0f);
+			
+			// Textura
+			renderer.dibujarTexturaMalla(gl, bufferTriangulosAnimacion, bufferCoords, tipo);
+				
+			// Contorno
+			renderer.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
+			
+			// Pegatinas
+			for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
+			{
+				if(pegatinas.isCargada(i))
+				{
+					int indice = pegatinas.getVertice(i);
+					renderer.dibujarTexturaRectangulo(gl, verticesAnimacion.get(2*indice), verticesAnimacion.get(2*indice+1), tipo, i);
+				}
+			}
+		
+		gl.glPopMatrix();
 	}
+	
+	/* SECTION Métodos de Animación */
 	
 	public void mover() 
 	{
@@ -129,6 +161,8 @@ public class Personaje extends Entidad
 		posicion += 10;
 	}
 	
+	/* SECTION Métodos de Modificación de Información */
+	
 	public void setEsqueleto(Esqueleto e)
 	{
 		contorno = e.getContorno();		
@@ -160,6 +194,8 @@ public class Personaje extends Entidad
 		nombre = n;
 	}
 	
+	/* SECTION Métodos de Obtención de Información */
+	
 	public Esqueleto getEsqueleto()
 	{
 		return new Esqueleto(contorno, vertices, triangulos);
@@ -179,5 +215,4 @@ public class Personaje extends Entidad
 	{
 		return nombre;
 	}
-
 }
