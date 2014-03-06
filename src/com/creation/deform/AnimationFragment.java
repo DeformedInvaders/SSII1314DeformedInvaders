@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.android.storage.ExternalStorageManager;
-import com.android.view.SwipeableViewPager;
+import com.android.view.ViewPagerSwipeable;
 import com.android.view.ViewPagerFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
@@ -80,7 +80,7 @@ public class AnimationFragment extends ViewPagerFragment
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);		
 		botonReady.setOnClickListener(new OnReadyClickListener());	
 
-		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewAnimation1);
+		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewAnimation1);
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 		

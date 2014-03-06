@@ -28,11 +28,10 @@ import com.creation.paint.PaintFragment;
 import com.game.data.Personaje;
 import com.game.game.GameFragment;
 import com.game.select.LevelSelectionFragment;
-import com.game.select.LevelSelectFragment;
 import com.project.loading.LoadingFragment;
 import com.selection.select.CharacterSelectionFragment;
 
-public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectFragment.LevelSelectionFragmentListener 
+public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener 
 {	
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
@@ -328,7 +327,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onLevelSelectionSelectClicked()
     {
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado)));
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager));
     }
 	
 	/* SECTION Métodos de Modificación de la ActionBar */

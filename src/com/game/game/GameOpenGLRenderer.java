@@ -31,10 +31,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// BackGround
-		indiceTexturaFondo = R.drawable.background_egypt;
+		indiceTexturaFondo = R.drawable.background_moon;
 		
 		// Protagonista
-		personaje.cargar(gl, this);
+		personaje.cargarTextura(gl, this);
 	}
 	
 	@Override
@@ -83,6 +83,36 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Métodos de Modificación de Estado */
 
+	public void reproducirAnimacion()
+	{
+		personaje.animar();
+	}
+	
+	public void pararAnimacion()
+	{
+		personaje.reposo();
+	}
+	
+	public void seleccionarRun() 
+	{
+		personaje.mover();
+	}
+	
+	public void seleccionarJump() 
+	{
+		personaje.saltar();
+	}
+	
+	public void seleccionarCrouch() 
+	{
+		personaje.agachar();
+	}
+	
+	public void seleccionarAttack() 
+	{
+		personaje.atacar();
+	}
+	
 	/* SECTION Métodos de Obtención de Información */
 	
 	/* SECTION Métodos de Guardado de Información */

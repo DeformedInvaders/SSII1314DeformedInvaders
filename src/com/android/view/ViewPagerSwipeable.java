@@ -16,7 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class SwipeableViewPager<T extends Fragment> extends ViewPager
+public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 {
 	private ActionBar actionBar;
 	private SectionViewPagerAdapter pageAdapter;
@@ -28,7 +28,7 @@ public class SwipeableViewPager<T extends Fragment> extends ViewPager
 	
 	/* SECTION Constructora */
 	
-	public SwipeableViewPager(Context context)
+	public ViewPagerSwipeable(Context context)
 	{
 		super(context);
 		
@@ -37,7 +37,7 @@ public class SwipeableViewPager<T extends Fragment> extends ViewPager
 		listaNombres = new ArrayList<String>();
 	}
 	
-	public SwipeableViewPager(Context context, AttributeSet attrs)
+	public ViewPagerSwipeable(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         

@@ -13,7 +13,7 @@ import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
-import com.android.view.SwipeableViewPager;
+import com.android.view.ViewPagerSwipeable;
 import com.creation.design.TDisplayTipo;
 import com.game.data.Personaje;
 import com.project.display.DisplayGLSurfaceView;
@@ -23,7 +23,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 {
 	private ExternalStorageManager manager;
 	private SocialConnector connector;
-	private SwipeableViewPager pager;
+	private ViewPagerSwipeable pager;
 	
 	private Personaje personaje;
 
@@ -32,14 +32,14 @@ public class CharacterSelectFragment extends OpenGLFragment
 
 	/* SECTION Constructora */
 	
-	public static final CharacterSelectFragment newInstance(Personaje p, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
+	public static final CharacterSelectFragment newInstance(Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
 	{
 		CharacterSelectFragment fragment = new CharacterSelectFragment();
 		fragment.setParameters(p, s, m, c);
 		return fragment;
 	}
 	
-	private void setParameters(Personaje p, SwipeableViewPager s, ExternalStorageManager m, SocialConnector c)
+	private void setParameters(Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
 	{	
 		personaje = p;
 		pager = s;
@@ -144,7 +144,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 	
 	/* SECTION Métodos Listener onClick */
 	
-	private class OnCamaraClickListener implements OnClickListener
+	public class OnCamaraClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)

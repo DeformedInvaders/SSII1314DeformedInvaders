@@ -153,14 +153,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		if(estado == TDeformEstado.Reproducir)
 		{			
+			// Centrado de Marco
+			centrarPersonajeEnMarcoInicio(gl);
+			
 			dibujarPersonaje(gl, triangulosAnimacion, contornoAnimacion, bufferCoords, pegatinas, verticesAnimacion);
+		
+			// Centrado de Marco
+			centrarPersonajeEnMarcoFinal(gl);
 		}
 		else
 		{
-			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, verticesModificados);
-			
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
+			
+			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, verticesModificados);
 			
 			if(estado != TDeformEstado.Deformar)
 			{

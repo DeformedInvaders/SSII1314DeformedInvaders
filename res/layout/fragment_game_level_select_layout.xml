@@ -16,14 +16,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:textSize="60sp" />
-    
-    <LinearLayout style="@style/Layout_Center_FragmentButton_Style">
-
-        <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonLevel1"
-            android:contentDescription="@string/desc_magic"
-            android:background="@drawable/icon_magic" />
-	
-	</LinearLayout>
 
 </RelativeLayout>

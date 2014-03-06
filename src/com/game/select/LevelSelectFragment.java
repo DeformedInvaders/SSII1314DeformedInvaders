@@ -1,86 +1,56 @@
 package com.game.select;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.view.OpenGLFragment;
 import com.project.main.R;
 
 public class LevelSelectFragment extends OpenGLFragment
 {	
-	private LevelSelectionFragmentListener mCallback;
-	
-	private ImageButton botonNivel;
-	
-	private boolean nivelBloqueado;
 	private int imageLevel, textTitle, textColor;
 	
 	/* SECTION Constructora */
 	
-	public static final LevelSelectFragment newInstance(boolean bloqueado, TLevelTipo tipo)
+	public static final LevelSelectFragment newInstance(TLevelTipo tipo)
 	{
 		LevelSelectFragment fragment = new LevelSelectFragment();
 		
 		switch(tipo)
 		{
 			case Moon:
-				fragment.setParameters(bloqueado, R.drawable.background_moon, R.string.text_level_section_moon, Color.WHITE);
+				fragment.setParameters(R.drawable.background_moon, R.string.text_level_section_moon, Color.WHITE);
 			break;
 			case NewYork:
-				fragment.setParameters(bloqueado, R.drawable.background_newyork, R.string.text_level_section_newyork, Color.BLACK);
+				fragment.setParameters(R.drawable.background_newyork, R.string.text_level_section_newyork, Color.BLACK);
 			break;
 			case Rome:
-				fragment.setParameters(bloqueado, R.drawable.background_rome, R.string.text_level_section_rome, Color.WHITE);
+				fragment.setParameters(R.drawable.background_rome, R.string.text_level_section_rome, Color.WHITE);
 			break;
 			case Egypt:
-				fragment.setParameters(bloqueado, R.drawable.background_egypt, R.string.text_level_section_egypt, Color.BLACK);
+				fragment.setParameters(R.drawable.background_egypt, R.string.text_level_section_egypt, Color.BLACK);
 			break;
 			case Stonehenge:
-				fragment.setParameters(bloqueado, R.drawable.background_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK);
+				fragment.setParameters(R.drawable.background_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK);
 			break;
 		}
 		
 		return fragment;
 	}
 	
-	private void setParameters(boolean bloqueado, int level, int text, int color)
+	private void setParameters(int level, int text, int color)
 	{
-		nivelBloqueado = bloqueado;
 		imageLevel = level;
 		textTitle = text;
 		textColor = color;
 	}
-	
-	public interface LevelSelectionFragmentListener
-	{
-        public void onLevelSelectionSelectClicked();
-    }
 
 	/* SECTION Métodos Fragment */
-		
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (LevelSelectionFragmentListener) activity;
-	}
-	
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mCallback = null;
-		botonNivel = null;
-	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -94,22 +64,11 @@ public class LevelSelectFragment extends OpenGLFragment
         TextView textBackground = (TextView) rootView.findViewById(R.id.textViewLevelSelect1);
         textBackground.setText(getString(textTitle));
         textBackground.setTextColor(textColor);
-        
-        botonNivel = (ImageButton) rootView.findViewById(R.id.imageButtonLevel1);
-		botonNivel.setOnClickListener(new OnLevelClickListener());
 		
 		reiniciarInterfaz();
 		actualizarInterfaz();
         return rootView;
     }
-	
-	@Override
-	public void onDestroyView()
-	{
-		super.onDestroyView();
-		
-		botonNivel = null;
-	}
 	
 	/* SECTION Métodos abstractos de OpenGLFragment */
 	
@@ -118,25 +77,5 @@ public class LevelSelectFragment extends OpenGLFragment
 	
 	@Override
 	protected void actualizarInterfaz() { }
-	
-	/* SECTION Métodos Listener onClick */
-	
-	private class OnLevelClickListener implements OnClickListener
-    {
-		@Override
-		public void onClick(View v)
-		{			
-			if(nivelBloqueado)
-			{
-				Toast.makeText(getActivity(), R.string.text_level_enabled, Toast.LENGTH_SHORT).show();
-				
-				mCallback.onLevelSelectionSelectClicked();
-			}
-			else
-			{
-				Toast.makeText(getActivity(), R.string.text_level_disabled, Toast.LENGTH_SHORT).show();
-			}
-		}
-    }
 	
 }

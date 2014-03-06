@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
-   <com.android.view.SwipeableViewPager style="@style/ViewPager_Style"
+   <com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
 	    android:id="@+id/pagerViewSelection1"/>
     
     <LinearLayout style="@style/Layout_Right_FragmentButton_Style">

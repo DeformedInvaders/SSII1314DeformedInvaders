@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
-import com.android.view.SwipeableViewPager;
+import com.android.view.ViewPagerSwipeable;
 import com.android.view.ViewPagerFragment;
 import com.game.data.Personaje;
 import com.project.main.R;
@@ -84,7 +84,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment
 		botonReady.setOnClickListener(new OnReadyClickListener());		
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 
-		viewPager = (SwipeableViewPager) rootView.findViewById(R.id.pagerViewSelection1);
+		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewSelection1);
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		
 		Iterator<Personaje> it = listaPersonajes.iterator();

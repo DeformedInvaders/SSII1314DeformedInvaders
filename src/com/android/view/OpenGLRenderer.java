@@ -686,9 +686,6 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
 	{			
-		// Centrado de Marco
-		centrarPersonajeEnMarcoInicio(gl);
-		
 		// Textura
 		dibujarTexturaEsqueleto(gl, triangulos, coordTriangulos);
 			
@@ -704,9 +701,6 @@ public abstract class OpenGLRenderer implements Renderer
 				dibujarTexturaPegatina(gl, vertices.get(2*indice), vertices.get(2*indice+1), i);
 			}
 		}
-		
-		// Centrado de Marco
-		centrarPersonajeEnMarcoFinal(gl);
 	}
 	
 	/* SECTION Métodos de Construcción de Texturas */

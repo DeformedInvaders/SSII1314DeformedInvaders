@@ -43,7 +43,9 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void onFinish() 
 			{ 
+				renderer.pararAnimacion();
 				animacionFinalizada = true;
+				requestRender();
 			}
 
 			@Override

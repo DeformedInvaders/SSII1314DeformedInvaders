@@ -51,7 +51,7 @@ public class Personaje
 		
 	}
 	
-	public void cargar(GL10 gl, OpenGLRenderer renderer)
+	public void cargarTextura(GL10 gl, OpenGLRenderer renderer)
 	{
 		// Textura
 		renderer.cargarTexturaEsqueleto(gl, mapaBits.getBitmap());
@@ -66,7 +66,7 @@ public class Personaje
 		}
 	}
 	
-	public void descargar(OpenGLRenderer renderer)
+	public void descargarTextura(OpenGLRenderer renderer)
 	{
 		for(int i = 0; i < pegatinas.getNumPegatinas(); i++)
         {
@@ -75,11 +75,6 @@ public class Personaje
 	}
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
-	{
-		renderer.dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, vertices);
-	}
-	
-	public void dibujarAnimacion(GL10 gl, OpenGLRenderer renderer)
 	{
 		renderer.dibujarPersonaje(gl, bufferTriangulosAnimacion, bufferContornoAnimacion, bufferCoords, pegatinas, verticesAnimacion);
 	}
@@ -116,12 +111,19 @@ public class Personaje
 		bufferContornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
 	}
 	
+	public void reposo()
+	{
+		verticesAnimacion = vertices;
+		bufferTriangulosAnimacion = bufferTriangulos;
+		bufferContornoAnimacion = bufferContorno;		
+	}
+	
 	public void animar()
 	{
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();		
+		posicionAnimacion = (posicionAnimacion + 1) % listaVerticesAnimacion.size();		
 	}
 	
 	public void setEsqueleto(Esqueleto e)
@@ -146,6 +148,8 @@ public class Personaje
 	public void setMovimientos(Movimientos m)
 	{
 		movimientos = m;
+		
+		reposo();
 	}
 	
 	public void setNombre(String n)

@@ -58,7 +58,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		
 		if(personajeCargado)
 		{
-			personaje.cargar(gl, this);
+			personaje.cargarTextura(gl, this);
 		}
 	}
 	
@@ -72,10 +72,16 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		
 		if(personajeCargado)
 		{
-			if(estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
-			{
-				personaje.dibujar(gl, this);
+			// Centrado de Marco
+			centrarPersonajeEnMarcoInicio(gl);
 			
+			personaje.dibujar(gl, this);
+			
+			// Centrado de Marco
+			centrarPersonajeEnMarcoFinal(gl);
+			
+			if(estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
+			{			
 				if(estado == TDisplayEstado.Captura)
 				{
 					if(estadoCaptura == TCapturaEstado.Capturando)
@@ -93,7 +99,13 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						super.onDrawFrame(gl);
 						dibujarTexturaFondo(gl);
 						
+						// Centrado de Marco
+						centrarPersonajeEnMarcoInicio(gl);
+						
 						personaje.dibujar(gl, this);
+						
+						// Centrado de Marco
+						centrarPersonajeEnMarcoFinal(gl);
 					}
 					else if(estadoCaptura == TCapturaEstado.Retocando)
 					{
@@ -102,10 +114,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						dibujarMarcoCentral(gl);
 					}
 				}
-			}
-			else
-			{
-				personaje.dibujarAnimacion(gl, this);
 			}
 		}
 	}
@@ -171,6 +179,11 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public void reproducirAnimacion()
 	{
 		personaje.animar();
+	}
+	
+	public void pararAnimacion()
+	{
+		personaje.reposo();
 	}
 	
 	public void seleccionarRun() 
@@ -242,7 +255,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		if(personajeCargado)
 		{
-			personaje.descargar(this);
+			personaje.descargarTextura(this);
 		}
 	}
 }

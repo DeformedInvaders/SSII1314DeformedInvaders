@@ -6,4 +6,32 @@
     <com.game.game.GameGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
         android:id="@+id/gameGLSurfaceViewGame1" />
     
+	<LinearLayout style="@style/Layout_Left_FragmentButton_Style" >
+
+        <ImageButton
+            android:id="@+id/imageButtonGame1"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_run"
+            android:contentDescription="@string/desc_select_run" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonGame2"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_jump"
+            android:contentDescription="@string/desc_select_jump" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonGame3"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_crouch"
+            android:contentDescription="@string/desc_select_crouch" />
+        
+        <ImageButton
+            android:id="@+id/imageButtonGame4"
+            style="@style/Button_Fragment_Style"
+            android:background="@drawable/icon_animation_attack"
+            android:contentDescription="@string/desc_select_attack" />
+
+	</LinearLayout>
+    
 </RelativeLayout>
