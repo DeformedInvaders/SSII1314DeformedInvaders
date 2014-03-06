@@ -137,7 +137,8 @@ public class MainFragment extends OpenGLFragment
 	@Override
 	protected void reiniciarInterfaz()
 	{
-		botonSeleccionar.setVisibility(View.INVISIBLE);	
+		botonSeleccionar.setVisibility(View.INVISIBLE);
+		botonJugar.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -145,7 +146,12 @@ public class MainFragment extends OpenGLFragment
 	{
 		if(!listaPersonajes.isEmpty())
 		{
-			botonSeleccionar.setVisibility(View.VISIBLE);		
+			botonSeleccionar.setVisibility(View.VISIBLE);
+			
+			if(personajeSeleccionado != -1)
+			{
+				botonJugar.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 	

@@ -114,17 +114,14 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Name file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Name sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Name ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Names not loadead");
@@ -170,17 +167,14 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Name file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Name sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Name ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Names not loadead");
@@ -235,17 +229,14 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Chosen file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Chosen sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Chosen ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Chosen not loadead");
@@ -272,17 +263,14 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Chosen file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Chosen sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Chosen ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Chosen not saved");
@@ -314,22 +302,18 @@ public class InternalStorageManager
 		catch (ClassNotFoundException e)
 		{
 			Log.d("TEST", "File Character class not found");
-			e.printStackTrace();
 		}
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Character file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Character sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Character ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Character not loadead");
@@ -371,17 +355,14 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Character file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Character sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Character ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Character not saved");
@@ -428,22 +409,19 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Levels file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Levels sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Levels ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Levels not loadead");
-		niveles[0] = true;
 		
+		niveles[0] = true;
 		return niveles;
 	}
 	
@@ -470,17 +448,14 @@ public class InternalStorageManager
 		catch (FileNotFoundException e)
 		{
 			Log.d("TEST", "File Chosen file not found");
-			e.printStackTrace();
 		}
 		catch (StreamCorruptedException e)
 		{
 			Log.d("TEST", "File Chosen sream corrupted");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			Log.d("TEST", "File Chosen ioexception");
-			e.printStackTrace();
 		}
 		
 		Log.d("TEST", "Chosen not saved");
