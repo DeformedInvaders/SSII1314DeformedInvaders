@@ -89,7 +89,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	public void reproducirAnimacion()
 	{
+		// FIXME
 		personaje.animar();
+		personaje.avanzar();
 	}
 	
 	public void pararAnimacion()

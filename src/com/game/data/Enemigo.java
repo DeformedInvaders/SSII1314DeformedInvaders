@@ -1,17 +1,52 @@
 package com.game.data;
 
-import javax.microedition.khronos.opengles.GL10;
+import java.util.List;
 
-import com.android.view.OpenGLRenderer;
+import com.lib.utils.FloatArray;
 
-public class Enemigo extends Entidad
+public class Enemigo extends Malla
 {
-	public Enemigo()
+	private List<FloatArray> movimiento;
+	
+	/* SECTION Constructora */
+	
+	public Enemigo(int idEnemigo)
 	{
 		tipo = TTipoEntidad.Enemigo;
+		id = idEnemigo;
 	}
 	
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer) { }
-	public void descargarTextura(OpenGLRenderer renderer) { }
-	public void dibujar(GL10 gl, OpenGLRenderer renderer) { }
+	/* SECTION Métodos abstractos de Entidad */
+	
+	@Override
+	public void avanzar()
+	{
+		posicion -= DIST_AVANCE;
+	}
+	
+	/* SECTION Métodos de Animación */
+	
+	public void mover() 
+	{
+		listaVerticesAnimacion = movimiento;
+		
+		iniciar();
+	}
+	
+	/* SECTION Métodos de Modificación de Información */
+	
+	public void setMovimientos(List<FloatArray> m)
+	{
+		movimiento = m;
+		
+		reposo();
+	}
+	
+	/* SECTION Métodos de Obtención de Información */
+	
+	public List<FloatArray> getMovimientos()
+	{
+		return movimiento;
+	}
+	
 }

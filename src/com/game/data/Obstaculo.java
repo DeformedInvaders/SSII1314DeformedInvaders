@@ -1,17 +1,13 @@
 package com.game.data;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import com.android.view.OpenGLRenderer;
-
-public class Obstaculo extends Entidad
+public class Obstaculo extends Rectangulo
 {
-	public Obstaculo()
+	/* SECTION Constructora */
+	
+	public Obstaculo(int indiceTextura, int idObstaculo)
 	{
 		tipo = TTipoEntidad.Obstaculo;
+		id = idObstaculo;
+		textura = indiceTextura;
 	}
-	
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer) { }
-	public void descargarTextura(OpenGLRenderer renderer) { }
-	public void dibujar(GL10 gl, OpenGLRenderer renderer) { }
 }
