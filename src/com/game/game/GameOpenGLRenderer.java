@@ -32,6 +32,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		// BackGround
 		indiceTexturaFondo = R.drawable.background_moon;
+		indiceTexturaFondoFinal = R.drawable.background_newyork;
 		
 		// Protagonista
 		personaje.cargarTextura(gl, this);
@@ -90,8 +91,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public void reproducirAnimacion()
 	{
 		// FIXME
-		personaje.animar();
-		personaje.avanzar();
+		//personaje.animar();
+		//personaje.avanzar();
+		
+		desplazarFondo();
 	}
 	
 	public void pararAnimacion()

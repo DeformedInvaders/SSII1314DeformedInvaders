@@ -48,21 +48,27 @@ public abstract class OpenGLRenderer implements Renderer
 	private static final int MAX_TEXTURE_ENEMY = 4;
 
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_FISSURE = 1;
-	private static final int POS_TEXTURE_OBSTACLE = 2;
+	private static final int POS_TEXTURE_BACKGROUND_FINAL = 1;
+	private static final int POS_TEXTURE_FISSURE = 2;
+	private static final int POS_TEXTURE_OBSTACLE = 3;
 	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + MAX_TEXTURE_OBSTACLE;
 	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + 1;
 	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + MAX_TEXTURE_STICKER;
-	//private static final int POS_TEXTURE_ENEMY_STICKER = 9;
 	
 	private static final int NUM_TEXTURES = POS_TEXTURE_ENEMY_SKELETON + MAX_TEXTURE_ENEMY * MAX_TEXTURE_STICKER + 1;
 	private int[] nombreTexturas;
 
 	private FloatBuffer coordTextura;
 	private FloatBuffer[] vertTextura;
-
-	protected int indiceTexturaFondo;
+	
 	protected boolean[] cargadaTextura;
+	
+	// Fondo
+	private static final int NUM_REPETICIONES = 3;
+	
+	protected int indiceTexturaFondo, indiceTexturaFondoFinal;
+	private float posFondo1, posFondo2, posFondo3;
+	private boolean dibujarFondo1, dibujarFondo2, dibujarFondo3;
 
 	// Marco
 	private float marcoA, marcoB, marcoC;
@@ -76,12 +82,18 @@ public abstract class OpenGLRenderer implements Renderer
 	public OpenGLRenderer(Context context)
 	{				
 		mContext = context;
-
+		
 		// Marcos
 		actualizarMarcos();
 
+		// Fondo
+		dibujarFondo1 = true;
+		dibujarFondo2 = true;
+		dibujarFondo3 = false;
+		
 		// Textura
 		indiceTexturaFondo = -1;
+		indiceTexturaFondoFinal = -1;
 
 		nombreTexturas = new int[NUM_TEXTURES];
 		cargadaTextura = new boolean[NUM_TEXTURES];
@@ -169,11 +181,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glLoadIdentity();
 
 		// Fondo 
-		if(indiceTexturaFondo != -1)
-		{
-			cargarTexturaFondo(gl, indiceTexturaFondo);
-			cargadaTextura[POS_TEXTURE_BACKGROUND] = true;
-		}
+		cargarTexturaFondo(gl, indiceTexturaFondo, indiceTexturaFondoFinal, NUM_REPETICIONES);
 
 		actualizarTexturaFondo();
 	}
@@ -194,7 +202,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glLoadIdentity();
 
 		// Background
-		dibujarTexturaFondo(gl);	
+		dibujarFondo(gl);	
 	}
 
 	/* SECTION Métodos de Modificación de Cámara */
@@ -426,16 +434,16 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 
-		gl.glTranslatef(xLeft, yBottom, 1.0f);
-
-		gl.glPushMatrix();
-
-		dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoA);
-
-		gl.glTranslatef(marcoC + marcoA, 0, 0);
-		dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoA);
-
-		gl.glPopMatrix();
+			gl.glTranslatef(xLeft, yBottom, 1.0f);
+	
+			gl.glPushMatrix();
+	
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoA);
+		
+				gl.glTranslatef(marcoC + marcoA, 0, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoA);
+	
+			gl.glPopMatrix();
 
 		gl.glPopMatrix();
 	}
@@ -450,14 +458,14 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 
-		gl.glTranslatef(xLeft, yBottom, 1.0f);
-
-		gl.glPushMatrix();
-
-		gl.glTranslatef(marcoC, marcoB + marcoA, 0);
-		dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
-
-		gl.glPopMatrix();
+			gl.glTranslatef(xLeft, yBottom, 1.0f);
+	
+			gl.glPushMatrix();
+	
+				gl.glTranslatef(marcoC, marcoB + marcoA, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
+	
+			gl.glPopMatrix();
 
 		gl.glPopMatrix();		
 	}
@@ -466,14 +474,14 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 
-		gl.glTranslatef(xLeft, yBottom, 1.0f);
-
-		gl.glPushMatrix();
-
-		gl.glTranslatef(marcoC, 0, 0);
-		dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
-
-		gl.glPopMatrix();
+			gl.glTranslatef(xLeft, yBottom, 1.0f);
+	
+				gl.glPushMatrix();
+		
+				gl.glTranslatef(marcoC, 0, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(175, 0, 0, 0), recMarcoB);
+	
+			gl.glPopMatrix();
 
 		gl.glPopMatrix();		
 	}
@@ -767,6 +775,27 @@ public abstract class OpenGLRenderer implements Renderer
 
 		cargadaTextura[posTextura] = true;
 	}
+	
+	private void cargarTextura(GL10 gl, int indiceTextura, int posTextura)
+	{
+		Bitmap textura = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+
+			gl.glGenTextures(1, nombreTexturas, posTextura);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
+	
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+	
+			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, textura, 0);
+
+		gl.glDisable(GL10.GL_TEXTURE_2D);
+
+		cargadaTextura[posTextura] = true;
+		
+		textura.recycle();
+	}
 
 	private void descargarTextura(int posTextura)
 	{
@@ -857,18 +886,18 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
-		gl.glFrontFace(GL10.GL_CW);
-		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, bufferCoordTextura);
-
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDrawArrays(type, 0, bufferPuntos.capacity()/2);
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
+			gl.glFrontFace(GL10.GL_CW);
+			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	
+			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, bufferCoordTextura);
+	
+			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glDrawArrays(type, 0, bufferPuntos.capacity()/2);
+			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
@@ -915,19 +944,48 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* SECTION Métodos de Pintura de Fondo */
 
-	private void cargarTexturaFondo(GL10 gl, int indiceTextura)
+	private void cargarTexturaFondo(GL10 gl, int indiceTextura, int indiceTexturaFinal, int numRepeticiones)
 	{        
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		if(indiceTextura != -1)
+		{
+			cargarTextura(gl, indiceTextura, POS_TEXTURE_BACKGROUND);
 
-		cargarTextura(gl, bitmap, POS_TEXTURE_BACKGROUND);
-		bitmap.recycle();
+			if(indiceTexturaFinal != -1)
+			{
+				cargarTextura(gl, indiceTexturaFinal, POS_TEXTURE_BACKGROUND_FINAL);
+				
+				posFondo1 = 0;
+				posFondo2 = screenWidth;
+				posFondo3 = numRepeticiones * screenWidth;
+			}
+		}
+	}
+	
+	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
+	{
+		if(dibujarFondo)
+		{
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(posFondo, 0.0f, 0.0f);
+			
+				dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
+		
+			gl.glPopMatrix();
+		}
 	}
 
-	private void dibujarTexturaFondo(GL10 gl)
+	private void dibujarFondo(GL10 gl)
 	{
 		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
 		{
-			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[POS_TEXTURE_BACKGROUND], coordTextura, POS_TEXTURE_BACKGROUND);
+			dibujarTexturaFondo(gl, dibujarFondo1, posFondo1, POS_TEXTURE_BACKGROUND);
+		
+			if(cargadaTextura[POS_TEXTURE_BACKGROUND_FINAL])
+			{
+				dibujarTexturaFondo(gl, dibujarFondo2, posFondo2, POS_TEXTURE_BACKGROUND);
+				dibujarTexturaFondo(gl, dibujarFondo3, posFondo3, POS_TEXTURE_BACKGROUND_FINAL);
+			}
 		}
 	}
 
@@ -942,9 +1000,42 @@ public abstract class OpenGLRenderer implements Renderer
 			puntos.add(xRight);	puntos.add(yTop);	
 
 			vertTextura[POS_TEXTURE_BACKGROUND] = BufferManager.construirBufferListaPuntos(puntos);
+			
+			if(cargadaTextura[POS_TEXTURE_BACKGROUND_FINAL])
+			{
+				vertTextura[POS_TEXTURE_BACKGROUND_FINAL] = BufferManager.construirBufferListaPuntos(puntos);
+			}
 		}
 	}
 
+	protected void desplazarFondo()
+	{
+		float despX = 0.01f * screenWidth;
+		
+		if(posFondo3 <= screenWidth)
+		{
+			dibujarFondo3 = true;
+			if(posFondo3 <= 0.0f)
+			{
+				dibujarFondo1 = false;
+				dibujarFondo2 = false;
+			}
+		}
+		
+		posFondo1 -= despX;
+		posFondo2 -= despX;
+		posFondo3 -= despX;
+		
+		if(posFondo1 <= -screenWidth)
+		{
+			posFondo1 = screenWidth;
+		}
+		else if(posFondo2 <= -screenWidth)
+		{
+			posFondo2 = screenWidth;
+		}
+	}
+	
 	/* SECTION Métodos Genéricos */
 
 	// Generar Color Aleatorio
