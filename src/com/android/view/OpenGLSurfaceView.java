@@ -7,10 +7,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.touch.GameDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
 import com.android.touch.TTouchEstado;
+import com.game.game.GameGLSurfaceView;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
@@ -27,6 +29,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private ScaleDetector scaleDetector;
 	private MoveDetector moveDetector;
 	private RotateDetector rotateDetector;
+	private GameDetector gameDetector;
     
 	/* SECTION Constructora */
 	
@@ -63,6 +66,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     	scaleDetector = new ScaleDetector(mContext, renderer);
         moveDetector = new MoveDetector(renderer);
         rotateDetector = new RotateDetector(renderer);
+        gameDetector = new GameDetector();
         
         setEstado(estado);
     }
@@ -90,6 +94,8 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
     			return onDetectorsTouch(v, event);
     		case CoordDetectors:
     			return onDetectorsTouch(v, event);
+    		case GameDetectors:
+    			return onGameDetectors(v, event);
     	}
     	
     	return false;
@@ -203,5 +209,21 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		}
 		
 		return false;
+	}
+	
+	private boolean onGameDetectors(View v, MotionEvent event)
+	{
+		if(event != null)
+    	{			
+			
+			if(event.getPointerCount() == 1)
+			{				
+				gameDetector.onTouchEvent(event, (GameGLSurfaceView) this);
+				requestRender();
+			}
+			return true;
+    	}
+    	
+    	return false;
 	}
 }

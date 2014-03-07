@@ -3,6 +3,7 @@ package com.game.game;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
@@ -23,12 +24,12 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
     private ExternalStorageManager manager;
 	private CountDownTimer timer;
 	private AudioPlayerManager player;
-    
+	
 	/* SECTION Constructora */
 	
     public GameGLSurfaceView(Context context, AttributeSet attrs)
     {
-        super(context, attrs, TTouchEstado.SimpleTouch);
+        super(context, attrs, TTouchEstado.GameDetectors);
         
         mContext = context;
         
@@ -121,6 +122,8 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
 			
 			animacionFinalizada = false;
+			
+			
 		}
 	}
 
@@ -149,6 +152,7 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
 			
 			animacionFinalizada = false;
+			Log.d("TEST", "attackView");
 		}
 	}
 	
