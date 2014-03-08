@@ -22,7 +22,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	private int level;
 	private Personaje personaje;
 
-	private GameGLSurfaceView canvas;
+	private GameOpenGLSurfaceView canvas;
 	private ImageButton botonRun, botonJump, botonCrouch, botonAttack;
 	
 	/* SECTION Constructora */
@@ -69,7 +69,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
         View rootView = inflater.inflate(R.layout.fragment_game_game_layout, container, false);
  		
 		// Instanciar Elementos de la GUI
-		canvas = (GameGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
+		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(personaje, manager, level, this);
 		
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);

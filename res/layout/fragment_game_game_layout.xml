@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.game.game.GameGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
+    <com.game.game.GameOpenGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
         android:id="@+id/gameGLSurfaceViewGame1" />
     
 	<LinearLayout style="@style/Layout_Left_FragmentButton_Style" >

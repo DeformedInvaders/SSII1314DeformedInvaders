@@ -11,7 +11,7 @@ import com.android.view.OpenGLSurfaceView;
 import com.game.data.Personaje;
 import com.project.main.R;
 
-public class GameGLSurfaceView extends OpenGLSurfaceView
+public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
     private GameOpenGLRenderer renderer;
@@ -31,7 +31,7 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 	
 	/* SECTION Constructora */
 	
-    public GameGLSurfaceView(Context context, AttributeSet attrs)
+    public GameOpenGLSurfaceView(Context context, AttributeSet attrs)
     {
         super(context, attrs, TTouchEstado.GameDetectors);
         
