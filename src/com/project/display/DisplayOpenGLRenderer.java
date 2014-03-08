@@ -54,7 +54,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// BackGround
-		indiceTexturaFondo = R.drawable.background_display;
+		seleccionarTexturaFondo(R.drawable.background_display);
 		
 		if(personajeCargado)
 		{

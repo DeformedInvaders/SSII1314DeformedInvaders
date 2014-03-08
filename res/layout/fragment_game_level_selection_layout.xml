@@ -11,7 +11,7 @@
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonLevel1"
             android:contentDescription="@string/desc_magic"
-            android:background="@drawable/icon_magic" />
+            android:background="@drawable/icon_level_locked" />
 	
 	</LinearLayout>
 

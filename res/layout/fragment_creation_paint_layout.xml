@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.creation.paint.PaintGLSurfaceView style="@style/GLSurfaceView_FragmentButton_Style"
+    <com.creation.paint.PaintGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/paintGLSurfaceViewPaint1" />
 
     <LinearLayout style="@style/Layout_Left_FragmentButton_Style">

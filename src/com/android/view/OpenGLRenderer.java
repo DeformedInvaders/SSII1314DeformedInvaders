@@ -43,14 +43,14 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final float MAX_DISTANCE_PIXELS = 10;
 
 	// Parámetros de Texturas	
+	private static final int MAX_TEXTURE_BACKGROUND = 3;
 	private static final int MAX_TEXTURE_STICKER = 4;
 	private static final int MAX_TEXTURE_OBSTACLE = 1;
 	private static final int MAX_TEXTURE_ENEMY = 4;
 
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_BACKGROUND_FINAL = 1;
-	private static final int POS_TEXTURE_FISSURE = 2;
-	private static final int POS_TEXTURE_OBSTACLE = 3;
+	private static final int POS_TEXTURE_FISSURE = POS_TEXTURE_BACKGROUND + MAX_TEXTURE_BACKGROUND;
+	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_FISSURE + 1;
 	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + MAX_TEXTURE_OBSTACLE;
 	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + 1;
 	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + MAX_TEXTURE_STICKER;
@@ -61,15 +61,16 @@ public abstract class OpenGLRenderer implements Renderer
 	private FloatBuffer coordTextura;
 	private FloatBuffer[] vertTextura;
 	
-	protected boolean[] cargadaTextura;
+	private boolean[] cargadaTextura;
 	
 	// Fondo
 	private static final int NUM_REPETICIONES = 3;
 	
-	protected int indiceTexturaFondo, indiceTexturaFondoFinal;
-	private float posFondo1, posFondo2;
-	protected float posFondo3;
-	private boolean dibujarFondo1, dibujarFondo2, dibujarFondo3;
+	private int[] indiceTexturaFondo;
+	private float[] posFondo;
+	private boolean[] dibujarFondo;
+	
+	protected boolean fondoFinalFijado;
 
 	// Marco
 	private float marcoA, marcoB, marcoC;
@@ -88,14 +89,18 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarMarcos();
 
 		// Fondo
-		dibujarFondo1 = true;
-		dibujarFondo2 = true;
-		dibujarFondo3 = false;
+		indiceTexturaFondo = new int[MAX_TEXTURE_BACKGROUND];
+		dibujarFondo = new boolean[MAX_TEXTURE_BACKGROUND];
+		posFondo = new float[MAX_TEXTURE_BACKGROUND];
+		
+		fondoFinalFijado = false;
+		
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		{
+			indiceTexturaFondo[i] = -1;
+		}
 		
 		// Textura
-		indiceTexturaFondo = -1;
-		indiceTexturaFondoFinal = -1;
-
 		nombreTexturas = new int[NUM_TEXTURES];
 		cargadaTextura = new boolean[NUM_TEXTURES];
 		vertTextura = new FloatBuffer[NUM_TEXTURES];
@@ -182,7 +187,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glLoadIdentity();
 
 		// Fondo 
-		cargarTexturaFondo(gl, indiceTexturaFondo, indiceTexturaFondoFinal, NUM_REPETICIONES);
+		cargarTexturaFondo(gl, NUM_REPETICIONES);
 
 		actualizarTexturaFondo();
 	}
@@ -945,21 +950,38 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* SECTION Métodos de Pintura de Fondo */
 
-	private void cargarTexturaFondo(GL10 gl, int indiceTextura, int indiceTexturaFinal, int numRepeticiones)
-	{        
-		if(indiceTextura != -1)
+	protected void seleccionarTexturaFondo(int indiceTextura)
+	{
+		indiceTexturaFondo[0] = indiceTextura;	
+		
+		dibujarFondo[0] = true;
+	}
+	
+	protected void seleccionarTexturaFondo(int indiceTextura1, int indiceTextura2, int indiceTextura3)
+	{
+		indiceTexturaFondo[0] = indiceTextura1;
+		indiceTexturaFondo[1] = indiceTextura2;
+		indiceTexturaFondo[2] = indiceTextura3;		
+		
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND - 1; i++)
 		{
-			cargarTextura(gl, indiceTextura, POS_TEXTURE_BACKGROUND);
-
-			if(indiceTexturaFinal != -1)
+			dibujarFondo[i] = true;
+		}
+	}
+	
+	private void cargarTexturaFondo(GL10 gl, int numRepeticiones)
+	{ 
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		{
+			if(indiceTexturaFondo[i] != -1)
 			{
-				cargarTextura(gl, indiceTexturaFinal, POS_TEXTURE_BACKGROUND_FINAL);
-				
-				posFondo1 = 0;
-				posFondo2 = screenWidth;
-				posFondo3 = numRepeticiones * screenWidth;
+				cargarTextura(gl, indiceTexturaFondo[i], POS_TEXTURE_BACKGROUND + i);
 			}
 		}
+		
+		posFondo[0] = 0;
+		posFondo[1] = screenWidth;
+		posFondo[2] = numRepeticiones * screenWidth;
 	}
 	
 	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
@@ -978,62 +1000,67 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void dibujarFondo(GL10 gl)
 	{
-		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
 		{
-			dibujarTexturaFondo(gl, dibujarFondo1, posFondo1, POS_TEXTURE_BACKGROUND);
-		
-			if(cargadaTextura[POS_TEXTURE_BACKGROUND_FINAL])
+			if(cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
-				dibujarTexturaFondo(gl, dibujarFondo2, posFondo2, POS_TEXTURE_BACKGROUND);
-				dibujarTexturaFondo(gl, dibujarFondo3, posFondo3, POS_TEXTURE_BACKGROUND_FINAL);
+				dibujarTexturaFondo(gl, dibujarFondo[i], posFondo[i], POS_TEXTURE_BACKGROUND + i);
 			}
 		}
 	}
 
 	private void actualizarTexturaFondo()
-	{
-		if(cargadaTextura[POS_TEXTURE_BACKGROUND])
-		{			
-			FloatArray puntos = new FloatArray();
-			puntos.add(xLeft);	puntos.add(yBottom);
-			puntos.add(xLeft);	puntos.add(yTop);
-			puntos.add(xRight);	puntos.add(yBottom);
-			puntos.add(xRight);	puntos.add(yTop);	
-
-			vertTextura[POS_TEXTURE_BACKGROUND] = BufferManager.construirBufferListaPuntos(puntos);
-			
-			if(cargadaTextura[POS_TEXTURE_BACKGROUND_FINAL])
+	{		
+		FloatArray puntos = new FloatArray();
+		puntos.add(xLeft);	puntos.add(yBottom);
+		puntos.add(xLeft);	puntos.add(yTop);
+		puntos.add(xRight);	puntos.add(yBottom);
+		puntos.add(xRight);	puntos.add(yTop);
+		
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		{
+			if(cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
-				vertTextura[POS_TEXTURE_BACKGROUND_FINAL] = BufferManager.construirBufferListaPuntos(puntos);
+				vertTextura[POS_TEXTURE_BACKGROUND + i] = BufferManager.construirBufferListaPuntos(puntos);
 			}
 		}
 	}
 
 	protected void desplazarFondo()
 	{
-		float despX = 0.01f * screenWidth;
+		float despX = 0.005f * screenWidth;
 		
-		if(posFondo3 <= screenWidth)
+		int lastFondo = POS_TEXTURE_BACKGROUND + MAX_TEXTURE_BACKGROUND - 1;
+		
+		// Activado de Último Fondo
+		if(posFondo[lastFondo] <= screenWidth)
 		{
-			dibujarFondo3 = true;
-			if(posFondo3 <= 0.0f)
+			dibujarFondo[lastFondo] = true;
+			
+			if(posFondo[lastFondo] <= 0.0f)
 			{
-				dibujarFondo1 = false;
-				dibujarFondo2 = false;
+				fondoFinalFijado = true;
+				
+				for(int i = 0; i < MAX_TEXTURE_BACKGROUND - 1; i++)
+				{
+					dibujarFondo[i] = false;
+				}
 			}
 		}
 		
-		posFondo1 -= despX;
-		posFondo2 -= despX;
-		posFondo3 -= despX;
-		
-		if(posFondo1 <= -screenWidth)
+		// Desplazamiento
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
 		{
-			posFondo1 = screenWidth;
+			posFondo[i] -= despX;
 		}
-		else if(posFondo2 <= -screenWidth)
+		
+		// Reinicio de Fondo
+		for(int i = 0; i < MAX_TEXTURE_BACKGROUND - 1; i++)
 		{
-			posFondo2 = screenWidth;
+			if(posFondo[i] <= -screenWidth)
+			{
+				posFondo[i] = screenWidth;
+			}
 		}
 	}
 	

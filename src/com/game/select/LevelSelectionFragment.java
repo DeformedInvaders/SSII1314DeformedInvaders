@@ -1,17 +1,16 @@
 package com.game.select;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.view.ViewPagerSwipeable;
 import com.android.view.ViewPagerFragment;
+import com.android.view.ViewPagerSwipeable;
 import com.project.main.R;
 
 public class LevelSelectionFragment extends ViewPagerFragment
@@ -91,7 +90,17 @@ public class LevelSelectionFragment extends ViewPagerFragment
     /* SECTION Métodos abstractos de ViewPagerFragment */
     
     @Override
-    public void onPageSelected() { }
+    public void onPageSelected(int page)
+    {
+    	if(estadoNiveles[page])
+    	{
+    		botonNivel.setBackgroundResource(R.drawable.icon_level_unlocked);
+    	}
+    	else
+    	{
+    		botonNivel.setBackgroundResource(R.drawable.icon_level_locked);
+    	}
+    }
     
 	/* SECTION Métodos Listener onClick */
 	
@@ -99,10 +108,8 @@ public class LevelSelectionFragment extends ViewPagerFragment
     {
 		@Override
 		public void onClick(View v)
-		{			
-			ActionBar actionBar = getActivity().getActionBar();
-			
-			int level = actionBar.getSelectedNavigationIndex();
+		{	
+			int level = viewPager.getPosition();
 			
 			if(estadoNiveles[level])
 			{

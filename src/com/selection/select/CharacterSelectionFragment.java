@@ -3,7 +3,6 @@ package com.selection.select;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +13,8 @@ import android.widget.ImageButton;
 
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
-import com.android.view.ViewPagerSwipeable;
 import com.android.view.ViewPagerFragment;
+import com.android.view.ViewPagerSwipeable;
 import com.game.data.Personaje;
 import com.project.main.R;
 
@@ -114,8 +113,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment
 		@Override
 		public void onClick(View v)
 		{
-			ActionBar actionBar = getActivity().getActionBar();
-			mCallback.onCharacterSelectionSelectClicked(actionBar.getSelectedNavigationIndex());
+			mCallback.onCharacterSelectionSelectClicked(viewPager.getPosition());
 		}
     }
     
@@ -124,13 +122,12 @@ public class CharacterSelectionFragment extends ViewPagerFragment
 		@Override
 		public void onClick(View v)
 		{
-			ActionBar actionBar = getActivity().getActionBar();
-			mCallback.onCharacterSelectionDeleteButtonClicked(actionBar.getSelectedNavigationIndex());
+			mCallback.onCharacterSelectionDeleteButtonClicked(viewPager.getPosition());
 		}
     }
     
     /* SECTION Métodos abstractos de ViewPagerFragment */
     
     @Override
-    public void onPageSelected() { }
+    public void onPageSelected(int position) { }
 }

@@ -66,7 +66,7 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 			public void onPageSelected(int position)
 			{
 				actionBar.setSelectedNavigationItem(position);
-				fragment.onPageSelected();
+				fragment.onPageSelected(position);
 			}
 		});
 	}
@@ -82,6 +82,11 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
     public Iterator<T> iterator()
     {
 		return listaFragmentos.iterator();
+    }
+    
+    public int getPosition()
+    {
+    	return actionBar.getSelectedNavigationIndex();
     }
     
     @Override

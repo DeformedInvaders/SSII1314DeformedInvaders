@@ -38,24 +38,19 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		{
 			// FIXME
 			case 0:
-				indiceTexturaFondo = R.drawable.background_moon;
-				indiceTexturaFondoFinal = R.drawable.background_display;
+				seleccionarTexturaFondo(R.drawable.background_moon, R.drawable.background_moon, R.drawable.background_display);
 			break;
 			case 1:
-				indiceTexturaFondo = R.drawable.background_newyork;
-				indiceTexturaFondoFinal = R.drawable.background_display;
+				seleccionarTexturaFondo(R.drawable.background_newyork, R.drawable.background_newyork, R.drawable.background_display);
 			break;
 			case 2:
-				indiceTexturaFondo = R.drawable.background_rome;
-				indiceTexturaFondoFinal = R.drawable.background_display;
+				seleccionarTexturaFondo(R.drawable.background_rome, R.drawable.background_rome, R.drawable.background_display);
 			break;
 			case 3:
-				indiceTexturaFondo = R.drawable.background_egypt;
-				indiceTexturaFondoFinal = R.drawable.background_display;
+				seleccionarTexturaFondo(R.drawable.background_egypt2, R.drawable.background_egypt3, R.drawable.background_egypt4);
 			break;
 			case 4:
-				indiceTexturaFondo = R.drawable.background_stonehenge;
-				indiceTexturaFondoFinal = R.drawable.background_display;
+				seleccionarTexturaFondo(R.drawable.background_stonehenge, R.drawable.background_stonehenge, R.drawable.background_display);
 			break;
 		}
 		
@@ -149,7 +144,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	public boolean isJuegoFinalizado()
 	{
-		return posFondo3 <= 0.0f;
+		return fondoFinalFijado;
 	}
 	
 	/* SECTION Métodos de Guardado de Información */

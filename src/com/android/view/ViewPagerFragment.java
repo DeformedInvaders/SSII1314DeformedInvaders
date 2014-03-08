@@ -8,5 +8,5 @@ public abstract class ViewPagerFragment extends Fragment
 	
 	/* SECTION Métodos Abstractos */
 	
-	public abstract void onPageSelected();
+	public abstract void onPageSelected(int page);
 }

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView style="@style/ImageView_Background_FragmentButton_Style"
+    <ImageView style="@style/ImageView_Background_Style"
         android:id="@+id/imageViewLevelSelect1"
         android:contentDescription="@string/desc_select_background" />
 

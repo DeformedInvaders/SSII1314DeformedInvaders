@@ -33,7 +33,7 @@ public class LevelSelectFragment extends OpenGLFragment
 				fragment.setParameters(R.drawable.background_rome, R.string.text_level_section_rome, Color.WHITE);
 			break;
 			case Egypt:
-				fragment.setParameters(R.drawable.background_egypt, R.string.text_level_section_egypt, Color.BLACK);
+				fragment.setParameters(R.drawable.background_egypt1, R.string.text_level_section_egypt, Color.BLACK);
 			break;
 			case Stonehenge:
 				fragment.setParameters(R.drawable.background_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK);

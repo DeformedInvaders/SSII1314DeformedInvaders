@@ -133,7 +133,7 @@ public class AnimationFragment extends ViewPagerFragment
     /* SECTION Métodos Abstractos ViewPagerFragment */
     
     @Override
-    public void onPageSelected()
+    public void onPageSelected(int position)
     {
     	actualizarMovimientos();
     }

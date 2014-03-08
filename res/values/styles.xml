@@ -87,10 +87,6 @@
 		<item name="android:layout_alignParentTop">true</item>
 	</style>
 	
-    <style name="GLSurfaceView_FragmentButton_Style" parent="GLSurfaceView_Style">
-        <item name="android:layout_marginBottom">@dimen/FragmentButton_LayoutHeight_Dimen</item>
-	</style>
-	
 <!-- ImageView Background -->
 	
 	<style name="ImageView_Background_Style">
@@ -98,10 +94,6 @@
 		<item name="android:layout_height">match_parent</item>
 		<item name="android:layout_alignParentLeft">true</item>
 		<item name="android:layout_alignParentTop">true</item>
-	</style>
-	
-    <style name="ImageView_Background_FragmentButton_Style" parent="ImageView_Background_Style">
-        <item name="android:layout_marginBottom">@dimen/FragmentButton_LayoutHeight_Dimen</item>
 	</style>
 	
 <!-- Layout Fragmentos -->
