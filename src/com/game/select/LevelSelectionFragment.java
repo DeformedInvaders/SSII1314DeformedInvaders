@@ -38,7 +38,7 @@ public class LevelSelectionFragment extends ViewPagerFragment
 	
 	public interface LevelSelectionFragmentListener
 	{
-        public void onLevelSelectionSelectClicked();
+        public void onLevelSelectionSelectClicked(int level);
     }
 	
 	/* SECTION Métodos Fragment */
@@ -55,7 +55,6 @@ public class LevelSelectionFragment extends ViewPagerFragment
 	{
 		super.onDetach();
 		mCallback = null;
-		botonNivel = null;
 	}
 	
 	@Override
@@ -103,9 +102,11 @@ public class LevelSelectionFragment extends ViewPagerFragment
 		{			
 			ActionBar actionBar = getActivity().getActionBar();
 			
-			if(estadoNiveles[actionBar.getSelectedNavigationIndex()])
+			int level = actionBar.getSelectedNavigationIndex();
+			
+			if(estadoNiveles[level])
 			{
-				mCallback.onLevelSelectionSelectClicked();
+				mCallback.onLevelSelectionSelectClicked(level);
 			}
 			else
 			{

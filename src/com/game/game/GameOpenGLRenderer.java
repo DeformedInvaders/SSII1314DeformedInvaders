@@ -14,13 +14,16 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	// Protagonista
 	private Personaje personaje;
 	
+	private int level;
+	
 	/* SECTION Constructura */
 	
-	public GameOpenGLRenderer(Context context, Personaje p)
+	public GameOpenGLRenderer(Context context, Personaje p, int l)
 	{
         super(context);
         
         personaje = p;
+        level = l;
 	}
 	
 	/* SECTION Métodos Renderer */
@@ -31,8 +34,30 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// BackGround
-		indiceTexturaFondo = R.drawable.background_moon;
-		indiceTexturaFondoFinal = R.drawable.background_newyork;
+		switch(level)
+		{
+			// FIXME
+			case 0:
+				indiceTexturaFondo = R.drawable.background_moon;
+				indiceTexturaFondoFinal = R.drawable.background_display;
+			break;
+			case 1:
+				indiceTexturaFondo = R.drawable.background_newyork;
+				indiceTexturaFondoFinal = R.drawable.background_display;
+			break;
+			case 2:
+				indiceTexturaFondo = R.drawable.background_rome;
+				indiceTexturaFondoFinal = R.drawable.background_display;
+			break;
+			case 3:
+				indiceTexturaFondo = R.drawable.background_egypt;
+				indiceTexturaFondoFinal = R.drawable.background_display;
+			break;
+			case 4:
+				indiceTexturaFondo = R.drawable.background_stonehenge;
+				indiceTexturaFondoFinal = R.drawable.background_display;
+			break;
+		}
 		
 		// Protagonista
 		personaje.cargarTextura(gl, this);
@@ -91,10 +116,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public void reproducirAnimacion()
 	{
 		// FIXME
-		//personaje.animar();
-		//personaje.avanzar();
-		
 		desplazarFondo();
+		personaje.animar();
 	}
 	
 	public void pararAnimacion()
@@ -123,6 +146,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	/* SECTION Métodos de Obtención de Información */
+	
+	public boolean isJuegoFinalizado()
+	{
+		return posFondo3 <= 0.0f;
+	}
 	
 	/* SECTION Métodos de Guardado de Información */
 	

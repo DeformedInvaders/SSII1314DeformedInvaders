@@ -30,7 +30,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura, tipo);
 		setRenderer(renderer);
 		
-		timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) 
+		timer = new CountDownTimer(TIME_DURATION_ANIMATION, TIME_INTERVAL_ANIMATION) 
 		{
 
 			@Override

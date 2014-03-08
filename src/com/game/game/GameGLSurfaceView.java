@@ -1,9 +1,8 @@
 package com.game.game;
 
 import android.content.Context;
-import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
@@ -16,14 +15,19 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
     private GameOpenGLRenderer renderer;
+    private OnGameListener listener;
     private Context mContext;
     
     private String nombrePersonaje;
+    
     private boolean animacionFinalizada;
+    private int contadorFrames;
     
     private ExternalStorageManager manager;
-	private CountDownTimer timer;
 	private AudioPlayerManager player;
+	
+	private Handler handler;
+	private Thread thread;
 	
 	/* SECTION Constructora */
 	
@@ -34,32 +38,15 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
         mContext = context;
         
         animacionFinalizada = true;
-        
-        timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
-
-			@Override
-			public void onFinish() 
-			{ 
-				renderer.pararAnimacion();
-				animacionFinalizada = true;
-				requestRender();
-			}
-
-			@Override
-			public void onTick(long arg0) 
-			{
-				renderer.reproducirAnimacion();
-				requestRender();
-			}
-        };
     }
 	
-	public void setParameters(Personaje p, ExternalStorageManager m)
+	public void setParameters(Personaje p, ExternalStorageManager m, int l, OnGameListener gl)
 	{        
         manager = m;
         nombrePersonaje = p.getNombre();
+        listener = gl;
         
-    	renderer = new GameOpenGLRenderer(getContext(), p);
+    	renderer = new GameOpenGLRenderer(getContext(), p, l);
         setRenderer(renderer);
         
         player = new AudioPlayerManager(manager) {
@@ -67,6 +54,39 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void onPlayerCompletion() { }
         };
+        
+        handler = new Handler();
+        
+        thread = new Thread(new Runnable() {
+        	@Override
+            public void run()
+        	{        		                
+				renderer.reproducirAnimacion();
+				requestRender();
+				
+				contadorFrames++;
+				
+				if(contadorFrames == NUM_FRAMES_ANIMATION)
+				{
+					renderer.seleccionarRun();
+					animacionFinalizada = true;
+				}
+				
+				handler.postDelayed(this, TIME_INTERVAL_ANIMATION);
+
+                if(renderer.isJuegoFinalizado())
+                {
+                    renderer.pararAnimacion();
+    				requestRender();
+    				
+                	handler.removeCallbacks(this);
+                	
+                	listener.onGameFinished();
+                }
+        	}
+        });
+        
+        renderer.seleccionarRun();
 	}
 	
 	/* SECTION Métodos abstractos OpenGLSurfaceView */
@@ -96,21 +116,12 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 	}
 	
 	/* SECTION Métodos de Selección de Estado */
-	
-	public void seleccionarRun() 
-	{
-		if(animacionFinalizada)
-		{
-			renderer.seleccionarRun();
-			requestRender();
-			
-			timer.start();
-			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_run));
-			
-			animacionFinalizada = false;
-		}
-	}
 
+	public void seleccionarRun()
+	{
+        thread.run();
+	}
+	
 	public void seleccionarJump() 
 	{
 		if(animacionFinalizada)
@@ -118,12 +129,10 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 			renderer.seleccionarJump();
 			requestRender();
 			
-			timer.start();
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
 			
-			animacionFinalizada = false;
-			
-			
+			animacionFinalizada = false;	
+			contadorFrames = 0;
 		}
 	}
 
@@ -134,10 +143,10 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 			renderer.seleccionarCrouch();
 			requestRender();
 			
-			timer.start();
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
 			
 			animacionFinalizada = false;
+			contadorFrames = 0;
 		}
 	}
 
@@ -148,11 +157,10 @@ public class GameGLSurfaceView extends OpenGLSurfaceView
 			renderer.seleccionarAttack();
 			requestRender();
 			
-			timer.start();
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
 			
 			animacionFinalizada = false;
-			Log.d("TEST", "attackView");
+			contadorFrames = 0;
 		}
 	}
 	

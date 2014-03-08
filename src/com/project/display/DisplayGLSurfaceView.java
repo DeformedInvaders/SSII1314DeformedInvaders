@@ -38,7 +38,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
         
         animacionFinalizada = true;
         
-        timer = new CountDownTimer(TIME_DURATION, TIME_INTERVAL) {
+        timer = new CountDownTimer(TIME_DURATION_ANIMATION, TIME_INTERVAL_ANIMATION) {
 
 			@Override
 			public void onFinish() 

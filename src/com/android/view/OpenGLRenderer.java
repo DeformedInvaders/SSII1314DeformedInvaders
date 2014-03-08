@@ -67,7 +67,8 @@ public abstract class OpenGLRenderer implements Renderer
 	private static final int NUM_REPETICIONES = 3;
 	
 	protected int indiceTexturaFondo, indiceTexturaFondoFinal;
-	private float posFondo1, posFondo2, posFondo3;
+	private float posFondo1, posFondo2;
+	protected float posFondo3;
 	private boolean dibujarFondo1, dibujarFondo2, dibujarFondo3;
 
 	// Marco

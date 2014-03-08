@@ -13,7 +13,11 @@
             style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_animation_run"
             android:contentDescription="@string/desc_select_run" />
-        
+
+	</LinearLayout>
+	 
+	<LinearLayout style="@style/Layout_Right_FragmentButton_Style" >
+            
         <ImageButton
             android:id="@+id/imageButtonGame2"
             style="@style/Button_Fragment_Style"

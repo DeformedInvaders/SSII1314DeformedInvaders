@@ -88,6 +88,9 @@
 			<string name="text_level_enabled">The level is unlocked!</string>
 			<string name="text_level_disabled">The level is still locked!</string>
 			
+			<string name="text_game_finish">You finish this level.</string>
+			<string name="text_game_fail">Game over.</string>
+			
 			<string name="text_button_yes">Yes</string>
 			<string name="text_button_no">No</string>
 

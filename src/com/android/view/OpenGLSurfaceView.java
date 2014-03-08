@@ -7,29 +7,32 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.android.touch.GameDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
 import com.android.touch.TTouchEstado;
-import com.game.game.GameGLSurfaceView;
+import com.android.touch.GameDetector;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
-	protected static final int NUM_HANDLES = 10;
-	
-	// Animación
-	protected static final long TIME_INTERVAL = 80;
-	protected static final long TIME_DURATION = 24*TIME_INTERVAL;
-	
 	private Context mContext;
 	private TTouchEstado estado;
+	
+	private OpenGLRenderer renderer;
 	
 	// Detectores de Gestos
 	private ScaleDetector scaleDetector;
 	private MoveDetector moveDetector;
 	private RotateDetector rotateDetector;
 	private GameDetector gameDetector;
+	
+	// Multitouch
+	protected static final int NUM_HANDLES = 10;
+	
+	// Animación
+	protected static final int NUM_FRAMES_ANIMATION = 24;
+	protected static final long TIME_INTERVAL_ANIMATION = 80;
+	protected static final long TIME_DURATION_ANIMATION = NUM_FRAMES_ANIMATION * TIME_INTERVAL_ANIMATION;
     
 	/* SECTION Constructora */
 	
@@ -56,28 +59,47 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	protected abstract boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
 	protected abstract boolean onMultiTouchEvent();
     
-    protected void setRenderer(OpenGLRenderer renderer)
+    protected void setRenderer(OpenGLRenderer r)
     {	
-    	// Renderer
+    	renderer = r;
+    	
     	super.setRenderer(renderer);
     	super.setRenderMode(RENDERMODE_WHEN_DIRTY);
-    	
-        // Detectors
-    	scaleDetector = new ScaleDetector(mContext, renderer);
-        moveDetector = new MoveDetector(renderer);
-        rotateDetector = new RotateDetector(renderer);
-        gameDetector = new GameDetector();
         
         setEstado(estado);
     }
     
-    public void setEstado(TTouchEstado estado)
+    public void setEstado(TTouchEstado e)
     {
-    	this.estado = estado;
+    	estado = e;
     	
-    	scaleDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
-    	moveDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
-    	rotateDetector.setEstado(estado == TTouchEstado.CamaraDetectors);
+    	if(estado == TTouchEstado.CamaraDetectors || estado == TTouchEstado.CoordDetectors)
+    	{
+    		if(scaleDetector == null)
+    		{
+    			scaleDetector = new ScaleDetector(mContext, renderer);
+    		}
+    		
+    		if(moveDetector == null)
+    		{
+    			moveDetector = new MoveDetector(renderer);
+    		}
+    		
+    		if(rotateDetector == null)
+    		{
+    			rotateDetector = new RotateDetector(renderer);
+    		}
+
+        	boolean estadoCamara = estado == TTouchEstado.CamaraDetectors;
+
+	    	scaleDetector.setEstado(estadoCamara);
+	    	moveDetector.setEstado(estadoCamara);
+	    	rotateDetector.setEstado(estadoCamara);
+    	}
+    	else if(estado == TTouchEstado.GameDetectors)
+    	{
+    		gameDetector = new GameDetector();
+    	}
     }
     
     /* SECTION Métodos Listener onTouch */
@@ -215,12 +237,9 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	{
 		if(event != null)
     	{			
+			gameDetector.onTouchEvent(event, this);
+			requestRender();
 			
-			if(event.getPointerCount() == 1)
-			{				
-				gameDetector.onTouchEvent(event, (GameGLSurfaceView) this);
-				requestRender();
-			}
 			return true;
     	}
     	

@@ -31,7 +31,7 @@ import com.game.select.LevelSelectionFragment;
 import com.project.loading.LoadingFragment;
 import com.selection.select.CharacterSelectionFragment;
 
-public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener 
+public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener 
 {	
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onBackPressed()
 	{
-		if(estado != TEstado.Main && estado != TEstado.Game)
+		if(estado != TEstado.Main)// && estado != TEstado.Game)
 		{	
 			limpiarActionBar();
 			
@@ -325,10 +325,32 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Level Selection Fragment */
     
 	@Override
-    public void onLevelSelectionSelectClicked()
+    public void onLevelSelectionSelectClicked(int level)
     {
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager));
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, level));
     }
+	
+	/* SECTION Métodos Game Fragment */
+	
+	@Override
+	public void onGameFinished(int level)
+	{
+		Toast.makeText(this, getString(R.string.text_game_finish), Toast.LENGTH_SHORT).show();
+		
+		int nextLevel = (level + 1) % estadoNiveles.length;
+		
+		estadoNiveles[nextLevel] = true;
+		internalManager.guardarNiveles(estadoNiveles);
+		
+		changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+	}
+
+	@Override
+	public void onGameFailed(int level)
+	{
+		Toast.makeText(this, getString(R.string.text_game_fail), Toast.LENGTH_SHORT).show();
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, level));
+	}
 	
 	/* SECTION Métodos de Modificación de la ActionBar */
     

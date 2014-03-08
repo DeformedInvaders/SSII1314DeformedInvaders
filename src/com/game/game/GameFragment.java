@@ -1,10 +1,11 @@
 package com.game.game;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.android.storage.ExternalStorageManager;
@@ -12,10 +13,13 @@ import com.android.view.OpenGLFragment;
 import com.game.data.Personaje;
 import com.project.main.R;
 
-public class GameFragment extends OpenGLFragment
+public class GameFragment extends OpenGLFragment implements OnGameListener
 {
+	private GameFragmentListener mCallback;
+	
 	private ExternalStorageManager manager;
 	
+	private int level;
 	private Personaje personaje;
 
 	private GameGLSurfaceView canvas;
@@ -23,20 +27,41 @@ public class GameFragment extends OpenGLFragment
 	
 	/* SECTION Constructora */
 	
-	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m)
+	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, int l)
 	{
 		GameFragment fragment = new GameFragment();
-		fragment.setParameters(p, m);
+		fragment.setParameters(p, m, l);
 		return fragment;
 	}
 	
-	private void setParameters(Personaje p, ExternalStorageManager m)
+	private void setParameters(Personaje p, ExternalStorageManager m, int l)
 	{	
 		personaje = p;
 		manager = m;
+		level = l;
 	}
 	
+	public interface GameFragmentListener
+	{
+        public void onGameFinished(int level);
+        public void onGameFailed(int level);
+    }
+	
 	/* SECTION Métodos Fragment */
+	
+	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		mCallback = (GameFragmentListener) activity;
+	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mCallback = null;
+	}
 		
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -45,7 +70,7 @@ public class GameFragment extends OpenGLFragment
  		
 		// Instanciar Elementos de la GUI
 		canvas = (GameGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
-		canvas.setParameters(personaje, manager);
+		canvas.setParameters(personaje, manager, level, this);
 		
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonGame2);
@@ -70,6 +95,11 @@ public class GameFragment extends OpenGLFragment
 		super.onDestroyView();
 		
 		canvas = null;
+		
+		botonRun = null;
+		botonJump = null;
+		botonAttack = null;
+		botonCrouch = null;
 	}
 	
 	@Override
@@ -131,5 +161,17 @@ public class GameFragment extends OpenGLFragment
 		{
 			canvas.seleccionarAttack();
 		}
+	}
+	
+	/* SECTION Métodos de OnGameListener */
+	
+	public void onGameFinished()
+	{
+		mCallback.onGameFinished(level);
+	}
+	
+	public void onGameFailed()
+	{
+		mCallback.onGameFinished(level);
 	}
 }
