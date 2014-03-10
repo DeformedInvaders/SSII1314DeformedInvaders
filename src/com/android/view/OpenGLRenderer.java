@@ -210,6 +210,18 @@ public abstract class OpenGLRenderer implements Renderer
 		// Background
 		dibujarFondo(gl);	
 	}
+	
+	/* SECTION Métodos de Obtención de Información */
+	
+	public float getScreenWidth()
+	{
+		return screenWidth;
+	}
+	
+	public float getScreenHeight()
+	{
+		return screenHeight;
+	}
 
 	/* SECTION Métodos de Modificación de Cámara */
 
@@ -731,7 +743,8 @@ public abstract class OpenGLRenderer implements Renderer
 			case Personaje:
 				return POS_TEXTURE_CHARACTER_STICKER + posPegatina;
 			case Enemigo:
-				return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + posPegatina;
+				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
+				//return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + posPegatina;
 			case Obstaculo:
 				return POS_TEXTURE_OBSTACLE + posEntidad;
 			case Grieta:
@@ -830,7 +843,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	public void cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	public float cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
 	{     
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -838,20 +851,24 @@ public abstract class OpenGLRenderer implements Renderer
 		{
 			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 
-			float textureHeight = bitmap.getHeight()/2;
-			float textureWidth = bitmap.getWidth()/2;
+			float textureHeight = bitmap.getHeight();
+			float textureWidth = bitmap.getWidth();
 
 			cargarTextura(gl, bitmap, posTextura);
 			bitmap.recycle();
 
 			FloatArray puntos = new FloatArray();
-			puntos.add(-textureWidth);	puntos.add(-textureHeight);
-			puntos.add(-textureWidth);	puntos.add(textureHeight);
-			puntos.add(textureWidth);	puntos.add(-textureHeight);
+			puntos.add(0.0f);	puntos.add(0.0f);
+			puntos.add(0.0f);	puntos.add(textureHeight);
+			puntos.add(textureWidth);	puntos.add(0.0f);
 			puntos.add(textureWidth);	puntos.add(textureHeight);	
 
 			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
+			
+			return textureHeight;
 		}
+		
+		return 0;
 	}
 	
 	public void descargarTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
@@ -920,7 +937,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina, float scaleX, float scaleY)
 	{     
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -929,11 +946,18 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 
 			gl.glTranslatef(x, y, 0.0f);
+			
+			gl.glScalef(scaleX, scaleY, 0.0f);
 
 			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
 
 			gl.glPopMatrix();
 		}
+	}
+	
+	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	{     
+		dibujarTexturaRectangulo(gl, x, y, tipoEntidad, posEntidad, posPegatina, 1.0f, 1.0f);
 	}
 	
 	// Métodos de Pintura de Textura para Fase Creación

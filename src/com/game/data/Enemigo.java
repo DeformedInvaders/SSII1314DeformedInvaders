@@ -1,52 +1,57 @@
 package com.game.data;
 
-import java.util.List;
 
-import com.lib.utils.FloatArray;
-
-public class Enemigo extends Malla
+public class Enemigo extends Rectangulo
 {
-	private List<FloatArray> movimiento;
+	//private List<FloatArray> movimiento;
 	
 	/* SECTION Constructora */
 	
-	public Enemigo(int idEnemigo)
+	/*public Enemigo(int idEnemigo)
 	{
 		tipo = TTipoEntidad.Enemigo;
 		id = idEnemigo;
+	}*/
+	
+	public Enemigo(int indiceTextura, int idEnemigo, float posObstaculo)
+	{
+		tipo = TTipoEntidad.Enemigo;
+		id = idEnemigo;
+		textura = indiceTextura;
+		posicionX = posObstaculo;
 	}
 	
 	/* SECTION Métodos abstractos de Entidad */
 	
-	@Override
+	/*@Override
 	public void avanzar()
 	{
 		posicion -= DIST_AVANCE;
-	}
+	}*/
 	
 	/* SECTION Métodos de Animación */
 	
-	public void mover() 
+	/*public void mover() 
 	{
 		listaVerticesAnimacion = movimiento;
 		
 		iniciar();
-	}
+	}*/
 	
 	/* SECTION Métodos de Modificación de Información */
 	
-	public void setMovimientos(List<FloatArray> m)
+	/*public void setMovimientos(List<FloatArray> m)
 	{
 		movimiento = m;
 		
 		reposo();
-	}
+	}*/
 	
 	/* SECTION Métodos de Obtención de Información */
 	
-	public List<FloatArray> getMovimientos()
+	/*public List<FloatArray> getMovimientos()
 	{
 		return movimiento;
-	}
+	}*/
 	
 }

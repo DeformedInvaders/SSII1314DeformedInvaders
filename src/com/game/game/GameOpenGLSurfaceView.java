@@ -27,7 +27,9 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	private AudioPlayerManager player;
 	
 	private Handler handler;
-	private Thread thread;
+	private Runnable task;
+	
+	private boolean threadActivo;
 	
 	/* SECTION Constructora */
 	
@@ -57,11 +59,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
         
         handler = new Handler();
         
-        thread = new Thread(new Runnable() {
+        task = new Runnable() {
         	@Override
             public void run()
-        	{        		                
-				renderer.reproducirAnimacion();
+        	{        		 
+        		boolean primerosCiclos = contadorFrames < NUM_FRAMES_ANIMATION / 2;
+        		
+				renderer.reproducirAnimacion(primerosCiclos);
 				requestRender();
 				
 				contadorFrames++;
@@ -71,20 +75,31 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					renderer.seleccionarRun();
 					animacionFinalizada = true;
 				}
-				
-				handler.postDelayed(this, TIME_INTERVAL_ANIMATION);
 
-                if(renderer.isJuegoFinalizado())
-                {
-                    renderer.pararAnimacion();
-    				requestRender();
-    				
-                	handler.removeCallbacks(this);
-                	
-                	listener.onGameFinished();
-                }
+				int valor = renderer.isJuegoFinalizado();
+				
+				switch(valor)
+				{
+					case 0:
+						handler.postDelayed(this, TIME_INTERVAL_ANIMATION);
+					break;
+					case 1:
+						renderer.pararAnimacion();
+	    				requestRender();
+	                	
+	                	listener.onGameFinished();
+					break;
+					case 2:
+						renderer.pararAnimacion();
+	    				requestRender();
+	                	
+	                	listener.onGameFailed();
+					break;
+				}
         	}
-        });
+        };
+        
+        threadActivo = false;
         
         renderer.seleccionarRun();
 	}
@@ -119,7 +134,12 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public void seleccionarRun()
 	{
-        thread.run();
+		if(!threadActivo)
+		{
+			task.run();
+			
+			threadActivo = true;
+		}
 	}
 	
 	public void seleccionarJump() 

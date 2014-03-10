@@ -82,7 +82,7 @@ public abstract class Malla extends Entidad
 	{			
 		gl.glPushMatrix();
 		
-			gl.glTranslatef(posicion, 0.0f, 0.0f);
+			gl.glTranslatef(posicionX, posicionY, 0.0f);
 			
 			// Textura
 			renderer.dibujarTexturaMalla(gl, bufferTriangulosAnimacion, bufferCoords, tipo);
@@ -115,6 +115,9 @@ public abstract class Malla extends Entidad
 	
 	public void reposo()
 	{
+		posicionX = 0;
+		posicionY = 0;
+		
 		verticesAnimacion = vertices;
 		bufferTriangulosAnimacion = bufferTriangulos;
 		bufferContornoAnimacion = bufferContorno;		
@@ -145,6 +148,8 @@ public abstract class Malla extends Entidad
 		mapaBits = t.getMapaBits();
 		pegatinas = t.getPegatinas();
 		coords = t.getCoordTextura();
+		
+		width = mapaBits.getWidth();
 		
 		bufferCoords = BufferManager.construirBufferListaTriangulosRellenos(triangulos, coords);
 	}
