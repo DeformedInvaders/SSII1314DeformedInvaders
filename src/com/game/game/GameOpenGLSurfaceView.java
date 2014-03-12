@@ -1,5 +1,8 @@
 package com.game.game;
 
+import java.util.List;
+import java.util.Queue;
+
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -8,6 +11,7 @@ import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
+import com.game.data.Entidad;
 import com.game.data.Personaje;
 import com.project.main.R;
 
@@ -42,13 +46,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
         animacionFinalizada = true;
     }
 	
-	public void setParameters(Personaje p, ExternalStorageManager m, int l, OnGameListener gl)
+	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, List<Entidad> listaEnemigos, Queue<InstanciaEntidad> colaEnemigos, Background b)
 	{        
         manager = m;
         nombrePersonaje = p.getNombre();
         listener = gl;
         
-    	renderer = new GameOpenGLRenderer(getContext(), p, l);
+    	renderer = new GameOpenGLRenderer(getContext(), listaEnemigos, colaEnemigos, b, p);
         setRenderer(renderer);
         
         player = new AudioPlayerManager(manager) {

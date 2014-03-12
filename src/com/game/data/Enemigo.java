@@ -13,12 +13,11 @@ public class Enemigo extends Rectangulo
 		id = idEnemigo;
 	}*/
 	
-	public Enemigo(int indiceTextura, int idEnemigo, float posObstaculo)
+	public Enemigo(int indiceTextura, int idEnemigo)
 	{
 		tipo = TTipoEntidad.Enemigo;
 		id = idEnemigo;
 		textura = indiceTextura;
-		posicionX = posObstaculo;
 	}
 	
 	/* SECTION Métodos abstractos de Entidad */

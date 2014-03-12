@@ -3,24 +3,26 @@ package com.game.data;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.deform.TDeformTipo;
+import com.game.game.InstanciaEntidad;
 
 public class Personaje extends Malla
 {	
 	private Movimientos movimientos;
 	
 	private TDeformTipo estado;
-	
+	private float posicionX, posicionY;
 	/* SECTION Constructora */
 	
 	public Personaje()
 	{
 		tipo = TTipoEntidad.Personaje;
 		id = 0;
+		posicionX = 0.0f;
+		posicionY = 0.0f;
 	}
 	
 	/* SECTION Métodos abstractos de Entidad */
 	
-	@Override
 	public void avanzar(OpenGLRenderer renderer, boolean primerosCiclos)
 	{
 		if(estado == TDeformTipo.Jump)
@@ -71,32 +73,27 @@ public class Personaje extends Malla
 		iniciar();
 	}
 	
-	public boolean colision(Entidad entidad)
+	public int colision(Entidad entidad, InstanciaEntidad instanciaE)
 	{	
-		if(entidad.isActivo())
+		float posXEntidad = instanciaE.getPosX();
+		float posYEntidad = instanciaE.getPosY();
+		
+		float widthEntidad = entidad.getWidth();	
+		float heightEntidad = entidad.getHeight();
+		
+		if(posXEntidad + widthEntidad/2 < posicionX)
 		{
-			float posEntidad = entidad.getPosicion();
-			float widthEntidad = entidad.getWidth();
-			TTipoEntidad tipoEntidad = entidad.getTipo();
-			
-			if(posEntidad + widthEntidad/2 < posicionX)
+			return 2;
+		}
+		else if(posXEntidad < posicionX + width/2 && posXEntidad > posicionX)
+		{
+			if(posicionY < posYEntidad + heightEntidad)
 			{
-				entidad.setInactivo();
-			}
-			else if(posEntidad < posicionX + width/2 && posEntidad > posicionX)
-			{
-				if(tipoEntidad == TTipoEntidad.Enemigo)
-				{
-					return estado != TDeformTipo.Attack && estado != TDeformTipo.Jump;
-				}
-				else if(tipoEntidad == TTipoEntidad.Obstaculo || tipoEntidad == TTipoEntidad.Grieta)
-				{
-					return estado != TDeformTipo.Jump;
-				}
+				return 1;
 			}
 		}
 		
-		return false;
+		return 0;
 	}
 	
 	/* SECTION Métodos de Modificación de Información */

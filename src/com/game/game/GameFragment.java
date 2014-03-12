@@ -1,5 +1,8 @@
 package com.game.game;
 
+import java.util.List;
+import java.util.Queue;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.widget.ImageButton;
 
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
+import com.game.data.Entidad;
 import com.game.data.Personaje;
 import com.project.main.R;
 
@@ -25,20 +29,27 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	private GameOpenGLSurfaceView canvas;
 	private ImageButton botonRun, botonJump, botonCrouch, botonAttack;
 	
+	private List<Entidad> listaEnemigos;
+	private Queue<InstanciaEntidad> colaEnemigos;
+	private Background background;
+	
 	/* SECTION Constructora */
 	
-	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, int l)
+	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, int l, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background b)
 	{
 		GameFragment fragment = new GameFragment();
-		fragment.setParameters(p, m, l);
+		fragment.setParameters(p, m, l, lista, cola, b);
 		return fragment;
 	}
 	
-	private void setParameters(Personaje p, ExternalStorageManager m, int l)
+	private void setParameters(Personaje p, ExternalStorageManager m, int l, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background b)
 	{	
 		personaje = p;
 		manager = m;
 		level = l;
+		listaEnemigos = lista;
+		colaEnemigos = cola;
+		background = b;
 	}
 	
 	public interface GameFragmentListener
@@ -70,7 +81,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
  		
 		// Instanciar Elementos de la GUI
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
-		canvas.setParameters(personaje, manager, level, this);
+		canvas.setParameters(personaje, manager, this, listaEnemigos, colaEnemigos, background);
 		
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonGame2);

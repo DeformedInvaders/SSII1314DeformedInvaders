@@ -3,6 +3,7 @@ package com.game.game;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -10,39 +11,36 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
-import com.game.data.Enemigo;
 import com.game.data.Entidad;
-import com.game.data.Obstaculo;
 import com.game.data.Personaje;
-import com.project.main.R;
+import com.game.data.TTipoEntidad;
 
 public class GameOpenGLRenderer extends OpenGLRenderer
 {	
+	// Background
+	private Background background;
+	
 	// Protagonista
 	private Personaje personaje;
 	
 	// Enemigos
 	private List<Entidad> listaEnemigos;
-	
-	private int level;
+	private List<InstanciaEntidad> listaEnemigosDerrotados;
+	private Queue<InstanciaEntidad> colaEnemigos;
 	
 	/* SECTION Constructura */
 	
-	public GameOpenGLRenderer(Context context, Personaje p, int l)
+	public GameOpenGLRenderer(Context context, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background b, Personaje p)
 	{
         super(context);
         
-        personaje = p;
-        level = l;
+        personaje = p;        
+        background = b;
         
-        listaEnemigos = new ArrayList<Entidad>();
+        listaEnemigos = lista;
+        colaEnemigos = cola;
         
-        listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt, 0, 1200));
-        
-        listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt1, 0, 2000));
-        listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt2, 1, 3500));
-        listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt3, 2, 4100));
-        listaEnemigos.add(new Enemigo(R.drawable.boss_egypt, 3, 5000));
+        listaEnemigosDerrotados = new ArrayList<InstanciaEntidad>();
 	}
 	
 	/* SECTION Métodos Renderer */
@@ -53,26 +51,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 		
 		// BackGround
-		switch(level)
-		{
-			// FIXME
-			case 0:
-				seleccionarTexturaFondo(R.drawable.background_moon, R.drawable.background_moon, R.drawable.background_display);
-			break;
-			case 1:
-				seleccionarTexturaFondo(R.drawable.background_newyork, R.drawable.background_newyork, R.drawable.background_display);
-			break;
-			case 2:
-				seleccionarTexturaFondo(R.drawable.background_rome, R.drawable.background_rome, R.drawable.background_display);
-			break;
-			case 3:
-				seleccionarTexturaFondo(R.drawable.background_egypt2, R.drawable.background_egypt3, R.drawable.background_egypt4);
-			break;
-			case 4:
-				seleccionarTexturaFondo(R.drawable.background_stonehenge, R.drawable.background_stonehenge, R.drawable.background_display);
-			break;
-		}
-		
+		seleccionarTexturaFondo(background.getIdTextura1(), background.getIdTextura2(), background.getIdTextura3());
+			
 		// Protagonista
 		personaje.cargarTextura(gl, this);
 		
@@ -99,12 +79,24 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		gl.glPopMatrix();
 		
-		// Lista Enemigos
-		Iterator<Entidad> it = listaEnemigos.iterator();
+		// Cola Enemigos
+		Iterator<InstanciaEntidad> it = colaEnemigos.iterator();
 		while(it.hasNext())
 		{
-			it.next().dibujar(gl, this);
+			InstanciaEntidad instancia = it.next();
+			Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+			instancia.dibujar(gl, this, entidad);
 		}
+		
+		//Enemigos Derrotados
+		it = listaEnemigosDerrotados.iterator();
+		while(it.hasNext())
+		{
+			InstanciaEntidad instancia = it.next();
+			Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+			instancia.dibujar(gl, this, entidad);
+		}
+			
 	}
 	
 	/* SECTION Métodos abstractos de OpenGLRenderer */
@@ -152,10 +144,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		personaje.avanzar(this, primerosCiclos);
 		
 		// Lista Enemigos
-		Iterator<Entidad> it = listaEnemigos.iterator();
+		Iterator<InstanciaEntidad> it = colaEnemigos.iterator();
 		while(it.hasNext())
 		{
-			it.next().avanzar(this, primerosCiclos);
+			InstanciaEntidad instancia = it.next();
+			Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+			instancia.avanzar(this, entidad);
 		}
 	}
 	
@@ -187,26 +181,29 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	/* SECTION Métodos de Obtención de Información */
 	
 	public int isJuegoFinalizado()
-	{
-		boolean colisionPersonaje = false;
-		
+	{		
 		if(fondoFinalFijado)
 		{
 			return 1;
 		}
-	
-		// Lista Enemigos
-		Iterator<Entidad> it = listaEnemigos.iterator();
-		while(it.hasNext() && !colisionPersonaje)
-		{
-			colisionPersonaje = personaje.colision(it.next());
-		}
 		
-		if(colisionPersonaje)
+		if(!colaEnemigos.isEmpty())
 		{
-			return 2;
+			InstanciaEntidad instancia = colaEnemigos.peek();
+			switch(personaje.colision(listaEnemigos.get(instancia.getEntidad()), instancia))
+			{
+				case 0:
+					return 0;
+				case 1:
+					return 2;
+				case 2:
+					Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+					if(entidad.getTipo() == TTipoEntidad.Enemigo)
+						instancia.setDerrotado();
+					listaEnemigosDerrotados.add(colaEnemigos.poll());
+					return 0;					
+			}
 		}
-		
 		return 0;
 	}
 	

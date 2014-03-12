@@ -27,28 +27,6 @@ public abstract class Rectangulo extends Entidad
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		if(dibujar)
-		{
-			renderer.dibujarTexturaRectangulo(gl, posicionX, posicionY, tipo, id, 0, 0.5f, 0.5f);
-		}
-	}
-	
-	@Override
-	public void avanzar(OpenGLRenderer renderer, boolean primerosCiclos)
-	{
-		posicionX -= DIST_AVANCE;
-
-		if(posicionX < -width)
-		{
-			dibujar = false;
-		}
-		else if(posicionX < renderer.getScreenWidth())
-		{
-			dibujar = true;
-		}
-		else
-		{
-			dibujar = false;
-		}
+		renderer.dibujarTexturaRectangulo(gl, tipo, id, 0, 0.5f, 0.5f);
 	}
 }

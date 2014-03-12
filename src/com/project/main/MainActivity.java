@@ -27,6 +27,7 @@ import com.creation.design.DesignFragment;
 import com.creation.paint.PaintFragment;
 import com.game.data.Personaje;
 import com.game.game.GameFragment;
+import com.game.game.LevelsGenerator;
 import com.game.select.LevelSelectionFragment;
 import com.project.loading.LoadingFragment;
 import com.selection.select.CharacterSelectionFragment;
@@ -52,6 +53,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	
 	/* Estado */
 	private TEstado estado;
+	
+	private LevelsGenerator levelGenerator;
 
 	/* SECTION Métodos Activity */
 	
@@ -67,6 +70,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		internalManager = new InternalStorageManager(this);
 		externalManager = new ExternalStorageManager();
 		connector = new SocialConnector(this);
+		levelGenerator = new LevelsGenerator();
 		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
@@ -327,7 +331,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onLevelSelectionSelectClicked(int level)
     {
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, level));
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, level, levelGenerator.getListaEnemigos(level), levelGenerator.getColaEnemigos(level), levelGenerator.getFondo(level)));
     }
 	
 	/* SECTION Métodos Game Fragment */
@@ -349,7 +353,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	public void onGameFailed(int level)
 	{
 		Toast.makeText(this, getString(R.string.text_game_fail), Toast.LENGTH_SHORT).show();
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, level));
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, level, levelGenerator.getListaEnemigos(level), levelGenerator.getColaEnemigos(level), levelGenerator.getFondo(level)));
 	}
 	
 	/* SECTION Métodos de Modificación de la ActionBar */

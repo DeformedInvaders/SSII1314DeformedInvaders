@@ -955,6 +955,22 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
+	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina, float scaleX, float scaleY)
+	{     
+		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
+
+		if(posTextura != -1 && cargadaTextura[posTextura])
+		{
+			gl.glPushMatrix();
+			
+			gl.glScalef(scaleX, scaleY, 0.0f);
+
+			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
+
+			gl.glPopMatrix();
+		}
+	}
+	
 	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
 	{     
 		dibujarTexturaRectangulo(gl, x, y, tipoEntidad, posEntidad, posPegatina, 1.0f, 1.0f);
