@@ -5,7 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.android.view.OpenGLRenderer;
 import com.game.data.Entidad;
 
-public class InstanciaEntidad 
+public class InstanciaEntidad implements Comparable<InstanciaEntidad>
 {
 	public static final float DIST_AVANCE = 20.0f;
 	
@@ -75,6 +75,7 @@ public class InstanciaEntidad
 		}
 	}
 	
+	@Override
 	public int compareTo(InstanciaEntidad a)
 	{
 		if(posX > a.getPosX()) return 1;
