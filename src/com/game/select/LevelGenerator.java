@@ -15,7 +15,7 @@ import com.game.data.Level;
 import com.game.data.Obstaculo;
 import com.project.main.R;
 
-public class LevelsGenerator
+public class LevelGenerator
 {
 	private static final short TYPE_ENEMIGOS = 4;
 	private static final short NUM_ENEMIGOS = 20;
@@ -30,7 +30,7 @@ public class LevelsGenerator
 	private List<List<Entidad>> listaEnemigos;
 	private List<Background> listaFondos;
 	
-	public LevelsGenerator(Context context)
+	public LevelGenerator(Context context)
 	{
 		mContext = context;
 		
@@ -64,41 +64,38 @@ public class LevelsGenerator
 	
 	private void crearNivelLuna(List<Entidad> lista, Background b)
 	{
-		// FIXME
-		lista.add(new Obstaculo(R.drawable.obstacle_egypt, 0));
+		lista.add(new Obstaculo(R.drawable.obstacle_moon, 0));
 		        
-		lista.add(new Enemigo(R.drawable.enemy_egypt1, 0));
-		lista.add(new Enemigo(R.drawable.enemy_egypt2, 1));
-		lista.add(new Enemigo(R.drawable.enemy_egypt3, 2));
-		lista.add(new Enemigo(R.drawable.boss_egypt, 3));
+		lista.add(new Enemigo(R.drawable.enemy_moon, 0));
+		lista.add(new Enemigo(R.drawable.enemy_moon, 1));
+		lista.add(new Enemigo(R.drawable.enemy_moon, 2));
+		lista.add(new Enemigo(R.drawable.boss_moon, 3));
 				
-		b.setBackground(R.drawable.background_moon, R.drawable.background_moon, R.drawable.background_display);
+		b.setBackground(R.drawable.background_moon2, R.drawable.background_moon2, R.drawable.background_moon1, R.drawable.gameover_moon, R.drawable.levelcompleted_moon);
 	}
 	
 	private void crearNivelNewYork(List<Entidad> lista, Background b)
 	{
-		// FIXME
-		lista.add(new Obstaculo(R.drawable.obstacle_egypt, 0));
+		lista.add(new Obstaculo(R.drawable.obstacle_newyork, 0));
 		        
-		lista.add(new Enemigo(R.drawable.enemy_egypt1, 0));
-		lista.add(new Enemigo(R.drawable.enemy_egypt2, 1));
-		lista.add(new Enemigo(R.drawable.enemy_egypt3, 2));
-		lista.add(new Enemigo(R.drawable.boss_egypt, 3));
+		lista.add(new Enemigo(R.drawable.enemy_newyork1, 0));
+		lista.add(new Enemigo(R.drawable.enemy_newyork2, 1));
+		lista.add(new Enemigo(R.drawable.enemy_newyork3, 2));
+		lista.add(new Enemigo(R.drawable.boss_newyork, 3));
 				
-		b.setBackground(R.drawable.background_newyork, R.drawable.background_newyork, R.drawable.background_display);
+		b.setBackground(R.drawable.background_newyork2, R.drawable.background_newyork2, R.drawable.background_newyork1, R.drawable.gameover_newyork, R.drawable.levelcompleted_newyork);
 	}
 	
 	private void crearNivelRome(List<Entidad> lista, Background b)
 	{
-		// FIXME
-		lista.add(new Obstaculo(R.drawable.obstacle_egypt, 0));
+		lista.add(new Obstaculo(R.drawable.obstacle_rome, 0));
         
-		lista.add(new Enemigo(R.drawable.enemy_egypt1, 0));
-		lista.add(new Enemigo(R.drawable.enemy_egypt2, 1));
-		lista.add(new Enemigo(R.drawable.enemy_egypt3, 2));
-		lista.add(new Enemigo(R.drawable.boss_egypt, 3));
+		lista.add(new Enemigo(R.drawable.enemy_rome1, 0));
+		lista.add(new Enemigo(R.drawable.enemy_rome2, 1));
+		lista.add(new Enemigo(R.drawable.enemy_rome3, 2));
+		lista.add(new Enemigo(R.drawable.boss_rome, 3));
 		
-		b.setBackground(R.drawable.background_rome, R.drawable.background_rome, R.drawable.background_display);
+		b.setBackground(R.drawable.background_rome2, R.drawable.background_rome2, R.drawable.background_rome1, R.drawable.gameover_rome, R.drawable.levelcompleted_rome);
 	}
 	
 	private void crearNivelEgipto(List<Entidad> lista, Background b) 
@@ -110,20 +107,20 @@ public class LevelsGenerator
 		lista.add(new Enemigo(R.drawable.enemy_egypt3, 2));
 		lista.add(new Enemigo(R.drawable.boss_egypt, 3));
 		
-		b.setBackground(R.drawable.background_egypt2, R.drawable.background_egypt3, R.drawable.background_egypt4);
+		b.setBackground(R.drawable.background_egypt2, R.drawable.background_egypt3, R.drawable.background_egypt4, R.drawable.gameover_egypt, R.drawable.levelcompleted_egypt);
 	}
 	
 	private void crearNivelStonehenge(List<Entidad> lista, Background b)
 	{
 		// FIXME
-		lista.add(new Obstaculo(R.drawable.obstacle_egypt, 0));
+		lista.add(new Obstaculo(R.drawable.obstacle_stonehenge, 0));
         
-		lista.add(new Enemigo(R.drawable.enemy_egypt1, 0));
-		lista.add(new Enemigo(R.drawable.enemy_egypt2, 1));
-		lista.add(new Enemigo(R.drawable.enemy_egypt3, 2));
-		lista.add(new Enemigo(R.drawable.boss_egypt, 3));
+		lista.add(new Enemigo(R.drawable.enemy_stonehenge1, 0));
+		lista.add(new Enemigo(R.drawable.enemy_stonehenge2, 1));
+		lista.add(new Enemigo(R.drawable.enemy_stonehenge3, 2));
+		lista.add(new Enemigo(R.drawable.boss_stonehenge, 3));
 				
-		b.setBackground(R.drawable.background_stonehenge, R.drawable.background_stonehenge, R.drawable.background_display);
+		b.setBackground(R.drawable.background_stonehenge2, R.drawable.background_stonehenge2, R.drawable.background_stonehenge1, R.drawable.gameover_stonehenge, R.drawable.levelcompleted_stonehenge);
 	}
 	
 	private List<Entidad> getListaEnemigos(int indice)

@@ -24,19 +24,19 @@ public class LevelSelectFragment extends OpenGLFragment
 		switch(tipo)
 		{
 			case Moon:
-				fragment.setParameters(R.drawable.background_moon, R.string.text_level_section_moon, Color.WHITE);
+				fragment.setParameters(R.drawable.background_moon1, R.string.text_level_section_moon, Color.WHITE);
 			break;
 			case NewYork:
-				fragment.setParameters(R.drawable.background_newyork, R.string.text_level_section_newyork, Color.BLACK);
+				fragment.setParameters(R.drawable.background_newyork1, R.string.text_level_section_newyork, Color.BLACK);
 			break;
 			case Rome:
-				fragment.setParameters(R.drawable.background_rome, R.string.text_level_section_rome, Color.WHITE);
+				fragment.setParameters(R.drawable.background_rome1, R.string.text_level_section_rome, Color.WHITE);
 			break;
 			case Egypt:
 				fragment.setParameters(R.drawable.background_egypt1, R.string.text_level_section_egypt, Color.BLACK);
 			break;
 			case Stonehenge:
-				fragment.setParameters(R.drawable.background_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK);
+				fragment.setParameters(R.drawable.background_stonehenge1, R.string.text_level_section_stonehenge, Color.BLACK);
 			break;
 		}
 		

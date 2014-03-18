@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.alert.ConfirmationAlert;
+import com.android.alert.ImageAlert;
 import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
@@ -27,8 +28,8 @@ import com.creation.design.DesignFragment;
 import com.creation.paint.PaintFragment;
 import com.game.data.Personaje;
 import com.game.game.GameFragment;
+import com.game.select.LevelGenerator;
 import com.game.select.LevelSelectionFragment;
-import com.game.select.LevelsGenerator;
 import com.project.loading.LoadingFragment;
 import com.selection.select.CharacterSelectionFragment;
 
@@ -54,7 +55,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Estado */
 	private TEstado estado;
 	
-	private LevelsGenerator levelGenerator;
+	private LevelGenerator levelGenerator;
 
 	/* SECTION Métodos Activity */
 	
@@ -70,7 +71,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		internalManager = new InternalStorageManager(this);
 		externalManager = new ExternalStorageManager();
 		connector = new SocialConnector(this);
-		levelGenerator = new LevelsGenerator(this);
+		levelGenerator = new LevelGenerator(this);
 		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
@@ -337,23 +338,51 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Game Fragment */
 	
 	@Override
-	public void onGameFinished(int level)
+	public void onGameFinished(final int level, final int idImagen)
 	{
-		Toast.makeText(this, getString(R.string.text_game_finish), Toast.LENGTH_SHORT).show();
-		
+		// Desbloquear Siguiente nivel
 		int nextLevel = (level + 1) % estadoNiveles.length;
 		
 		estadoNiveles[nextLevel] = true;
 		internalManager.guardarNiveles(estadoNiveles);
 		
-		changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_finish), getString(R.string.text_game_finish_description), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
+
+			@Override
+			public void onPossitiveButtonClick()
+			{				
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+			}
+
+			@Override
+			public void onNegativeButtonClick()
+			{
+				changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+			}
+    	};
+    	
+    	alert.show();
 	}
 
 	@Override
-	public void onGameFailed(int level)
+	public void onGameFailed(final int level, final int idImagen)
 	{
-		Toast.makeText(this, getString(R.string.text_game_fail), Toast.LENGTH_SHORT).show();
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_fail), getString(R.string.text_game_fail_description), getString(R.string.text_button_replay), getString(R.string.text_button_cancel), idImagen) {
+
+			@Override
+			public void onPossitiveButtonClick()
+			{				
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+			}
+
+			@Override
+			public void onNegativeButtonClick()
+			{
+				changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+			}
+    	};
+    	
+    	alert.show();
 	}
 	
 	/* SECTION Métodos de Modificación de la ActionBar */

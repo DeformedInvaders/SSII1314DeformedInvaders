@@ -44,8 +44,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	public interface GameFragmentListener
 	{
-        public void onGameFinished(int level);
-        public void onGameFailed(int level);
+        public void onGameFinished(int level, int idImage);
+        public void onGameFailed(int level, int idImage);
     }
 	
 	/* SECTION Métodos Fragment */
@@ -168,11 +168,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	public void onGameFinished()
 	{
-		mCallback.onGameFinished(level.getIndiceNivel());
+		mCallback.onGameFinished(level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted());
 	}
 	
 	public void onGameFailed()
 	{
-		mCallback.onGameFinished(level.getIndiceNivel());
+		mCallback.onGameFinished(level.getIndiceNivel(), level.getFondoNivel().getIdTextureGameOver());
 	}
 }

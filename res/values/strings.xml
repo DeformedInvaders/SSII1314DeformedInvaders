@@ -89,7 +89,10 @@
 			<string name="text_level_disabled">The level is still locked!</string>
 			
 			<string name="text_game_finish">You finish this level.</string>
+			<string name="text_game_finish_description">Do you want to replay this level?.</string>
+			
 			<string name="text_game_fail">Game over.</string>
+			<string name="text_game_fail_description">Do you want to replay this level?.</string>
 			
 			<string name="text_button_yes">Yes</string>
 			<string name="text_button_no">No</string>
@@ -105,6 +108,9 @@
 		    
 		    <string name="text_button_plus">+</string>
 		    <string name="text_button_minus">-</string>
+		    
+		    <string name="text_button_replay">Replay</string>
+		    <string name="text_button_levels">Levels</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Coming Soon</string>
