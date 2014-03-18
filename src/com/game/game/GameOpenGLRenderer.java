@@ -11,7 +11,10 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
+import com.game.data.Background;
 import com.game.data.Entidad;
+import com.game.data.InstanciaEntidad;
+import com.game.data.Level;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
 
@@ -30,15 +33,15 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Constructura */
 	
-	public GameOpenGLRenderer(Context context, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background b, Personaje p)
+	public GameOpenGLRenderer(Context context, Personaje p, Level l)
 	{
         super(context);
         
         personaje = p;        
-        background = b;
+        background = l.getFondoNivel();
         
-        listaEnemigos = lista;
-        colaEnemigos = cola;
+        listaEnemigos = l.getListaEnemigos();
+        colaEnemigos = l.getColaEnemigos();
         
         listaEnemigosDerrotados = new ArrayList<InstanciaEntidad>();
 	}
@@ -84,7 +87,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		while(it.hasNext())
 		{
 			InstanciaEntidad instancia = it.next();
-			Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 			instancia.dibujar(gl, this, entidad);
 		}
 		
@@ -93,7 +96,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		while(it.hasNext())
 		{
 			InstanciaEntidad instancia = it.next();
-			Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 			instancia.dibujar(gl, this, entidad);
 		}
 			
@@ -148,7 +151,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		while(it.hasNext())
 		{
 			InstanciaEntidad instancia = it.next();
-			Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 			instancia.avanzar(this, entidad);
 		}
 	}
@@ -180,31 +183,35 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Métodos de Obtención de Información */
 	
-	public int isJuegoFinalizado()
+	public TEstadoGame isJuegoFinalizado()
 	{		
 		if(fondoFinalFijado)
 		{
-			return 1;
+			return TEstadoGame.FinJuegoVictoria;
 		}
 		
 		if(!colaEnemigos.isEmpty())
 		{
 			InstanciaEntidad instancia = colaEnemigos.peek();
-			switch(personaje.colision(listaEnemigos.get(instancia.getEntidad()), instancia))
+			switch(personaje.colision(listaEnemigos.get(instancia.getIdEntidad()), instancia))
 			{
-				case 0:
-					return 0;
-				case 1:
-					return 2;
-				case 2:
-					Entidad entidad = listaEnemigos.get(instancia.getEntidad());
+				case Nada:
+					return TEstadoGame.Nada;
+				case Colision:
+					return TEstadoGame.FinJuegoDerrota;
+				case EnemigoFueraRango:
+					Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 					if(entidad.getTipo() == TTipoEntidad.Enemigo)
+					{
 						instancia.setDerrotado();
+					}
 					listaEnemigosDerrotados.add(colaEnemigos.poll());
-					return 0;					
+					
+					return TEstadoGame.Nada;					
 			}
 		}
-		return 0;
+		
+		return TEstadoGame.Nada;
 	}
 	
 	/* SECTION Métodos de Guardado de Información */

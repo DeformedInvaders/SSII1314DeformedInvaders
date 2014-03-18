@@ -1,24 +1,25 @@
-package com.game.game;
+package com.game.data;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import com.android.view.OpenGLRenderer;
-import com.game.data.Entidad;
 
 public class InstanciaEntidad implements Comparable<InstanciaEntidad>
 {
 	public static final float DIST_AVANCE = 20.0f;
 	
-	private int entidad;
+	private int idEntidad;
 	private boolean pintar, derrotado;
-	private float posX, posY;
+	private float posicionX, posicionY;
 	
-	public InstanciaEntidad(int entidad, float posX)
+	public InstanciaEntidad(int id, float posX)
 	{
 		pintar = true;
 		derrotado = false;
-		this.entidad = entidad;
-		this.posX = posX;
+		idEntidad = id;
+		
+		posicionX = posX;
+		posicionY = 0.0f;
 	}
 
 	public boolean isPintar() 
@@ -28,7 +29,7 @@ public class InstanciaEntidad implements Comparable<InstanciaEntidad>
 
 	public void setNoPintar() 
 	{
-		this.pintar = false;
+		pintar = false;
 	}
 
 	public boolean isDerrotado() 
@@ -38,29 +39,29 @@ public class InstanciaEntidad implements Comparable<InstanciaEntidad>
 
 	public void setDerrotado() 
 	{
-		this.derrotado = true;
+		derrotado = true;
 	}
 
-	public int getEntidad() 
+	public int getIdEntidad() 
 	{
-		return entidad;
+		return idEntidad;
 	}
 
-	public float getPosX() 
+	public float getPosicionX() 
 	{
-		return posX;
+		return posicionX;
 	}
 
-	public float getPosY() 
+	public float getPosicionY() 
 	{
-		return posY;
+		return posicionY;
 	}
 
 	public void avanzar(OpenGLRenderer renderer, Entidad entidad)
 	{
-		posX -= DIST_AVANCE;
+		posicionX -= DIST_AVANCE;
 
-		pintar = (posX < renderer.getScreenWidth() && posX > -entidad.getWidth());
+		pintar = (posicionX < renderer.getScreenWidth() && posicionX > -entidad.getWidth());
 	}
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer, Entidad entidad)
@@ -68,18 +69,27 @@ public class InstanciaEntidad implements Comparable<InstanciaEntidad>
 		if(pintar && !derrotado)
 		{
 			gl.glPushMatrix();
-				gl.glTranslatef(posX, posY, 0.0f);
+			
+				gl.glTranslatef(posicionX, posicionY, 0.0f);
 				
 				entidad.dibujar(gl, renderer);
+				
 			gl.glPopMatrix();
 		}
 	}
 	
 	@Override
-	public int compareTo(InstanciaEntidad a)
+	public int compareTo(InstanciaEntidad entidad)
 	{
-		if(posX > a.getPosX()) return 1;
-		else if(posX < a.getPosX()) return -1;
-		else return 0;
+		if(posicionX > entidad.getPosicionX())
+		{
+			return 1;
+		}
+		else if(posicionX < entidad.getPosicionX())
+		{
+			return -1;
+		}
+		
+		return 0;
 	}
 }

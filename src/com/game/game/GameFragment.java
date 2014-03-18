@@ -1,8 +1,5 @@
 package com.game.game;
 
-import java.util.List;
-import java.util.Queue;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +10,7 @@ import android.widget.ImageButton;
 
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
-import com.game.data.Entidad;
+import com.game.data.Level;
 import com.game.data.Personaje;
 import com.project.main.R;
 
@@ -23,33 +20,26 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	private ExternalStorageManager manager;
 	
-	private int level;
+	private Level level;
 	private Personaje personaje;
 
 	private GameOpenGLSurfaceView canvas;
 	private ImageButton botonRun, botonJump, botonCrouch, botonAttack;
 	
-	private List<Entidad> listaEnemigos;
-	private Queue<InstanciaEntidad> colaEnemigos;
-	private Background background;
-	
 	/* SECTION Constructora */
 	
-	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, int l, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background b)
+	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, Level l)
 	{
 		GameFragment fragment = new GameFragment();
-		fragment.setParameters(p, m, l, lista, cola, b);
+		fragment.setParameters(p, m, l);
 		return fragment;
 	}
 	
-	private void setParameters(Personaje p, ExternalStorageManager m, int l, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background b)
+	private void setParameters(Personaje p, ExternalStorageManager m, Level l)
 	{	
 		personaje = p;
 		manager = m;
 		level = l;
-		listaEnemigos = lista;
-		colaEnemigos = cola;
-		background = b;
 	}
 	
 	public interface GameFragmentListener
@@ -81,7 +71,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
  		
 		// Instanciar Elementos de la GUI
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
-		canvas.setParameters(personaje, manager, this, listaEnemigos, colaEnemigos, background);
+		canvas.setParameters(personaje, manager, this, level);
 		
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonGame2);
@@ -178,11 +168,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	public void onGameFinished()
 	{
-		mCallback.onGameFinished(level);
+		mCallback.onGameFinished(level.getIndiceNivel());
 	}
 	
 	public void onGameFailed()
 	{
-		mCallback.onGameFinished(level);
+		mCallback.onGameFinished(level.getIndiceNivel());
 	}
 }

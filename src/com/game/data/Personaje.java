@@ -3,7 +3,7 @@ package com.game.data;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.deform.TDeformTipo;
-import com.game.game.InstanciaEntidad;
+import com.game.game.TEstadoColision;
 
 public class Personaje extends Malla
 {	
@@ -11,6 +11,7 @@ public class Personaje extends Malla
 	
 	private TDeformTipo estado;
 	private float posicionX, posicionY;
+	
 	/* SECTION Constructora */
 	
 	public Personaje()
@@ -27,7 +28,8 @@ public class Personaje extends Malla
 	{
 		if(estado == TDeformTipo.Jump)
 		{
-			float dY = 5 * width / 24;
+			float dY = 5 * width / 12;
+			
 			if(primerosCiclos)
 			{
 				posicionY += dY;
@@ -73,27 +75,27 @@ public class Personaje extends Malla
 		iniciar();
 	}
 	
-	public int colision(Entidad entidad, InstanciaEntidad instanciaE)
+	public TEstadoColision colision(Entidad entidad, InstanciaEntidad instanciaE)
 	{	
-		float posXEntidad = instanciaE.getPosX();
-		float posYEntidad = instanciaE.getPosY();
+		float posXEntidad = instanciaE.getPosicionX();
+		float posYEntidad = instanciaE.getPosicionY();
 		
 		float widthEntidad = entidad.getWidth();	
 		float heightEntidad = entidad.getHeight();
 		
 		if(posXEntidad + widthEntidad/2 < posicionX)
 		{
-			return 2;
+			return TEstadoColision.EnemigoFueraRango;
 		}
 		else if(posXEntidad < posicionX + width/2 && posXEntidad > posicionX)
 		{
 			if(posicionY < posYEntidad + heightEntidad)
 			{
-				return 1;
+				return TEstadoColision.Colision;
 			}
 		}
 		
-		return 0;
+		return TEstadoColision.Nada;
 	}
 	
 	/* SECTION Métodos de Modificación de Información */

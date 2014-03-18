@@ -131,20 +131,21 @@ public final class R {
         public static final int menu_twitter=0x7f02004d;
         public static final int menu_twitter_connected=0x7f02004e;
         public static final int obstacle_egypt=0x7f02004f;
-        public static final int texture_eyes1=0x7f020050;
-        public static final int texture_eyes2=0x7f020051;
-        public static final int texture_eyes3=0x7f020052;
-        public static final int texture_eyes4=0x7f020053;
-        public static final int texture_eyes5=0x7f020054;
-        public static final int texture_mouth1=0x7f020055;
-        public static final int texture_mouth2=0x7f020056;
-        public static final int texture_mouth3=0x7f020057;
-        public static final int texture_mouth4=0x7f020058;
-        public static final int texture_mouth5=0x7f020059;
-        public static final int texture_weapon1=0x7f02005a;
-        public static final int texture_weapon2=0x7f02005b;
-        public static final int texture_weapon3=0x7f02005c;
-        public static final int texture_weapon4=0x7f02005d;
+        public static final int obstacle_global=0x7f020050;
+        public static final int texture_eyes1=0x7f020051;
+        public static final int texture_eyes2=0x7f020052;
+        public static final int texture_eyes3=0x7f020053;
+        public static final int texture_eyes4=0x7f020054;
+        public static final int texture_eyes5=0x7f020055;
+        public static final int texture_mouth1=0x7f020056;
+        public static final int texture_mouth2=0x7f020057;
+        public static final int texture_mouth3=0x7f020058;
+        public static final int texture_mouth4=0x7f020059;
+        public static final int texture_mouth5=0x7f02005a;
+        public static final int texture_weapon1=0x7f02005b;
+        public static final int texture_weapon2=0x7f02005c;
+        public static final int texture_weapon3=0x7f02005d;
+        public static final int texture_weapon4=0x7f02005e;
     }
     public static final class id {
         public static final int deformGLSurfaceViewDeform1=0x7f08001c;

@@ -1,8 +1,5 @@
 package com.game.game;
 
-import java.util.List;
-import java.util.Queue;
-
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -11,7 +8,7 @@ import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
-import com.game.data.Entidad;
+import com.game.data.Level;
 import com.game.data.Personaje;
 import com.project.main.R;
 
@@ -46,13 +43,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
         animacionFinalizada = true;
     }
 	
-	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, List<Entidad> listaEnemigos, Queue<InstanciaEntidad> colaEnemigos, Background b)
+	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, Level l)
 	{        
         manager = m;
         nombrePersonaje = p.getNombre();
         listener = gl;
         
-    	renderer = new GameOpenGLRenderer(getContext(), listaEnemigos, colaEnemigos, b, p);
+    	renderer = new GameOpenGLRenderer(getContext(), p, l);
         setRenderer(renderer);
         
         player = new AudioPlayerManager(manager) {
@@ -80,20 +77,18 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					animacionFinalizada = true;
 				}
 
-				int valor = renderer.isJuegoFinalizado();
-				
-				switch(valor)
+				switch(renderer.isJuegoFinalizado())
 				{
-					case 0:
+					case Nada:
 						handler.postDelayed(this, TIME_INTERVAL_ANIMATION);
 					break;
-					case 1:
+					case FinJuegoVictoria:
 						renderer.pararAnimacion();
 	    				requestRender();
 	                	
 	                	listener.onGameFinished();
 					break;
-					case 2:
+					case FinJuegoDerrota:
 						renderer.pararAnimacion();
 	    				requestRender();
 	                	

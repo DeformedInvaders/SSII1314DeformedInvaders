@@ -1,4 +1,4 @@
-package com.game.game;
+package com.game.data;
 
 public class Background
 {
