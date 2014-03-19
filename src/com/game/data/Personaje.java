@@ -10,7 +10,7 @@ public class Personaje extends Malla
 	private Movimientos movimientos;
 	
 	private TDeformTipo estado;
-	private float posicionX, posicionY;
+	
 	
 	/* SECTION Constructora */
 	
@@ -24,21 +24,24 @@ public class Personaje extends Malla
 	
 	/* SECTION Métodos abstractos de Entidad */
 	
-	public void avanzar(OpenGLRenderer renderer, boolean primerosCiclos)
+	public boolean avanzar(OpenGLRenderer renderer)
 	{
 		if(estado == TDeformTipo.Jump)
 		{
-			float dY = 5 * width / 12;
+			float dY = 5 * width / 24;
 			
-			if(primerosCiclos)
+			int mitadAnimacion = posicionAnimacion / 2;
+			
+			if(posicionAnimacion < mitadAnimacion)
 			{
 				posicionY += dY;
 			}
-			else
+			else 
 			{
 				posicionY -= dY;
 			}
 		}
+		return posicionAnimacion == listaVerticesAnimacion.size();
 	}
 	
 	/* SECTION Métodos de Animación */

@@ -136,7 +136,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Métodos de Modificación de Estado */
 
-	public void reproducirAnimacion(boolean primerosCiclos)
+	public boolean reproducirAnimacion()
 	{
 		// FIXME
 		// Background
@@ -144,8 +144,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		// Personaje
 		personaje.animar();
-		personaje.avanzar(this, primerosCiclos);
-		
+		boolean fin = personaje.avanzar(this);
+				
 		// Lista Enemigos
 		Iterator<InstanciaEntidad> it = colaEnemigos.iterator();
 		while(it.hasNext())
@@ -154,6 +154,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 			instancia.avanzar(this, entidad);
 		}
+		
+		return fin;
+		
 	}
 	
 	public void pararAnimacion()

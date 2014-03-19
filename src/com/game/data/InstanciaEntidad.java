@@ -6,7 +6,7 @@ import com.android.view.OpenGLRenderer;
 
 public class InstanciaEntidad implements Comparable<InstanciaEntidad>
 {
-	public static final float DIST_AVANCE = 20.0f;
+	public static final float DIST_AVANCE = 10.0f;
 	
 	private int idEntidad;
 	private boolean pintar, derrotado;

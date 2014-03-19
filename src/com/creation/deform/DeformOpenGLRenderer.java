@@ -27,7 +27,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private Deformator deformator;
 	
 	private final int NUM_HANDLES;
-	private final static int NUM_ITER = 20;
+	//private final static int NUM_ITER = 20;
+	private final int NUM_FRAMES;
 	
 	// Modo Grabado
 	private TDeformEstado estado;
@@ -83,12 +84,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Constructora */
 	
-	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura, TDeformTipo tipo)
+	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura, TDeformTipo tipo, int numero_frames )
 	{
         super(context);
         
         NUM_HANDLES = num_handles;
-        
+        NUM_FRAMES = numero_frames;
         tipoDeformacion = tipo;
         estado = TDeformEstado.Nada;
         modoGrabar = false;
@@ -437,15 +438,16 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private void construirListadeMovimientos()
 	{
 		int i = 0;
+		//Entero para controlar cada cuantos movimientos se guarda uno.
 		int r = 0;
 		
-		if(listaHandlesAnimacion.size() < NUM_ITER)
+		if(listaHandlesAnimacion.size() < NUM_FRAMES)
 		{
 			r = 1;
 		}
 		else
 		{
-			r = listaHandlesAnimacion.size() / NUM_ITER;
+			r = listaHandlesAnimacion.size() / NUM_FRAMES;
 		}
 		
 		FloatArray v = vertices.clone();

@@ -24,6 +24,7 @@ public class DeformFragment extends OpenGLFragment
 	private TDeformTipo tipo;
 	private Esqueleto esqueleto;
 	private Textura textura;
+	private int num_frames;
 	
 	private DeformDataSaved dataSaved;
 	private ExternalStorageManager manager;
@@ -33,20 +34,21 @@ public class DeformFragment extends OpenGLFragment
 		
 	/* SECTION Constructora */
 	
-	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d)
+	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(m, e, t, n, d);
+		fragment.setParameters(m, e, t, n, d, f);
 		return fragment;
 	}
 	
-	private void setParameters(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d)
+	private void setParameters(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
 	{	
 		esqueleto = e;
 		textura = t;
 		manager = m;
 		movimiento = n;
-		tipo = d;		
+		tipo = d;	
+		num_frames = f;
 	}
 	
 	/* SECTION Métodos Fragment */
@@ -58,7 +60,7 @@ public class DeformFragment extends OpenGLFragment
 		
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(esqueleto, textura, tipo, this);
+		canvas.setParameters(esqueleto, textura, tipo, this, num_frames);
 		
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);

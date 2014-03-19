@@ -45,6 +45,8 @@ public abstract class Malla extends Entidad
 	
 	// Pegatinas
 	private Pegatinas pegatinas;
+	
+	protected float posicionX, posicionY;
 		
 	/* SECTION Métodos abstractos de Entidad */
 	
@@ -82,7 +84,7 @@ public abstract class Malla extends Entidad
 	{			
 		gl.glPushMatrix();
 			//TODO
-			//gl.glTranslatef(posicionX, posicionY, 0.0f);
+			gl.glTranslatef(posicionX, posicionY, 0.0f);
 			
 			// Textura
 			renderer.dibujarTexturaMalla(gl, bufferTriangulosAnimacion, bufferCoords, tipo);
@@ -125,7 +127,7 @@ public abstract class Malla extends Entidad
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1) % listaVerticesAnimacion.size();
+		posicionAnimacion = (posicionAnimacion + 1);// % listaVerticesAnimacion.size();
 	}
 	
 	/* SECTION Métodos de Modificación de Información */

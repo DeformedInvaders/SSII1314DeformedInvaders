@@ -31,7 +31,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	
 	// Animación
 	protected static final int NUM_FRAMES_ANIMATION = 24;
-	protected static final long TIME_INTERVAL_ANIMATION = 80;
+	protected static final long TIME_INTERVAL_ANIMATION = 20;
 	protected static final long TIME_DURATION_ANIMATION = NUM_FRAMES_ANIMATION * TIME_INTERVAL_ANIMATION;
     
 	/* SECTION Constructora */
