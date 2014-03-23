@@ -3,6 +3,8 @@ package com.android.view;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -41,6 +43,9 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final int POINTWIDTH = 7;
 
 	protected static final float MAX_DISTANCE_PIXELS = 10;
+	
+	protected static final float DIST_PIXELS = 20;
+	protected static final float DIST_PIXELS_EXTRA = 14;
 
 	// Parámetros de Texturas	
 	private static final int MAX_TEXTURE_BACKGROUND = 3;
@@ -1117,4 +1122,343 @@ public abstract class OpenGLRenderer implements Renderer
 
 		return Color.rgb(red, green, blue);
 	}
+	
+	protected FloatArray obtenerPuntosInterseccion(int tipo, int size, int color, float minX, float minY, float maxX, float maxY, float distanciaX, float distanciaY, FloatArray vertices)
+
+	{
+		FloatArray verticesInterseccion = new FloatArray();
+
+		List lineasHorizontales = new ArrayList();
+		List lineasVerticales = new ArrayList();
+		
+		float ladoX = maxX - minX;
+		float ladoY = maxY - minY;
+		
+		lineasHorizontales = obtenerLineasHorizontales(tipo, size, color, minX, minY, maxX, maxY, distanciaY, ladoX);
+		lineasVerticales = obtenerLineasVerticales(tipo, size, color, minX, minY, maxX, maxY, distanciaX, ladoY);
+		
+		verticesInterseccion = obtenerVerticesInterseccion(tipo, size, color, lineasHorizontales, lineasVerticales, vertices);
+		
+		
+		return verticesInterseccion;
+	}
+	
+	
+	private List obtenerLineasHorizontales(int tipo, int size, int color, float minX, float minY, float maxX, float maxY, float distancia, float ladoX) {
+		
+			List lineasAux = new ArrayList();
+			Punto p1 = null;
+			Punto p2 = null;
+			Recta recta = null;
+					
+			float  auxMinY = minY;
+			while((ladoX > distancia) && (auxMinY < maxY - distancia)){
+				auxMinY = auxMinY + distancia;
+	
+				p1 = new Punto(minX, auxMinY);
+				p2 = new Punto(maxX, auxMinY);
+			
+				recta = construccionRecta(p1,p2);
+				lineasAux.add(recta);	
+			}
+			return lineasAux;
+
+	}
+	
+	private List obtenerLineasVerticales(int tipo, int size, int color, float minX, float minY, float maxX, float maxY, float distancia, float ladoY) {
+		
+			List lineasAux = new ArrayList();
+			Punto p1 = null;
+			Punto p2 = null;
+			Recta recta = null;
+						
+			float auxMinX = minX;
+			while((ladoY > distancia) && (auxMinX < maxX - distancia)){
+				auxMinX = auxMinX + distancia;
+				
+				p1 = new Punto(auxMinX, minY);
+				p2 = new Punto(auxMinX, maxY);
+
+				recta = construccionRecta(p1,p2);
+				lineasAux.add(recta);
+			}
+			return lineasAux;
+		
+	}
+	
+	private FloatArray obtenerVerticesInterseccion(int tipo, int size, int color, List lineasHorizontales, List lineasVerticales, FloatArray vertices){
+		
+			FloatArray verticesInterseccion = new FloatArray();
+			ArrayList verticesInterseccionMasDistancia = new ArrayList();
+			Punto p = new Punto();
+			for(int i=0; i < lineasHorizontales.size(); i++){
+				for(int j=0; j < lineasVerticales.size(); j++){
+					p = interseccionRectas((Recta) lineasHorizontales.get(i), (Recta) lineasVerticales.get(j));
+					if (p!=null){ //si NO es null entonces se cortan
+						if(puntoEnPoligono(vertices, vertices.size, p.getX(), p.getY())){
+							if(tieneDistanciaConOtrosVertices(p, vertices, DIST_PIXELS)){
+								//añadimos los vertices a la lista
+								verticesInterseccion.add(p.getX());
+								verticesInterseccion.add(p.getY());
+							}
+							else{
+								//añadimos los vertices que no cumplen la distancia minima en una lista auxiliar por si fuera necesario meterlos
+								verticesInterseccionMasDistancia.add(p);
+							}
+							
+						}
+						
+					}	
+				}		
+			}
+			
+			int cont = 0;
+			ArrayList<Boolean> usados = new ArrayList<Boolean>();
+			for(int k=0; k<verticesInterseccionMasDistancia.size(); k++){
+				usados.add(k, false);
+			}
+
+			while ((verticesInterseccion.size < 20) && (cont < verticesInterseccionMasDistancia.size())){
+				int numeroAleatorio = 0 + (int)(Math.random()*usados.size()); 
+				if(!usados.get(numeroAleatorio)){
+					cont++;
+					usados.set(numeroAleatorio, true);
+					Punto punto = new Punto(((Punto) verticesInterseccionMasDistancia.get(numeroAleatorio)).getX(), ((Punto) verticesInterseccionMasDistancia.get(numeroAleatorio)).getY());
+					if(tieneDistanciaConOtrosVertices((Punto) verticesInterseccionMasDistancia.get(numeroAleatorio), vertices, DIST_PIXELS_EXTRA)){
+						verticesInterseccion.add(punto.getX());
+						verticesInterseccion.add(punto.getY());
+					}
+				}
+				
+			}
+			
+			return verticesInterseccion;
+		
+	}
+	
+	
+	private Recta construccionRecta(Punto p1, Punto p2) {
+		Recta recta = null;
+		if(p1.getX() == p2.getX()){
+			recta = new Recta(1, 0, - p1.getX());
+		}
+		else{
+			float aux = ((p2.getY() - p1.getY()) / (p2.getX() - p1.getX()));
+			recta = new Recta(-aux, 1, (-p1.getY() + (aux * p1.getX())));
+		}
+		return recta;
+	}
+
+	private Punto interseccionRectas(Recta recta1, Recta recta2) {
+		Punto punto;
+		float xObtenido, yObtenido;
+		float factorXRecta1 = recta1.getFactorX();
+		float factorYRecta1 = recta1.getFactorY();
+		float coeficienteRecta1 = recta1.getCoeficiente();
+		float factorXRecta2 = recta2.getFactorX();
+		float factorYRecta2 = recta2.getFactorY();
+		float coeficienteRecta2 = recta2.getCoeficiente();
+
+		//la recta de igualacion se consigue dejando las y = 0 y por lo tanto no tiene factorY
+		if(factorYRecta1 == factorYRecta2){
+			Recta rectaIgualacion = new Recta (0, factorXRecta1 - factorXRecta2, coeficienteRecta1 - coeficienteRecta2);
+			//se obtiene la X cogiendo la y=0 porque por la recta de igualacion se ha ido
+			xObtenido = rectaIgualacion.darXdadoY(0);
+			//se obtiene la y cogiendo la xObtenido y metiendola en cualquiera de las 2 rectas que te pasan por parametro
+			yObtenido = recta1.darYdadoX(xObtenido);
+		}
+		else{
+			if(factorYRecta1 != 0){
+				yObtenido = - coeficienteRecta1;
+				xObtenido = recta2.darXdadoY(yObtenido);
+			}
+			else{
+				xObtenido = - coeficienteRecta1;
+				yObtenido = recta1.darYdadoX(xObtenido);
+			}
+		}
+		
+		
+		//compruebacion de si cortan
+		//si no se cortan tienen los mismos factores de x e y
+		if((factorXRecta1 == factorXRecta2) && (factorYRecta1 == factorYRecta2)){
+			punto = null;
+		}
+		else{
+			punto = new Punto(xObtenido, yObtenido);
+		}
+		return punto;
+	}
+
+	/*	Test del Rayo:
+	Consiste en trazar una semirecta, generalmente horizontal, desde el punto
+	hasta hasta el infinito, y contar la cantidad de veces que corta al polígono.
+	Si la cantidad es par entonces se encuentra fuera del polígono, y si se
+	encuentra dentro la cantidad de cortes será impar.*/
+	private boolean puntoEnPoligono(FloatArray vertices,int N, float puntoX, float puntoY){
+		boolean dentro = false;
+		int numIntersecciones = 0;
+		int i;
+		double xinters;
+		float punto1X, punto1Y, punto2X, punto2Y;
+
+		punto1X = vertices.get(0);
+		punto1Y = vertices.get(1);
+		for (i=2; i<N; i= i+2) {
+		   punto2X = vertices.get(i % N);
+		   punto2Y = vertices.get((i+1) % N);
+		   if (puntoY > min2Puntos(punto1Y,punto2Y)) {
+			   if (puntoY <= max2Punto(punto1Y,punto2Y)) {
+			      if (puntoX <= max2Punto(punto1X,punto2X)) {
+			          if (punto1Y != punto2Y) {
+			              xinters = (puntoY - punto1Y)*(punto2X - punto1X)/(punto2Y - punto1Y) + punto1X;
+			              if (punto1X == punto2X || puntoX <= xinters){
+			            	  numIntersecciones++;
+			              }
+			          }
+			      }
+			   } 
+		   }
+		   
+		   punto1X = punto2X;
+		   punto1Y = punto2Y;
+		}
+
+		if (numIntersecciones % 2 == 0){
+			dentro = false;
+		}
+		else{
+			dentro = true;
+		}
+		return dentro;
+		
+	}
+	
+
+	private float min2Puntos(float punto1Y, float punto2Y) {
+		float minimo;
+		if(punto1Y < punto2Y){
+			minimo = punto1Y;
+		}
+		else{
+			minimo = punto2Y;
+		}
+		return minimo;
+	}
+
+	private float max2Punto(float punto1Y, float punto2Y) {
+		float maximo;
+		if(punto1Y > punto2Y){
+			maximo = punto1Y;
+		}
+		else{
+			maximo = punto2Y;
+		}
+		return maximo;
+	}
+	
+	private boolean tieneDistanciaConOtrosVertices(Punto p, FloatArray vertices, float distancia){
+		boolean tieneDistancia = true;
+		int i = 0;
+		while((i < vertices.size) && (tieneDistancia)){
+			Punto p2 = new Punto(vertices.get(i), vertices.get(i+1));
+			if(distancia2Puntos(p, p2) < distancia){
+				tieneDistancia = false;
+			}
+
+			i = i+2;
+		}
+		
+		return tieneDistancia;
+	}
+	
+	private float distancia2Puntos(Punto p1, Punto p2){
+		return (float) (Math.sqrt(Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2)));
+	}
+	
+	protected float areaRectangulo(float ladoX, float ladoY) {
+		return ladoX*ladoY;
+	}
+	
+	//Clases auxiliares
+		public class Punto{
+
+			private float x;
+			private float y;
+			
+			public Punto(){
+				
+			}
+			
+			public Punto(float a, float b){
+				x = a;
+				y = b;
+			}
+
+			public float getX() {
+				return x;
+			}
+
+			public void setX(float x) {
+				this.x = x;
+			}
+
+			public float getY() {
+				return y;
+			}
+
+			public void setY(float y) {
+				this.y = y;
+			}
+			
+			
+		}
+			
+		public class Recta{
+
+			private float factorX, factorY, coeficiente;
+			
+			public Recta(){
+				
+			}
+			
+			public Recta(float fX, float fY, float coef){
+				factorX = fX;
+				factorY = fY;
+				coeficiente = coef;
+			}
+
+			public float getFactorX() {
+				return factorX;
+			}
+
+			public void setFactorX(float factorX) {
+				this.factorX = factorX;
+			}
+
+			public float getFactorY() {
+				return factorY;
+			}
+
+			public void setFactorY(float factorY) {
+				this.factorY = factorY;
+			}
+
+			public float getCoeficiente() {
+				return coeficiente;
+			}
+
+			public void setCoeficiente(float coeficiente) {
+				this.coeficiente = coeficiente;
+			}
+
+			public float darXdadoY(float y){
+				return (- factorY * y - coeficiente) / factorX;
+			}
+				
+			public float darYdadoX(float x){
+				return (- factorX * x - coeficiente) / factorY;
+			}
+			
+		}
 }

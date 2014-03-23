@@ -52,6 +52,26 @@ public class Triangulator
 		}
 	}
 	
+	public Triangulator(FloatArray puntos, FloatArray verticesInterseccion, FloatArray lineasBSpline)
+	{
+		poligonoSimple = false;
+				
+		if(puntos.size > 4){	
+			poligonoSimple = calcularPoligonoSimple(lineasBSpline, false).size == 0;
+			if(poligonoSimple)
+			{
+				Mesh m = calcularMeshGenerator(lineasBSpline, verticesInterseccion);
+
+				vertices = m.getVertices();
+				triangulos = m.getTriangulos();
+
+				contorno = new ShortArray(NUM_BSPLINE_VERTICES);
+				for(int i = 0; i < NUM_BSPLINE_VERTICES; i++) contorno.add(i);
+			}
+		}
+
+	}
+	
 	/* SECTION Métodos de Obtención de Información */
 	
 	public boolean getPoligonSimple()
@@ -103,6 +123,12 @@ public class Triangulator
 	public float calcularAreaMesh(FloatArray bsplineVertices) {
 		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
 		return delaunayMeshGenerator.calcularAreaMesh(bsplineVertices);
+	}
+	
+	private Mesh calcularMeshGenerator(FloatArray vertices, FloatArray auxVertices)
+	{
+		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
+		return delaunayMeshGenerator.computeMesh(vertices, auxVertices);
 	}
 	
 	public static Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)

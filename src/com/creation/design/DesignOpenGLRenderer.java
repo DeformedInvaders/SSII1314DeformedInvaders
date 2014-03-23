@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
@@ -29,6 +30,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private FloatBuffer bufferMalla;
 	
 	private boolean poligonoSimple;
+	
+	private final static int NUM_BSPLINE_VERTICES = 60;
+	private FloatArray lineasBSpline;
+	private float minX, minY, maxX, maxY, ladoX, ladoY, distanciaX, distanciaY;
 	
 	/* SECTION Constructora */
 	
@@ -151,22 +156,221 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			
+			minX = obtenerMinX(puntos);
+			minY = obtenerMinY(puntos);
+			maxX = obtenerMaxX(puntos);
+			maxY = obtenerMaxY(puntos);
+			
+			ladoX = maxX - minX;
+			ladoY = maxY - minY;
+			
 			triangulator = new Triangulator(puntos);
+			if(puntos.size > 4){	
+					lineasBSpline = triangulator.calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
+			}
+
+			float area = triangulator.calcularAreaMesh(lineasBSpline);
+			distanciaX = hallarDistancia(area, ladoX, ladoY, true);
+			distanciaY = hallarDistancia(area, ladoX, ladoY, false);
+			
+			FloatArray verticesInterseccion;
+
+			verticesInterseccion =  obtenerPuntosInterseccion(GL10.GL_LINE_LOOP, SIZELINE, Color.GREEN,  minX, minY, maxX, maxY, distanciaX, distanciaY, lineasBSpline);
+
+			triangulator = null;
+			triangulator = new Triangulator(puntos, verticesInterseccion, lineasBSpline);
 			
 			poligonoSimple = triangulator.getPoligonSimple();
 			vertices = triangulator.getVertices();
 			triangulos = triangulator.getTriangulos();
 			contorno = triangulator.getContorno();
-			
 			if(poligonoSimple)
 			{
 				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
 			}
-			
 			return true;
 		}
 		
 		return false;
+	}
+	
+	private float obtenerMinX(FloatArray contornoTest) {
+		
+		float min = Float.MAX_VALUE;
+		for (int i = 0; i<contornoTest.size; i++){
+			if((i%2==0) && (contornoTest.get(i) < min)){
+				min = contornoTest.get(i);
+			}
+		}
+		return min;
+	}
+	
+	private float obtenerMinY(FloatArray contornoTest) {
+			
+		float min = Float.MAX_VALUE;
+		for (int i = 0; i<contornoTest.size; i++){
+			if((i%2==1) && (contornoTest.get(i) < min)){
+				min = contornoTest.get(i);
+			}
+		}
+		return min;
+	}
+	
+	private float obtenerMaxX(FloatArray contornoTest) {
+		
+		float max = 0;
+		for (int i = 0; i<contornoTest.size; i++){
+			if((i%2==0) && (contornoTest.get(i) > max)){
+				max = contornoTest.get(i);
+			}
+		}
+		return max;
+	}
+	
+	private float obtenerMaxY(FloatArray contornoTest) {
+		
+		float max = 0;
+		for (int i = 0; i<contornoTest.size; i++){
+			if((i%2==1) && (contornoTest.get(i) > max)){
+				max = contornoTest.get(i);
+			}
+		}
+		return max;
+	}
+	
+	private float hallarDistancia(float areaFigura, float ladoX, float ladoY, boolean esDistanciaX) {
+		
+		float areaRectangulo = ladoX * ladoY;
+		float areaDivision = (areaFigura/areaRectangulo)*100; //En porcentaje
+		
+		double separacion;
+		float lado;
+		
+		if(esDistanciaX){
+			separacion = ladoX / 30;
+			lado = ladoX;
+		}else{
+			separacion = ladoY / 30;
+			lado = ladoY;
+		}
+		
+		//Miramos la propocion del ladoX respecto al ladoY
+	 	if (ladoX * 0.5 >= ladoY || ladoY * 0.5 >= ladoX){
+			separacion /= 1.15;
+	 	}
+		
+		if(areaDivision <10){
+			separacion *= 1.1;
+		}
+		else if(areaDivision <20){
+			separacion *= 1.2;
+		}
+		else if(areaDivision <30){
+			separacion *= 1.3;
+		}
+		else if(areaDivision <40){
+			separacion *= 1.3;
+		}
+		else if(areaDivision <50){
+			separacion *= 1.4;
+		}
+		else if(areaDivision <60){
+			separacion *= 1.5;
+		}
+		else if(areaDivision <70){
+			separacion *= 1.7;
+		}
+		else if(areaDivision <80){
+			separacion *= 1.7;
+		}
+		else if(areaDivision <90){
+			separacion *= 1.8;
+		}
+		else{
+			separacion *= 2;
+		}
+		
+		
+		if(areaFigura < 1000){
+			if (areaDivision < 50 ) separacion*= 8;
+			else separacion *= 8;
+		}
+		else if(areaFigura < 2500){
+			if (areaDivision < 50 ) separacion*= 7;
+			else separacion *= 7;
+		}
+		else if(areaFigura < 5000){
+			if (areaDivision < 50 ) separacion*= 6;
+			else separacion *= 6;
+		}
+		else if(areaFigura < 10000){
+			if (areaDivision < 50 ) separacion*= 6;
+			else separacion *= 6;
+		}
+		else if(areaFigura < 20000){
+			if (areaDivision < 50 ) separacion*= 6;
+			else separacion *= 6;
+		}
+		else if(areaFigura < 30000){
+			if (areaDivision < 50 ) separacion*= 4.5;
+			else separacion *= 4.75;
+		}
+		else if(areaFigura < 40000){
+			if (areaDivision < 50 ) separacion*= 3.25;
+			else separacion *= 3.75;
+		}
+		else if(areaFigura < 50000){
+			if (areaDivision < 50 ) separacion*= 3.25;
+			else separacion *= 3.75;
+		}
+		else if(areaFigura < 60000){
+			if (areaDivision < 50 ) separacion*= 3.75;
+			else separacion *= 4.25;
+		}
+		else if(areaFigura < 70000){
+			if (areaDivision < 50 ) separacion*= 3.75;
+			else separacion *= 4.25;
+		}
+		else if(areaFigura < 80000){
+			if (areaDivision < 50 ) separacion*= 4;
+			else separacion *= 4.5;
+		}
+		else if(areaFigura < 90000){
+			if (areaDivision < 50 ) separacion*= 4.25;
+			else separacion *= 4.25;
+		}
+		else if(areaFigura < 100000){
+			if (areaDivision < 50 ) separacion*= 3.5;
+			else separacion *= 4.5;
+		}
+		else if(areaFigura < 110000){
+			if (areaDivision < 50 ) separacion*= 3.5;
+			else separacion *= 4.5;
+		}
+		else if(areaFigura < 120000){
+			if (areaDivision < 50 ) separacion*= 3.5;
+			else separacion *= 5;
+		}
+		else if(areaFigura < 130000){
+			if (areaDivision < 50 ) separacion*= 3.5;
+			else separacion *= 5;
+		}
+		else if(areaFigura < 140000){
+			if (areaDivision < 50 ) separacion*= 3.5;
+			else separacion *= 5;
+		}
+		else{
+			if (areaDivision < 50 ) separacion*= 3.5;
+			else separacion *= 5; 
+		}
+				
+//		Log.i("LOGTAG", "En hallarDistancia - areaFigura: "+areaFigura);
+//		Log.i("LOGTAG", "En hallarDistancia - areaDivision: "+areaDivision);
+//		Log.i("LOGTAG", "En hallarDistancia - separacion: "+separacion);
+		
+		float aux = (float) (lado / separacion);
+		aux = Math.round(aux);
+		return lado/aux ;
 	}
 	
 	@Override
