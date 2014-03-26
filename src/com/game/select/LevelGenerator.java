@@ -95,7 +95,7 @@ public class LevelGenerator
 		lista.add(new Enemigo(R.drawable.enemy_rome3, 2));
 		lista.add(new Enemigo(R.drawable.boss_rome, 3));
 		
-		b.setBackground(R.drawable.background_rome2, R.drawable.background_rome2, R.drawable.background_rome1, R.drawable.gameover_rome, R.drawable.levelcompleted_rome);
+		b.setBackground(R.drawable.background_rome2, R.drawable.background_rome3, R.drawable.background_rome4, R.drawable.gameover_rome, R.drawable.levelcompleted_rome);
 	}
 	
 	private void crearNivelEgipto(List<Entidad> lista, Background b) 
