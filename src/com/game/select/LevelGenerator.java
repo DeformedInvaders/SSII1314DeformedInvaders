@@ -71,7 +71,7 @@ public class LevelGenerator
 		lista.add(new Enemigo(R.drawable.enemy_moon, 2));
 		lista.add(new Enemigo(R.drawable.boss_moon, 3));
 				
-		b.setBackground(R.drawable.background_moon2, R.drawable.background_moon2, R.drawable.background_moon1, R.drawable.gameover_moon, R.drawable.levelcompleted_moon);
+		b.setBackground(R.drawable.background_moon2, R.drawable.background_moon3, R.drawable.background_moon4, R.drawable.gameover_moon, R.drawable.levelcompleted_moon);
 	}
 	
 	private void crearNivelNewYork(List<Entidad> lista, Background b)
@@ -120,7 +120,7 @@ public class LevelGenerator
 		lista.add(new Enemigo(R.drawable.enemy_stonehenge3, 2));
 		lista.add(new Enemigo(R.drawable.boss_stonehenge, 3));
 				
-		b.setBackground(R.drawable.background_stonehenge2, R.drawable.background_stonehenge2, R.drawable.background_stonehenge1, R.drawable.gameover_stonehenge, R.drawable.levelcompleted_stonehenge);
+		b.setBackground(R.drawable.background_stonehenge2, R.drawable.background_stonehenge3, R.drawable.background_stonehenge4, R.drawable.gameover_stonehenge, R.drawable.levelcompleted_stonehenge);
 	}
 	
 	private List<Entidad> getListaEnemigos(int indice)
