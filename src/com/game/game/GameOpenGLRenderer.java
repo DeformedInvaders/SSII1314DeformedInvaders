@@ -201,7 +201,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				case Nada:
 					return TEstadoGame.Nada;
 				case Colision:
-					return TEstadoGame.FinJuegoDerrota;
+					//FIXME TESTING
+					//return TEstadoGame.FinJuegoDerrota;
+					return TEstadoGame.Nada;
 				case EnemigoFueraRango:
 					Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 					if(entidad.getTipo() == TTipoEntidad.Enemigo)

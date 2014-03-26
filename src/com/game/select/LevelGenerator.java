@@ -83,7 +83,7 @@ public class LevelGenerator
 		lista.add(new Enemigo(R.drawable.enemy_newyork3, 2));
 		lista.add(new Enemigo(R.drawable.boss_newyork, 3));
 				
-		b.setBackground(R.drawable.background_newyork2, R.drawable.background_newyork2, R.drawable.background_newyork1, R.drawable.gameover_newyork, R.drawable.levelcompleted_newyork);
+		b.setBackground(R.drawable.background_newyork2, R.drawable.background_newyork3, R.drawable.background_newyork4, R.drawable.gameover_newyork, R.drawable.levelcompleted_newyork);
 	}
 	
 	private void crearNivelRome(List<Entidad> lista, Background b)
@@ -112,7 +112,6 @@ public class LevelGenerator
 	
 	private void crearNivelStonehenge(List<Entidad> lista, Background b)
 	{
-		// FIXME
 		lista.add(new Obstaculo(R.drawable.obstacle_stonehenge, 0));
         
 		lista.add(new Enemigo(R.drawable.enemy_stonehenge1, 0));

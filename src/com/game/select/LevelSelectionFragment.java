@@ -111,14 +111,15 @@ public class LevelSelectionFragment extends ViewPagerFragment
 		{	
 			int level = viewPager.getPosition();
 			
-			if(estadoNiveles[level])
-			{
+			//FIXME TESTING
+			//if(estadoNiveles[level])
+			//{
 				mCallback.onLevelSelectionSelectClicked(level);
-			}
-			else
-			{
-				Toast.makeText(getActivity(), R.string.text_level_disabled, Toast.LENGTH_SHORT).show();
-			}
+			//}
+			//else
+			//{
+			//	Toast.makeText(getActivity(), R.string.text_level_disabled, Toast.LENGTH_SHORT).show();
+			//}
 		}
     }
 }
