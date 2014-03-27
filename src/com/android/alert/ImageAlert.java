@@ -15,7 +15,7 @@ public abstract class ImageAlert extends WindowAlert
 		setMessage(message);
 		
 		ImageView image = new ImageView(context);
-		image.setBackgroundResource(idImage);
+		image.setImageResource(idImage);
 		
 		setView(image);
 

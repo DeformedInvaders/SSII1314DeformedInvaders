@@ -22,7 +22,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
     private String nombrePersonaje;
     
     private boolean animacionFinalizada;
-    private int contadorFrames;
     
     private ExternalStorageManager manager;
 	private AudioPlayerManager player;
@@ -150,8 +149,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
 			
-			animacionFinalizada = false;	
-			contadorFrames = 0;
+			animacionFinalizada = false;
 		}
 	}
 
@@ -165,7 +163,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
 			
 			animacionFinalizada = false;
-			contadorFrames = 0;
 		}
 	}
 
@@ -179,7 +176,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
 			
 			animacionFinalizada = false;
-			contadorFrames = 0;
 		}
 	}
 	
