@@ -30,7 +30,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	private Runnable task;
 	
 	private boolean threadActivo;
-	private boolean finAnimacion;
 	
 	/* SECTION Constructora */
 	
@@ -41,7 +40,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
         mContext = context;
         
         animacionFinalizada = true;
-        finAnimacion = false;
     }
 	
 	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, Level l)
@@ -65,16 +63,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
         	@Override
             public void run()
         	{        		 
-        		//boolean primerosCiclos = contadorFrames < NUM_FRAMES_ANIMATION / 2;
-        		
-				finAnimacion = renderer.reproducirAnimacion();
-				requestRender();
-				
-				if(finAnimacion)
+				if(renderer.reproducirAnimacion())
 				{
 					renderer.seleccionarRun();
 					animacionFinalizada = true;
 				}
+				
+				requestRender();
 
 				switch(renderer.isJuegoFinalizado())
 				{
@@ -96,10 +91,10 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				}
         	}
         };
-        
-        threadActivo = false;
-        
+               
         renderer.seleccionarRun();
+        animacionFinalizada = true;
+        threadActivo = false;
 	}
 	
 	/* SECTION Métodos abstractos OpenGLSurfaceView */

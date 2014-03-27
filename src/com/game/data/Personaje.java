@@ -11,7 +11,6 @@ public class Personaje extends Malla
 	
 	private TDeformTipo estado;
 	
-	
 	/* SECTION Constructora */
 	
 	public Personaje()
@@ -28,11 +27,9 @@ public class Personaje extends Malla
 	{
 		if(estado == TDeformTipo.Jump)
 		{
-			float dY = 5 * width / 24;
+			float dY = width / 12;
 			
-			int mitadAnimacion = posicionAnimacion / 2;
-			
-			if(posicionAnimacion < mitadAnimacion)
+			if(posicionAnimacion <= listaVerticesAnimacion.size() / 2)
 			{
 				posicionY += dY;
 			}
@@ -41,7 +38,8 @@ public class Personaje extends Malla
 				posicionY -= dY;
 			}
 		}
-		return posicionAnimacion == listaVerticesAnimacion.size();
+		
+		return posicionAnimacion == listaVerticesAnimacion.size()-1;
 	}
 	
 	/* SECTION Métodos de Animación */

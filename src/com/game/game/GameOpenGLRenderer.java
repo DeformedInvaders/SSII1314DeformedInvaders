@@ -138,14 +138,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	public boolean reproducirAnimacion()
 	{
-		// FIXME
 		// Background
 		desplazarFondo();
 		
-		// Personaje
-		personaje.animar();
-		boolean fin = personaje.avanzar(this);
-				
 		// Lista Enemigos
 		Iterator<InstanciaEntidad> it = colaEnemigos.iterator();
 		while(it.hasNext())
@@ -155,8 +150,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			instancia.avanzar(this, entidad);
 		}
 		
-		return fin;
-		
+		// Personaje
+		personaje.animar();
+		return personaje.avanzar(this);
 	}
 	
 	public void pararAnimacion()
@@ -210,6 +206,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					{
 						instancia.setDerrotado();
 					}
+					
 					listaEnemigosDerrotados.add(colaEnemigos.poll());
 					
 					return TEstadoGame.Nada;					

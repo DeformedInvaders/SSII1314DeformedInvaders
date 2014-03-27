@@ -109,6 +109,8 @@ public abstract class Malla extends Entidad
 	
 	protected void iniciar()
 	{
+		posicionY = 0.0f;
+		
 		posicionAnimacion = 0;
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
@@ -127,7 +129,7 @@ public abstract class Malla extends Entidad
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1);// % listaVerticesAnimacion.size();
+		posicionAnimacion = (posicionAnimacion + 1) % listaVerticesAnimacion.size();
 	}
 	
 	/* SECTION Métodos de Modificación de Información */

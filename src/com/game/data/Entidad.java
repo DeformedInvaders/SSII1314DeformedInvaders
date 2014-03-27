@@ -28,12 +28,13 @@ public abstract class Entidad
 		return width;
 	}
 	
+	public float getHeight()
+	{	
+		return height;
+	}
+	
 	public TTipoEntidad getTipo()
 	{
 		return tipo;
-	}
-	public float getHeight() {
-		
-		return height;
 	}
 }
