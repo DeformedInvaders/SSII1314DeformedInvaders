@@ -17,7 +17,11 @@ public class GamePreferences
 	public static final int MAX_TEXTURE_OBSTACLE = 1;
 	public static final int MAX_TEXTURE_ENEMY = 4;
 	
-	public static final int TYPE_ENEMIGOS = 4;
+	public static final int NUM_TYPE_ENEMIGOS = 4;
+	
+	public static final int TYPE_OBSTACLE = 0;
+	public static final int TYPE_ENEMY = 0;
+	public static final int TYPE_BOSS = TYPE_ENEMY + MAX_TEXTURE_ENEMY;
 	
 	/* FIXME Usar Width de pantalla */
 	
