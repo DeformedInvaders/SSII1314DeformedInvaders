@@ -1,4 +1,4 @@
-package com.project.display;
+package com.character.display;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -173,12 +173,13 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
-	public void reproducirAnimacion()
+	public boolean reproducirAnimacion()
 	{
 		personaje.animar();
+		return personaje.avanzar(this);
 	}
 	
-	public void pararAnimacion()
+	public void seleccionarReposo()
 	{
 		personaje.reposo();
 	}

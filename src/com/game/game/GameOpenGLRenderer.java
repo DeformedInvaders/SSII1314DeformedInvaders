@@ -1,9 +1,7 @@
 package com.game.game;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,7 +12,7 @@ import com.android.view.OpenGLRenderer;
 import com.game.data.Background;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
-import com.game.data.Level;
+import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
 
@@ -27,23 +25,20 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private Personaje personaje;
 	
 	// Enemigos
-	private List<Entidad> listaEnemigos;
-	private List<InstanciaEntidad> listaEnemigosDerrotados;
-	private Queue<InstanciaEntidad> colaEnemigos;
+	private List<Entidad> tipoEnemigos;
+	private List<InstanciaEntidad> listaEnemigos;
 	
 	/* SECTION Constructura */
 	
-	public GameOpenGLRenderer(Context context, Personaje p, Level l)
+	public GameOpenGLRenderer(Context context, Personaje p, InstanciaNivel l)
 	{
         super(context);
         
         personaje = p;        
         background = l.getFondoNivel();
         
+        tipoEnemigos = l.getTipoEnemigos();
         listaEnemigos = l.getListaEnemigos();
-        colaEnemigos = l.getColaEnemigos();
-        
-        listaEnemigosDerrotados = new ArrayList<InstanciaEntidad>();
 	}
 	
 	/* SECTION Métodos Renderer */
@@ -60,7 +55,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		personaje.cargarTextura(gl, this);
 		
 		// Lista Enemigos
-		Iterator<Entidad> it = listaEnemigos.iterator();
+		Iterator<Entidad> it = tipoEnemigos.iterator();
 		while(it.hasNext())
 		{
 			it.next().cargarTextura(gl, this);
@@ -83,23 +78,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		gl.glPopMatrix();
 		
 		// Cola Enemigos
-		Iterator<InstanciaEntidad> it = colaEnemigos.iterator();
+		Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
 		while(it.hasNext())
 		{
 			InstanciaEntidad instancia = it.next();
-			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
+			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
 			instancia.dibujar(gl, this, entidad);
-		}
-		
-		//Enemigos Derrotados
-		it = listaEnemigosDerrotados.iterator();
-		while(it.hasNext())
-		{
-			InstanciaEntidad instancia = it.next();
-			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
-			instancia.dibujar(gl, this, entidad);
-		}
-			
+		}			
 	}
 	
 	/* SECTION Métodos abstractos de OpenGLRenderer */
@@ -142,11 +127,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		desplazarFondo();
 		
 		// Lista Enemigos
-		Iterator<InstanciaEntidad> it = colaEnemigos.iterator();
+		Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
 		while(it.hasNext())
 		{
 			InstanciaEntidad instancia = it.next();
-			Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
+			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
 			instancia.avanzar(this, entidad);
 		}
 		
@@ -189,10 +174,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			return TEstadoGame.FinJuegoVictoria;
 		}
 		
-		if(!colaEnemigos.isEmpty())
+		Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
+		while(it.hasNext())
 		{
-			InstanciaEntidad instancia = colaEnemigos.peek();
-			switch(personaje.colision(listaEnemigos.get(instancia.getIdEntidad()), instancia))
+			InstanciaEntidad instancia = it.next();
+			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+			
+			switch(personaje.colision(entidad, instancia))
 			{
 				case Nada:
 					return TEstadoGame.Nada;
@@ -201,13 +189,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					//return TEstadoGame.FinJuegoDerrota;
 					return TEstadoGame.Nada;
 				case EnemigoFueraRango:
-					Entidad entidad = listaEnemigos.get(instancia.getIdEntidad());
 					if(entidad.getTipo() == TTipoEntidad.Enemigo)
 					{
 						instancia.setDerrotado();
 					}
-					
-					listaEnemigosDerrotados.add(colaEnemigos.poll());
 					
 					return TEstadoGame.Nada;					
 			}
@@ -224,7 +209,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		personaje.descargarTextura(this);
 		
 		// Lista Enemigos
-		Iterator<Entidad> it = listaEnemigos.iterator();
+		Iterator<Entidad> it = tipoEnemigos.iterator();
 		while(it.hasNext())
 		{
 			it.next().descargarTextura(this);

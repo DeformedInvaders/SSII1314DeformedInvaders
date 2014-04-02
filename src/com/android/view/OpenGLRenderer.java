@@ -3,8 +3,6 @@ package com.android.view;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -25,6 +23,7 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.main.GamePreferences;
 
 public abstract class OpenGLRenderer implements Renderer
 {	
@@ -43,24 +42,16 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final int POINTWIDTH = 7;
 
 	protected static final float MAX_DISTANCE_PIXELS = 10;
-	
-	protected static final float DIST_PIXELS = 20;
-	protected static final float DIST_PIXELS_EXTRA = 14;
 
-	// Parámetros de Texturas	
-	private static final int MAX_TEXTURE_BACKGROUND = 3;
-	private static final int MAX_TEXTURE_STICKER = 4;
-	private static final int MAX_TEXTURE_OBSTACLE = 1;
-	private static final int MAX_TEXTURE_ENEMY = 4;
-
+	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_FISSURE = POS_TEXTURE_BACKGROUND + MAX_TEXTURE_BACKGROUND;
+	private static final int POS_TEXTURE_FISSURE = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND;
 	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_FISSURE + 1;
-	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + MAX_TEXTURE_OBSTACLE;
+	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.MAX_TEXTURE_OBSTACLE;
 	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + 1;
-	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + MAX_TEXTURE_STICKER;
+	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.MAX_TEXTURE_STICKER;
 	
-	private static final int NUM_TEXTURES = POS_TEXTURE_ENEMY_SKELETON + MAX_TEXTURE_ENEMY * MAX_TEXTURE_STICKER + 1;
+	private static final int NUM_TEXTURES = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.MAX_TEXTURE_ENEMY * GamePreferences.MAX_TEXTURE_STICKER + 1;
 	private int[] nombreTexturas;
 
 	private FloatBuffer coordTextura;
@@ -68,9 +59,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private boolean[] cargadaTextura;
 	
-	// Fondo
-	private static final int NUM_REPETICIONES = 3;
-	
+	// Fondo	
 	private int[] indiceTexturaFondo;
 	private float[] posFondo;
 	private boolean[] dibujarFondo;
@@ -94,13 +83,13 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarMarcos();
 
 		// Fondo
-		indiceTexturaFondo = new int[MAX_TEXTURE_BACKGROUND];
-		dibujarFondo = new boolean[MAX_TEXTURE_BACKGROUND];
-		posFondo = new float[MAX_TEXTURE_BACKGROUND];
+		indiceTexturaFondo = new int[GamePreferences.MAX_TEXTURE_BACKGROUND];
+		dibujarFondo = new boolean[GamePreferences.MAX_TEXTURE_BACKGROUND];
+		posFondo = new float[GamePreferences.MAX_TEXTURE_BACKGROUND];
 		
 		fondoFinalFijado = false;
 		
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
 		{
 			indiceTexturaFondo[i] = -1;
 		}
@@ -192,7 +181,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glLoadIdentity();
 
 		// Fondo 
-		cargarTexturaFondo(gl, NUM_REPETICIONES);
+		cargarTexturaFondo(gl);
 
 		actualizarTexturaFondo();
 	}
@@ -1008,15 +997,15 @@ public abstract class OpenGLRenderer implements Renderer
 		indiceTexturaFondo[1] = indiceTextura2;
 		indiceTexturaFondo[2] = indiceTextura3;		
 		
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND - 1; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
 		{
 			dibujarFondo[i] = true;
 		}
 	}
 	
-	private void cargarTexturaFondo(GL10 gl, int numRepeticiones)
+	private void cargarTexturaFondo(GL10 gl)
 	{ 
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
 		{
 			if(indiceTexturaFondo[i] != -1)
 			{
@@ -1024,9 +1013,12 @@ public abstract class OpenGLRenderer implements Renderer
 			}
 		}
 		
-		posFondo[0] = 0;
-		posFondo[1] = screenWidth;
-		posFondo[2] = numRepeticiones * screenWidth;
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
+		{
+			posFondo[i] = i*screenWidth;
+		}
+		
+		posFondo[GamePreferences.MAX_TEXTURE_BACKGROUND - 1] = GamePreferences.NUM_ITERATION_BACKGROUND * screenWidth;
 	}
 	
 	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
@@ -1045,7 +1037,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void dibujarFondo(GL10 gl)
 	{
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
 		{
 			if(cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
@@ -1062,7 +1054,7 @@ public abstract class OpenGLRenderer implements Renderer
 		puntos.add(xRight);	puntos.add(yBottom);
 		puntos.add(xRight);	puntos.add(yTop);
 		
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
 		{
 			if(cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
@@ -1073,9 +1065,9 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void desplazarFondo()
 	{
-		float despX = 0.005f * screenWidth;
+		float despX = 0.0025f * screenWidth;
 		
-		int lastFondo = POS_TEXTURE_BACKGROUND + MAX_TEXTURE_BACKGROUND - 1;
+		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND - 1;
 		
 		// Activado de Último Fondo
 		if(posFondo[lastFondo] <= screenWidth)
@@ -1086,7 +1078,7 @@ public abstract class OpenGLRenderer implements Renderer
 			{
 				fondoFinalFijado = true;
 				
-				for(int i = 0; i < MAX_TEXTURE_BACKGROUND - 1; i++)
+				for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
 				{
 					dibujarFondo[i] = false;
 				}
@@ -1094,13 +1086,13 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 		
 		// Desplazamiento
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
 		{
 			posFondo[i] -= despX;
 		}
 		
 		// Reinicio de Fondo
-		for(int i = 0; i < MAX_TEXTURE_BACKGROUND - 1; i++)
+		for(int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
 		{
 			if(posFondo[i] <= -screenWidth)
 			{
@@ -1122,343 +1114,4 @@ public abstract class OpenGLRenderer implements Renderer
 
 		return Color.rgb(red, green, blue);
 	}
-	
-	protected FloatArray obtenerPuntosInterseccion(int tipo, int size, int color, float minX, float minY, float maxX, float maxY, float distanciaX, float distanciaY, FloatArray vertices)
-
-	{
-		FloatArray verticesInterseccion = new FloatArray();
-
-		List lineasHorizontales = new ArrayList();
-		List lineasVerticales = new ArrayList();
-		
-		float ladoX = maxX - minX;
-		float ladoY = maxY - minY;
-		
-		lineasHorizontales = obtenerLineasHorizontales(tipo, size, color, minX, minY, maxX, maxY, distanciaY, ladoX);
-		lineasVerticales = obtenerLineasVerticales(tipo, size, color, minX, minY, maxX, maxY, distanciaX, ladoY);
-		
-		verticesInterseccion = obtenerVerticesInterseccion(tipo, size, color, lineasHorizontales, lineasVerticales, vertices);
-		
-		
-		return verticesInterseccion;
-	}
-	
-	
-	private List obtenerLineasHorizontales(int tipo, int size, int color, float minX, float minY, float maxX, float maxY, float distancia, float ladoX) {
-		
-			List lineasAux = new ArrayList();
-			Punto p1 = null;
-			Punto p2 = null;
-			Recta recta = null;
-					
-			float  auxMinY = minY;
-			while((ladoX > distancia) && (auxMinY < maxY - distancia)){
-				auxMinY = auxMinY + distancia;
-	
-				p1 = new Punto(minX, auxMinY);
-				p2 = new Punto(maxX, auxMinY);
-			
-				recta = construccionRecta(p1,p2);
-				lineasAux.add(recta);	
-			}
-			return lineasAux;
-
-	}
-	
-	private List obtenerLineasVerticales(int tipo, int size, int color, float minX, float minY, float maxX, float maxY, float distancia, float ladoY) {
-		
-			List lineasAux = new ArrayList();
-			Punto p1 = null;
-			Punto p2 = null;
-			Recta recta = null;
-						
-			float auxMinX = minX;
-			while((ladoY > distancia) && (auxMinX < maxX - distancia)){
-				auxMinX = auxMinX + distancia;
-				
-				p1 = new Punto(auxMinX, minY);
-				p2 = new Punto(auxMinX, maxY);
-
-				recta = construccionRecta(p1,p2);
-				lineasAux.add(recta);
-			}
-			return lineasAux;
-		
-	}
-	
-	private FloatArray obtenerVerticesInterseccion(int tipo, int size, int color, List lineasHorizontales, List lineasVerticales, FloatArray vertices){
-		
-			FloatArray verticesInterseccion = new FloatArray();
-			ArrayList verticesInterseccionMasDistancia = new ArrayList();
-			Punto p = new Punto();
-			for(int i=0; i < lineasHorizontales.size(); i++){
-				for(int j=0; j < lineasVerticales.size(); j++){
-					p = interseccionRectas((Recta) lineasHorizontales.get(i), (Recta) lineasVerticales.get(j));
-					if (p!=null){ //si NO es null entonces se cortan
-						if(puntoEnPoligono(vertices, vertices.size, p.getX(), p.getY())){
-							if(tieneDistanciaConOtrosVertices(p, vertices, DIST_PIXELS)){
-								//añadimos los vertices a la lista
-								verticesInterseccion.add(p.getX());
-								verticesInterseccion.add(p.getY());
-							}
-							else{
-								//añadimos los vertices que no cumplen la distancia minima en una lista auxiliar por si fuera necesario meterlos
-								verticesInterseccionMasDistancia.add(p);
-							}
-							
-						}
-						
-					}	
-				}		
-			}
-			
-			int cont = 0;
-			ArrayList<Boolean> usados = new ArrayList<Boolean>();
-			for(int k=0; k<verticesInterseccionMasDistancia.size(); k++){
-				usados.add(k, false);
-			}
-
-			while ((verticesInterseccion.size < 20) && (cont < verticesInterseccionMasDistancia.size())){
-				int numeroAleatorio = 0 + (int)(Math.random()*usados.size()); 
-				if(!usados.get(numeroAleatorio)){
-					cont++;
-					usados.set(numeroAleatorio, true);
-					Punto punto = new Punto(((Punto) verticesInterseccionMasDistancia.get(numeroAleatorio)).getX(), ((Punto) verticesInterseccionMasDistancia.get(numeroAleatorio)).getY());
-					if(tieneDistanciaConOtrosVertices((Punto) verticesInterseccionMasDistancia.get(numeroAleatorio), vertices, DIST_PIXELS_EXTRA)){
-						verticesInterseccion.add(punto.getX());
-						verticesInterseccion.add(punto.getY());
-					}
-				}
-				
-			}
-			
-			return verticesInterseccion;
-		
-	}
-	
-	
-	private Recta construccionRecta(Punto p1, Punto p2) {
-		Recta recta = null;
-		if(p1.getX() == p2.getX()){
-			recta = new Recta(1, 0, - p1.getX());
-		}
-		else{
-			float aux = ((p2.getY() - p1.getY()) / (p2.getX() - p1.getX()));
-			recta = new Recta(-aux, 1, (-p1.getY() + (aux * p1.getX())));
-		}
-		return recta;
-	}
-
-	private Punto interseccionRectas(Recta recta1, Recta recta2) {
-		Punto punto;
-		float xObtenido, yObtenido;
-		float factorXRecta1 = recta1.getFactorX();
-		float factorYRecta1 = recta1.getFactorY();
-		float coeficienteRecta1 = recta1.getCoeficiente();
-		float factorXRecta2 = recta2.getFactorX();
-		float factorYRecta2 = recta2.getFactorY();
-		float coeficienteRecta2 = recta2.getCoeficiente();
-
-		//la recta de igualacion se consigue dejando las y = 0 y por lo tanto no tiene factorY
-		if(factorYRecta1 == factorYRecta2){
-			Recta rectaIgualacion = new Recta (0, factorXRecta1 - factorXRecta2, coeficienteRecta1 - coeficienteRecta2);
-			//se obtiene la X cogiendo la y=0 porque por la recta de igualacion se ha ido
-			xObtenido = rectaIgualacion.darXdadoY(0);
-			//se obtiene la y cogiendo la xObtenido y metiendola en cualquiera de las 2 rectas que te pasan por parametro
-			yObtenido = recta1.darYdadoX(xObtenido);
-		}
-		else{
-			if(factorYRecta1 != 0){
-				yObtenido = - coeficienteRecta1;
-				xObtenido = recta2.darXdadoY(yObtenido);
-			}
-			else{
-				xObtenido = - coeficienteRecta1;
-				yObtenido = recta1.darYdadoX(xObtenido);
-			}
-		}
-		
-		
-		//compruebacion de si cortan
-		//si no se cortan tienen los mismos factores de x e y
-		if((factorXRecta1 == factorXRecta2) && (factorYRecta1 == factorYRecta2)){
-			punto = null;
-		}
-		else{
-			punto = new Punto(xObtenido, yObtenido);
-		}
-		return punto;
-	}
-
-	/*	Test del Rayo:
-	Consiste en trazar una semirecta, generalmente horizontal, desde el punto
-	hasta hasta el infinito, y contar la cantidad de veces que corta al polígono.
-	Si la cantidad es par entonces se encuentra fuera del polígono, y si se
-	encuentra dentro la cantidad de cortes será impar.*/
-	private boolean puntoEnPoligono(FloatArray vertices,int N, float puntoX, float puntoY){
-		boolean dentro = false;
-		int numIntersecciones = 0;
-		int i;
-		double xinters;
-		float punto1X, punto1Y, punto2X, punto2Y;
-
-		punto1X = vertices.get(0);
-		punto1Y = vertices.get(1);
-		for (i=2; i<N; i= i+2) {
-		   punto2X = vertices.get(i % N);
-		   punto2Y = vertices.get((i+1) % N);
-		   if (puntoY > min2Puntos(punto1Y,punto2Y)) {
-			   if (puntoY <= max2Punto(punto1Y,punto2Y)) {
-			      if (puntoX <= max2Punto(punto1X,punto2X)) {
-			          if (punto1Y != punto2Y) {
-			              xinters = (puntoY - punto1Y)*(punto2X - punto1X)/(punto2Y - punto1Y) + punto1X;
-			              if (punto1X == punto2X || puntoX <= xinters){
-			            	  numIntersecciones++;
-			              }
-			          }
-			      }
-			   } 
-		   }
-		   
-		   punto1X = punto2X;
-		   punto1Y = punto2Y;
-		}
-
-		if (numIntersecciones % 2 == 0){
-			dentro = false;
-		}
-		else{
-			dentro = true;
-		}
-		return dentro;
-		
-	}
-	
-
-	private float min2Puntos(float punto1Y, float punto2Y) {
-		float minimo;
-		if(punto1Y < punto2Y){
-			minimo = punto1Y;
-		}
-		else{
-			minimo = punto2Y;
-		}
-		return minimo;
-	}
-
-	private float max2Punto(float punto1Y, float punto2Y) {
-		float maximo;
-		if(punto1Y > punto2Y){
-			maximo = punto1Y;
-		}
-		else{
-			maximo = punto2Y;
-		}
-		return maximo;
-	}
-	
-	private boolean tieneDistanciaConOtrosVertices(Punto p, FloatArray vertices, float distancia){
-		boolean tieneDistancia = true;
-		int i = 0;
-		while((i < vertices.size) && (tieneDistancia)){
-			Punto p2 = new Punto(vertices.get(i), vertices.get(i+1));
-			if(distancia2Puntos(p, p2) < distancia){
-				tieneDistancia = false;
-			}
-
-			i = i+2;
-		}
-		
-		return tieneDistancia;
-	}
-	
-	private float distancia2Puntos(Punto p1, Punto p2){
-		return (float) (Math.sqrt(Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2)));
-	}
-	
-	protected float areaRectangulo(float ladoX, float ladoY) {
-		return ladoX*ladoY;
-	}
-	
-	//Clases auxiliares
-		public class Punto{
-
-			private float x;
-			private float y;
-			
-			public Punto(){
-				
-			}
-			
-			public Punto(float a, float b){
-				x = a;
-				y = b;
-			}
-
-			public float getX() {
-				return x;
-			}
-
-			public void setX(float x) {
-				this.x = x;
-			}
-
-			public float getY() {
-				return y;
-			}
-
-			public void setY(float y) {
-				this.y = y;
-			}
-			
-			
-		}
-			
-		public class Recta{
-
-			private float factorX, factorY, coeficiente;
-			
-			public Recta(){
-				
-			}
-			
-			public Recta(float fX, float fY, float coef){
-				factorX = fX;
-				factorY = fY;
-				coeficiente = coef;
-			}
-
-			public float getFactorX() {
-				return factorX;
-			}
-
-			public void setFactorX(float factorX) {
-				this.factorX = factorX;
-			}
-
-			public float getFactorY() {
-				return factorY;
-			}
-
-			public void setFactorY(float factorY) {
-				this.factorY = factorY;
-			}
-
-			public float getCoeficiente() {
-				return coeficiente;
-			}
-
-			public void setCoeficiente(float coeficiente) {
-				this.coeficiente = coeficiente;
-			}
-
-			public float darXdadoY(float y){
-				return (- factorY * y - coeficiente) / factorX;
-			}
-				
-			public float darYdadoX(float x){
-				return (- factorX * x - coeficiente) / factorY;
-			}
-			
-		}
 }

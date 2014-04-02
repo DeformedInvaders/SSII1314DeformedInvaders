@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
+import com.character.display.TCapturaEstado;
 import com.creation.data.Accion;
 import com.creation.data.Esqueleto;
 import com.creation.data.Handle;
@@ -24,7 +25,6 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.display.TCapturaEstado;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {		

@@ -1,4 +1,4 @@
-package com.selection.select;
+package com.character.select;
 
 import java.util.Iterator;
 import java.util.List;

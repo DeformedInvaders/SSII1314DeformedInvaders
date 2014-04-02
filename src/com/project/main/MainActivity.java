@@ -1,8 +1,11 @@
 package com.project.main;
 
+import java.io.File;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -20,6 +23,7 @@ import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
+import com.character.select.CharacterSelectionFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.Textura;
@@ -30,8 +34,6 @@ import com.game.data.Personaje;
 import com.game.game.GameFragment;
 import com.game.select.LevelGenerator;
 import com.game.select.LevelSelectionFragment;
-import com.project.loading.LoadingFragment;
-import com.selection.select.CharacterSelectionFragment;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener 
 {	
@@ -39,14 +41,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
 	private int personajeSeleccionado;
-	private boolean[] estadoNiveles;
 
 	/* Almacenamiento */
 	private InternalStorageManager internalManager;
 	private ExternalStorageManager externalManager;
 	
 	/* Conectores Sociales */
-	private SocialConnector connector;
+	private SocialConnector socialConnector;
 	
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
@@ -55,7 +56,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Estado */
 	private TEstado estado;
 	
+	/* Niveles */
 	private LevelGenerator levelGenerator;
+	private boolean[] estadoNiveles;
 
 	/* SECTION Métodos Activity */
 	
@@ -70,7 +73,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		
 		internalManager = new InternalStorageManager(this);
 		externalManager = new ExternalStorageManager();
-		connector = new SocialConnector(this);
+		socialConnector = new SocialConnector(this);
 		levelGenerator = new LevelGenerator(this);
 		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -82,7 +85,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onBackPressed()
 	{
-		if(estado != TEstado.Main)// && estado != TEstado.Game)
+		if(estado != TEstado.Main && estado != TEstado.Game)
 		{	
 			limpiarActionBar();
 			
@@ -161,7 +164,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		listaPersonajes = lista;
 		personajeSeleccionado = seleccionado;
 		estadoNiveles = niveles;
-		
+
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 	}
 	
@@ -178,13 +181,13 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
     public void onMainSelectButtonClicked()
     {
-    	changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, externalManager, connector));
+    	changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, externalManager, socialConnector));
     }
     
 	@Override
     public void onMainPlayButtonClicked()
     {
-		changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+		changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
     }
 	
 	/* SECTION Métodos Design Fragment */
@@ -338,7 +341,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Game Fragment */
 	
 	@Override
-	public void onGameFinished(final int level, final int idImagen)
+	public void onGameFinished(final int level, final int idImagen, final String nameLevel)
 	{
 		// Desbloquear Siguiente nivel
 		int nextLevel = (level + 1) % estadoNiveles.length;
@@ -346,6 +349,18 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		estadoNiveles[nextLevel] = true;
 		internalManager.guardarNiveles(estadoNiveles);
 		
+		// Publicar Nivel Completado
+		String nombreFotoNivel = "nivel"+level;
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), idImagen);
+		if(externalManager.guardarImagenTemp(bitmap, nombreFotoNivel))
+		{
+			String text = getString(R.string.text_social_level_completed_initial)+" "+nameLevel+" "+getString(R.string.text_social_level_completed_final);
+			
+			File foto = externalManager.cargarImagenTemp(nombreFotoNivel);
+			socialConnector.publicar(text, foto);
+		}
+		
+		// Seleccionar Siguiente Nivel
 		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_finish), getString(R.string.text_game_finish_description), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
 
 			@Override
@@ -357,7 +372,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onNegativeButtonClick()
 			{
-				changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+				changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
 			}
     	};
     	
@@ -378,7 +393,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onNegativeButtonClick()
 			{
-				changeFragment(LevelSelectionFragment.newInstance(estadoNiveles));
+				changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
 			}
     	};
     	
@@ -389,31 +404,31 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
     
 	public void onMenuTwitterButtonClicked()
 	{
-		if(connector.isTwitterConnected())
+		if(socialConnector.isTwitterConnected())
 		{
-			connector.desconectarTwitter();
+			socialConnector.desconectarTwitter();
 		}
 		else
 		{
-			connector.conectarTwitter();
+			socialConnector.conectarTwitter();
 		}
 	}
 	
 	public void onMenuFacebookButtonClicked()
 	{
-		if(connector.isFacebookConnected())
+		if(socialConnector.isFacebookConnected())
 		{
-			connector.desconectarFacebook();
+			socialConnector.desconectarFacebook();
 		}
 		else
 		{
-			connector.conectarFacebook();
+			socialConnector.conectarFacebook();
 		}
 	}
 	
 	public void actualizarActionBar()
 	{
-		if(connector.isTwitterConnected())
+		if(socialConnector.isTwitterConnected())
 		{
 			botonTwitter.setIcon(R.drawable.menu_twitter_connected);
 		}
@@ -422,7 +437,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			botonTwitter.setIcon(R.drawable.menu_twitter);
 		}
 		
-		if(connector.isFacebookConnected())
+		if(socialConnector.isFacebookConnected())
 		{
 			botonFacebook.setIcon(R.drawable.menu_facebook_connected);
 		}

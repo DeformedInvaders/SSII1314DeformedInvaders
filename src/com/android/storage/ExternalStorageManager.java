@@ -276,6 +276,42 @@ public class ExternalStorageManager
 	
 	/* SECTION Métodos Lectura y Escritura Temporal */
 	
+	public File cargarImagenTemp(String nombre)
+	{
+		comprobarDirectorioTemp();
+		
+		return new File(getFicheroTemp(nombre));
+	}
+	
+	public boolean guardarImagenTemp(Bitmap bitmap, String nombre)
+	{
+		comprobarDirectorioTemp();
+	
+		try
+		{
+			File file = new File(getFicheroTemp(nombre));
+			FileOutputStream data = new FileOutputStream(file);
+			
+			bitmap.compress(Bitmap.CompressFormat.PNG, 85, data);
+			
+			data.flush();
+			data.close();
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File SaveImage file not found");
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "File SaveImage ioexception");
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	public String cargarAudioTemp(String movimiento)
 	{
 		comprobarDirectorioTemp();

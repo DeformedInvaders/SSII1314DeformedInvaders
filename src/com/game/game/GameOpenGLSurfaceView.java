@@ -8,8 +8,9 @@ import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
-import com.game.data.Level;
+import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class GameOpenGLSurfaceView extends OpenGLSurfaceView
@@ -42,7 +43,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
         animacionFinalizada = true;
     }
 	
-	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, Level l)
+	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, InstanciaNivel l)
 	{        
         manager = m;
         nombrePersonaje = p.getNombre();
@@ -74,7 +75,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				switch(renderer.isJuegoFinalizado())
 				{
 					case Nada:
-						handler.postDelayed(this, TIME_INTERVAL_ANIMATION);
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
 					break;
 					case FinJuegoVictoria:
 						renderer.pararAnimacion();
@@ -124,53 +125,70 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	}
 	
 	/* SECTION Métodos de Selección de Estado */
-
-	public void seleccionarRun()
-	{
-		if(!threadActivo)
-		{
-			task.run();
-			
-			threadActivo = true;
-		}
-	}
 	
 	public void seleccionarJump() 
 	{
-		if(animacionFinalizada)
+		if(threadActivo)
 		{
-			renderer.seleccionarJump();
-			requestRender();
-			
-			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
-			
-			animacionFinalizada = false;
+			if(animacionFinalizada)
+			{
+				renderer.seleccionarJump();
+				requestRender();
+				
+				player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
+				
+				animacionFinalizada = false;
+			}
 		}
 	}
 
 	public void seleccionarCrouch()
 	{
-		if(animacionFinalizada)
+		if(threadActivo)
 		{
-			renderer.seleccionarCrouch();
-			requestRender();
-			
-			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
-			
-			animacionFinalizada = false;
+			if(animacionFinalizada)
+			{
+				renderer.seleccionarCrouch();
+				requestRender();
+				
+				player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
+				
+				animacionFinalizada = false;
+			}
 		}
 	}
 
 	public void seleccionarAttack() 
 	{
-		if(animacionFinalizada)
+		if(threadActivo)
 		{
-			renderer.seleccionarAttack();
-			requestRender();
-			
-			player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
-			
-			animacionFinalizada = false;
+			if(animacionFinalizada)
+			{
+				renderer.seleccionarAttack();
+				requestRender();
+				
+				player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
+				
+				animacionFinalizada = false;
+			}
+		}
+	}
+	
+	public void seleccionarResume()
+	{
+		if(!threadActivo)
+		{
+			task.run();
+			threadActivo = true;
+		}
+	}
+	
+	public void seleccionarPause()
+	{
+		if(threadActivo)
+		{
+			handler.removeCallbacks(task);
+			threadActivo = false;
 		}
 	}
 	

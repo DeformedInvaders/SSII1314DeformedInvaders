@@ -12,6 +12,7 @@ import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
 import com.android.touch.TTouchEstado;
 import com.android.touch.GameDetector;
+import com.project.main.GamePreferences;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
@@ -25,14 +26,6 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private MoveDetector moveDetector;
 	private RotateDetector rotateDetector;
 	private GameDetector gameDetector;
-	
-	// Multitouch
-	protected static final int NUM_HANDLES = 10;
-	
-	// Animación
-	protected static final int NUM_FRAMES_ANIMATION = 24;
-	protected static final long TIME_INTERVAL_ANIMATION = 20;
-	protected static final long TIME_DURATION_ANIMATION = NUM_FRAMES_ANIMATION * TIME_INTERVAL_ANIMATION;
     
 	/* SECTION Constructora */
 	
@@ -196,7 +189,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			float screenWidth = getWidth();
 			float screenHeight = getHeight();
 			
-			if(pointCount > NUM_HANDLES) pointCount = NUM_HANDLES;
+			if(pointCount > GamePreferences.NUM_HANDLES) pointCount = GamePreferences.NUM_HANDLES;
 			
 			for(int i = 0; i < pointCount; i++)
 			{

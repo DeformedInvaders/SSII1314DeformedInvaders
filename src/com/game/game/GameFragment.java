@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
-import com.game.data.Level;
+import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.project.main.R;
 
@@ -20,22 +21,24 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	private ExternalStorageManager manager;
 	
-	private Level level;
+	private InstanciaNivel level;
 	private Personaje personaje;
 
 	private GameOpenGLSurfaceView canvas;
-	private ImageButton botonRun, botonJump, botonCrouch, botonAttack;
+	private ImageButton botonPlay, botonJump, botonCrouch, botonAttack;
+	
+	private boolean gamePaused;
 	
 	/* SECTION Constructora */
 	
-	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, Level l)
+	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, InstanciaNivel l)
 	{
 		GameFragment fragment = new GameFragment();
 		fragment.setParameters(p, m, l);
 		return fragment;
 	}
 	
-	private void setParameters(Personaje p, ExternalStorageManager m, Level l)
+	private void setParameters(Personaje p, ExternalStorageManager m, InstanciaNivel l)
 	{	
 		personaje = p;
 		manager = m;
@@ -44,7 +47,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	public interface GameFragmentListener
 	{
-        public void onGameFinished(int level, int idImage);
+        public void onGameFinished(int level, int idImage, String nameLevel);
         public void onGameFailed(int level, int idImage);
     }
 	
@@ -55,6 +58,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		super.onAttach(activity);
 		mCallback = (GameFragmentListener) activity;
+		
+		gamePaused = true;
 	}
 	
 	@Override
@@ -73,15 +78,15 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(personaje, manager, this, level);
 		
-		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonGame2);
 		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonGame3);
 		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonGame4);
+		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		
-		botonRun.setOnClickListener(new OnRunGameClickListener());
 		botonJump.setOnClickListener(new OnJumpGameClickListener());
 		botonCrouch.setOnClickListener(new OnCrouchGameClickListener());
 		botonAttack.setOnClickListener(new OnAttackGameClickListener());
+		botonPlay.setOnClickListener(new onPlayGameClickListener());
 		
 		setCanvasListener(canvas);
 		
@@ -97,7 +102,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		canvas = null;
 		
-		botonRun = null;
+		botonPlay = null;
 		botonJump = null;
 		botonAttack = null;
 		botonCrouch = null;
@@ -121,28 +126,31 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	/* SECTION Métodos abstractos de OpenGLFragment */
 	
 	@Override
-	protected void reiniciarInterfaz() { }
+	protected void reiniciarInterfaz()
+	{
+		botonPlay.setBackgroundResource(R.drawable.icon_pause);
+	}
 	
 	@Override
-	protected void actualizarInterfaz() { }
-
-	/* SECTION Métodos Listener onClick */
-	
-	private class OnRunGameClickListener implements OnClickListener
+	protected void actualizarInterfaz()
 	{
-		@Override
-		public void onClick(View v)
+		if(gamePaused)
 		{
-			canvas.seleccionarRun();
+			botonPlay.setBackgroundResource(R.drawable.icon_play);
 		}
 	}
+
+	/* SECTION Métodos Listener onClick */
 	
 	private class OnJumpGameClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarJump();
+			if(!gamePaused)
+			{
+				canvas.seleccionarJump();
+			}
 		}
 	}
 	
@@ -151,7 +159,10 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarCrouch();			
+			if(!gamePaused)
+			{
+				canvas.seleccionarCrouch();		
+			}
 		}
 	}
 	
@@ -160,7 +171,33 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAttack();
+			if(!gamePaused)
+			{
+				canvas.seleccionarAttack();
+			}
+		}
+	}
+	
+	private class onPlayGameClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			gamePaused = !gamePaused;
+			
+			if(gamePaused)
+			{
+				canvas.seleccionarPause();
+				
+				Toast.makeText(getActivity(), R.string.text_game_paused, Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				canvas.seleccionarResume();
+			}
+			
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 	
@@ -168,11 +205,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	
 	public void onGameFinished()
 	{
-		mCallback.onGameFinished(level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted());
+		mCallback.onGameFinished(level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
 	}
 	
 	public void onGameFailed()
 	{
-		mCallback.onGameFinished(level.getIndiceNivel(), level.getFondoNivel().getIdTextureGameOver());
+		mCallback.onGameFailed(level.getIndiceNivel(), level.getFondoNivel().getIdTextureGameOver());
 	}
 }

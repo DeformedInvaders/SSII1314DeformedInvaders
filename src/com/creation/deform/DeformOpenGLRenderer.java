@@ -20,14 +20,13 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.main.GamePreferences;
 
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
 	private TDeformTipo tipoDeformacion;
 	private Deformator deformator;
 	
-	private final int NUM_HANDLES;
-	//private final static int NUM_ITER = 20;
 	private final int NUM_FRAMES;
 	
 	// Modo Grabado
@@ -84,12 +83,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	/* SECTION Constructora */
 	
-	public DeformOpenGLRenderer(Context context, int num_handles, Esqueleto esqueleto, Textura textura, TDeformTipo tipo, int numero_frames )
+	public DeformOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura, TDeformTipo tipo, int numero_frames )
 	{
         super(context);
         
-        NUM_HANDLES = num_handles;
         NUM_FRAMES = numero_frames;
+        
         tipoDeformacion = tipo;
         estado = TDeformEstado.Nada;
         modoGrabar = false;
@@ -514,12 +513,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		contornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
 	}
 	
-	public void reproducirAnimacion()
+	public boolean reproducirAnimacion()
 	{
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		BufferManager.actualizarBufferListaTriangulosRellenos(triangulosAnimacion, triangulos, verticesAnimacion);
 		BufferManager.actualizarBufferListaIndicePuntos(contornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion = (posicionAnimacion + 1)  % listaVerticesAnimacion.size();
+		posicionAnimacion++;
+		
+		return posicionAnimacion == listaVerticesAnimacion.size();
 	}
 	
 	private void reiniciarHandles()
@@ -539,7 +540,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	private void reinciarHandlesSeleccionados()
 	{
-        for(int i = 0; i < NUM_HANDLES; i++)
+        for(int i = 0; i < GamePreferences.NUM_HANDLES; i++)
         {
         	// Indice Handle
         	handleSeleccionado.add(-1);

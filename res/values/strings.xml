@@ -70,9 +70,11 @@
 			
 			<string name="text_social_photo_title">Uploading a picture.</string>
 			
-			<string name="text_social_photo_initial">I just created</string>
-			<string name="text_social_photo_final">using #DeformedInvaders</string>
-			<string name="text_social_via">, via #DeformedInvaders</string>
+			<string name="text_social_create_character_initial">I just created</string>
+			<string name="text_social_create_character_final">using #DeformedInvaders</string>
+			
+			<string name="text_social_level_completed_initial">I just completed</string>
+			<string name="text_social_level_completed_final">level, using #DeformedInvaders</string>		
 			
 			<string name="text_twitter_title">Twitter OAuth.</string>
 			<string name="text_facebook_title">Facebook OAuth.</string>
@@ -93,6 +95,8 @@
 			
 			<string name="text_game_fail">Game over.</string>
 			<string name="text_game_fail_description">Do you want to replay this level?.</string>
+			
+			<string name="text_game_paused">Game paused.</string>
 			
 			<string name="text_button_yes">Yes</string>
 			<string name="text_button_no">No</string>
@@ -182,6 +186,10 @@
 	    	<string name="desc_select_jump">Play jump animation.</string>
 	    	<string name="desc_select_crouch">Play crouch animation.</string>
 	    	<string name="desc_select_attack">Play attack animation.</string>
+	    	
+	    <!-- Game Fragment -->
+	    	<string name="desc_game_play">Resume the game.</string>
+	    	<string name="desc_game_pause">Pause the game.</string>
 	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Record with the microphone.</string>

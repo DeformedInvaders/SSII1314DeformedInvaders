@@ -1,4 +1,4 @@
-package com.selection.select;
+package com.character.select;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.android.view.ViewPagerSwipeable;
+import com.character.display.DisplayGLSurfaceView;
 import com.creation.design.TDisplayTipo;
 import com.game.data.Personaje;
-import com.project.display.DisplayGLSurfaceView;
 import com.project.main.R;
 
 public class CharacterSelectFragment extends OpenGLFragment
@@ -159,7 +159,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 				Bitmap bitmap = canvas.getCapturaPantalla();
 				if(manager.guardarImagen(bitmap, personaje.getNombre()))
 				{
-					String text = getString(R.string.text_social_photo_initial)+" "+personaje.getNombre()+" "+getString(R.string.text_social_photo_final);
+					String text = getString(R.string.text_social_create_character_initial)+" "+personaje.getNombre()+" "+getString(R.string.text_social_create_character_final);
 					
 					TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_social_share_title), getString(R.string.text_social_share_description), text, getString(R.string.text_button_send), getString(R.string.text_button_cancel)) {
 			

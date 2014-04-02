@@ -21,13 +21,12 @@ import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
-import com.project.loading.LoadingFragment;
+import com.project.main.GamePreferences;
+import com.project.main.LoadingFragment;
 import com.project.main.R;
 
 public class InternalStorageManager
-{
-	private static final int NUM_LEVELS = 5;
-	
+{	
 	private static final String CHARACTERS_FILE = "CharactersDataBase";
 	private static final String CHARACTER_CHOSEN_FILE = "CharacterChosen";
 	private static final String CHARACTERS_NAMES_FILE = "CharactersNamesDataBase";
@@ -387,7 +386,7 @@ public class InternalStorageManager
 	
 	public boolean[] cargarNiveles()
 	{
-		boolean[] niveles = new boolean[NUM_LEVELS];
+		boolean[] niveles = new boolean[GamePreferences.NUM_LEVELS];
 		
 		try
 		{
@@ -395,10 +394,12 @@ public class InternalStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 			
 			// Cargar Niveles Jugados
-			for(int i = 0; i < NUM_LEVELS; i++)
+			for(int i = 0; i < GamePreferences.NUM_LEVELS; i++)
 			{
 				niveles[i] = data.readBoolean();
 			}
+			
+			niveles[0] = true;
 			
 			data.close();
 			file.close();

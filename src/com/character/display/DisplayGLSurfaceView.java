@@ -1,8 +1,8 @@
-package com.project.display;
+package com.character.display;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.android.audio.AudioPlayerManager;
@@ -11,6 +11,7 @@ import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.design.TDisplayTipo;
 import com.game.data.Personaje;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class DisplayGLSurfaceView extends OpenGLSurfaceView
@@ -22,13 +23,17 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
     private TDisplayTipo tipoDisplay;
     
     private String nombre;
-    private boolean personajeCargado, animacionFinalizada;
+    private boolean personajeCargado;
     
     private ExternalStorageManager manager;
-	private CountDownTimer timer;
 	private AudioPlayerManager player;
-    
-	/* SECTION Constructora */
+	
+	private Handler handler;
+	private Runnable task;
+	
+	private boolean threadActivo;
+	
+    /* SECTION Constructora */
 	
     public DisplayGLSurfaceView(Context context, AttributeSet attrs)
     {
@@ -36,25 +41,26 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
        
         mContext = context;
         
-        animacionFinalizada = true;
+        handler = new Handler();
         
-        timer = new CountDownTimer(TIME_DURATION_ANIMATION, TIME_INTERVAL_ANIMATION) {
-
-			@Override
-			public void onFinish() 
-			{ 
-				renderer.pararAnimacion();
-				animacionFinalizada = true;
-				requestRender();
-			}
-
-			@Override
-			public void onTick(long arg0) 
-			{
-				renderer.reproducirAnimacion();
-				requestRender();
-			}
+        task = new Runnable() {
+        	@Override
+            public void run()
+        	{        		 
+				if(!renderer.reproducirAnimacion())
+				{
+					requestRender();
+					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+				}
+				else
+				{
+					renderer.seleccionarReposo();
+					threadActivo = false;
+				}
+        	}
         };
+        
+        threadActivo = false;
     }
 	
 	public void setParameters(Personaje p, ExternalStorageManager m, TDisplayTipo e)
@@ -94,23 +100,20 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 			{
 				int animacion = (int) Math.floor(Math.random()*4);
 				
-				if(animacionFinalizada)
+				switch(animacion)
 				{
-					switch(animacion)
-					{
-						case 0:
-							seleccionarRun();
-						break;
-						case 1:
-							seleccionarJump();
-						break;
-						case 2:
-							seleccionarCrouch();
-						break;
-						case 3:
-							seleccionarAttack();
-						break;
-					}
+					case 0:
+						seleccionarRun();
+					break;
+					case 1:
+						seleccionarJump();
+					break;
+					case 2:
+						seleccionarCrouch();
+					break;
+					case 3:
+						seleccionarAttack();
+					break;
 				}
 				
 				return true;
@@ -142,58 +145,54 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	
 	public void seleccionarRun() 
 	{
-		if(animacionFinalizada)
+		if(!threadActivo)
 		{
 			renderer.seleccionarRun();
 			requestRender();
 			
 			
-			timer.start();
+			task.run();
+			threadActivo = true;
 			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_run));
-			
-			animacionFinalizada = false;
 		}
 	}
 
 	public void seleccionarJump() 
 	{
-		if(animacionFinalizada)
+		if(!threadActivo)
 		{
 			renderer.seleccionarJump();
 			requestRender();
 			
-			timer.start();
+			task.run();
+			threadActivo = true;
 			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_jump));
-			
-			animacionFinalizada = false;
 		}
 	}
 
 	public void seleccionarCrouch()
 	{
-		if(animacionFinalizada)
+		if(!threadActivo)
 		{
 			renderer.seleccionarCrouch();
 			requestRender();
 			
-			timer.start();
+			task.run();
+			threadActivo = true;
 			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_crouch));
-			
-			animacionFinalizada = false;
 		}
 	}
 
 	public void seleccionarAttack() 
 	{
-		if(animacionFinalizada)
+		if(!threadActivo)
 		{
 			renderer.seleccionarAttack();
 			requestRender();
 			
-			timer.start();
+			task.run();
+			threadActivo = true;
 			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_attack));
-			
-			animacionFinalizada = false;
 		}
 	}
 	

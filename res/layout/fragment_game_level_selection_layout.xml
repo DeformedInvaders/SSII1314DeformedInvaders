@@ -5,14 +5,5 @@
     
    <com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
 	    android:id="@+id/pagerViewLevelSelection1"/>
-   
-	<LinearLayout style="@style/Layout_Center_FragmentButton_Style">
-
-        <ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonLevel1"
-            android:contentDescription="@string/desc_magic"
-            android:background="@drawable/icon_level_locked" />
-	
-	</LinearLayout>
 
 </RelativeLayout>

@@ -1,23 +1,22 @@
 package com.game.data;
 
 import java.util.List;
-import java.util.Queue;
 
-public class Level
+public class InstanciaNivel
 {
 	private int indiceNivel;
 	private String nombreNivel;
 	
-	private List<Entidad> listaEnemigos;
-	private Queue<InstanciaEntidad> colaEnemigos;
+	private List<Entidad> tiposEnemigos;
+	private List<InstanciaEntidad> listaEnemigos;
 	private Background fondoNivel;
 	
-	public Level(int indice, String nombre, List<Entidad> lista, Queue<InstanciaEntidad> cola, Background fondo)
+	public InstanciaNivel(int indice, String nombre, List<Entidad> tipos, List<InstanciaEntidad> lista, Background fondo)
 	{
 		indiceNivel = indice;
 		nombreNivel = nombre;
+		tiposEnemigos = tipos;
 		listaEnemigos = lista;
-		colaEnemigos = cola;
 		fondoNivel = fondo;
 	}
 
@@ -31,14 +30,14 @@ public class Level
 		return nombreNivel;
 	}
 
-	public List<Entidad> getListaEnemigos()
+	public List<Entidad> getTipoEnemigos()
 	{
-		return listaEnemigos;
+		return tiposEnemigos;
 	}
 
-	public Queue<InstanciaEntidad> getColaEnemigos()
+	public List<InstanciaEntidad> getListaEnemigos()
 	{
-		return colaEnemigos;
+		return listaEnemigos;
 	}
 
 	public Background getFondoNivel()

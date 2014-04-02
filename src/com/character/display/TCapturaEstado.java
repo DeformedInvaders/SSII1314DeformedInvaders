@@ -1,4 +1,4 @@
-package com.project.display;
+package com.character.display;
 
 public enum TCapturaEstado
 {

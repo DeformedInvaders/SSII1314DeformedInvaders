@@ -3,7 +3,7 @@ package com.creation.deform;
 import java.util.List;
 
 import android.content.Context;
-import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.android.touch.TTouchEstado;
@@ -11,12 +11,16 @@ import com.android.view.OpenGLSurfaceView;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
+import com.project.main.GamePreferences;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
     private DeformOpenGLRenderer renderer;
     
-    private CountDownTimer timer;
+    private Handler handler;
+	private Runnable task;
+	
+	private boolean threadActivo;
     
     /* SECTION Constructora */
 
@@ -27,27 +31,32 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	
 	public void setParameters(Esqueleto esqueleto, Textura textura, TDeformTipo tipo, final DeformFragment fragmento, int num_frames)
 	{
-		renderer = new DeformOpenGLRenderer(getContext(), NUM_HANDLES, esqueleto, textura, tipo, num_frames);
+		renderer = new DeformOpenGLRenderer(getContext(), esqueleto, textura, tipo, num_frames);
 		setRenderer(renderer);
 		
-		timer = new CountDownTimer(TIME_DURATION_ANIMATION, TIME_INTERVAL_ANIMATION) 
-		{
-
-			@Override
-			public void onFinish() 
-			{ 
-				renderer.seleccionarReposo();
-				fragmento.reiniciarInterfaz();
-				fragmento.actualizarInterfaz();
-			}
-
-			@Override
-			public void onTick(long arg0) 
-			{
-				renderer.reproducirAnimacion();
-				requestRender();
-			}
+		handler = new Handler();
+        
+        task = new Runnable() {
+        	@Override
+            public void run()
+        	{        		 
+				if(!renderer.reproducirAnimacion())
+				{
+					requestRender();
+					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+				}
+				else
+				{
+					renderer.seleccionarReposo();
+					fragmento.reiniciarInterfaz();
+					fragmento.actualizarInterfaz();
+					
+					threadActivo = false;
+				}
+        	}
         };
+        
+        threadActivo = false;
 	}
 	
     /* SECTION Métodos Abstráctos OpenGLSurfaceView */
@@ -107,10 +116,14 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 
 	public void seleccionarPlay() 
 	{
-		renderer.selecionarPlay();
-		requestRender();
-		
-		timer.start();
+		if(!threadActivo)
+		{
+			renderer.selecionarPlay();
+			requestRender();
+			
+			task.run();
+			threadActivo = true;
+		}
 	}
 	
 	public void seleccionarAudio()
