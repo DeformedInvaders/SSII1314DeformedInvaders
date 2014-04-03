@@ -1,5 +1,6 @@
 package com.game.select;
 
-public enum TLevelTipo {
+public enum TLevelTipo
+{
 	Moon, NewYork, Rome, Egypt, Stonehenge
 }

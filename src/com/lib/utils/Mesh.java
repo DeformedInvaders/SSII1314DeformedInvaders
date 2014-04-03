@@ -4,12 +4,12 @@ public class Mesh {
 
 	private FloatArray vertices;
 	private ShortArray triangulos;
-	
+
 	public Mesh() {
 		this.vertices = new FloatArray();
 		this.triangulos = new ShortArray();
 	}
-	
+
 	public Mesh(FloatArray vertices, ShortArray triangulos) {
 		this.vertices = vertices;
 		this.triangulos = triangulos;
@@ -30,5 +30,5 @@ public class Mesh {
 	public void setTriangulos(ShortArray triangulos) {
 		this.triangulos = triangulos;
 	}
-	
+
 }

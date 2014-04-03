@@ -19,36 +19,53 @@ package com.lib.math;
 import com.lib.utils.FloatArray;
 import com.lib.utils.IntArray;
 
-/** Computes the convex hull of a set of points using the monotone chain convex hull algorithm (aka Andrew's algorithm).
- * @author Nathan Sweet */
+/**
+ * Computes the convex hull of a set of points using the monotone chain convex
+ * hull algorithm (aka Andrew's algorithm).
+ * 
+ * @author Nathan Sweet
+ */
 public class ConvexHull {
 	private final FloatArray hull = new FloatArray();
 	private final IntArray quicksortStack = new IntArray();
 	private float[] sortedPoints;
 
 	/** @see #computePolygon(float[], int, int, boolean) */
-	public FloatArray computePolygon (FloatArray points, boolean sorted) {
+	public FloatArray computePolygon(FloatArray points, boolean sorted) {
 		return computePolygon(points.items, 0, points.size, sorted);
 	}
 
 	/** @see #computePolygon(float[], int, int, boolean) */
-	public FloatArray computePolygon (float[] polygon, boolean sorted) {
+	public FloatArray computePolygon(float[] polygon, boolean sorted) {
 		return computePolygon(polygon, 0, polygon.length, sorted);
 	}
 
-	/** Returns a list of points on the convex hull in counter-clockwise order. Note: the last point in the returned list is the
-	 * same as the first one. */
-	/** Returns the convex hull polygon for the given point cloud.
-	 * @param points x,y pairs describing points. Duplicate points will result in undefined behavior.
-	 * @param sorted If false, the points will be sorted by the x coordinate then the y coordinate, which is required by the convex
-	 *           hull algorithm. If sorting is done the input array is not modified and count additional working memory is needed.
-	 * @return pairs of coordinates that describe the convex hull polygon in counterclockwise order. Note the returned array is
-	 *         reused for later calls to the same method. */
-	public FloatArray computePolygon (float[] points, int offset, int count, boolean sorted) {
+	/**
+	 * Returns a list of points on the convex hull in counter-clockwise order.
+	 * Note: the last point in the returned list is the same as the first one.
+	 */
+	/**
+	 * Returns the convex hull polygon for the given point cloud.
+	 * 
+	 * @param points
+	 *            x,y pairs describing points. Duplicate points will result in
+	 *            undefined behavior.
+	 * @param sorted
+	 *            If false, the points will be sorted by the x coordinate then
+	 *            the y coordinate, which is required by the convex hull
+	 *            algorithm. If sorting is done the input array is not modified
+	 *            and count additional working memory is needed.
+	 * @return pairs of coordinates that describe the convex hull polygon in
+	 *         counterclockwise order. Note the returned array is reused for
+	 *         later calls to the same method.
+	 */
+	public FloatArray computePolygon(float[] points, int offset, int count,
+			boolean sorted) {
 		int end = offset + count;
 
 		if (!sorted) {
-			if (sortedPoints == null || sortedPoints.length < count) sortedPoints = new float[count];
+			if (sortedPoints == null || sortedPoints.length < count)
+				sortedPoints = new float[count];
 			System.arraycopy(points, offset, sortedPoints, 0, count);
 			points = sortedPoints;
 			offset = 0;
@@ -80,8 +97,11 @@ public class ConvexHull {
 		return hull;
 	}
 
-	/** Returns > 0 if the points are a counterclockwise turn, < 0 if clockwise, and 0 if colinear. */
-	private float ccw (float p3x, float p3y) {
+	/**
+	 * Returns > 0 if the points are a counterclockwise turn, < 0 if clockwise,
+	 * and 0 if colinear.
+	 */
+	private float ccw(float p3x, float p3y) {
 		FloatArray hull = this.hull;
 		int size = hull.size;
 		float p1x = hull.get(size - 4);
@@ -91,9 +111,13 @@ public class ConvexHull {
 		return (p2x - p1x) * (p3y - p1y) - (p2y - p1y) * (p3x - p1x);
 	}
 
-	/** Sorts x,y pairs of values by the x value, then the y value.
-	 * @param count Number of indices, must be even. */
-	private void sort (float[] values, int count) {
+	/**
+	 * Sorts x,y pairs of values by the x value, then the y value.
+	 * 
+	 * @param count
+	 *            Number of indices, must be even.
+	 */
+	private void sort(float[] values, int count) {
 		int lower = 0;
 		int upper = count - 1;
 		IntArray stack = quicksortStack;
@@ -102,7 +126,8 @@ public class ConvexHull {
 		while (stack.size > 0) {
 			upper = stack.pop();
 			lower = stack.pop();
-			if (upper <= lower) continue;
+			if (upper <= lower)
+				continue;
 			int i = quicksortPartition(values, lower, upper);
 			if (i - lower > upper - i) {
 				stack.add(lower);
@@ -117,7 +142,7 @@ public class ConvexHull {
 		}
 	}
 
-	private int quicksortPartition (final float[] values, int lower, int upper) {
+	private int quicksortPartition(final float[] values, int lower, int upper) {
 		float x = values[lower];
 		float y = values[lower + 1];
 		int up = upper;

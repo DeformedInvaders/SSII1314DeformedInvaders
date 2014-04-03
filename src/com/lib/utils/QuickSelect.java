@@ -18,12 +18,12 @@ package com.lib.utils;
 
 import java.util.Comparator;
 
-
 /**
- * Implementation of Tony Hoare's quickselect algorithm.
- * Running time is generally O(n), but worst case is O(n**2)
- * Pivot choice is median of three method, providing better performance
- * than a random pivot for partially sorted data.
+ * Implementation of Tony Hoare's quickselect algorithm. Running time is
+ * generally O(n), but worst case is O(n**2) Pivot choice is median of three
+ * method, providing better performance than a random pivot for partially sorted
+ * data.
+ * 
  * @author Jon Renner
  */
 public class QuickSelect<T> {
@@ -51,15 +51,15 @@ public class QuickSelect<T> {
 	}
 
 	private int recursiveSelect(int left, int right, int k) {
-		if (left == right) return left;
+		if (left == right)
+			return left;
 		int pivotIndex = medianOfThreePivot(left, right);
 		int pivotNewIndex = partition(left, right, pivotIndex);
 		int pivotDist = (pivotNewIndex - left) + 1;
 		int result;
 		if (pivotDist == k) {
 			result = pivotNewIndex;
-		}
-		else if (k < pivotDist) {
+		} else if (k < pivotDist) {
 			result = recursiveSelect(left, pivotNewIndex - 1, k);
 		} else {
 			result = recursiveSelect(pivotNewIndex + 1, right, k - pivotDist);
@@ -67,7 +67,10 @@ public class QuickSelect<T> {
 		return result;
 	}
 
-	/** Median of Three has the potential to outperform a random pivot, especially for partially sorted arrays */
+	/**
+	 * Median of Three has the potential to outperform a random pivot,
+	 * especially for partially sorted arrays
+	 */
 	private int medianOfThreePivot(int leftIdx, int rightIdx) {
 		T left = array[leftIdx];
 		int midIdx = (leftIdx + rightIdx) / 2;

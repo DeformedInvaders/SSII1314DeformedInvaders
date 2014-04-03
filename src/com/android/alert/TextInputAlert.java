@@ -7,14 +7,14 @@ import android.widget.EditText;
 public abstract class TextInputAlert extends WindowAlert
 {
 	private EditText input;
-	
+
 	/* SECTION Constructora */
-	
+
 	public TextInputAlert(Context context, String title, String messege, String textYes, String textNo)
 	{
 		this(context, title, messege, "", textYes, textNo);
 	}
-	
+
 	public TextInputAlert(Context context, String title, String messege, String text, String textYes, String textNo)
 	{
 		super(context, title);
@@ -41,9 +41,10 @@ public abstract class TextInputAlert extends WindowAlert
 			}
 		});
 	}
-	
+
 	/* SECTION Métodos Abstractos */
-	
+
 	public abstract void onPossitiveButtonClick(String text);
+
 	public abstract void onNegativeButtonClick(String text);
 }

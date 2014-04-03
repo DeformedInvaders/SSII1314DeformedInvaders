@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -20,48 +19,49 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 {
 	private ActionBar actionBar;
 	private SectionViewPagerAdapter pageAdapter;
-	
+
 	private List<T> listaFragmentos;
 	private List<String> listaNombres;
-	
+
 	private boolean swipeable;
-	
+
 	/* SECTION Constructora */
-	
+
 	public ViewPagerSwipeable(Context context)
 	{
 		super(context);
-		
+
 		swipeable = true;
 		listaFragmentos = new ArrayList<T>();
 		listaNombres = new ArrayList<String>();
 	}
-	
+
 	public ViewPagerSwipeable(Context context, AttributeSet attrs)
-    {
-        super(context, attrs);
-        
-        swipeable = true;
+	{
+		super(context, attrs);
+
+		swipeable = true;
 		listaFragmentos = new ArrayList<T>();
 		listaNombres = new ArrayList<String>();
-    }
-	
-	/*SECTION Métodos Publicos */
-	
+	}
+
+	/* SECTION Métodos Publicos */
+
 	public void setSwipeable(boolean swipe)
 	{
 		swipeable = swipe;
 	}
-	
+
 	public void setAdapter(final ViewPagerFragment fragment, FragmentManager manager, ActionBar bar)
 	{
 		actionBar = bar;
 		pageAdapter = new SectionViewPagerAdapter(manager);
-		
+
 		removeAllViews();
 		setAdapter(pageAdapter);
-		
-		setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+		setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+		{
 			@Override
 			public void onPageSelected(int position)
 			{
@@ -70,48 +70,48 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 			}
 		});
 	}
-    
-    public void addView(T t, String s)
-    {
-    	listaFragmentos.add(t);
-    	listaNombres.add(s);
-    	
-    	actionBar.addTab(actionBar.newTab().setText(s).setTabListener(pageAdapter));
-    }
-    
-    public Iterator<T> iterator()
-    {
-		return listaFragmentos.iterator();
-    }
-    
-    public int getPosition()
-    {
-    	return actionBar.getSelectedNavigationIndex();
-    }
-    
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event)
-    {
-    	if(swipeable)
-    	{
-    		return super.onInterceptTouchEvent(event);
-    	}
-    	
-    	return false;
-    }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-    	if(swipeable)
-    	{
-    		return super.onTouchEvent(event);
-    	}
-    	
-    	return false;
-    }
-    
-    /* SECTION Métodos Adaptador de PagerViewer */
+	public void addView(T t, String s)
+	{
+		listaFragmentos.add(t);
+		listaNombres.add(s);
+
+		actionBar.addTab(actionBar.newTab().setText(s).setTabListener(pageAdapter));
+	}
+
+	public Iterator<T> iterator()
+	{
+		return listaFragmentos.iterator();
+	}
+
+	public int getPosition()
+	{
+		return actionBar.getSelectedNavigationIndex();
+	}
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent event)
+	{
+		if (swipeable)
+		{
+			return super.onInterceptTouchEvent(event);
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (swipeable)
+		{
+			return super.onTouchEvent(event);
+		}
+
+		return false;
+	}
+
+	/* SECTION Métodos Adaptador de PagerViewer */
 
 	public class SectionViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
 	{
@@ -123,11 +123,11 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		@Override
 		public Fragment getItem(int position)
 		{
-			if(position >= 0 && position < listaFragmentos.size())
+			if (position >= 0 && position < listaFragmentos.size())
 			{
 				return listaFragmentos.get(position);
 			}
-			
+
 			return null;
 		}
 
@@ -140,23 +140,23 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		@Override
 		public CharSequence getPageTitle(int position)
 		{
-			if(position >= 0 && position < listaNombres.size())
+			if (position >= 0 && position < listaNombres.size())
 			{
 				return listaNombres.get(position).toUpperCase(Locale.getDefault());
 			}
-			
+
 			return null;
 		}
-		
+
 		@Override
 		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
 		{
 			setCurrentItem(tab.getPosition());
 		}
-	
+
 		@Override
 		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-	
+
 		@Override
 		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
 	}

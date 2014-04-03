@@ -15,27 +15,27 @@ import facebook4j.ResponseList;
 public class FacebookConnector
 {
 	private static final String URL_FACEBOOK_OAUTH_VERIFIER = "code";
-	
+
 	private Facebook facebook;
 
 	/* SECTION Métodos Públicos */
-	
+
 	public boolean iniciarAutorizacion()
 	{
-        facebook = new FacebookFactory().getInstance();
-        facebook.setOAuthAppId(SocialInformation.FACEBOOK_APP_ID, SocialInformation.FACEBOOK_APP_SECRET);
-        facebook.setOAuthPermissions("publish_actions");
-        return true;
+		facebook = new FacebookFactory().getInstance();
+		facebook.setOAuthAppId(SocialInformation.FACEBOOK_APP_ID, SocialInformation.FACEBOOK_APP_SECRET);
+		facebook.setOAuthPermissions("publish_actions");
+		return true;
 	}
-	
+
 	public String getAuthorizationURL()
 	{
 		return facebook.getOAuthAuthorizationURL(SocialInformation.FACEBOOK_CALLBACK_URL);
 	}
-	
+
 	public boolean finalizarAutorizacion(Uri uri)
 	{
-		try
+		try 
 		{
 			facebook.getOAuthAccessToken(uri.getQueryParameter(URL_FACEBOOK_OAUTH_VERIFIER));
 			return true;
@@ -44,12 +44,12 @@ public class FacebookConnector
 		{
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean desconexion()
-	{		
+	{
 		return true;
 	}
 
@@ -60,35 +60,34 @@ public class FacebookConnector
 			PostUpdate post = new PostUpdate(message);
 			
 			facebook.postFeed(post);
-			//facebook.postStatusMessage(post);
 			return true;
 		}
 		catch (FacebookException e)
 		{
 			e.printStackTrace();
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean enviarPost(String message, File file)
 	{
-	    try
-	    {
-	    	PhotoUpdate photo = new PhotoUpdate(new Media(file));
-	    	photo.setMessage(message);
-	    	
-	    	facebook.postPhoto(photo);
-	    	return true;
-    	}
-    	catch (FacebookException e)
-    	{
-    		e.printStackTrace();
-	    }
-	    
-	    return true;
+		try
+		{
+			PhotoUpdate photo = new PhotoUpdate(new Media(file));
+			photo.setMessage(message);
+
+			facebook.postPhoto(photo);
+			return true;
+		}
+		catch (FacebookException e)
+		{
+			e.printStackTrace();
+		}
+
+		return true;
 	}
-	
+
 	public ResponseList<Post> getTimeLine()
 	{
 		try
@@ -100,7 +99,7 @@ public class FacebookConnector
 		{
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 }

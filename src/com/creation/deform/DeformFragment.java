@@ -19,49 +19,49 @@ import com.lib.utils.FloatArray;
 import com.project.main.R;
 
 public class DeformFragment extends OpenGLFragment
-{	
+{
 	private DeformGLSurfaceView canvas;
 	private TDeformTipo tipo;
 	private Esqueleto esqueleto;
 	private Textura textura;
 	private int num_frames;
-	
+
 	private DeformDataSaved dataSaved;
 	private ExternalStorageManager manager;
 	private String movimiento;
-	
+
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
-		
+
 	/* SECTION Constructora */
-	
+
 	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
 	{
 		DeformFragment fragment = new DeformFragment();
 		fragment.setParameters(m, e, t, n, d, f);
 		return fragment;
 	}
-	
+
 	private void setParameters(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
-	{	
+	{
 		esqueleto = e;
 		textura = t;
 		manager = m;
 		movimiento = n;
-		tipo = d;	
+		tipo = d;
 		num_frames = f;
 	}
-	
+
 	/* SECTION Métodos Fragment */
 
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{        
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
 		View rootView = inflater.inflate(R.layout.fragment_creation_deform_layout, container, false);
-		
+
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
 		canvas.setParameters(esqueleto, textura, tipo, this, num_frames);
-		
+
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
 		botonDeformar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
@@ -69,7 +69,7 @@ public class DeformFragment extends OpenGLFragment
 		botonGrabar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
 		botonAudio = (ImageButton) rootView.findViewById(R.id.imageButtonDeform6);
 		botonReproducir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform7);
-		
+
 		botonAnyadir.setOnClickListener(new OnAddClickListener());
 		botonEliminar.setOnClickListener(new OnRemoveClickListener());
 		botonDeformar.setOnClickListener(new OnMoveClickListener());
@@ -77,19 +77,19 @@ public class DeformFragment extends OpenGLFragment
 		botonGrabar.setOnClickListener(new OnRecordClickListener());
 		botonAudio.setOnClickListener(new OnAudioClickListener());
 		botonReproducir.setOnClickListener(new OnPlayClickListener());
-		
+
 		setCanvasListener(canvas);
-		
+
 		reiniciarInterfaz();
 		actualizarInterfaz();
-        return rootView;
-    }
-	
+		return rootView;
+	}
+
 	@Override
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		
+
 		botonAnyadir = null;
 		botonEliminar = null;
 		botonDeformar = null;
@@ -98,95 +98,95 @@ public class DeformFragment extends OpenGLFragment
 		botonReproducir = null;
 		botonAudio = null;
 	}
-	
-	@Override	
+
+	@Override
 	public void onDetach()
 	{
 		super.onDetach();
-		
+
 		canvas = null;
 	}
-	
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
 		canvas.onResume();
-		
-		if(dataSaved != null)
-		{			
+
+		if (dataSaved != null)
+		{
 			canvas.restoreData(dataSaved);
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
 		}
 	}
-	
+
 	@Override
 	public void onPause()
 	{
 		super.onPause();
 		canvas.onPause();
-		
+
 		dataSaved = canvas.saveData();
 	}
-	
+
 	/* SECTION Métodos Abstractos OpenGLFramgent */
-	
+
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if(canvas.isHandlesVacio())
+		if (canvas.isHandlesVacio())
 		{
 			botonAnyadir.setVisibility(View.VISIBLE);
 		}
-		else 
+		else
 		{
 			botonGrabar.setVisibility(View.VISIBLE);
 			botonAudio.setVisibility(View.VISIBLE);
-			
-			if(!canvas.isEstadoGrabacion())
+
+			if (!canvas.isEstadoGrabacion())
 			{
 				botonAnyadir.setVisibility(View.VISIBLE);
 				botonEliminar.setVisibility(View.VISIBLE);
 				botonDeformar.setVisibility(View.VISIBLE);
 				botonReiniciar.setVisibility(View.VISIBLE);
-					
-				//TODO audio ready
-				if(canvas.isGrabacionReady())
+
+				// TODO audio ready
+				if (canvas.isGrabacionReady())
 				{
 					botonAudio.setVisibility(View.VISIBLE);
 					botonReproducir.setVisibility(View.VISIBLE);
 				}
 			}
 		}
-		
-		if(canvas.isEstadoAnyadir())
+
+		if (canvas.isEstadoAnyadir())
 		{
 			botonAnyadir.setBackgroundResource(R.drawable.icon_add_selected);
 		}
-		else if(canvas.isEstadoEliminar())
+		else if (canvas.isEstadoEliminar())
 		{
 			botonEliminar.setBackgroundResource(R.drawable.icon_remove_selected);
 		}
-		else if(canvas.isEstadoGrabacion())
+		else if (canvas.isEstadoGrabacion())
 		{
 			botonGrabar.setBackgroundResource(R.drawable.icon_record_selected);
 		}
-		else if(canvas.isEstadoDeformar())
+		else if (canvas.isEstadoDeformar())
 		{
 			botonDeformar.setBackgroundResource(R.drawable.icon_deform_selected);
 		}
-		else if(canvas.isEstadoAudio())
+		else if (canvas.isEstadoAudio())
 		{
 			botonAudio.setBackgroundResource(R.drawable.icon_microphone_selected);
 		}
-		else if(canvas.isEstadoReproduccion())
+		else if (canvas.isEstadoReproduccion())
 		{
 			botonReproducir.setBackgroundResource(R.drawable.icon_play_selected);
 		}
 	}
-	
+
 	@Override
 	protected void reiniciarInterfaz()
 	{
@@ -197,7 +197,7 @@ public class DeformFragment extends OpenGLFragment
 		botonGrabar.setVisibility(View.INVISIBLE);
 		botonReproducir.setVisibility(View.INVISIBLE);
 		botonAudio.setVisibility(View.INVISIBLE);
-		
+
 		botonAnyadir.setBackgroundResource(R.drawable.icon_add);
 		botonEliminar.setBackgroundResource(R.drawable.icon_remove);
 		botonDeformar.setBackgroundResource(R.drawable.icon_deform);
@@ -205,72 +205,72 @@ public class DeformFragment extends OpenGLFragment
 		botonAudio.setBackgroundResource(R.drawable.icon_microphone);
 		botonReproducir.setBackgroundResource(R.drawable.icon_play);
 	}
-	
+
 	/* SECTION Métodos Listener onClick */
-	
+
 	private class OnAddClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarAnyadir();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
-		}	
+		}
 	}
-	
+
 	private class OnRemoveClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarEliminar();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
-		}	
+		}
 	}
-	
+
 	private class OnMoveClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarMover();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
-		}	
+		}
 	}
-	
+
 	private class OnResetClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
-		}	
+		}
 	}
-	
-	private class OnRecordClickListener implements OnClickListener 
-	{ 
+
+	private class OnRecordClickListener implements OnClickListener
+	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarGrabado();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
-		}	
+		}
 	}
-	
-	//TODO
-	private class OnAudioClickListener implements OnClickListener 
-	{ 
+
+	// TODO
+	private class OnAudioClickListener implements OnClickListener
+	{
 		@Override
 		public void onClick(View v)
 		{
@@ -278,14 +278,14 @@ public class DeformFragment extends OpenGLFragment
 
 			reiniciarInterfaz();
 			actualizarInterfaz();
-			
-			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, movimiento) 
+
+			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, movimiento)
 			{
 				@Override
 				public void onPossitiveButtonClick()
 				{
 					canvas.seleccionarReposo();
-					
+
 					Toast.makeText(getActivity(), R.string.text_audio_record_confirmation, Toast.LENGTH_SHORT).show();
 
 					reiniciarInterfaz();
@@ -303,30 +303,30 @@ public class DeformFragment extends OpenGLFragment
 			};
 
 			alert.show();
-		}	
+		}
 	}
-	
-	private class OnPlayClickListener implements OnClickListener 
-	{ 
+
+	private class OnPlayClickListener implements OnClickListener
+	{
 		@Override
 		public void onClick(View v)
 		{
 			canvas.seleccionarPlay();
-			
+
 			reiniciarInterfaz();
 			actualizarInterfaz();
-		}	
+		}
 	}
-	
+
 	/* SECTION Métodos de Obtención de Información */
-	
-	public List<FloatArray> getMovimientos() 
-	{ 
-		if(canvas != null)
+
+	public List<FloatArray> getMovimientos()
+	{
+		if (canvas != null)
 		{
 			return canvas.getMovimientos();
 		}
-		
+
 		return null;
 	}
 }

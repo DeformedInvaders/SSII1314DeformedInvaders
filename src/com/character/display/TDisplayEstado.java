@@ -1,5 +1,6 @@
 package com.character.display;
 
-public enum TDisplayEstado {
+public enum TDisplayEstado
+{
 	Nada, Captura, Run, Jump, Crouch, Attack
 }

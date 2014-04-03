@@ -15,32 +15,32 @@ import com.project.main.GamePreferences;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
-    private DeformOpenGLRenderer renderer;
-    
-    private Handler handler;
-	private Runnable task;
-	
-	private boolean threadActivo;
-    
-    /* SECTION Constructora */
+	private DeformOpenGLRenderer renderer;
 
-    public DeformGLSurfaceView(Context context, AttributeSet attrs)
-    {
-        super(context, attrs, TTouchEstado.MultiTouch); 
-    }
-	
+	private Handler handler;
+	private Runnable task;
+
+	private boolean threadActivo;
+
+	/* SECTION Constructora */
+
+	public DeformGLSurfaceView(Context context, AttributeSet attrs)
+	{
+		super(context, attrs, TTouchEstado.MultiTouch);
+	}
+
 	public void setParameters(Esqueleto esqueleto, Textura textura, TDeformTipo tipo, final DeformFragment fragmento, int num_frames)
 	{
 		renderer = new DeformOpenGLRenderer(getContext(), esqueleto, textura, tipo, num_frames);
 		setRenderer(renderer);
-		
+
 		handler = new Handler();
-        
-        task = new Runnable() {
-        	@Override
-            public void run()
-        	{        		 
-				if(!renderer.reproducirAnimacion())
+
+		task = new Runnable() {
+			@Override
+			public void run()
+			{
+				if (!renderer.reproducirAnimacion())
 				{
 					requestRender();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
@@ -50,41 +50,41 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 					renderer.seleccionarReposo();
 					fragmento.reiniciarInterfaz();
 					fragmento.actualizarInterfaz();
-					
+
 					threadActivo = false;
 				}
-        	}
-        };
-        
-        threadActivo = false;
+			}
+		};
+
+		threadActivo = false;
 	}
-	
-    /* SECTION Métodos Abstráctos OpenGLSurfaceView */
-	
+
+	/* SECTION Métodos Abstráctos OpenGLSurfaceView */
+
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
 	{
 		return renderer.onTouchDown(x, y, width, height, pos);
 	}
-	
+
 	@Override
 	protected boolean onTouchMove(float x, float y, float width, float height, int pos)
 	{
 		return renderer.onTouchMove(x, y, width, height, pos);
 	}
-	
+
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
 		return renderer.onTouchUp(x, y, width, height, pos);
 	}
-	
+
 	@Override
 	protected boolean onMultiTouchEvent()
 	{
 		return renderer.onMultiTouchEvent();
 	}
-	
+
 	/* SECTION Métodos de modifiación del Renderer */
 
 	public void seleccionarAnyadir()
@@ -101,69 +101,69 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.seleccionarMover();
 	}
-	
+
 	public void reiniciar()
 	{
 		renderer.reiniciar();
 		requestRender();
 	}
-	
-	public void seleccionarGrabado() 
+
+	public void seleccionarGrabado()
 	{
 		renderer.seleccionarGrabado();
 		requestRender();
 	}
 
-	public void seleccionarPlay() 
+	public void seleccionarPlay()
 	{
-		if(!threadActivo)
+		if (!threadActivo)
 		{
 			renderer.selecionarPlay();
 			requestRender();
-			
+
 			task.run();
 			threadActivo = true;
 		}
 	}
-	
+
 	public void seleccionarAudio()
 	{
 		renderer.seleccionarAudio();
 	}
-	
-	public void seleccionarReposo() 
+
+	public void seleccionarReposo()
 	{
 		renderer.seleccionarReposo();
 	}
 
 	/* SECTION Métodos de Obtención de Información */
-	
+
 	public boolean isHandlesVacio()
 	{
 		return renderer.isHandlesVacio();
 	}
-	
+
 	public boolean isEstadoAnyadir()
 	{
 		return renderer.isEstadoAnyadir();
 	}
-	
+
 	public boolean isEstadoEliminar()
 	{
 		return renderer.isEstadoEliminar();
 	}
-	
+
 	public boolean isEstadoDeformar()
 	{
 		return renderer.isEstadoDeformar();
 	}
-	
+
 	public boolean isEstadoGrabacion()
 	{
 		return renderer.isEstadoGrabacion();
 	}
-	
-	public boolean isGrabacionReady() 
+
+	public boolean isGrabacionReady()
 	{
 		return renderer.isGrabacionReady();
 	}
@@ -172,24 +172,24 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		return renderer.isEstadoAudio();
 	}
-	
+
 	public boolean isEstadoReproduccion()
 	{
 		return renderer.isEstadoReproduccion();
 	}
-	
+
 	public List<FloatArray> getMovimientos()
 	{
 		return renderer.getMovimientos();
 	}
-	
+
 	/* SECTION Métodos de Guardado de Información */
-	
+
 	public DeformDataSaved saveData()
 	{
 		return renderer.saveData();
 	}
-	
+
 	public void restoreData(DeformDataSaved data)
 	{
 		renderer.restoreData(data);

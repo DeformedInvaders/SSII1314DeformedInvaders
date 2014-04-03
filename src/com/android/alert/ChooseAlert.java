@@ -7,30 +7,29 @@ public abstract class ChooseAlert extends WindowAlert
 {
 	private int selected;
 	private String[] lista;
-	
+
 	/* SECTION Constructora */
-	
+
 	public ChooseAlert(Context context, String title, String textYes, String textNo, String[] list)
 	{
 		super(context, title);
-		
+
 		selected = -1;
 		lista = list;
-		
+
 		setSingleChoiceItems(lista, selected, new DialogInterface.OnClickListener() {
-            
 			@Override
 			public void onClick(DialogInterface dialog, int which)
-            {
-	            selected = which;
-            }
-		});	
+			{
+				selected = which;
+			}
+		});
 
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				if(selected != -1)
+				if (selected != -1)
 				{
 					onSelectedPossitiveButtonClick(lista[selected]);
 				}
@@ -41,7 +40,8 @@ public abstract class ChooseAlert extends WindowAlert
 			}
 		});
 
-		setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+		setNegativeButton(textNo, new DialogInterface.OnClickListener()
+		{
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
@@ -49,11 +49,13 @@ public abstract class ChooseAlert extends WindowAlert
 			}
 		});
 	}
-	
+
 	/* SECTION Métodos Abstractos */
-	
+
 	public abstract void onSelectedPossitiveButtonClick(String selected);
+
 	public abstract void onNoSelectedPossitiveButtonClick();
+
 	public abstract void onNegativeButtonClick();
 
 }

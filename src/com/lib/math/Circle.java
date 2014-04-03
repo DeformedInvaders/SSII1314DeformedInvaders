@@ -15,101 +15,128 @@ package com.lib.math;
 
 import java.io.Serializable;
 
-/** A convenient 2D circle class.
- * @author mzechner */
+/**
+ * A convenient 2D circle class.
+ * 
+ * @author mzechner
+ */
 public class Circle implements Serializable {
 	public float x, y;
 	public float radius;
 
 	/** Constructs a new circle with all values set to zero */
-	public Circle () {
+	public Circle() {
 
 	}
 
-	public Circle (float x, float y, float radius) {
+	public Circle(float x, float y, float radius) {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
 	}
 
-	public Circle (Vector2 position, float radius) {
+	public Circle(Vector2 position, float radius) {
 		this.x = position.x;
 		this.y = position.y;
 		this.radius = radius;
 	}
 
-	public Circle (Circle circle) {
+	public Circle(Circle circle) {
 		this.x = circle.x;
 		this.y = circle.y;
 		this.radius = circle.radius;
 	}
 
-	public void set (float x, float y, float radius) {
+	public void set(float x, float y, float radius) {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
 	}
-    
-	public void set (Vector2 position, float radius) {
+
+	public void set(Vector2 position, float radius) {
 		this.x = position.x;
 		this.y = position.y;
 		this.radius = radius;
 	}
 
-	public void set (Circle circle) { 
+	public void set(Circle circle) {
 		x = circle.x;
 		y = circle.y;
 		radius = circle.radius;
 	}
 
-	/** Sets the x and y-coordinates of circle center from vector
-	 * @param position The position vector */
-	public void setPosition (Vector2 position) {
+	/**
+	 * Sets the x and y-coordinates of circle center from vector
+	 * 
+	 * @param position
+	 *            The position vector
+	 */
+	public void setPosition(Vector2 position) {
 		this.x = position.x;
 		this.y = position.y;
 	}
 
-	/** Sets the x and y-coordinates of circle center
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate */
-	public void setPosition (float x, float y) {
+	/**
+	 * Sets the x and y-coordinates of circle center
+	 * 
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 */
+	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	/** Sets the x-coordinate of circle center
-	 * @param x The x-coordinate */
-	public void setX (float x) {
+	/**
+	 * Sets the x-coordinate of circle center
+	 * 
+	 * @param x
+	 *            The x-coordinate
+	 */
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	/** Sets the y-coordinate of circle center
-	 * @param y The y-coordinate */
-	public void setY (float y) {
+	/**
+	 * Sets the y-coordinate of circle center
+	 * 
+	 * @param y
+	 *            The y-coordinate
+	 */
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	/** Sets the radius of circle
-	 * @param radius The radius */
-	public void setRadius (float radius) {
+	/**
+	 * Sets the radius of circle
+	 * 
+	 * @param radius
+	 *            The radius
+	 */
+	public void setRadius(float radius) {
 		this.radius = radius;
 	}
 
-	public boolean contains (float x, float y) {
+	public boolean contains(float x, float y) {
 		x = this.x - x;
 		y = this.y - y;
 		return x * x + y * y <= radius * radius;
 	}
 
-	public boolean contains (Vector2 point) {
+	public boolean contains(Vector2 point) {
 		float dx = x - point.x;
 		float dy = y - point.y;
 		return dx * dx + dy * dy <= radius * radius;
 	}
 
-	/** @param c the other {@link Circle}
-	 * @return whether this circle contains the other circle. */
-	public boolean contains (Circle c) {
+	/**
+	 * @param c
+	 *            the other {@link Circle}
+	 * @return whether this circle contains the other circle.
+	 */
+	public boolean contains(Circle c) {
 		float dx = x - c.x;
 		float dy = y - c.y;
 		// The distance to the furthest point on circle c is the distance
@@ -119,9 +146,12 @@ public class Circle implements Serializable {
 		return maxDistanceSqrd <= radius * radius;
 	}
 
-	/** @param c the other {@link Circle}
-	 * @return whether this circle overlaps the other circle. */
-	public boolean overlaps (Circle c) {
+	/**
+	 * @param c
+	 *            the other {@link Circle}
+	 * @return whether this circle overlaps the other circle.
+	 */
+	public boolean overlaps(Circle c) {
 		float dx = x - c.x;
 		float dy = y - c.y;
 		float distance = dx * dx + dy * dy;
@@ -130,7 +160,7 @@ public class Circle implements Serializable {
 	}
 
 	@Override
-	public String toString () {
+	public String toString() {
 		return x + "," + y + "," + radius;
 	}
 }

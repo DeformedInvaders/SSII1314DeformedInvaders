@@ -11,100 +11,100 @@ import com.creation.data.MapaBits;
 import com.game.data.Personaje;
 import com.project.main.R;
 
-public class DisplayOpenGLRenderer extends OpenGLRenderer
+public class DisplayOpenGLRenderer extends OpenGLRenderer 
 {
 	private TDisplayEstado estado;
-	
+
 	// Personaje
 	private Personaje personaje;
 	private boolean personajeCargado;
-	
+
 	// Captura
 	private Bitmap captura;
-	private TCapturaEstado estadoCaptura; 
-	
+	private TCapturaEstado estadoCaptura;
+
 	/* SECTION Constructura */
-	
+
 	public DisplayOpenGLRenderer(Context context)
 	{
 		super(context);
-		
+
 		personajeCargado = false;
-		
+
 		estado = TDisplayEstado.Nada;
 		estadoCaptura = TCapturaEstado.Nada;
 	}
-	
+
 	public DisplayOpenGLRenderer(Context context, Personaje p)
 	{
-        super(context);
-        
-        personajeCargado = true;
-        personaje = p;        
-        
-        estado = TDisplayEstado.Nada;
-        estadoCaptura = TCapturaEstado.Nada;
+		super(context);
+
+		personajeCargado = true;
+		personaje = p;
+
+		estado = TDisplayEstado.Nada;
+		estadoCaptura = TCapturaEstado.Nada;
 	}
-	
+
 	/* SECTION Métodos Renderer */
-	
+
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		super.onSurfaceCreated(gl, config);
-		
+
 		// BackGround
 		seleccionarTexturaFondo(R.drawable.background_display);
-		
-		if(personajeCargado)
+
+		if (personajeCargado)
 		{
 			personaje.cargarTextura(gl, this);
 		}
 	}
-	
+
 	@Override
 	public void onDrawFrame(GL10 gl)
-	{					
-		super.onDrawFrame(gl);	
-		
-		if(personajeCargado)
+	{
+		super.onDrawFrame(gl);
+
+		if (personajeCargado)
 		{
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
-			
+
 			personaje.dibujar(gl, this);
-			
+
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
-			
-			if(estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
-			{			
-				if(estado == TDisplayEstado.Captura)
+
+			if (estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
+			{
+				if (estado == TDisplayEstado.Captura)
 				{
-					if(estadoCaptura == TCapturaEstado.Capturando)
+					if (estadoCaptura == TCapturaEstado.Capturando)
 					{
 						// Capturar Pantalla
-					    MapaBits textura = capturaPantalla(gl);
+						MapaBits textura = capturaPantalla(gl);
 						captura = textura.getBitmap();
-						
+
 						// Desactivar Modo Captura
 						estadoCaptura = TCapturaEstado.Terminado;
-						
+
 						// Restaurar posición anterior de la Cámara
 						camaraRestore();
-						
+
 						// Reiniciar Renderer
 						super.onDrawFrame(gl);
-						
+
 						// Centrado de Marco
 						centrarPersonajeEnMarcoInicio(gl);
-						
+
 						personaje.dibujar(gl, this);
-						
+
 						// Centrado de Marco
 						centrarPersonajeEnMarcoFinal(gl);
 					}
-					else if(estadoCaptura == TCapturaEstado.Retocando)
+					else if (estadoCaptura == TCapturaEstado.Retocando)
 					{
 						// Marco Oscuro
 						dibujarMarcoLateral(gl);
@@ -114,144 +114,144 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			}
 		}
 	}
-	
+
 	/* SECTION Métodos abstractos de OpenGLRenderer */
-	
+
 	@Override
 	protected boolean reiniciar()
 	{
 		return false;
 	}
-	
+
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		return false;
 	}
-	
+
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		return false;
 	}
-	
+
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		return false;
 	}
-	
+
 	@Override
 	protected boolean onMultiTouchEvent()
 	{
 		return false;
 	}
-	
+
 	/* SECTION Métodos de Modificación de Estado */
-	
+
 	public void seleccionarRetoque(float height, float width)
 	{
-		// Construir rectangulos	
+		// Construir rectangulos
 		estado = TDisplayEstado.Captura;
 		estadoCaptura = TCapturaEstado.Retocando;
 	}
-	
+
 	public void seleccionarCaptura()
 	{
-		if(estado == TDisplayEstado.Captura)
-		{			
+		if (estado == TDisplayEstado.Captura)
+		{
 			estadoCaptura = TCapturaEstado.Capturando;
 		}
 	}
-	
+
 	public void seleccionarTerminado()
 	{
-		if(estado == TDisplayEstado.Captura)
+		if (estado == TDisplayEstado.Captura)
 		{
 			estado = TDisplayEstado.Nada;
 			estadoCaptura = TCapturaEstado.Nada;
 		}
 	}
-	
+
 	public boolean reproducirAnimacion()
 	{
 		personaje.animar();
 		return personaje.avanzar(this);
 	}
-	
+
 	public void seleccionarReposo()
 	{
 		personaje.reposo();
 	}
-	
-	public void seleccionarRun() 
+
+	public void seleccionarRun()
 	{
 		estado = TDisplayEstado.Run;
 		personaje.mover();
 	}
-	
-	public void seleccionarJump() 
+
+	public void seleccionarJump()
 	{
 		estado = TDisplayEstado.Jump;
 		personaje.saltar();
 	}
-	
-	public void seleccionarCrouch() 
+
+	public void seleccionarCrouch()
 	{
 		estado = TDisplayEstado.Crouch;
 		personaje.agachar();
 	}
-	
-	public void seleccionarAttack() 
+
+	public void seleccionarAttack()
 	{
 		estado = TDisplayEstado.Attack;
 		personaje.atacar();
 	}
-	
+
 	/* SECTION Métodos de Obtención de Información */
-	
+
 	public boolean isEstadoReposo()
 	{
 		return estado == TDisplayEstado.Nada;
 	}
-	
+
 	public boolean isEstadoRetoque()
 	{
 		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Retocando;
 	}
-	
+
 	public boolean isEstadoCapturando()
 	{
 		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Retocando;
 	}
-	
+
 	public boolean isEstadoTerminado()
 	{
 		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Terminado;
 	}
-	
+
 	public boolean isEstadoAnimacion()
 	{
 		return estado != TDisplayEstado.Nada && estado != TDisplayEstado.Captura;
 	}
-	
+
 	public Bitmap getCapturaPantalla()
 	{
-		if(estadoCaptura == TCapturaEstado.Capturando)
-		{	
-			while(estadoCaptura != TCapturaEstado.Terminado);
-		
+		if (estadoCaptura == TCapturaEstado.Capturando)
+		{
+			while (estadoCaptura != TCapturaEstado.Terminado);
+
 			return captura;
 		}
-		
+
 		return null;
 	}
-	
+
 	/* SECTION Métodos de Guardado de Información */
-	
+
 	public void saveData()
 	{
-		if(personajeCargado)
+		if (personajeCargado)
 		{
 			personaje.descargarTextura(this);
 		}

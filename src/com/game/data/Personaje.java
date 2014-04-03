@@ -4,15 +4,18 @@ import com.android.view.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.deform.TDeformTipo;
 import com.game.game.TEstadoColision;
+import com.lib.math.Circle;
+import com.lib.math.Intersector;
+import com.project.main.GamePreferences;
 
 public class Personaje extends Malla
-{	
+{
 	private Movimientos movimientos;
-	
+
 	private TDeformTipo estado;
-	
+
 	/* SECTION Constructora */
-	
+
 	public Personaje()
 	{
 		tipo = TTipoEntidad.Personaje;
@@ -20,96 +23,96 @@ public class Personaje extends Malla
 		posicionX = 0.0f;
 		posicionY = 0.0f;
 	}
-	
+
 	/* SECTION Métodos abstractos de Entidad */
-	
+
 	public boolean avanzar(OpenGLRenderer renderer)
 	{
-		if(estado == TDeformTipo.Jump)
+		if (estado == TDeformTipo.Jump)
 		{
-			float dY = width / 12;
-			
-			if(posicionAnimacion <= listaVerticesAnimacion.size() / 2)
+			if (posicionAnimacion <= listaVerticesAnimacion.size() / 2)
 			{
-				posicionY += dY;
+				posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER;
 			}
-			else 
+			else
 			{
-				posicionY -= dY;
+				posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER;
 			}
 		}
-		
-		return posicionAnimacion == listaVerticesAnimacion.size()-1;
+
+		return posicionAnimacion == listaVerticesAnimacion.size() - 1;
 	}
-	
+
 	/* SECTION Métodos de Animación */
-	
-	public void mover() 
+
+	public void mover()
 	{
 		listaVerticesAnimacion = movimientos.get(0);
-		
+
 		estado = TDeformTipo.Run;
 		iniciar();
 	}
-	
-	public void saltar() 
+
+	public void saltar()
 	{
 		listaVerticesAnimacion = movimientos.get(1);
-		
+
 		estado = TDeformTipo.Jump;
 		iniciar();
 	}
-	
-	public void agachar() 
+
+	public void agachar()
 	{
 		listaVerticesAnimacion = movimientos.get(2);
-		
+
 		estado = TDeformTipo.Crouch;
 		iniciar();
 	}
-	
-	public void atacar() 
+
+	public void atacar()
 	{
 		listaVerticesAnimacion = movimientos.get(3);
-		
+
 		estado = TDeformTipo.Attack;
 		iniciar();
 	}
-	
-	public TEstadoColision colision(Entidad entidad, InstanciaEntidad instanciaE)
-	{	
-		float posXEntidad = instanciaE.getPosicionX();
-		float posYEntidad = instanciaE.getPosicionY();
-		
-		float widthEntidad = entidad.getWidth();	
-		float heightEntidad = entidad.getHeight();
-		
-		if(posXEntidad + widthEntidad/2 < posicionX)
+
+	public TEstadoColision colision(Entidad entidad, InstanciaEntidad instancia)
+	{
+		float posicionXEntidad = instancia.getPosicionX();
+		float posicionYEntidad = instancia.getPosicionY();
+		float widthEntidad = entidad.getWidth();
+
+		Circle areaPersonaje = new Circle(posicionX + width / 4, posicionY, width / 5);
+		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 4, posicionYEntidad, widthEntidad / 5);
+
+		// Hay colisión entre el personaje y el enemigo
+		if (Intersector.overlaps(areaPersonaje, areaEntidad))
 		{
-			return TEstadoColision.EnemigoFueraRango;
-		}
-		else if(posXEntidad < posicionX + width/2 && posXEntidad > posicionX)
-		{
-			if(posicionY < posYEntidad + heightEntidad)
+			// Enemigo derrotado
+			if (entidad.getTipo() == TTipoEntidad.Enemigo && estado == TDeformTipo.Attack)
 			{
-				return TEstadoColision.Colision;
+				instancia.setDerrotado();
+				return TEstadoColision.EnemigoDerrotado;
 			}
+
+			return TEstadoColision.Colision;
 		}
-		
+
 		return TEstadoColision.Nada;
 	}
-	
+
 	/* SECTION Métodos de Modificación de Información */
-	
+
 	public void setMovimientos(Movimientos m)
 	{
 		movimientos = m;
-		
+
 		reposo();
 	}
-	
+
 	/* SECTION Métodos de Obtención de Información */
-	
+
 	public Movimientos getMovimientos()
 	{
 		return movimientos;

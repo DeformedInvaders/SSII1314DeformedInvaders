@@ -5,18 +5,18 @@ import android.content.DialogInterface;
 import android.widget.ImageView;
 
 public abstract class ImageAlert extends WindowAlert
-{	
+{
 	/* SECTION Constructora */
-	
+
 	public ImageAlert(Context context, String title, String message, String textYes, String textNo, int idImage)
 	{
 		super(context, title);
 
 		setMessage(message);
-		
+
 		ImageView image = new ImageView(context);
 		image.setImageResource(idImage);
-		
+
 		setView(image);
 
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
@@ -35,10 +35,11 @@ public abstract class ImageAlert extends WindowAlert
 			}
 		});
 	}
-	
+
 	/* SECTION Métodos Abstractos */
-	
+
 	public abstract void onPossitiveButtonClick();
+
 	public abstract void onNegativeButtonClick();
 
 }

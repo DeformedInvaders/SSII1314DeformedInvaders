@@ -2,41 +2,40 @@ package com.game.data;
 
 public class Background
 {
-	int idTextura1, idTextura2, idTextura3;
-	int idTexturaGameOver, idTexturaLevelCompleted;
-	
-	public void setBackground(int id1, int id2, int id3, int id4, int id5)
+	private int idTexturaFondo1, idTexturaFondo2, idTexturaFondo3, idTexturaGameOver, idTexturaLevelCompleted;
+
+	public void setBackground(int idFondo1, int idFondo2, int idFondo3, int idFondo4, int idFondo5)
 	{
-		idTextura1 = id1;
-		idTextura2 = id2;
-		idTextura3 = id3;
-		idTexturaGameOver = id4;
-		idTexturaLevelCompleted = id5;
+		idTexturaFondo1 = idFondo1;
+		idTexturaFondo2 = idFondo2;
+		idTexturaFondo3 = idFondo3;
+		idTexturaGameOver = idFondo4;
+		idTexturaLevelCompleted = idFondo5;
 	}
 
-	public int getIdTextura1()
+	public int getIdTexturaFondo1()
 	{
-		return idTextura1;
+		return idTexturaFondo1;
 	}
 
-	public int getIdTextura2()
+	public int getIdTexturaFondo2()
 	{
-		return idTextura2;
+		return idTexturaFondo2;
 	}
 
-	public int getIdTextura3()
+	public int getIdTexturaFondo3()
 	{
-		return idTextura3;
+		return idTexturaFondo3;
 	}
-	
+
 	public int getIdTextureGameOver()
 	{
 		return idTexturaGameOver;
 	}
-	
+
 	public int getIdTextureLevelCompleted()
 	{
 		return idTexturaLevelCompleted;
 	}
-	
+
 }

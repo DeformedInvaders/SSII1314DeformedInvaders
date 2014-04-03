@@ -7,20 +7,20 @@ import com.lib.utils.FloatArray;
 public class Textura implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	private MapaBits mapaBits;
 	private FloatArray coordTextura;
 	private Pegatinas pegatinas;
-	
+
 	/* SECTION Constructora */
-	
+
 	public Textura(MapaBits mapaBits, FloatArray coordTextura, Pegatinas pegatinas)
 	{
 		this.mapaBits = mapaBits;
 		this.coordTextura = coordTextura;
 		this.pegatinas = pegatinas;
 	}
-	
+
 	/* SECTION Métodos de Obtención de Información */
 
 	public MapaBits getMapaBits()
@@ -32,7 +32,7 @@ public class Textura implements Serializable
 	{
 		return coordTextura;
 	}
-	
+
 	public Pegatinas getPegatinas()
 	{
 		return pegatinas;

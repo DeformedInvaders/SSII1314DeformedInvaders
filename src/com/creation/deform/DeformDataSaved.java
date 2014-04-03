@@ -12,9 +12,9 @@ public class DeformDataSaved
 	private FloatArray verticesModificados;
 	private List<FloatArray> listaVertices;
 	private TDeformEstado estado;
-	
+
 	/* SECTION Constructora */
-	
+
 	public DeformDataSaved(FloatArray handles, ShortArray indiceHandles, FloatArray verticesModificados, TDeformEstado estado, List<FloatArray> listaVertices)
 	{
 		this.handles = handles;
@@ -22,9 +22,9 @@ public class DeformDataSaved
 		this.verticesModificados = verticesModificados;
 		this.estado = estado;
 		this.listaVertices = listaVertices;
-		
+
 	}
-	
+
 	/* SECTION Métodos Obtención de Información */
 
 	public FloatArray getHandles()
@@ -41,11 +41,12 @@ public class DeformDataSaved
 	{
 		return verticesModificados;
 	}
+
 	public List<FloatArray> getListaVertices()
 	{
 		return listaVertices;
 	}
-	
+
 	public TDeformEstado getEstado()
 	{
 		return estado;
