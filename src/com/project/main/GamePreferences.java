@@ -10,8 +10,12 @@ public class GamePreferences
 
 	// Enemigos
 	public static final int MAX_TEXTURE_BACKGROUND = 3;
-	public static final int MAX_TEXTURE_STICKER = 4;
+	public static final int MAX_TEXTURE_CHARACTER = 1;
+	public static final int MAX_TEXTURE_STICKER = 3;
+	public static final int MAX_TEXTURE_BUBBLE = 3;
+	public static final int MAX_TEXTURE_HEART = 2;
 	public static final int MAX_TEXTURE_OBSTACLE = 1;
+	public static final int MAX_TEXTURE_FISSURE = 1;
 	public static final int MAX_TEXTURE_ENEMY = 4;
 
 	public static final int NUM_TYPE_ENEMIGOS = 4;

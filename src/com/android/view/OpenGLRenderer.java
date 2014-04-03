@@ -45,12 +45,16 @@ public abstract class OpenGLRenderer implements Renderer
 	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
 	private static final int POS_TEXTURE_FISSURE = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND;
-	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_FISSURE + 1;
+	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_FISSURE + GamePreferences.MAX_TEXTURE_FISSURE;
 	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.MAX_TEXTURE_OBSTACLE;
-	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + 1;
+	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + GamePreferences.MAX_TEXTURE_CHARACTER;
 	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.MAX_TEXTURE_STICKER;
-
-	private static final int NUM_TEXTURES = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.MAX_TEXTURE_ENEMY * GamePreferences.MAX_TEXTURE_STICKER + 1;
+	private static final int POS_TEXTURE_BUBBLE = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.MAX_TEXTURE_ENEMY * (GamePreferences.MAX_TEXTURE_STICKER + 1);
+	private static final int POS_TEXTURE_HEART = POS_TEXTURE_BUBBLE + GamePreferences.MAX_TEXTURE_BUBBLE;
+	
+	private static final int NUM_TEXTURES = POS_TEXTURE_HEART + GamePreferences.MAX_TEXTURE_HEART;
+	//private static final int NUM_TEXTURES = GamePreferences.MAX_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_FISSURE + GamePreferences.MAX_TEXTURE_OBSTACLE + GamePreferences.MAX_TEXTURE_CHARACTER + GamePreferences.MAX_TEXTURE_STICKER + (GamePreferences.MAX_TEXTURE_ENEMY * GamePreferences.MAX_TEXTURE_STICKER + 1) + GamePreferences.MAX_TEXTURE_BUBBLE + GamePreferences.MAX_TEXTURE_HEART;
+	
 	private int[] nombreTexturas;
 
 	private FloatBuffer coordTextura;
@@ -737,12 +741,15 @@ public abstract class OpenGLRenderer implements Renderer
 			case Enemigo:
 				// FIXME:
 				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
-				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) +
-				// posPegatina;
+				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + posPegatina;
 			case Obstaculo:
 				return POS_TEXTURE_OBSTACLE + posEntidad;
 			case Grieta:
 				return POS_TEXTURE_FISSURE;
+			case Burbuja:
+				return POS_TEXTURE_BUBBLE + posPegatina;
+			case Corazon:
+				return POS_TEXTURE_HEART + posPegatina;
 			default:
 				return -1;
 		}
@@ -848,6 +855,31 @@ public abstract class OpenGLRenderer implements Renderer
 			float textureHeight = bitmap.getHeight();
 			float textureWidth = bitmap.getWidth();
 
+			cargarTextura(gl, bitmap, posTextura);
+			bitmap.recycle();
+
+			FloatArray puntos = new FloatArray();
+			puntos.add(0.0f);			puntos.add(0.0f);
+			puntos.add(0.0f);			puntos.add(textureHeight);
+			puntos.add(textureWidth);	puntos.add(0.0f);
+			puntos.add(textureWidth);	puntos.add(textureHeight);
+
+			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
+
+			return textureHeight;
+		}
+
+		return 0;
+	}
+	
+	public float cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	{
+		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
+
+		if (posTextura != -1 && !cargadaTextura[posTextura])
+		{
+			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+			
 			cargarTextura(gl, bitmap, posTextura);
 			bitmap.recycle();
 

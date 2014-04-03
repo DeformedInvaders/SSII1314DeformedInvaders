@@ -39,6 +39,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		tipoEnemigos = l.getTipoEnemigos();
 		listaEnemigos = l.getListaEnemigos();
+		
+		personaje.reiniciarVidas();
+		personaje.activarBurbuja();
 	}
 
 	/* SECTION Métodos Renderer */
@@ -78,8 +81,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 				// Protagonista
 				personaje.dibujar(gl, this);
+				
+				// Burbuja
 	
 			gl.glPopMatrix();
+			
+			// Vidas
 	
 			// Cola Enemigos
 			Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
@@ -191,12 +198,22 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				switch (personaje.colision(entidad, instancia))
 				{
 					case Nada:
-						break;
+					break;
 					case EnemigoDerrotado:
 						instancia.setDerrotado();
-						break;
+					break;
 					case Colision:
-						return TEstadoGame.FinJuegoDerrota;
+						personaje.quitarVida();
+						instancia.setDerrotado();
+						
+						if (!personaje.isAlive())
+						{
+							personaje.reiniciarVidas();
+							personaje.desactivarBurbuja();
+							
+							return TEstadoGame.FinJuegoDerrota;
+						}
+					break;
 				}
 			}
 		}

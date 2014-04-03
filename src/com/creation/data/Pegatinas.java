@@ -2,10 +2,11 @@ package com.creation.data;
 
 import java.io.Serializable;
 
+import com.project.main.GamePreferences;
+
 public class Pegatinas implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private static final int NUM_PEGATINAS = 3;
 
 	// ID Drawable
 	private int[] indicePegatinas;
@@ -17,10 +18,10 @@ public class Pegatinas implements Serializable
 
 	public Pegatinas()
 	{
-		indicePegatinas = new int[NUM_PEGATINAS];
-		verticePegatinas = new int[NUM_PEGATINAS];
+		indicePegatinas = new int[GamePreferences.MAX_TEXTURE_STICKER];
+		verticePegatinas = new int[GamePreferences.MAX_TEXTURE_STICKER];
 
-		for (int i = 0; i < NUM_PEGATINAS; i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			indicePegatinas[i] = -1;
 			verticePegatinas[i] = -1;
@@ -31,7 +32,7 @@ public class Pegatinas implements Serializable
 
 	public void setPegatina(int indice, int vertice, int tipo)
 	{
-		if (tipo >= 0 && tipo < NUM_PEGATINAS)
+		if (tipo >= 0 && tipo < GamePreferences.MAX_TEXTURE_STICKER)
 		{
 			indicePegatinas[tipo] = indice;
 			verticePegatinas[tipo] = vertice;
@@ -57,6 +58,6 @@ public class Pegatinas implements Serializable
 
 	public int getNumPegatinas()
 	{
-		return NUM_PEGATINAS;
+		return GamePreferences.MAX_TEXTURE_STICKER;
 	}
 }
