@@ -11,7 +11,7 @@
         <ImageButton
             android:id="@+id/imageButtonGame1"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_play"
+            android:background="@drawable/icon_main_game"
             android:contentDescription="@string/desc_game_play" />
 
 	</LinearLayout>
@@ -21,19 +21,19 @@
         <ImageButton
             android:id="@+id/imageButtonGame2"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_animation_jump"
+            android:background="@drawable/icon_game_jump"
             android:contentDescription="@string/desc_select_jump" />
         
         <ImageButton
             android:id="@+id/imageButtonGame3"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_animation_crouch"
+            android:background="@drawable/icon_game_crouch"
             android:contentDescription="@string/desc_select_crouch" />
         
         <ImageButton
             android:id="@+id/imageButtonGame4"
             style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_animation_attack"
+            android:background="@drawable/icon_game_attack"
             android:contentDescription="@string/desc_select_attack" />
 
 	</LinearLayout>

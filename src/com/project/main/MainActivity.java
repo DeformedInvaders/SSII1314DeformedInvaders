@@ -439,20 +439,20 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	{
 		if (socialConnector.isTwitterConnected())
 		{
-			botonTwitter.setIcon(R.drawable.menu_twitter_connected);
+			botonTwitter.setIcon(R.drawable.icon_social_twitter_connected);
 		}
 		else
 		{
-			botonTwitter.setIcon(R.drawable.menu_twitter);
+			botonTwitter.setIcon(R.drawable.icon_social_twitter_disconnected);
 		}
 
 		if (socialConnector.isFacebookConnected())
 		{
-			botonFacebook.setIcon(R.drawable.menu_facebook_connected);
+			botonFacebook.setIcon(R.drawable.icon_social_facebook_connected);
 		}
 		else
 		{
-			botonFacebook.setIcon(R.drawable.menu_facebook);
+			botonFacebook.setIcon(R.drawable.icon_social_facebook_disconnected);
 		}
 	}
 

@@ -129,7 +129,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	protected void reiniciarInterfaz()
 	{
-		botonPlay.setBackgroundResource(R.drawable.icon_pause);
+		botonPlay.setBackgroundResource(R.drawable.icon_game_pause);
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		if (gamePaused)
 		{
-			botonPlay.setBackgroundResource(R.drawable.icon_play);
+			botonPlay.setBackgroundResource(R.drawable.icon_game_play);
 		}
 	}
 

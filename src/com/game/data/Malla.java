@@ -61,7 +61,8 @@ public abstract class Malla extends Entidad
 		{
 			if (pegatinas.isCargada(i))
 			{
-				renderer.cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipo, id, i);
+				TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+				renderer.cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipo, id, tipoPegatinas[i]);
 			}
 		}
 	}
@@ -75,7 +76,8 @@ public abstract class Malla extends Entidad
 		// Pegatinas
 		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
-			renderer.descargarTexturaRectangulo(tipo, id, i);
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			renderer.descargarTexturaRectangulo(tipo, id, tipoPegatinas[i]);
 		}
 	}
 
@@ -98,7 +100,8 @@ public abstract class Malla extends Entidad
 				if (pegatinas.isCargada(i))
 				{
 					int indice = pegatinas.getVertice(i);
-					renderer.dibujarTexturaRectangulo(gl, verticesAnimacion.get(2 * indice), verticesAnimacion.get(2 * indice + 1), tipo, id, i);
+					TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+					renderer.dibujarTexturaRectangulo(gl, verticesAnimacion.get(2 * indice), verticesAnimacion.get(2 * indice + 1), tipo, id, tipoPegatinas[i]);
 				}
 			}
 

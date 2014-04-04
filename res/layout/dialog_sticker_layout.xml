@@ -12,27 +12,27 @@
 	        
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker1"
-				android:background="@drawable/texture_eyes1"
+				android:background="@drawable/sticker_eyes_1"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker2"
-				android:background="@drawable/texture_eyes2"
+				android:background="@drawable/sticker_eyes_2"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker3"
-				android:background="@drawable/texture_eyes3"
+				android:background="@drawable/sticker_eyes_3"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker4"
-				android:background="@drawable/texture_eyes4"
+				android:background="@drawable/sticker_eyes_4"
 				android:contentDescription="@string/desc_sticker_eye" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker5"
-				android:background="@drawable/texture_eyes5"
+				android:background="@drawable/sticker_eyes_5"
 				android:contentDescription="@string/desc_sticker_eye" />
 		
 		</LinearLayout>
@@ -44,27 +44,27 @@
 	        
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker6"
-				android:background="@drawable/texture_mouth1"
+				android:background="@drawable/sticker_mouth_1"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker7"
-				android:background="@drawable/texture_mouth2"
+				android:background="@drawable/sticker_mouth_2"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker8"
-				android:background="@drawable/texture_mouth3"
+				android:background="@drawable/sticker_mouth_3"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker9"
-				android:background="@drawable/texture_mouth4"
+				android:background="@drawable/sticker_mouth_4"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
 			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker10"
-				android:background="@drawable/texture_mouth5"
+				android:background="@drawable/sticker_mouth_5"
 				android:contentDescription="@string/desc_sticker_mouth" />
 			
 		</LinearLayout>
@@ -74,26 +74,31 @@
   	    
 	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
 	        
-			<ImageView style="@style/Button_Sticker_Big_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker11"
-				android:background="@drawable/texture_weapon1"
+				android:background="@drawable/sticker_weapon_1"
 				android:contentDescription="@string/desc_sticker_weapon" />
 			
-			<ImageView style="@style/Button_Sticker_Big_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker12"
-				android:background="@drawable/texture_weapon2"
+				android:background="@drawable/sticker_weapon_2"
 				android:contentDescription="@string/desc_sticker_weapon" />
 			
-			<ImageView style="@style/Button_Sticker_Big_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker13"
-				android:background="@drawable/texture_weapon3"
+				android:background="@drawable/sticker_weapon_3"
 				android:contentDescription="@string/desc_sticker_weapon" />
 			
-			<ImageView style="@style/Button_Sticker_Big_Style"
+			<ImageView style="@style/Button_Sticker_Style"
 				android:id="@+id/imageButtonSticker14"
-				android:background="@drawable/texture_weapon4"
+				android:background="@drawable/sticker_weapon_4"
 				android:contentDescription="@string/desc_sticker_weapon" />
 			
+			<ImageView style="@style/Button_Sticker_Style"
+				android:id="@+id/imageButtonSticker15"
+				android:background="@drawable/sticker_weapon_5"
+				android:contentDescription="@string/desc_sticker_weapon" />		
+					
 		</LinearLayout>
 		
 	</LinearLayout>

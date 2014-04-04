@@ -11,7 +11,7 @@
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain1"
             android:contentDescription="@string/desc_main_new"
-            android:background="@drawable/icon_main_create" />
+            android:background="@drawable/icon_main_creation" />
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain2"
@@ -21,7 +21,7 @@
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain3"
             android:contentDescription="@string/desc_main_select"
-            android:background="@drawable/icon_main_select" />
+            android:background="@drawable/icon_main_selection" />
         
     </LinearLayout>
 

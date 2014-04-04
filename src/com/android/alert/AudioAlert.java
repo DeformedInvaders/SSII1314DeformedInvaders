@@ -46,7 +46,7 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onPlayerCompletion()
 			{
-				botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
+				botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play);
 			}
 		};
 
@@ -68,8 +68,8 @@ public abstract class AudioAlert extends WindowAlert
 		botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
 		botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
 
-		botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
-		botonPlayAudio.setBackgroundResource(R.drawable.icon_play);
+		botonRecAudio.setBackgroundResource(R.drawable.icon_media_record);
+		botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play);
 
 		layoutBotones.addView(botonRecAudio);
 		layoutBotones.addView(botonPlayAudio);
@@ -113,7 +113,7 @@ public abstract class AudioAlert extends WindowAlert
 			public void onFinish()
 			{
 				audioRecorder.stopRecording();
-				botonRecAudio.setBackgroundResource(R.drawable.icon_record_start);
+				botonRecAudio.setBackgroundResource(R.drawable.icon_media_record);
 
 				actualizarInterfaz();
 				reiniciarContadores();
@@ -174,7 +174,7 @@ public abstract class AudioAlert extends WindowAlert
 			timer.start();
 			audioRecorder.startRecording(movimiento);
 
-			botonRecAudio.setBackgroundResource(R.drawable.icon_record_started);
+			botonRecAudio.setBackgroundResource(R.drawable.icon_media_record_selected);
 			actualizarInterfaz();
 		}
 	}
@@ -186,7 +186,7 @@ public abstract class AudioAlert extends WindowAlert
 		{
 			audioPlayer.startPlaying(movimiento);
 
-			botonPlayAudio.setBackgroundResource(R.drawable.icon_play_selected);
+			botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play_selected);
 		}
 	}
 }

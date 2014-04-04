@@ -7,6 +7,7 @@ import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
+import com.game.data.TTipoSticker;
 
 public class PaintGLSurfaceView extends OpenGLSurfaceView
 {
@@ -89,7 +90,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarSize(pos);
 	}
 
-	public void seleccionarPegatina(int pegatina, int tipo)
+	public void seleccionarPegatina(int pegatina, TTipoSticker tipo)
 	{
 		renderer.seleccionarPegatina(pegatina, tipo);
 		setEstado(TTouchEstado.SimpleTouch);

@@ -20,6 +20,7 @@ import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
 import com.creation.data.Polilinea;
 import com.creation.data.Textura;
+import com.game.data.TTipoSticker;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
@@ -34,7 +35,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private int colorPaleta;
 	private int sizeLinea;
 	private int pegatinaActual;
-	private int tipoPegatinaActual;
+	private TTipoSticker tipoPegatinaActual;
 
 	// Detalles
 	private List<Polilinea> listaLineas;
@@ -136,7 +137,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			if (pegatinas.isCargada(i))
 			{
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), i);
+				TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipoPegatinas[i]);
 			}
 		}
 
@@ -177,7 +179,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				if (pegatinas.isCargada(i))
 				{
 					int indice = pegatinas.getVertice(i);
-					dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), i);
+					TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+					dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipoPegatinas[i]);
 				}
 			}
 
@@ -205,7 +208,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
-			descargarTexturaRectangulo(i);
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			descargarTexturaRectangulo(tipoPegatinas[i]);
 		}
 
 		anteriores.clear();
@@ -418,7 +422,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	public void seleccionarPegatina(int pegatina, int tipo)
+	public void seleccionarPegatina(int pegatina, TTipoSticker tipo)
 	{
 		guardarPolilinea();
 
@@ -470,7 +474,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
-			descargarTexturaRectangulo(i);
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			descargarTexturaRectangulo(tipoPegatinas[i]);
 		}
 
 		Iterator<Accion> it = pila.iterator();

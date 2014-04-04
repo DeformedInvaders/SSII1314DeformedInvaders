@@ -163,27 +163,27 @@ public class DeformFragment extends OpenGLFragment
 
 		if (canvas.isEstadoAnyadir())
 		{
-			botonAnyadir.setBackgroundResource(R.drawable.icon_add_selected);
+			botonAnyadir.setBackgroundResource(R.drawable.icon_tool_add_selected);
 		}
 		else if (canvas.isEstadoEliminar())
 		{
-			botonEliminar.setBackgroundResource(R.drawable.icon_remove_selected);
+			botonEliminar.setBackgroundResource(R.drawable.icon_tool_remove_selected);
 		}
 		else if (canvas.isEstadoGrabacion())
 		{
-			botonGrabar.setBackgroundResource(R.drawable.icon_record_selected);
+			botonGrabar.setBackgroundResource(R.drawable.icon_media_videocamara_selected);
 		}
 		else if (canvas.isEstadoDeformar())
 		{
-			botonDeformar.setBackgroundResource(R.drawable.icon_deform_selected);
+			botonDeformar.setBackgroundResource(R.drawable.icon_tool_hand_selected);
 		}
 		else if (canvas.isEstadoAudio())
 		{
-			botonAudio.setBackgroundResource(R.drawable.icon_microphone_selected);
+			botonAudio.setBackgroundResource(R.drawable.icon_media_microphone_selected);
 		}
 		else if (canvas.isEstadoReproduccion())
 		{
-			botonReproducir.setBackgroundResource(R.drawable.icon_play_selected);
+			botonReproducir.setBackgroundResource(R.drawable.icon_media_play_selected);
 		}
 	}
 
@@ -198,12 +198,12 @@ public class DeformFragment extends OpenGLFragment
 		botonReproducir.setVisibility(View.INVISIBLE);
 		botonAudio.setVisibility(View.INVISIBLE);
 
-		botonAnyadir.setBackgroundResource(R.drawable.icon_add);
-		botonEliminar.setBackgroundResource(R.drawable.icon_remove);
-		botonDeformar.setBackgroundResource(R.drawable.icon_deform);
-		botonGrabar.setBackgroundResource(R.drawable.icon_record);
-		botonAudio.setBackgroundResource(R.drawable.icon_microphone);
-		botonReproducir.setBackgroundResource(R.drawable.icon_play);
+		botonAnyadir.setBackgroundResource(R.drawable.icon_tool_add);
+		botonEliminar.setBackgroundResource(R.drawable.icon_tool_remove);
+		botonDeformar.setBackgroundResource(R.drawable.icon_tool_hand);
+		botonGrabar.setBackgroundResource(R.drawable.icon_media_videocamara);
+		botonAudio.setBackgroundResource(R.drawable.icon_media_microphone);
+		botonReproducir.setBackgroundResource(R.drawable.icon_media_play);
 	}
 
 	/* SECTION Métodos Listener onClick */

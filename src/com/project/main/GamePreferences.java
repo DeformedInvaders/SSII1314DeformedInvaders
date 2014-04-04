@@ -19,6 +19,7 @@ public class GamePreferences
 	public static final int MAX_TEXTURE_ENEMY = 4;
 
 	public static final int NUM_TYPE_ENEMIGOS = 4;
+	public static final int NUM_TYPE_STICKERS = 5;
 
 	public static final int TYPE_OBSTACLE = 0;
 	public static final int TYPE_ENEMY = 0;

@@ -15,6 +15,7 @@ import com.android.dialog.StickerDialog;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
+import com.game.data.TTipoSticker;
 import com.project.main.R;
 
 public class PaintFragment extends OpenGLFragment
@@ -172,19 +173,19 @@ public class PaintFragment extends OpenGLFragment
 
 		if (canvas.isEstadoPincel())
 		{
-			botonPincel.setBackgroundResource(R.drawable.icon_pencil_selected);
+			botonPincel.setBackgroundResource(R.drawable.icon_tool_pencil_selected);
 		}
 		else if (canvas.isEstadoCubo())
 		{
-			botonCubo.setBackgroundResource(R.drawable.icon_bucket_selected);
+			botonCubo.setBackgroundResource(R.drawable.icon_tool_bucket_selected);
 		}
 		else if (canvas.isEstadoMover())
 		{
-			botonMano.setBackgroundResource(R.drawable.icon_zoom_selected);
+			botonMano.setBackgroundResource(R.drawable.icon_tool_zoom_selected);
 		}
 		else if (canvas.isEstadoPegatinas())
 		{
-			botonPegatina.setBackgroundResource(R.drawable.icon_sticker_selected);
+			botonPegatina.setBackgroundResource(R.drawable.icon_tool_sticker_selected);
 		}
 	}
 
@@ -195,10 +196,10 @@ public class PaintFragment extends OpenGLFragment
 		botonPrev.setVisibility(View.INVISIBLE);
 		botonDelete.setVisibility(View.INVISIBLE);
 
-		botonPincel.setBackgroundResource(R.drawable.icon_pencil);
-		botonCubo.setBackgroundResource(R.drawable.icon_bucket);
-		botonMano.setBackgroundResource(R.drawable.icon_zoom);
-		botonPegatina.setBackgroundResource(R.drawable.icon_sticker);
+		botonPincel.setBackgroundResource(R.drawable.icon_tool_pencil);
+		botonCubo.setBackgroundResource(R.drawable.icon_tool_bucket);
+		botonMano.setBackgroundResource(R.drawable.icon_tool_zoom);
+		botonPegatina.setBackgroundResource(R.drawable.icon_tool_sticker);
 	}
 
 	/* SECTION Métodos Listener onClick */
@@ -274,7 +275,7 @@ public class PaintFragment extends OpenGLFragment
 			{
 				stickerDialog = new StickerDialog(mContext) {
 					@Override
-					public void onStickerSelected(int tag, int tipo)
+					public void onStickerSelected(int tag, TTipoSticker tipo)
 					{
 						canvas.seleccionarPegatina(tag, tipo);
 

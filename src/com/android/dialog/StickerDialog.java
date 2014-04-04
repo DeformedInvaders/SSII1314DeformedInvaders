@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+import com.game.data.TTipoSticker;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public abstract class StickerDialog extends WindowDialog
@@ -14,9 +16,7 @@ public abstract class StickerDialog extends WindowDialog
 	private OnMouthClickListener mouthListener;
 	private OnWeaponClickListener weaponListener;
 
-	private ImageView imagenEye1, imagenEye2, imagenEye3, imagenEye4, imagenEye5;
-	private ImageView imagenMouth1, imagenMouth2, imagenMouth3, imagenMouth4, imagenMouth5;
-	private ImageView imagenWeapon1, imagenWeapon2, imagenWeapon3, imagenWeapon4;
+	private ImageView[] imagenEye, imagenMouth, imagenWeapon;
 
 	/* SECTION Constructora */
 
@@ -27,62 +27,44 @@ public abstract class StickerDialog extends WindowDialog
 		eyeListener = new OnEyeClickListener();
 		mouthListener = new OnMouthClickListener();
 		weaponListener = new OnWeaponClickListener();
+		
+		imagenEye = new ImageView[GamePreferences.NUM_TYPE_STICKERS];
+		imagenMouth = new ImageView[GamePreferences.NUM_TYPE_STICKERS];
+		imagenWeapon = new ImageView[GamePreferences.NUM_TYPE_STICKERS];
 
-		imagenEye1 = (ImageView) findViewById(R.id.imageButtonSticker1);
-		imagenEye2 = (ImageView) findViewById(R.id.imageButtonSticker2);
-		imagenEye3 = (ImageView) findViewById(R.id.imageButtonSticker3);
-		imagenEye4 = (ImageView) findViewById(R.id.imageButtonSticker4);
-		imagenEye5 = (ImageView) findViewById(R.id.imageButtonSticker5);
+		imagenEye[0] = (ImageView) findViewById(R.id.imageButtonSticker1);
+		imagenEye[1] = (ImageView) findViewById(R.id.imageButtonSticker2);
+		imagenEye[2] = (ImageView) findViewById(R.id.imageButtonSticker3);
+		imagenEye[3] = (ImageView) findViewById(R.id.imageButtonSticker4);
+		imagenEye[4] = (ImageView) findViewById(R.id.imageButtonSticker5);
 
-		imagenEye1.setTag(R.drawable.texture_eyes1);
-		imagenEye2.setTag(R.drawable.texture_eyes2);
-		imagenEye3.setTag(R.drawable.texture_eyes3);
-		imagenEye4.setTag(R.drawable.texture_eyes4);
-		imagenEye5.setTag(R.drawable.texture_eyes5);
+		imagenMouth[0] = (ImageView) findViewById(R.id.imageButtonSticker6);
+		imagenMouth[1] = (ImageView) findViewById(R.id.imageButtonSticker7);
+		imagenMouth[2] = (ImageView) findViewById(R.id.imageButtonSticker8);
+		imagenMouth[3] = (ImageView) findViewById(R.id.imageButtonSticker9);
+		imagenMouth[4] = (ImageView) findViewById(R.id.imageButtonSticker10);
 
-		imagenEye1.setOnClickListener(eyeListener);
-		imagenEye2.setOnClickListener(eyeListener);
-		imagenEye3.setOnClickListener(eyeListener);
-		imagenEye4.setOnClickListener(eyeListener);
-		imagenEye5.setOnClickListener(eyeListener);
-
-		imagenMouth1 = (ImageView) findViewById(R.id.imageButtonSticker6);
-		imagenMouth2 = (ImageView) findViewById(R.id.imageButtonSticker7);
-		imagenMouth3 = (ImageView) findViewById(R.id.imageButtonSticker8);
-		imagenMouth4 = (ImageView) findViewById(R.id.imageButtonSticker9);
-		imagenMouth5 = (ImageView) findViewById(R.id.imageButtonSticker10);
-
-		imagenMouth1.setTag(R.drawable.texture_mouth1);
-		imagenMouth2.setTag(R.drawable.texture_mouth2);
-		imagenMouth3.setTag(R.drawable.texture_mouth3);
-		imagenMouth4.setTag(R.drawable.texture_mouth4);
-		imagenMouth5.setTag(R.drawable.texture_mouth5);
-
-		imagenMouth1.setOnClickListener(mouthListener);
-		imagenMouth2.setOnClickListener(mouthListener);
-		imagenMouth3.setOnClickListener(mouthListener);
-		imagenMouth4.setOnClickListener(mouthListener);
-		imagenMouth5.setOnClickListener(mouthListener);
-
-		imagenWeapon1 = (ImageView) findViewById(R.id.imageButtonSticker11);
-		imagenWeapon2 = (ImageView) findViewById(R.id.imageButtonSticker12);
-		imagenWeapon3 = (ImageView) findViewById(R.id.imageButtonSticker13);
-		imagenWeapon4 = (ImageView) findViewById(R.id.imageButtonSticker14);
-
-		imagenWeapon1.setTag(R.drawable.texture_weapon1);
-		imagenWeapon2.setTag(R.drawable.texture_weapon2);
-		imagenWeapon3.setTag(R.drawable.texture_weapon3);
-		imagenWeapon4.setTag(R.drawable.texture_weapon4);
-
-		imagenWeapon1.setOnClickListener(weaponListener);
-		imagenWeapon2.setOnClickListener(weaponListener);
-		imagenWeapon3.setOnClickListener(weaponListener);
-		imagenWeapon4.setOnClickListener(weaponListener);
+		imagenWeapon[0] = (ImageView) findViewById(R.id.imageButtonSticker11);
+		imagenWeapon[1] = (ImageView) findViewById(R.id.imageButtonSticker12);
+		imagenWeapon[2] = (ImageView) findViewById(R.id.imageButtonSticker13);
+		imagenWeapon[3] = (ImageView) findViewById(R.id.imageButtonSticker14);
+		imagenWeapon[4] = (ImageView) findViewById(R.id.imageButtonSticker15);
+		
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+		{
+			imagenEye[i].setOnClickListener(eyeListener);
+			imagenMouth[i].setOnClickListener(mouthListener);
+			imagenWeapon[i].setOnClickListener(weaponListener);
+			
+			imagenEye[i].setTag(i);
+			imagenMouth[i].setTag(i);
+			imagenWeapon[i].setTag(i);
+		}
 	}
 
 	/* SECTION Métodos Abstractos */
 
-	public abstract void onStickerSelected(int tag, int tipo);
+	public abstract void onStickerSelected(int tag, TTipoSticker tipo);
 
 	/* SECTION Métodos Abstractos WindowDialog */
 
@@ -99,7 +81,7 @@ public abstract class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			onStickerSelected((Integer) v.getTag(), 0);
+			onStickerSelected((Integer) v.getTag(), TTipoSticker.Eyes);
 			dismiss();
 		}
 	}
@@ -109,7 +91,7 @@ public abstract class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			onStickerSelected((Integer) v.getTag(), 1);
+			onStickerSelected((Integer) v.getTag(), TTipoSticker.Mouth);
 			dismiss();
 		}
 	}
@@ -119,7 +101,7 @@ public abstract class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			onStickerSelected((Integer) v.getTag(), 2);
+			onStickerSelected((Integer) v.getTag(), TTipoSticker.Weapon);
 			dismiss();
 		}
 	}

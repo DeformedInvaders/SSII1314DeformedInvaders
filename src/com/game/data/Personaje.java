@@ -43,11 +43,11 @@ public class Personaje extends Malla
 		switch (vidas)
 		{
 			case 0:
-				return R.drawable.bubble_0_lives;
+				return R.drawable.lives_bubble_1;
 			case 1:
-				return R.drawable.bubble_1_lives;
+				return R.drawable.lives_bubble_2;
 			default:
-				return R.drawable.bubble_2_lives;
+				return R.drawable.lives_bubble_3;
 		}
 	}
 
@@ -59,7 +59,7 @@ public class Personaje extends Malla
 		// Burbuja
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
 		{
-			renderer.cargarTexturaRectangulo(gl, width, width, indiceBurbuja(i), TTipoEntidad.Burbuja, 0, i);
+			renderer.cargarTexturaRectangulo(gl, width, width, indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class Personaje extends Malla
 		// Burbuja
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
 		{
-			renderer.descargarTexturaRectangulo(TTipoEntidad.Burbuja, 0, i);
+			renderer.descargarTexturaRectangulo(TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class Personaje extends Malla
 		
 		if (burbuja && vidas > 0)
 		{
-			renderer.dibujarTexturaRectangulo(gl, posicionX, posicionY, TTipoEntidad.Burbuja, 0, vidas - 1);
+			renderer.dibujarTexturaRectangulo(gl, posicionX, posicionY, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
 		}
 	}
 

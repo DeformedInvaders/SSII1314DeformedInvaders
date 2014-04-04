@@ -1,5 +1,7 @@
 package com.creation.data;
 
+import com.game.data.TTipoSticker;
+
 public class Accion
 {
 	// Tipo de Acción
@@ -9,8 +11,9 @@ public class Accion
 	private int color;
 
 	// Pegatina
-	private int pegatina, indice, vertice;
-
+	private int indice, vertice;
+	private TTipoSticker pegatina;
+	
 	// Polilinea
 	private Polilinea linea;
 
@@ -27,7 +30,7 @@ public class Accion
 		this.tipo = 1;
 	}
 
-	public Accion(int indice, int vertice, int pegatina)
+	public Accion(int indice, int vertice, TTipoSticker pegatina)
 	{
 		this.indice = indice;
 		this.pegatina = pegatina;
@@ -47,7 +50,7 @@ public class Accion
 		return linea;
 	}
 
-	public int getTipoPegatina()
+	public TTipoSticker getTipoPegatina()
 	{
 		return pegatina;
 	}

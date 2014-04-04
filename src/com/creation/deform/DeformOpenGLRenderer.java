@@ -16,6 +16,7 @@ import com.creation.data.Esqueleto;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
+import com.game.data.TTipoSticker;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
@@ -141,7 +142,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			if (pegatinas.isCargada(i))
 			{
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), i);
+				TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipoPegatinas[i]);
 			}
 		}
 	}
@@ -220,7 +222,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			if (pegatinas.isCargada(i))
 			{
 				int indice = pegatinas.getVertice(i);
-				dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), i);
+				TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+				dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipoPegatinas[i]);
 			}
 		}
 	}
@@ -614,7 +617,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// Pegatinas
 		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
 		{
-			descargarTexturaRectangulo(i);
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			descargarTexturaRectangulo(tipoPegatinas[i]);
 		}
 
 		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVerticesAnimacion);

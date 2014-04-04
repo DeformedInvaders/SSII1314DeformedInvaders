@@ -17,6 +17,7 @@ import android.opengl.GLUtils;
 
 import com.creation.data.MapaBits;
 import com.game.data.TTipoEntidad;
+import com.game.data.TTipoSticker;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
@@ -732,24 +733,24 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	private int obtenerPosicionTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	private int obtenerPosicionTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker tipoPegatina)
 	{
 		switch (tipoEntidad)
 		{
 			case Personaje:
-				return POS_TEXTURE_CHARACTER_STICKER + posPegatina;
+				return POS_TEXTURE_CHARACTER_STICKER + tipoPegatina.ordinal();
 			case Enemigo:
 				// FIXME:
 				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
-				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + posPegatina;
+				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + tipoPegatina.ordinal();
 			case Obstaculo:
 				return POS_TEXTURE_OBSTACLE + posEntidad;
 			case Grieta:
 				return POS_TEXTURE_FISSURE;
 			case Burbuja:
-				return POS_TEXTURE_BUBBLE + posPegatina;
+				return POS_TEXTURE_BUBBLE + posEntidad;
 			case Corazon:
-				return POS_TEXTURE_HEART + posPegatina;
+				return POS_TEXTURE_HEART + tipoPegatina.ordinal();
 			default:
 				return -1;
 		}
@@ -844,7 +845,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public float cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	public float cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -872,7 +873,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return 0;
 	}
 	
-	public float cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	public float cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -897,7 +898,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return 0;
 	}
 
-	public void descargarTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	public void descargarTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -919,12 +920,12 @@ public abstract class OpenGLRenderer implements Renderer
 		descargarTexturaMalla(TTipoEntidad.Personaje);
 	}
 
-	protected void cargarTexturaRectangulo(GL10 gl, int indiceTextura, int posPegatina)
+	protected void cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoSticker posPegatina)
 	{
 		cargarTexturaRectangulo(gl, indiceTextura, TTipoEntidad.Personaje, 0, posPegatina);
 	}
 
-	protected void descargarTexturaRectangulo(int posPegatina)
+	protected void descargarTexturaRectangulo(TTipoSticker posPegatina)
 	{
 		descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, posPegatina);
 	}
@@ -965,7 +966,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina, float scaleX, float scaleY)
+	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina, float scaleX, float scaleY)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -983,7 +984,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina, float scaleX, float scaleY)
+	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina, float scaleX, float scaleY)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -999,7 +1000,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, int posPegatina)
+	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
 		dibujarTexturaRectangulo(gl, x, y, tipoEntidad, posEntidad, posPegatina, 1.0f, 1.0f);
 	}
@@ -1011,7 +1012,7 @@ public abstract class OpenGLRenderer implements Renderer
 		dibujarTexturaMalla(gl, bufferPuntos, bufferCoordTextura, TTipoEntidad.Personaje);
 	}
 
-	protected void dibujarTexturaRectangulo(GL10 gl, float x, float y, int posPegatina)
+	protected void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoSticker posPegatina)
 	{
 		dibujarTexturaRectangulo(gl, x, y, TTipoEntidad.Personaje, 0, posPegatina);
 	}
