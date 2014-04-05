@@ -48,7 +48,7 @@ public class LevelSelectFragment extends OpenGLFragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_game_level_select_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_game_select_layout, container, false);
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect1);

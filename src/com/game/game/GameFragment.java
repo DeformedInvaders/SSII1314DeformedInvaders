@@ -73,7 +73,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_game_game_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
 
 		// Instanciar Elementos de la GUI
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);

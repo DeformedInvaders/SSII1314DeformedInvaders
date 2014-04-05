@@ -26,21 +26,23 @@ public class CharacterSelectFragment extends OpenGLFragment
 	private ViewPagerSwipeable pager;
 
 	private Personaje personaje;
-
+	
+	private OnCharacterListener listener;
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack;
+	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonDelete;
 
 	/* SECTION Constructora */
 
-	public static final CharacterSelectFragment newInstance(Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
+	public static final CharacterSelectFragment newInstance(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
 	{
 		CharacterSelectFragment fragment = new CharacterSelectFragment();
-		fragment.setParameters(p, s, m, c);
+		fragment.setParameters(l, p, s, m, c);
 		return fragment;
 	}
 
-	private void setParameters(Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
+	private void setParameters(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
 	{
+		listener = l;
 		personaje = p;
 		pager = s;
 		manager = m;
@@ -52,23 +54,27 @@ public class CharacterSelectFragment extends OpenGLFragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_selection_character_select_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_character_select_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewSelect1);
+		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
 		canvas.setParameters(personaje, manager, TDisplayTipo.Selection);
 
-		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonSelect1);
-		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonSelect2);
-		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonSelect3);
-		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonSelect4);
-		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonSelect5);
+		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
+		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect2);
+		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect3);
+		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect4);
+		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
+		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
+		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
 
 		botonCamara.setOnClickListener(new OnCamaraClickListener());
 		botonRun.setOnClickListener(new OnRunClickListener());
 		botonJump.setOnClickListener(new OnJumpClickListener());
 		botonCrouch.setOnClickListener(new OnCrouchClickListener());
 		botonAttack.setOnClickListener(new OnAttackClickListener());
+		botonReady.setOnClickListener(new OnReadyClickListener());
+		botonDelete.setOnClickListener(new OnDeleteClickListener());
 
 		setCanvasListener(canvas);
 
@@ -82,7 +88,13 @@ public class CharacterSelectFragment extends OpenGLFragment
 	{
 		super.onDestroyView();
 
+		botonReady = null;
+		botonDelete = null;
 		botonCamara = null;
+		botonRun = null;
+		botonJump = null;
+		botonCrouch = null;
+		botonAttack = null;
 		canvas = null;
 		pager = null;
 	}
@@ -112,6 +124,8 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonJump.setVisibility(View.INVISIBLE);
 		botonCrouch.setVisibility(View.INVISIBLE);
 		botonAttack.setVisibility(View.INVISIBLE);
+		botonReady.setVisibility(View.INVISIBLE);
+		botonDelete.setVisibility(View.INVISIBLE);
 
 		botonCamara.setBackgroundResource(R.drawable.icon_share_picture);
 	}
@@ -130,6 +144,8 @@ public class CharacterSelectFragment extends OpenGLFragment
 			botonJump.setVisibility(View.VISIBLE);
 			botonCrouch.setVisibility(View.VISIBLE);
 			botonAttack.setVisibility(View.VISIBLE);
+			botonReady.setVisibility(View.VISIBLE);
+			botonDelete.setVisibility(View.VISIBLE);
 		}
 
 		if (canvas.isEstadoRetoque())
@@ -235,6 +251,24 @@ public class CharacterSelectFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarAttack();
+		}
+	}
+	
+	private class OnReadyClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			listener.onCharacterSelected();
+		}
+	}
+
+	private class OnDeleteClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			listener.onCharacterDeleted();
 		}
 	}
 }

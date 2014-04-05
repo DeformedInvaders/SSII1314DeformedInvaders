@@ -7,9 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
@@ -18,14 +16,12 @@ import com.android.view.ViewPagerSwipeable;
 import com.game.data.Personaje;
 import com.project.main.R;
 
-public class CharacterSelectionFragment extends ViewPagerFragment
+public class CharacterSelectionFragment extends ViewPagerFragment implements OnCharacterListener
 {
 	private ExternalStorageManager manager;
 	private SocialConnector connector;
 
 	private CharacterSelectionFragmentListener mCallback;
-
-	private ImageButton botonReady, botonDelete;
 
 	private List<Personaje> listaPersonajes;
 
@@ -75,23 +71,17 @@ public class CharacterSelectionFragment extends ViewPagerFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// Seleccionar Layout
-		View rootView = inflater.inflate(R.layout.fragment_selection_character_selection_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_character_selection_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelection1);
-		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelection2);
-
-		botonReady.setOnClickListener(new OnReadyClickListener());
-		botonDelete.setOnClickListener(new OnDeleteClickListener());
-
-		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewSelection1);
+		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewCharacterSelection1);
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 
 		Iterator<Personaje> it = listaPersonajes.iterator();
 		while (it.hasNext())
 		{
 			Personaje p = it.next();
-			viewPager.addView(CharacterSelectFragment.newInstance(p, viewPager, manager, connector), p.getNombre());
+			viewPager.addView(CharacterSelectFragment.newInstance(this, p, viewPager, manager, connector), p.getNombre());
 		}
 
 		return rootView;
@@ -102,33 +92,25 @@ public class CharacterSelectionFragment extends ViewPagerFragment
 	{
 		super.onDestroyView();
 
-		botonReady = null;
-		botonDelete = null;
 		viewPager = null;
-	}
-
-	/* SECTION Métodos Listener onClick */
-
-	private class OnReadyClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			mCallback.onCharacterSelectionSelectClicked(viewPager.getPosition());
-		}
-	}
-
-	private class OnDeleteClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			mCallback.onCharacterSelectionDeleteButtonClicked(viewPager.getPosition());
-		}
 	}
 
 	/* SECTION Métodos abstractos de ViewPagerFragment */
 
 	@Override
 	public void onPageSelected(int position) { }
+
+	/* SECTION Métodos abstractos de OnCharacterListener */
+	
+	@Override
+	public void onCharacterSelected()
+	{
+		mCallback.onCharacterSelectionSelectClicked(viewPager.getPosition());
+	}
+
+	@Override
+	public void onCharacterDeleted()
+	{
+		mCallback.onCharacterSelectionDeleteButtonClicked(viewPager.getPosition());
+	}
 }

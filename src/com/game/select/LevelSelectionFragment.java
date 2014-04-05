@@ -61,7 +61,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// Seleccionar Layout
-		View rootView = inflater.inflate(R.layout.fragment_game_level_selection_layout, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_game_selection_layout, container, false);
 
 		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewLevelSelection1);
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
@@ -93,7 +93,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	@Override
 	public void onPageSelected(int page) { }
 
-	/* SECTION Métodos de OnLevelListener */
+	/* SECTION Métodos abstractos de OnLevelListener */
 
 	@Override
 	public void onLevelSelected(int level)
