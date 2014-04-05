@@ -138,7 +138,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		cargarTexturaMalla(gl, bitmap);
 
 		// Pegatinas
-		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			if (pegatinas.isCargada(i))
 			{
@@ -217,7 +217,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
 
 		// Pegatinas
-		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			if (pegatinas.isCargada(i))
 			{
@@ -615,7 +615,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		descargarTexturaMalla();
 
 		// Pegatinas
-		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
 			descargarTexturaRectangulo(tipoPegatinas[i]);

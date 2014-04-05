@@ -7,6 +7,7 @@ public class GamePreferences
 
 	// Animación
 	public static final int TIME_INTERVAL_ANIMATION = 20;
+	public static final int NUM_FRAMES_ANIMATION = 34;
 
 	// Enemigos
 	public static final int MAX_TEXTURE_BACKGROUND = 3;

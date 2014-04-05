@@ -26,6 +26,7 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.main.GamePreferences;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {
@@ -133,7 +134,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 
 		// Cargar Pegatinas
-		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			if (pegatinas.isCargada(i))
 			{
@@ -174,7 +175,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 
 			// Dibujar Pegatinas
-			for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+			for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 			{
 				if (pegatinas.isCargada(i))
 				{
@@ -206,7 +207,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
 
-		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
 			descargarTexturaRectangulo(tipoPegatinas[i]);
@@ -309,7 +310,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private boolean anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(contorno, vertices, pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight);
 		if (j != -1)
 		{
 			pegatinas.setPegatina(pegatinaActual, j, tipoPegatinaActual);
@@ -472,7 +473,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		listaLineas = new ArrayList<Polilinea>();
 		pegatinas = new Pegatinas();
 
-		for (int i = 0; i < pegatinas.getNumPegatinas(); i++)
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
 			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
 			descargarTexturaRectangulo(tipoPegatinas[i]);

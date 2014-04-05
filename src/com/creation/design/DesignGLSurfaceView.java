@@ -67,6 +67,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarRetoque()
 	{
 		renderer.seleccionarRetoque();
+		requestRender();
 	}
 
 	/* SECTION Métodos de Obtención de Información */

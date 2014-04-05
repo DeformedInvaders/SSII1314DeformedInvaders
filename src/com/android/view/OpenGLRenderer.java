@@ -18,11 +18,9 @@ import android.opengl.GLUtils;
 import com.creation.data.MapaBits;
 import com.game.data.TTipoEntidad;
 import com.game.data.TTipoSticker;
-import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
 import com.project.main.GamePreferences;
 
 public abstract class OpenGLRenderer implements Renderer
@@ -595,47 +593,6 @@ public abstract class OpenGLRenderer implements Renderer
 		return (short) minpos;
 	}
 
-	protected short buscarPixel(ShortArray contorno, FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-
-		float frameX = convertToFrameXCoordinate(worldX);
-		float frameY = convertToFrameYCoordinate(worldY);
-
-		if (!GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
-		{
-			return -1;
-		}
-
-		float mindistancia = Float.MAX_VALUE;
-		int minpos = -1;
-
-		int j = 0;
-		while (j < vertices.size)
-		{
-			float framepX = vertices.get(j);
-			float framepY = vertices.get(j + 1);
-
-			float worldpX = convertFromFrameXCoordinate(framepX);
-			float worldpY = convertFromFrameYCoordinate(framepY);
-
-			float lastpX = convertToPixelXCoordinate(worldpX, screenWidth);
-			float lastpY = convertToPixelYCoordinate(worldpY, screenHeight);
-
-			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
-			if (distancia < mindistancia)
-			{
-				minpos = j / 2;
-				mindistancia = distancia;
-			}
-
-			j = j + 2;
-		}
-
-		return (short) minpos;
-	}
-
 	/* SECTION Métodos de Pintura en la Tubería Gráfica */
 
 	// Pintura de un Buffer de Puntos
@@ -847,49 +804,47 @@ public abstract class OpenGLRenderer implements Renderer
 
 	public float cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
-		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 
-		if (posTextura != -1 && !cargadaTextura[posTextura])
-		{
-			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
-
-			float textureHeight = bitmap.getHeight();
-			float textureWidth = bitmap.getWidth();
-
-			cargarTextura(gl, bitmap, posTextura);
-			bitmap.recycle();
-
-			FloatArray puntos = new FloatArray();
-			puntos.add(0.0f);			puntos.add(0.0f);
-			puntos.add(0.0f);			puntos.add(textureHeight);
-			puntos.add(textureWidth);	puntos.add(0.0f);
-			puntos.add(textureWidth);	puntos.add(textureHeight);
-
-			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
-
-			return textureHeight;
-		}
-
-		return 0;
+		float textureHeight = bitmap.getHeight();
+		float textureWidth = bitmap.getWidth();
+		
+		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
 	}
 	
 	public float cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		
+		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
+	}
+	
+	private float cargarTexturaRectangulo(GL10 gl, Bitmap bitmap, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
 		if (posTextura != -1 && !cargadaTextura[posTextura])
-		{
-			Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
-			
+		{			
 			cargarTextura(gl, bitmap, posTextura);
 			bitmap.recycle();
 
 			FloatArray puntos = new FloatArray();
-			puntos.add(0.0f);			puntos.add(0.0f);
-			puntos.add(0.0f);			puntos.add(textureHeight);
-			puntos.add(textureWidth);	puntos.add(0.0f);
-			puntos.add(textureWidth);	puntos.add(textureHeight);
-
+			
+			if(tipoEntidad == TTipoEntidad.Personaje)// || tipoEntidad == TTipoEntidad.Enemigo)
+			{
+				puntos.add(-textureWidth/2);	puntos.add(-textureHeight/2);
+				puntos.add(-textureWidth/2);	puntos.add(textureHeight/2);
+				puntos.add(textureWidth/2);		puntos.add(-textureHeight/2);
+				puntos.add(textureWidth/2);		puntos.add(textureHeight/2);
+			}
+			else
+			{
+				puntos.add(0.0f);				puntos.add(0.0f);
+				puntos.add(0.0f);				puntos.add(textureHeight);
+				puntos.add(textureWidth);		puntos.add(0.0f);
+				puntos.add(textureWidth);		puntos.add(textureHeight);
+			}
+			
 			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
 
 			return textureHeight;
@@ -986,18 +941,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina, float scaleX, float scaleY)
 	{
-		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
-
-		if (posTextura != -1 && cargadaTextura[posTextura])
-		{
-			gl.glPushMatrix();
-
-			gl.glScalef(scaleX, scaleY, 0.0f);
-
-			dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
-
-			gl.glPopMatrix();
-		}
+		dibujarTexturaRectangulo(gl, 0.0f, 0.0f, tipoEntidad, posEntidad, posPegatina, scaleX, scaleY);
 	}
 
 	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
@@ -1019,22 +963,25 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* SECTION Métodos de Pintura de Fondo */
 
-	protected void seleccionarTexturaFondo(int indiceTextura)
-	{
-		indiceTexturaFondo[0] = indiceTextura;
-
-		dibujarFondo[0] = true;
-	}
-
-	protected void seleccionarTexturaFondo(int indiceTextura1, int indiceTextura2, int indiceTextura3)
-	{
-		indiceTexturaFondo[0] = indiceTextura1;
-		indiceTexturaFondo[1] = indiceTextura2;
-		indiceTexturaFondo[2] = indiceTextura3;
-
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
+	protected void seleccionarTexturaFondo(int... indiceTexturas)
+	{		
+		if(indiceTexturas.length == 1)
 		{
-			dibujarFondo[i] = true;
+			indiceTexturaFondo[0] = indiceTexturas[0];
+			dibujarFondo[0] = true;
+		}	
+		else
+		{
+			int i = 0;
+			while(i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1)
+			{
+				indiceTexturaFondo[i] = indiceTexturas[i % (indiceTexturas.length - 1)];
+				dibujarFondo[i] = true;		
+				i++;
+			}
+			
+			indiceTexturaFondo[i] = indiceTexturas[indiceTexturas.length - 1];
+			dibujarFondo[i] = false;
 		}
 	}
 
@@ -1089,10 +1036,11 @@ public abstract class OpenGLRenderer implements Renderer
 		puntos.add(xRight);		puntos.add(yBottom);
 		puntos.add(xRight);		puntos.add(yTop);
 
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++) {
-			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i]) {
-				vertTextura[POS_TEXTURE_BACKGROUND + i] = BufferManager
-						.construirBufferListaPuntos(puntos);
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
+		{
+			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
+			{
+				vertTextura[POS_TEXTURE_BACKGROUND + i] = BufferManager.construirBufferListaPuntos(puntos);
 			}
 		}
 	}

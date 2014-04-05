@@ -15,27 +15,5 @@
             android:contentDescription="@string/desc_game_play" />
 
 	</LinearLayout>
-	 
-	<LinearLayout style="@style/Layout_Right_FragmentButton_Style" >
-		
-        <ImageButton
-            android:id="@+id/imageButtonGame2"
-            style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_game_jump"
-            android:contentDescription="@string/desc_select_jump" />
-        
-        <ImageButton
-            android:id="@+id/imageButtonGame3"
-            style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_game_crouch"
-            android:contentDescription="@string/desc_select_crouch" />
-        
-        <ImageButton
-            android:id="@+id/imageButtonGame4"
-            style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_game_attack"
-            android:contentDescription="@string/desc_select_attack" />
-
-	</LinearLayout>
     
 </RelativeLayout>

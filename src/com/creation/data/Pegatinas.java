@@ -106,8 +106,4 @@ public class Pegatinas implements Serializable
 		return verticePegatinas[tipo];
 	}
 
-	public int getNumPegatinas()
-	{
-		return GamePreferences.MAX_TEXTURE_STICKER;
-	}
 }

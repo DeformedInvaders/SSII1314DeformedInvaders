@@ -19,7 +19,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/algorithm_icon"
+        android:icon="@drawable/application_icon"
         android:label="@string/title_app"
         android:theme="@style/AppTheme" >
         

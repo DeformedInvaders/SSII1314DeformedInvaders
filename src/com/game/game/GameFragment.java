@@ -25,7 +25,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	private Personaje personaje;
 
 	private GameOpenGLSurfaceView canvas;
-	private ImageButton botonPlay, botonJump, botonCrouch, botonAttack;
+	private ImageButton botonPlay;
 
 	private boolean gamePaused;
 
@@ -78,15 +78,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		// Instanciar Elementos de la GUI
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(personaje, manager, this, level);
-
-		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonGame2);
-		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonGame3);
-		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonGame4);
+		
 		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
-
-		botonJump.setOnClickListener(new OnJumpGameClickListener());
-		botonCrouch.setOnClickListener(new OnCrouchGameClickListener());
-		botonAttack.setOnClickListener(new OnAttackGameClickListener());
 		botonPlay.setOnClickListener(new onPlayGameClickListener());
 
 		setCanvasListener(canvas);
@@ -104,9 +97,6 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		canvas = null;
 
 		botonPlay = null;
-		botonJump = null;
-		botonAttack = null;
-		botonCrouch = null;
 	}
 
 	@Override
@@ -142,42 +132,6 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	}
 
 	/* SECTION Métodos Listener onClick */
-
-	private class OnJumpGameClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if (!gamePaused)
-			{
-				canvas.seleccionarJump();
-			}
-		}
-	}
-
-	private class OnCrouchGameClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if (!gamePaused)
-			{
-				canvas.seleccionarCrouch();
-			}
-		}
-	}
-
-	private class OnAttackGameClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if (!gamePaused)
-			{
-				canvas.seleccionarAttack();
-			}
-		}
-	}
 
 	private class onPlayGameClickListener implements OnClickListener
 	{

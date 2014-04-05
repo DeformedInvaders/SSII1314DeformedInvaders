@@ -18,6 +18,7 @@ import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class AnimationFragment extends ViewPagerFragment
@@ -84,10 +85,10 @@ public class AnimationFragment extends ViewPagerFragment
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_run), TDeformTipo.Run, 18), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_jump), TDeformTipo.Jump, 34), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_crouch), TDeformTipo.Crouch, 34), getString(R.string.title_animation_section_crouch));
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_attack), TDeformTipo.Attack, 18), getString(R.string.title_animation_section_attack));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_run), TDeformTipo.Run, GamePreferences.NUM_FRAMES_ANIMATION), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_jump), TDeformTipo.Jump, GamePreferences.NUM_FRAMES_ANIMATION), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_crouch), TDeformTipo.Crouch, GamePreferences.NUM_FRAMES_ANIMATION), getString(R.string.title_animation_section_crouch));
+		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_attack), TDeformTipo.Attack, GamePreferences.NUM_FRAMES_ANIMATION), getString(R.string.title_animation_section_attack));
 
 		return rootView;
 	}
