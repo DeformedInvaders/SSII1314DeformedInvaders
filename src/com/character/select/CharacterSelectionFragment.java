@@ -78,8 +78,8 @@ public class CharacterSelectionFragment extends ViewPagerFragment
 		View rootView = inflater.inflate(R.layout.fragment_selection_character_selection_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonSelection1);
-		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonSelection2);
+		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelection1);
+		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelection2);
 
 		botonReady.setOnClickListener(new OnReadyClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());

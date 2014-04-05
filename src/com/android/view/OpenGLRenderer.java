@@ -126,11 +126,14 @@ public abstract class OpenGLRenderer implements Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
+		gl.glDisable(GL10.GL_DITHER);
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
+
 		// Sombreado Suave
 		gl.glShadeModel(GL10.GL_SMOOTH);
 
 		// Color de Fondo Blanco
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 		// Limpiar Buffer de Profundidad
 		gl.glClearDepthf(1.0f);

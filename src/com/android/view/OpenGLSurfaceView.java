@@ -40,6 +40,9 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		// Activar Formato Texturas transparentes
 		setEGLConfigChooser(8, 8, 8, 8, 0, 0);
 		getHolder().setFormat(PixelFormat.RGBA_8888);
+		
+		// Activar Formato fondo transparente
+		setZOrderOnTop(true);
 
 		// Crear Contexto OpenGL ES 1.0
 		setEGLContextClientVersion(1);

@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.MapaBits;
 import com.game.data.Personaje;
-import com.project.main.R;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer 
 {
@@ -54,7 +53,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// BackGround
-		seleccionarTexturaFondo(R.drawable.background_display);
+		//seleccionarTexturaFondo(R.drawable.background_display);
 
 		if (personajeCargado)
 		{

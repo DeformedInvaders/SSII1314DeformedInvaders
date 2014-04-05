@@ -26,7 +26,9 @@
         <item name="android:orientation">vertical</item>
 	</style>
 	
-	<style name="Layout_Activity_Style" parent="Layout_Fragment_Style"/>
+	<style name="Layout_Activity_Style" parent="Layout_Fragment_Style">
+	    <item name="android:background">#FFFFFF</item>
+    </style>
 	
 	<style name="Layout_Dialog_Style" >	    
 		<item name="android:orientation">vertical</item>
@@ -44,8 +46,8 @@
 	</style>
 	
     <style name="Button_Sticker_Style">
-    	<item name="android:layout_width">@dimen/StickerButton_LayoutHeight_Dimen</item>
-        <item name="android:layout_height">@dimen/StickerButton_LayoutHeight_Dimen</item>
+    	<item name="android:layout_width">@dimen/StickerButton_LayoutWidth_Dimen</item>
+        <item name="android:layout_height">@dimen/StickerButton_LayoutWidth_Dimen</item>
         <item name="android:layout_marginLeft">10dp</item>
     </style>
     

@@ -3,18 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
+	<ImageView style="@style/ImageView_Background_Style"
+		android:contentDescription="@string/desc_select_background"
+		android:background="@drawable/background_display" />
+    
    <com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
 	    android:id="@+id/pagerViewSelection1"/>
     
     <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
 
 	    <ImageButton style="@style/Button_Fragment_Style"
-	        android:id="@+id/imageButtonSelection1"
+	        android:id="@+id/imageButtonCharacterSelection1"
 	        android:contentDescription="@string/desc_selection_select"
 	        android:background="@drawable/icon_tool_ready" />
 	
 		<ImageButton style="@style/Button_Fragment_Style"
-		    android:id="@+id/imageButtonSelection2"
+		    android:id="@+id/imageButtonCharacterSelection2"
 		    android:contentDescription="@string/desc_selection_delete"
 		    android:background="@drawable/icon_tool_reset" />
 	

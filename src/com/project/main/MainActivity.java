@@ -36,7 +36,7 @@ import com.game.select.LevelGenerator;
 import com.game.select.LevelSelectionFragment;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
-	{
+{
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
@@ -129,7 +129,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		boolean clearBackStack = false;
 		boolean addToBackStack = true;
 
-		if (estado == TEstado.CharacterSelection)
+		if (estado == TEstado.CharacterSelection || estado == TEstado.LevelSelection || estado == TEstado.Game)
 		{
 			addToBackStack = false;
 		}

@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
+   	<ImageView style="@style/ImageView_Background_Style"
+		android:contentDescription="@string/desc_select_background"
+		android:background="@drawable/background_display" />
+    
     <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewMain1" />
 
