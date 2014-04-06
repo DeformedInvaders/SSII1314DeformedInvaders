@@ -8,12 +8,11 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.android.alert.WebAlert;
-import com.project.main.MainActivity;
 import com.project.main.R;
 
-public class SocialConnector
+public abstract class SocialConnector
 {
-	private MainActivity activity;
+	private Context mContext;
 
 	private TSocialEstado estadoTwitter, estadoFacebook;
 	private TwitterConnector conectorTwitter;
@@ -21,9 +20,9 @@ public class SocialConnector
 
 	/* SECTION Constructora */
 
-	public SocialConnector(MainActivity context)
+	public SocialConnector(Context context)
 	{
-		activity = context;
+		mContext = context;
 
 		estadoTwitter = TSocialEstado.Desconectado;
 		estadoFacebook = TSocialEstado.Desconectado;
@@ -31,12 +30,16 @@ public class SocialConnector
 		conectorTwitter = new TwitterConnector();
 		conectorFacebook = new FacebookConnector();
 	}
+	
+	/* SECTION Métodos Abstractos */
+	
+	public abstract void onConectionStatusChange();
 
 	/* SECTION Métodos Comprobación de Conexión */
 
 	private boolean comprobarConexionInternet()
 	{
-		ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		return cm.getActiveNetworkInfo() != null;
 	}
 
@@ -49,7 +52,7 @@ public class SocialConnector
 	{
 		if (!comprobarConexionInternet())
 		{
-			Toast.makeText(activity, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
 
 			desconectarTwitter();
 			desconectarFacebook();
@@ -64,7 +67,7 @@ public class SocialConnector
 	{
 		if (!comprobarConexionSocial())
 		{
-			Toast.makeText(activity, R.string.error_social_connection, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_social_connection, Toast.LENGTH_SHORT).show();
 
 			return false;
 		}
@@ -74,7 +77,7 @@ public class SocialConnector
 
 	private void evaluarRespuestaOAuth(String url, String title)
 	{
-		WebAlert alert = new WebAlert(activity, title, activity.getString(R.string.text_button_close)) {
+		WebAlert alert = new WebAlert(mContext, title, mContext.getString(R.string.text_button_close)) {
 			@Override
 			public boolean evaluarURL(String url)
 			{
@@ -124,11 +127,11 @@ public class SocialConnector
 		if (conectorTwitter.iniciarAutorizacion())
 		{
 			estadoTwitter = TSocialEstado.OAuth;
-			evaluarRespuestaOAuth(conectorTwitter.getAuthorizationURL(), activity.getString(R.string.text_twitter_title));
+			evaluarRespuestaOAuth(conectorTwitter.getAuthorizationURL(), mContext.getString(R.string.text_twitter_title));
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_twitter_oauth_permission, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_twitter_oauth_permission, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -138,14 +141,14 @@ public class SocialConnector
 		{
 			estadoTwitter = TSocialEstado.Conectado;
 
-			Toast.makeText(activity, R.string.text_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
 
-		activity.actualizarActionBar();
+		onConectionStatusChange();
 	}
 
 	public void desconectarTwitter()
@@ -155,7 +158,7 @@ public class SocialConnector
 			estadoTwitter = TSocialEstado.Desconectado;
 		}
 
-		activity.actualizarActionBar();
+		onConectionStatusChange();
 	}
 
 	public void conectarFacebook()
@@ -175,11 +178,11 @@ public class SocialConnector
 		if (conectorFacebook.iniciarAutorizacion())
 		{
 			estadoFacebook = TSocialEstado.OAuth;
-			evaluarRespuestaOAuth(conectorFacebook.getAuthorizationURL(), activity.getString(R.string.text_facebook_title));
+			evaluarRespuestaOAuth(conectorFacebook.getAuthorizationURL(), mContext.getString(R.string.text_facebook_title));
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_facebook_oauth_permission, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_facebook_oauth_permission, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -189,14 +192,14 @@ public class SocialConnector
 		{
 			estadoFacebook = TSocialEstado.Conectado;
 
-			Toast.makeText(activity, R.string.text_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
 
-		activity.actualizarActionBar();
+		onConectionStatusChange();
 	}
 
 	public void desconectarFacebook()
@@ -206,7 +209,7 @@ public class SocialConnector
 			estadoFacebook = TSocialEstado.Desconectado;
 		}
 
-		activity.actualizarActionBar();
+		onConectionStatusChange();
 	}
 
 	/* SECTION Métodos Publicación de Estados */
@@ -231,11 +234,11 @@ public class SocialConnector
 	{
 		if (conectorTwitter.enviarPost(text))
 		{
-			Toast.makeText(activity, R.string.text_twitter_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_twitter_post, Toast.LENGTH_SHORT).show();
 		}
 		else 
 		{
-			Toast.makeText(activity, R.string.error_twitter_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_twitter_post, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -243,11 +246,11 @@ public class SocialConnector
 	{
 		if (conectorFacebook.enviarPost(text))
 		{
-			Toast.makeText(activity, R.string.text_facebook_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_facebook_post, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_facebook_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_facebook_post, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -273,11 +276,11 @@ public class SocialConnector
 	{
 		if (conectorTwitter.enviarPost(text, foto))
 		{
-			Toast.makeText(activity, R.string.text_twitter_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_twitter_post, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_twitter_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_twitter_post, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -285,11 +288,11 @@ public class SocialConnector
 	{
 		if (conectorFacebook.enviarPost(text, foto))
 		{
-			Toast.makeText(activity, R.string.text_facebook_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_facebook_post, Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
-			Toast.makeText(activity, R.string.error_facebook_post, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_facebook_post, Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -2,6 +2,8 @@ package com.android.audio;
 
 import java.io.IOException;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
@@ -9,6 +11,7 @@ import com.android.storage.ExternalStorageManager;
 
 public abstract class AudioPlayerManager implements OnCompletionListener
 {
+	private Context mContext;
 	private ExternalStorageManager manager;
 
 	private MediaPlayer player;
@@ -16,14 +19,21 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	/* SECTION Constructora */
 
-	public AudioPlayerManager(ExternalStorageManager manager)
+	public AudioPlayerManager(ExternalStorageManager externalManager)
 	{
-		this.manager = manager;
+		manager = externalManager;
 
-		this.player = new MediaPlayer();
-		this.player.setOnCompletionListener(this);
+		player = new MediaPlayer();
+		player.setOnCompletionListener(this);
 
-		this.estado = TPlayEstado.Libre;
+		estado = TPlayEstado.Libre;
+	}
+	
+	public AudioPlayerManager(Context context)
+	{
+		mContext = context;
+		
+		estado = TPlayEstado.Libre;
 	}
 
 	/* SECTION Métodos Abstractos */
@@ -31,31 +41,62 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	public abstract void onPlayerCompletion();
 
 	/* SECTION Métodos de Selección de Estado */
+	
+	private boolean startPlayingAudio(String path)
+	{
+		try
+		{
+			if (estado == TPlayEstado.Libre)
+			{
+				// Idle
+				player.setDataSource(path);
+				// Initialized
+				player.prepare();
+				// Prepared
+				player.start();
+				// Started
+
+				estado = TPlayEstado.Reproduciendo;
+				return true;
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public boolean startPlayting(int path)
+	{
+		if(manager == null)
+		{
+			if (estado != TPlayEstado.Libre)
+			{
+				resetPlaying();
+			}
+			
+			player = MediaPlayer.create(mContext, path);
+			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			player.setLooping(true);
+			
+			// Prepared
+			player.start();
+			// Started
+
+			estado = TPlayEstado.Reproduciendo;
+			return true;
+			
+		}
+		return false;
+	}
 
 	public boolean startPlaying(String nombre, String movimiento)
 	{
-		if (manager.existeFicheroAudio(nombre, movimiento))
+		if (manager != null && manager.existeFicheroAudio(nombre, movimiento))
 		{
-			try
-			{
-				if (estado == TPlayEstado.Libre)
-				{
-					// Idle
-					player.setDataSource(manager.cargarAudio(nombre, movimiento));
-					// Initialized
-					player.prepare();
-					// Prepared
-					player.start();
-					// Started
-
-					estado = TPlayEstado.Reproduciendo;
-					return true;
-				}
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			return startPlayingAudio(manager.cargarAudio(nombre, movimiento));
 		}
 
 		return false;
@@ -63,28 +104,9 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean startPlaying(String nombre)
 	{
-		if (manager.existeFicheroTemp(nombre))
+		if (manager != null && manager.existeFicheroTemp(nombre))
 		{
-			try
-			{
-				if (estado == TPlayEstado.Libre)
-				{
-					// Idle
-					player.setDataSource(manager.cargarAudioTemp(nombre));
-					// Initialized
-					player.prepare();
-					// Prepared
-					player.start();
-					// Started
-
-					estado = TPlayEstado.Reproduciendo;
-					return true;
-				}
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			return startPlayingAudio(manager.cargarAudioTemp(nombre));
 		}
 
 		return false;

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.android.alert.ConfirmationAlert;
 import com.android.alert.ImageAlert;
 import com.android.alert.TextInputAlert;
+import com.android.audio.AudioPlayerManager;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
@@ -41,6 +42,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
 	private int personajeSeleccionado;
+	
+	/* Musica */
+	private AudioPlayerManager audioManager;
 
 	/* Almacenamiento */
 	private InternalStorageManager internalManager;
@@ -71,10 +75,23 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		internalManager = new InternalStorageManager(this);
+		internalManager = new InternalStorageManager(getApplicationContext());
 		externalManager = new ExternalStorageManager();
-		socialConnector = new SocialConnector(this);
-		levelGenerator = new LevelGenerator(this);
+		
+		levelGenerator = new LevelGenerator(getApplicationContext());
+		
+		socialConnector = new SocialConnector(getApplicationContext()) {
+			@Override
+			public void onConectionStatusChange()
+			{
+				actualizarActionBar();
+			}
+		};
+		
+		audioManager = new AudioPlayerManager(getApplicationContext()) {
+			@Override
+			public void onPlayerCompletion() { }
+		};
 
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
@@ -161,6 +178,19 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 
 		transaction.commit();
+		
+		if(estado == TEstado.Main)
+		{
+			audioManager.startPlayting(R.raw.black_vortex);
+		}
+		else if(estado == TEstado.LevelSelection)
+		{
+			audioManager.startPlayting(R.raw.pump_sting);
+		}
+		else if(estado == TEstado.Game)
+		{
+			audioManager.startPlayting(R.raw.prelude_action);
+		}
 	}
 
 	private void clearBackStack(FragmentManager manager)
@@ -176,7 +206,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		listaPersonajes = lista;
 		personajeSeleccionado = seleccionado;
 		estadoNiveles = niveles;
-
+		
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 	}
 

@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,15 +31,15 @@ public class InternalStorageManager
 	private static final String CHARACTERS_NAMES_FILE = "CharactersNamesDataBase";
 	private static final String LEVELS_FILE = "LevelDataBase";
 
-	private Activity activity;
+	private Context mContext;
 	private List<String> nombres;
 
 	/* SECTION Constructora */
 
-	public InternalStorageManager(Activity activity)
+	public InternalStorageManager(Context context)
 	{
-		this.activity = activity;
-		this.nombres = new ArrayList<String>();
+		mContext = context;
+		nombres = new ArrayList<String>();
 
 		cargarNombres();
 	}
@@ -93,7 +92,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileInputStream file = activity .openFileInput(getCharacterNamesFileName());
+			FileInputStream file = mContext.openFileInput(getCharacterNamesFileName());
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Personaje Seleccionado
@@ -143,7 +142,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileOutputStream file = activity.openFileOutput(getCharacterNamesFileName(), Context.MODE_PRIVATE);
+			FileOutputStream file = mContext.openFileOutput(getCharacterNamesFileName(), Context.MODE_PRIVATE);
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Número de Personajes
@@ -213,7 +212,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileInputStream file = activity.openFileInput(getCharacterChosenFileName());
+			FileInputStream file = mContext.openFileInput(getCharacterChosenFileName());
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Personaje Seleccionado
@@ -246,7 +245,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileOutputStream file = activity.openFileOutput(getCharacterChosenFileName(), Context.MODE_PRIVATE);
+			FileOutputStream file = mContext.openFileOutput(getCharacterChosenFileName(), Context.MODE_PRIVATE);
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personaje Seleccionado
@@ -282,7 +281,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileInputStream file = activity.openFileInput(nombre);
+			FileInputStream file = mContext.openFileInput(nombre);
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Personajes
@@ -331,7 +330,7 @@ public class InternalStorageManager
 		if (comprobarNombresUsados(personaje.getNombre()))
 		{
 			// Personaje Reemplazado
-			Toast.makeText(activity.getApplication(), R.string.text_replace_character_confirmation, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.text_replace_character_confirmation, Toast.LENGTH_SHORT).show();
 		}
 
 		String nombreActual = evaluarNombre(personaje.getNombre());
@@ -339,7 +338,7 @@ public class InternalStorageManager
 
 		try
 		{
-			FileOutputStream file = activity.openFileOutput(nombreActual, Context.MODE_PRIVATE);
+			FileOutputStream file = mContext.openFileOutput(nombreActual, Context.MODE_PRIVATE);
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personajes
@@ -375,7 +374,7 @@ public class InternalStorageManager
 	{
 		String nombreActual = evaluarNombre(personaje.getNombre());
 
-		if (activity.deleteFile(nombreActual))
+		if (mContext.deleteFile(nombreActual))
 		{
 			Log.d("TEST", "File deleted");
 			return eliminarNombre(nombreActual);
@@ -393,7 +392,7 @@ public class InternalStorageManager
 
 		try
 		{
-			FileInputStream file = activity.openFileInput(getLevelsFileName());
+			FileInputStream file = mContext.openFileInput(getLevelsFileName());
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Niveles Jugados
@@ -433,7 +432,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileOutputStream file = activity.openFileOutput(getLevelsFileName(), Context.MODE_PRIVATE);
+			FileOutputStream file = mContext.openFileOutput(getLevelsFileName(), Context.MODE_PRIVATE);
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personaje Seleccionado
