@@ -29,6 +29,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	private ImageButton botonPlay;
 
 	private boolean gamePaused;
+	private int score;
 
 	/* SECTION Constructora */
 
@@ -48,7 +49,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	public interface GameFragmentListener
 	{
-		public void onGameFinished(int level, int idImage, String nameLevel);
+		public void onGameFinished(int score, int level, int idImage, String nameLevel);
 
 		public void onGameFailed(int level, int idImage);
 	}
@@ -164,7 +165,9 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	public void onGameFinished()
 	{
-		mCallback.onGameFinished(level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
+		score = canvas.getPuntuacion();
+		
+		mCallback.onGameFinished(score, level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
 	}
 
 	public void onGameFailed()

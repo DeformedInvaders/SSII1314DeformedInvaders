@@ -74,7 +74,8 @@
 			<string name="text_social_create_character_final">using #DeformedInvaders</string>
 			
 			<string name="text_social_level_completed_initial">I just completed</string>
-			<string name="text_social_level_completed_final">level, using #DeformedInvaders</string>		
+			<string name="text_social_level_completed_middle">level with a score of</string>
+			<string name="text_social_level_completed_final">using #DeformedInvaders</string>		
 			
 			<string name="text_twitter_title">Twitter OAuth.</string>
 			<string name="text_facebook_title">Facebook OAuth.</string>
@@ -90,7 +91,7 @@
 			<string name="text_level_enabled">The level is unlocked!</string>
 			<string name="text_level_disabled">The level is still locked!</string>
 			
-			<string name="text_game_finish">You finish this level.</string>
+			<string name="text_game_finish">You finish this level with a score of </string>
 			<string name="text_game_finish_description">Do you want to replay this level?.</string>
 			
 			<string name="text_game_fail">Game over.</string>

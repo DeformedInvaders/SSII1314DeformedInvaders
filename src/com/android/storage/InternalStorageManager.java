@@ -29,7 +29,8 @@ public class InternalStorageManager
 	private static final String CHARACTERS_FILE = "CharactersDataBase";
 	private static final String CHARACTER_CHOSEN_FILE = "CharacterChosen";
 	private static final String CHARACTERS_NAMES_FILE = "CharactersNamesDataBase";
-	private static final String LEVELS_FILE = "LevelDataBase";
+	private static final String LOCKED_LEVELS_FILE = "LockedLevelDataBase";
+	private static final String SCORE_LEVELS_FILE = "ScoreLevelsDataBase";
 
 	private Context mContext;
 	private List<String> nombres;
@@ -61,14 +62,19 @@ public class InternalStorageManager
 		return CHARACTERS_NAMES_FILE;
 	}
 
-	private String getLevelsFileName()
+	private String getLockedLevelsFileName()
 	{
-		return LEVELS_FILE;
+		return LOCKED_LEVELS_FILE;
+	}
+	
+	private String getScoreLevelsFileName()
+	{
+		return SCORE_LEVELS_FILE;
 	}
 
 	private boolean comprobarNombresInternos(String nombre)
 	{
-		if (nombre.equals(getCharactersFileName()) || nombre.equals(getCharacterChosenFileName()) || nombre.equals(getCharacterNamesFileName()) || nombre.equals(getLevelsFileName()))
+		if (nombre.equals(getCharactersFileName()) || nombre.equals(getCharacterChosenFileName()) || nombre.equals(getCharacterNamesFileName()) || nombre.equals(getLockedLevelsFileName()) || nombre.equals(getScoreLevelsFileName()))
 		{
 			return false;
 		}
@@ -392,7 +398,7 @@ public class InternalStorageManager
 
 		try
 		{
-			FileInputStream file = mContext.openFileInput(getLevelsFileName());
+			FileInputStream file = mContext.openFileInput(getLockedLevelsFileName());
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Niveles Jugados
@@ -432,7 +438,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileOutputStream file = mContext.openFileOutput(getLevelsFileName(), Context.MODE_PRIVATE);
+			FileOutputStream file = mContext.openFileOutput(getLockedLevelsFileName(), Context.MODE_PRIVATE);
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personaje Seleccionado
@@ -465,4 +471,79 @@ public class InternalStorageManager
 		return false;
 	}
 
+	public int[] cargarPuntuaciones()
+	{
+		int[] puntuacion = new int[GamePreferences.NUM_LEVELS];
+
+		try
+		{
+			FileInputStream file = mContext.openFileInput(getScoreLevelsFileName());
+			ObjectInputStream data = new ObjectInputStream(file);
+
+			// Cargar Niveles Jugados
+			for (int i = 0; i < GamePreferences.NUM_LEVELS; i++)
+			{
+				puntuacion[i] = data.readInt();
+			}
+
+			data.close();
+			file.close();
+
+			Log.d("TEST", "Levels loadead");
+			return puntuacion;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Levels file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Levels sream corrupted");
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "File Levels ioexception");
+		}
+
+		Log.d("TEST", "Levels not loadead");
+
+		return puntuacion;
+	}
+
+	public boolean guardarPuntuacion(int[] puntuacion)
+	{
+		try
+		{
+			FileOutputStream file = mContext.openFileOutput(getScoreLevelsFileName(), Context.MODE_PRIVATE);
+			ObjectOutputStream data = new ObjectOutputStream(file);
+
+			// Guardar Personaje Seleccionado
+			for (int i = 0; i < puntuacion.length; i++)
+			{
+				data.writeInt(puntuacion[i]);
+			}
+
+			data.flush();
+			data.close();
+			file.close();
+
+			Log.d("TEST", "Chosen saved");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("TEST", "File Chosen file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("TEST", "File Chosen sream corrupted");
+		}
+		catch (IOException e)
+		{
+			Log.d("TEST", "File Chosen ioexception");
+		}
+
+		Log.d("TEST", "Chosen not saved");
+		return false;
+	}
 }

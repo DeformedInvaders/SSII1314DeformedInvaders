@@ -6,7 +6,7 @@
     <com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
         android:id="@+id/pagerViewAnimation1" />
 
-    <LinearLayout style="@style/Layout_Right_FragmentButton_Style"
+    <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style"
         android:id="@+id/linearLayout1">
 
         <ImageButton style="@style/Button_Fragment_Style"

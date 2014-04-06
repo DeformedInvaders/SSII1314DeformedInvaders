@@ -24,6 +24,7 @@ public class LoadingFragment extends Fragment
 	private int seleccionado;
 	private List<Personaje> lista;
 	private boolean[] niveles;
+	private int[] puntuacion;
 
 	private Handler handler;
 	private Thread threadProgressBar, threadLoadData;
@@ -48,7 +49,7 @@ public class LoadingFragment extends Fragment
 
 	public interface LoadingFragmentListener
 	{
-		public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles);
+		public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles, int[] puntuacion);
 	}
 
 	/* SECTION Métodos Fragment */
@@ -107,6 +108,8 @@ public class LoadingFragment extends Fragment
 			{
 				// Cargar Niveles
 				niveles = manager.cargarNiveles();
+				puntuacion = manager.cargarPuntuaciones();
+				
 				textView.setText(getString(R.string.text_progressBar_level));
 
 				// Cargar Seleccionado
@@ -168,7 +171,7 @@ public class LoadingFragment extends Fragment
 				textView.setText(getString(R.string.text_progressBar_completed) + " " + "(100%)");
 
 				// Guardar datos
-				mCallback.onLoadingListCharacters(lista, seleccionado, niveles);
+				mCallback.onLoadingListCharacters(lista, seleccionado, niveles, puntuacion);
 			}
 		});
 	}

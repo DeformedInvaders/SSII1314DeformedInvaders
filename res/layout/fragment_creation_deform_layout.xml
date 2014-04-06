@@ -6,7 +6,7 @@
     <com.creation.deform.DeformGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/deformGLSurfaceViewDeform1" />
 
-    <LinearLayout style="@style/Layout_Left_FragmentButton_Style">
+    <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style">
         
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform1"
@@ -43,10 +43,6 @@
             android:contentDescription="@string/desc_deform_play"
             android:background="@drawable/icon_media_play" />
 		
-    </LinearLayout>
-    
-    <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
-        
     </LinearLayout>
 
 </RelativeLayout>

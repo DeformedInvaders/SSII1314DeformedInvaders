@@ -259,6 +259,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		return TEstadoGame.Nada;
 	}
+	
+	public int getPuntuacion()
+	{
+		return puntuacion;
+	}
 
 	/* SECTION Métodos de Guardado de Información */
 

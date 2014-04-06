@@ -10,7 +10,7 @@
     <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewMain1" />
 
-    <LinearLayout style="@style/Layout_Center_FragmentButton_Style">
+    <LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style">
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain1"

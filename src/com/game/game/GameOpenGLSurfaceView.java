@@ -196,6 +196,11 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	/* SECTION Métodos de Obtención de Información */
 
+	public int getPuntuacion()
+	{
+		return renderer.getPuntuacion();
+	}
+	
 	/* SECTION Métodos de Guardado de Información */
 
 	public void saveData()

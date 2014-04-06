@@ -63,6 +63,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Niveles */
 	private LevelGenerator levelGenerator;
 	private boolean[] estadoNiveles;
+	private int[] puntuacionNiveles;
 
 	/* SECTION Métodos Activity */
 
@@ -75,12 +76,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		internalManager = new InternalStorageManager(getApplicationContext());
+		internalManager = new InternalStorageManager(this);
 		externalManager = new ExternalStorageManager();
 		
-		levelGenerator = new LevelGenerator(getApplicationContext());
+		levelGenerator = new LevelGenerator(this);
 		
-		socialConnector = new SocialConnector(getApplicationContext()) {
+		socialConnector = new SocialConnector(this) {
 			@Override
 			public void onConectionStatusChange()
 			{
@@ -88,7 +89,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			}
 		};
 		
-		audioManager = new AudioPlayerManager(getApplicationContext()) {
+		audioManager = new AudioPlayerManager(this) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
@@ -201,11 +202,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Loading Fragment */
 
 	@Override
-	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles)
+	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles, int[] puntuacion)
 	{
 		listaPersonajes = lista;
 		personajeSeleccionado = seleccionado;
 		estadoNiveles = niveles;
+		puntuacionNiveles = puntuacion;
 		
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 	}
@@ -381,27 +383,34 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* SECTION Métodos Game Fragment */
 
 	@Override
-	public void onGameFinished(final int level, final int idImagen, final String nameLevel)
+	public void onGameFinished(final int score, final int level, final int idImagen, final String nameLevel)
 	{
 		// Desbloquear Siguiente nivel
 		int nextLevel = (level + 1) % estadoNiveles.length;
-
 		estadoNiveles[nextLevel] = true;
+		
+		// Actualizar Puntuacion máxima
+		if (score > puntuacionNiveles[level])
+		{
+			puntuacionNiveles[level] = score;
+		}
+		
 		internalManager.guardarNiveles(estadoNiveles);
+		internalManager.guardarPuntuacion(puntuacionNiveles);
 
 		// Publicar Nivel Completado
 		String nombreFotoNivel = "nivel" + level;
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), idImagen);
 		if (externalManager.guardarImagenTemp(bitmap, nombreFotoNivel))
 		{
-			String text = getString(R.string.text_social_level_completed_initial) + " " + nameLevel + " " + getString(R.string.text_social_level_completed_final);
+			String text = getString(R.string.text_social_level_completed_initial) + " " + nameLevel + " " + getString(R.string.text_social_level_completed_middle) + " " + score + " " + getString(R.string.text_social_level_completed_final);
 
 			File foto = externalManager.cargarImagenTemp(nombreFotoNivel);
 			socialConnector.publicar(text, foto);
 		}
 
 		// Seleccionar Siguiente Nivel
-		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_finish), getString(R.string.text_game_finish_description), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
+		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_finish) + " " + score, getString(R.string.text_game_finish_description), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
 			@Override
 			public void onPossitiveButtonClick()
 			{

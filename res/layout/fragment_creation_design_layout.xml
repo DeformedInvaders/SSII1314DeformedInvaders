@@ -6,7 +6,7 @@
     <com.creation.design.DesignGLSurfaceView style="@style/GLSurfaceView_Style" 
         android:id="@+id/designGLSurfaceViewDesign1" />
 
-    <LinearLayout style="@style/Layout_Left_FragmentButton_Style">
+    <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style">
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign3"
@@ -20,7 +20,7 @@
     
     </LinearLayout>
 
-    <LinearLayout style="@style/Layout_Right_FragmentButton_Style" >
+    <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style" >
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign1"

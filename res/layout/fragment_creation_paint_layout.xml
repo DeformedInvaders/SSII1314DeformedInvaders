@@ -6,7 +6,7 @@
     <com.creation.paint.PaintGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/paintGLSurfaceViewPaint1" />
 
-    <LinearLayout style="@style/Layout_Left_FragmentButton_Style">
+    <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style">
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint1"
@@ -55,7 +55,7 @@
 
     </LinearLayout>
     
-    <LinearLayout style="@style/Layout_Right_FragmentButton_Style">
+    <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 
 	   	<ImageButton style="@style/Button_Fragment_Style"
 	   	    android:id="@+id/imageButtonPaint10"
