@@ -48,13 +48,9 @@ public class InstanciaEntidad
 
 	public void avanzar(OpenGLRenderer renderer, Entidad entidad)
 	{
-		if (!derrotado)
-		{
-			posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMY;
+		posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMY;
 
-			pintar = posicionX < renderer.getScreenWidth() && posicionX > -entidad.getWidth();
-			derrotado = posicionX < -entidad.getWidth();
-		}
+		pintar = posicionX < renderer.getScreenWidth() && posicionX > -entidad.getWidth();
 	}
 
 	public void dibujar(GL10 gl, OpenGLRenderer renderer, Entidad entidad)

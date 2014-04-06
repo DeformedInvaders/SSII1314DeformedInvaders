@@ -367,7 +367,8 @@ public abstract class OpenGLRenderer implements Renderer
 
 	public void recuperarCamara()
 	{
-		if (camaraGuardada) {
+		if (camaraGuardada)
+		{
 			xLeft = lastXLeft;
 			xRight = lastXRight;
 			yTop = lastYTop;
@@ -532,8 +533,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected float convertToWorldYCoordinate(float pixelY, float screenHeight)
 	{
-		return yBottom + (yTop - yBottom) * (screenHeight - pixelY)
-				/ screenHeight;
+		return yBottom + (yTop - yBottom) * (screenHeight - pixelY) / screenHeight;
 	}
 
 	protected float convertToPixelXCoordinate(float worldX, float screenWidth)

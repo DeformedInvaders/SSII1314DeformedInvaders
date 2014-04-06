@@ -27,6 +27,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	// Enemigos
 	private List<Entidad> tipoEnemigos;
 	private List<InstanciaEntidad> listaEnemigos;
+	
+	// Puntuancion
+	private int puntuacion;
 
 	/* SECTION Constructura */
 
@@ -42,6 +45,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		personaje.reiniciarVidas();
 		personaje.activarBurbuja();
+		
+		puntuacion = 0;
 	}
 
 	/* SECTION Métodos Renderer */
@@ -85,6 +90,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				// Burbuja
 	
 			gl.glPopMatrix();
+			
+			// Score
 			
 			// Vidas
 	
@@ -134,30 +141,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	/* SECTION Métodos de Modificación de Estado */
 
-	public boolean reproducirAnimacion()
-	{
-		// Background
-		desplazarFondo();
-
-		// Lista Enemigos
-		Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
-		while (it.hasNext())
-		{
-			InstanciaEntidad instancia = it.next();
-			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
-			instancia.avanzar(this, entidad);
-		}
-
-		// Personaje
-		personaje.animar();
-		return personaje.avanzar(this);
-	}
-
-	public void pararAnimacion()
-	{
-		personaje.reposo();
-	}
-
 	public void seleccionarRun()
 	{
 		personaje.mover();
@@ -177,6 +160,53 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		personaje.atacar();
 	}
+	
+	public void pararAnimacion()
+	{
+		personaje.reposo();
+	}
+	
+	public boolean reproducirAnimacion()
+	{
+		// Background
+		desplazarFondo();
+
+		// Lista Enemigos
+		Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
+		while (it.hasNext())
+		{
+			InstanciaEntidad instancia = it.next();
+			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+			
+			if(!instancia.isDerrotado())
+			{
+				instancia.avanzar(this, entidad);
+				
+				if(instancia.getPosicionX() < -entidad.getWidth())
+				{
+					switch(entidad.getTipo())
+					{
+						case Enemigo:
+							puntuacion += GamePreferences.SCORE_ACTION_WRONG;
+							android.util.Log.d("[GAME] TEST", "SCORE "+GamePreferences.SCORE_ACTION_WRONG+" ("+puntuacion+")");
+						break;
+						case Obstaculo:
+							puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+							android.util.Log.d("[GAME] TEST", "SCORE "+GamePreferences.SCORE_ACTION_RIGHT+" ("+puntuacion+")");
+						break;
+						default:
+						break;
+					}
+					
+					instancia.setDerrotado();
+				}
+			}
+		}
+
+		// Personaje
+		personaje.animar();
+		return personaje.avanzar(this);
+	}
 
 	/* SECTION Métodos de Obtención de Información */
 
@@ -184,6 +214,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		if (fondoFinalFijado)
 		{
+			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
+			android.util.Log.d("TEST", "[GAME] SCORE "+GamePreferences.SCORE_LEVEL_COMPLETED+" ("+puntuacion+")");
+			
 			return TEstadoGame.FinJuegoVictoria;
 		}
 
@@ -197,14 +230,18 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			{
 				switch (personaje.colision(entidad, instancia))
 				{
-					case Nada:
-					break;
 					case EnemigoDerrotado:
 						instancia.setDerrotado();
+						
+						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+						android.util.Log.d("TEST", "[GAME] SCORE "+GamePreferences.SCORE_ACTION_RIGHT+" ("+puntuacion+")");
 					break;
 					case Colision:
-						personaje.quitarVida();
 						instancia.setDerrotado();
+						personaje.quitarVida();
+						
+						puntuacion += GamePreferences.SCORE_LOSE_LIFE;
+						android.util.Log.d("TEST", "[GAME] SCORE "+GamePreferences.SCORE_LOSE_LIFE+" ("+puntuacion+")");
 						
 						if (!personaje.isAlive())
 						{
@@ -213,6 +250,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 							
 							return TEstadoGame.FinJuegoDerrota;
 						}
+					break;
+					default:
 					break;
 				}
 			}

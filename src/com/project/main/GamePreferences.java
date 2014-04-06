@@ -25,8 +25,16 @@ public class GamePreferences
 	public static final int TYPE_OBSTACLE = 0;
 	public static final int TYPE_ENEMY = 0;
 	public static final int TYPE_BOSS = TYPE_ENEMY + MAX_TEXTURE_ENEMY;
+	
+	// Puntuaciones
+	public static final int SCORE_LEVEL_COMPLETED = 10;
+	public static final int SCORE_ACTION_RIGHT = 5;
+	public static final int SCORE_ACTION_WRONG = 1;
+	public static final int SCORE_LOSE_LIFE = -10;
 
 	/* FIXME Usar Width de pantalla */
+	
+	public static final float WIDTH_CHARACTER = 536.8f;
 
 	// Velocidades
 	public static final float DIST_MOVIMIENTO_BACKGROUND = 4.0f;
@@ -36,6 +44,7 @@ public class GamePreferences
 	// Niveles
 	public static final int NUM_LEVELS = 5;
 	public static final int MAX_ENEMIES = 20;
+	public static final int MAX_LIVES = 3;
 
 	// Diastancias Escenario
 	public static final float DISTANCE_RIGHT = 70.0f;

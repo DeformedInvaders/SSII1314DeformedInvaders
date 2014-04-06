@@ -32,7 +32,7 @@ public class Personaje extends Malla
 		posicionX = 0.0f;
 		posicionY = 0.0f;
 		
-		vidas = 3;
+		vidas = GamePreferences.MAX_LIVES;
 		burbuja = false;		
 	}
 
@@ -59,7 +59,7 @@ public class Personaje extends Malla
 		// Burbuja
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
 		{
-			renderer.cargarTexturaRectangulo(gl, width, width, indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
+			renderer.cargarTexturaRectangulo(gl, GamePreferences.WIDTH_CHARACTER, GamePreferences.WIDTH_CHARACTER, indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
 	}
 	
@@ -183,14 +183,14 @@ public class Personaje extends Malla
 	
 	public void reiniciarVidas()
 	{
-		vidas = 3;
-		Log.d("TEST", "Hay "+vidas+" vidas");
+		vidas = GamePreferences.MAX_LIVES;
+		Log.d("TEST", "[GAME] LIVES "+vidas);
 	}
 	
 	public void quitarVida()
 	{
 		vidas--;
-		Log.d("TEST", "Hay "+vidas+" vidas");
+		Log.d("TEST", "[GAME] LIVES "+vidas);
 	}
 
 	/* SECTION Métodos de Obtención de Información */
