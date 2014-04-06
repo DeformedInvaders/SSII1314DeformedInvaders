@@ -39,7 +39,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TTouchEstado.GameDetectors);
 		
 		// Desctivar Formato fondo transparente
-		setZOrderOnTop(false);
+		//setZOrderOnTop(false);
 
 		mContext = context;
 

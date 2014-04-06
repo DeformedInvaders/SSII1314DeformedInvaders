@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.storage.ExternalStorageManager;
@@ -76,6 +77,9 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		View rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
 
 		// Instanciar Elementos de la GUI
+		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewGame1);
+		imageBackground.setBackgroundResource(level.getFondoNivel().getIdTexturaCielo());
+
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(personaje, manager, this, level);
 		

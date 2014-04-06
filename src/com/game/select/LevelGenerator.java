@@ -77,7 +77,7 @@ public class LevelGenerator
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon, GamePreferences.TYPE_ENEMY + 2));
 		listaEnemigos.add(new Enemigo(R.drawable.boss_moon, GamePreferences.TYPE_BOSS));
 
-		background.setBackground(R.drawable.background_moon_2, R.drawable.background_moon_3, R.drawable.background_moon_4, R.drawable.polaroid_gameover_moon, R.drawable.polaroid_levelcompleted_moon);
+		background.setBackground(R.drawable.background_moon_2, R.drawable.background_moon_3, R.drawable.background_moon_4, R.drawable.background_moon_5, R.drawable.polaroid_gameover_moon, R.drawable.polaroid_levelcompleted_moon);
 	}
 
 	private void crearNivelNewYork(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
@@ -92,7 +92,7 @@ public class LevelGenerator
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork3, GamePreferences.TYPE_ENEMY + 2));
 		listaEnemigos.add(new Enemigo(R.drawable.boss_newyork, GamePreferences.TYPE_BOSS));
 
-		background.setBackground(R.drawable.background_newyork_2, R.drawable.background_newyork_3, R.drawable.background_newyork_4, R.drawable.polaroid_gameover_newyork, R.drawable.polaroid_levelcompleted_newyork);
+		background.setBackground(R.drawable.background_newyork_2, R.drawable.background_newyork_3, R.drawable.background_newyork_4, R.drawable.background_newyork_5, R.drawable.polaroid_gameover_newyork, R.drawable.polaroid_levelcompleted_newyork);
 	}
 
 	private void crearNivelRoma(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
@@ -107,7 +107,7 @@ public class LevelGenerator
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome3, GamePreferences.TYPE_ENEMY + 2));
 		listaEnemigos.add(new Enemigo(R.drawable.boss_rome, GamePreferences.TYPE_BOSS));
 
-		background.setBackground(R.drawable.background_rome_2, R.drawable.background_rome_3, R.drawable.background_rome_4, R.drawable.polaroid_gameover_rome, R.drawable.polaroid_levelcompleted_rome);
+		background.setBackground(R.drawable.background_rome_2, R.drawable.background_rome_3, R.drawable.background_rome_4, R.drawable.background_rome_5, R.drawable.polaroid_gameover_rome, R.drawable.polaroid_levelcompleted_rome);
 	}
 
 	private void crearNivelEgipto(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
@@ -122,7 +122,7 @@ public class LevelGenerator
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt3, GamePreferences.TYPE_ENEMY + 2));
 		listaEnemigos.add(new Enemigo(R.drawable.boss_egypt, GamePreferences.TYPE_BOSS));
 
-		background.setBackground(R.drawable.background_egypt_2, R.drawable.background_egypt_3, R.drawable.background_egypt_4, R.drawable.polaroid_gameover_egypt, R.drawable.polaroid_levelcompleted_egypt);
+		background.setBackground(R.drawable.background_egypt_2, R.drawable.background_egypt_3, R.drawable.background_egypt_4, R.drawable.background_egypt_5, R.drawable.polaroid_gameover_egypt, R.drawable.polaroid_levelcompleted_egypt);
 	}
 
 	private void crearNivelStonehenge(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
@@ -137,7 +137,7 @@ public class LevelGenerator
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge3, GamePreferences.TYPE_ENEMY + 2));
 		listaEnemigos.add(new Enemigo(R.drawable.boss_stonehenge, GamePreferences.TYPE_BOSS));
 
-		background.setBackground(R.drawable.background_stonehenge_2, R.drawable.background_stonehenge_3, R.drawable.background_stonehenge_4, R.drawable.polaroid_gameover_stonehenge, R.drawable.polaroid_levelcompleted_stonehenge);
+		background.setBackground(R.drawable.background_stonehenge_2, R.drawable.background_stonehenge_3, R.drawable.background_stonehenge_4, R.drawable.background_stonehenge_5, R.drawable.polaroid_gameover_stonehenge, R.drawable.polaroid_levelcompleted_stonehenge);
 	}
 
 	private List<Entidad> getListaEnemigos(int indice)

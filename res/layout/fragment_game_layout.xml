@@ -2,11 +2,15 @@
 <RelativeLayout style="@style/Layout_Fragment_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    
+    <ImageView style="@style/ImageView_Background_Style"
+        android:id="@+id/imageViewGame1"
+        android:contentDescription="@string/desc_select_background" />
+    
     <com.game.game.GameOpenGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/gameGLSurfaceViewGame1" />
     
-	<LinearLayout style="@style/Layout_Left_FragmentButton_Style" >
+	<LinearLayout style="@style/Layout_Left_FragmentButton_Style" >"
 
         <ImageButton
             android:id="@+id/imageButtonGame1"
