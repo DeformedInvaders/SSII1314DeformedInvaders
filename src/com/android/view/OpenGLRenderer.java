@@ -1075,11 +1075,14 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 
 		// Reinicio de Fondo
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
+		if (posFondo[lastFondo] > screenWidth)
 		{
-			if (posFondo[i] <= -screenWidth)
+			for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
 			{
-				posFondo[i] = screenWidth;
+				if (posFondo[i] <= -screenWidth)
+				{
+					posFondo[i] = screenWidth;
+				}
 			}
 		}
 	}
