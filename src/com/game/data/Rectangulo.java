@@ -6,8 +6,6 @@ import com.android.view.OpenGLRenderer;
 
 public abstract class Rectangulo extends Entidad
 {
-	protected int textura;
-
 	/* SECTION Métodos abstractos de Entidad */
 
 	@Override

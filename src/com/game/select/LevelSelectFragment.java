@@ -1,5 +1,6 @@
 package com.game.select;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ public class LevelSelectFragment extends OpenGLFragment
 	private OnLevelListener listener;
 
 	private boolean lockNivel;
+	
+	private Typeface fuenteNivel;
 	private int fondoNivel, descripcionNivel, colorTextoNivel, numeroNivel;
 
 	private ImageButton botonNivel;
@@ -28,11 +31,11 @@ public class LevelSelectFragment extends OpenGLFragment
 	public static final LevelSelectFragment newInstance(OnLevelListener l, Nivel nivel, boolean lock)
 	{
 		LevelSelectFragment fragment = new LevelSelectFragment();
-		fragment.setParameters(l, nivel.getFondoNivel(), nivel.getDescripcionNivel(), nivel.getColorTextoNivel(), nivel.getNumeroNivel(), lock);
+		fragment.setParameters(l, nivel.getFondoNivel(), nivel.getDescripcionNivel(), nivel.getColorTextoNivel(), nivel.getNumeroNivel(), nivel.getFuenteNivel(), lock);
 		return fragment;
 	}
 
-	private void setParameters(OnLevelListener l, int fondo, int descripcion, int color, int number, boolean lock)
+	private void setParameters(OnLevelListener l, int fondo, int descripcion, int color, int number, Typeface fuente, boolean lock)
 	{
 		listener = l;
 
@@ -41,6 +44,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		colorTextoNivel = color;
 		numeroNivel = number;
 		lockNivel = lock;
+		fuenteNivel = fuente;
 	}
 
 	/* SECTION Métodos Fragment */
@@ -57,6 +61,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewLevelSelect1);
 		textBackground.setText(getString(descripcionNivel));
 		textBackground.setTextColor(colorTextoNivel);
+		textBackground.setTypeface(fuenteNivel);
 
 		botonNivel = (ImageButton) rootView.findViewById(R.id.imageButtonLevel1);
 		botonNivel.setOnClickListener(new OnLevelClickListener());

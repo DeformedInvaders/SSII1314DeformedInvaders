@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.alert.ConfirmationAlert;
 import com.android.alert.ImageAlert;
+import com.android.alert.SummaryAlert;
 import com.android.alert.TextInputAlert;
 import com.android.audio.AudioPlayerManager;
 import com.android.social.SocialConnector;
@@ -376,8 +377,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	@Override
 	public void onLevelSelectionSelectClicked(int level)
-	{
+	{	
 		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+	
+		// Resumen del nivel
+		SummaryAlert alert = new SummaryAlert(this, getString(R.string.text_summary), getString(R.string.text_button_ready), levelGenerator.getLevel(level).getTipoEnemigos());
+		alert.show();	
 	}
 
 	/* SECTION Métodos Game Fragment */
@@ -410,7 +415,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 
 		// Seleccionar Siguiente Nivel
-		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_finish) + " " + score, getString(R.string.text_game_finish_description), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
+		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_finish) + " " + score, getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
 			@Override
 			public void onPossitiveButtonClick()
 			{
@@ -430,8 +435,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onGameFailed(final int level, final int idImagen)
 	{
-		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_fail), getString(R.string.text_game_fail_description), getString(R.string.text_button_replay), getString(R.string.text_button_cancel), idImagen) {
-
+		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_fail), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
 			@Override
 			public void onPossitiveButtonClick()
 			{

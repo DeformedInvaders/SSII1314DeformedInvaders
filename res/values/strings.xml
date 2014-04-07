@@ -23,10 +23,10 @@
 			<string name="title_level_section_newyork">New York</string>
 			
 			<string name="text_level_section_moon">Moon 2014 AC.</string>
-			<string name="text_level_section_stonehenge">Stonehenge 3000 BC.</string>
-			<string name="text_level_section_egypt">Egypt 2560 BC.</string>
-			<string name="text_level_section_rome">Rome 35 BC.</string>
-			<string name="text_level_section_newyork">New York 1960 AC.</string>
+			<string name="text_level_section_stonehenge">Stonehenge 3125 BC.</string>
+			<string name="text_level_section_egypt">Egypt 2562 BC.</string>
+			<string name="text_level_section_rome">Rome 435 BC.</string>
+			<string name="text_level_section_newyork">New York 1945 AC.</string>
 			
 		<!-- ActionBar Icons -->
 			<string name="title_menu_twitter">Twitter</string>
@@ -38,6 +38,15 @@
 			<string name="title_dialog_eyes">Eyes:</string>
 			<string name="title_dialog_mouths">Mouths:</string>
 			<string name="title_dialog_weapons">Weapons:</string>
+			
+		<!-- Alert Section Titles -->	
+			<string name="title_alert_enemies">Enemies:</string>
+			<string name="title_alert_obstacles">Obstacles:</string>
+			<string name="title_alert_missiles">Missiles:</string>
+			
+			<string name="title_alert_weaknesses_enemies">Known Weaknesses: Attack, Jump.</string>
+			<string name="title_alert_weaknesses_obstacles">Known Weaknesses: Jump.</string>
+			<string name="title_alert_weaknesses_missiles">Known Weaknesses: Crouch.</string>
 			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
@@ -91,13 +100,12 @@
 			<string name="text_level_enabled">The level is unlocked!</string>
 			<string name="text_level_disabled">The level is still locked!</string>
 			
-			<string name="text_game_finish">You finish this level with a score of </string>
-			<string name="text_game_finish_description">Do you want to replay this level?.</string>
-			
+			<string name="text_game_finish">You finish this level with a score of </string>			
 			<string name="text_game_fail">Game over.</string>
-			<string name="text_game_fail_description">Do you want to replay this level?.</string>
 			
 			<string name="text_game_paused">Game paused.</string>
+			
+			<string name="text_summary">Level\'s Summary.</string>
 			
 			<string name="text_button_yes">Yes</string>
 			<string name="text_button_no">No</string>
@@ -116,6 +124,8 @@
 		    
 		    <string name="text_button_replay">Replay</string>
 		    <string name="text_button_levels">Levels</string>
+		    
+		    <string name="text_button_ready">Ready</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Coming Soon</string>

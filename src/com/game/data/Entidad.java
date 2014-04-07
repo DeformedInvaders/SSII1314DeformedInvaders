@@ -8,6 +8,8 @@ public abstract class Entidad
 {
 	protected TTipoEntidad tipo;
 	protected int id;
+	
+	protected int textura;
 
 	protected float width = 0.0f;
 
@@ -32,5 +34,10 @@ public abstract class Entidad
 	public TTipoEntidad getTipo()
 	{
 		return tipo;
+	}
+	
+	public int getIndiceTextura()
+	{
+		return textura;
 	}
 }
