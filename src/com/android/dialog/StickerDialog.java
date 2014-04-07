@@ -12,11 +12,8 @@ import com.project.main.R;
 
 public abstract class StickerDialog extends WindowDialog
 {
-	private OnEyeClickListener eyeListener;
-	private OnMouthClickListener mouthListener;
-	private OnWeaponClickListener weaponListener;
-
-	private ImageView[] imagenEye, imagenMouth, imagenWeapon;
+	private OnClickListener eyeListener, mouthListener, weaponListener, trinketListener, helmetListener;
+	private ImageView[] imagenEye, imagenMouth, imagenWeapon, imagenTrinket, imagenHelmet;
 
 	/* SECTION Constructora */
 
@@ -27,38 +24,31 @@ public abstract class StickerDialog extends WindowDialog
 		eyeListener = new OnEyeClickListener();
 		mouthListener = new OnMouthClickListener();
 		weaponListener = new OnWeaponClickListener();
+		trinketListener = new OnTrinketClickListener();
+		helmetListener = new OnHelmetClickListener();
 		
-		imagenEye = new ImageView[GamePreferences.NUM_TYPE_STICKERS];
-		imagenMouth = new ImageView[GamePreferences.NUM_TYPE_STICKERS];
-		imagenWeapon = new ImageView[GamePreferences.NUM_TYPE_STICKERS];
+		imagenEye = new ImageView[GamePreferences.NUM_TYPE_STICKERS_EYES];
+		imagenMouth = new ImageView[GamePreferences.NUM_TYPE_STICKERS_MOUTH];
+		imagenWeapon = new ImageView[GamePreferences.NUM_TYPE_STICKERS_WEAPON];
+		imagenTrinket = new ImageView[GamePreferences.NUM_TYPE_STICKERS_TRINKET];
+		imagenHelmet = new ImageView[GamePreferences.NUM_TYPE_STICKERS_HELMET];
 
-		imagenEye[0] = (ImageView) findViewById(R.id.imageButtonSticker1);
-		imagenEye[1] = (ImageView) findViewById(R.id.imageButtonSticker2);
-		imagenEye[2] = (ImageView) findViewById(R.id.imageButtonSticker3);
-		imagenEye[3] = (ImageView) findViewById(R.id.imageButtonSticker4);
-		imagenEye[4] = (ImageView) findViewById(R.id.imageButtonSticker5);
-
-		imagenMouth[0] = (ImageView) findViewById(R.id.imageButtonSticker6);
-		imagenMouth[1] = (ImageView) findViewById(R.id.imageButtonSticker7);
-		imagenMouth[2] = (ImageView) findViewById(R.id.imageButtonSticker8);
-		imagenMouth[3] = (ImageView) findViewById(R.id.imageButtonSticker9);
-		imagenMouth[4] = (ImageView) findViewById(R.id.imageButtonSticker10);
-
-		imagenWeapon[0] = (ImageView) findViewById(R.id.imageButtonSticker11);
-		imagenWeapon[1] = (ImageView) findViewById(R.id.imageButtonSticker12);
-		imagenWeapon[2] = (ImageView) findViewById(R.id.imageButtonSticker13);
-		imagenWeapon[3] = (ImageView) findViewById(R.id.imageButtonSticker14);
-		imagenWeapon[4] = (ImageView) findViewById(R.id.imageButtonSticker15);
-		
-		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+		configurarPegatinas(GamePreferences.RESOURCE_BUTTON_STICKER_EYES, GamePreferences.NUM_TYPE_STICKERS_EYES, imagenEye, eyeListener);
+		configurarPegatinas(GamePreferences.RESOURCE_BUTTON_STICKER_MOUTH, GamePreferences.NUM_TYPE_STICKERS_MOUTH, imagenMouth, mouthListener);
+		configurarPegatinas(GamePreferences.RESOURCE_BUTTON_STICKER_WEAPON, GamePreferences.NUM_TYPE_STICKERS_WEAPON, imagenWeapon, weaponListener);
+		configurarPegatinas(GamePreferences.RESOURCE_BUTTON_STICKER_TRINKET, GamePreferences.NUM_TYPE_STICKERS_TRINKET, imagenTrinket, trinketListener);
+		configurarPegatinas(GamePreferences.RESOURCE_BUTTON_STICKER_HELMET, GamePreferences.NUM_TYPE_STICKERS_HELMET, imagenHelmet, helmetListener);
+	}
+	
+	private void configurarPegatinas(String idPegatinas, int numPegatinas, ImageView[] listaPegatinas, OnClickListener listener)
+	{
+		for (int i = 0; i < numPegatinas; i++)
 		{
-			imagenEye[i].setOnClickListener(eyeListener);
-			imagenMouth[i].setOnClickListener(mouthListener);
-			imagenWeapon[i].setOnClickListener(weaponListener);
+			int id = mContext.getResources().getIdentifier(idPegatinas + (i + 1), "id", mContext.getPackageName());
 			
-			imagenEye[i].setTag(i);
-			imagenMouth[i].setTag(i);
-			imagenWeapon[i].setTag(i);
+			listaPegatinas[i] = (ImageView) findViewById(id);
+			listaPegatinas[i].setOnClickListener(listener);
+			listaPegatinas[i].setTag(i);
 		}
 	}
 
@@ -102,6 +92,26 @@ public abstract class StickerDialog extends WindowDialog
 		public void onClick(View v)
 		{
 			onStickerSelected((Integer) v.getTag(), TTipoSticker.Weapon);
+			dismiss();
+		}
+	}
+	
+	private class OnTrinketClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			onStickerSelected((Integer) v.getTag(), TTipoSticker.Trinket);
+			dismiss();
+		}
+	}
+	
+	private class OnHelmetClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			onStickerSelected((Integer) v.getTag(), TTipoSticker.Helmet);
 			dismiss();
 		}
 	}

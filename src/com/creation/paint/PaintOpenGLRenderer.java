@@ -136,10 +136,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		// Cargar Pegatinas
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
-			if (pegatinas.isCargada(i))
+			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
+			
+			if (pegatinas.isCargada(tipoPegatinas))
 			{
-				TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipoPegatinas[i]);
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
 			}
 		}
 
@@ -177,11 +178,12 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Dibujar Pegatinas
 			for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 			{
-				if (pegatinas.isCargada(i))
+				TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
+				
+				if (pegatinas.isCargada(tipoPegatinas))
 				{
-					int indice = pegatinas.getVertice(i);
-					TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-					dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipoPegatinas[i]);
+					int indice = pegatinas.getVertice(tipoPegatinas);
+					dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipoPegatinas);
 				}
 			}
 

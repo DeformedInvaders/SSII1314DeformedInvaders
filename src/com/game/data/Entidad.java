@@ -2,6 +2,8 @@ package com.game.data;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+
 import com.android.view.OpenGLRenderer;
 
 public abstract class Entidad
@@ -15,7 +17,7 @@ public abstract class Entidad
 
 	/* SECTION Métodos abstractos a implementar */
 
-	public abstract void cargarTextura(GL10 gl, OpenGLRenderer renderer);
+	public abstract void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context);
 
 	public abstract void descargarTextura(OpenGLRenderer renderer);
 

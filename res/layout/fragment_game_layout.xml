@@ -19,5 +19,34 @@
             android:contentDescription="@string/desc_game_play" />
 
 	</LinearLayout>
+	
+	<LinearLayout style="@style/Layout_Top_Right_FragmentButton_Style" >
+	        
+		<ImageView style="@style/Button_Fragment_Style"
+			android:id="@+id/imageViewGameHeart1"
+			android:background="@drawable/lives_heart"
+			android:contentDescription="@string/desc_game_heart" />
+		
+		<ImageView style="@style/Button_Fragment_Style"
+			android:id="@+id/imageViewGameHeart2"
+			android:background="@drawable/lives_heart"
+			android:contentDescription="@string/desc_game_heart" />
+		
+		<ImageView style="@style/Button_Fragment_Style"
+			android:id="@+id/imageViewGameHeart3"
+			android:background="@drawable/lives_heart"
+			android:contentDescription="@string/desc_game_heart" />
+	
+	</LinearLayout>
+	
+    <TextView
+        android:id="@+id/textViewGame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textColor="#EEEEEE"
+        android:textSize="30sp" />
     
 </RelativeLayout>

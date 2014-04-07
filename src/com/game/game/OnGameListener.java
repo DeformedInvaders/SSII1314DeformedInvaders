@@ -2,7 +2,11 @@ package com.game.game;
 
 public interface OnGameListener
 {
-	public void onGameFinished();
+	public void onGameFinished(int score);
 
 	public void onGameFailed();
+	
+	public void onScoreChanged(int score);
+	
+	public void onLivesChanged(int lives);
 }

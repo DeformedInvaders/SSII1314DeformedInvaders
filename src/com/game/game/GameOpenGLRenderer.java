@@ -30,6 +30,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	// Puntuancion
 	private int puntuacion;
+	private boolean puntuacionModificada;
 
 	/* SECTION Constructura */
 
@@ -47,6 +48,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		personaje.activarBurbuja();
 		
 		puntuacion = 0;
+		puntuacionModificada = false;
 	}
 
 	/* SECTION Métodos Renderer */
@@ -60,13 +62,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		seleccionarTexturaFondo(background.getIdTexturaFondo1(), background.getIdTexturaFondo2(), background.getIdTexturaFondo3());
 
 		// Protagonista
-		personaje.cargarTextura(gl, this);
+		personaje.cargarTextura(gl, this, mContext);
 
 		// Lista Enemigos
 		Iterator<Entidad> it = tipoEnemigos.iterator();
 		while (it.hasNext())
 		{
-			it.next().cargarTextura(gl, this);
+			it.next().cargarTextura(gl, this, mContext);
 		}
 	}
 
@@ -90,10 +92,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				// Burbuja
 	
 			gl.glPopMatrix();
-			
-			// Score
-			
-			// Vidas
 	
 			// Cola Enemigos
 			Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
@@ -188,11 +186,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					{
 						case Enemigo:
 							puntuacion += GamePreferences.SCORE_ACTION_WRONG;
-							android.util.Log.d("[GAME] TEST", "SCORE "+GamePreferences.SCORE_ACTION_WRONG+" ("+puntuacion+")");
+							puntuacionModificada = true;
 						break;
 						case Obstaculo:
 							puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-							android.util.Log.d("[GAME] TEST", "SCORE "+GamePreferences.SCORE_ACTION_RIGHT+" ("+puntuacion+")");
+							puntuacionModificada = true;
 						break;
 						default:
 						break;
@@ -215,7 +213,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		if (fondoFinalFijado)
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
-			android.util.Log.d("TEST", "[GAME] SCORE "+GamePreferences.SCORE_LEVEL_COMPLETED+" ("+puntuacion+")");
+		
+			personaje.reiniciarVidas();
+			personaje.desactivarBurbuja();
 			
 			return TEstadoGame.FinJuegoVictoria;
 		}
@@ -234,15 +234,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 						instancia.setDerrotado();
 						
 						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-						android.util.Log.d("TEST", "[GAME] SCORE "+GamePreferences.SCORE_ACTION_RIGHT+" ("+puntuacion+")");
-					break;
+						return TEstadoGame.CambioPuntuacion;
 					case Colision:
 						instancia.setDerrotado();
 						personaje.quitarVida();
 						
 						puntuacion += GamePreferences.SCORE_LOSE_LIFE;
-						android.util.Log.d("TEST", "[GAME] SCORE "+GamePreferences.SCORE_LOSE_LIFE+" ("+puntuacion+")");
-						
+
 						if (!personaje.isAlive())
 						{
 							personaje.reiniciarVidas();
@@ -250,11 +248,19 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 							
 							return TEstadoGame.FinJuegoDerrota;
 						}
-					break;
+						
+						return TEstadoGame.VidaPerdida;
 					default:
 					break;
 				}
 			}
+		}
+		
+		if(puntuacionModificada)
+		{
+			puntuacionModificada = false;
+			
+			return TEstadoGame.CambioPuntuacion;
 		}
 
 		return TEstadoGame.Nada;
@@ -263,6 +269,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public int getPuntuacion()
 	{
 		return puntuacion;
+	}
+	
+	public int getVidas()
+	{
+		return personaje.getVidas();
 	}
 
 	/* SECTION Métodos de Guardado de Información */

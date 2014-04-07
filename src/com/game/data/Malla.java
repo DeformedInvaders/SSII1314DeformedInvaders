@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
@@ -52,7 +53,7 @@ public abstract class Malla extends Entidad
 	/* SECTION Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer)
+	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
 		// Textura
 		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipo);
@@ -60,10 +61,11 @@ public abstract class Malla extends Entidad
 		// Pegatinas
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 		{
-			if (pegatinas.isCargada(i))
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			
+			if (pegatinas.isCargada(tipoPegatinas[i]))
 			{
-				TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-				renderer.cargarTexturaRectangulo(gl, pegatinas.getIndice(i), tipo, id, tipoPegatinas[i]);
+				renderer.cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas[i], context), tipo, id, tipoPegatinas[i]);
 			}
 		}
 	}
@@ -98,11 +100,12 @@ public abstract class Malla extends Entidad
 			// Pegatinas
 			for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
 			{
-				if (pegatinas.isCargada(i))
+				TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
+				
+				if (pegatinas.isCargada(tipoPegatinas))
 				{
-					int indice = pegatinas.getVertice(i);
-					TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-					renderer.dibujarTexturaRectangulo(gl, verticesAnimacion.get(2 * indice), verticesAnimacion.get(2 * indice + 1), tipo, id, tipoPegatinas[i]);
+					int indice = pegatinas.getVertice(tipoPegatinas);
+					renderer.dibujarTexturaRectangulo(gl, verticesAnimacion.get(2 * indice), verticesAnimacion.get(2 * indice + 1), tipo, id, tipoPegatinas);
 				}
 			}
 

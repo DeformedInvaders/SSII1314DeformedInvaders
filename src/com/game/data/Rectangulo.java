@@ -2,6 +2,8 @@ package com.game.data;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+
 import com.android.view.OpenGLRenderer;
 
 public abstract class Rectangulo extends Entidad
@@ -9,7 +11,7 @@ public abstract class Rectangulo extends Entidad
 	/* SECTION Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer)
+	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
 		width = renderer.cargarTexturaRectangulo(gl, textura, tipo, id, TTipoSticker.Nada);
 	}

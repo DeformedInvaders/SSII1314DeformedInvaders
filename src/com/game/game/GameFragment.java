@@ -8,12 +8,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class GameFragment extends OpenGLFragment implements OnGameListener
@@ -26,10 +28,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	private Personaje personaje;
 
 	private GameOpenGLSurfaceView canvas;
+	private TextView textoPuntuacion;
 	private ImageButton botonPlay;
+	private ImageView[] imagenVidas;
 
 	private boolean gamePaused;
-	private int score;
 
 	/* SECTION Constructora */
 
@@ -76,6 +79,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
+		
+		imagenVidas = new ImageView[GamePreferences.MAX_LIVES];
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewGame1);
@@ -84,8 +89,17 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(personaje, manager, this, level);
 		
+		textoPuntuacion = (TextView) rootView.findViewById(R.id.textViewGame1);
+		
 		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonPlay.setOnClickListener(new onPlayGameClickListener());
+		
+		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
+		{
+			int id = getActivity().getResources().getIdentifier(GamePreferences.RESOURCE_IMAGE_HEART + (i + 1), "id", getActivity().getPackageName());
+			
+			imagenVidas[i] = (ImageView) rootView.findViewById(id);
+		}
 
 		setCanvasListener(canvas);
 
@@ -100,7 +114,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		super.onDestroyView();
 
 		canvas = null;
-
+		textoPuntuacion = null;
 		botonPlay = null;
 	}
 
@@ -163,15 +177,37 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* SECTION Métodos de OnGameListener */
 
-	public void onGameFinished()
+	@Override
+	public void onGameFinished(int score)
 	{
-		score = canvas.getPuntuacion();
+		onScoreChanged(score);
 		
 		mCallback.onGameFinished(score, level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
 	}
 
+	@Override
 	public void onGameFailed()
 	{
 		mCallback.onGameFailed(level.getIndiceNivel(), level.getFondoNivel().getIdTextureGameOver());
+	}
+	
+	@Override
+	public void onScoreChanged(int score)
+	{
+		textoPuntuacion.setText(getActivity().getString(R.string.text_game_score)+" "+score);
+	}
+	
+	@Override
+	public void onLivesChanged(int lives)
+	{
+		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
+		{
+			imagenVidas[i].setBackgroundResource(R.drawable.lives_heart_broken);
+		}
+		
+		for(int i = 0; i < lives; i++)
+		{
+			imagenVidas[i].setBackgroundResource(R.drawable.lives_heart);
+		}
 	}
 }

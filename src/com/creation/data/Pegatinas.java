@@ -2,9 +2,10 @@ package com.creation.data;
 
 import java.io.Serializable;
 
+import android.content.Context;
+
 import com.game.data.TTipoSticker;
 import com.project.main.GamePreferences;
-import com.project.main.R;
 
 public class Pegatinas implements Serializable
 {
@@ -40,70 +41,44 @@ public class Pegatinas implements Serializable
 
 	/* SECTION Métodos de Obtención de Información */
 
-	public boolean isCargada(int tipo)
+	public boolean isCargada(TTipoSticker tipo)
 	{
-		return indicePegatinas[tipo] != -1;
+		return indicePegatinas[tipo.ordinal()] != -1;
 	}
 
-	public int getIndice(int tipo)
+	public int getIndice(TTipoSticker tipo, Context context)
 	{
-		int tag = indicePegatinas[tipo];
+		int tag = indicePegatinas[tipo.ordinal()];
 		
-		TTipoSticker[] listaPegatinas = TTipoSticker.values();
-		TTipoSticker tipoPegatina = listaPegatinas[tipo];
+		String nombrePegatina;
 		
-		switch (tipoPegatina)
+		switch (tipo)
 		{
 			case Eyes:
-				switch(tag)
-				{
-					case 0:
-						return R.drawable.sticker_eyes_1;
-					case 1:
-						return R.drawable.sticker_eyes_2;
-					case 2:
-						return R.drawable.sticker_eyes_3;
-					case 3:
-						return R.drawable.sticker_eyes_4;
-					default:
-						return R.drawable.sticker_eyes_5;
-				}
+				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_EYES;
+			break;
 			case Mouth:
-				switch(tag)
-				{
-					case 0:
-						return R.drawable.sticker_mouth_1;
-					case 1:
-						return R.drawable.sticker_mouth_2;
-					case 2:
-						return R.drawable.sticker_mouth_3;
-					case 3:
-						return R.drawable.sticker_mouth_4;
-					default:
-						return R.drawable.sticker_mouth_5;
-				}
+				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_MOUTH;
+			break;
 			case Weapon:
-				switch(tag)
-				{
-					case 0:
-						return R.drawable.sticker_weapon_1;
-					case 1:
-						return R.drawable.sticker_weapon_2;
-					case 2:
-						return R.drawable.sticker_weapon_3;
-					case 3:
-						return R.drawable.sticker_weapon_4;
-					default:
-						return R.drawable.sticker_weapon_5;
-				}
+				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_WEAPON;
+			break;
+			case Trinket:
+				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_TRINKET;
+			break;
+			case Helmet:
+				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_HELMET;
+			break;
 			default:
 				return -1;
 		}
+		
+		return context.getResources().getIdentifier(nombrePegatina + (tag + 1), "drawable", context.getPackageName());
 	}
 
-	public int getVertice(int tipo)
+	public int getVertice(TTipoSticker tipo)
 	{
-		return verticePegatinas[tipo];
+		return verticePegatinas[tipo.ordinal()];
 	}
 
 }

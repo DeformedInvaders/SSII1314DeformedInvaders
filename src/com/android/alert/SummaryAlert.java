@@ -18,6 +18,7 @@ import com.project.main.R;
 
 public class SummaryAlert extends WindowAlert
 {
+	// FIXME
 	private static final int paddingLeft = 75;
 	private static final int paddingTop = 100;
 	private static final int paddingRight = 30;

@@ -37,9 +37,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	public GameOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs, TTouchEstado.GameDetectors);
-		
-		// Desctivar Formato fondo transparente
-		//setZOrderOnTop(false);
 
 		mContext = context;
 
@@ -76,6 +73,15 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 				switch (renderer.isJuegoFinalizado())
 				{
+					case VidaPerdida:
+						listener.onLivesChanged(renderer.getVidas());
+						listener.onScoreChanged(renderer.getPuntuacion());
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+					break;
+					case CambioPuntuacion:
+						listener.onScoreChanged(renderer.getPuntuacion());
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+					break;
 					case Nada:
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
 					break;
@@ -83,7 +89,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						renderer.pararAnimacion();
 						requestRender();
 	
-						listener.onGameFinished();
+						listener.onGameFinished(renderer.getPuntuacion());
 					break;
 					case FinJuegoDerrota:
 						renderer.pararAnimacion();
@@ -182,6 +188,8 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		{
 			task.run();
 			threadActivo = true;
+			
+			listener.onScoreChanged(renderer.getPuntuacion());
 		}
 	}
 
@@ -192,13 +200,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			handler.removeCallbacks(task);
 			threadActivo = false;
 		}
-	}
-
-	/* SECTION Métodos de Obtención de Información */
-
-	public int getPuntuacion()
-	{
-		return renderer.getPuntuacion();
 	}
 	
 	/* SECTION Métodos de Guardado de Información */

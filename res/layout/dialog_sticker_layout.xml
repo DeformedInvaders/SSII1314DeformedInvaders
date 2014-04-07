@@ -3,104 +3,303 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-  	<LinearLayout style="@style/Layout_Content_Dialog_Style">
-        
-  	    <TextView style="@style/Text_Section_Dialog_Style"
-  	        android:text="@string/title_dialog_eyes"/>
+  	<LinearLayout style="@style/Layout_Horizontal_Content_Dialog_Style">
   	    
-	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
-	        
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker1"
-				android:background="@drawable/sticker_eyes_1"
-				android:contentDescription="@string/desc_sticker_eye" />
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="300dp">
+			  	    
+		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style">
+		        
+		        <TextView style="@style/Text_Section_Dialog_Style"
+  	        		android:text="@string/title_dialog_eyes"/>
+		        
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes1"
+					android:background="@drawable/sticker_eyes_1"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes2"
+					android:background="@drawable/sticker_eyes_2"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes3"
+					android:background="@drawable/sticker_eyes_3"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes4"
+					android:background="@drawable/sticker_eyes_4"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes5"
+					android:background="@drawable/sticker_eyes_5"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes6"
+					android:background="@drawable/sticker_eyes_6"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes7"
+					android:background="@drawable/sticker_eyes_7"
+					android:contentDescription="@string/desc_sticker_eye" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerEyes8"
+					android:background="@drawable/sticker_eyes_8"
+					android:contentDescription="@string/desc_sticker_eye" />	
+						
+			</LinearLayout>
 			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker2"
-				android:background="@drawable/sticker_eyes_2"
-				android:contentDescription="@string/desc_sticker_eye" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker3"
-				android:background="@drawable/sticker_eyes_3"
-				android:contentDescription="@string/desc_sticker_eye" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker4"
-				android:background="@drawable/sticker_eyes_4"
-				android:contentDescription="@string/desc_sticker_eye" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker5"
-				android:background="@drawable/sticker_eyes_5"
-				android:contentDescription="@string/desc_sticker_eye" />
+		</ScrollView>
 		
-		</LinearLayout>
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="300dp" >
+			  	    
+		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style">
+
+				<TextView style="@style/Text_Section_Dialog_Style"
+  	        		android:text="@string/title_dialog_mouths"/>
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth1"
+					android:background="@drawable/sticker_mouth_1"
+					android:contentDescription="@string/desc_sticker_mouth" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth2"
+					android:background="@drawable/sticker_mouth_2"
+					android:contentDescription="@string/desc_sticker_mouth" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth3"
+					android:background="@drawable/sticker_mouth_3"
+					android:contentDescription="@string/desc_sticker_mouth" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth4"
+					android:background="@drawable/sticker_mouth_4"
+					android:contentDescription="@string/desc_sticker_mouth" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth5"
+					android:background="@drawable/sticker_mouth_5"
+					android:contentDescription="@string/desc_sticker_mouth" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth6"
+					android:background="@drawable/sticker_mouth_6"
+					android:contentDescription="@string/desc_sticker_mouth" />
+				
+			</LinearLayout>
+			
+		</ScrollView>
+ 		
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="300dp" >
+			 	    
+		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style">
+		        
+        		<TextView style="@style/Text_Section_Dialog_Style"
+  	        		android:text="@string/title_dialog_weapons"/>
+		        		
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon1"
+					android:background="@drawable/sticker_weapon_1"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon2"
+					android:background="@drawable/sticker_weapon_2"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon3"
+					android:background="@drawable/sticker_weapon_3"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon4"
+					android:background="@drawable/sticker_weapon_4"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon5"
+					android:background="@drawable/sticker_weapon_5"
+					android:contentDescription="@string/desc_sticker_weapon" />		
 	
-	    <TextView style="@style/Text_Section_Dialog_Style"
-  	        android:text="@string/title_dialog_mouths"/>
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon6"
+					android:background="@drawable/sticker_weapon_6"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon7"
+					android:background="@drawable/sticker_weapon_7"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon8"
+					android:background="@drawable/sticker_weapon_8"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon9"
+					android:background="@drawable/sticker_weapon_9"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon10"
+					android:background="@drawable/sticker_weapon_10"
+					android:contentDescription="@string/desc_sticker_weapon" />	
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon11"
+					android:background="@drawable/sticker_weapon_11"
+					android:contentDescription="@string/desc_sticker_weapon" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerWeapon12"
+					android:background="@drawable/sticker_weapon_12"
+					android:contentDescription="@string/desc_sticker_weapon" />					
+									
+			</LinearLayout>
+			
+		</ScrollView>
+			
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="300dp" >
+			  	        	
+		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style">
+		        
+       		<TextView style="@style/Text_Section_Dialog_Style"
+  	        	android:text="@string/title_dialog_trinkets"/>
+		        		
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket1"
+					android:background="@drawable/sticker_trinket_1"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket2"
+					android:background="@drawable/sticker_trinket_2"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket3"
+					android:background="@drawable/sticker_trinket_3"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket4"
+					android:background="@drawable/sticker_trinket_4"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket5"
+					android:background="@drawable/sticker_trinket_5"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket6"
+					android:background="@drawable/sticker_trinket_6"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket7"
+					android:background="@drawable/sticker_trinket_7"
+					android:contentDescription="@string/desc_sticker_trinket" />
+								
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerTrinket8"
+					android:background="@drawable/sticker_trinket_8"
+					android:contentDescription="@string/desc_sticker_trinket" />
+				
+			</LinearLayout>
+
+		</ScrollView>
   	    
-	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
-	        
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker6"
-				android:background="@drawable/sticker_mouth_1"
-				android:contentDescription="@string/desc_sticker_mouth" />
+		<ScrollView
+			android:layout_width="wrap_content"
+			android:layout_height="300dp" >
 			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker7"
-				android:background="@drawable/sticker_mouth_2"
-				android:contentDescription="@string/desc_sticker_mouth" />
+		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style">
+		        
+           		<TextView style="@style/Text_Section_Dialog_Style"
+ 	        		android:text="@string/title_dialog_helmets"/>
+		           		
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet1"
+					android:background="@drawable/sticker_helmet_1"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet2"
+					android:background="@drawable/sticker_helmet_2"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet3"
+					android:background="@drawable/sticker_helmet_3"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet4"
+					android:background="@drawable/sticker_helmet_4"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet5"
+					android:background="@drawable/sticker_helmet_5"
+					android:contentDescription="@string/desc_sticker_helmet" />		
+	
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet6"
+					android:background="@drawable/sticker_helmet_6"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet7"
+					android:background="@drawable/sticker_helmet_7"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet8"
+					android:background="@drawable/sticker_helmet_8"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet9"
+					android:background="@drawable/sticker_helmet_9"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet10"
+					android:background="@drawable/sticker_helmet_10"
+					android:contentDescription="@string/desc_sticker_helmet" />	
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet11"
+					android:background="@drawable/sticker_helmet_11"
+					android:contentDescription="@string/desc_sticker_helmet" />
+				
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerHelmet12"
+					android:background="@drawable/sticker_helmet_12"
+					android:contentDescription="@string/desc_sticker_helmet" />					
+									
+			</LinearLayout>
 			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker8"
-				android:background="@drawable/sticker_mouth_3"
-				android:contentDescription="@string/desc_sticker_mouth" />
+		</ScrollView>
 			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker9"
-				android:background="@drawable/sticker_mouth_4"
-				android:contentDescription="@string/desc_sticker_mouth" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker10"
-				android:background="@drawable/sticker_mouth_5"
-				android:contentDescription="@string/desc_sticker_mouth" />
-			
-		</LinearLayout>
-		
-		<TextView style="@style/Text_Section_Dialog_Style"
-  	        android:text="@string/title_dialog_weapons"/>
-  	    
-	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style">
-	        
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker11"
-				android:background="@drawable/sticker_weapon_1"
-				android:contentDescription="@string/desc_sticker_weapon" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker12"
-				android:background="@drawable/sticker_weapon_2"
-				android:contentDescription="@string/desc_sticker_weapon" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker13"
-				android:background="@drawable/sticker_weapon_3"
-				android:contentDescription="@string/desc_sticker_weapon" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker14"
-				android:background="@drawable/sticker_weapon_4"
-				android:contentDescription="@string/desc_sticker_weapon" />
-			
-			<ImageView style="@style/Button_Sticker_Style"
-				android:id="@+id/imageButtonSticker15"
-				android:background="@drawable/sticker_weapon_5"
-				android:contentDescription="@string/desc_sticker_weapon" />		
-					
-		</LinearLayout>
-		
 	</LinearLayout>
 	
  	<ImageView style="@style/ImageView_Arrow_Dialog_Style"

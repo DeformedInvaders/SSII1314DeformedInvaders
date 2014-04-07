@@ -56,7 +56,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		if (personajeCargado)
 		{
-			personaje.cargarTextura(gl, this);
+			personaje.cargarTextura(gl, this, mContext);
 		}
 	}
 

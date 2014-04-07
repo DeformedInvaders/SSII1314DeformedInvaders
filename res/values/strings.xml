@@ -38,6 +38,8 @@
 			<string name="title_dialog_eyes">Eyes:</string>
 			<string name="title_dialog_mouths">Mouths:</string>
 			<string name="title_dialog_weapons">Weapons:</string>
+			<string name="title_dialog_trinkets">Trinkets:</string>
+			<string name="title_dialog_helmets">Helmets:</string>
 			
 		<!-- Alert Section Titles -->	
 			<string name="title_alert_enemies">Enemies:</string>
@@ -104,6 +106,7 @@
 			<string name="text_game_fail">Game over.</string>
 			
 			<string name="text_game_paused">Game paused.</string>
+			<string name="text_game_score">Score:</string>
 			
 			<string name="text_summary">Level\'s Summary.</string>
 			
@@ -201,6 +204,7 @@
 	    <!-- Game Fragment -->
 	    	<string name="desc_game_play">Resume the game.</string>
 	    	<string name="desc_game_pause">Pause the game.</string>
+	    	<string name="desc_game_heart">Live of the character.</string>
 	    	
 	    <!-- Audio Fragment -->
 	    	<string name="desc_audio_record">Record with the microphone.</string>
@@ -223,7 +227,9 @@
 		    <string name="desc_sticker_eye">Eye sticker.</string>
 		    <string name="desc_sticker_mouth">Mouth sticker.</string>
 		    <string name="desc_sticker_weapon">Weapon sticker.</string>
-
+		    <string name="desc_sticker_trinket">Trinket sticker.</string>
+			<string name="desc_sticker_helmet">Helmet sticker.</string>
+		
 		<!-- Size Dialog -->	
 		    <string name="desc_size_pencil">Pencil size.</string>
 

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-  	<LinearLayout style="@style/Layout_Content_Dialog_Style" >
+  	<LinearLayout style="@style/Layout_Vertical_Content_Dialog_Style" >
         
   	    <TextView style="@style/Text_Section_Dialog_Style"
   	        android:text="@string/title_dialog_size" />

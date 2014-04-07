@@ -2,7 +2,7 @@ package com.game.data;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Movimientos;
@@ -52,9 +52,9 @@ public class Personaje extends Malla
 	}
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer)
+	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		super.cargarTextura(gl, renderer);
+		super.cargarTextura(gl, renderer, context);
 		
 		// Burbuja
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
@@ -184,13 +184,11 @@ public class Personaje extends Malla
 	public void reiniciarVidas()
 	{
 		vidas = GamePreferences.MAX_LIVES;
-		Log.d("TEST", "[GAME] LIVES "+vidas);
 	}
 	
 	public void quitarVida()
 	{
 		vidas--;
-		Log.d("TEST", "[GAME] LIVES "+vidas);
 	}
 
 	/* SECTION Métodos de Obtención de Información */
@@ -203,5 +201,10 @@ public class Personaje extends Malla
 	public boolean isAlive()
 	{
 		return vidas > 0;
+	}
+	
+	public int getVidas()
+	{
+		return vidas;
 	}
 }
