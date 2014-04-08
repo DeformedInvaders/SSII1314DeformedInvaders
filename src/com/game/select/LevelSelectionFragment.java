@@ -21,7 +21,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	private List<Nivel> listaNiveles;
 	private boolean[] estadoNiveles;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final LevelSelectionFragment newInstance(List<Nivel> lista, boolean[] estado)
 	{
@@ -41,7 +41,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		public void onLevelSelectionSelectClicked(int level);
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public void onAttach(Activity activity)
@@ -88,12 +88,12 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		viewPager = null;
 	}
 
-	/* SECTION Métodos abstractos de ViewPagerFragment */
+	/* Métodos abstractos de ViewPagerFragment */
 
 	@Override
 	public void onPageSelected(int page) { }
 
-	/* SECTION Métodos abstractos de OnLevelListener */
+	/* Métodos abstractos de OnLevelListener */
 
 	@Override
 	public void onLevelSelected(int level)

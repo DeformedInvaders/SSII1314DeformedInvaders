@@ -16,7 +16,7 @@ public abstract class WebAlert extends WindowAlert
 {
 	private WebView webView;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public WebAlert(Context context, String title, String textNo)
 	{
@@ -47,18 +47,18 @@ public abstract class WebAlert extends WindowAlert
 		setView(layout);
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract boolean evaluarURL(String url);
 
-	/* SECTION Métodos Públicos */
+	/* Métodos Públicos */
 
 	public void loadURL(String url)
 	{
 		webView.loadUrl(url);
 	}
 
-	/* SECTION Listener WebClient */
+	/* Listener WebClient */
 
 	public class WebClient extends WebViewClient
 	{

@@ -12,7 +12,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 	// Renderer
 	private DesignOpenGLRenderer renderer;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public DesignGLSurfaceView(Context context, AttributeSet attrs)
 	{
@@ -23,7 +23,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		setRenderer(renderer);
 	}
 
-	/* SECTION Métodos Abstráctos OpenGLSurfaceView */
+	/* Métodos Abstráctos OpenGLSurfaceView */
 
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
@@ -55,7 +55,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public boolean seleccionarTriangular()
 	{
@@ -70,7 +70,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isEstadoDibujando()
 	{
@@ -102,7 +102,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		return renderer.isPoligonoDentroMarco();
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public DesignDataSaved saveData()
 	{

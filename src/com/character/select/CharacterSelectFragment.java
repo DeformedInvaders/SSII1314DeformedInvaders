@@ -35,7 +35,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 	private DisplayGLSurfaceView canvas;
 	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonDelete;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final CharacterSelectFragment newInstance(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
 	{
@@ -53,7 +53,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 		connector = c;
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -125,7 +125,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 		canvas.onPause();
 	}
 
-	/* SECTION Métodos abstractos de OpenGLFragment */
+	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
 	protected void reiniciarInterfaz()
@@ -169,7 +169,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 		}
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	public class OnCamaraClickListener implements OnClickListener
 	{

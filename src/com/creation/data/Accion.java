@@ -17,7 +17,7 @@ public class Accion
 	// Polilinea
 	private Polilinea linea;
 
-	/* SECTION Constructora */
+	/* Constructora */
 	public Accion(int color)
 	{
 		this.color = color;
@@ -38,7 +38,7 @@ public class Accion
 		this.tipo = 2;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public int getColor()
 	{

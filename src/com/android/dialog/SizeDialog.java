@@ -15,7 +15,7 @@ public abstract class SizeDialog extends WindowDialog
 	private ImageView botonPincel;
 	private int posicion;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public SizeDialog(Context context)
 	{
@@ -34,11 +34,11 @@ public abstract class SizeDialog extends WindowDialog
 		actualizarBotones();
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onSizeSelected(int size);
 
-	/* SECTION Métodos Abstractos WindowDialog */
+	/* Métodos Abstractos WindowDialog */
 
 	@Override
 	protected void onTouchOutsidePopUp(View v, MotionEvent event)
@@ -46,7 +46,7 @@ public abstract class SizeDialog extends WindowDialog
 		dismiss();
 	}
 
-	/* SECTION Métodos Privados */
+	/* Métodos Privados */
 
 	private void actualizarBotones()
 	{
@@ -82,7 +82,7 @@ public abstract class SizeDialog extends WindowDialog
 		}
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnMasClickListener implements OnClickListener
 	{

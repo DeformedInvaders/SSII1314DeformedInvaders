@@ -19,7 +19,7 @@ public class ExternalStorageManager
 	private static final String MUSICEXTENSION = ".3gp";
 	private static final String IMAGEEXTENSION = ".png";
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public ExternalStorageManager()
 	{
@@ -27,7 +27,7 @@ public class ExternalStorageManager
 		comprobarDirectorioTemp();
 	}
 
-	/* SECTION Métodos Dirección de Ficheros y Directorios */
+	/* Métodos Dirección de Ficheros y Directorios */
 
 	private String getDirectorioRaiz()
 	{
@@ -69,7 +69,7 @@ public class ExternalStorageManager
 		return getDirectorioTemp() + "/" + nombre.toUpperCase(Locale.getDefault()) + MUSICEXTENSION;
 	}
 
-	/* SECTION Métodos Comprobación existencia y creación de Directorios */
+	/* Métodos Comprobación existencia y creación de Directorios */
 
 	private boolean comprobarDirectorio(String file)
 	{
@@ -100,7 +100,7 @@ public class ExternalStorageManager
 		comprobarDirectorio(getDirectorioTemp());
 	}
 
-	/* SECTION Métodos Número de ficheros de Directorios */
+	/* Métodos Número de ficheros de Directorios */
 
 	private int getNumFicherosDirectorio(String file)
 	{
@@ -128,7 +128,7 @@ public class ExternalStorageManager
 		return getNumFicherosDirectorio(getDirectorioTemp());
 	}
 
-	/* SECTION Métodos Ficheros de Directorios */
+	/* Métodos Ficheros de Directorios */
 
 	private String[] getFicherosDirectorio(String file)
 	{
@@ -165,7 +165,7 @@ public class ExternalStorageManager
 		return getFicherosDirectorio(getDirectorioTemp());
 	}
 
-	/* SECTION Métodos de Comprobación de Existencia de Ficheros */
+	/* Métodos de Comprobación de Existencia de Ficheros */
 
 	private boolean existeFichero(String nombre)
 	{
@@ -188,7 +188,7 @@ public class ExternalStorageManager
 		return existeFichero(getFicheroTemp(nombre));
 	}
 
-	/* SECTION Métodos de Eliminación de Directorios */
+	/* Métodos de Eliminación de Directorios */
 
 	private void eliminarFichero(File file)
 	{
@@ -213,7 +213,7 @@ public class ExternalStorageManager
 		eliminarFichero(new File(getDirectorioPersonaje(nombre)));
 	}
 
-	/* SECTION Métodos Lectura y Escritura */
+	/* Métodos Lectura y Escritura */
 
 	public String cargarAudio(String nombre, String movimiento)
 	{
@@ -274,7 +274,7 @@ public class ExternalStorageManager
 		return false;
 	}
 
-	/* SECTION Métodos Lectura y Escritura Temporal */
+	/* Métodos Lectura y Escritura Temporal */
 
 	public File cargarImagenTemp(String nombre)
 	{

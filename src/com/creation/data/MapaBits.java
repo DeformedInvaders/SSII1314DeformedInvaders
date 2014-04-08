@@ -12,7 +12,7 @@ public class MapaBits implements Serializable
 	private ArrayList<Integer> pixelsCompressed;
 	private int width, height;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public MapaBits()
 	{
@@ -37,7 +37,7 @@ public class MapaBits implements Serializable
 		this.pixelsCompressed = pixels;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public int getWidth()
 	{
@@ -59,7 +59,7 @@ public class MapaBits implements Serializable
 		return bitmap;
 	}
 
-	/* SECTION Métodos Privados */
+	/* Métodos Privados */
 
 	private void comprimirBitmap(int[] array)
 	{

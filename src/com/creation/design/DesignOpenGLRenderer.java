@@ -30,7 +30,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	private boolean poligonoSimple;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public DesignOpenGLRenderer(Context context)
 	{
@@ -42,7 +42,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		poligonoSimple = false;
 	}
 
-	/* SECTION Métodos Renderer */
+	/* Métodos Renderer */
 
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -76,7 +76,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	/* SECTION Métodos Abstractos de OpenGLRenderer */
+	/* Métodos Abstractos de OpenGLRenderer */
 
 	@Override
 	protected boolean reiniciar()
@@ -228,7 +228,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public boolean seleccionarTriangular()
 	{
@@ -246,7 +246,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		estado = TDesignEstado.Retocando;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public Esqueleto getEsqueleto()
 	{
@@ -291,7 +291,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public DesignDataSaved saveData()
 	{

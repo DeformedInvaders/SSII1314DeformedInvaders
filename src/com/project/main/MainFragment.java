@@ -29,7 +29,7 @@ public class MainFragment extends OpenGLFragment
 
 	private ExternalStorageManager externalManager;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final MainFragment newInstance(List<Personaje> lista, int indice, ExternalStorageManager m)
 	{
@@ -54,7 +54,7 @@ public class MainFragment extends OpenGLFragment
 		public void onMainPlayButtonClicked();
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public void onAttach(Activity activity)
@@ -135,7 +135,7 @@ public class MainFragment extends OpenGLFragment
 		canvas.onPause();
 	}
 
-	/* SECTION Métodos abstractos de OpenGLFragment */
+	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
 	protected void reiniciarInterfaz()
@@ -158,7 +158,7 @@ public class MainFragment extends OpenGLFragment
 		}
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnAddClickListener implements OnClickListener
 	{

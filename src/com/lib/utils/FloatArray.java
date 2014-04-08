@@ -392,7 +392,6 @@ public class FloatArray implements Serializable {
 
 	@Override
 	public FloatArray clone() {
-		// TODO
 		FloatArray f = new FloatArray();
 		for (int i = 0; i < size; i++) {
 			f.add(items[i]);

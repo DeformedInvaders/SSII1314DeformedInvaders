@@ -13,7 +13,7 @@ public class PaintDataSaved
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public PaintDataSaved(Stack<Accion> anteriores, Stack<Accion> siguientes, TPaintEstado estado)
 	{
@@ -22,7 +22,7 @@ public class PaintDataSaved
 		this.estado = estado;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public TPaintEstado getEstado()
 	{

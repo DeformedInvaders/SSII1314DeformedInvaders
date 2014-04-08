@@ -32,7 +32,7 @@ public class DeformFragment extends OpenGLFragment
 
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
 	{
@@ -51,7 +51,7 @@ public class DeformFragment extends OpenGLFragment
 		num_frames = f;
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -131,7 +131,7 @@ public class DeformFragment extends OpenGLFragment
 		dataSaved = canvas.saveData();
 	}
 
-	/* SECTION Métodos Abstractos OpenGLFramgent */
+	/* Métodos Abstractos OpenGLFramgent */
 
 	@Override
 	protected void actualizarInterfaz()
@@ -152,7 +152,7 @@ public class DeformFragment extends OpenGLFragment
 				botonDeformar.setVisibility(View.VISIBLE);
 				botonReiniciar.setVisibility(View.VISIBLE);
 
-				// TODO audio ready
+				// TODO
 				if (canvas.isGrabacionReady())
 				{
 					botonAudio.setVisibility(View.VISIBLE);
@@ -206,7 +206,7 @@ public class DeformFragment extends OpenGLFragment
 		botonReproducir.setBackgroundResource(R.drawable.icon_media_play);
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnAddClickListener implements OnClickListener
 	{
@@ -318,7 +318,7 @@ public class DeformFragment extends OpenGLFragment
 		}
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public List<FloatArray> getMovimientos()
 	{

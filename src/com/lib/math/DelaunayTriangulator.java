@@ -44,7 +44,7 @@ public class DelaunayTriangulator {
 
 	/** @see #computeTriangles(float[], int, int, boolean) */
 	public ShortArray computeTriangles(FloatArray points, boolean sorted) {
-		// TODO
+
 		float[] polygon = points.items;
 		ShortArray delaunay = computeTriangles(polygon, 0, points.size, sorted);
 
@@ -405,7 +405,6 @@ public class DelaunayTriangulator {
 	 */
 	public void trim(ShortArray triangles, FloatArray points, FloatArray hull,
 			int offset, int count) {
-		// TODO
 
 		ShortArray trianglesTmp = new ShortArray();
 

@@ -27,7 +27,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private RotateDetector rotateDetector;
 	private GameDetector gameDetector;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public OpenGLSurfaceView(Context context, AttributeSet attrs, TTouchEstado estado)
 	{
@@ -48,7 +48,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		setEGLContextClientVersion(1);
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	protected abstract boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
 
@@ -101,7 +101,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		}
 	}
 
-	/* SECTION Métodos Listener onTouch */
+	/* Métodos Listener onTouch */
 
 	public boolean onTouch(View v, MotionEvent event)
 	{

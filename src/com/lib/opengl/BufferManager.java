@@ -8,7 +8,7 @@ import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 
 public class BufferManager {
-	/* SECTION Métodos de Construcción de Buffer de Pintura */
+	/* Métodos de Construcción de Buffer de Pintura */
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de
 	// vertices
@@ -149,7 +149,7 @@ public class BufferManager {
 		return construirBufferListaPuntos(arrayVertices);
 	}
 
-	/* SECTION Metodos de Actualización de Buffers de Pintura */
+	/* Metodos de Actualización de Buffers de Pintura */
 
 	// Actualiza los valores de un buffer de pintura para puntos
 	public static void actualizarBufferListaPuntos(FloatBuffer buffer,

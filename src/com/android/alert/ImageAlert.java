@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 
 public abstract class ImageAlert extends WindowAlert
 {
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public ImageAlert(Context context, String title, String textYes, String textNo, int idImage)
 	{
@@ -40,7 +40,7 @@ public abstract class ImageAlert extends WindowAlert
 		});
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onPossitiveButtonClick();
 

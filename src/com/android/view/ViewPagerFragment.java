@@ -6,7 +6,7 @@ public abstract class ViewPagerFragment extends Fragment
 {
 	protected ViewPagerSwipeable viewPager;
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onPageSelected(int page);
 }

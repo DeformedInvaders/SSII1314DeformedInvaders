@@ -31,6 +31,7 @@
 		<!-- ActionBar Icons -->
 			<string name="title_menu_twitter">Twitter</string>
 			<string name="title_menu_facebook">Facebook</string>
+			<string name="title_menu_music">Music</string>
 		
 		<!-- Dialog Section Titles -->	
 			<string name="title_dialog_size">Size:</string>

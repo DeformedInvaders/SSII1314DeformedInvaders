@@ -8,7 +8,7 @@ import com.android.view.OpenGLRenderer;
 
 public abstract class Rectangulo extends Entidad
 {
-	/* SECTION Métodos abstractos de Entidad */
+	/* Métodos abstractos de Entidad */
 
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)

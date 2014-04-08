@@ -2,7 +2,7 @@ package com.game.data;
 
 public class Obstaculo extends Rectangulo
 {
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Obstaculo(int indiceTextura, int idObstaculo)
 	{

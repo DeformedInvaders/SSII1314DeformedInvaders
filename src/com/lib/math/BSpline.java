@@ -273,7 +273,6 @@ public class BSpline<T extends Vector<T>> implements Path<T> {
 
 	@Override
 	public float locate(T v) {
-		// TODO Add a precise method
 		return approximate(v);
 	}
 

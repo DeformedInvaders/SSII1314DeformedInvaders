@@ -25,7 +25,6 @@ import com.lib.utils.GdxRuntimeException;
  * @author Xoppa
  */
 public class Bezier<T extends Vector<T>> implements Path<T> {
-	// TODO implement Serializable
 
 	/**
 	 * Simple linear interpolation
@@ -159,7 +158,6 @@ public class Bezier<T extends Vector<T>> implements Path<T> {
 
 	@Override
 	public float approximate(final T v) {
-		// TODO: make a real approximate method
 		T p1 = points.get(0);
 		T p2 = points.get(points.size - 1);
 		T p3 = v;
@@ -172,7 +170,6 @@ public class Bezier<T extends Vector<T>> implements Path<T> {
 
 	@Override
 	public float locate(T v) {
-		// TODO implement a precise method
 		return approximate(v);
 	}
 }

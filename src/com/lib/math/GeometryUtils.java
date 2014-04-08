@@ -151,7 +151,6 @@ public class GeometryUtils {
 
 	public static ShortArray isPolygonSimple(FloatArray vertices,
 			boolean continuo) {
-		// TODO
 		ShortArray listaCortes = new ShortArray();
 		FloatArray listaVertices = new FloatArray(vertices);
 
@@ -196,7 +195,6 @@ public class GeometryUtils {
 
 	public static boolean isPointInsideMesh(ShortArray contorno,
 			FloatArray vertices, float x, float y) {
-		// TODO
 		Array<Vector2> polygon = new Array<Vector2>(2 * contorno.size);
 		int j = 0;
 		while (j < contorno.size) {

@@ -34,7 +34,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	private boolean gamePaused;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, InstanciaNivel l)
 	{
@@ -57,7 +57,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		public void onGameFailed(int level, int idImage);
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public void onAttach(Activity activity)
@@ -133,7 +133,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		canvas.onPause();
 	}
 
-	/* SECTION Métodos abstractos de OpenGLFragment */
+	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
 	protected void reiniciarInterfaz()
@@ -150,7 +150,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		}
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class onPlayGameClickListener implements OnClickListener
 	{
@@ -175,7 +175,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		}
 	}
 
-	/* SECTION Métodos de OnGameListener */
+	/* Métodos de OnGameListener */
 
 	@Override
 	public void onGameFinished(int score)

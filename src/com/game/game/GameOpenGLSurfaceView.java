@@ -30,7 +30,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	private boolean threadActivo;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public GameOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
@@ -103,7 +103,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	/* SECTION Métodos abstractos OpenGLSurfaceView */
+	/* Métodos abstractos OpenGLSurfaceView */
 
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
@@ -129,7 +129,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		return false;
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void seleccionarJump()
 	{
@@ -199,7 +199,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		}
 	}
 	
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public void saveData()
 	{

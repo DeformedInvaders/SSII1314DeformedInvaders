@@ -18,7 +18,7 @@ public class FacebookConnector
 
 	private Facebook facebook;
 
-	/* SECTION Métodos Públicos */
+	/* Métodos Públicos */
 
 	public boolean iniciarAutorizacion()
 	{

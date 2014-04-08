@@ -212,7 +212,6 @@ public class Quaternion implements Serializable {
 		return this;
 	}
 
-	// TODO : this would better fit into the vector3 class
 	/**
 	 * Transforms the given vector using this quaternion
 	 * 
@@ -268,7 +267,6 @@ public class Quaternion implements Serializable {
 		return this;
 	}
 
-	// TODO : the matrix4 set(quaternion) doesnt set the last row+col of the
 	// matrix to 0,0,0,1 so... that's why there is this
 	// method
 	/**

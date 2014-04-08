@@ -578,7 +578,7 @@ public class Matrix implements Cloneable, java.io.Serializable {
 	 * 
 	 * @return A'
 	 */
-	// TODO:
+
 	public Matrix transpose() {
 		Matrix X = new Matrix(n, m);
 		double[][] C = X.getArray();
@@ -728,7 +728,6 @@ public class Matrix implements Cloneable, java.io.Serializable {
 	 * @return A - B
 	 */
 
-	// TODO
 	public Matrix minus(Matrix B) {
 		checkMatrixDimensions(B);
 		Matrix X = new Matrix(m, n);
@@ -892,7 +891,6 @@ public class Matrix implements Cloneable, java.io.Serializable {
 	 * @return s*A
 	 */
 
-	// TODO:
 	public Matrix times(double s) {
 		Matrix X = new Matrix(m, n);
 		double[][] C = X.getArray();

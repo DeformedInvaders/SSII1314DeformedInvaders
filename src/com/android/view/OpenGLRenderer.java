@@ -74,7 +74,7 @@ public abstract class OpenGLRenderer implements Renderer
 	// Contexto
 	protected Context mContext;
 
-	/* SECTION Constructoras */
+	/* Constructoras */
 
 	public OpenGLRenderer(Context context)
 	{
@@ -108,7 +108,7 @@ public abstract class OpenGLRenderer implements Renderer
 		// después de la constructora.
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	protected abstract boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
 
@@ -120,7 +120,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected abstract boolean reiniciar();
 
-	/* SECTION Métodos Renderer */
+	/* Métodos Renderer */
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -213,7 +213,7 @@ public abstract class OpenGLRenderer implements Renderer
 		dibujarFondo(gl);
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public float getScreenWidth()
 	{
@@ -225,7 +225,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return screenHeight;
 	}
 
-	/* SECTION Métodos de Modificación de Cámara */
+	/* Métodos de Modificación de Cámara */
 
 	public void camaraZoom(float factor)
 	{
@@ -283,7 +283,7 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarTexturaFondo();
 	}
 
-	/* SECTION Métodos de modificación de puntos */
+	/* Métodos de modificación de puntos */
 
 	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
 
@@ -350,7 +350,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	/* SECTION Métodos de Copia de Seguridad de la Cámara */
+	/* Métodos de Copia de Seguridad de la Cámara */
 
 	public void salvarCamara()
 	{
@@ -377,7 +377,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	/* SECTION Métodos de Captura de Pantalla y Marcos */
+	/* Métodos de Captura de Pantalla y Marcos */
 
 	private void actualizarMarcos()
 	{
@@ -523,7 +523,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return capturaPantalla(gl, (int) marcoC, (int) marcoB, (int) marcoA, (int) marcoA);
 	}
 
-	/* SECTION Métodos de Conversión de Coordenadas */
+	/* Métodos de Conversión de Coordenadas */
 
 	protected float convertToWorldXCoordinate(float pixelX, float screenWidth)
 	{
@@ -565,7 +565,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return frameY + marcoB;
 	}
 
-	/* SECTION Métodos de Búsqueda de Pixeles */
+	/* Métodos de Búsqueda de Pixeles */
 
 	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
@@ -595,7 +595,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return (short) minpos;
 	}
 
-	/* SECTION Métodos de Pintura en la Tubería Gráfica */
+	/* Métodos de Pintura en la Tubería Gráfica */
 
 	// Pintura de un Buffer de Puntos
 	protected void dibujarBuffer(GL10 gl, int type, int size, int color, FloatBuffer bufferPuntos)
@@ -675,7 +675,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 
-	/* SECTION Métodos de Construcción de Texturas */
+	/* Métodos de Construcción de Texturas */
 
 	// Métodos de Gestión de posición de Texturas
 
@@ -699,7 +699,7 @@ public abstract class OpenGLRenderer implements Renderer
 			case Personaje:
 				return POS_TEXTURE_CHARACTER_STICKER + tipoPegatina.ordinal();
 			case Enemigo:
-				// FIXME:
+				// FIXME Añadir Enemigos con el sistema.
 				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
 				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + tipoPegatina.ordinal();
 			case Obstaculo:
@@ -961,7 +961,7 @@ public abstract class OpenGLRenderer implements Renderer
 		dibujarTexturaRectangulo(gl, x, y, TTipoEntidad.Personaje, 0, posPegatina);
 	}
 
-	/* SECTION Métodos de Pintura de Fondo */
+	/* Métodos de Pintura de Fondo */
 
 	protected void seleccionarTexturaFondo(int... indiceTexturas)
 	{		

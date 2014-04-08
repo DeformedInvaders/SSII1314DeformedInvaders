@@ -82,7 +82,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	// Pegatinas
 	private Pegatinas pegatinas;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public DeformOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura, TDeformTipo tipo, int numero_frames)
 	{
@@ -127,7 +127,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		deformator = new Deformator(verticesModificados, triangulos, handles, indiceHandles);
 	}
 
-	/* SECTION Métodos Renderer */
+	/* Métodos Renderer */
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -230,7 +230,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void seleccionarAnyadir()
 	{
@@ -247,7 +247,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TDeformEstado.Deformar;
 	}
 
-	/* SECTION Métodos Abstractos de OpenGLRenderer */
+	/* Métodos Abstractos de OpenGLRenderer */
 
 	@Override
 	protected boolean reiniciar()
@@ -481,7 +481,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void seleccionarGrabado()
 	{
@@ -562,7 +562,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TDeformEstado.Nada;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isHandlesVacio()
 	{
@@ -609,7 +609,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return listaVerticesAnimacion != null && listaVerticesAnimacion.size() > 0;
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public DeformDataSaved saveData()
 	{

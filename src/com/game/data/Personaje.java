@@ -22,7 +22,7 @@ public class Personaje extends Malla
 	private int vidas;
 	private boolean burbuja;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Personaje()
 	{
@@ -36,7 +36,7 @@ public class Personaje extends Malla
 		burbuja = false;		
 	}
 
-	/* SECTION Métodos abstractos de Entidad */
+	/* Métodos abstractos de Entidad */
 	
 	private int indiceBurbuja(int vidas)
 	{
@@ -116,7 +116,7 @@ public class Personaje extends Malla
 		return super.animar();
 	}
 
-	/* SECTION Métodos de Animación */
+	/* Métodos de Animación */
 
 	public void mover()
 	{
@@ -175,7 +175,7 @@ public class Personaje extends Malla
 		return TEstadoColision.Nada;
 	}
 
-	/* SECTION Métodos de Modificación de Información */
+	/* Métodos de Modificación de Información */
 
 	public void setMovimientos(Movimientos m)
 	{
@@ -204,7 +204,7 @@ public class Personaje extends Malla
 		vidas--;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public Movimientos getMovimientos()
 	{

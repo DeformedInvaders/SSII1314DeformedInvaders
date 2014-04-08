@@ -34,7 +34,7 @@ public class PaintFragment extends OpenGLFragment
 
 	private PaintDataSaved dataSaved;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final PaintFragment newInstance(Esqueleto e)
 	{
@@ -53,7 +53,7 @@ public class PaintFragment extends OpenGLFragment
 		public void onPaintReadyButtonClicked(Textura t);
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public void onAttach(Activity activity)
@@ -155,7 +155,7 @@ public class PaintFragment extends OpenGLFragment
 		dataSaved = canvas.saveData();
 	}
 
-	/* SECTION Métodos Abstráctos OpenGLFragment */
+	/* Métodos Abstráctos OpenGLFragment */
 
 	@Override
 	protected void actualizarInterfaz()
@@ -202,7 +202,7 @@ public class PaintFragment extends OpenGLFragment
 		botonPegatina.setBackgroundResource(R.drawable.icon_tool_sticker);
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnPincelClickListener implements OnClickListener
 	{

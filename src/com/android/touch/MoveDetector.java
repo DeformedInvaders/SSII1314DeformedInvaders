@@ -16,7 +16,7 @@ public class MoveDetector
 	private float lastPixelX, lastPixelY;
 	private long lastTap;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public MoveDetector(OpenGLRenderer renderer)
 	{
@@ -26,14 +26,14 @@ public class MoveDetector
 		this.camara = true;
 	}
 
-	/* SECTION Métodos de Modificación de Estado */
+	/* Métodos de Modificación de Estado */
 
 	public void setEstado(boolean camara)
 	{
 		this.camara = camara;
 	}
 
-	/* SECTION Métodos Listener onTouch */
+	/* Métodos Listener onTouch */
 
 	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight)
 	{

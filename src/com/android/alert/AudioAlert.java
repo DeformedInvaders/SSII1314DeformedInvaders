@@ -32,7 +32,7 @@ public abstract class AudioAlert extends WindowAlert
 
 	private String movimiento;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, ExternalStorageManager manager, String nombre)
 	{
@@ -130,7 +130,7 @@ public abstract class AudioAlert extends WindowAlert
 		actualizarInterfaz();
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onPossitiveButtonClick();
 
@@ -142,7 +142,7 @@ public abstract class AudioAlert extends WindowAlert
 		progressBar.setProgress(0);
 	}
 
-	/* SECTION Métodos Privados */
+	/* Métodos Privados */
 
 	private void actualizarContadores(long millisUntilFinished)
 	{
@@ -164,7 +164,7 @@ public abstract class AudioAlert extends WindowAlert
 		botonRecAudio.setVisibility(View.VISIBLE);
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnRecAudioClickListener implements OnClickListener
 	{

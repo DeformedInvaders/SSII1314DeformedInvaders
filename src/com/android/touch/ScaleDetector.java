@@ -21,7 +21,7 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 
 	private boolean camara;
 
-	/* SECTION Contructora */
+	/* Contructora */
 
 	public ScaleDetector(Context context, OpenGLRenderer renderer)
 	{
@@ -30,14 +30,14 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 		this.camara = true;
 	}
 
-	/* SECTION Métodos de Modificación de Estado */
+	/* Métodos de Modificación de Estado */
 
 	public void setEstado(boolean camara)
 	{
 		this.camara = camara;
 	}
 
-	/* SECTION Métodos Listener onTouch */
+	/* Métodos Listener onTouch */
 
 	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight)
 	{
@@ -47,7 +47,7 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 		return detector.onTouchEvent(event);
 	}
 
-	/* SECTION Métodos Listener onScale */
+	/* Métodos Listener onScale */
 
 	@Override
 	public boolean onScaleBegin(ScaleGestureDetector detector)

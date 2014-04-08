@@ -56,7 +56,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
-	private MenuItem botonTwitter, botonFacebook;
+	private MenuItem botonTwitter, botonFacebook, botonMusica;
 
 	/* Estado */
 	private TEstado estado;
@@ -66,7 +66,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private boolean[] estadoNiveles;
 	private int[] puntuacionNiveles;
 
-	/* SECTION Métodos Activity */
+	/* Métodos Activity */
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -132,9 +132,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
-
-		botonTwitter = menu.getItem(0);
-		botonFacebook = menu.getItem(1);
+		
+		botonMusica = menu.getItem(0);
+		botonTwitter = menu.getItem(1);
+		botonFacebook = menu.getItem(2);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -145,17 +146,17 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		switch (item.getItemId())
 		{
 			case R.id.menuIcon1:
-				onMenuTwitterButtonClicked();
-				return true;
+				return onMenuMusicButtonClicked();
 			case R.id.menuIcon2:
-				onMenuFacebookButtonClicked();
-				return true;
+				return onMenuTwitterButtonClicked();
+			case R.id.menuIcon3:
+				return onMenuFacebookButtonClicked();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 
-	/* SECTION Métodos de Modificación del FrameLayout */
+	/* Métodos de Modificación del FrameLayout */
 
 	private void changeFragment(Fragment fragmento)
 	{
@@ -195,17 +196,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 		transaction.commit();
 		
-		if(estado == TEstado.Game)
-		{
-			audioManager.startPlaying(R.raw.music_game, true);
-		}
-		else
-		{
-			if(audioManager.isStoped())
-			{
-				audioManager.startPlaying(R.raw.music_main, true);
-			}
-		}
+		actualizarMusica();
 	}
 
 	private void clearBackStack(FragmentManager manager)
@@ -213,7 +204,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
-	/* SECTION Métodos Loading Fragment */
+	/* Métodos Loading Fragment */
 
 	@Override
 	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles, int[] puntuacion)
@@ -226,7 +217,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
 	}
 
-	/* SECTION Métodos Main Fragment */
+	/* Métodos Main Fragment */
 
 	@Override
 	public void onMainCreateButtonClicked()
@@ -248,7 +239,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
 	}
 
-	/* SECTION Métodos Design Fragment */
+	/* Métodos Design Fragment */
 
 	@Override
 	public void onDesignReadyButtonClicked(Esqueleto esqueleto)
@@ -264,7 +255,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
 
-	/* SECTION Métodos Paint Fragment */
+	/* Métodos Paint Fragment */
 
 	@Override
 	public void onPaintReadyButtonClicked(Textura textura)
@@ -280,7 +271,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
 
-	/* SECTION Métodos Animation Fragment */
+	/* Métodos Animation Fragment */
 
 	@Override
 	public void onAnimationReadyButtonClicked(Movimientos movimientos)
@@ -338,7 +329,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 	}
 
-	/* SECTION Métodos Character Selection Fragment */
+	/* Métodos Character Selection Fragment */
 
 	@Override
 	public void onCharacterSelectionSelectClicked(int indice)
@@ -386,7 +377,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		alert.show();
 	}
 
-	/* SECTION Métodos Level Selection Fragment */
+	/* Métodos Level Selection Fragment */
 
 	@Override
 	public void onLevelSelectionSelectClicked(int level)
@@ -398,7 +389,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		alert.show();	
 	}
 
-	/* SECTION Métodos Game Fragment */
+	/* Métodos Game Fragment */
 
 	@Override
 	public void onGameFinished(final int score, final int level, final int idImagen, final String nameLevel)
@@ -471,9 +462,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		alert.show();
 	}
 
-	/* SECTION Métodos de Modificación de la ActionBar */
+	/* Métodos de Modificación de la ActionBar */
 
-	public void onMenuTwitterButtonClicked()
+	public boolean onMenuTwitterButtonClicked()
 	{
 		if (socialConnector.isTwitterConnected())
 		{
@@ -483,9 +474,11 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		{
 			socialConnector.conectarTwitter();
 		}
+		
+		return true;
 	}
 
-	public void onMenuFacebookButtonClicked()
+	public boolean onMenuFacebookButtonClicked()
 	{
 		if (socialConnector.isFacebookConnected())
 		{
@@ -495,6 +488,25 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		{
 			socialConnector.conectarFacebook();
 		}
+		
+		return true;
+	}
+	
+	public boolean onMenuMusicButtonClicked()
+	{
+		if (audioManager.isEnabled())
+		{
+			audioManager.disablePlayer();
+		}
+		else
+		{
+			audioManager.enablePlayer();
+			actualizarMusica();
+		}
+		
+		actualizarActionBar();
+		
+		return true;
 	}
 
 	public void actualizarActionBar()
@@ -516,6 +528,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		{
 			botonFacebook.setIcon(R.drawable.icon_social_facebook_disconnected);
 		}
+		
+		if (audioManager.isEnabled())
+		{
+			botonMusica.setIcon(R.drawable.icon_media_music_selected);
+		}
+		else
+		{
+			botonMusica.setIcon(R.drawable.icon_media_music);
+		}
 	}
 
 	private void limpiarActionBar()
@@ -523,8 +544,23 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		actionBar.removeAllTabs();
 	}
 
-	/* SECTION Métodos de Modificación del Estado */
+	/* Métodos de Modificación del Estado */
 
+	private void actualizarMusica()
+	{
+		if(estado == TEstado.Game)
+		{
+			audioManager.startPlaying(R.raw.music_game, true);
+		}
+		else
+		{
+			if(audioManager.isStoped())
+			{
+				audioManager.startPlaying(R.raw.music_main, true);
+			}
+		}
+	}
+	
 	private void actualizarEstado(Fragment fragmento)
 	{
 		if (fragmento != null)

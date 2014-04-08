@@ -35,7 +35,7 @@ public class InternalStorageManager
 	private Context mContext;
 	private List<String> nombres;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public InternalStorageManager(Context context)
 	{
@@ -45,7 +45,7 @@ public class InternalStorageManager
 		cargarNombres();
 	}
 
-	/* SECTION Métodos Nombre de Directorios */
+	/* Métodos Nombre de Directorios */
 
 	private String getCharactersFileName()
 	{
@@ -92,7 +92,7 @@ public class InternalStorageManager
 		return nombre.toUpperCase(Locale.getDefault());
 	}
 
-	/* SECTION Métodos Lista de Nombres */
+	/* Métodos Lista de Nombres */
 
 	private boolean cargarNombres()
 	{
@@ -185,7 +185,7 @@ public class InternalStorageManager
 		return false;
 	}
 
-	/* SECTION Métodos Lista de Personajes */
+	/* Métodos Lista de Personajes */
 
 	public List<Personaje> cargarListaPersonajes(LoadingFragment fragment)
 	{
@@ -212,7 +212,7 @@ public class InternalStorageManager
 		return lista;
 	}
 
-	/* SECTION Métodos Personaje Seleccionado */
+	/* Métodos Personaje Seleccionado */
 
 	public int cargarSeleccionado()
 	{
@@ -281,7 +281,7 @@ public class InternalStorageManager
 		return false;
 	}
 
-	/* SECTION Métodos Personaje Actual */
+	/* Métodos Personaje Actual */
 
 	public Personaje cargarPersonaje(String nombre)
 	{
@@ -390,7 +390,7 @@ public class InternalStorageManager
 		return false;
 	}
 
-	/* SECTION Métodos Niveles */
+	/* Métodos Niveles */
 
 	public boolean[] cargarNiveles()
 	{

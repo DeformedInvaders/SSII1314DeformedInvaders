@@ -8,7 +8,7 @@ public class AudioVolumeManager
 {
 	private AudioManager audio;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public AudioVolumeManager(Activity activity)
 	{
@@ -17,7 +17,7 @@ public class AudioVolumeManager
 		activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void increaseVolume()
 	{
@@ -39,7 +39,7 @@ public class AudioVolumeManager
 		audio.setStreamMute(AudioManager.STREAM_MUSIC, false);
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isMaxVolume()
 	{

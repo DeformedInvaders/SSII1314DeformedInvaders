@@ -137,5 +137,4 @@ public interface Vector<T extends Vector<T>> {
 	 */
 	T lerp(T target, float alpha);
 
-	// TODO: T crs(T v);
 }

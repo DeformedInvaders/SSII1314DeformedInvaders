@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 
 public abstract class ConfirmationAlert extends WindowAlert
 {
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public ConfirmationAlert(Context context, String title, String messege, String textYes, String textNo)
 	{
@@ -30,7 +30,7 @@ public abstract class ConfirmationAlert extends WindowAlert
 		});
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onPossitiveButtonClick();
 

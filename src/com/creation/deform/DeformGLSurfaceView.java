@@ -22,7 +22,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 
 	private boolean threadActivo;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public DeformGLSurfaceView(Context context, AttributeSet attrs)
 	{
@@ -59,7 +59,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	/* SECTION Métodos Abstráctos OpenGLSurfaceView */
+	/* Métodos Abstráctos OpenGLSurfaceView */
 
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
@@ -85,7 +85,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.onMultiTouchEvent();
 	}
 
-	/* SECTION Métodos de modifiación del Renderer */
+	/* Métodos de modifiación del Renderer */
 
 	public void seleccionarAnyadir()
 	{
@@ -136,7 +136,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarReposo();
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isHandlesVacio()
 	{
@@ -183,7 +183,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.getMovimientos();
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public DeformDataSaved saveData()
 	{

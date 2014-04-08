@@ -25,7 +25,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 
 	private List<Personaje> listaPersonajes;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final CharacterSelectionFragment newInstance( List<Personaje> l, ExternalStorageManager m, SocialConnector c)
 	{
@@ -48,7 +48,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		public void onCharacterSelectionDeleteButtonClicked(int indice);
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public void onAttach(Activity activity)
@@ -95,12 +95,12 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		viewPager = null;
 	}
 
-	/* SECTION Métodos abstractos de ViewPagerFragment */
+	/* Métodos abstractos de ViewPagerFragment */
 
 	@Override
 	public void onPageSelected(int position) { }
 
-	/* SECTION Métodos abstractos de OnCharacterListener */
+	/* Métodos abstractos de OnCharacterListener */
 	
 	@Override
 	public void onCharacterSelected()

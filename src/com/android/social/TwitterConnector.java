@@ -18,7 +18,7 @@ public class TwitterConnector
 	private Twitter twitter;
 	private RequestToken requestToken;
 
-	/* SECTION Métodos Públicos */
+	/* Métodos Públicos */
 
 	public boolean iniciarAutorizacion()
 	{

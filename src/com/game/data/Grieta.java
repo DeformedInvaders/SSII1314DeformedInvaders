@@ -2,7 +2,7 @@ package com.game.data;
 
 public class Grieta extends Rectangulo
 {
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Grieta(int indiceTextura)
 	{

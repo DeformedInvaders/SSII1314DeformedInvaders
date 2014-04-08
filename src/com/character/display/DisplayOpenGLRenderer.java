@@ -22,7 +22,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	private Bitmap captura;
 	private TCapturaEstado estadoCaptura;
 
-	/* SECTION Constructura */
+	/* Constructura */
 
 	public DisplayOpenGLRenderer(Context context)
 	{
@@ -45,7 +45,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TCapturaEstado.Nada;
 	}
 
-	/* SECTION Métodos Renderer */
+	/* Métodos Renderer */
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -111,7 +111,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	/* SECTION Métodos abstractos de OpenGLRenderer */
+	/* Métodos abstractos de OpenGLRenderer */
 
 	@Override
 	protected boolean reiniciar()
@@ -143,7 +143,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	/* SECTION Métodos de Modificación de Estado */
+	/* Métodos de Modificación de Estado */
 
 	public void seleccionarRetoque(float height, float width)
 	{
@@ -203,7 +203,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		personaje.atacar();
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isEstadoReposo()
 	{
@@ -242,7 +242,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		return null;
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public void saveData()
 	{

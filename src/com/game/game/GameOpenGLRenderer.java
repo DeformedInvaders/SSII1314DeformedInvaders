@@ -32,7 +32,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private int puntuacion;
 	private boolean puntuacionModificada;
 
-	/* SECTION Constructura */
+	/* Constructura */
 
 	public GameOpenGLRenderer(Context context, Personaje p, InstanciaNivel l)
 	{
@@ -51,7 +51,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		puntuacionModificada = false;
 	}
 
-	/* SECTION Métodos Renderer */
+	/* Métodos Renderer */
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -105,7 +105,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		gl.glPopMatrix();
 	}
 
-	/* SECTION Métodos abstractos de OpenGLRenderer */
+	/* Métodos abstractos de OpenGLRenderer */
 
 	@Override
 	protected boolean reiniciar()
@@ -137,7 +137,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	/* SECTION Métodos de Modificación de Estado */
+	/* Métodos de Modificación de Estado */
 
 	public void seleccionarRun()
 	{
@@ -205,7 +205,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return personaje.animar();
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public TEstadoGame isJuegoFinalizado()
 	{
@@ -275,7 +275,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return personaje.getVidas();
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public void saveData()
 	{

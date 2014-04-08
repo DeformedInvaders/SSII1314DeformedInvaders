@@ -17,7 +17,7 @@ public class Pegatinas implements Serializable
 	// Vertice Asociado
 	private int[] verticePegatinas;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Pegatinas()
 	{
@@ -31,7 +31,7 @@ public class Pegatinas implements Serializable
 		}
 	}
 
-	/* SECTION Métodos de Modificación de Información */
+	/* Métodos de Modificación de Información */
 
 	public void setPegatina(int indice, int vertice, TTipoSticker tipo)
 	{
@@ -39,7 +39,7 @@ public class Pegatinas implements Serializable
 		verticePegatinas[tipo.ordinal()] = vertice;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isCargada(TTipoSticker tipo)
 	{

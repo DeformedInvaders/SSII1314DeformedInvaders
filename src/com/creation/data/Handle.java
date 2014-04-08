@@ -8,7 +8,7 @@ public class Handle
 {
 	private FloatBuffer buffer;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Handle(int numIter, float radio)
 	{
@@ -36,7 +36,7 @@ public class Handle
 		buffer.position(0);
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public FloatBuffer getBuffer()
 	{

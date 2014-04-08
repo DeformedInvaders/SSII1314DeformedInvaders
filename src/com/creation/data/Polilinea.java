@@ -12,7 +12,7 @@ public class Polilinea
 	private int color;
 	private int size;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Polilinea(int color, int size, FloatArray puntos, FloatBuffer buffer)
 	{
@@ -25,7 +25,7 @@ public class Polilinea
 		this.buffer = buffer;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public FloatArray getPuntos()
 	{

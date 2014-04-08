@@ -18,7 +18,7 @@ public abstract class SocialConnector
 	private TwitterConnector conectorTwitter;
 	private FacebookConnector conectorFacebook;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public SocialConnector(Context context)
 	{
@@ -31,11 +31,11 @@ public abstract class SocialConnector
 		conectorFacebook = new FacebookConnector();
 	}
 	
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 	
 	public abstract void onConectionStatusChange();
 
-	/* SECTION Métodos Comprobación de Conexión */
+	/* Métodos Comprobación de Conexión */
 
 	private boolean comprobarConexionInternet()
 	{
@@ -108,7 +108,7 @@ public abstract class SocialConnector
 		alert.show();
 	}
 
-	/* SECTION Métodos Conexión y Desconexión */
+	/* Métodos Conexión y Desconexión */
 
 	public void conectarTwitter()
 	{
@@ -212,7 +212,7 @@ public abstract class SocialConnector
 		onConectionStatusChange();
 	}
 
-	/* SECTION Métodos Publicación de Estados */
+	/* Métodos Publicación de Estados */
 
 	public void publicar(String text)
 	{
@@ -254,7 +254,7 @@ public abstract class SocialConnector
 		}
 	}
 
-	/* SECTION Métodos Publicación de Fotos */
+	/* Métodos Publicación de Fotos */
 
 	public void publicar(String text, File foto)
 	{
@@ -296,7 +296,7 @@ public abstract class SocialConnector
 		}
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isTwitterConnected()
 	{

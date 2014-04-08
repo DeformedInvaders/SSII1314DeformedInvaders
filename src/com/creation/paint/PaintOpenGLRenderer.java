@@ -70,7 +70,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public PaintOpenGLRenderer(Context context, Esqueleto esqueleto)
 	{
@@ -105,7 +105,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		objetoVertice = new Handle(20, POINTWIDTH);
 	}
 
-	/* SECTION Métodos Renderer */
+	/* Métodos Renderer */
 
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -197,7 +197,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		centrarPersonajeEnMarcoFinal(gl);
 	}
 
-	/* SECTION Métodos Abstráctos OpenGLRenderer */
+	/* Métodos Abstráctos OpenGLRenderer */
 
 	@Override
 	protected boolean reiniciar()
@@ -374,7 +374,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void seleccionarMano()
 	{
@@ -442,7 +442,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TCapturaEstado.Capturando;
 	}
 
-	/* SECTION Métodos de modificación de Buffers de estado */
+	/* Métodos de modificación de Buffers de estado */
 
 	public void anteriorAccion()
 	{
@@ -500,7 +500,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isBufferSiguienteVacio()
 	{
@@ -560,7 +560,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return null;
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public PaintDataSaved saveData()
 	{

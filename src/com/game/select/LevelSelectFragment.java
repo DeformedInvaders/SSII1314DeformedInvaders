@@ -26,7 +26,7 @@ public class LevelSelectFragment extends OpenGLFragment
 
 	private ImageButton botonNivel;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public static final LevelSelectFragment newInstance(OnLevelListener l, Nivel nivel, boolean lock)
 	{
@@ -47,7 +47,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		fuenteNivel = fuente;
 	}
 
-	/* SECTION Métodos Fragment */
+	/* Métodos Fragment */
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -79,7 +79,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		botonNivel = null;
 	}
 
-	/* SECTION Métodos abstractos de OpenGLFragment */
+	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
 	protected void reiniciarInterfaz()
@@ -96,7 +96,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		}
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnLevelClickListener implements OnClickListener
 	{

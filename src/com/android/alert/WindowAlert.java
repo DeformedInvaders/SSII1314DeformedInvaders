@@ -10,7 +10,7 @@ public abstract class WindowAlert {
 	private AlertDialog.Builder builder;
 	private AlertDialog dialog;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public WindowAlert(Context context, String title)
 	{
@@ -19,7 +19,7 @@ public abstract class WindowAlert {
 		builder.setTitle(title);
 	}
 
-	/* SECTION Métodos Protegidos */
+	/* Métodos Protegidos */
 
 	protected void setPositiveButton(CharSequence text, OnClickListener listener)
 	{
@@ -56,7 +56,7 @@ public abstract class WindowAlert {
 		builder.setView(view);
 	}
 
-	/* SECTION Métodos Públicos */
+	/* Métodos Públicos */
 
 	public void show()
 	{

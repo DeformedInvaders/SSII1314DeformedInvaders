@@ -15,7 +15,7 @@ public abstract class Entidad
 
 	protected float width = 0.0f;
 
-	/* SECTION Métodos abstractos a implementar */
+	/* Métodos abstractos a implementar */
 
 	public abstract void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context);
 

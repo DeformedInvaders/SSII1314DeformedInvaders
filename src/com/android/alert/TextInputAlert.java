@@ -8,7 +8,7 @@ public abstract class TextInputAlert extends WindowAlert
 {
 	private EditText input;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public TextInputAlert(Context context, String title, String messege, String textYes, String textNo)
 	{
@@ -42,7 +42,7 @@ public abstract class TextInputAlert extends WindowAlert
 		});
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onPossitiveButtonClick(String text);
 

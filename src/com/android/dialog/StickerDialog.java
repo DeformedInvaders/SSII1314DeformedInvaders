@@ -15,7 +15,7 @@ public abstract class StickerDialog extends WindowDialog
 	private OnClickListener eyeListener, mouthListener, weaponListener, trinketListener, helmetListener;
 	private ImageView[] imagenEye, imagenMouth, imagenWeapon, imagenTrinket, imagenHelmet;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public StickerDialog(Context context)
 	{
@@ -52,11 +52,11 @@ public abstract class StickerDialog extends WindowDialog
 		}
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onStickerSelected(int tag, TTipoSticker tipo);
 
-	/* SECTION Métodos Abstractos WindowDialog */
+	/* Métodos Abstractos WindowDialog */
 
 	@Override
 	protected void onTouchOutsidePopUp(View v, MotionEvent event)
@@ -64,7 +64,7 @@ public abstract class StickerDialog extends WindowDialog
 		dismiss();
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnEyeClickListener implements OnClickListener
 	{

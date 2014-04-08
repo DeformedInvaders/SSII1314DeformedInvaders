@@ -23,7 +23,7 @@ public abstract class ColorDialog extends WindowDialog
 	private Button botonAceptar, botonCancelar;
 	private ImageView imagenCursorPrincipal, imagenCursorSecundario, imagenSeleccionado;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public ColorDialog(Context context)
 	{
@@ -63,11 +63,11 @@ public abstract class ColorDialog extends WindowDialog
 		});
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onColorSelected(int color);
 
-	/* SECTION Métodos Abstractos WindowDialog */
+	/* Métodos Abstractos WindowDialog */
 
 	@Override
 	protected void onTouchOutsidePopUp(View v, MotionEvent event)
@@ -75,7 +75,7 @@ public abstract class ColorDialog extends WindowDialog
 		dismiss();
 	}
 
-	/* SECTION Métodos Listener onClick */
+	/* Métodos Listener onClick */
 
 	private class OnAceptarClickListener implements OnClickListener
 	{
@@ -96,7 +96,7 @@ public abstract class ColorDialog extends WindowDialog
 		}
 	}
 
-	/* SECTION Métodos Privados */
+	/* Métodos Privados */
 
 	private int getColor()
 	{
@@ -158,7 +158,7 @@ public abstract class ColorDialog extends WindowDialog
 		imagenCursorSecundario.setLayoutParams(layoutParams);
 	}
 
-	/* SECTION Métodos Listener onTouch */
+	/* Métodos Listener onTouch */
 
 	private class OnPaletaPrincipalTouchListener implements OnTouchListener
 	{

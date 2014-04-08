@@ -56,7 +56,7 @@ public class GamePreferences
 	public static final int SCORE_ACTION_WRONG = 1;
 	public static final int SCORE_LOSE_LIFE = -10;
 
-	/* FIXME Usar Width de pantalla */
+	/* FIXME Realizar Cálculos relativos a la pantalla */
 	
 	public static final float WIDTH_CHARACTER = 536.8f;
 

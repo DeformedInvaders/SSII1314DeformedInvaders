@@ -11,14 +11,14 @@ public class Movimientos implements Serializable
 
 	private List<FloatArray> attack, jump, crouch, run;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Movimientos()
 	{
 
 	}
 
-	/* SECTION Métodos de Modificación de Información */
+	/* Métodos de Modificación de Información */
 
 	public void set(List<FloatArray> movimiento, int pos)
 	{
@@ -39,7 +39,7 @@ public class Movimientos implements Serializable
 		}
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public List<FloatArray> get(int pos)
 	{

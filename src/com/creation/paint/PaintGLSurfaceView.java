@@ -14,7 +14,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	// Renderer
 	private PaintOpenGLRenderer renderer;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public PaintGLSurfaceView(Context context, AttributeSet attrs)
 	{
@@ -28,7 +28,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		setRenderer(renderer);
 	}
 
-	/* SECTION Métodos Abstráctos OpenGLSurfaceView */
+	/* Métodos Abstráctos OpenGLSurfaceView */
 
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
@@ -54,7 +54,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		return false;
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void seleccionarMano()
 	{
@@ -115,7 +115,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public Textura getTextura()
 	{
@@ -159,7 +159,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		return renderer.isEstadoPegatinas();
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public PaintDataSaved saveData()
 	{

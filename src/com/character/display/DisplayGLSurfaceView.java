@@ -32,7 +32,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 	private boolean threadActivo;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public DisplayGLSurfaceView(Context context, AttributeSet attrs)
 	{
@@ -87,7 +87,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		setRenderer(renderer);
 	}
 
-	/* SECTION Métodos abstractos OpenGLSurfaceView */
+	/* Métodos abstractos OpenGLSurfaceView */
 
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
@@ -139,7 +139,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		return false;
 	}
 
-	/* SECTION Métodos de Selección de Estado */
+	/* Métodos de Selección de Estado */
 
 	public void seleccionarRun()
 	{
@@ -207,7 +207,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public boolean isEstadoReposo()
 	{
@@ -238,7 +238,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		return renderer.getCapturaPantalla();
 	}
 
-	/* SECTION Métodos de Guardado de Información */
+	/* Métodos de Guardado de Información */
 
 	public void saveData()
 	{

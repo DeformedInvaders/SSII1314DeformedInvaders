@@ -50,7 +50,7 @@ public abstract class Malla extends Entidad
 
 	protected float posicionX, posicionY;
 
-	/* SECTION Métodos abstractos de Entidad */
+	/* Métodos abstractos de Entidad */
 
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
@@ -112,7 +112,7 @@ public abstract class Malla extends Entidad
 		gl.glPopMatrix();
 	}
 
-	/* SECTION Métodos de Animación */
+	/* Métodos de Animación */
 
 	protected void iniciar()
 	{
@@ -141,7 +141,7 @@ public abstract class Malla extends Entidad
 		return posicionAnimacion == listaVerticesAnimacion.size() - 1;
 	}
 
-	/* SECTION Métodos de Modificación de Información */
+	/* Métodos de Modificación de Información */
 
 	public void setEsqueleto(Esqueleto e)
 	{
@@ -169,7 +169,7 @@ public abstract class Malla extends Entidad
 		nombre = n;
 	}
 
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	public Esqueleto getEsqueleto()
 	{

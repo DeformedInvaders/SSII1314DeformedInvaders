@@ -4,7 +4,7 @@ public class Enemigo extends Rectangulo
 {
 	// private List<FloatArray> movimiento;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	/*
 	public Enemigo(int idEnemigo)
@@ -21,7 +21,7 @@ public class Enemigo extends Rectangulo
 		textura = indiceTextura;
 	}
 
-	/* SECTION Métodos abstractos de Entidad */
+	/* Métodos abstractos de Entidad */
 
 	/*
 	@Override
@@ -31,7 +31,7 @@ public class Enemigo extends Rectangulo
 	}
 	*/
 	
-	/* SECTION Métodos de Animación */
+	/* Métodos de Animación */
 
 	/*
 	public void mover()
@@ -41,7 +41,7 @@ public class Enemigo extends Rectangulo
 	}
 	*/
 	
-	/* SECTION Métodos de Modificación de Información */
+	/* Métodos de Modificación de Información */
 
 	/*
 	public void setMovimientos(List<FloatArray> m)
@@ -51,7 +51,7 @@ public class Enemigo extends Rectangulo
 	}
 	*/
 	
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 
 	/*
 	public List<FloatArray> getMovimientos()

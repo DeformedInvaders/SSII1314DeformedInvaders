@@ -36,7 +36,7 @@ public class Deformator
 	private Matrix matrizA2, matrizA2t, matrizA2tA2;
 	private Matrix matrizB2x, matrizB2y, matrizA2tB2x, matrizA2tB2y;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public Deformator(FloatArray puntos, ShortArray triangulos, FloatArray handles, ShortArray indiceHandles)
 	{

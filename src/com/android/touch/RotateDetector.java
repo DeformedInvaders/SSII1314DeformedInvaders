@@ -15,7 +15,7 @@ public class RotateDetector
 	private boolean camara, started;
 	private float fijoPixelX, fijoPixelY, lastPixelX, lastPixelY;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public RotateDetector(OpenGLRenderer renderer)
 	{
@@ -24,14 +24,14 @@ public class RotateDetector
 		this.started = false;
 	}
 
-	/* SECTION Métodos de Modificación de Estado */
+	/* Métodos de Modificación de Estado */
 
 	public void setEstado(boolean camara)
 	{
 		this.camara = camara;
 	}
 
-	/* SECTION Métodos Listener onTouch */
+	/* Métodos Listener onTouch */
 
 	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight)
 	{

@@ -21,7 +21,7 @@ public abstract class WindowDialog implements OnTouchListener
 	private PopupWindow popupWindow;
 	private LayoutInflater layoutInflater;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public WindowDialog(Context context, int id)
 	{
@@ -38,11 +38,11 @@ public abstract class WindowDialog implements OnTouchListener
 		popupWindow.setFocusable(true);
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	protected abstract void onTouchOutsidePopUp(View v, MotionEvent event);
 
-	/* SECTION Métodos Protegidos */
+	/* Métodos Protegidos */
 
 	protected View findViewById(int id)
 	{
@@ -86,7 +86,7 @@ public abstract class WindowDialog implements OnTouchListener
 		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 	}
 
-	/* SECTION Métodos Públicos */
+	/* Métodos Públicos */
 
 	public void show(View view)
 	{
@@ -98,7 +98,7 @@ public abstract class WindowDialog implements OnTouchListener
 		popupWindow.showAsDropDown(view, posX, -posY);
 	}
 
-	/* SECTION Métodos Listener onTouch */
+	/* Métodos Listener onTouch */
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event)

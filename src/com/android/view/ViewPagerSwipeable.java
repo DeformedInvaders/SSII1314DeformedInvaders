@@ -25,7 +25,7 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 
 	private boolean swipeable;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public ViewPagerSwipeable(Context context)
 	{
@@ -45,7 +45,7 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		listaNombres = new ArrayList<String>();
 	}
 
-	/* SECTION Métodos Publicos */
+	/* Métodos Publicos */
 
 	public void setSwipeable(boolean swipe)
 	{
@@ -111,7 +111,7 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		return false;
 	}
 
-	/* SECTION Métodos Adaptador de PagerViewer */
+	/* Métodos Adaptador de PagerViewer */
 
 	public class SectionViewPagerAdapter extends FragmentStatePagerAdapter implements ActionBar.TabListener
 	{

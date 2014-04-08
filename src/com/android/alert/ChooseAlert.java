@@ -8,7 +8,7 @@ public abstract class ChooseAlert extends WindowAlert
 	private int selected;
 	private String[] lista;
 
-	/* SECTION Constructora */
+	/* Constructora */
 
 	public ChooseAlert(Context context, String title, String textYes, String textNo, String[] list)
 	{
@@ -50,7 +50,7 @@ public abstract class ChooseAlert extends WindowAlert
 		});
 	}
 
-	/* SECTION Métodos Abstractos */
+	/* Métodos Abstractos */
 
 	public abstract void onSelectedPossitiveButtonClick(String selected);
 
