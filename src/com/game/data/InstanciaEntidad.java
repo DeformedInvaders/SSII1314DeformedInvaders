@@ -11,14 +11,14 @@ public class InstanciaEntidad
 	private boolean pintar, derrotado;
 	private float posicionX, posicionY;
 
-	public InstanciaEntidad(int id, float posX)
+	public InstanciaEntidad(int id, float posX, float posY)
 	{
 		pintar = true;
 		derrotado = false;
 		idEntidad = id;
 
 		posicionX = posX;
-		posicionY = 0.0f;
+		posicionY = posY;
 	}
 
 	public boolean isDerrotado()

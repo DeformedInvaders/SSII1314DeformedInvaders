@@ -15,10 +15,10 @@ public class GamePreferences
 	public static final int MAX_TEXTURE_STICKER = 5;
 	public static final int MAX_TEXTURE_BUBBLE = 3;
 	public static final int MAX_TEXTURE_OBSTACLE = 1;
-	public static final int MAX_TEXTURE_FISSURE = 1;
+	public static final int MAX_TEXTURE_MISSILE = 1;
 	public static final int MAX_TEXTURE_ENEMY = 4;
 
-	public static final int NUM_TYPE_ENEMIGOS = 4;
+	public static final int NUM_TYPE_ENEMIGOS = 6;
 	public static final int NUM_TYPE_STICKERS_EYES = 8;
 	public static final int NUM_TYPE_STICKERS_MOUTH = 6;
 	public static final int NUM_TYPE_STICKERS_WEAPON = 12;
@@ -46,9 +46,9 @@ public class GamePreferences
 	public static final String FONT_EGYPT_PATH = "fonts/font_egypt.ttf";
 	public static final String FONT_STONEHENGE_PATH = "fonts/font_stonehenge.ttf";
 	
-	public static final int TYPE_OBSTACLE = 0;
-	public static final int TYPE_ENEMY = 0;
-	public static final int TYPE_BOSS = TYPE_ENEMY + MAX_TEXTURE_ENEMY;
+	public static final int ID_TYPE_OBSTACLE = 0;
+	public static final int ID_TYPE_ENEMY = 0;
+	public static final int ID_TYPE_MISSILE = 0;
 	
 	// Puntuaciones
 	public static final int SCORE_LEVEL_COMPLETED = 10;
@@ -71,8 +71,11 @@ public class GamePreferences
 	public static final int MAX_LIVES = 3;
 
 	// Diastancias Escenario
-	public static final float DISTANCE_RIGHT = 70.0f;
-	public static final float DISTANCE_BOTTOM = 70.0f;
+	public static final float DISTANCE_CHARACTER_RIGHT = 50.0f;
+	public static final float DISTANCE_CHARACTER_BOTTOM = 50.0f;
+	
+	public static final float DISTANCE_ENEMY_GROUND = 0.0f;
+	public static final float DISTANCE_ENEMY_AIR = 200.0f;
 
 	public static final float DISTANCE_BETWEEN_ENEMY = 700.0f;
 	public static final float POS_ENEMIES_INICIO = 1280.0f;

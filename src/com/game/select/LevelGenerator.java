@@ -12,6 +12,7 @@ import com.game.data.Enemigo;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
+import com.game.data.Misil;
 import com.game.data.Nivel;
 import com.game.data.Obstaculo;
 import com.project.main.GamePreferences;
@@ -73,12 +74,13 @@ public class LevelGenerator
 		listaNiveles.add(new Nivel(0, R.drawable.background_moon_1, R.string.title_level_section_moon, R.string.text_level_section_moon, Color.WHITE, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_moon));
 
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon, GamePreferences.TYPE_OBSTACLE));
+		listaEnemigos.add(new Misil(R.drawable.missile_moon, GamePreferences.ID_TYPE_MISSILE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon, GamePreferences.ID_TYPE_OBSTACLE));
 
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon, GamePreferences.TYPE_ENEMY));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon, GamePreferences.TYPE_ENEMY + 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon, GamePreferences.TYPE_ENEMY + 2));
-		listaEnemigos.add(new Enemigo(R.drawable.boss_moon, GamePreferences.TYPE_BOSS));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, GamePreferences.ID_TYPE_ENEMY));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, GamePreferences.ID_TYPE_ENEMY + 1));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_2, GamePreferences.ID_TYPE_ENEMY + 2));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_2, GamePreferences.ID_TYPE_ENEMY + 3));
 
 		background.setBackground(R.drawable.background_moon_2, R.drawable.background_moon_3, R.drawable.background_moon_4, R.drawable.background_moon_5, R.drawable.polaroid_gameover_moon, R.drawable.polaroid_levelcompleted_moon);
 	}
@@ -90,12 +92,13 @@ public class LevelGenerator
 		listaNiveles.add(new Nivel(1, R.drawable.background_newyork_1, R.string.title_level_section_newyork, R.string.text_level_section_newyork, Color.BLACK, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_newyork));
 
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork, GamePreferences.TYPE_OBSTACLE));
+		listaEnemigos.add(new Misil(R.drawable.missile_newyork, GamePreferences.ID_TYPE_MISSILE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork, GamePreferences.ID_TYPE_OBSTACLE));
 
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork1, GamePreferences.TYPE_ENEMY));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork2, GamePreferences.TYPE_ENEMY + 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork3, GamePreferences.TYPE_ENEMY + 2));
-		listaEnemigos.add(new Enemigo(R.drawable.boss_newyork, GamePreferences.TYPE_BOSS));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_1, GamePreferences.ID_TYPE_ENEMY));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_2, GamePreferences.ID_TYPE_ENEMY + 1));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_3, GamePreferences.ID_TYPE_ENEMY + 2));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_4, GamePreferences.ID_TYPE_ENEMY + 3));
 
 		background.setBackground(R.drawable.background_newyork_2, R.drawable.background_newyork_3, R.drawable.background_newyork_4, R.drawable.background_newyork_5, R.drawable.polaroid_gameover_newyork, R.drawable.polaroid_levelcompleted_newyork);
 	}
@@ -107,12 +110,13 @@ public class LevelGenerator
 		listaNiveles.add(new Nivel(2, R.drawable.background_rome_1, R.string.title_level_section_rome, R.string.text_level_section_rome, Color.WHITE, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_rome));
 
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome, GamePreferences.TYPE_OBSTACLE));
+		listaEnemigos.add(new Misil(R.drawable.missile_rome, GamePreferences.ID_TYPE_MISSILE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome, GamePreferences.ID_TYPE_OBSTACLE));
 
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome1, GamePreferences.TYPE_ENEMY));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome2, GamePreferences.TYPE_ENEMY + 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome3, GamePreferences.TYPE_ENEMY + 2));
-		listaEnemigos.add(new Enemigo(R.drawable.boss_rome, GamePreferences.TYPE_BOSS));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_1, GamePreferences.ID_TYPE_ENEMY));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_2, GamePreferences.ID_TYPE_ENEMY + 1));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_3, GamePreferences.ID_TYPE_ENEMY + 2));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_4, GamePreferences.ID_TYPE_ENEMY + 3));
 
 		background.setBackground(R.drawable.background_rome_2, R.drawable.background_rome_3, R.drawable.background_rome_4, R.drawable.background_rome_5, R.drawable.polaroid_gameover_rome, R.drawable.polaroid_levelcompleted_rome);
 	}
@@ -123,14 +127,15 @@ public class LevelGenerator
 		
 		listaNiveles.add(new Nivel(3, R.drawable.background_egypt_1, R.string.title_level_section_egypt, R.string.text_level_section_egypt, Color.BLACK, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_egypt));
+		
+		listaEnemigos.add(new Misil(R.drawable.missile_egypt, GamePreferences.ID_TYPE_MISSILE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt, GamePreferences.ID_TYPE_OBSTACLE));
 
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt, GamePreferences.TYPE_OBSTACLE));
-
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt1, GamePreferences.TYPE_ENEMY));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt2, GamePreferences.TYPE_ENEMY + 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt3, GamePreferences.TYPE_ENEMY + 2));
-		listaEnemigos.add(new Enemigo(R.drawable.boss_egypt, GamePreferences.TYPE_BOSS));
-
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_1, GamePreferences.ID_TYPE_ENEMY));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_2, GamePreferences.ID_TYPE_ENEMY + 1));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_3, GamePreferences.ID_TYPE_ENEMY + 2));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_4, GamePreferences.ID_TYPE_ENEMY + 3));
+		
 		background.setBackground(R.drawable.background_egypt_2, R.drawable.background_egypt_3, R.drawable.background_egypt_4, R.drawable.background_egypt_5, R.drawable.polaroid_gameover_egypt, R.drawable.polaroid_levelcompleted_egypt);
 	}
 
@@ -141,12 +146,13 @@ public class LevelGenerator
 		listaNiveles.add(new Nivel(4, R.drawable.background_stonehenge_1, R.string.title_level_section_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_stonehenge));
 
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge, 0));
+		listaEnemigos.add(new Misil(R.drawable.missile_stonehenge, GamePreferences.ID_TYPE_MISSILE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge, GamePreferences.ID_TYPE_OBSTACLE));
 
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge1, GamePreferences.TYPE_ENEMY));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge2, GamePreferences.TYPE_ENEMY + 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge3, GamePreferences.TYPE_ENEMY + 2));
-		listaEnemigos.add(new Enemigo(R.drawable.boss_stonehenge, GamePreferences.TYPE_BOSS));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_1, GamePreferences.ID_TYPE_ENEMY));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_2, GamePreferences.ID_TYPE_ENEMY + 1));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_3, GamePreferences.ID_TYPE_ENEMY + 2));
+		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_4, GamePreferences.ID_TYPE_ENEMY + 3));
 
 		background.setBackground(R.drawable.background_stonehenge_2, R.drawable.background_stonehenge_3, R.drawable.background_stonehenge_4, R.drawable.background_stonehenge_5, R.drawable.polaroid_gameover_stonehenge, R.drawable.polaroid_levelcompleted_stonehenge);
 	}
@@ -163,21 +169,22 @@ public class LevelGenerator
 
 	private List<InstanciaEntidad> getColaEnemigos(int indice)
 	{
-		List<InstanciaEntidad> colaEnemigos = new ArrayList<InstanciaEntidad>();
+		List<InstanciaEntidad> listaEnemigos = new ArrayList<InstanciaEntidad>();
 
-		float posActual = GamePreferences.POS_ENEMIES_INICIO;
-		while (posActual < GamePreferences.POS_ENEMIES_FINAL)
+		float posXActual = GamePreferences.POS_ENEMIES_INICIO;
+		while (posXActual < GamePreferences.POS_ENEMIES_FINAL)
 		{
 			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_ENEMIGOS);
-			float posEnemigo = posActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMY);
-
-			colaEnemigos.add(new InstanciaEntidad(tipoEnemigo, posEnemigo));
-			posActual = posEnemigo + GamePreferences.DISTANCE_BETWEEN_ENEMY;
+			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMY);
+			float posYEnemigo = GamePreferences.DISTANCE_ENEMY_GROUND;
+			
+			if (tipoEnemigo == 0) posYEnemigo = GamePreferences.DISTANCE_ENEMY_AIR;
+					
+			listaEnemigos.add(new InstanciaEntidad(tipoEnemigo, posXEnemigo, posYEnemigo));
+			posXActual = posXEnemigo + GamePreferences.DISTANCE_BETWEEN_ENEMY;
 		}
 
-		colaEnemigos.add(new InstanciaEntidad(GamePreferences.NUM_TYPE_ENEMIGOS, GamePreferences.POS_BOSS));
-
-		return colaEnemigos;
+		return listaEnemigos;
 	}
 
 	public InstanciaNivel getLevel(int indice)

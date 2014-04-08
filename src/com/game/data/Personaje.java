@@ -155,9 +155,11 @@ public class Personaje extends Malla
 		float posicionXEntidad = instancia.getPosicionX();
 		float posicionYEntidad = instancia.getPosicionY();
 		float widthEntidad = entidad.getWidth();
+		float heightEntidad = entidad.getWidth();
 
-		Circle areaPersonaje = new Circle(posicionX + width / 4, posicionY, width / 5);
-		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 4, posicionYEntidad, widthEntidad / 5);
+		// FIXME Obtener Height
+		Circle areaPersonaje = new Circle(posicionX + width / 4, posicionY + width / 4, width / 5);
+		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 4, posicionYEntidad + heightEntidad / 4, widthEntidad / 5);
 
 		// Hay colisión entre el personaje y el enemigo
 		if (Intersector.overlaps(areaPersonaje, areaEntidad))
@@ -167,6 +169,11 @@ public class Personaje extends Malla
 			{
 				instancia.setDerrotado();
 				return TEstadoColision.EnemigoDerrotado;
+			}
+			
+			if (entidad.getTipo() == TTipoEntidad.Misil && estado == TDeformTipo.Crouch)
+			{
+				return TEstadoColision.Nada;
 			}
 
 			return TEstadoColision.Colision;

@@ -43,15 +43,14 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_FISSURE = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND;
-	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_FISSURE + GamePreferences.MAX_TEXTURE_FISSURE;
+	private static final int POS_TEXTURE_MISSILE = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND;
+	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.MAX_TEXTURE_MISSILE;
 	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.MAX_TEXTURE_OBSTACLE;
 	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + GamePreferences.MAX_TEXTURE_CHARACTER;
 	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.MAX_TEXTURE_STICKER;
 	private static final int POS_TEXTURE_BUBBLE = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.MAX_TEXTURE_ENEMY * (GamePreferences.MAX_TEXTURE_STICKER + 1);
 	
 	private static final int NUM_TEXTURES = POS_TEXTURE_BUBBLE + GamePreferences.MAX_TEXTURE_BUBBLE;
-	//private static final int NUM_TEXTURES = GamePreferences.MAX_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_FISSURE + GamePreferences.MAX_TEXTURE_OBSTACLE + GamePreferences.MAX_TEXTURE_CHARACTER + GamePreferences.MAX_TEXTURE_STICKER + (GamePreferences.MAX_TEXTURE_ENEMY * GamePreferences.MAX_TEXTURE_STICKER + 1) + GamePreferences.MAX_TEXTURE_BUBBLE + GamePreferences.MAX_TEXTURE_HEART;
 	
 	private int[] nombreTexturas;
 
@@ -704,8 +703,8 @@ public abstract class OpenGLRenderer implements Renderer
 				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + tipoPegatina.ordinal();
 			case Obstaculo:
 				return POS_TEXTURE_OBSTACLE + posEntidad;
-			case Grieta:
-				return POS_TEXTURE_FISSURE;
+			case Misil:
+				return POS_TEXTURE_MISSILE;
 			case Burbuja:
 				return POS_TEXTURE_BUBBLE + posEntidad;
 			default:

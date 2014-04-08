@@ -79,7 +79,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		gl.glPushMatrix();
 
-			gl.glTranslatef(GamePreferences.DISTANCE_RIGHT, GamePreferences.DISTANCE_BOTTOM, 0.0f);
+			gl.glTranslatef(GamePreferences.DISTANCE_CHARACTER_RIGHT, GamePreferences.DISTANCE_CHARACTER_BOTTOM, 0.0f);
 	
 			// Escala del Juego
 			gl.glPushMatrix();
@@ -192,6 +192,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 							puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
 							puntuacionModificada = true;
 						break;
+						case Misil:
+							puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+							puntuacionModificada = true;
 						default:
 						break;
 					}

@@ -20,6 +20,7 @@ import com.project.main.R;
 public class SummaryAlert extends WindowAlert
 {
 	// FIXME Realizar Cálculos relativos a la pantalla
+	
 	private static final int paddingLeft = 75;
 	private static final int paddingTop = 100;
 	private static final int paddingRight = 30;
@@ -67,20 +68,23 @@ public class SummaryAlert extends WindowAlert
 				Iterator<Entidad> it = listaEnemigos.iterator();
 				while(it.hasNext())
 				{
-					ImageView imageView = new ImageView(context);
-					imageView.setLayoutParams(new LinearLayout.LayoutParams(imageHeight, imageWidth));
-					
 					Entidad enemigo = it.next();
+					
+					ImageView imageView = new ImageView(context);
+					imageView.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
+					imageView.setBackgroundResource(enemigo.getIndiceTextura());
+					
 					switch(enemigo.getTipo())
 					{
 						case Enemigo:
-							imageView.setBackgroundResource(enemigo.getIndiceTextura());
 							layoutImagesEnemigos.addView(imageView);
 						break;
 						case Obstaculo:
-							imageView.setBackgroundResource(enemigo.getIndiceTextura());
 							layoutImagesObstaculos.addView(imageView);
 						break;
+						case Misil:
+							imageView.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight/2));
+							layoutImagesMisiles.addView(imageView);
 						default:
 						break;
 					}
