@@ -202,8 +202,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 
 		// Personaje
-		personaje.animar();
-		return personaje.avanzar(this);
+		return personaje.animar();
 	}
 
 	/* SECTION Métodos de Obtención de Información */

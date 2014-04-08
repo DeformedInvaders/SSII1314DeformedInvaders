@@ -52,8 +52,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceCreated(gl, config);
 
-		// BackGround
-
 		if (personajeCargado)
 		{
 			personaje.cargarTextura(gl, this, mContext);
@@ -173,8 +171,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public boolean reproducirAnimacion()
 	{
-		personaje.animar();
-		return personaje.avanzar(this);
+		return personaje.animar(false);
 	}
 
 	public void seleccionarReposo()

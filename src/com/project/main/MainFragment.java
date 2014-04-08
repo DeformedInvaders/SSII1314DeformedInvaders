@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
-import com.creation.design.TDisplayTipo;
+import com.character.display.TDisplayTipo;
 import com.game.data.Personaje;
 
 public class MainFragment extends OpenGLFragment

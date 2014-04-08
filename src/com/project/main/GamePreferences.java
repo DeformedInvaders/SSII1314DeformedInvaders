@@ -38,6 +38,14 @@ public class GamePreferences
 	public static final String RESOURCE_ID_STICKER_TRINKET = "sticker_trinket_";
 	public static final String RESOURCE_ID_STICKER_HELMET = "sticker_helmet_";
 	
+	public static final String FONT_TYPEWRITER_PATH = "fonts/font_typewriter.ttf";
+	public static final String FONT_LOGO_PATH = "fonts/font_logo.ttf";
+	public static final String FONT_MOON_PATH = "fonts/font_moon.ttf";
+	public static final String FONT_NEW_YORK_PATH = "fonts/font_new_york.ttf";
+	public static final String FONT_ROME_PATH = "fonts/font_rome.ttf";
+	public static final String FONT_EGYPT_PATH = "fonts/font_egypt.ttf";
+	public static final String FONT_STONEHENGE_PATH = "fonts/font_stonehenge.ttf";
+	
 	public static final int TYPE_OBSTACLE = 0;
 	public static final int TYPE_ENEMY = 0;
 	public static final int TYPE_BOSS = TYPE_ENEMY + MAX_TEXTURE_ENEMY;

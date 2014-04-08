@@ -6,39 +6,33 @@
     <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewCharacterSelect1" />
     
-    <LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style" >
-
-        <ImageButton
-            android:id="@+id/imageButtonCharacterSelect1"
-            style="@style/Button_Fragment_Style"
-            android:background="@drawable/icon_share_picture"
-            android:contentDescription="@string/desc_select_camera" />
-
-	</LinearLayout>
+    <TextView
+        android:id="@+id/textViewCharacterSelect1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="45sp" />
 	
     <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style" >
 
-        <ImageButton
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect2"
-            style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_game_run"
             android:contentDescription="@string/desc_select_run" />
         
-        <ImageButton
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect3"
-            style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_game_jump"
             android:contentDescription="@string/desc_select_jump" />
         
-        <ImageButton
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect4"
-            style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_game_crouch"
             android:contentDescription="@string/desc_select_crouch" />
         
-        <ImageButton
+        <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect5"
-            style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_game_attack"
             android:contentDescription="@string/desc_select_attack" />
 
@@ -46,6 +40,11 @@
 	
 	<LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 
+		<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonCharacterSelect1"
+            android:background="@drawable/icon_share_picture"
+            android:contentDescription="@string/desc_select_camera" />
+	            
 	    <ImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonCharacterSelect6"
 	        android:contentDescription="@string/desc_selection_select"

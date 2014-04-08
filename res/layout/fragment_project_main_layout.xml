@@ -5,7 +5,7 @@
     
    	<ImageView style="@style/ImageView_Background_Style"
 		android:contentDescription="@string/desc_select_background"
-		android:background="@drawable/background_display" />
+		android:background="@drawable/background_main" />
     
     <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewMain1" />
@@ -28,15 +28,5 @@
             android:background="@drawable/icon_main_selection" />
         
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:text="@string/title_app"
-        android:textColor="#EEEEEE"
-        android:textSize="80sp" />
 
 </RelativeLayout>

@@ -21,11 +21,9 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	private Context mContext;
 
 	private String nombrePersonaje;
-
 	private boolean animacionFinalizada;
 
-	private ExternalStorageManager manager;
-	private AudioPlayerManager player;
+	private AudioPlayerManager audioManager;
 
 	private Handler handler;
 	private Runnable task;
@@ -45,14 +43,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, InstanciaNivel l)
 	{
-		manager = m;
 		nombrePersonaje = p.getNombre();
 		listener = gl;
 
 		renderer = new GameOpenGLRenderer(getContext(), p, l);
 		setRenderer(renderer);
 
-		player = new AudioPlayerManager(manager) {
+		audioManager = new AudioPlayerManager(m) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
@@ -143,7 +140,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				renderer.seleccionarJump();
 				requestRender();
 
-				player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
+				audioManager.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
 
 				animacionFinalizada = false;
 			}
@@ -159,7 +156,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				renderer.seleccionarCrouch();
 				requestRender();
 
-				player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
+				audioManager.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
 
 				animacionFinalizada = false;
 			}
@@ -175,7 +172,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				renderer.seleccionarAttack();
 				requestRender();
 
-				player.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
+				audioManager.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
 
 				animacionFinalizada = false;
 			}

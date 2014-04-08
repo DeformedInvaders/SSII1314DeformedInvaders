@@ -132,13 +132,13 @@ public abstract class Malla extends Entidad
 	}
 
 	public boolean animar()
-	{
+	{ 
 		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
 		posicionAnimacion++;
 
-		return posicionAnimacion == listaVerticesAnimacion.size();
+		return posicionAnimacion == listaVerticesAnimacion.size() - 1;
 	}
 
 	/* SECTION Métodos de Modificación de Información */

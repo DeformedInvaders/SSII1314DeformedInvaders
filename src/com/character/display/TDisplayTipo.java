@@ -1,4 +1,4 @@
-package com.creation.design;
+package com.character.display;
 
 public enum TDisplayTipo
 {

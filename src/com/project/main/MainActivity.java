@@ -181,17 +181,16 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 		transaction.commit();
 		
-		if(estado == TEstado.Main)
+		if(estado == TEstado.Game)
 		{
-			audioManager.startPlayting(R.raw.black_vortex);
+			audioManager.startPlaying(R.raw.music_game, true);
 		}
-		else if(estado == TEstado.LevelSelection)
+		else
 		{
-			audioManager.startPlayting(R.raw.pump_sting);
-		}
-		else if(estado == TEstado.Game)
-		{
-			audioManager.startPlayting(R.raw.prelude_action);
+			if(audioManager.isStoped())
+			{
+				audioManager.startPlaying(R.raw.music_main, true);
+			}
 		}
 	}
 
@@ -390,6 +389,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onGameFinished(final int score, final int level, final int idImagen, final String nameLevel)
 	{
+		// Sonido Victoria
+		audioManager.startPlaying(R.raw.effect_level_complete, false);
+		
 		// Desbloquear Siguiente nivel
 		int nextLevel = (level + 1) % estadoNiveles.length;
 		estadoNiveles[nextLevel] = true;
@@ -435,6 +437,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onGameFailed(final int level, final int idImagen)
 	{
+		// Sonido Derrota
+		audioManager.startPlaying(R.raw.effect_game_over, false);
+		
 		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_fail), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
 			@Override
 			public void onPossitiveButtonClick()

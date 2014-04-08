@@ -86,8 +86,11 @@ public class Personaje extends Malla
 		}
 	}
 
-	public boolean avanzar(OpenGLRenderer renderer)
+	@Override
+	public boolean animar()
 	{
+		boolean finAnimacion = super.animar();
+		
 		if (estado == TDeformTipo.Jump)
 		{
 			if (posicionAnimacion <= listaVerticesAnimacion.size() / 2)
@@ -100,7 +103,17 @@ public class Personaje extends Malla
 			}
 		}
 
-		return posicionAnimacion == listaVerticesAnimacion.size() - 1;
+		return finAnimacion;
+	}
+	
+	public boolean animar(boolean desplazamiento)
+	{
+		if(desplazamiento)
+		{
+			return animar();
+		}
+		
+		return super.animar();
 	}
 
 	/* SECTION Métodos de Animación */

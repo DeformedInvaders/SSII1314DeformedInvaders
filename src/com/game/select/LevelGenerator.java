@@ -68,7 +68,7 @@ public class LevelGenerator
 
 	private void crearNivelLuna(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
 	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_moon.ttf");
+		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_MOON_PATH);
 		
 		listaNiveles.add(new Nivel(0, R.drawable.background_moon_1, R.string.title_level_section_moon, R.string.text_level_section_moon, Color.WHITE, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_moon));
@@ -85,7 +85,7 @@ public class LevelGenerator
 
 	private void crearNivelNewYork(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
 	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_new_york.ttf");
+		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_NEW_YORK_PATH);
 		
 		listaNiveles.add(new Nivel(1, R.drawable.background_newyork_1, R.string.title_level_section_newyork, R.string.text_level_section_newyork, Color.BLACK, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_newyork));
@@ -102,7 +102,7 @@ public class LevelGenerator
 
 	private void crearNivelRoma(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
 	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_rome.ttf");
+		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_ROME_PATH);
 		
 		listaNiveles.add(new Nivel(2, R.drawable.background_rome_1, R.string.title_level_section_rome, R.string.text_level_section_rome, Color.WHITE, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_rome));
@@ -119,7 +119,7 @@ public class LevelGenerator
 
 	private void crearNivelEgipto(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
 	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_egypt.ttf");
+		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_EGYPT_PATH);
 		
 		listaNiveles.add(new Nivel(3, R.drawable.background_egypt_1, R.string.title_level_section_egypt, R.string.text_level_section_egypt, Color.BLACK, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_egypt));
@@ -136,7 +136,7 @@ public class LevelGenerator
 
 	private void crearNivelStonehenge(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
 	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_stonehenge.ttf");
+		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_STONEHENGE_PATH);
 		
 		listaNiveles.add(new Nivel(4, R.drawable.background_stonehenge_1, R.string.title_level_section_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK, textFont));
 		listaNombres.add(mContext.getString(R.string.title_level_section_stonehenge));

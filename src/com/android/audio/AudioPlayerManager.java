@@ -68,7 +68,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		return false;
 	}
 	
-	public boolean startPlayting(int path)
+	public boolean startPlaying(int path, boolean loop)
 	{
 		if(manager == null)
 		{
@@ -79,7 +79,8 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 			
 			player = MediaPlayer.create(mContext, path);
 			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			player.setLooping(true);
+			player.setLooping(loop);
+			player.setOnCompletionListener(this);
 			
 			// Prepared
 			player.start();

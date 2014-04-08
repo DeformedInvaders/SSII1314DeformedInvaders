@@ -9,7 +9,6 @@ import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.touch.TTouchEstado;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.design.TDisplayTipo;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
 import com.project.main.R;

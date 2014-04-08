@@ -1,12 +1,15 @@
 package com.character.select;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.alert.TextInputAlert;
@@ -15,8 +18,9 @@ import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.character.display.DisplayGLSurfaceView;
-import com.creation.design.TDisplayTipo;
+import com.character.display.TDisplayTipo;
 import com.game.data.Personaje;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class CharacterSelectFragment extends OpenGLFragment
@@ -59,6 +63,13 @@ public class CharacterSelectFragment extends OpenGLFragment
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
 		canvas.setParameters(personaje, manager, TDisplayTipo.Selection);
+		
+		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GamePreferences.FONT_LOGO_PATH);
+		
+		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewCharacterSelect1);
+		textBackground.setText(personaje.getNombre());
+		textBackground.setTextColor(Color.BLACK);
+		textBackground.setTypeface(textFont);
 
 		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
 		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect2);

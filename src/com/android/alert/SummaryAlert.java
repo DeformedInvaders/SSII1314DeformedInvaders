@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.game.data.Entidad;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class SummaryAlert extends WindowAlert
@@ -34,7 +35,7 @@ public class SummaryAlert extends WindowAlert
 	{
 		super(context, title);
 		
-		Typeface textFont = Typeface.createFromAsset(context.getAssets(), "fonts/font_typewriter.ttf");
+		Typeface textFont = Typeface.createFromAsset(context.getAssets(), GamePreferences.FONT_TYPEWRITER_PATH);
 
 		RelativeLayout layoutFolder = new RelativeLayout(context);
 
