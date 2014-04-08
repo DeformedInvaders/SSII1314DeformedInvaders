@@ -100,6 +100,20 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 		changeFragment(LoadingFragment.newInstance(internalManager));
 	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		audioManager.resumePlaying();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		audioManager.pausePlaying();
+	}
 
 	@Override
 	public void onBackPressed()
