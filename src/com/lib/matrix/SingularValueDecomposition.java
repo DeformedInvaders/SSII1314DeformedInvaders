@@ -268,7 +268,6 @@ public class SingularValueDecomposition implements java.io.Serializable {
 
 			// Here is where a test for too many iterations would go.
 
-			/* of the program inspects for
 			// negligible elements in the s and e arrays. On
 			// completion the variables kase and k are set as follows.
 
