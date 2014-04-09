@@ -6,7 +6,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.view.View;
 
-public abstract class WindowAlert {
+public abstract class WindowAlert
+{
 	private AlertDialog.Builder builder;
 	private AlertDialog dialog;
 

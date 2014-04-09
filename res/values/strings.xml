@@ -61,6 +61,9 @@
 			<string name="text_progressBar_completed">Loading stored data completed.</string>
 			
 		<!-- Dialogs -->
+			<string name="text_processing_character_title">Please wait&#x2026;</string>
+			<string name="text_processing_character_description">Procesing your character.</string>
+		
 			<string name="text_save_character_title">Saving your character.</string>
 			<string name="text_save_character_description">Introduce a name for your new character.</string>
 			<string name="text_save_character_confirmation">Character saved.</string>

@@ -40,8 +40,6 @@ public abstract class OpenGLRenderer implements Renderer
 	protected static final int SIZELINE = 3;
 	protected static final int POINTWIDTH = 7;
 
-	protected static final float MAX_DISTANCE_PIXELS = 10.0f;
-
 	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
 	private static final int POS_TEXTURE_MISSILE = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND;
@@ -586,7 +584,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* Métodos de Búsqueda de Pixeles */
 
-	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight, float epsilon)
 	{
 		int minpos = -1;
 		int j = 0;
@@ -602,7 +600,7 @@ public abstract class OpenGLRenderer implements Renderer
 			float lastpY = convertToPixelYCoordinate(worldpY, screenHeight);
 
 			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
-			if (distancia < MAX_DISTANCE_PIXELS)
+			if (distancia < epsilon)
 			{
 				minpos = j / 2;
 				return (short) minpos;
@@ -612,6 +610,16 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 
 		return (short) minpos;
+	}
+	
+	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		return buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_PIXELS);
+	}
+	
+	protected short buscarHandle(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		return buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_HANDLES);
 	}
 
 	/* Métodos de Pintura en la Tubería Gráfica */
@@ -718,7 +726,7 @@ public abstract class OpenGLRenderer implements Renderer
 			case Personaje:
 				return POS_TEXTURE_CHARACTER_STICKER + tipoPegatina.ordinal();
 			case Enemigo:
-				// FIXME Cambira al añadir enemigos con mallas.
+				// FIXME Cambiar al añadir enemigos con mallas.
 				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
 				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + tipoPegatina.ordinal();
 			case Obstaculo:

@@ -96,7 +96,12 @@
 					android:id="@+id/imageButtonStickerMouth6"
 					android:background="@drawable/sticker_mouth_6"
 					android:contentDescription="@string/desc_sticker_mouth" />
-				
+
+				<ImageView style="@style/Button_Sticker_Style"
+					android:id="@+id/imageButtonStickerMouth7"
+					android:background="@drawable/sticker_mouth_7"
+					android:contentDescription="@string/desc_sticker_mouth" />
+												
 			</LinearLayout>
 			
 		</ScrollView>

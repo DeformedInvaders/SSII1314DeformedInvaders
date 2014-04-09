@@ -7,6 +7,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.main.GamePreferences;
+import com.project.main.R;
 
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
@@ -273,7 +275,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		// Pixel pertenece a los Vértices
 		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
-		if (j != -1) {
+		if (j != -1)
+		{
 			// Vértice no pertenece a los Handles
 			if (!indiceHandles.contains(j))
 			{
@@ -294,21 +297,17 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private boolean eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
-		if (j != -1) {
-			// Vértice no pertenece a los Handles
-			if (indiceHandles.contains(j))
-			{
-				int pos = indiceHandles.indexOf(j);
-				indiceHandles.removeIndex(pos);
-
-				handles.removeIndex(2 * pos + 1);
-				handles.removeIndex(2 * pos);
-
-				// Eliminar Handle
-				deformator.anyadirHandles(handles, indiceHandles);
-			}
-
+		short j = buscarHandle(handles, pixelX, pixelY, screenWidth, screenHeight);
+		if (j != -1)
+		{
+			indiceHandles.removeIndex(j);
+			
+			handles.removeIndex(2 * j + 1);
+			handles.removeIndex(2 * j);
+			
+			// Eliminar Handle
+			deformator.anyadirHandles(handles, indiceHandles);
+			
 			return true;
 		}
 
@@ -318,7 +317,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private boolean seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(handles, pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarHandle(handles, pixelX, pixelY, screenWidth, screenHeight);
 		if (j != -1)
 		{
 			// Seleccionar Handle
@@ -376,7 +375,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
 		float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
 
-		if (Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3 * MAX_DISTANCE_PIXELS)
+		if (Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3 * GamePreferences.MAX_DISTANCE_PIXELS)
 		{
 			handles.set(2 * indiceHandleSeleccionado, frameX);
 			handles.set(2 * indiceHandleSeleccionado + 1, frameY);
@@ -402,15 +401,25 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 
-			handleSeleccionado.set(4 * pointer, -1);
-			handleSeleccionado.set(4 * pointer + 1, 0);
+			reinciarHandlesSeleccionados();
 
 			if (modoGrabar && listaHandlesAnimacion.size() > 0)
 			{
 				modoGrabar = false;
 				estado = TEstadoDeform.Nada;
-				construirListadeMovimientos();
+				
+				final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_character_title), mContext.getString(R.string.text_processing_character_description), true);
 
+				Thread thread = new Thread(new Runnable() {
+					@Override
+					public void run()
+					{
+						construirListadeMovimientos();
+						alert.dismiss();
+					}
+				});
+				
+				thread.start();
 				return true;
 			}
 		}
@@ -419,9 +428,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 
 	private void construirListadeMovimientos()
-	{
-		int i = 0;
-
+	{		
 		int numFramesDescartar = 1;
 		int numFramesRepetir = 1;
 
@@ -435,7 +442,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 
 		FloatArray frame = vertices.clone();
-
+		
+		int i = 0;
 		while (i < listaHandlesAnimacion.size())
 		{
 			for(int j = 0; j < numFramesRepetir; j++)
@@ -527,6 +535,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	private void reinciarHandlesSeleccionados()
 	{
+		handleSeleccionado.clear();
+		
 		for (int i = 0; i < GamePreferences.NUM_HANDLES; i++)
 		{
 			// Indice Handle

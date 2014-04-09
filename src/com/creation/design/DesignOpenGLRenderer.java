@@ -13,6 +13,7 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.main.GamePreferences;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {
@@ -118,7 +119,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
 			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
 
-			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > MAX_DISTANCE_PIXELS;
+			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
 		}
 
 		if (anyadir)

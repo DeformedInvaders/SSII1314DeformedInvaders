@@ -4,10 +4,13 @@ public class GamePreferences
 {
 	// Multitouch
 	public static final int NUM_HANDLES = 10;
-
+	
+	public static final float MAX_DISTANCE_PIXELS = 10.0f;
+	public static final float MAX_DISTANCE_HANDLES = 30.0f;
+	
 	// Animación
 	public static final int TIME_INTERVAL_ANIMATION = 15;
-	public static final int NUM_FRAMES_ANIMATION = 34;
+	public static final int NUM_FRAMES_ANIMATION = 50;
 
 	// Enemigos
 	public static final int MAX_TEXTURE_BACKGROUND = 3;
@@ -20,7 +23,7 @@ public class GamePreferences
 
 	public static final int NUM_TYPE_ENEMIES = 6;
 	public static final int NUM_TYPE_STICKERS_EYES = 8;
-	public static final int NUM_TYPE_STICKERS_MOUTH = 6;
+	public static final int NUM_TYPE_STICKERS_MOUTH = 7;
 	public static final int NUM_TYPE_STICKERS_WEAPON = 12;
 	public static final int NUM_TYPE_STICKERS_TRINKET = 8;
 	public static final int NUM_TYPE_STICKERS_HELMET = 12;

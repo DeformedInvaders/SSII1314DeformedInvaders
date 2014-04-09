@@ -7,13 +7,14 @@ import java.nio.FloatBuffer;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 
-public class BufferManager {
+public class BufferManager
+{
 	/* Métodos de Construcción de Buffer de Pintura */
 
-	// Construcción de un buffer de pintura para puntos a partir de una lista de
-	// vertices
+	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP
-	public static FloatBuffer construirBufferListaPuntos(float[] vertices) {
+	public static FloatBuffer construirBufferListaPuntos(float[] vertices)
+	{
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		FloatBuffer buffer = byteBuf.asFloatBuffer();
@@ -23,24 +24,24 @@ public class BufferManager {
 		return buffer;
 	}
 
-	// Construcción de un buffer de pintura para puntos a partir de una lista de
-	// vertices
+	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP
-	public static FloatBuffer construirBufferListaPuntos(FloatArray vertices) {
+	public static FloatBuffer construirBufferListaPuntos(FloatArray vertices)
+	{
 		float[] arrayVertices = new float[vertices.size];
 		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
 
 		return construirBufferListaPuntos(arrayVertices);
 	}
 
-	// Construcción de un buffer de pintura para puntos a partir de una lista de
-	// indice de vertices
-	public static FloatBuffer construirBufferListaIndicePuntos(
-			ShortArray indices, FloatArray vertices) {
+	// Construcción de un buffer de pintura para puntos a partir de una lista de indice de vertices
+	public static FloatBuffer construirBufferListaIndicePuntos(ShortArray indices, FloatArray vertices)
+	{
 		float[] arrayVertices = new float[2 * indices.size];
 
 		int i = 0;
-		while (i < indices.size) {
+		while (i < indices.size)
+		{
 			int pos = indices.get(i);
 			arrayVertices[2 * pos] = vertices.get(2 * pos);
 			arrayVertices[2 * pos + 1] = vertices.get(2 * pos + 1);
@@ -51,17 +52,17 @@ public class BufferManager {
 		return construirBufferListaPuntos(arrayVertices);
 	}
 
-	// Construcción de un buffer de pintura para lineas a partir de una lista de
-	// triangulos.
+	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_LINES
-	public static FloatBuffer construirBufferListaLineas(ShortArray triangulos,
-			FloatArray vertices) {
+	public static FloatBuffer construirBufferListaLineas(ShortArray triangulos, FloatArray vertices)
+	{
 		int arrayLong = 2 * (triangulos.size - 1);
 		float[] arrayVertices = new float[2 * arrayLong];
 
 		int j = 0;
 		int i = 0;
-		while (j < triangulos.size) {
+		while (j < triangulos.size)
+		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j + 1);
 
@@ -78,17 +79,17 @@ public class BufferManager {
 		return construirBufferListaPuntos(arrayVertices);
 	}
 
-	// Construcción de un buffer de pintura para lineas a partir de una lista de
-	// triangulos.
+	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_LINES
-	public static FloatBuffer construirBufferListaTriangulos(
-			ShortArray triangulos, FloatArray vertices) {
+	public static FloatBuffer construirBufferListaTriangulos(ShortArray triangulos, FloatArray vertices)
+	{
 		int arrayLong = 2 * triangulos.size;
 		float[] arrayVertices = new float[2 * arrayLong];
 
 		int j = 0;
 		int i = 0;
-		while (j < triangulos.size) {
+		while (j < triangulos.size)
+		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j + 1);
 			short c = triangulos.get(j + 2);
@@ -118,17 +119,17 @@ public class BufferManager {
 		return construirBufferListaPuntos(arrayVertices);
 	}
 
-	// Construcción de un buffer de pintura para lineas a partir de una lista de
-	// triangulos.
+	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_TRIANGLES
-	public static FloatBuffer construirBufferListaTriangulosRellenos(
-			ShortArray triangulos, FloatArray vertices) {
+	public static FloatBuffer construirBufferListaTriangulosRellenos(ShortArray triangulos, FloatArray vertices)
+	{
 		int arrayLong = triangulos.size;
 		float[] arrayVertices = new float[2 * arrayLong];
 
 		int j = 0;
 		int i = 0;
-		while (j < triangulos.size) {
+		while (j < triangulos.size)
+		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j + 1);
 			short c = triangulos.get(j + 2);
@@ -152,8 +153,8 @@ public class BufferManager {
 	/* Metodos de Actualización de Buffers de Pintura */
 
 	// Actualiza los valores de un buffer de pintura para puntos
-	public static void actualizarBufferListaPuntos(FloatBuffer buffer,
-			FloatArray vertices) {
+	public static void actualizarBufferListaPuntos(FloatBuffer buffer, FloatArray vertices)
+	{
 		float[] arrayVertices = new float[vertices.size];
 		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
 
@@ -163,11 +164,12 @@ public class BufferManager {
 
 	// Actualizar los valores de un buffer de pintura para triangulos.
 	// Uso para GL_LINES
-	public static void construirBufferListaTriangulos(FloatBuffer buffer,
-			ShortArray triangulos, FloatArray vertices) {
+	public static void construirBufferListaTriangulos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
+	{
 		int j = 0;
 		int i = 0;
-		while (j < triangulos.size) {
+		while (j < triangulos.size)
+		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j + 1);
 			short c = triangulos.get(j + 2);
@@ -197,11 +199,12 @@ public class BufferManager {
 
 	// Actualiza los valores de un buffer de pintura para triangulos
 	// Uso para GL_TRIANGLES
-	public static void actualizarBufferListaTriangulosRellenos(
-			FloatBuffer buffer, ShortArray triangulos, FloatArray vertices) {
+	public static void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
+	{
 		int j = 0;
 		int i = 0;
-		while (j < triangulos.size) {
+		while (j < triangulos.size)
+		{
 			short a = triangulos.get(j);
 			short b = triangulos.get(j + 1);
 			short c = triangulos.get(j + 2);
@@ -221,10 +224,11 @@ public class BufferManager {
 	}
 
 	// Actualiza los valores de un buffer de pintura para indice puntos
-	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer,
-			ShortArray contorno, FloatArray vertices) {
+	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer, ShortArray contorno, FloatArray vertices)
+	{
 		int j = 0;
-		while (j < contorno.size) {
+		while (j < contorno.size)
+		{
 			short a = contorno.get(j);
 
 			buffer.put(2 * j, vertices.get(2 * a));
