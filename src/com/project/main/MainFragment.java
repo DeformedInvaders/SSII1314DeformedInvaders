@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
-import com.character.display.TDisplayTipo;
+import com.character.display.TTipoDisplay;
 import com.game.data.Personaje;
 
 public class MainFragment extends OpenGLFragment
@@ -87,11 +87,11 @@ public class MainFragment extends OpenGLFragment
 		if (personajeSeleccionado >= 0 && personajeSeleccionado < listaPersonajes.size() && !listaPersonajes.isEmpty())
 		{
 			Personaje p = listaPersonajes.get(personajeSeleccionado);
-			canvas.setParameters(p, externalManager, TDisplayTipo.Main);
+			canvas.setParameters(p, externalManager, TTipoDisplay.Main);
 		}
 		else
 		{
-			canvas.setParameters(TDisplayTipo.Main);
+			canvas.setParameters(TTipoDisplay.Main);
 		}
 
 		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);

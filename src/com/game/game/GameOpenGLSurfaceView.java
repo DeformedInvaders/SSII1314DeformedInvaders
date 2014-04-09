@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
@@ -34,7 +34,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public GameOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TTouchEstado.GameDetectors);
+		super(context, attrs, TEstadoDetector.GameDetectors);
 
 		mContext = context;
 

@@ -3,7 +3,7 @@ package com.creation.design;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.Esqueleto;
 
@@ -16,7 +16,7 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 
 	public DesignGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TTouchEstado.SimpleTouch);
+		super(context, attrs, TEstadoDetector.SimpleTouch);
 
 		// Asignar Renderer al GLSurfaceView
 		renderer = new DesignOpenGLRenderer(getContext());

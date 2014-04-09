@@ -1,6 +1,6 @@
 package com.character.display;
 
-public enum TDisplayTipo
+public enum TTipoDisplay
 {
 	Selection, Main
 }

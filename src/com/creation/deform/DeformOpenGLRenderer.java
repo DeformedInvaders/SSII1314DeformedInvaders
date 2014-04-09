@@ -25,13 +25,10 @@ import com.project.main.GamePreferences;
 
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
-	private TDeformTipo tipoDeformacion;
 	private Deformator deformator;
 
-	private final int NUM_FRAMES;
-
 	// Modo Grabado
-	private TDeformEstado estado;
+	private TEstadoDeform estado;
 	private boolean modoGrabar;
 
 	/* Movimientos */
@@ -84,14 +81,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructora */
 
-	public DeformOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura, TDeformTipo tipo, int numero_frames)
+	public DeformOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura)
 	{
 		super(context);
 
-		NUM_FRAMES = numero_frames;
-
-		tipoDeformacion = tipo;
-		estado = TDeformEstado.Nada;
+		estado = TEstadoDeform.Nada;
 		modoGrabar = false;
 		listaHandlesAnimacion = new ArrayList<FloatArray>();
 
@@ -154,7 +148,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 
-		if (estado == TDeformEstado.Reproducir)
+		if (estado == TEstadoDeform.Reproducir)
 		{
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
@@ -171,7 +165,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, verticesModificados);
 
-			if (estado != TDeformEstado.Deformar)
+			if (estado != TEstadoDeform.Deformar)
 			{
 				dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
 			}
@@ -183,7 +177,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 
 			// Seleccionado
-			if (estado == TDeformEstado.Deformar)
+			if (estado == TEstadoDeform.Deformar)
 			{
 				dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
 			}
@@ -192,20 +186,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			centrarPersonajeEnMarcoFinal(gl);
 
 			// Marcos
-			if (tipoDeformacion == TDeformTipo.Run || tipoDeformacion == TDeformTipo.Attack)
-			{
-				dibujarMarcoCentral(gl);
-			}
-			else if (tipoDeformacion == TDeformTipo.Jump)
-			{
-				dibujarMarcoInferior(gl);
-			}
-			else if (tipoDeformacion == TDeformTipo.Crouch)
-			{
-				dibujarMarcoSuperior(gl);
-			}
-
-			dibujarMarcoLateral(gl);
+			dibujarMarcoIncompletoSuave(gl);
 		}
 	}
 
@@ -234,17 +215,17 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarAnyadir()
 	{
-		estado = TDeformEstado.Anyadir;
+		estado = TEstadoDeform.Anyadir;
 	}
 
 	public void seleccionarEliminar()
 	{
-		estado = TDeformEstado.Eliminar;
+		estado = TEstadoDeform.Eliminar;
 	}
 
 	public void seleccionarMover()
 	{
-		estado = TDeformEstado.Deformar;
+		estado = TEstadoDeform.Deformar;
 	}
 
 	/* Métodos Abstractos de OpenGLRenderer */
@@ -252,7 +233,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean reiniciar()
 	{
-		estado = TDeformEstado.Nada;
+		estado = TEstadoDeform.Nada;
 		modoGrabar = false;
 
 		handles.clear();
@@ -272,21 +253,16 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TDeformEstado.Anyadir)
+		if (estado == TEstadoDeform.Anyadir)
 		{
 			return anyadirHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TDeformEstado.Eliminar)
+		else if (estado == TEstadoDeform.Eliminar)
 		{
 			return eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TDeformEstado.Deformar)
+		else if (estado == TEstadoDeform.Deformar)
 		{
-			if (modoGrabar)
-			{
-				listaHandlesAnimacion.add(handles.clone());
-			}
-
 			return seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
 
@@ -342,8 +318,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private boolean seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(handles, pixelX, pixelY, screenWidth,
-				screenHeight);
+		short j = buscarPixel(handles, pixelX, pixelY, screenWidth, screenHeight);
 		if (j != -1)
 		{
 			// Seleccionar Handle
@@ -352,6 +327,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handleSeleccionado.set(4 * pointer + 2, handles.get(2 * j));
 			handleSeleccionado.set(4 * pointer + 3, handles.get(2 * j + 1));
 
+			if (modoGrabar)
+			{
+				listaHandlesAnimacion.add(handles.clone());
+			}
+			
 			return true;
 		}
 
@@ -361,7 +341,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TDeformEstado.Deformar)
+		if (estado == TEstadoDeform.Deformar)
 		{
 			// Handle sin Pulsar
 			if (handleSeleccionado.get(4 * pointer + 1) == 0)
@@ -370,11 +350,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				if (modoGrabar)
-				{
-					listaHandlesAnimacion.add(handles.clone());
-				}
-
 				return moverHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			}
 		}
@@ -408,6 +383,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 			handleSeleccionado.set(4 * pointer + 2, frameX);
 			handleSeleccionado.set(4 * pointer + 3, frameY);
+			
+			if (modoGrabar)
+			{
+				listaHandlesAnimacion.add(handles.clone());
+			}
 
 			return true;
 		}
@@ -418,7 +398,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TDeformEstado.Deformar)
+		if (estado == TEstadoDeform.Deformar)
 		{
 			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 
@@ -428,7 +408,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			if (modoGrabar && listaHandlesAnimacion.size() > 0)
 			{
 				modoGrabar = false;
-				estado = TDeformEstado.Nada;
+				estado = TEstadoDeform.Nada;
 				construirListadeMovimientos();
 
 				return true;
@@ -441,33 +421,40 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private void construirListadeMovimientos()
 	{
 		int i = 0;
-		// Entero para controlar cada cuantos movimientos se guarda uno.
-		int r = 1;
 
-		if (listaHandlesAnimacion.size() >= NUM_FRAMES)
+		int numFramesDescartar = 1;
+		int numFramesRepetir = 1;
+
+		if (listaHandlesAnimacion.size() >= GamePreferences.NUM_FRAMES_ANIMATION)
 		{
-			r = listaHandlesAnimacion.size() / NUM_FRAMES;
+			numFramesDescartar = Math.round((float) listaHandlesAnimacion.size() / (float) GamePreferences.NUM_FRAMES_ANIMATION);
+		}
+		else
+		{
+			numFramesRepetir = Math.round((float) GamePreferences.NUM_FRAMES_ANIMATION / (float) listaHandlesAnimacion.size());
 		}
 
-		FloatArray v = vertices.clone();
+		FloatArray frame = vertices.clone();
 
 		while (i < listaHandlesAnimacion.size())
 		{
-			deformator.moverHandles(listaHandlesAnimacion.get(i), v);
-
-			listaVerticesAnimacion.add(v.clone());
-			i = i + r;
+			for(int j = 0; j < numFramesRepetir; j++)
+			{
+				deformator.moverHandles(listaHandlesAnimacion.get(i), frame);
+				listaVerticesAnimacion.add(frame.clone());
+			}
+			
+			i = i + numFramesDescartar;
 		}
 
-		deformator.moverHandles(listaHandlesAnimacion.get(listaHandlesAnimacion.size() - 1), v);
-		listaVerticesAnimacion.add(v.clone());
-
+		deformator.moverHandles(listaHandlesAnimacion.get(listaHandlesAnimacion.size() - 1), frame);
+		listaVerticesAnimacion.add(frame.clone());
 	}
 
 	@Override
 	protected boolean onMultiTouchEvent()
 	{
-		if (estado == TDeformEstado.Deformar)
+		if (estado == TEstadoDeform.Deformar)
 		{
 			// Cambiar Posicion de los Handles
 			deformator.moverHandles(handles, verticesModificados);
@@ -486,7 +473,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarGrabado()
 	{
 		modoGrabar = true;
-		estado = TDeformEstado.Deformar;
+		estado = TEstadoDeform.Deformar;
 
 		listaHandlesAnimacion.clear();
 		listaVerticesAnimacion = new ArrayList<FloatArray>();
@@ -500,7 +487,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void selecionarPlay()
 	{
-		estado = TDeformEstado.Reproducir;
+		estado = TEstadoDeform.Reproducir;
 
 		iniciarAnimacion();
 	}
@@ -554,12 +541,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarAudio()
 	{
-		estado = TDeformEstado.Audio;
+		estado = TEstadoDeform.Audio;
 	}
 
 	public void seleccionarReposo()
 	{
-		estado = TDeformEstado.Nada;
+		estado = TEstadoDeform.Nada;
 	}
 
 	/* Métodos de Obtención de Información */
@@ -571,32 +558,32 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoAnyadir()
 	{
-		return estado == TDeformEstado.Anyadir;
+		return estado == TEstadoDeform.Anyadir;
 	}
 
 	public boolean isEstadoEliminar()
 	{
-		return estado == TDeformEstado.Eliminar;
+		return estado == TEstadoDeform.Eliminar;
 	}
 
 	public boolean isEstadoDeformar()
 	{
-		return estado == TDeformEstado.Deformar;
+		return estado == TEstadoDeform.Deformar;
 	}
 
 	public boolean isEstadoGrabacion()
 	{
-		return estado == TDeformEstado.Deformar && modoGrabar;
+		return estado == TEstadoDeform.Deformar && modoGrabar;
 	}
 
 	public boolean isEstadoAudio()
 	{
-		return estado == TDeformEstado.Audio;
+		return estado == TEstadoDeform.Audio;
 	}
 
 	public boolean isEstadoReproduccion()
 	{
-		return estado == TDeformEstado.Reproducir;
+		return estado == TEstadoDeform.Reproducir;
 	}
 
 	public List<FloatArray> getMovimientos()

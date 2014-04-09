@@ -21,10 +21,8 @@ import com.project.main.R;
 public class DeformFragment extends OpenGLFragment
 {
 	private DeformGLSurfaceView canvas;
-	private TDeformTipo tipo;
 	private Esqueleto esqueleto;
 	private Textura textura;
-	private int num_frames;
 
 	private DeformDataSaved dataSaved;
 	private ExternalStorageManager manager;
@@ -34,21 +32,19 @@ public class DeformFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
+	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(m, e, t, n, d, f);
+		fragment.setParameters(m, e, t, n);
 		return fragment;
 	}
 
-	private void setParameters(ExternalStorageManager m, Esqueleto e, Textura t, String n, TDeformTipo d, int f)
+	private void setParameters(ExternalStorageManager m, Esqueleto e, Textura t, String n)
 	{
 		esqueleto = e;
 		textura = t;
 		manager = m;
 		movimiento = n;
-		tipo = d;
-		num_frames = f;
 	}
 
 	/* Métodos Fragment */
@@ -60,7 +56,7 @@ public class DeformFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(esqueleto, textura, tipo, this, num_frames);
+		canvas.setParameters(esqueleto, textura, this);
 
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
@@ -152,7 +148,6 @@ public class DeformFragment extends OpenGLFragment
 				botonDeformar.setVisibility(View.VISIBLE);
 				botonReiniciar.setVisibility(View.VISIBLE);
 
-				// TODO
 				if (canvas.isGrabacionReady())
 				{
 					botonAudio.setVisibility(View.VISIBLE);
@@ -268,7 +263,6 @@ public class DeformFragment extends OpenGLFragment
 		}
 	}
 
-	// TODO
 	private class OnAudioClickListener implements OnClickListener
 	{
 		@Override

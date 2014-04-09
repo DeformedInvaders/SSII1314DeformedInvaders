@@ -1,6 +1,6 @@
 package com.android.audio;
 
-public enum TPlayEstado
+public enum TEstadoPlay
 {
 	Deshabilitado, Libre, Reproduciendo, Pausado
 }

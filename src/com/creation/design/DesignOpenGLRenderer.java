@@ -17,7 +17,7 @@ import com.lib.utils.ShortArray;
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {
 	// Estructura de Datos de la Escena
-	private TDesignEstado estado;
+	private TEstadoDesign estado;
 	private Triangulator triangulator;
 
 	private FloatArray puntos;
@@ -36,7 +36,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		super(context);
 
-		estado = TDesignEstado.Dibujando;
+		estado = TEstadoDesign.Dibujando;
 
 		puntos = new FloatArray();
 		poligonoSimple = false;
@@ -49,7 +49,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 
-		if (estado == TDesignEstado.Dibujando)
+		if (estado == TEstadoDesign.Dibujando)
 		{
 			if (puntos.size > 0)
 			{
@@ -67,11 +67,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
 
-			if (estado == TDesignEstado.Retocando)
+			if (estado == TEstadoDesign.Retocando)
 			{
 				// Marco Oscuro
-				dibujarMarcoLateral(gl);
-				dibujarMarcoCentral(gl);
+				dibujarMarcoCompletoFuerte(gl);
 			}
 		}
 	}
@@ -81,7 +80,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean reiniciar()
 	{
-		estado = TDesignEstado.Dibujando;
+		estado = TEstadoDesign.Dibujando;
 
 		puntos.clear();
 
@@ -95,7 +94,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TDesignEstado.Dibujando)
+		if (estado == TEstadoDesign.Dibujando)
 		{
 			return anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
 		}
@@ -138,7 +137,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TDesignEstado.Dibujando)
+		if (estado == TEstadoDesign.Dibujando)
 		{
 			return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
@@ -149,7 +148,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TDesignEstado.Dibujando)
+		if (estado == TEstadoDesign.Dibujando)
 		{
 			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 
@@ -180,7 +179,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TDesignEstado.Retocando)
+		if (estado == TEstadoDesign.Retocando)
 		{
 			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
 			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
@@ -199,7 +198,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void coordsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TDesignEstado.Retocando)
+		if (estado == TEstadoDesign.Retocando)
 		{
 			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
 			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
@@ -218,7 +217,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void coordsRotate(float ang, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TDesignEstado.Retocando)
+		if (estado == TEstadoDesign.Retocando)
 		{
 			float cWorldX = convertToWorldXCoordinate(pixelX, screenWidth);
 			float cWorldY = convertToWorldYCoordinate(pixelY, screenHeight);
@@ -234,7 +233,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (poligonoSimple)
 		{
-			estado = TDesignEstado.Triangulando;
+			estado = TEstadoDesign.Triangulando;
 			return true;
 		}
 
@@ -243,14 +242,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarRetoque()
 	{
-		estado = TDesignEstado.Retocando;
+		estado = TEstadoDesign.Retocando;
 	}
 
 	/* Métodos de Obtención de Información */
 
 	public Esqueleto getEsqueleto()
 	{
-		if (estado == TDesignEstado.Terminado)
+		if (estado == TEstadoDesign.Terminado)
 		{
 			recortarPoligonoDentroMarco(vertices);
 
@@ -262,17 +261,17 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoDibujando()
 	{
-		return estado == TDesignEstado.Dibujando;
+		return estado == TEstadoDesign.Dibujando;
 	}
 
 	public boolean isEstadoTriangulando()
 	{
-		return estado == TDesignEstado.Triangulando;
+		return estado == TEstadoDesign.Triangulando;
 	}
 
 	public boolean isEstadoRetocando()
 	{
-		return estado == TDesignEstado.Retocando;
+		return estado == TEstadoDesign.Retocando;
 	}
 
 	public boolean isPoligonoCompleto()
@@ -284,7 +283,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (isPoligonoDentroMarco(vertices))
 		{
-			estado = TDesignEstado.Terminado;
+			estado = TEstadoDesign.Terminado;
 			return true;
 		}
 

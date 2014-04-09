@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Movimientos;
-import com.creation.deform.TDeformTipo;
+import com.creation.data.TTipoMovimiento;
 import com.game.game.TEstadoColision;
 import com.lib.math.Circle;
 import com.lib.math.Intersector;
@@ -17,7 +17,7 @@ public class Personaje extends Malla
 {
 	private Movimientos movimientos;
 
-	private TDeformTipo estado;
+	private TTipoMovimiento estado;
 	
 	private int vidas;
 	private boolean burbuja;
@@ -59,7 +59,7 @@ public class Personaje extends Malla
 		// Burbuja
 		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
 		{
-			renderer.cargarTexturaRectangulo(gl, GamePreferences.WIDTH_CHARACTER, GamePreferences.WIDTH_CHARACTER, indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
+			renderer.cargarTexturaRectangulo(gl, GamePreferences.DISTANCE_CHARACTER_WIDTH(), GamePreferences.DISTANCE_CHARACTER_WIDTH(), indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class Personaje extends Malla
 	{
 		boolean finAnimacion = super.animar();
 		
-		if (estado == TDeformTipo.Jump)
+		if (estado == TTipoMovimiento.Jump)
 		{
 			if (posicionAnimacion <= listaVerticesAnimacion.size() / 2)
 			{
@@ -122,7 +122,7 @@ public class Personaje extends Malla
 	{
 		listaVerticesAnimacion = movimientos.get(0);
 
-		estado = TDeformTipo.Run;
+		estado = TTipoMovimiento.Run;
 		iniciar();
 	}
 
@@ -130,7 +130,7 @@ public class Personaje extends Malla
 	{
 		listaVerticesAnimacion = movimientos.get(1);
 
-		estado = TDeformTipo.Jump;
+		estado = TTipoMovimiento.Jump;
 		iniciar();
 	}
 
@@ -138,7 +138,7 @@ public class Personaje extends Malla
 	{
 		listaVerticesAnimacion = movimientos.get(2);
 
-		estado = TDeformTipo.Crouch;
+		estado = TTipoMovimiento.Crouch;
 		iniciar();
 	}
 
@@ -146,7 +146,7 @@ public class Personaje extends Malla
 	{
 		listaVerticesAnimacion = movimientos.get(3);
 
-		estado = TDeformTipo.Attack;
+		estado = TTipoMovimiento.Attack;
 		iniciar();
 	}
 
@@ -155,23 +155,22 @@ public class Personaje extends Malla
 		float posicionXEntidad = instancia.getPosicionX();
 		float posicionYEntidad = instancia.getPosicionY();
 		float widthEntidad = entidad.getWidth();
-		float heightEntidad = entidad.getWidth();
+		float heightEntidad = entidad.getHeight();
 
-		// FIXME Obtener Height
-		Circle areaPersonaje = new Circle(posicionX + width / 4, posicionY + width / 4, width / 5);
+		Circle areaPersonaje = new Circle(posicionX + width / 4, posicionY + height / 4, width / 5);
 		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 4, posicionYEntidad + heightEntidad / 4, widthEntidad / 5);
 
 		// Hay colisión entre el personaje y el enemigo
 		if (Intersector.overlaps(areaPersonaje, areaEntidad))
 		{
 			// Enemigo derrotado
-			if (entidad.getTipo() == TTipoEntidad.Enemigo && estado == TDeformTipo.Attack)
+			if (entidad.getTipo() == TTipoEntidad.Enemigo && estado == TTipoMovimiento.Attack)
 			{
 				instancia.setDerrotado();
 				return TEstadoColision.EnemigoDerrotado;
 			}
 			
-			if (entidad.getTipo() == TTipoEntidad.Misil && estado == TDeformTipo.Crouch)
+			if (entidad.getTipo() == TTipoEntidad.Misil && estado == TTipoMovimiento.Crouch)
 			{
 				return TEstadoColision.Nada;
 			}

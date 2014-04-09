@@ -10,12 +10,12 @@ public class DesignDataSaved
 	private ShortArray triangulos;
 	private ShortArray contorno;
 
-	private TDesignEstado estado;
+	private TEstadoDesign estado;
 	private boolean poligonoSimple;
 
 	/* Constructora */
 
-	public DesignDataSaved(FloatArray puntos, FloatArray vertices, ShortArray triangulos, ShortArray contorno, TDesignEstado estado, boolean poligonoSimple)
+	public DesignDataSaved(FloatArray puntos, FloatArray vertices, ShortArray triangulos, ShortArray contorno, TEstadoDesign estado, boolean poligonoSimple)
 	{
 		this.puntos = puntos;
 		this.vertices = vertices;
@@ -47,7 +47,7 @@ public class DesignDataSaved
 		return contorno;
 	}
 
-	public TDesignEstado getEstado()
+	public TEstadoDesign getEstado()
 	{
 		return estado;
 	}

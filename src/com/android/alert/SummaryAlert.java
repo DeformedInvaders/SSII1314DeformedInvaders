@@ -18,17 +18,7 @@ import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class SummaryAlert extends WindowAlert
-{
-	// FIXME Realizar Cálculos relativos a la pantalla
-	
-	private static final int paddingLeft = 75;
-	private static final int paddingTop = 100;
-	private static final int paddingRight = 30;
-	private static final int paddingBottom = 30;
-	
-	private static final int imageHeight = 250;
-	private static final int imageWidth = 250;
-	
+{	
 	private static final int sizeText = 30;
 	private static final int sizeTextSmall = 20;
 	
@@ -44,10 +34,15 @@ public class SummaryAlert extends WindowAlert
 			imageFolder.setImageResource(R.drawable.polaroid_folder_mission);
 			
 			ScrollView scrollFolder = new ScrollView(context);
-			scrollFolder.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
 			
 			LinearLayout layoutScroll = new LinearLayout(context);
 			layoutScroll.setOrientation(LinearLayout.VERTICAL);
+			
+				// Inicio Mensaje
+				TextView textInitial = new TextView(context);
+				textInitial.setText(context.getString(R.string.title_alert_initial) + "\n");
+				textInitial.setTextSize(sizeText);
+				textInitial.setTypeface(textFont);
 			
 				// Enemigos
 				LinearLayout layoutImagesEnemigos = new LinearLayout(context);
@@ -71,7 +66,7 @@ public class SummaryAlert extends WindowAlert
 					Entidad enemigo = it.next();
 					
 					ImageView imageView = new ImageView(context);
-					imageView.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
+					imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));
 					imageView.setBackgroundResource(enemigo.getIndiceTextura());
 					
 					switch(enemigo.getTipo())
@@ -83,16 +78,24 @@ public class SummaryAlert extends WindowAlert
 							layoutImagesObstaculos.addView(imageView);
 						break;
 						case Misil:
-							imageView.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight/2));
+							imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH() / 2));
 							layoutImagesMisiles.addView(imageView);
 						default:
 						break;
 					}
 				}
 				
+				// Mensaje Final
+				TextView textFinal = new TextView(context);
+				textFinal.setText("\n" + context.getString(R.string.title_alert_final));
+				textFinal.setTextSize(sizeText);
+				textFinal.setTypeface(textFont);
+				
+			layoutScroll.addView(textInitial);
 			layoutScroll.addView(layoutEnemigos);
 			layoutScroll.addView(layoutObstaculos);
 			layoutScroll.addView(layoutMisiles);
+			layoutScroll.addView(textFinal);
 
 		scrollFolder.addView(layoutScroll);
 			
@@ -100,6 +103,12 @@ public class SummaryAlert extends WindowAlert
 		layoutFolder.addView(scrollFolder, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		setView(layoutFolder);
+		
+		imageFolder.measure(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		int imageFolderWidth = imageFolder.getMeasuredHeight();
+		int imageFolderHeight = imageFolder.getMeasuredWidth();
+		
+		scrollFolder.setPadding(imageFolderWidth / 8, imageFolderHeight / 6, imageFolderWidth / 20, imageFolderHeight / 20);
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

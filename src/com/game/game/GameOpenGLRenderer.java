@@ -79,7 +79,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		gl.glPushMatrix();
 
-			gl.glTranslatef(GamePreferences.DISTANCE_CHARACTER_RIGHT, GamePreferences.DISTANCE_CHARACTER_BOTTOM, 0.0f);
+			gl.glTranslatef(GamePreferences.DISTANCE_CHARACTER_RIGHT(), GamePreferences.DISTANCE_CHARACTER_BOTTOM(), 0.0f);
 	
 			// Escala del Juego
 			gl.glPushMatrix();

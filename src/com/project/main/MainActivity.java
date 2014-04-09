@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ import com.character.select.CharacterSelectionFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.Textura;
-import com.creation.deform.AnimationFragment;
+import com.creation.deform.DeformationFragment;
 import com.creation.design.DesignFragment;
 import com.creation.paint.PaintFragment;
 import com.game.data.Personaje;
@@ -37,7 +38,7 @@ import com.game.game.GameFragment;
 import com.game.select.LevelGenerator;
 import com.game.select.LevelSelectionFragment;
 
-public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, AnimationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
+public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
 {
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
@@ -59,7 +60,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	private MenuItem botonTwitter, botonFacebook, botonMusica;
 
 	/* Estado */
-	private TEstado estado;
+	private TEstadoMain estado;
 
 	/* Niveles */
 	private LevelGenerator levelGenerator;
@@ -97,6 +98,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
+		
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        GamePreferences.setParameters(metrics.widthPixels, metrics.heightPixels);
 
 		changeFragment(LoadingFragment.newInstance(internalManager));
 	}
@@ -118,7 +123,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onBackPressed()
 	{
-		if (estado != TEstado.Main && estado != TEstado.Game)
+		if (estado != TEstadoMain.Main && estado != TEstadoMain.Game)
 		{
 			limpiarActionBar();
 
@@ -163,7 +168,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		boolean clearBackStack = false;
 		boolean addToBackStack = true;
 
-		if (estado == TEstado.CharacterSelection || estado == TEstado.LevelSelection || estado == TEstado.Game)
+		if (estado == TEstadoMain.CharacterSelection || estado == TEstadoMain.LevelSelection || estado == TEstadoMain.Game)
 		{
 			addToBackStack = false;
 		}
@@ -171,7 +176,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		actualizarEstado(fragmento);
 		limpiarActionBar();
 
-		if (estado == TEstado.Main)
+		if (estado == TEstadoMain.Main)
 		{
 			clearBackStack = true;
 		}
@@ -267,7 +272,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		else
 		{
 			personajeActual.setTextura(textura);
-			changeFragment(AnimationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura(), externalManager));
+			changeFragment(DeformationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura(), externalManager));
 		}
 	}
 
@@ -548,7 +553,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	private void actualizarMusica()
 	{
-		if(estado == TEstado.Game)
+		if(estado == TEstadoMain.Game)
 		{
 			audioManager.startPlaying(R.raw.music_game, true);
 		}
@@ -567,42 +572,42 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		{
 			if (fragmento instanceof LoadingFragment)
 			{
-				estado = TEstado.Loading;
+				estado = TEstadoMain.Loading;
 				setTitle(R.string.title_app);
 			}
 			else if (fragmento instanceof MainFragment)
 			{
-				estado = TEstado.Main;
+				estado = TEstadoMain.Main;
 				setTitle(R.string.title_app);
 			}
 			else if (fragmento instanceof DesignFragment)
 			{
-				estado = TEstado.Design;
+				estado = TEstadoMain.Design;
 				setTitle(R.string.title_design_phase);
 			}
 			else if (fragmento instanceof PaintFragment)
 			{
-				estado = TEstado.Paint;
+				estado = TEstadoMain.Paint;
 				setTitle(R.string.title_paint_phase);
 			}
-			else if (fragmento instanceof AnimationFragment)
+			else if (fragmento instanceof DeformationFragment)
 			{
-				estado = TEstado.Animation;
+				estado = TEstadoMain.Animation;
 				setTitle(R.string.title_animation_phase);
 			}
 			else if (fragmento instanceof CharacterSelectionFragment)
 			{
-				estado = TEstado.CharacterSelection;
+				estado = TEstadoMain.CharacterSelection;
 				setTitle(R.string.title_character_selection_phase);
 			}
 			else if (fragmento instanceof LevelSelectionFragment)
 			{
-				estado = TEstado.LevelSelection;
+				estado = TEstadoMain.LevelSelection;
 				setTitle(R.string.title_level_selection_phase);
 			}
 			else if (fragmento instanceof GameFragment)
 			{
-				estado = TEstado.Game;
+				estado = TEstadoMain.Game;
 				setTitle(R.string.title_game_phase);
 			}
 		}

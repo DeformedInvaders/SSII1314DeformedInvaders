@@ -18,7 +18,7 @@ import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.character.display.DisplayGLSurfaceView;
-import com.character.display.TDisplayTipo;
+import com.character.display.TTipoDisplay;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
 import com.project.main.R;
@@ -62,7 +62,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
-		canvas.setParameters(personaje, manager, TDisplayTipo.Selection);
+		canvas.setParameters(personaje, manager, TTipoDisplay.Selection);
 		
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GamePreferences.FONT_LOGO_PATH);
 		

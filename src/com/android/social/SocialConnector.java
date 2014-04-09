@@ -14,7 +14,7 @@ public abstract class SocialConnector
 {
 	private Context mContext;
 
-	private TSocialEstado estadoTwitter, estadoFacebook;
+	private TEstadoSocial estadoTwitter, estadoFacebook;
 	private TwitterConnector conectorTwitter;
 	private FacebookConnector conectorFacebook;
 
@@ -24,8 +24,8 @@ public abstract class SocialConnector
 	{
 		mContext = context;
 
-		estadoTwitter = TSocialEstado.Desconectado;
-		estadoFacebook = TSocialEstado.Desconectado;
+		estadoTwitter = TEstadoSocial.Desconectado;
+		estadoFacebook = TEstadoSocial.Desconectado;
 
 		conectorTwitter = new TwitterConnector();
 		conectorFacebook = new FacebookConnector();
@@ -83,7 +83,7 @@ public abstract class SocialConnector
 			{
 				if (url.toString().startsWith(SocialInformation.TWITTER_CALLBACK_URL))
 				{
-					if (estadoTwitter == TSocialEstado.OAuth)
+					if (estadoTwitter == TEstadoSocial.OAuth)
 					{
 						conectarTwitterFinal(Uri.parse(url));
 						dismiss();
@@ -92,7 +92,7 @@ public abstract class SocialConnector
 				}
 				else if (url.toString().startsWith(SocialInformation.FACEBOOK_CALLBACK_URL))
 				{
-					if (estadoFacebook == TSocialEstado.OAuth)
+					if (estadoFacebook == TEstadoSocial.OAuth)
 					{
 						conectarFacebookFinal(Uri.parse(url));
 						dismiss();
@@ -126,7 +126,7 @@ public abstract class SocialConnector
 	{
 		if (conectorTwitter.iniciarAutorizacion())
 		{
-			estadoTwitter = TSocialEstado.OAuth;
+			estadoTwitter = TEstadoSocial.OAuth;
 			evaluarRespuestaOAuth(conectorTwitter.getAuthorizationURL(), mContext.getString(R.string.text_twitter_title));
 		}
 		else
@@ -139,7 +139,7 @@ public abstract class SocialConnector
 	{
 		if (conectorTwitter.finalizarAutorizacion(uri))
 		{
-			estadoTwitter = TSocialEstado.Conectado;
+			estadoTwitter = TEstadoSocial.Conectado;
 
 			Toast.makeText(mContext, R.string.text_twitter_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
@@ -155,7 +155,7 @@ public abstract class SocialConnector
 	{
 		if (conectorTwitter.desconexion())
 		{
-			estadoTwitter = TSocialEstado.Desconectado;
+			estadoTwitter = TEstadoSocial.Desconectado;
 		}
 
 		onConectionStatusChange();
@@ -177,7 +177,7 @@ public abstract class SocialConnector
 	{
 		if (conectorFacebook.iniciarAutorizacion())
 		{
-			estadoFacebook = TSocialEstado.OAuth;
+			estadoFacebook = TEstadoSocial.OAuth;
 			evaluarRespuestaOAuth(conectorFacebook.getAuthorizationURL(), mContext.getString(R.string.text_facebook_title));
 		}
 		else
@@ -190,7 +190,7 @@ public abstract class SocialConnector
 	{
 		if (conectorFacebook.finalizarAutorizacion(uri))
 		{
-			estadoFacebook = TSocialEstado.Conectado;
+			estadoFacebook = TEstadoSocial.Conectado;
 
 			Toast.makeText(mContext, R.string.text_facebook_oauth_sign_in, Toast.LENGTH_SHORT).show();
 		}
@@ -206,7 +206,7 @@ public abstract class SocialConnector
 	{
 		if (conectorFacebook.desconexion())
 		{
-			estadoFacebook = TSocialEstado.Desconectado;
+			estadoFacebook = TEstadoSocial.Desconectado;
 		}
 
 		onConectionStatusChange();
@@ -260,12 +260,12 @@ public abstract class SocialConnector
 	{
 		if (evaluarConexionInternet() && evaluarConexionSocial())
 		{
-			if (estadoTwitter == TSocialEstado.Conectado)
+			if (estadoTwitter == TEstadoSocial.Conectado)
 			{
 				publicarTwitter(text, foto);
 			}
 
-			if (estadoFacebook == TSocialEstado.Conectado)
+			if (estadoFacebook == TEstadoSocial.Conectado)
 			{
 				publicarFacebook(text, foto);
 			}
@@ -300,11 +300,11 @@ public abstract class SocialConnector
 
 	public boolean isTwitterConnected()
 	{
-		return estadoTwitter == TSocialEstado.Conectado;
+		return estadoTwitter == TEstadoSocial.Conectado;
 	}
 
 	public boolean isFacebookConnected()
 	{
-		return estadoFacebook == TSocialEstado.Conectado;
+		return estadoFacebook == TEstadoSocial.Conectado;
 	}
 }

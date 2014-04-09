@@ -1,6 +1,6 @@
 package com.android.social;
 
-public enum TSocialEstado
+public enum TEstadoSocial
 {
 	Desconectado, OAuth, Conectado
 }

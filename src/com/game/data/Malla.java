@@ -160,6 +160,7 @@ public abstract class Malla extends Entidad
 		coords = t.getCoordTextura();
 
 		width = mapaBits.getWidth();
+		height = mapaBits.getHeight();
 
 		bufferCoords = BufferManager.construirBufferListaTriangulosRellenos(triangulos, coords);
 	}

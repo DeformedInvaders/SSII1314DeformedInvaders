@@ -1,6 +1,6 @@
 package com.creation.design;
 
-public enum TDesignEstado
+public enum TEstadoDesign
 {
 	Dibujando, Triangulando, Retocando, Terminado
 }

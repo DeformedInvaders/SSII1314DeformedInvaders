@@ -6,7 +6,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
@@ -26,12 +26,12 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 
 	public DeformGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TTouchEstado.MultiTouch);
+		super(context, attrs, TEstadoDetector.MultiTouch);
 	}
 
-	public void setParameters(Esqueleto esqueleto, Textura textura, TDeformTipo tipo, final DeformFragment fragmento, int num_frames)
+	public void setParameters(Esqueleto esqueleto, Textura textura, final DeformFragment fragmento)
 	{
-		renderer = new DeformOpenGLRenderer(getContext(), esqueleto, textura, tipo, num_frames);
+		renderer = new DeformOpenGLRenderer(getContext(), esqueleto, textura);
 		setRenderer(renderer);
 
 		handler = new Handler();

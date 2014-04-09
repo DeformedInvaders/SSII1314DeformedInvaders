@@ -13,7 +13,12 @@ public abstract class Rectangulo extends Entidad
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		width = renderer.cargarTexturaRectangulo(gl, textura, tipo, id, TTipoSticker.Nada);
+		Dimensiones dim = renderer.cargarTexturaRectangulo(gl, textura, tipo, id, TTipoSticker.Nada);
+		if(dim != null)
+		{
+			width = dim.getWidth();
+			height = dim.getHeight();
+		}
 	}
 
 	@Override
@@ -22,6 +27,7 @@ public abstract class Rectangulo extends Entidad
 		renderer.descargarTexturaRectangulo(tipo, id, TTipoSticker.Nada);
 
 		width = 0;
+		height = 0;
 	}
 
 	@Override

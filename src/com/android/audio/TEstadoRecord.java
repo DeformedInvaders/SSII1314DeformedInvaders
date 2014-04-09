@@ -1,6 +1,6 @@
 package com.android.audio;
 
-public enum TRecordEstado
+public enum TEstadoRecord
 {
 	Grabando, Parado
 }

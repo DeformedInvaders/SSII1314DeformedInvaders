@@ -11,7 +11,7 @@ public class AudioRecorderManager
 	private ExternalStorageManager manager;
 
 	private MediaRecorder recorder;
-	private TRecordEstado estado;
+	private TEstadoRecord estado;
 
 	/* Constructora */
 
@@ -21,7 +21,7 @@ public class AudioRecorderManager
 
 		this.recorder = new MediaRecorder();
 
-		this.estado = TRecordEstado.Parado;
+		this.estado = TEstadoRecord.Parado;
 	}
 
 	/* Métodos de Selección de Estado */
@@ -30,7 +30,7 @@ public class AudioRecorderManager
 	{
 		try
 		{
-			if (estado == TRecordEstado.Parado)
+			if (estado == TEstadoRecord.Parado)
 			{
 				// Initial
 				recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -46,7 +46,7 @@ public class AudioRecorderManager
 				recorder.start();
 				// Recording
 
-				estado = TRecordEstado.Grabando;
+				estado = TEstadoRecord.Grabando;
 				return true;
 			}
 		}
@@ -60,13 +60,13 @@ public class AudioRecorderManager
 
 	public boolean stopRecording()
 	{
-		if (estado == TRecordEstado.Grabando)
+		if (estado == TEstadoRecord.Grabando)
 		{
 			// Recording
 			recorder.stop();
 			// Initial
 
-			estado = TRecordEstado.Parado;
+			estado = TEstadoRecord.Parado;
 			return true;
 		}
 
@@ -82,11 +82,11 @@ public class AudioRecorderManager
 
 	public boolean isRecording()
 	{
-		return estado == TRecordEstado.Grabando;
+		return estado == TEstadoRecord.Grabando;
 	}
 
 	public boolean isStopped()
 	{
-		return estado == TRecordEstado.Parado;
+		return estado == TEstadoRecord.Parado;
 	}
 }

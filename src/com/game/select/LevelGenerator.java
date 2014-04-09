@@ -171,17 +171,17 @@ public class LevelGenerator
 	{
 		List<InstanciaEntidad> listaEnemigos = new ArrayList<InstanciaEntidad>();
 
-		float posXActual = GamePreferences.POS_ENEMIES_INICIO;
-		while (posXActual < GamePreferences.POS_ENEMIES_FINAL)
+		float posXActual = GamePreferences.POS_ENEMIES_INICIO();
+		while (posXActual < GamePreferences.POS_ENEMIES_FINAL())
 		{
-			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_ENEMIGOS);
-			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMY);
-			float posYEnemigo = GamePreferences.DISTANCE_ENEMY_GROUND;
+			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_ENEMIES);
+			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMY());
+			float posYEnemigo = GamePreferences.DISTANCE_ENEMY_GROUND();
 			
-			if (tipoEnemigo == 0) posYEnemigo = GamePreferences.DISTANCE_ENEMY_AIR;
+			if (tipoEnemigo == 0) posYEnemigo = GamePreferences.DISTANCE_ENEMY_AIR();
 					
 			listaEnemigos.add(new InstanciaEntidad(tipoEnemigo, posXEnemigo, posYEnemigo));
-			posXActual = posXEnemigo + GamePreferences.DISTANCE_BETWEEN_ENEMY;
+			posXActual = posXEnemigo + GamePreferences.DISTANCE_BETWEEN_ENEMY();
 		}
 
 		return listaEnemigos;

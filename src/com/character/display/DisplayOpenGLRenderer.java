@@ -12,7 +12,7 @@ import com.game.data.Personaje;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer 
 {
-	private TDisplayEstado estado;
+	private TEstadoDisplay estado;
 
 	// Personaje
 	private Personaje personaje;
@@ -20,7 +20,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	// Captura
 	private Bitmap captura;
-	private TCapturaEstado estadoCaptura;
+	private TEstadoCaptura estadoCaptura;
 
 	/* Constructura */
 
@@ -30,8 +30,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		personajeCargado = false;
 
-		estado = TDisplayEstado.Nada;
-		estadoCaptura = TCapturaEstado.Nada;
+		estado = TEstadoDisplay.Nada;
+		estadoCaptura = TEstadoCaptura.Nada;
 	}
 
 	public DisplayOpenGLRenderer(Context context, Personaje p)
@@ -41,8 +41,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		personajeCargado = true;
 		personaje = p;
 
-		estado = TDisplayEstado.Nada;
-		estadoCaptura = TCapturaEstado.Nada;
+		estado = TEstadoDisplay.Nada;
+		estadoCaptura = TEstadoCaptura.Nada;
 	}
 
 	/* Métodos Renderer */
@@ -73,18 +73,18 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
 
-			if (estado == TDisplayEstado.Nada || estado == TDisplayEstado.Captura)
+			if (estado == TEstadoDisplay.Nada || estado == TEstadoDisplay.Captura)
 			{
-				if (estado == TDisplayEstado.Captura)
+				if (estado == TEstadoDisplay.Captura)
 				{
-					if (estadoCaptura == TCapturaEstado.Capturando)
+					if (estadoCaptura == TEstadoCaptura.Capturando)
 					{
 						// Capturar Pantalla
 						MapaBits textura = capturaPantalla(gl);
 						captura = textura.getBitmap();
 
 						// Desactivar Modo Captura
-						estadoCaptura = TCapturaEstado.Terminado;
+						estadoCaptura = TEstadoCaptura.Terminado;
 
 						// Restaurar posición anterior de la Cámara
 						camaraRestore();
@@ -100,11 +100,10 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						// Centrado de Marco
 						centrarPersonajeEnMarcoFinal(gl);
 					}
-					else if (estadoCaptura == TCapturaEstado.Retocando)
+					else if (estadoCaptura == TEstadoCaptura.Retocando)
 					{
 						// Marco Oscuro
-						dibujarMarcoLateral(gl);
-						dibujarMarcoCentral(gl);
+						dibujarMarcoCompletoFuerte(gl);
 					}
 				}
 			}
@@ -148,24 +147,24 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarRetoque(float height, float width)
 	{
 		// Construir rectangulos
-		estado = TDisplayEstado.Captura;
-		estadoCaptura = TCapturaEstado.Retocando;
+		estado = TEstadoDisplay.Captura;
+		estadoCaptura = TEstadoCaptura.Retocando;
 	}
 
 	public void seleccionarCaptura()
 	{
-		if (estado == TDisplayEstado.Captura)
+		if (estado == TEstadoDisplay.Captura)
 		{
-			estadoCaptura = TCapturaEstado.Capturando;
+			estadoCaptura = TEstadoCaptura.Capturando;
 		}
 	}
 
 	public void seleccionarTerminado()
 	{
-		if (estado == TDisplayEstado.Captura)
+		if (estado == TEstadoDisplay.Captura)
 		{
-			estado = TDisplayEstado.Nada;
-			estadoCaptura = TCapturaEstado.Nada;
+			estado = TEstadoDisplay.Nada;
+			estadoCaptura = TEstadoCaptura.Nada;
 		}
 	}
 
@@ -181,25 +180,25 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarRun()
 	{
-		estado = TDisplayEstado.Run;
+		estado = TEstadoDisplay.Run;
 		personaje.mover();
 	}
 
 	public void seleccionarJump()
 	{
-		estado = TDisplayEstado.Jump;
+		estado = TEstadoDisplay.Jump;
 		personaje.saltar();
 	}
 
 	public void seleccionarCrouch()
 	{
-		estado = TDisplayEstado.Crouch;
+		estado = TEstadoDisplay.Crouch;
 		personaje.agachar();
 	}
 
 	public void seleccionarAttack()
 	{
-		estado = TDisplayEstado.Attack;
+		estado = TEstadoDisplay.Attack;
 		personaje.atacar();
 	}
 
@@ -207,34 +206,34 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoReposo()
 	{
-		return estado == TDisplayEstado.Nada;
+		return estado == TEstadoDisplay.Nada;
 	}
 
 	public boolean isEstadoRetoque()
 	{
-		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Retocando;
+		return estado == TEstadoDisplay.Captura && estadoCaptura == TEstadoCaptura.Retocando;
 	}
 
 	public boolean isEstadoCapturando()
 	{
-		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Retocando;
+		return estado == TEstadoDisplay.Captura && estadoCaptura == TEstadoCaptura.Retocando;
 	}
 
 	public boolean isEstadoTerminado()
 	{
-		return estado == TDisplayEstado.Captura && estadoCaptura == TCapturaEstado.Terminado;
+		return estado == TEstadoDisplay.Captura && estadoCaptura == TEstadoCaptura.Terminado;
 	}
 
 	public boolean isEstadoAnimacion()
 	{
-		return estado != TDisplayEstado.Nada && estado != TDisplayEstado.Captura;
+		return estado != TEstadoDisplay.Nada && estado != TEstadoDisplay.Captura;
 	}
 
 	public Bitmap getCapturaPantalla()
 	{
-		if (estadoCaptura == TCapturaEstado.Capturando)
+		if (estadoCaptura == TEstadoCaptura.Capturando)
 		{
-			while (estadoCaptura != TCapturaEstado.Terminado);
+			while (estadoCaptura != TEstadoCaptura.Terminado);
 
 			return captura;
 		}

@@ -1,6 +1,6 @@
 package com.character.display;
 
-public enum TCapturaEstado
+public enum TEstadoCaptura
 {
 	Nada, Retocando, Capturando, Terminado
 }

@@ -3,7 +3,7 @@ package com.creation.paint;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
@@ -18,7 +18,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 
 	public PaintGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TTouchEstado.SimpleTouch);
+		super(context, attrs, TEstadoDetector.SimpleTouch);
 	}
 
 	public void setParameters(Esqueleto esqueleto)
@@ -59,19 +59,19 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarMano()
 	{
 		renderer.seleccionarMano();
-		setEstado(TTouchEstado.CamaraDetectors);
+		setEstado(TEstadoDetector.CamaraDetectors);
 	}
 
 	public void seleccionarPincel()
 	{
 		renderer.seleccionarPincel();
-		setEstado(TTouchEstado.SimpleTouch);
+		setEstado(TEstadoDetector.SimpleTouch);
 	}
 
 	public void seleccionarCubo()
 	{
 		renderer.seleccionarCubo();
-		setEstado(TTouchEstado.SimpleTouch);
+		setEstado(TEstadoDetector.SimpleTouch);
 	}
 
 	public int getColorPaleta()
@@ -82,7 +82,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarColor(int color)
 	{
 		renderer.seleccionarColor(color);
-		setEstado(TTouchEstado.SimpleTouch);
+		setEstado(TEstadoDetector.SimpleTouch);
 	}
 
 	public void seleccionarSize(int pos)
@@ -93,7 +93,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarPegatina(int pegatina, TTipoSticker tipo)
 	{
 		renderer.seleccionarPegatina(pegatina, tipo);
-		setEstado(TTouchEstado.SimpleTouch);
+		setEstado(TEstadoDetector.SimpleTouch);
 		requestRender();
 	}
 

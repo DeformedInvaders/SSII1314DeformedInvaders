@@ -7,7 +7,7 @@ import com.creation.data.Accion;
 public class PaintDataSaved
 {
 	// Estructura de Datos
-	private TPaintEstado estado;
+	private TEstadoPaint estado;
 
 	// Anterior Siguiente Buffers
 	private Stack<Accion> anteriores;
@@ -15,7 +15,7 @@ public class PaintDataSaved
 
 	/* Constructora */
 
-	public PaintDataSaved(Stack<Accion> anteriores, Stack<Accion> siguientes, TPaintEstado estado)
+	public PaintDataSaved(Stack<Accion> anteriores, Stack<Accion> siguientes, TEstadoPaint estado)
 	{
 		this.anteriores = anteriores;
 		this.siguientes = siguientes;
@@ -24,7 +24,7 @@ public class PaintDataSaved
 
 	/* Métodos de Obtención de Información */
 
-	public TPaintEstado getEstado()
+	public TEstadoPaint getEstado()
 	{
 		return estado;
 	}

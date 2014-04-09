@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.storage.ExternalStorageManager;
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
@@ -19,7 +19,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	private DisplayOpenGLRenderer renderer;
 	private Context mContext;
 
-	private TDisplayTipo tipoDisplay;
+	private TTipoDisplay tipoDisplay;
 
 	private String nombre;
 	private boolean personajeCargado;
@@ -36,7 +36,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 	public DisplayGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TTouchEstado.SimpleTouch);
+		super(context, attrs, TEstadoDetector.SimpleTouch);
 
 		mContext = context;
 
@@ -62,7 +62,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	public void setParameters(Personaje p, ExternalStorageManager m, TDisplayTipo e)
+	public void setParameters(Personaje p, ExternalStorageManager m, TTipoDisplay e)
 	{
 		nombre = p.getNombre();
 		manager = m;
@@ -78,7 +78,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		};
 	}
 
-	public void setParameters(TDisplayTipo e)
+	public void setParameters(TTipoDisplay e)
 	{
 		personajeCargado = false;
 		tipoDisplay = e;
@@ -92,7 +92,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (tipoDisplay == TDisplayTipo.Main)
+		if (tipoDisplay == TTipoDisplay.Main)
 		{
 			if (personajeCargado)
 			{
@@ -196,7 +196,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarRetoque()
 	{
 		renderer.seleccionarRetoque(getHeight(), getWidth());
-		setEstado(TTouchEstado.CamaraDetectors);
+		setEstado(TEstadoDetector.CamaraDetectors);
 
 		requestRender();
 	}
@@ -232,7 +232,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public Bitmap getCapturaPantalla()
 	{
 		renderer.seleccionarCaptura();
-		setEstado(TTouchEstado.SimpleTouch);
+		setEstado(TEstadoDetector.SimpleTouch);
 
 		requestRender();
 		return renderer.getCapturaPantalla();

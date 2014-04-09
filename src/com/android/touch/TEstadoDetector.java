@@ -1,6 +1,6 @@
 package com.android.touch;
 
-public enum TTouchEstado
+public enum TEstadoDetector
 {
 	SimpleTouch, MultiTouch, CamaraDetectors, CoordDetectors, GameDetectors
 }

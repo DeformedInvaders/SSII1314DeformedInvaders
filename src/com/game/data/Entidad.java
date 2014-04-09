@@ -14,6 +14,7 @@ public abstract class Entidad
 	protected int textura;
 
 	protected float width = 0.0f;
+	protected float height = 0.0f;
 
 	/* Métodos abstractos a implementar */
 
@@ -31,6 +32,11 @@ public abstract class Entidad
 	public float getWidth()
 	{
 		return width;
+	}
+	
+	public float getHeight()
+	{
+		return height;
 	}
 
 	public TTipoEntidad getTipo()

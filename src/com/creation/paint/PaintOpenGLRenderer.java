@@ -12,7 +12,7 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
-import com.character.display.TCapturaEstado;
+import com.character.display.TEstadoCaptura;
 import com.creation.data.Accion;
 import com.creation.data.Esqueleto;
 import com.creation.data.Handle;
@@ -31,7 +31,7 @@ import com.project.main.GamePreferences;
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {
 	// Estructura de Datos
-	private TPaintEstado estado;
+	private TEstadoPaint estado;
 
 	private int colorPaleta;
 	private int sizeLinea;
@@ -59,7 +59,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private int color;
 
 	// Texturas
-	private TCapturaEstado estadoCaptura;
+	private TEstadoCaptura estadoCaptura;
 
 	private MapaBits textura;
 	private FloatArray coordsTextura;
@@ -76,7 +76,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		super(context);
 
-		estado = TPaintEstado.Nada;
+		estado = TEstadoPaint.Nada;
 
 		contorno = esqueleto.getContorno();
 		vertices = esqueleto.getVertices();
@@ -100,7 +100,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		anteriores = new Stack<Accion>();
 		siguientes = new Stack<Accion>();
 
-		estadoCaptura = TCapturaEstado.Nada;
+		estadoCaptura = TEstadoCaptura.Nada;
 
 		objetoVertice = new Handle(20, POINTWIDTH);
 	}
@@ -110,7 +110,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		if (estado == TPaintEstado.Captura && estadoCaptura == TCapturaEstado.Capturando)
+		if (estado == TEstadoPaint.Captura && estadoCaptura == TEstadoCaptura.Capturando)
 		{
 			// Guardar posición actual de la Cámara
 			salvarCamara();
@@ -127,7 +127,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
 
 			// Desactivar Modo Captura
-			estadoCaptura = TCapturaEstado.Terminado;
+			estadoCaptura = TEstadoCaptura.Terminado;
 
 			// Restaurar posición anterior de la Cámara
 			recuperarCamara();
@@ -170,7 +170,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
 		}
 
-		if (estado != TPaintEstado.Captura)
+		if (estado != TEstadoPaint.Captura)
 		{
 			// Contorno
 			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
@@ -187,7 +187,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				}
 			}
 
-			if (estado == TPaintEstado.Pegatinas)
+			if (estado == TEstadoPaint.Pegatinas)
 			{
 				dibujarListaHandle(gl, Color.BLACK, objetoVertice.getBuffer(), vertices);
 			}
@@ -218,7 +218,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		anteriores.clear();
 		siguientes.clear();
 
-		estado = TPaintEstado.Nada;
+		estado = TEstadoPaint.Nada;
 		color = Color.WHITE;
 		sizeLinea = 6;
 
@@ -228,15 +228,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TPaintEstado.Pincel)
+		if (estado == TEstadoPaint.Pincel)
 		{
 			return anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TPaintEstado.Cubo)
+		else if (estado == TEstadoPaint.Cubo)
 		{
 			return pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TPaintEstado.Pegatinas)
+		else if (estado == TEstadoPaint.Pegatinas)
 		{
 			return anyadirPegatina(pixelX, pixelY, screenWidth, screenHeight);
 		}
@@ -332,7 +332,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TPaintEstado.Pincel)
+		if (estado == TEstadoPaint.Pincel)
 		{
 			return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
@@ -343,7 +343,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TPaintEstado.Pincel)
+		if (estado == TEstadoPaint.Pincel)
 		{
 			return guardarPolilinea();
 		}
@@ -379,19 +379,19 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarMano()
 	{
 		guardarPolilinea();
-		estado = TPaintEstado.Mano;
+		estado = TEstadoPaint.Mano;
 	}
 
 	public void seleccionarPincel()
 	{
 		guardarPolilinea();
-		estado = TPaintEstado.Pincel;
+		estado = TEstadoPaint.Pincel;
 	}
 
 	public void seleccionarCubo()
 	{
 		guardarPolilinea();
-		estado = TPaintEstado.Cubo;
+		estado = TEstadoPaint.Cubo;
 	}
 
 	public void seleccionarColor(int color)
@@ -431,15 +431,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		pegatinaActual = pegatina;
 		tipoPegatinaActual = tipo;
-		estado = TPaintEstado.Pegatinas;
+		estado = TEstadoPaint.Pegatinas;
 	}
 
 	public void seleccionarCaptura() 
 {
 		guardarPolilinea();
 
-		estado = TPaintEstado.Captura;
-		estadoCaptura = TCapturaEstado.Capturando;
+		estado = TEstadoPaint.Captura;
+		estadoCaptura = TEstadoCaptura.Capturando;
 	}
 
 	/* Métodos de modificación de Buffers de estado */
@@ -517,7 +517,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if (pegatinaAnyadida)
 		{
 			pegatinaAnyadida = false;
-			estado = TPaintEstado.Nada;
+			estado = TEstadoPaint.Nada;
 
 			return true;
 		}
@@ -527,32 +527,32 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoPincel()
 	{
-		return estado == TPaintEstado.Pincel;
+		return estado == TEstadoPaint.Pincel;
 	}
 
 	public boolean isEstadoCubo()
 	{
-		return estado == TPaintEstado.Cubo;
+		return estado == TEstadoPaint.Cubo;
 	}
 
 	public boolean isEstadoMover()
 	{
-		return estado == TPaintEstado.Mano;
+		return estado == TEstadoPaint.Mano;
 	}
 
 	public boolean isEstadoPegatinas()
 	{
-		return estado == TPaintEstado.Pegatinas;
+		return estado == TEstadoPaint.Pegatinas;
 	}
 
 	public Textura getTextura()
 	{
-		if (estadoCaptura == TCapturaEstado.Capturando)
+		if (estadoCaptura == TEstadoCaptura.Capturando)
 		{
-			while (estadoCaptura != TCapturaEstado.Terminado);
+			while (estadoCaptura != TEstadoCaptura.Terminado);
 
-			estado = TPaintEstado.Nada;
-			estadoCaptura = TCapturaEstado.Nada;
+			estado = TEstadoPaint.Nada;
+			estadoCaptura = TEstadoCaptura.Nada;
 
 			return new Textura(textura, coordsTextura, pegatinas);
 		}

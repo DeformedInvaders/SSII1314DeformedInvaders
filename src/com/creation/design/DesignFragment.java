@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
 import com.project.main.R;
@@ -143,12 +143,12 @@ public class DesignFragment extends OpenGLFragment
 			{
 				if (canvas.seleccionarTriangular())
 				{
-					canvas.setEstado(TTouchEstado.CoordDetectors);
+					canvas.setEstado(TEstadoDetector.CoordDetectors);
 					canvas.seleccionarRetoque();
 				}
 				else
 				{
-					canvas.setEstado(TTouchEstado.SimpleTouch);
+					canvas.setEstado(TEstadoDetector.SimpleTouch);
 					Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -172,7 +172,7 @@ public class DesignFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
-			canvas.setEstado(TTouchEstado.SimpleTouch);
+			canvas.setEstado(TEstadoDetector.SimpleTouch);
 
 			reiniciarInterfaz();
 			actualizarInterfaz();

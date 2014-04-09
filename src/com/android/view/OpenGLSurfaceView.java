@@ -10,14 +10,14 @@ import android.view.View;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
-import com.android.touch.TTouchEstado;
+import com.android.touch.TEstadoDetector;
 import com.android.touch.GameDetector;
 import com.project.main.GamePreferences;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {
 	private Context mContext;
-	private TTouchEstado estado;
+	private TEstadoDetector estado;
 
 	private OpenGLRenderer renderer;
 
@@ -29,7 +29,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 
 	/* Constructora */
 
-	public OpenGLSurfaceView(Context context, AttributeSet attrs, TTouchEstado estado)
+	public OpenGLSurfaceView(Context context, AttributeSet attrs, TEstadoDetector estado)
 	{
 		super(context, attrs);
 
@@ -68,11 +68,11 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		setEstado(estado);
 	}
 
-	public void setEstado(TTouchEstado e)
+	public void setEstado(TEstadoDetector e)
 	{
 		estado = e;
 
-		if (estado == TTouchEstado.CamaraDetectors || estado == TTouchEstado.CoordDetectors)
+		if (estado == TEstadoDetector.CamaraDetectors || estado == TEstadoDetector.CoordDetectors)
 		{
 			if (scaleDetector == null)
 			{
@@ -89,13 +89,13 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 				rotateDetector = new RotateDetector(renderer);
 			}
 
-			boolean estadoCamara = estado == TTouchEstado.CamaraDetectors;
+			boolean estadoCamara = estado == TEstadoDetector.CamaraDetectors;
 
 			scaleDetector.setEstado(estadoCamara);
 			moveDetector.setEstado(estadoCamara);
 			rotateDetector.setEstado(estadoCamara);
 		}
-		else if (estado == TTouchEstado.GameDetectors)
+		else if (estado == TEstadoDetector.GameDetectors)
 		{
 			gameDetector = new GameDetector();
 		}
