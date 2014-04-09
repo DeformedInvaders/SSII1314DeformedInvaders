@@ -15,13 +15,12 @@ import android.widget.TextView;
 import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
 import com.android.storage.ExternalStorageManager;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public abstract class AudioAlert extends WindowAlert
 {
-	private static final long DURATION = 3000;
-
-	private TextView cuenta;
+	private TextView textoContador;
 	private ProgressBar progressBar;
 	private ImageButton botonRecAudio, botonPlayAudio;
 
@@ -54,17 +53,23 @@ public abstract class AudioAlert extends WindowAlert
 
 		LinearLayout layout = new LinearLayout(context);
 
-		cuenta = new TextView(context);
-		cuenta.setTextSize(20);
-		cuenta.setGravity(Gravity.CENTER);
+		textoContador = new TextView(context);
+		textoContador.setTextSize(20);
+		textoContador.setGravity(Gravity.CENTER);
 
 		progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
 
 		LinearLayout layoutBotones = new LinearLayout(context);
 
-		botonRecAudio = new ImageButton(context);
+		int widthButton = (int) context.getResources().getDimension(R.dimen.FragmentButton_LayoutWidth_Dimen);
+		int heightButton = (int) context.getResources().getDimension(R.dimen.FragmentButton_LayoutHeight_Dimen);
+		
+		botonRecAudio = new ImageButton(context);		
 		botonPlayAudio = new ImageButton(context);
-
+		
+		botonRecAudio.setLayoutParams(new LinearLayout.LayoutParams(widthButton, heightButton));
+		botonPlayAudio.setLayoutParams(new LinearLayout.LayoutParams(widthButton, heightButton));
+		
 		botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
 		botonPlayAudio.setOnClickListener(new OnPlayAudioClickListener());
 
@@ -76,7 +81,7 @@ public abstract class AudioAlert extends WindowAlert
 		layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
 		layoutBotones.setGravity(Gravity.CENTER);
 
-		layout.addView(cuenta, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		layout.addView(textoContador, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.addView(progressBar, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.addView(layoutBotones, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.setOrientation(LinearLayout.VERTICAL);
@@ -90,6 +95,7 @@ public abstract class AudioAlert extends WindowAlert
 			{
 				audioPlayer.stopPlaying();
 				audioRecorder.stopRecording();
+				
 				onPossitiveButtonClick();
 			}
 		});
@@ -99,24 +105,27 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				audioPlayer.stopPlaying();
-				audioRecorder.stopRecording();
-				externalManager.eliminarAudioTemp(movimiento);
-
+				if(audioPlayer.stopPlaying() &&	audioRecorder.stopRecording())
+				{
+					externalManager.eliminarAudioTemp(movimiento);
+				}
+				
 				onNegativeButtonClick();
 			}
 		});
 
-		timer = new CountDownTimer(DURATION, 1) {
+		timer = new CountDownTimer(GamePreferences.TIME_DURATION_ANIMATION, 100) {
 
 			@Override
 			public void onFinish()
 			{
-				audioRecorder.stopRecording();
-				botonRecAudio.setBackgroundResource(R.drawable.icon_media_record);
-
-				actualizarInterfaz();
-				reiniciarContadores();
+				if (audioRecorder.stopRecording())
+				{
+					botonRecAudio.setBackgroundResource(R.drawable.icon_media_record);
+	
+					actualizarInterfaz();
+					reiniciarContadores();
+				}
 			}
 
 			@Override
@@ -138,7 +147,7 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void reiniciarContadores()
 	{
-		cuenta.setText("0" + DURATION / 1000 + ":" + DURATION % 100 + "0");
+		textoContador.setText("0" + GamePreferences.TIME_DURATION_ANIMATION / 1000 + ":" + GamePreferences.TIME_DURATION_ANIMATION % 100);
 		progressBar.setProgress(0);
 	}
 
@@ -146,8 +155,8 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void actualizarContadores(long millisUntilFinished)
 	{
-		cuenta.setText("0" + millisUntilFinished / 1000 + ":" + (millisUntilFinished % 100));
-		progressBar.setProgress((int) (100 * (DURATION - millisUntilFinished) / DURATION));
+		textoContador.setText("0" + millisUntilFinished / 1000 + ":" + (millisUntilFinished % 100));
+		progressBar.setProgress((int) (100 * (GamePreferences.TIME_DURATION_ANIMATION - millisUntilFinished) / GamePreferences.TIME_DURATION_ANIMATION));
 	}
 
 	private void actualizarInterfaz()
@@ -171,11 +180,13 @@ public abstract class AudioAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			timer.start();
-			audioRecorder.startRecording(movimiento);
-
-			botonRecAudio.setBackgroundResource(R.drawable.icon_media_record_selected);
-			actualizarInterfaz();
+			if (audioRecorder.startRecording(movimiento))
+			{
+				timer.start();
+				
+				botonRecAudio.setBackgroundResource(R.drawable.icon_media_record_selected);
+				actualizarInterfaz();
+			}
 		}
 	}
 
@@ -184,9 +195,10 @@ public abstract class AudioAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			audioPlayer.startPlaying(movimiento);
-
-			botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play_selected);
+			if (audioPlayer.startPlaying(movimiento))
+			{
+				botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play_selected);
+			}
 		}
 	}
 }

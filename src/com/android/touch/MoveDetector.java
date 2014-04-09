@@ -3,11 +3,10 @@ package com.android.touch;
 import android.view.MotionEvent;
 
 import com.android.view.OpenGLRenderer;
+import com.project.main.GamePreferences;
 
 public class MoveDetector
 {
-	private static final long MAX_TAP_DURATION = 300;
-
 	private OpenGLRenderer renderer;
 
 	private boolean camara;
@@ -111,7 +110,7 @@ public class MoveDetector
 	{
 		long time = System.currentTimeMillis();
 
-		if (Math.abs(lastTap - time) < MAX_TAP_DURATION)
+		if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
 		{
 			// Double Touch
 			renderer.camaraRestore();

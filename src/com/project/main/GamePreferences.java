@@ -8,9 +8,24 @@ public class GamePreferences
 	public static final float MAX_DISTANCE_PIXELS = 10.0f;
 	public static final float MAX_DISTANCE_HANDLES = 30.0f;
 	
+	public static final long MAX_DURATION_TAP = 200;
+	public static final float MAX_DISTANCE_DRAG = 80.0f;
+	public static final float MAX_DRIFT_ROTATION = 10.0f;
+	
+	public static final float MAX_SCALE_FACTOR = 1.03f;
+	public static final float MIN_SCALE_FACTOR = 0.97f;
+	public static final float NULL_SCALE_FACTOR = 1.0f;
+	
 	// Animación
 	public static final int TIME_INTERVAL_ANIMATION = 15;
+	public static final int TIME_INTERVAL_ANIMATION_FAST = 10;
+	public static final int TIME_INTERVAL_ANIMATION_SLOW = 20;
+	
 	public static final int NUM_FRAMES_ANIMATION = 50;
+	
+	/* FIXME Cambiar al añadir tres velocidades */
+	public static final int TIME_DURATION_ANIMATION = 2000;
+	//public static final int TIME_DURACION_ANIMATION = TIME_INTERVAL_ANIMATION * NUM_FRAMES_ANIMATION;
 
 	// Enemigos
 	public static final int MAX_TEXTURE_BACKGROUND = 3;

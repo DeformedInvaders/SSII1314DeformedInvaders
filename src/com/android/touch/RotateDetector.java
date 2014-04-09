@@ -5,11 +5,10 @@ import android.view.MotionEvent;
 import com.android.view.OpenGLRenderer;
 import com.lib.math.Intersector;
 import com.lib.math.Vector2;
+import com.project.main.GamePreferences;
 
 public class RotateDetector
 {
-	private static final int MAX_LONG_DESVIO = 10;
-
 	private OpenGLRenderer renderer;
 
 	private boolean camara, started;
@@ -65,7 +64,7 @@ public class RotateDetector
 		fijoPixelX = pixelX1;
 		fijoPixelY = pixelY1;
 
-		if (Intersector.distancePoints(pixelX1, pixelY1, fijoPixelX, fijoPixelY) > MAX_LONG_DESVIO)
+		if (Intersector.distancePoints(pixelX1, pixelY1, fijoPixelX, fijoPixelY) > GamePreferences.MAX_DRIFT_ROTATION)
 		{
 			return false;
 		}
@@ -79,7 +78,7 @@ public class RotateDetector
 
 	private boolean rotateOnCoordMove(float pixelX1, float pixelY1, float pixelX2, float pixelY2, float screenWidth, float screenHeight)
 	{
-		if (Intersector.distancePoints(pixelX1, pixelY1, fijoPixelX, fijoPixelY) > MAX_LONG_DESVIO)
+		if (Intersector.distancePoints(pixelX1, pixelY1, fijoPixelX, fijoPixelY) > GamePreferences.MAX_DRIFT_ROTATION)
 		{
 			return false;
 		}

@@ -4,12 +4,10 @@ import android.view.MotionEvent;
 
 import com.android.view.OpenGLSurfaceView;
 import com.game.game.GameOpenGLSurfaceView;
+import com.project.main.GamePreferences;
 
 public class GameDetector
 {
-	private static final long MAX_TAP_DURATION = 200;
-	private static final long DRAG_DISTANCE = 80;
-
 	private float lastPixelY;
 	private long lastTap;
 
@@ -48,15 +46,15 @@ public class GameDetector
 
 	private void onGameUp(long time, float pixelY, GameOpenGLSurfaceView renderer)
 	{
-		if (pixelY - lastPixelY > DRAG_DISTANCE)
+		if (pixelY - lastPixelY > GamePreferences.MAX_DISTANCE_DRAG)
 		{
 			renderer.seleccionarCrouch();
 		}
-		else if (lastPixelY - pixelY > DRAG_DISTANCE)
+		else if (lastPixelY - pixelY > GamePreferences.MAX_DISTANCE_DRAG)
 		{
 			renderer.seleccionarJump();
 		}
-		else if (Math.abs(lastTap - time) < MAX_TAP_DURATION)
+		else if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
 		{
 			renderer.seleccionarAttack();
 		}

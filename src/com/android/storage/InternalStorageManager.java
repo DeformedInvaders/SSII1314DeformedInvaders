@@ -84,7 +84,15 @@ public class InternalStorageManager
 
 	private boolean comprobarNombresUsados(String nombre)
 	{
-		return nombres.contains(nombre);
+		Iterator<String> it = nombres.iterator();
+		while(it.hasNext())
+		{
+			if(it.next().equals(nombre))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private String evaluarNombre(String nombre)

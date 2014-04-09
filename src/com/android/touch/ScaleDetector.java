@@ -6,13 +6,10 @@ import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
 
 import com.android.view.OpenGLRenderer;
+import com.project.main.GamePreferences;
 
 public class ScaleDetector extends SimpleOnScaleGestureListener
 {
-	private static final float MAX_SCALE_FACTOR = 1.03f;
-	private static final float MIN_SCALE_FACTOR = 0.97f;
-	private static final float NULL_SCALE_FACTOR = 1.0f;
-
 	private OpenGLRenderer renderer;
 	private ScaleGestureDetector detector;
 
@@ -63,18 +60,18 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 	{
 		float factor = detector.getScaleFactor();
 
-		if (factor >= MAX_SCALE_FACTOR)
+		if (factor >= GamePreferences.MAX_SCALE_FACTOR)
 		{
-			factor = MAX_SCALE_FACTOR;
+			factor = GamePreferences.MAX_SCALE_FACTOR;
 		}
-		else if (factor <= MIN_SCALE_FACTOR)
+		else if (factor <= GamePreferences.MIN_SCALE_FACTOR)
 		{
-			factor = MIN_SCALE_FACTOR;
+			factor = GamePreferences.MIN_SCALE_FACTOR;
 		}
 
 		if (camara)
 		{
-			factor = 2 * NULL_SCALE_FACTOR - factor;
+			factor = 2 * GamePreferences.NULL_SCALE_FACTOR - factor;
 
 			renderer.camaraZoom(factor);
 		}

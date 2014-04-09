@@ -27,7 +27,7 @@ import java.util.List;
  * @author badlogicgames@gmail.com
  */
 public class BoundingBox implements Serializable {
-	private static final long serialVersionUID = -1286036817192127343L;
+	private static final long serialVersionUID = 1L;
 	final Vector3 crn[] = new Vector3[8];
 	public final Vector3 min = new Vector3();
 	public final Vector3 max = new Vector3();

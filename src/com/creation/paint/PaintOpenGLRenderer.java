@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 
@@ -27,6 +28,7 @@ import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.main.GamePreferences;
+import com.project.main.R;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {
@@ -549,12 +551,35 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estadoCaptura == TEstadoCaptura.Capturando)
 		{
-			while (estadoCaptura != TEstadoCaptura.Terminado);
+			final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_character_title), mContext.getString(R.string.text_processing_character_description), true);
 
-			estado = TEstadoPaint.Nada;
-			estadoCaptura = TEstadoCaptura.Nada;
+			Thread thread = new Thread(new Runnable() {
+				@Override
+				public void run()
+				{
+					while (estadoCaptura != TEstadoCaptura.Terminado);
 
-			return new Textura(textura, coordsTextura, pegatinas);
+					estado = TEstadoPaint.Nada;
+					estadoCaptura = TEstadoCaptura.Nada;
+					
+					alert.dismiss();
+				}
+			});
+			
+			thread.start();
+
+			// Esperar por la finalización del thread.
+			
+			try
+			{
+				thread.join();
+				
+				return new Textura(textura, coordsTextura, pegatinas);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		return null;
