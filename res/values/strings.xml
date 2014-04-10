@@ -32,6 +32,7 @@
 			<string name="title_menu_twitter">Twitter</string>
 			<string name="title_menu_facebook">Facebook</string>
 			<string name="title_menu_music">Music</string>
+			<string name="title_menu_tips">Tips</string>
 		
 		<!-- Dialog Section Titles -->	
 			<string name="title_dialog_size">Size:</string>
@@ -159,6 +160,9 @@
 			<string name="error_facebook_oauth_permission">Facebook permission not granted.</string>
 			<string name="error_facebook_oauth_sign_in">Facebook account not connected.</string>
 			<string name="error_facebook_post">Post not send.</string>
+			
+			<string name="error_storage_internal_name">The name is not available.</string>
+			<string name="error_storage_used_name">The name is already used by another character.</string>
 			
 	<!-- IMAGE DESCRIPTIONS -->
 	

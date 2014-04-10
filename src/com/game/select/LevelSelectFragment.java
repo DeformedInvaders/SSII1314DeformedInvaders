@@ -22,7 +22,8 @@ public class LevelSelectFragment extends OpenGLFragment
 	private boolean lockNivel;
 	
 	private Typeface fuenteNivel;
-	private int fondoNivel, descripcionNivel, colorTextoNivel, numeroNivel;
+	private TTipoLevel tipoNivel;
+	private int fondoNivel, descripcionNivel, colorTextoNivel;
 
 	private ImageButton botonNivel;
 
@@ -31,18 +32,18 @@ public class LevelSelectFragment extends OpenGLFragment
 	public static final LevelSelectFragment newInstance(OnLevelListener l, Nivel nivel, boolean lock)
 	{
 		LevelSelectFragment fragment = new LevelSelectFragment();
-		fragment.setParameters(l, nivel.getFondoNivel(), nivel.getDescripcionNivel(), nivel.getColorTextoNivel(), nivel.getNumeroNivel(), nivel.getFuenteNivel(), lock);
+		fragment.setParameters(l, nivel.getFondoNivel(), nivel.getDescripcionNivel(), nivel.getColorTextoNivel(), nivel.getTipoNivel(), nivel.getFuenteNivel(), lock);
 		return fragment;
 	}
 
-	private void setParameters(OnLevelListener l, int fondo, int descripcion, int color, int number, Typeface fuente, boolean lock)
+	private void setParameters(OnLevelListener l, int fondo, int descripcion, int color, TTipoLevel tipo, Typeface fuente, boolean lock)
 	{
 		listener = l;
 
 		fondoNivel = fondo;
 		descripcionNivel = descripcion;
 		colorTextoNivel = color;
-		numeroNivel = number;
+		tipoNivel = tipo;
 		lockNivel = lock;
 		fuenteNivel = fuente;
 	}
@@ -105,7 +106,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		{
 			if (lockNivel)
 			{
-				listener.onLevelSelected(numeroNivel);
+				listener.onLevelSelected(tipoNivel);
 			}
 			else
 			{

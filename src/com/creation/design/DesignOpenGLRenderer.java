@@ -54,13 +54,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			if (puntos.size > 0)
 			{
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED,
-						bufferPoligono);
+				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
 
 				if (puntos.size > 2)
 				{
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK,
-							bufferPoligono);
+					dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
 				}
 			}
 		}
@@ -70,8 +68,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 			if (estado == TEstadoDesign.Retocando)
 			{
-				// Marco Oscuro
-				dibujarMarcoCompletoFuerte(gl);
+				dibujarMarcoInterior(gl);
 			}
 		}
 	}

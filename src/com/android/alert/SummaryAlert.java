@@ -104,6 +104,8 @@ public class SummaryAlert extends WindowAlert
 
 		setView(layoutFolder);
 		
+		setCancelable(false);
+		
 		imageFolder.measure(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		int imageFolderWidth = imageFolder.getMeasuredHeight();
 		int imageFolderHeight = imageFolder.getMeasuredWidth();

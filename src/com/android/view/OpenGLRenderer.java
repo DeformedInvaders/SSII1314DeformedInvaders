@@ -66,8 +66,8 @@ public abstract class OpenGLRenderer implements Renderer
 	protected boolean fondoFinalFijado;
 
 	// Marco
-	private float marcoA, marcoB, marcoC;
-	private FloatBuffer recMarcoA, recMarcoB;
+	private float marcoAnchuraInterior, marcoAlturaLateral, marcoAnchuraLateral;
+	private FloatBuffer recMarcoLateral, recMarcoFrontal, recMarcoInterior;
 
 	// Contexto
 	protected Context mContext;
@@ -382,15 +382,18 @@ public abstract class OpenGLRenderer implements Renderer
 		float camaraHeight = yTop - yBottom;
 		float camaraWidth = xRight - xLeft;
 
-		marcoB = 0.1f * camaraHeight;
-		marcoA = camaraHeight - 2 * marcoB;
-		marcoC = (camaraWidth - marcoA) / 2;
+		marcoAlturaLateral = 0.1f * camaraHeight;
+		marcoAnchuraInterior = camaraHeight - 2 * marcoAlturaLateral;
+		marcoAnchuraLateral = (camaraWidth - marcoAnchuraInterior) / 2;
 
-		float[] recA = { 0, marcoB, 0, camaraHeight - marcoB, marcoC, marcoB, marcoC, camaraHeight - marcoB };
-		recMarcoA = BufferManager.construirBufferListaPuntos(recA);
+		float[] recA = { 0, 0, 0, marcoAnchuraInterior, marcoAnchuraLateral, 0, marcoAnchuraLateral, marcoAnchuraInterior };
+		recMarcoLateral = BufferManager.construirBufferListaPuntos(recA);
 
-		float[] recB = { 0, 0, 0, marcoB, camaraWidth, 0, camaraWidth, marcoB };
-		recMarcoB = BufferManager.construirBufferListaPuntos(recB);
+		float[] recB = { 0, 0, 0, marcoAlturaLateral, camaraWidth, 0, camaraWidth, marcoAlturaLateral };
+		recMarcoFrontal = BufferManager.construirBufferListaPuntos(recB);
+		
+		float[] recC = { 0, 0, 0, marcoAnchuraInterior, marcoAnchuraInterior, 0, marcoAnchuraInterior,marcoAnchuraInterior };
+		recMarcoInterior = BufferManager.construirBufferListaPuntos(recC);
 	}
 
 	protected boolean isPoligonoDentroMarco(FloatArray vertices)
@@ -401,7 +404,7 @@ public abstract class OpenGLRenderer implements Renderer
 			float x = vertices.get(i);
 			float y = vertices.get(i + 1);
 
-			if (x <= marcoC || x >= marcoC + marcoA || y <= marcoB || y >= marcoB + marcoA)
+			if (x <= marcoAnchuraLateral || x >= marcoAnchuraLateral + marcoAnchuraInterior || y <= marcoAlturaLateral || y >= marcoAlturaLateral + marcoAnchuraInterior)
 			{
 				return false;
 			}
@@ -431,38 +434,39 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void centrarPersonajeEnMarcoInicio(GL10 gl)
 	{
-		gl.glTranslatef(marcoC, marcoB, 0.0f);
+		gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0.0f);
 	}
 
 	protected void centrarPersonajeEnMarcoFinal(GL10 gl)
 	{
-		gl.glTranslatef(-marcoC, -marcoB, 0.0f);
+		gl.glTranslatef(-marcoAnchuraLateral, -marcoAlturaLateral, 0.0f);
 	}
 
-	protected void dibujarMarcoCompletoFuerte(GL10 gl)
+	protected void dibujarMarcoExterior(GL10 gl)
 	{
-		dibujarMarcoSuperior(gl, 175);
-		dibujarMarcoInferior(gl, 175);
+		dibujarMarcoFrontal(gl, 175);
 		dibujarMarcoLateral(gl, 175);
 	}
 	
-	protected void dibujarMarcoCompletoSuave(GL10 gl)
+	protected void dibujarMarcoInterior(GL10 gl)
 	{
-		dibujarMarcoSuperior(gl, 75);
-		dibujarMarcoInferior(gl, 75);
-		dibujarMarcoLateral(gl, 75);
+		dibujarMarcoInterior(gl, 30);
 	}
 	
-	protected void dibujarMarcoIncompletoFuerte(GL10 gl)
+	private void dibujarMarcoInterior(GL10 gl, int alfa)
 	{
-		dibujarMarcoSuperior(gl, 175);
-		dibujarMarcoLateral(gl, 175);
-	}
-	
-	protected void dibujarMarcoIncompletoSuave(GL10 gl)
-	{
-		dibujarMarcoSuperior(gl, 75);
-		dibujarMarcoLateral(gl, 75);
+		gl.glPushMatrix();
+
+		gl.glTranslatef(xLeft, yBottom, -1.0f);
+
+		gl.glPushMatrix();
+
+			gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0);
+			dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoInterior);
+
+		gl.glPopMatrix();
+
+	gl.glPopMatrix();
 	}
 	
 	private void dibujarMarcoLateral(GL10 gl, int alfa)
@@ -473,41 +477,29 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 	
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoA);
+				gl.glTranslatef(0, marcoAlturaLateral, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoLateral);
 		
-				gl.glTranslatef(marcoC + marcoA, 0, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoA);
+				gl.glTranslatef(marcoAnchuraLateral + marcoAnchuraInterior, 0, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoLateral);
 	
 			gl.glPopMatrix();
 
 		gl.glPopMatrix();
 	}
 
-	private void dibujarMarcoSuperior(GL10 gl, int alfa)
+	private void dibujarMarcoFrontal(GL10 gl, int alfa)
 	{
 		gl.glPushMatrix();
 
 			gl.glTranslatef(xLeft, yBottom, 1.0f);
 	
 			gl.glPushMatrix();
+			
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoFrontal);
 	
-				gl.glTranslatef(0, marcoB + marcoA, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoB);
-	
-			gl.glPopMatrix();
-
-		gl.glPopMatrix();
-	}
-
-	private void dibujarMarcoInferior(GL10 gl, int alfa)
-	{
-		gl.glPushMatrix();
-
-			gl.glTranslatef(xLeft, yBottom, 1.0f);
-	
-			gl.glPushMatrix();
-	
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoB);
+				gl.glTranslatef(0, marcoAlturaLateral + marcoAnchuraInterior, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoFrontal);
 	
 			gl.glPopMatrix();
 
@@ -537,7 +529,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected MapaBits capturaPantalla(GL10 gl)
 	{
-		return capturaPantalla(gl, (int) marcoC, (int) marcoB, (int) marcoA, (int) marcoA);
+		return capturaPantalla(gl, (int) marcoAnchuraLateral, (int) marcoAlturaLateral, (int) marcoAnchuraInterior, (int) marcoAnchuraInterior);
 	}
 
 	/* Métodos de Conversión de Coordenadas */
@@ -564,22 +556,22 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected float convertToFrameXCoordinate(float worldX)
 	{
-		return worldX - marcoC;
+		return worldX - marcoAnchuraLateral;
 	}
 
 	protected float convertToFrameYCoordinate(float worldY)
 	{
-		return worldY - marcoB;
+		return worldY - marcoAlturaLateral;
 	}
 
 	protected float convertFromFrameXCoordinate(float frameX)
 	{
-		return frameX + marcoC;
+		return frameX + marcoAnchuraLateral;
 	}
 
 	protected float convertFromFrameYCoordinate(float frameY)
 	{
-		return frameY + marcoB;
+		return frameY + marcoAlturaLateral;
 	}
 
 	/* Métodos de Búsqueda de Pixeles */
@@ -931,6 +923,7 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
 			
 				gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+				
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 		gl.glDisable(GL10.GL_TEXTURE_2D);

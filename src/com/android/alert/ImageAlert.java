@@ -22,6 +22,8 @@ public abstract class ImageAlert extends WindowAlert
 			layout.addView(image, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 		setView(layout);
+		
+		setCancelable(false);
 
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

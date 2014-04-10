@@ -33,10 +33,13 @@ import com.creation.data.Textura;
 import com.creation.deform.DeformationFragment;
 import com.creation.design.DesignFragment;
 import com.creation.paint.PaintFragment;
+import com.game.data.InstanciaNivel;
+import com.game.data.Nivel;
 import com.game.data.Personaje;
 import com.game.game.GameFragment;
 import com.game.select.LevelGenerator;
 import com.game.select.LevelSelectionFragment;
+import com.game.select.TTipoLevel;
 
 public class MainActivity extends FragmentActivity implements LoadingFragment.LoadingFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
 {
@@ -47,6 +50,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	
 	/* Musica */
 	private AudioPlayerManager audioManager;
+	private int musicaSeleccionada;
 
 	/* Almacenamiento */
 	private InternalStorageManager internalManager;
@@ -57,7 +61,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
-	private MenuItem botonTwitter, botonFacebook, botonMusica;
+	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos;
 
 	/* Estado */
 	private TEstadoMain estado;
@@ -99,9 +103,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
+		// Parámetros globales del juego.
+		
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        GamePreferences.setParameters(metrics.widthPixels, metrics.heightPixels);
+        GamePreferences.setScreenParameters(metrics.widthPixels, metrics.heightPixels);
+        
+        GamePreferences.setMusicParameters(true);
+        GamePreferences.setTipParameters(true);
 
 		changeFragment(LoadingFragment.newInstance(internalManager));
 	}
@@ -138,9 +147,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
 		
-		botonMusica = menu.getItem(0);
-		botonTwitter = menu.getItem(1);
-		botonFacebook = menu.getItem(2);
+		botonConsejos = menu.getItem(0);
+		botonMusica = menu.getItem(1);
+		botonTwitter = menu.getItem(2);
+		botonFacebook = menu.getItem(3);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -151,10 +161,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		switch (item.getItemId())
 		{
 			case R.id.menuIcon1:
-				return onMenuMusicButtonClicked();
+				return onMenuTipsButtonClicked();
 			case R.id.menuIcon2:
-				return onMenuTwitterButtonClicked();
+				return onMenuMusicButtonClicked();
 			case R.id.menuIcon3:
+				return onMenuTwitterButtonClicked();
+			case R.id.menuIcon4:
 				return onMenuFacebookButtonClicked();
 			default:
 				return super.onOptionsItemSelected(item);
@@ -295,10 +307,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					@Override
 					public void onPossitiveButtonClick(String text)
 					{
-						personajeActual.setNombre(text);
-
-						if (internalManager.guardarPersonaje(personajeActual))
+						while (!internalManager.guardarPersonaje(personajeActual))
 						{
+							personajeActual.setNombre(text);
+							
 							externalManager.guardarAudio(text, getString(R.string.title_animation_section_run));
 							externalManager.guardarAudio(text, getString(R.string.title_animation_section_jump));
 							externalManager.guardarAudio(text, getString(R.string.title_animation_section_crouch));
@@ -308,13 +320,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 							personajeActual = null;
 
 							Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
-						}
-						else
-						{
-							Toast.makeText(getApplication(), R.string.error_save_character, Toast.LENGTH_SHORT).show();
-						}
 
-						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+							changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+						}
 					}
 
 					@Override
@@ -384,32 +392,35 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	/* Métodos Level Selection Fragment */
 
-	@Override
-	public void onLevelSelectionSelectClicked(int level)
+	public void onLevelSelectionSelectClicked(TTipoLevel level)
 	{	
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+		Nivel nivelSeleccionado = levelGenerator.getLevel(level);
+		InstanciaNivel intanciaNivelSeleccionado = levelGenerator.getInstanciaLevel(level);
+		musicaSeleccionada = nivelSeleccionado.getMusicaNivel();
+		
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, intanciaNivelSeleccionado));
 	
 		// Resumen del nivel
-		SummaryAlert alert = new SummaryAlert(this, getString(R.string.text_summary), getString(R.string.text_button_ready), levelGenerator.getLevel(level).getTipoEnemigos());
+		SummaryAlert alert = new SummaryAlert(this, getString(R.string.text_summary), getString(R.string.text_button_ready), intanciaNivelSeleccionado.getTipoEnemigos());
 		alert.show();	
 	}
 
 	/* Métodos Game Fragment */
 
 	@Override
-	public void onGameFinished(final int score, final int level, final int idImagen, final String nameLevel)
+	public void onGameFinished(final TTipoLevel level, final int score, final int idImagen, final String nameLevel)
 	{
 		// Sonido Victoria
 		audioManager.startPlaying(R.raw.effect_level_complete, false);
 		
 		// Desbloquear Siguiente nivel
-		int nextLevel = (level + 1) % estadoNiveles.length;
+		int nextLevel = (level.ordinal() + 1) % estadoNiveles.length;
 		estadoNiveles[nextLevel] = true;
 		
 		// Actualizar Puntuacion máxima
-		if (score > puntuacionNiveles[level])
+		if (score > puntuacionNiveles[level.ordinal()])
 		{
-			puntuacionNiveles[level] = score;
+			puntuacionNiveles[level.ordinal()] = score;
 		}
 		
 		internalManager.guardarNiveles(estadoNiveles);
@@ -431,7 +442,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override
@@ -445,7 +456,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	}
 
 	@Override
-	public void onGameFailed(final int level, final int idImagen)
+	public void onGameFailed(final TTipoLevel level, final int idImagen)
 	{
 		// Sonido Derrota
 		audioManager.startPlaying(R.raw.effect_game_over, false);
@@ -454,7 +465,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getLevel(level)));
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override
@@ -499,7 +510,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	
 	public boolean onMenuMusicButtonClicked()
 	{
-		if (audioManager.isEnabled())
+		if (GamePreferences.MUSIC_ENABLED())
 		{
 			audioManager.disablePlayer();
 		}
@@ -509,6 +520,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			actualizarMusica();
 		}
 		
+		GamePreferences.SWITCH_MUSIC_GAME();
+		actualizarActionBar();
+		
+		return true;
+	}
+	
+	public boolean onMenuTipsButtonClicked()
+	{
+		GamePreferences.SWITCH_TIPS_GAME();
 		actualizarActionBar();
 		
 		return true;
@@ -534,13 +554,22 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			botonFacebook.setIcon(R.drawable.icon_social_facebook_disconnected);
 		}
 		
-		if (audioManager.isEnabled())
+		if (GamePreferences.MUSIC_ENABLED())
 		{
-			botonMusica.setIcon(R.drawable.icon_media_music_selected);
+			botonMusica.setIcon(R.drawable.icon_media_music_enabled);
 		}
 		else
 		{
-			botonMusica.setIcon(R.drawable.icon_media_music);
+			botonMusica.setIcon(R.drawable.icon_media_music_disabled);
+		}
+		
+		if (GamePreferences.TIPS_ENABLED())
+		{
+			botonConsejos.setIcon(R.drawable.icon_tool_tips_enabled);
+		}
+		else
+		{
+			botonConsejos.setIcon(R.drawable.icon_tool_tips_disabled);
 		}
 	}
 
@@ -555,7 +584,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	{
 		if(estado == TEstadoMain.Game)
 		{
-			audioManager.startPlaying(R.raw.music_game, true);
+			audioManager.startPlaying(musicaSeleccionada, true);
 		}
 		else
 		{

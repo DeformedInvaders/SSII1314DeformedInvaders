@@ -22,15 +22,6 @@ public abstract class WebAlert extends WindowAlert
 	{
 		super(context, title);
 
-		setNegativeButton(textNo, new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton)
-			{
-				dismiss();
-			}
-		});
-
 		LinearLayout layout = new LinearLayout(context);
 
 		webView = new WebView(context);
@@ -45,6 +36,17 @@ public abstract class WebAlert extends WindowAlert
 		layout.addView(keyboardHack, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		setView(layout);
+		
+		setCancelable(false);
+		
+		setNegativeButton(textNo, new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				//dismiss();
+			}
+		});
 	}
 
 	/* Métodos Abstractos */

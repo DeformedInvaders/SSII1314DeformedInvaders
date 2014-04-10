@@ -71,7 +71,7 @@ public class LevelGenerator
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_MOON_PATH);
 		
-		listaNiveles.add(new Nivel(0, R.drawable.background_moon_1, R.string.title_level_section_moon, R.string.text_level_section_moon, Color.WHITE, textFont));
+		listaNiveles.add(new Nivel(TTipoLevel.Moon, R.drawable.background_moon_1, R.string.title_level_section_moon, R.string.text_level_section_moon, Color.WHITE, textFont, R.raw.music_moon));
 		listaNombres.add(mContext.getString(R.string.title_level_section_moon));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_moon, GamePreferences.ID_TYPE_MISSILE));
@@ -89,7 +89,7 @@ public class LevelGenerator
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_NEW_YORK_PATH);
 		
-		listaNiveles.add(new Nivel(1, R.drawable.background_newyork_1, R.string.title_level_section_newyork, R.string.text_level_section_newyork, Color.BLACK, textFont));
+		listaNiveles.add(new Nivel(TTipoLevel.NewYork, R.drawable.background_newyork_1, R.string.title_level_section_newyork, R.string.text_level_section_newyork, Color.BLACK, textFont, R.raw.music_newyork));
 		listaNombres.add(mContext.getString(R.string.title_level_section_newyork));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_newyork, GamePreferences.ID_TYPE_MISSILE));
@@ -107,7 +107,7 @@ public class LevelGenerator
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_ROME_PATH);
 		
-		listaNiveles.add(new Nivel(2, R.drawable.background_rome_1, R.string.title_level_section_rome, R.string.text_level_section_rome, Color.WHITE, textFont));
+		listaNiveles.add(new Nivel(TTipoLevel.Rome, R.drawable.background_rome_1, R.string.title_level_section_rome, R.string.text_level_section_rome, Color.WHITE, textFont, R.raw.music_rome));
 		listaNombres.add(mContext.getString(R.string.title_level_section_rome));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_rome, GamePreferences.ID_TYPE_MISSILE));
@@ -125,7 +125,7 @@ public class LevelGenerator
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_EGYPT_PATH);
 		
-		listaNiveles.add(new Nivel(3, R.drawable.background_egypt_1, R.string.title_level_section_egypt, R.string.text_level_section_egypt, Color.BLACK, textFont));
+		listaNiveles.add(new Nivel(TTipoLevel.Egypt, R.drawable.background_egypt_1, R.string.title_level_section_egypt, R.string.text_level_section_egypt, Color.BLACK, textFont, R.raw.music_egypt));
 		listaNombres.add(mContext.getString(R.string.title_level_section_egypt));
 		
 		listaEnemigos.add(new Misil(R.drawable.missile_egypt, GamePreferences.ID_TYPE_MISSILE));
@@ -143,7 +143,7 @@ public class LevelGenerator
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_STONEHENGE_PATH);
 		
-		listaNiveles.add(new Nivel(4, R.drawable.background_stonehenge_1, R.string.title_level_section_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK, textFont));
+		listaNiveles.add(new Nivel(TTipoLevel.Stonehenge, R.drawable.background_stonehenge_1, R.string.title_level_section_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK, textFont, R.raw.music_stonhenge));
 		listaNombres.add(mContext.getString(R.string.title_level_section_stonehenge));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_stonehenge, GamePreferences.ID_TYPE_MISSILE));
@@ -187,9 +187,15 @@ public class LevelGenerator
 		return listaEnemigos;
 	}
 
-	public InstanciaNivel getLevel(int indice)
+	public InstanciaNivel getInstanciaLevel(TTipoLevel level)
 	{
-		return new InstanciaNivel(indice, listaNombres.get(indice), getListaEnemigos(indice), getColaEnemigos(indice), getFondo(indice));
+		int indice = level.ordinal();
+		return new InstanciaNivel(level, listaNombres.get(indice), getListaEnemigos(indice), getColaEnemigos(indice), getFondo(indice));
+	}
+	
+	public Nivel getLevel(TTipoLevel level)
+	{
+		return listaNiveles.get(level.ordinal());
 	}
 
 	public List<Nivel> getListaNiveles()

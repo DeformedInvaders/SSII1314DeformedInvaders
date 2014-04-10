@@ -44,11 +44,6 @@ public class GamePreferences
 	public static final int NUM_TYPE_STICKERS_HELMET = 12;
 	
 	// Busqueda de recursos
-	public static final String RESOURCE_BUTTON_STICKER_EYES = "imageButtonStickerEyes";
-	public static final String RESOURCE_BUTTON_STICKER_MOUTH = "imageButtonStickerMouth";
-	public static final String RESOURCE_BUTTON_STICKER_WEAPON = "imageButtonStickerWeapon";
-	public static final String RESOURCE_BUTTON_STICKER_TRINKET = "imageButtonStickerTrinket";
-	public static final String RESOURCE_BUTTON_STICKER_HELMET = "imageButtonStickerHelmet";
 	public static final String RESOURCE_IMAGE_HEART = "imageViewGameHeart";
 	
 	public static final String RESOURCE_ID_STICKER_EYES = "sticker_eyes_";
@@ -91,10 +86,46 @@ public class GamePreferences
 	private static float WIDTH_SCREEN;
 	private static float HEIGHT_SCREEN;
 	
-	public static final void setParameters(float width, float height)
+	// Opciones del Juego
+	private static boolean TIPS_GAME;
+	private static boolean MUSIC_GAME;
+	
+	public static final void setScreenParameters(float width, float height)
 	{
 		WIDTH_SCREEN = width;
 		HEIGHT_SCREEN = height;
+	}
+	
+	public static final void setTipParameters(boolean tips)
+	{
+		TIPS_GAME = tips;
+	}
+	
+	public static final void setMusicParameters(boolean music)
+	{
+		MUSIC_GAME = music;
+	}
+	
+	public static final void SWITCH_MUSIC_GAME()
+	{
+		MUSIC_GAME = !MUSIC_GAME;
+	}
+	
+	public static final void SWITCH_TIPS_GAME()
+	{
+		TIPS_GAME = !TIPS_GAME;
+	}
+	
+	// Parametros Juego
+	
+	public static final boolean TIPS_ENABLED()
+	{
+		return TIPS_GAME;
+	}
+	
+	public static final boolean MUSIC_ENABLED()
+	{
+		return MUSIC_GAME;
 	}
 	
 	// Distancias Escenario

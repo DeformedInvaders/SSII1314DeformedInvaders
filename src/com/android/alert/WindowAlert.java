@@ -18,7 +18,6 @@ public abstract class WindowAlert
 		builder = new AlertDialog.Builder(context);
 
 		builder.setTitle(title);
-		builder.setCancelable(false);
 	}
 
 	/* Métodos Protegidos */
@@ -56,6 +55,11 @@ public abstract class WindowAlert
 	protected void setView(View view)
 	{
 		builder.setView(view);
+	}
+	
+	protected void setCancelable(boolean cancelable)
+	{
+		builder.setCancelable(cancelable);
 	}
 
 	/* Métodos Públicos */

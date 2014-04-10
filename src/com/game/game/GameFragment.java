@@ -15,6 +15,7 @@ import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
+import com.game.select.TTipoLevel;
 import com.project.main.GamePreferences;
 import com.project.main.R;
 
@@ -52,9 +53,9 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	public interface GameFragmentListener
 	{
-		public void onGameFinished(int score, int level, int idImage, String nameLevel);
+		public void onGameFinished(TTipoLevel level, int score, int idImage, String nameLevel);
 
-		public void onGameFailed(int level, int idImage);
+		public void onGameFailed(TTipoLevel level, int idImage);
 	}
 
 	/* Métodos Fragment */
@@ -182,13 +183,13 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		onScoreChanged(score);
 		
-		mCallback.onGameFinished(score, level.getIndiceNivel(), level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
+		mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
 	}
 
 	@Override
 	public void onGameFailed()
 	{
-		mCallback.onGameFailed(level.getIndiceNivel(), level.getFondoNivel().getIdTextureGameOver());
+		mCallback.onGameFailed(level.getTipoNivel(), level.getFondoNivel().getIdTextureGameOver());
 	}
 	
 	@Override

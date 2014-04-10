@@ -16,6 +16,8 @@ public abstract class ChooseAlert extends WindowAlert
 
 		selected = -1;
 		lista = list;
+		
+		setCancelable(false);
 
 		setSingleChoiceItems(lista, selected, new DialogInterface.OnClickListener() {
 			@Override

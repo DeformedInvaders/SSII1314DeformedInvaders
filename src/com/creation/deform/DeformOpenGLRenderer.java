@@ -188,7 +188,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			centrarPersonajeEnMarcoFinal(gl);
 
 			// Marcos
-			dibujarMarcoIncompletoSuave(gl);
+			dibujarMarcoInterior(gl);
 		}
 	}
 

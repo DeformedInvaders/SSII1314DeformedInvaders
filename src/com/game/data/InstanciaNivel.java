@@ -2,27 +2,29 @@ package com.game.data;
 
 import java.util.List;
 
+import com.game.select.TTipoLevel;
+
 public class InstanciaNivel
 {
-	private int indiceNivel;
+	private TTipoLevel tipoNivel;
 	private String nombreNivel;
 
 	private List<Entidad> tiposEnemigos;
 	private List<InstanciaEntidad> listaEnemigos;
 	private Background fondoNivel;
 
-	public InstanciaNivel(int indice, String nombre, List<Entidad> tipos, List<InstanciaEntidad> lista, Background fondo)
+	public InstanciaNivel(TTipoLevel tipo, String nombre, List<Entidad> tipos, List<InstanciaEntidad> lista, Background fondo)
 	{
-		indiceNivel = indice;
+		tipoNivel = tipo;
 		nombreNivel = nombre;
 		tiposEnemigos = tipos;
 		listaEnemigos = lista;
 		fondoNivel = fondo;
 	}
 
-	public int getIndiceNivel()
+	public TTipoLevel getTipoNivel()
 	{
-		return indiceNivel;
+		return tipoNivel;
 	}
 
 	public String getNombreNivel()

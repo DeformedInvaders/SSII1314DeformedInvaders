@@ -337,14 +337,15 @@ public class InternalStorageManager
 		// Comprobar Nombre de Fichero usado por el Sistema
 		if (!comprobarNombresInternos(personaje.getNombre()))
 		{
+			Toast.makeText(mContext, R.string.error_storage_internal_name, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
 		// Comprobar Nombres de Personajes ya existentes
 		if (comprobarNombresUsados(personaje.getNombre()))
 		{
-			// Personaje Reemplazado
-			Toast.makeText(mContext, R.string.text_replace_character_confirmation, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_storage_used_name, Toast.LENGTH_SHORT).show();
+			return false;
 		}
 
 		String nombreActual = evaluarNombre(personaje.getNombre());

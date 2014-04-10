@@ -24,6 +24,8 @@ public abstract class TextInputAlert extends WindowAlert
 		input = new EditText(context);
 		input.setText(text);
 		setView(input);
+		
+		setCancelable(false);
 
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

@@ -12,6 +12,8 @@ public abstract class ConfirmationAlert extends WindowAlert
 		super(context, title);
 
 		setMessage(messege);
+		
+		setCancelable(false);
 
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

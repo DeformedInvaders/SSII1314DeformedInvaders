@@ -1,20 +1,24 @@
 package com.game.data;
 
+import com.game.select.TTipoLevel;
+
 import android.graphics.Typeface;
 
 public class Nivel
 {
 	private Typeface fuenteNivel;
-	private int fondoNivel, nombreNivel, descripcionNivel, colorTextoNivel, numeroNivel;
+	private TTipoLevel tipoNivel;
+	private int fondoNivel, nombreNivel, descripcionNivel, colorTextoNivel, musicaNivel;
 
-	public Nivel(int numero, int fondo, int nombre, int descripcion, int color, Typeface fuente)
+	public Nivel(TTipoLevel numero, int fondo, int nombre, int descripcion, int color, Typeface fuente, int musica)
 	{
 		fondoNivel = fondo;
 		nombreNivel = nombre;
 		descripcionNivel = descripcion;
 		colorTextoNivel = color;
-		numeroNivel = numero;
+		tipoNivel = numero;
 		fuenteNivel = fuente;
+		musicaNivel = musica;
 	}
 
 	public int getFondoNivel()
@@ -37,13 +41,18 @@ public class Nivel
 		return colorTextoNivel;
 	}
 
-	public int getNumeroNivel()
+	public TTipoLevel getTipoNivel()
 	{
-		return numeroNivel;
+		return tipoNivel;
 	}
 	
 	public Typeface getFuenteNivel()
 	{
 		return fuenteNivel;
+	}
+	
+	public int getMusicaNivel()
+	{
+		return musicaNivel;
 	}
 }

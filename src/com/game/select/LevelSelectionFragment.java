@@ -38,7 +38,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 
 	public interface LevelSelectionFragmentListener
 	{
-		public void onLevelSelectionSelectClicked(int level);
+		public void onLevelSelectionSelectClicked(TTipoLevel level);
 	}
 
 	/* Métodos Fragment */
@@ -96,7 +96,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	/* Métodos abstractos de OnLevelListener */
 
 	@Override
-	public void onLevelSelected(int level)
+	public void onLevelSelected(TTipoLevel level)
 	{
 		mCallback.onLevelSelectionSelectClicked(level);
 	}

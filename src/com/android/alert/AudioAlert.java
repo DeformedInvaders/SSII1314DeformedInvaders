@@ -88,6 +88,8 @@ public abstract class AudioAlert extends WindowAlert
 
 		setView(layout);
 
+		setCancelable(false);
+		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 
 			@Override
