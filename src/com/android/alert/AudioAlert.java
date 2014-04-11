@@ -10,7 +10,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
@@ -20,7 +19,6 @@ import com.project.main.R;
 
 public abstract class AudioAlert extends WindowAlert
 {
-	private TextView textoContador;
 	private ProgressBar progressBar;
 	private ImageButton botonRecAudio, botonPlayAudio;
 
@@ -53,10 +51,6 @@ public abstract class AudioAlert extends WindowAlert
 
 		LinearLayout layout = new LinearLayout(context);
 
-		textoContador = new TextView(context);
-		textoContador.setTextSize(20);
-		textoContador.setGravity(Gravity.CENTER);
-
 		progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
 
 		LinearLayout layoutBotones = new LinearLayout(context);
@@ -81,7 +75,6 @@ public abstract class AudioAlert extends WindowAlert
 		layoutBotones.setOrientation(LinearLayout.HORIZONTAL);
 		layoutBotones.setGravity(Gravity.CENTER);
 
-		layout.addView(textoContador, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.addView(progressBar, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.addView(layoutBotones, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		layout.setOrientation(LinearLayout.VERTICAL);
@@ -149,7 +142,7 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void reiniciarContadores()
 	{
-		textoContador.setText("0" + GamePreferences.TIME_DURATION_ANIMATION / 1000 + ":" + GamePreferences.TIME_DURATION_ANIMATION % 100);
+		changeMessage("0" + GamePreferences.TIME_DURATION_ANIMATION / 1000 + ":" + GamePreferences.TIME_DURATION_ANIMATION % 100);
 		progressBar.setProgress(0);
 	}
 
@@ -157,7 +150,7 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void actualizarContadores(long millisUntilFinished)
 	{
-		textoContador.setText("0" + millisUntilFinished / 1000 + ":" + (millisUntilFinished % 100));
+		changeMessage("0" + millisUntilFinished / 1000 + ":" + (millisUntilFinished % 100));
 		progressBar.setProgress((int) (100 * (GamePreferences.TIME_DURATION_ANIMATION - millisUntilFinished) / GamePreferences.TIME_DURATION_ANIMATION));
 	}
 

@@ -1,5 +1,8 @@
 package com.creation.design;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,11 +10,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class DesignFragment extends OpenGLFragment
@@ -73,6 +76,9 @@ public class DesignFragment extends OpenGLFragment
 
 		reiniciarInterfaz();
 		actualizarInterfaz();
+		
+		sendAlertMessage(R.string.text_tip_design_draw_title, R.string.text_tip_design_draw_description, GamePreferences.VIDEO_DESIGN_DRAW_PATH);
+		
 		return rootView;
 	}
 
@@ -143,13 +149,26 @@ public class DesignFragment extends OpenGLFragment
 			{
 				if (canvas.seleccionarTriangular())
 				{
+					List<Integer> listaMensajes = new ArrayList<Integer>();
+					listaMensajes.add(R.string.text_tip_design_drag_description);
+					listaMensajes.add(R.string.text_tip_design_zoom_description);
+					listaMensajes.add(R.string.text_tip_design_rotate_description);
+					
+					List<String> listaVideos = new ArrayList<String>();
+					listaVideos.add(GamePreferences.VIDEO_DESIGN_DRAG_PATH);
+					listaVideos.add(GamePreferences.VIDEO_DESIGN_ZOOM_PATH);
+					listaVideos.add(GamePreferences.VIDEO_DESIGN_ROTATE_PATH);
+					
+					sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);
+
 					canvas.setEstado(TEstadoDetector.CoordDetectors);
 					canvas.seleccionarRetoque();
 				}
 				else
 				{
 					canvas.setEstado(TEstadoDetector.SimpleTouch);
-					Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
+					
+					sendMessage(R.string.text_tip_design_problem_title, R.string.text_tip_design_noregular_description, GamePreferences.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 				}
 			}
 			else if (canvas.isEstadoRetocando())
@@ -160,7 +179,7 @@ public class DesignFragment extends OpenGLFragment
 				}
 				else
 				{
-					Toast.makeText(getActivity(), R.string.error_retouch, Toast.LENGTH_SHORT).show();
+					sendMessage(R.string.text_tip_design_problem_title, R.string.text_tip_design_outside_description, GamePreferences.VIDEO_DESIGN_OUTSIDE_PATH, R.string.error_retouch);
 				}
 			}
 		}
@@ -186,7 +205,7 @@ public class DesignFragment extends OpenGLFragment
 		{
 			if (!canvas.seleccionarTriangular())
 			{
-				Toast.makeText(getActivity(), R.string.error_triangle, Toast.LENGTH_SHORT).show();
+				sendMessage(R.string.text_tip_design_problem_title, R.string.text_tip_design_noregular_description, GamePreferences.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 			}
 
 			reiniciarInterfaz();

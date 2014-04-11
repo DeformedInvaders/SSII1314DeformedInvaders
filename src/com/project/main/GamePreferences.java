@@ -52,6 +52,21 @@ public class GamePreferences
 	public static final String RESOURCE_ID_STICKER_TRINKET = "sticker_trinket_";
 	public static final String RESOURCE_ID_STICKER_HELMET = "sticker_helmet_";
 	
+	// Video
+	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";
+	
+	public static final String VIDEO_DESIGN_DRAW_PATH = VIDEO_PATH + "tips_design_draw";
+	public static final String VIDEO_DESIGN_DRAG_PATH = VIDEO_PATH + "tips_design_drag";
+	public static final String VIDEO_DESIGN_ROTATE_PATH = VIDEO_PATH + "tips_design_rotate";
+	public static final String VIDEO_DESIGN_ZOOM_PATH = VIDEO_PATH + "tips_design_zoom";
+	public static final String VIDEO_DESIGN_OUTSIDE_PATH = VIDEO_PATH + "tips_design_outside";
+	public static final String VIDEO_DESIGN_NOREGULAR_PATH = VIDEO_PATH + "tips_design_noregular";
+
+	public static final String VIDEO_PAINT_PENCIL_PATH = VIDEO_PATH + "tips_paint_pencil";
+	public static final String VIDEO_PAINT_BUCKET_PATH = VIDEO_PATH + "tips_paint_bucket";
+	public static final String VIDEO_PAINT_STICKER_PATH = VIDEO_PATH + "tips_paint_sticker";
+	public static final String VIDEO_PAINT_ZOOM_PATH = VIDEO_PATH + "tips_paint_zoom";
+	
 	// Fuentes
 	private static final String FONT_PATH = "fonts/";
 	public static final String FONT_TYPEWRITER_PATH = FONT_PATH + "font_typewriter.ttf";

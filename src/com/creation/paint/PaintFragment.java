@@ -1,5 +1,8 @@
 package com.creation.paint;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
 import com.game.data.TTipoSticker;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class PaintFragment extends OpenGLFragment
@@ -107,6 +111,21 @@ public class PaintFragment extends OpenGLFragment
 
 		reiniciarInterfaz();
 		actualizarInterfaz();
+		
+		List<Integer> listaMensajes = new ArrayList<Integer>();
+		listaMensajes.add(R.string.text_tip_paint_pencil_description);
+		listaMensajes.add(R.string.text_tip_paint_bucket_description);
+		listaMensajes.add(R.string.text_tip_paint_sticker_description);
+		listaMensajes.add(R.string.text_tip_paint_zoom_description);
+		
+		List<String> listaVideos = new ArrayList<String>();
+		listaVideos.add(GamePreferences.VIDEO_PAINT_PENCIL_PATH);
+		listaVideos.add(GamePreferences.VIDEO_PAINT_BUCKET_PATH);
+		listaVideos.add(GamePreferences.VIDEO_PAINT_STICKER_PATH);
+		listaVideos.add(GamePreferences.VIDEO_PAINT_ZOOM_PATH);
+		
+		sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);		
+		
 		return rootView;
 	}
 

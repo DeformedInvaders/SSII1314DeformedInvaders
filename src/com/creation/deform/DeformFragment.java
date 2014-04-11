@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.android.alert.AudioAlert;
 import com.android.storage.ExternalStorageManager;
@@ -280,7 +279,7 @@ public class DeformFragment extends OpenGLFragment
 				{
 					canvas.seleccionarReposo();
 
-					Toast.makeText(getActivity(), R.string.text_audio_record_confirmation, Toast.LENGTH_SHORT).show();
+					sendToastMessage(R.string.text_audio_record_confirmation);
 
 					reiniciarInterfaz();
 					actualizarInterfaz();

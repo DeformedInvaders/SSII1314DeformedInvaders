@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
@@ -218,7 +217,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 				}
 				else
 				{
-					Toast.makeText(getActivity(), R.string.error_picture_character, Toast.LENGTH_SHORT).show();
+					sendToastMessage(R.string.error_picture_character);
 				}
 
 				pager.setSwipeable(false);

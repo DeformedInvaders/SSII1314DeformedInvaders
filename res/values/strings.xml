@@ -62,6 +62,26 @@
 			<string name="text_progressBar_completed">Loading stored data completed.</string>
 			
 		<!-- Dialogs -->
+		
+			<string name="text_tip_design_draw_title">Drawing your character\'s shape.</string>
+			<string name="text_tip_design_draw_description">Draw the shape for your character using your finger. The shape should not be cutting itself.</string>
+			
+			<string name="text_tip_design_problem_title">There\'s a problem.</string>
+			<string name="text_tip_design_noregular_description">The shape should not be cutting itself.</string>
+			<string name="text_tip_design_outside_description">The shape is needed to be inside the grey rectangle.</string>
+			
+			<string name="text_tip_design_touch_title">Resizing your character.</string>
+			<string name="text_tip_design_drag_description">You can move your character using this drag gesture.</string>
+			<string name="text_tip_design_rotate_description">You can rotate your character using this rotate gesture.</string>
+			<string name="text_tip_design_zoom_description">You can lengthen or shrink your character using this zoom gesture.</string>
+		
+			<string name="text_tip_paint_tools_title">Painting your character.</string>
+			<string name="text_tip_paint_pencil_description">You can draw extra details on your character with the pencil tool.</string>
+			<string name="text_tip_paint_bucket_description">You can chage the color of your character with the bucket tool.</string>
+			<string name="text_tip_paint_sticker_description">You can add predesigned stickers to your character with the sticker tool.</string>
+			<string name="text_tip_paint_zoom_description">You can lengthen or shrink your character using this zoom gesture. Also you can restore your character to it\'s original position using this double touch gesture.</string>
+
+						
 			<string name="text_processing_character_title">Please wait&#x2026;</string>
 			<string name="text_processing_character_description">Procesing your character.</string>
 		

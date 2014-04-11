@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.view.View;
+import android.widget.TextView;
 
 public abstract class WindowAlert
 {
@@ -61,17 +62,25 @@ public abstract class WindowAlert
 	{
 		builder.setCancelable(cancelable);
 	}
+	
+	protected void changeMessage(String message)
+	{
+		if(dialog != null)
+		{
+			TextView text = (TextView) dialog.findViewById(android.R.id.message);
+			text.setText(message);
+		}
+		else
+		{
+			setMessage(message);
+		}
+	}
 
 	/* Métodos Públicos */
 
 	public void show()
 	{
-		if(dialog == null)
-		{
-			dialog = builder.create();
-		}
-
-		builder.show();
+		dialog = builder.show();
 	}
 
 	public void dismiss()
