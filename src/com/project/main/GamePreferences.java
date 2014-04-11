@@ -67,6 +67,9 @@ public class GamePreferences
 	public static final String VIDEO_PAINT_STICKER_PATH = VIDEO_PATH + "tips_paint_sticker";
 	public static final String VIDEO_PAINT_ZOOM_PATH = VIDEO_PATH + "tips_paint_zoom";
 	
+	public static final String VIDEO_DEFORM_HANDLES_PATH = VIDEO_PATH + "tips_deform_handles";
+	public static final String VIDEO_DEFORM_UNDEFINED_PATH = VIDEO_PATH + "tips_deform_undefined";
+	
 	// Fuentes
 	private static final String FONT_PATH = "fonts/";
 	public static final String FONT_TYPEWRITER_PATH = FONT_PATH + "font_typewriter.ttf";

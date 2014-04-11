@@ -20,20 +20,20 @@ public class Movimientos implements Serializable
 
 	/* Métodos de Modificación de Información */
 
-	public void set(List<FloatArray> movimiento, int pos)
+	public void set(List<FloatArray> movimiento, TTipoMovimiento tipo)
 	{
-		switch (pos)
+		switch (tipo)
 		{
-			case 0:
+			case Run:
 				run = movimiento;
 			break;
-			case 1:
+			case Jump:
 				jump = movimiento;
 			break;
-			case 2:
+			case Crouch:
 				crouch = movimiento;
 			break;
-			case 3:
+			case Attack:
 				attack = movimiento;
 			break;
 		}
@@ -41,17 +41,17 @@ public class Movimientos implements Serializable
 
 	/* Métodos de Obtención de Información */
 
-	public List<FloatArray> get(int pos)
+	public List<FloatArray> get(TTipoMovimiento tipo)
 	{
-		switch (pos)
+		switch (tipo)
 		{
-			case 0:
+			case Run:
 				return run;
-			case 1:
+			case Jump:
 				return jump;
-			case 2:
+			case Crouch:
 				return crouch;
-			case 3:
+			case Attack:
 				return attack;
 			default:
 				return null;

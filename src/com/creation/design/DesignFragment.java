@@ -168,7 +168,7 @@ public class DesignFragment extends OpenGLFragment
 				{
 					canvas.setEstado(TEstadoDetector.SimpleTouch);
 					
-					sendMessage(R.string.text_tip_design_problem_title, R.string.text_tip_design_noregular_description, GamePreferences.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
+					sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GamePreferences.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 				}
 			}
 			else if (canvas.isEstadoRetocando())
@@ -179,7 +179,7 @@ public class DesignFragment extends OpenGLFragment
 				}
 				else
 				{
-					sendMessage(R.string.text_tip_design_problem_title, R.string.text_tip_design_outside_description, GamePreferences.VIDEO_DESIGN_OUTSIDE_PATH, R.string.error_retouch);
+					sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_outside_description, GamePreferences.VIDEO_DESIGN_OUTSIDE_PATH, R.string.error_retouch);
 				}
 			}
 		}
@@ -205,7 +205,7 @@ public class DesignFragment extends OpenGLFragment
 		{
 			if (!canvas.seleccionarTriangular())
 			{
-				sendMessage(R.string.text_tip_design_problem_title, R.string.text_tip_design_noregular_description, GamePreferences.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
+				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GamePreferences.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 			}
 
 			reiniciarInterfaz();

@@ -16,8 +16,10 @@ import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
+import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
+import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public class DeformationFragment extends ViewPagerFragment
@@ -89,6 +91,8 @@ public class DeformationFragment extends ViewPagerFragment
 		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_crouch)), getString(R.string.title_animation_section_crouch));
 		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_attack)), getString(R.string.title_animation_section_attack));
 
+		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GamePreferences.VIDEO_DEFORM_HANDLES_PATH);
+		
 		return rootView;
 	}
 
@@ -112,7 +116,7 @@ public class DeformationFragment extends ViewPagerFragment
 
 			if (movimiento != null && movimiento.size() > 0)
 			{
-				movimientos.set(movimiento, i);
+				movimientos.set(movimiento, TTipoMovimiento.values()[i]);
 			}
 
 			i++;
@@ -126,7 +130,14 @@ public class DeformationFragment extends ViewPagerFragment
 		{
 			actualizarMovimientos();
 
-			mCallback.onAnimationReadyButtonClicked(movimientos);
+			if (!movimientos.isReady())
+			{
+				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_deform_undefined_description, GamePreferences.VIDEO_DEFORM_UNDEFINED_PATH, R.string.error_deform);
+			}
+			else
+			{
+				mCallback.onAnimationReadyButtonClicked(movimientos);
+			}
 		}
 	}
 

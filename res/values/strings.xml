@@ -66,7 +66,7 @@
 			<string name="text_tip_design_draw_title">Drawing your character\'s shape.</string>
 			<string name="text_tip_design_draw_description">Draw the shape for your character using your finger. The shape should not be cutting itself.</string>
 			
-			<string name="text_tip_design_problem_title">There\'s a problem.</string>
+			<string name="text_tip_problem_title">There\'s a problem.</string>
 			<string name="text_tip_design_noregular_description">The shape should not be cutting itself.</string>
 			<string name="text_tip_design_outside_description">The shape is needed to be inside the grey rectangle.</string>
 			
@@ -81,6 +81,9 @@
 			<string name="text_tip_paint_sticker_description">You can add predesigned stickers to your character with the sticker tool.</string>
 			<string name="text_tip_paint_zoom_description">You can lengthen or shrink your character using this zoom gesture. Also you can restore your character to it\'s original position using this double touch gesture.</string>
 
+			<string name="text_tip_deform_handles_title">Deformating your character.</string>
+			<string name="text_tip_deform_handles_description">You can add and remove handles and drag them in order to deform your character.</string>
+			<string name="text_tip_deform_undefined_description">You must define all the movements for your character. Remember that you can record audio for each one.</string>
 						
 			<string name="text_processing_character_title">Please wait&#x2026;</string>
 			<string name="text_processing_character_description">Procesing your character.</string>

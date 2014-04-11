@@ -120,33 +120,33 @@ public class Personaje extends Malla
 
 	public void mover()
 	{
-		listaVerticesAnimacion = movimientos.get(0);
-
 		estado = TTipoMovimiento.Run;
+		listaVerticesAnimacion = movimientos.get(estado);
+		
 		iniciar();
 	}
 
 	public void saltar()
 	{
-		listaVerticesAnimacion = movimientos.get(1);
-
 		estado = TTipoMovimiento.Jump;
+		listaVerticesAnimacion = movimientos.get(estado);
+		
 		iniciar();
 	}
 
 	public void agachar()
 	{
-		listaVerticesAnimacion = movimientos.get(2);
-
 		estado = TTipoMovimiento.Crouch;
+		listaVerticesAnimacion = movimientos.get(estado);
+		
 		iniciar();
 	}
 
 	public void atacar()
 	{
-		listaVerticesAnimacion = movimientos.get(3);
-
 		estado = TTipoMovimiento.Attack;
+		listaVerticesAnimacion = movimientos.get(estado);
+		
 		iniciar();
 	}
 

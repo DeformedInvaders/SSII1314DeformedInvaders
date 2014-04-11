@@ -318,46 +318,39 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		}
 		else
 		{
-			if (movimientos.isReady())
-			{
-				personajeActual.setMovimientos(movimientos);
+			personajeActual.setMovimientos(movimientos);
 
-				TextInputAlert alert = new TextInputAlert(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no)) {
-					@Override
-					public void onPossitiveButtonClick(String text)
-					{
-						personajeActual.setNombre(text);
-						
-						if (!internalManager.guardarPersonaje(personajeActual))
-						{							
-							externalManager.guardarAudio(text, getString(R.string.title_animation_section_run));
-							externalManager.guardarAudio(text, getString(R.string.title_animation_section_jump));
-							externalManager.guardarAudio(text, getString(R.string.title_animation_section_crouch));
-							externalManager.guardarAudio(text, getString(R.string.title_animation_section_attack));
+			TextInputAlert alert = new TextInputAlert(this, getString(R.string.text_save_character_title), getString(R.string.text_save_character_description), getString(R.string.text_button_yes), getString(R.string.text_button_no)) {
+				@Override
+				public void onPossitiveButtonClick(String text)
+				{
+					personajeActual.setNombre(text);
+					
+					if (!internalManager.guardarPersonaje(personajeActual))
+					{							
+						externalManager.guardarAudio(text, getString(R.string.title_animation_section_run));
+						externalManager.guardarAudio(text, getString(R.string.title_animation_section_jump));
+						externalManager.guardarAudio(text, getString(R.string.title_animation_section_crouch));
+						externalManager.guardarAudio(text, getString(R.string.title_animation_section_attack));
 
-							listaPersonajes.add(personajeActual);
-							personajeActual = null;
+						listaPersonajes.add(personajeActual);
+						personajeActual = null;
 
-							Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
 
-							changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
-						}
-					}
-
-					@Override
-					public void onNegativeButtonClick(String text)
-					{
 						changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
 					}
+				}
 
-				};
+				@Override
+				public void onNegativeButtonClick(String text)
+				{
+					changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
+				}
 
-				alert.show();
-			}
-			else
-			{
-				Toast.makeText(getApplication(), R.string.error_deform, Toast.LENGTH_SHORT).show();
-			}
+			};
+
+			alert.show();
 		}
 	}
 
