@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 public class Handle
 {
-	private FloatBuffer buffer;
+	private FloatBuffer bufferRelleno, bufferContorno;
 
 	/* Constructora */
 
@@ -14,7 +14,10 @@ public class Handle
 	{
 		int longVertices = (numIter + 1) * 2;
 		int longArray = longVertices + 2;
+		
 		float[] vertices = new float[longArray];
+		float[] contorno = new float[longVertices];
+		
 		vertices[0] = 0.0f;
 		vertices[1] = 0.0f;
 
@@ -22,24 +25,41 @@ public class Handle
 		while (i < longVertices)
 		{
 			double theta = 2.0f * Math.PI * i / numIter;
-
-			vertices[longArray - 1 - (i + 1)] = radio * (float) Math.cos(theta);
-			vertices[longArray - 1 - i] = radio * (float) Math.sin(theta);
+			
+			float posX = radio * (float) Math.sin(theta);
+			float posY = radio * (float) Math.cos(theta);
+			
+			vertices[longArray - 1 - (i + 1)] = posY;
+			vertices[longArray - 1 - i] = posX;
+		
+			contorno[longVertices - 1 - (i + 1)] = posY;
+			contorno[longVertices - 1 - i] = posX;
 
 			i = i + 2;
 		}
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
-		buffer = byteBuf.asFloatBuffer();
-		buffer.put(vertices);
-		buffer.position(0);
+		bufferRelleno = byteBuf.asFloatBuffer();
+		bufferRelleno.put(vertices);
+		bufferRelleno.position(0);
+		
+		byteBuf = ByteBuffer.allocateDirect(contorno.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		bufferContorno = byteBuf.asFloatBuffer();
+		bufferContorno.put(contorno);
+		bufferContorno.position(0);
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public FloatBuffer getBuffer()
+	public FloatBuffer getBufferRelleno()
 	{
-		return buffer;
+		return bufferRelleno;
+	}
+	
+	public FloatBuffer getBufferContorno()
+	{
+		return bufferContorno;
 	}
 }

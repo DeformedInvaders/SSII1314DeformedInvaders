@@ -18,6 +18,7 @@ import com.android.dialog.StickerDialog;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.game.data.TTipoSticker;
 import com.project.main.GamePreferences;
 import com.project.main.R;
@@ -35,7 +36,11 @@ public class PaintFragment extends OpenGLFragment
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
 
 	private Esqueleto esqueleto;
-
+	private Personaje personaje;
+	
+	private int personajeIndice;
+	private boolean personajeCargado;
+	
 	private PaintDataSaved dataSaved;
 
 	/* Constructora */
@@ -46,15 +51,31 @@ public class PaintFragment extends OpenGLFragment
 		fragment.setParameters(e);
 		return fragment;
 	}
+	
+	public static final PaintFragment newInstance(Personaje p, int i)
+	{
+		PaintFragment fragment = new PaintFragment();
+		fragment.setParameters(p, i);
+		return fragment;
+	}
 
 	private void setParameters(Esqueleto e)
 	{
 		esqueleto = e;
+		personajeCargado = false;
+	}
+	
+	private void setParameters(Personaje p, int i)
+	{
+		personaje = p;
+		personajeIndice = i;
+		personajeCargado = true;
 	}
 
 	public interface PaintFragmentListener
 	{
 		public void onPaintReadyButtonClicked(Textura t);
+		public void onRepaintReadyButtonClicked(int i, Textura t);
 	}
 
 	/* Métodos Fragment */
@@ -83,8 +104,15 @@ public class PaintFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
-		canvas.setParameters(esqueleto);
-
+		if(personajeCargado)
+		{
+			canvas.setParameters(personaje);
+		}
+		else
+		{
+			canvas.setParameters(esqueleto);
+		}
+		
 		botonPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
 		botonCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
 		botonColor = (ImageButton) rootView.findViewById(R.id.imageButtonPaint3);
@@ -363,7 +391,14 @@ public class PaintFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 
-			mCallback.onPaintReadyButtonClicked(canvas.getTextura());
+			if(personajeCargado)
+			{
+				mCallback.onRepaintReadyButtonClicked(personajeIndice, canvas.getTextura());
+			}
+			else
+			{
+				mCallback.onPaintReadyButtonClicked(canvas.getTextura());
+			}
 		}
 	}
 }

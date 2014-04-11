@@ -22,7 +22,8 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	private String nombrePersonaje;
 	private boolean animacionFinalizada;
-
+	private int contadorCiclos;
+	
 	private AudioPlayerManager audioManager;
 
 	private Handler handler;
@@ -39,6 +40,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		mContext = context;
 
 		animacionFinalizada = true;
+		contadorCiclos = 0;
 	}
 
 	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, InstanciaNivel l)
@@ -73,14 +75,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					case VidaPerdida:
 						listener.onLivesChanged(renderer.getVidas());
 						listener.onScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 					break;
 					case CambioPuntuacion:
 						listener.onScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 					break;
 					case Nada:
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 					break;
 					case FinJuegoVictoria:
 						renderer.pararAnimacion();
@@ -95,6 +97,8 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						listener.onGameFailed();
 					break;
 				}
+				
+				contadorCiclos++;
 			}
 		};
 

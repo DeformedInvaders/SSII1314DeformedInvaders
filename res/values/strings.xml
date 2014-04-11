@@ -57,7 +57,7 @@
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
 			<string name="text_progressBar_level">Loading level data.</string>
-			<string name="text_progressBar_chosen">Loading chosen character.</string>
+			<string name="text_progressBar_preferences">Loading game preferences.</string>
 			<string name="text_progressBar_character_list">Loading character: </string>
 			<string name="text_progressBar_completed">Loading stored data completed.</string>
 			
@@ -220,12 +220,12 @@
 		<!-- Animation Fragment -->
 		    <string name="desc_animation_ready">Ready to save the character.</string>
 		    
-		<!-- Character Selection Fragment -->
-	    	<string name="desc_selection_select">Select this character.</string>
-	    	<string name="desc_selection_delete">Delete this character.</string>
-	    	
-	    <!-- Character Select Fragment -->
+		<!-- Character Select Fragment -->
+	    	<string name="desc_select_select">Select this character.</string>
+	    	<string name="desc_select_delete">Delete this character.</string>
 	    	<string name="desc_select_camera">Save a picture of this character.</string>
+	    	<string name="desc_select_rename">Rename this character.</string>
+	    	<string name="desc_select_repaint">Repaint this character.</string>
 	    	<string name="desc_select_run">Play run animation.</string>
 	    	<string name="desc_select_jump">Play jump animation.</string>
 	    	<string name="desc_select_crouch">Play crouch animation.</string>

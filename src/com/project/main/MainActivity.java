@@ -46,7 +46,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
 	private Personaje personajeActual;
-	private int personajeSeleccionado;
 	
 	/* Musica */
 	private AudioPlayerManager audioManager;
@@ -109,9 +108,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         GamePreferences.setScreenParameters(metrics.widthPixels, metrics.heightPixels);
         
-        GamePreferences.setMusicParameters(true);
-        GamePreferences.setTipParameters(true);
-
+        GamePreferences.setMusicParameters(false);
+        GamePreferences.setTipParameters(false);
+        
 		changeFragment(LoadingFragment.newInstance(internalManager));
 	}
 	
@@ -151,6 +150,8 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		botonMusica = menu.getItem(1);
 		botonTwitter = menu.getItem(2);
 		botonFacebook = menu.getItem(3);
+		
+		actualizarActionBar();
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -224,14 +225,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Métodos Loading Fragment */
 
 	@Override
-	public void onLoadingListCharacters(List<Personaje> lista, int seleccionado, boolean[] niveles, int[] puntuacion)
+	public void onLoadingListCharacters(List<Personaje> lista, boolean[] niveles, int[] puntuacion)
 	{
 		listaPersonajes = lista;
-		personajeSeleccionado = seleccionado;
 		estadoNiveles = niveles;
 		puntuacionNiveles = puntuacion;
 		
-		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+		actualizarActionBar();
+		
+		changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
 	}
 
 	/* Métodos Main Fragment */
@@ -287,6 +289,23 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			changeFragment(DeformationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura(), externalManager));
 		}
 	}
+	
+	@Override
+	public void onRepaintReadyButtonClicked(int indice, Textura textura)
+	{
+		if (textura == null)
+		{
+			Toast.makeText(getApplication(), R.string.error_paint, Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			Personaje personaje = listaPersonajes.get(indice);
+			personaje.setTextura(textura);
+			
+			internalManager.actualizarPersonaje(personaje);
+			changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, externalManager, socialConnector));
+		}
+	}
 
 	/* Métodos Animation Fragment */
 
@@ -307,10 +326,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					@Override
 					public void onPossitiveButtonClick(String text)
 					{
-						while (!internalManager.guardarPersonaje(personajeActual))
-						{
-							personajeActual.setNombre(text);
-							
+						personajeActual.setNombre(text);
+						
+						if (!internalManager.guardarPersonaje(personajeActual))
+						{							
 							externalManager.guardarAudio(text, getString(R.string.title_animation_section_run));
 							externalManager.guardarAudio(text, getString(R.string.title_animation_section_jump));
 							externalManager.guardarAudio(text, getString(R.string.title_animation_section_crouch));
@@ -321,14 +340,14 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 							Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
 
-							changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+							changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
 						}
 					}
 
 					@Override
 					public void onNegativeButtonClick(String text)
 					{
-						changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+						changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
 					}
 
 				};
@@ -347,12 +366,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onCharacterSelectionSelectClicked(int indice)
 	{
-		personajeSeleccionado = indice;
+		GamePreferences.setCharacterParameters(indice);
 
-		internalManager.guardarSeleccionado(personajeSeleccionado);
+		internalManager.guardarPreferencias();
 		Toast.makeText(getApplication(), R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
 
-		changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+		changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
 	}
 
 	@Override
@@ -367,10 +386,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					externalManager.eliminarDirectorioPersonaje(listaPersonajes.get(indice).getNombre());
 					listaPersonajes.remove(indice);
 
-					if (personajeSeleccionado == indice)
+					if (GamePreferences.GET_CHARACTER_GAME() == indice)
 					{
-						personajeSeleccionado = -1;
-						internalManager.guardarSeleccionado(personajeSeleccionado);
+						GamePreferences.setCharacterParameters(-1);
+						internalManager.guardarPreferencias();
 					}
 
 					Toast.makeText(getApplication(), R.string.text_delete_character_confirmation, Toast.LENGTH_SHORT).show();
@@ -380,7 +399,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					Toast.makeText(getApplication(), R.string.error_delete_character, Toast.LENGTH_SHORT).show();
 				}
 
-				changeFragment(MainFragment.newInstance(listaPersonajes, personajeSeleccionado, externalManager));
+				changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
 			}
 
 			@Override
@@ -388,6 +407,12 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		};
 
 		alert.show();
+	}
+	
+	@Override
+	public void onCharacterSelectionRepaintButtonClicked(int indice)
+	{
+		changeFragment(PaintFragment.newInstance(listaPersonajes.get(indice), indice));
 	}
 
 	/* Métodos Level Selection Fragment */
@@ -398,7 +423,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		InstanciaNivel intanciaNivelSeleccionado = levelGenerator.getInstanciaLevel(level);
 		musicaSeleccionada = nivelSeleccionado.getMusicaNivel();
 		
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, intanciaNivelSeleccionado));
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), externalManager, intanciaNivelSeleccionado));
 	
 		// Resumen del nivel
 		SummaryAlert alert = new SummaryAlert(this, getString(R.string.text_summary), getString(R.string.text_button_ready), intanciaNivelSeleccionado.getTipoEnemigos());
@@ -442,7 +467,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getInstanciaLevel(level)));
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), externalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override
@@ -465,7 +490,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				changeFragment(GameFragment.newInstance(listaPersonajes.get(personajeSeleccionado), externalManager, levelGenerator.getInstanciaLevel(level)));
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), externalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override
@@ -510,27 +535,20 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	
 	public boolean onMenuMusicButtonClicked()
 	{
-		if (GamePreferences.MUSIC_ENABLED())
-		{
-			audioManager.disablePlayer();
-		}
-		else
-		{
-			audioManager.enablePlayer();
-			actualizarMusica();
-		}
-		
 		GamePreferences.SWITCH_MUSIC_GAME();
-		actualizarActionBar();
+		internalManager.guardarPreferencias();
 		
+		actualizarMusica();
+		actualizarActionBar();
 		return true;
 	}
 	
 	public boolean onMenuTipsButtonClicked()
 	{
 		GamePreferences.SWITCH_TIPS_GAME();
-		actualizarActionBar();
+		internalManager.guardarPreferencias();
 		
+		actualizarActionBar();
 		return true;
 	}
 
@@ -582,18 +600,26 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	private void actualizarMusica()
 	{
-		if(estado == TEstadoMain.Game)
+		if(GamePreferences.MUSIC_ENABLED())
 		{
-			audioManager.startPlaying(musicaSeleccionada, true);
+			if(estado == TEstadoMain.Game)
+			{
+				audioManager.startPlaying(musicaSeleccionada, true);
+			}
+			else
+			{
+				if(audioManager.isStoped())
+				{
+					audioManager.startPlaying(R.raw.music_main, true);
+				}
+			}
 		}
 		else
 		{
-			if(audioManager.isStoped())
-			{
-				audioManager.startPlaying(R.raw.music_main, true);
-			}
+			audioManager.stopPlaying();
 		}
 	}
+	
 	
 	private void actualizarEstado(Fragment fragmento)
 	{

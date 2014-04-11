@@ -44,8 +44,8 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	public interface CharacterSelectionFragmentListener
 	{
 		public void onCharacterSelectionSelectClicked(int indice);
-
 		public void onCharacterSelectionDeleteButtonClicked(int indice);
+		public void onCharacterSelectionRepaintButtonClicked(int indice);
 	}
 
 	/* Métodos Fragment */
@@ -112,5 +112,11 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	public void onCharacterDeleted()
 	{
 		mCallback.onCharacterSelectionDeleteButtonClicked(viewPager.getPosition());
+	}
+	
+	@Override
+	public void onCharacterRepainted()
+	{
+		mCallback.onCharacterSelectionRepaintButtonClicked(viewPager.getPosition());
 	}
 }

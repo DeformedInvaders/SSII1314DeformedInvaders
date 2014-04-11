@@ -17,9 +17,9 @@ public class GamePreferences
 	public static final float NULL_SCALE_FACTOR = 1.0f;
 	
 	// Animación
-	public static final int TIME_INTERVAL_ANIMATION = 15;
-	public static final int TIME_INTERVAL_ANIMATION_FAST = 10;
-	public static final int TIME_INTERVAL_ANIMATION_SLOW = 20;
+	private static final int TIME_INTERVAL_ANIMATION_FAST = 10;
+	private static final int TIME_INTERVAL_ANIMATION_MEDIUM = 15;
+	private static final int TIME_INTERVAL_ANIMATION_SLOW = 20;
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
@@ -102,6 +102,7 @@ public class GamePreferences
 	private static float HEIGHT_SCREEN;
 	
 	// Opciones del Juego
+	private static int CHARACTER_GAME;
 	private static boolean TIPS_GAME;
 	private static boolean MUSIC_GAME;
 	
@@ -119,6 +120,11 @@ public class GamePreferences
 	public static final void setMusicParameters(boolean music)
 	{
 		MUSIC_GAME = music;
+	}
+	
+	public static final void setCharacterParameters(int character)
+	{
+		CHARACTER_GAME = character;
 	}
 	
 	public static final void SWITCH_MUSIC_GAME()
@@ -141,6 +147,11 @@ public class GamePreferences
 	public static final boolean MUSIC_ENABLED()
 	{
 		return MUSIC_GAME;
+	}
+	
+	public static final int GET_CHARACTER_GAME()
+	{
+		return CHARACTER_GAME;
 	}
 	
 	// Distancias Escenario
@@ -185,12 +196,35 @@ public class GamePreferences
 		return POS_ENEMIES_INICIO() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMY();
 	}
 	
+	private static final float MAX_NUM_CICLOS()
+	{
+		return Math.round(POS_ENEMIES_FINAL() / DIST_MOVIMIENTO_ENEMY);
+	}
+	
 	public static final int NUM_ITERATION_BACKGROUND()
 	{
-		float numMaxCiclos = Math.round(POS_ENEMIES_FINAL() / DIST_MOVIMIENTO_ENEMY);
-		float distanciaMaxBackground = numMaxCiclos * DIST_MOVIMIENTO_BACKGROUND;
-		
-		return Math.round(distanciaMaxBackground / WIDTH_SCREEN);
+		return Math.round(MAX_NUM_CICLOS() * DIST_MOVIMIENTO_BACKGROUND / WIDTH_SCREEN);
+	}
+	
+	public static final int TIME_INTERVAL_ANIMATION()
+	{
+		return TIME_INTERVAL_ANIMATION_SLOW;
+	}
+	
+	public static final int TIME_INTERVAL_ANIMATION(int ciclos)
+	{
+		if(ciclos < MAX_NUM_CICLOS() / 3)
+		{
+			return TIME_INTERVAL_ANIMATION_SLOW;
+		}
+		else if(ciclos < 2 * MAX_NUM_CICLOS() / 3)
+		{
+			return TIME_INTERVAL_ANIMATION_MEDIUM;
+		}
+		else
+		{
+			return TIME_INTERVAL_ANIMATION_FAST;
+		}
 	}
 	
 	public static final int PICTURE_ENEMY_WIDTH()

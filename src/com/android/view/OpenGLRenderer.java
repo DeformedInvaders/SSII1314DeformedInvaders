@@ -15,6 +15,7 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 
+import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.game.data.Dimensiones;
 import com.game.data.TTipoEntidad;
@@ -644,7 +645,7 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	// Pintura de una Lista de Handles
-	protected void dibujarListaIndiceHandle(GL10 gl, int color, FloatBuffer handle, FloatArray posiciones)
+	protected void dibujarListaIndiceHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
 	{
 		gl.glPushMatrix();
 
@@ -661,7 +662,11 @@ public abstract class OpenGLRenderer implements Renderer
 
 				gl.glPushMatrix();
 				gl.glTranslatef(x, y, z);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle.getBufferRelleno());
+				
+				gl.glTranslatef(0.0f, 0.0f, 1.0f);
+				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE / 2, Color.WHITE, handle.getBufferContorno());
+				
 				gl.glPopMatrix();
 			}
 
@@ -672,7 +677,7 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	// Pintura de una Lista de Handles
-	protected void dibujarListaHandle(GL10 gl, int color, FloatBuffer handle, FloatArray posiciones)
+	protected void dibujarListaHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
 	{
 		gl.glPushMatrix();
 
@@ -685,7 +690,10 @@ public abstract class OpenGLRenderer implements Renderer
 
 			gl.glPushMatrix();
 			gl.glTranslatef(x, y, z);
-			dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle);
+			dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle.getBufferRelleno());
+			
+			gl.glTranslatef(0.0f, 0.0f, 1.0f);
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE / 2, Color.WHITE, handle.getBufferContorno());
 			gl.glPopMatrix();
 
 			i = i + 2;

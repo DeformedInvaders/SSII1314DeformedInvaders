@@ -21,6 +21,7 @@ import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
 import com.creation.data.Polilinea;
 import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.game.data.TTipoSticker;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
@@ -87,12 +88,12 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 
-		listaLineas = new ArrayList<Polilinea>();
-		lineaActual = null;
-
 		pegatinas = new Pegatinas();
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
+		
+		listaLineas = new ArrayList<Polilinea>();
+		lineaActual = null;
 
 		color = Color.WHITE;
 
@@ -105,6 +106,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TEstadoCaptura.Nada;
 
 		objetoVertice = new Handle(20, POINTWIDTH);
+	}
+	
+	public PaintOpenGLRenderer(Context context, Personaje personaje)
+	{
+		this(context, personaje.getEsqueleto());
+		
+		pegatinas = personaje.getTextura().getPegatinas();
 	}
 
 	/* Métodos Renderer */
@@ -191,7 +199,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 			if (estado == TEstadoPaint.Pegatinas)
 			{
-				dibujarListaHandle(gl, Color.BLACK, objetoVertice.getBuffer(), vertices);
+				dibujarListaHandle(gl, Color.BLACK, objetoVertice, vertices);
 			}
 		}
 

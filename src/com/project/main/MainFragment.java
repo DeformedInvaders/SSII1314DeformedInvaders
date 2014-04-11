@@ -25,23 +25,21 @@ public class MainFragment extends OpenGLFragment
 	private ImageButton botonCrear, botonJugar, botonSeleccionar;
 
 	private List<Personaje> listaPersonajes;
-	private int personajeSeleccionado;
 
 	private ExternalStorageManager externalManager;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(List<Personaje> lista, int indice, ExternalStorageManager m)
+	public static final MainFragment newInstance(List<Personaje> lista, ExternalStorageManager m)
 	{
 		MainFragment fragment = new MainFragment();
-		fragment.setParameters(lista, indice, m);
+		fragment.setParameters(lista, m);
 		return fragment;
 	}
 
-	private void setParameters(List<Personaje> lista, int indice, ExternalStorageManager m)
+	private void setParameters(List<Personaje> lista, ExternalStorageManager m)
 	{
 		listaPersonajes = lista;
-		personajeSeleccionado = indice;
 		externalManager = m;
 	}
 
@@ -84,9 +82,9 @@ public class MainFragment extends OpenGLFragment
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
 		
-		if (personajeSeleccionado >= 0 && personajeSeleccionado < listaPersonajes.size() && !listaPersonajes.isEmpty())
+		if (GamePreferences.GET_CHARACTER_GAME() >= 0 && GamePreferences.GET_CHARACTER_GAME() < listaPersonajes.size() && !listaPersonajes.isEmpty())
 		{
-			Personaje p = listaPersonajes.get(personajeSeleccionado);
+			Personaje p = listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME());
 			canvas.setParameters(p, externalManager, TTipoDisplay.Main);
 		}
 		else
@@ -151,7 +149,7 @@ public class MainFragment extends OpenGLFragment
 		{
 			botonSeleccionar.setVisibility(View.VISIBLE);
 
-			if (personajeSeleccionado != -1)
+			if (GamePreferences.GET_CHARACTER_GAME() != -1)
 			{
 				botonJugar.setVisibility(View.VISIBLE);
 			}

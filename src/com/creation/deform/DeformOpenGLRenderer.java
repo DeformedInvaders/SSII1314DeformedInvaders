@@ -169,19 +169,19 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 			if (estado != TEstadoDeform.Deformar)
 			{
-				dibujarListaHandle(gl, Color.RED, objetoVertice.getBuffer(), verticesModificados);
+				dibujarListaHandle(gl, Color.RED, objetoVertice, verticesModificados);
 			}
 
 			// Handles
 			if (handles.size > 0)
 			{
-				dibujarListaHandle(gl, Color.BLACK, objetoHandle.getBuffer(), handles);
+				dibujarListaHandle(gl, Color.BLACK, objetoHandle, handles);
 			}
 
 			// Seleccionado
 			if (estado == TEstadoDeform.Deformar)
 			{
-				dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado.getBuffer(), handleSeleccionado);
+				dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado, handleSeleccionado);
 			}
 
 			// Centrado de Marco

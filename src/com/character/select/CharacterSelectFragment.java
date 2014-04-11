@@ -32,7 +32,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 	
 	private OnCharacterListener listener;
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonDelete;
+	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete;
 
 	/* Constructora */
 
@@ -76,6 +76,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect4);
 		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
+		botonRepaint = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
 
 		botonCamara.setOnClickListener(new OnCamaraClickListener());
@@ -84,6 +85,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonCrouch.setOnClickListener(new OnCrouchClickListener());
 		botonAttack.setOnClickListener(new OnAttackClickListener());
 		botonReady.setOnClickListener(new OnReadyClickListener());
+		botonRepaint.setOnClickListener(new OnRepaintClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 
 		setCanvasListener(canvas);
@@ -105,6 +107,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonJump = null;
 		botonCrouch = null;
 		botonAttack = null;
+		botonRepaint = null;
 		canvas = null;
 		pager = null;
 	}
@@ -270,6 +273,15 @@ public class CharacterSelectFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			listener.onCharacterSelected();
+		}
+	}
+	
+	private class OnRepaintClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			listener.onCharacterRepainted();
 		}
 	}
 

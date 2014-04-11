@@ -49,7 +49,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 				if (!renderer.reproducirAnimacion())
 				{
 					requestRender();
-					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION);
+					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
 				}
 				else
 				{

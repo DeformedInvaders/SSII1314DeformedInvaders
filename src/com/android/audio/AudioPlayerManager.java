@@ -44,11 +44,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	private boolean startPlayingAudio(String path)
 	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
 		try
 		{
 			if (estado == TEstadoPlay.Libre)
@@ -75,11 +70,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean startPlaying(int path, boolean loop)
 	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
 		if(manager == null)
 		{
 			if (estado != TEstadoPlay.Libre)
@@ -106,11 +96,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean startPlaying(String nombre, String movimiento)
 	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
 		if (manager != null && manager.existeFicheroAudio(nombre, movimiento))
 		{
 			return startPlayingAudio(manager.cargarAudio(nombre, movimiento));
@@ -121,11 +106,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean startPlaying(String nombre)
 	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
 		if (manager != null && manager.existeFicheroTemp(nombre))
 		{
 			return startPlayingAudio(manager.cargarAudioTemp(nombre));
@@ -136,11 +116,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean pausePlaying()
 	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
 		if (estado == TEstadoPlay.Reproduciendo)
 		{
 			// Started
@@ -155,11 +130,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean resumePlaying()
 	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
 		if (estado == TEstadoPlay.Pausado)
 		{
 			// Pause
@@ -173,12 +143,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	}
 
 	public boolean stopPlaying()
-	{
-		if (estado == TEstadoPlay.Deshabilitado)
-		{
-			return false;
-		}
-		
+	{		
 		if (estado == TEstadoPlay.Reproduciendo || estado == TEstadoPlay.Pausado)
 		{
 			// Started or Paused
@@ -203,18 +168,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	{
 		player.release();
 	}
-	
-	public void enablePlayer()
-	{
-		resetPlaying();
-	}
-	
-	public void disablePlayer()
-	{
-		resetPlaying();
-		
-		estado = TEstadoPlay.Deshabilitado;
-	}
 
 	/* Métodos de Obtención de Información */
 
@@ -231,11 +184,6 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	public boolean isStoped()
 	{
 		return estado == TEstadoPlay.Libre;
-	}
-	
-	public boolean isEnabled()
-	{
-		return estado != TEstadoPlay.Deshabilitado;
 	}
 
 	/* Métodos Listener onCompletition */
