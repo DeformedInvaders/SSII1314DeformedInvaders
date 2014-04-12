@@ -29,6 +29,7 @@ import com.android.storage.InternalStorageManager;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
+import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.creation.deform.DeformationFragment;
 import com.creation.design.DesignFragment;
@@ -231,9 +232,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		estadoNiveles = niveles;
 		puntuacionNiveles = puntuacion;
 		
-		actualizarActionBar();
-		
-		changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
+		changeFragment(MainFragment.newInstance(listaPersonajes, internalManager));
 	}
 
 	/* Métodos Main Fragment */
@@ -249,7 +248,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onMainSelectButtonClicked()
 	{
-		changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, externalManager, socialConnector));
+		changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, internalManager, externalManager, socialConnector));
 	}
 
 	@Override
@@ -286,7 +285,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		else
 		{
 			personajeActual.setTextura(textura);
-			changeFragment(DeformationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura(), externalManager));
+			changeFragment(DeformationFragment.newInstance(personajeActual.getEsqueleto(), personajeActual.getTextura(), internalManager));
 		}
 	}
 	
@@ -303,7 +302,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			personaje.setTextura(textura);
 			
 			internalManager.actualizarPersonaje(personaje);
-			changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, externalManager, socialConnector));
+			changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, internalManager, externalManager, socialConnector));
 		}
 	}
 
@@ -326,26 +325,26 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 				{
 					personajeActual.setNombre(text);
 					
-					if (!internalManager.guardarPersonaje(personajeActual))
+					if (internalManager.guardarPersonaje(personajeActual))
 					{							
-						externalManager.guardarAudio(text, getString(R.string.title_animation_section_run));
-						externalManager.guardarAudio(text, getString(R.string.title_animation_section_jump));
-						externalManager.guardarAudio(text, getString(R.string.title_animation_section_crouch));
-						externalManager.guardarAudio(text, getString(R.string.title_animation_section_attack));
+						internalManager.guardarAudio(text, TTipoMovimiento.Run);
+						internalManager.guardarAudio(text, TTipoMovimiento.Jump);
+						internalManager.guardarAudio(text, TTipoMovimiento.Crouch);
+						internalManager.guardarAudio(text, TTipoMovimiento.Attack);
 
 						listaPersonajes.add(personajeActual);
 						personajeActual = null;
 
 						Toast.makeText(getApplication(), R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
 
-						changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
+						changeFragment(MainFragment.newInstance(listaPersonajes, internalManager));
 					}
 				}
 
 				@Override
 				public void onNegativeButtonClick(String text)
 				{
-					changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
+					changeFragment(MainFragment.newInstance(listaPersonajes, internalManager));
 				}
 
 			};
@@ -364,7 +363,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		internalManager.guardarPreferencias();
 		Toast.makeText(getApplication(), R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
 
-		changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
+		changeFragment(MainFragment.newInstance(listaPersonajes, internalManager));
 	}
 
 	@Override
@@ -376,7 +375,6 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			{
 				if (internalManager.eliminarPersonaje(listaPersonajes.get(indice)))
 				{
-					externalManager.eliminarDirectorioPersonaje(listaPersonajes.get(indice).getNombre());
 					listaPersonajes.remove(indice);
 
 					if (GamePreferences.GET_CHARACTER_GAME() == indice)
@@ -392,7 +390,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 					Toast.makeText(getApplication(), R.string.error_delete_character, Toast.LENGTH_SHORT).show();
 				}
 
-				changeFragment(MainFragment.newInstance(listaPersonajes, externalManager));
+				changeFragment(MainFragment.newInstance(listaPersonajes, internalManager));
 			}
 
 			@Override
@@ -403,9 +401,43 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	}
 	
 	@Override
+	public void onCharacterSelectionRenameButtonClicked(final int indice)
+	{
+		TextInputAlert alert = new TextInputAlert(this, getString(R.string.text_rename_character_title), getString(R.string.text_rename_character_description), getString(R.string.text_button_rename), getString(R.string.text_button_cancel)) {
+			@Override
+			public void onPossitiveButtonClick(String text)
+			{
+				Personaje personaje = listaPersonajes.get(indice);
+				
+				if (internalManager.renombrarPersonaje(personaje, text))
+				{
+					Toast.makeText(getApplication(), R.string.text_rename_character_confirmation, Toast.LENGTH_SHORT).show();
+
+					changeFragment(CharacterSelectionFragment.newInstance(listaPersonajes, internalManager, externalManager, socialConnector));
+				}
+			}
+
+			@Override
+			public void onNegativeButtonClick(String text) { }
+
+		};
+
+		alert.show();
+	}
+	
+	@Override
 	public void onCharacterSelectionRepaintButtonClicked(int indice)
 	{
 		changeFragment(PaintFragment.newInstance(listaPersonajes.get(indice), indice));
+	}
+	
+	@Override
+	public void onCharacterSelectionExportButtonClicked(int indice)
+	{
+		if (internalManager.exportarPersonaje(listaPersonajes.get(indice)))
+		{
+			Toast.makeText(getApplication(), R.string.text_export_character_confirmation, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	/* Métodos Level Selection Fragment */
@@ -416,7 +448,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		InstanciaNivel intanciaNivelSeleccionado = levelGenerator.getInstanciaLevel(level);
 		musicaSeleccionada = nivelSeleccionado.getMusicaNivel();
 		
-		changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), externalManager, intanciaNivelSeleccionado));
+		changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), internalManager, intanciaNivelSeleccionado));
 	
 		// Resumen del nivel
 		SummaryAlert alert = new SummaryAlert(this, getString(R.string.text_summary), getString(R.string.text_button_ready), intanciaNivelSeleccionado.getTipoEnemigos());
@@ -445,14 +477,15 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		internalManager.guardarPuntuacion(puntuacionNiveles);
 
 		// Publicar Nivel Completado
-		String nombreFotoNivel = "nivel" + level;
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), idImagen);
-		if (externalManager.guardarImagenTemp(bitmap, nombreFotoNivel))
+		if (externalManager.guardarImagenTemp(bitmap))
 		{
 			String text = getString(R.string.text_social_level_completed_initial) + " " + nameLevel + " " + getString(R.string.text_social_level_completed_middle) + " " + score + " " + getString(R.string.text_social_level_completed_final);
 
-			File foto = externalManager.cargarImagenTemp(nombreFotoNivel);
+			File foto = externalManager.cargarImagenTemp();
 			socialConnector.publicar(text, foto);
+			
+			externalManager.eliminarImagenTemp();
 		}
 
 		// Seleccionar Siguiente Nivel
@@ -460,7 +493,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), externalManager, levelGenerator.getInstanciaLevel(level)));
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), internalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override
@@ -483,7 +516,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), externalManager, levelGenerator.getInstanciaLevel(level)));
+				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), internalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override

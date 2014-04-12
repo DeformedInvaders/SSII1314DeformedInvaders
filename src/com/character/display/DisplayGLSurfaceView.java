@@ -6,25 +6,24 @@ import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.android.audio.AudioPlayerManager;
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
-import com.project.main.R;
 
 public class DisplayGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
 	private DisplayOpenGLRenderer renderer;
-	private Context mContext;
 
 	private TTipoDisplay tipoDisplay;
 
 	private String nombre;
 	private boolean personajeCargado;
 
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
 	private AudioPlayerManager player;
 
 	private Handler handler;
@@ -37,8 +36,6 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	public DisplayGLSurfaceView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs, TEstadoDetector.SimpleTouch);
-
-		mContext = context;
 
 		handler = new Handler();
 
@@ -62,17 +59,17 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	public void setParameters(Personaje p, ExternalStorageManager m, TTipoDisplay e)
+	public void setParameters(Personaje p, InternalStorageManager m, TTipoDisplay e)
 	{
 		nombre = p.getNombre();
-		manager = m;
+		internalManager = m;
 		tipoDisplay = e;
 		personajeCargado = true;
 
 		renderer = new DisplayOpenGLRenderer(getContext(), p);
 		setRenderer(renderer);
 
-		player = new AudioPlayerManager(manager) {
+		player = new AudioPlayerManager(internalManager) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
@@ -150,7 +147,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_run));
+			player.startPlaying(nombre, TTipoMovimiento.Run);
 		}
 	}
 
@@ -163,7 +160,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_jump));
+			player.startPlaying(nombre, TTipoMovimiento.Jump);
 		}
 	}
 
@@ -176,7 +173,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_crouch));
+			player.startPlaying(nombre, TTipoMovimiento.Crouch);
 		}
 	}
 
@@ -189,7 +186,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, mContext.getString(R.string.title_animation_section_attack));
+			player.startPlaying(nombre, TTipoMovimiento.Attack);
 		}
 	}
 

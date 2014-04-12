@@ -5,20 +5,19 @@ import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.android.audio.AudioPlayerManager;
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
-import com.project.main.R;
 
 public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
 	private GameOpenGLRenderer renderer;
 	private OnGameListener listener;
-	private Context mContext;
 
 	private String nombrePersonaje;
 	private boolean animacionFinalizada;
@@ -37,13 +36,11 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		super(context, attrs, TEstadoDetector.GameDetectors);
 
-		mContext = context;
-
 		animacionFinalizada = true;
 		contadorCiclos = 0;
 	}
 
-	public void setParameters(Personaje p, ExternalStorageManager m, OnGameListener gl, InstanciaNivel l)
+	public void setParameters(Personaje p, InternalStorageManager m, OnGameListener gl, InstanciaNivel l)
 	{
 		nombrePersonaje = p.getNombre();
 		listener = gl;
@@ -144,7 +141,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				renderer.seleccionarJump();
 				requestRender();
 
-				audioManager.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_jump));
+				audioManager.startPlaying(nombrePersonaje, TTipoMovimiento.Jump);
 
 				animacionFinalizada = false;
 			}
@@ -160,7 +157,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				renderer.seleccionarCrouch();
 				requestRender();
 
-				audioManager.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_crouch));
+				audioManager.startPlaying(nombrePersonaje, TTipoMovimiento.Crouch);
 
 				animacionFinalizada = false;
 			}
@@ -176,7 +173,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				renderer.seleccionarAttack();
 				requestRender();
 
-				audioManager.startPlaying(nombrePersonaje, mContext.getString(R.string.title_animation_section_attack));
+				audioManager.startPlaying(nombrePersonaje, TTipoMovimiento.Attack);
 
 				animacionFinalizada = false;
 			}

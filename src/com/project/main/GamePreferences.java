@@ -96,6 +96,7 @@ public class GamePreferences
 	public static final float DIST_MOVIMIENTO_CHARACTER = 30.0f;
 	
 	// Niveles
+	public static final int MAX_CHARACTERS = 10;
 	private static final int MAX_ENEMIES = 50;
 	public static final int MAX_LIVES = 3;
 	public static final int NUM_LEVELS = 5;

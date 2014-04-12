@@ -41,6 +41,11 @@
 	<LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 
 		<ImageButton style="@style/Button_Fragment_Style"
+	        android:id="@+id/imageButtonCharacterSelect10"
+	        android:contentDescription="@string/desc_select_export"
+	        android:background="@drawable/icon_tool_export" />
+	    
+		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect1"
             android:background="@drawable/icon_share_picture"
             android:contentDescription="@string/desc_select_camera" />

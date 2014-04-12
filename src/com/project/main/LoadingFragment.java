@@ -16,7 +16,7 @@ import com.android.storage.InternalStorageManager;
 import com.game.data.Personaje;
 import com.project.main.R;
 
-public class LoadingFragment extends Fragment
+public class LoadingFragment extends Fragment implements OnLoadingListener
 {
 	private LoadingFragmentListener mCallback;
 
@@ -105,20 +105,7 @@ public class LoadingFragment extends Fragment
 			@Override
 			public void run()
 			{
-				// Cargar Niveles
-				niveles = manager.cargarNiveles();
-				puntuacion = manager.cargarPuntuaciones();
-				
-				textView.setText(getString(R.string.text_progressBar_level));
-
-				// Cargar Seleccionado
-				manager.cargarPreferencias();
-				textView.setText(getString(R.string.text_progressBar_preferences));
-
-				// Cargar ListaPersonajes
-				lista = manager.cargarListaPersonajes(LoadingFragment.this);
-
-				completeProgressBar();
+				cargarDatos();
 			}
 		};
 
@@ -139,9 +126,9 @@ public class LoadingFragment extends Fragment
 		progressBar = null;
 	}
 
-	/* Métodos Públicos */
+	/* Métodos abstractos de OnLoadingFragment */
 
-	public void updateProgressBarStatus(final int progress, final String name)
+	public void onProgress(final int progress, final String name)
 	{
 		progressBarStatus = progress;
 
@@ -156,9 +143,22 @@ public class LoadingFragment extends Fragment
 	}
 
 	/* Métodos Privados */
-
-	private void completeProgressBar()
+	
+	private void cargarDatos()
 	{
+		// Cargar Niveles
+		niveles = manager.cargarNiveles();
+		puntuacion = manager.cargarPuntuaciones();
+		
+		textView.setText(getString(R.string.text_progressBar_level));
+
+		// Cargar Seleccionado
+		manager.cargarPreferencias();
+		textView.setText(getString(R.string.text_progressBar_preferences));
+
+		// Cargar ListaPersonajes
+		lista = manager.cargarListaPersonajes(this);
+
 		progressBarStatus = 100;
 		progressCompleted = true;
 

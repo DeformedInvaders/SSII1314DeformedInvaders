@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.game.data.Personaje;
@@ -18,7 +19,8 @@ import com.project.main.R;
 
 public class CharacterSelectionFragment extends ViewPagerFragment implements OnCharacterListener
 {
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
+	private ExternalStorageManager externalManager;
 	private SocialConnector connector;
 
 	private CharacterSelectionFragmentListener mCallback;
@@ -27,17 +29,18 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 
 	/* Constructora */
 
-	public static final CharacterSelectionFragment newInstance( List<Personaje> l, ExternalStorageManager m, SocialConnector c)
+	public static final CharacterSelectionFragment newInstance(List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector c)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
-		fragment.setParameters(l, m, c);
+		fragment.setParameters(l, im, em, c);
 		return fragment;
 	}
 
-	private void setParameters(List<Personaje> l, ExternalStorageManager m, SocialConnector c)
+	private void setParameters(List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector c)
 	{
 		listaPersonajes = l;
-		manager = m;
+		internalManager = im;
+		externalManager = em;
 		connector = c;
 	}
 
@@ -46,6 +49,8 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		public void onCharacterSelectionSelectClicked(int indice);
 		public void onCharacterSelectionDeleteButtonClicked(int indice);
 		public void onCharacterSelectionRepaintButtonClicked(int indice);
+		public void onCharacterSelectionRenameButtonClicked(int indice);
+		public void onCharacterSelectionExportButtonClicked(int indice);
 	}
 
 	/* Métodos Fragment */
@@ -62,7 +67,8 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	{
 		super.onDetach();
 		mCallback = null;
-		manager = null;
+		internalManager = null;
+		externalManager = null;
 		connector = null;
 		listaPersonajes = null;
 	}
@@ -81,7 +87,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		while (it.hasNext())
 		{
 			Personaje p = it.next();
-			viewPager.addView(CharacterSelectFragment.newInstance(this, p, viewPager, manager, connector), p.getNombre());
+			viewPager.addView(CharacterSelectFragment.newInstance(this, p, viewPager, internalManager, externalManager, connector), p.getNombre());
 		}
 
 		return rootView;
@@ -118,5 +124,17 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	public void onCharacterRepainted()
 	{
 		mCallback.onCharacterSelectionRepaintButtonClicked(viewPager.getPosition());
+	}
+	
+	@Override
+	public void onCharacterRenamed()
+	{
+		mCallback.onCharacterSelectionRenameButtonClicked(viewPager.getPosition());
+	}
+	
+	@Override
+	public void onCharacterExported()
+	{
+		mCallback.onCharacterSelectionExportButtonClicked(viewPager.getPosition());
 	}
 }

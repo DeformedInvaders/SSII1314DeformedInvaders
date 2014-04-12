@@ -64,12 +64,12 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		}
 		else
 		{
-			dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
-
 			if (estado == TEstadoDesign.Retocando)
 			{
-				dibujarMarcoInterior(gl);
+				dibujarMarcoInterior(gl, Color.LTGRAY);
 			}
+			
+			dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
 		}
 	}
 

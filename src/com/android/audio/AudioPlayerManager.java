@@ -7,21 +7,22 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
+import com.creation.data.TTipoMovimiento;
 
 public abstract class AudioPlayerManager implements OnCompletionListener
 {
 	private Context mContext;
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
 
 	private MediaPlayer player;
 	private TEstadoPlay estado;
 
 	/* Constructora */
 
-	public AudioPlayerManager(ExternalStorageManager externalManager)
+	public AudioPlayerManager(InternalStorageManager manager)
 	{
-		manager = externalManager;
+		internalManager = manager;
 
 		player = new MediaPlayer();
 		player.setOnCompletionListener(this);
@@ -70,7 +71,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean startPlaying(int path, boolean loop)
 	{
-		if(manager == null)
+		if(internalManager == null)
 		{
 			if (estado != TEstadoPlay.Libre)
 			{
@@ -94,21 +95,21 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		return false;
 	}
 
-	public boolean startPlaying(String nombre, String movimiento)
+	public boolean startPlaying(String nombre, TTipoMovimiento tipo)
 	{
-		if (manager != null && manager.existeFicheroAudio(nombre, movimiento))
+		if (internalManager != null && internalManager.comprobarAudio(nombre, tipo))
 		{
-			return startPlayingAudio(manager.cargarAudio(nombre, movimiento));
+			return startPlayingAudio(internalManager.cargarAudio(nombre, tipo));
 		}
 
 		return false;
 	}
 
-	public boolean startPlaying(String nombre)
+	public boolean startPlaying(TTipoMovimiento tipo)
 	{
-		if (manager != null && manager.existeFicheroTemp(nombre))
+		if (internalManager != null && internalManager.comprobarAudioTemp(tipo))
 		{
-			return startPlayingAudio(manager.cargarAudioTemp(nombre));
+			return startPlayingAudio(internalManager.cargarAudioTemp(tipo));
 		}
 
 		return false;

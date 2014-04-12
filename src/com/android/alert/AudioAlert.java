@@ -13,33 +13,36 @@ import android.widget.ProgressBar;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
+import com.creation.data.TTipoMovimiento;
 import com.project.main.GamePreferences;
 import com.project.main.R;
 
 public abstract class AudioAlert extends WindowAlert
 {
+	private static final String TIME_FORMAT = "%02d:%03d";
+	
 	private ProgressBar progressBar;
 	private ImageButton botonRecAudio, botonPlayAudio;
 
 	private CountDownTimer timer;
 	private AudioRecorderManager audioRecorder;
 	private AudioPlayerManager audioPlayer;
-	private ExternalStorageManager externalManager;
+	private InternalStorageManager internalManager;
 
-	private String movimiento;
+	private TTipoMovimiento movimiento;
 
 	/* Constructora */
 
-	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, ExternalStorageManager manager, String nombre)
+	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, InternalStorageManager manager, TTipoMovimiento tipo)
 	{
 		super(context, title);
 
-		movimiento = nombre;
-		externalManager = manager;
+		movimiento = tipo;
+		internalManager = manager;
 
-		audioRecorder = new AudioRecorderManager(externalManager);
-		audioPlayer = new AudioPlayerManager(externalManager) {
+		audioRecorder = new AudioRecorderManager(internalManager);
+		audioPlayer = new AudioPlayerManager(internalManager) {
 			@Override
 			public void onPlayerCompletion()
 			{
@@ -102,14 +105,14 @@ public abstract class AudioAlert extends WindowAlert
 			{
 				if(audioPlayer.stopPlaying() &&	audioRecorder.stopRecording())
 				{
-					externalManager.eliminarAudioTemp(movimiento);
+					internalManager.eliminarAudioTemp(movimiento);
 				}
 				
 				onNegativeButtonClick();
 			}
 		});
 
-		timer = new CountDownTimer(GamePreferences.TIME_DURATION_ANIMATION, 100) {
+		timer = new CountDownTimer(GamePreferences.TIME_DURATION_ANIMATION, 10) {
 
 			@Override
 			public void onFinish()
@@ -142,7 +145,7 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void reiniciarContadores()
 	{
-		changeMessage("0" + GamePreferences.TIME_DURATION_ANIMATION / 1000 + ":" + GamePreferences.TIME_DURATION_ANIMATION % 100);
+		changeMessage(String.format(TIME_FORMAT, GamePreferences.TIME_DURATION_ANIMATION / 1000, GamePreferences.TIME_DURATION_ANIMATION % 100));
 		progressBar.setProgress(0);
 	}
 
@@ -150,13 +153,13 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void actualizarContadores(long millisUntilFinished)
 	{
-		changeMessage("0" + millisUntilFinished / 1000 + ":" + (millisUntilFinished % 100));
+		changeMessage(String.format(TIME_FORMAT, millisUntilFinished / 1000, millisUntilFinished % 100));
 		progressBar.setProgress((int) (100 * (GamePreferences.TIME_DURATION_ANIMATION - millisUntilFinished) / GamePreferences.TIME_DURATION_ANIMATION));
 	}
 
 	private void actualizarInterfaz()
 	{
-		if (externalManager.existeFicheroTemp(movimiento))
+		if (internalManager.comprobarAudioTemp(movimiento))
 		{
 			botonPlayAudio.setVisibility(View.VISIBLE);
 		}

@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
 import com.character.display.TTipoDisplay;
@@ -26,21 +26,21 @@ public class MainFragment extends OpenGLFragment
 
 	private List<Personaje> listaPersonajes;
 
-	private ExternalStorageManager externalManager;
+	private InternalStorageManager internalManager;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(List<Personaje> lista, ExternalStorageManager m)
+	public static final MainFragment newInstance(List<Personaje> lista, InternalStorageManager m)
 	{
 		MainFragment fragment = new MainFragment();
 		fragment.setParameters(lista, m);
 		return fragment;
 	}
 
-	private void setParameters(List<Personaje> lista, ExternalStorageManager m)
+	private void setParameters(List<Personaje> lista, InternalStorageManager m)
 	{
 		listaPersonajes = lista;
-		externalManager = m;
+		internalManager = m;
 	}
 
 	public interface MainFragmentListener
@@ -85,7 +85,7 @@ public class MainFragment extends OpenGLFragment
 		if (GamePreferences.GET_CHARACTER_GAME() >= 0 && GamePreferences.GET_CHARACTER_GAME() < listaPersonajes.size() && !listaPersonajes.isEmpty())
 		{
 			Personaje p = listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME());
-			canvas.setParameters(p, externalManager, TTipoDisplay.Main);
+			canvas.setParameters(p, internalManager, TTipoDisplay.Main);
 		}
 		else
 		{
@@ -145,7 +145,7 @@ public class MainFragment extends OpenGLFragment
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (!listaPersonajes.isEmpty())
+		if (!listaPersonajes.isEmpty() && listaPersonajes.size() <= GamePreferences.MAX_CHARACTERS)
 		{
 			botonSeleccionar.setVisibility(View.VISIBLE);
 

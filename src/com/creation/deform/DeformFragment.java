@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.android.alert.AudioAlert;
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
+import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.lib.utils.FloatArray;
 import com.project.main.R;
@@ -24,25 +25,25 @@ public class DeformFragment extends OpenGLFragment
 	private Textura textura;
 
 	private DeformDataSaved dataSaved;
-	private ExternalStorageManager manager;
-	private String movimiento;
+	private InternalStorageManager internalManager;
+	private TTipoMovimiento movimiento;
 
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 
 	/* Constructora */
 
-	public static final DeformFragment newInstance(ExternalStorageManager m, Esqueleto e, Textura t, String n)
+	public static final DeformFragment newInstance(InternalStorageManager m, Esqueleto e, Textura t, TTipoMovimiento n)
 	{
 		DeformFragment fragment = new DeformFragment();
 		fragment.setParameters(m, e, t, n);
 		return fragment;
 	}
 
-	private void setParameters(ExternalStorageManager m, Esqueleto e, Textura t, String n)
+	private void setParameters(InternalStorageManager m, Esqueleto e, Textura t, TTipoMovimiento n)
 	{
 		esqueleto = e;
 		textura = t;
-		manager = m;
+		internalManager = m;
 		movimiento = n;
 	}
 
@@ -272,7 +273,7 @@ public class DeformFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 
-			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), manager, movimiento)
+			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), internalManager, movimiento)
 			{
 				@Override
 				public void onPossitiveButtonClick()

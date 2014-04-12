@@ -443,34 +443,29 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glTranslatef(-marcoAnchuraLateral, -marcoAlturaLateral, 0.0f);
 	}
 
-	protected void dibujarMarcoExterior(GL10 gl)
+	protected void dibujarMarcoExterior(GL10 gl, int color)
 	{
-		dibujarMarcoFrontal(gl, 175);
-		dibujarMarcoLateral(gl, 175);
+		dibujarMarcoFrontal(gl, color);
+		dibujarMarcoLateral(gl, color);
 	}
-	
-	protected void dibujarMarcoInterior(GL10 gl)
-	{
-		dibujarMarcoInterior(gl, 30);
-	}
-	
-	private void dibujarMarcoInterior(GL10 gl, int alfa)
+
+	protected void dibujarMarcoInterior(GL10 gl, int color)
 	{
 		gl.glPushMatrix();
 
-		gl.glTranslatef(xLeft, yBottom, -1.0f);
-
-		gl.glPushMatrix();
-
-			gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0);
-			dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoInterior);
-
+			gl.glTranslatef(xLeft, yBottom, -1.0f);
+	
+			gl.glPushMatrix();
+	
+				gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
+	
+			gl.glPopMatrix();
+	
 		gl.glPopMatrix();
-
-	gl.glPopMatrix();
 	}
 	
-	private void dibujarMarcoLateral(GL10 gl, int alfa)
+	private void dibujarMarcoLateral(GL10 gl, int color)
 	{
 		gl.glPushMatrix();
 
@@ -479,17 +474,17 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(0, marcoAlturaLateral, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoLateral);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
 		
 				gl.glTranslatef(marcoAnchuraLateral + marcoAnchuraInterior, 0, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoLateral);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
 	
 			gl.glPopMatrix();
 
 		gl.glPopMatrix();
 	}
 
-	private void dibujarMarcoFrontal(GL10 gl, int alfa)
+	private void dibujarMarcoFrontal(GL10 gl, int color)
 	{
 		gl.glPushMatrix();
 
@@ -497,10 +492,10 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 			
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoFrontal);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 				gl.glTranslatef(0, marcoAlturaLateral + marcoAnchuraInterior, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, Color.argb(alfa, 0, 0, 0), recMarcoFrontal);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 			gl.glPopMatrix();
 

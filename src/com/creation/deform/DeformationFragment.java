@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.creation.data.Esqueleto;
@@ -32,22 +32,22 @@ public class DeformationFragment extends ViewPagerFragment
 	private Textura textura;
 
 	private Movimientos movimientos;
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
 
 	/* Constructora */
 
-	public static final DeformationFragment newInstance(Esqueleto e, Textura t, ExternalStorageManager m)
+	public static final DeformationFragment newInstance(Esqueleto e, Textura t, InternalStorageManager m)
 	{
 		DeformationFragment fragment = new DeformationFragment();
 		fragment.setParameters(e, t, m);
 		return fragment;
 	}
 
-	private void setParameters(Esqueleto e, Textura t, ExternalStorageManager m)
+	private void setParameters(Esqueleto e, Textura t, InternalStorageManager m)
 	{
 		esqueleto = e;
 		textura = t;
-		manager = m;
+		internalManager = m;
 	}
 
 	public interface AnimationFragmentListener
@@ -86,10 +86,10 @@ public class DeformationFragment extends ViewPagerFragment
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_run)), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_jump)), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_crouch)), getString(R.string.title_animation_section_crouch));
-		viewPager.addView(DeformFragment.newInstance(manager, esqueleto, textura, getString(R.string.title_animation_section_attack)), getString(R.string.title_animation_section_attack));
+		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Run), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Jump), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Crouch), getString(R.string.title_animation_section_crouch));
+		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Attack), getString(R.string.title_animation_section_attack));
 
 		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GamePreferences.VIDEO_DEFORM_HANDLES_PATH);
 		

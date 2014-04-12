@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.android.alert.TextInputAlert;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.character.display.DisplayGLSurfaceView;
@@ -24,7 +25,8 @@ import com.project.main.R;
 
 public class CharacterSelectFragment extends OpenGLFragment
 {
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
+	private ExternalStorageManager externalManager;
 	private SocialConnector connector;
 	private ViewPagerSwipeable pager;
 
@@ -32,23 +34,24 @@ public class CharacterSelectFragment extends OpenGLFragment
 	
 	private OnCharacterListener listener;
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete;
+	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete, botonRename, botonExport;
 
 	/* Constructora */
 
-	public static final CharacterSelectFragment newInstance(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
+	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Personaje personaje, ViewPagerSwipeable view, InternalStorageManager internalManager, ExternalStorageManager externalManager, SocialConnector connector)
 	{
 		CharacterSelectFragment fragment = new CharacterSelectFragment();
-		fragment.setParameters(l, p, s, m, c);
+		fragment.setParameters(listener, personaje, view, internalManager, externalManager, connector);
 		return fragment;
 	}
 
-	private void setParameters(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, ExternalStorageManager m, SocialConnector c)
+	private void setParameters(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, InternalStorageManager im, ExternalStorageManager em,  SocialConnector c)
 	{
 		listener = l;
 		personaje = p;
 		pager = s;
-		manager = m;
+		internalManager = im;
+		externalManager = em;
 		connector = c;
 	}
 
@@ -61,7 +64,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
-		canvas.setParameters(personaje, manager, TTipoDisplay.Selection);
+		canvas.setParameters(personaje, internalManager, TTipoDisplay.Selection);
 		
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GamePreferences.FONT_LOGO_PATH);
 		
@@ -77,8 +80,10 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
 		botonRepaint = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
+		botonRename = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect9);
 		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
-
+		botonExport = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect10);
+		
 		botonCamara.setOnClickListener(new OnCamaraClickListener());
 		botonRun.setOnClickListener(new OnRunClickListener());
 		botonJump.setOnClickListener(new OnJumpClickListener());
@@ -87,6 +92,8 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonReady.setOnClickListener(new OnReadyClickListener());
 		botonRepaint.setOnClickListener(new OnRepaintClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
+		botonRename.setOnClickListener(new OnRenameClickListener());
+		botonExport.setOnClickListener(new OnExportClickListener());
 
 		setCanvasListener(canvas);
 
@@ -108,6 +115,8 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonCrouch = null;
 		botonAttack = null;
 		botonRepaint = null;
+		botonRename = null;
+		botonExport = null;
 		canvas = null;
 		pager = null;
 	}
@@ -139,6 +148,9 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonAttack.setVisibility(View.INVISIBLE);
 		botonReady.setVisibility(View.INVISIBLE);
 		botonDelete.setVisibility(View.INVISIBLE);
+		botonRepaint.setVisibility(View.INVISIBLE);
+		botonRename.setVisibility(View.INVISIBLE);
+		botonExport.setVisibility(View.INVISIBLE);
 
 		botonCamara.setBackgroundResource(R.drawable.icon_share_picture);
 	}
@@ -159,6 +171,9 @@ public class CharacterSelectFragment extends OpenGLFragment
 			botonAttack.setVisibility(View.VISIBLE);
 			botonReady.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
+			botonRepaint.setVisibility(View.VISIBLE);
+			botonRename.setVisibility(View.VISIBLE);
+			botonExport.setVisibility(View.VISIBLE);
 		}
 
 		if (canvas.isEstadoRetoque())
@@ -186,7 +201,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 			else if (canvas.isEstadoRetoque())
 			{
 				Bitmap bitmap = canvas.getCapturaPantalla();
-				if (manager.guardarImagen(bitmap, personaje.getNombre()))
+				if (externalManager.guardarImagenTemp(bitmap))
 				{
 					String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getNombre() + " " + getString(R.string.text_social_create_character_final);
 
@@ -194,9 +209,11 @@ public class CharacterSelectFragment extends OpenGLFragment
 						@Override
 						public void onPossitiveButtonClick(String text)
 						{
-							connector.publicar(text, manager.cargarImagen(personaje.getNombre()));
+							connector.publicar(text, externalManager.cargarImagenTemp());
 							canvas.seleccionarTerminado();
 							pager.setSwipeable(true);
+							
+							externalManager.eliminarImagenTemp();
 
 							reiniciarInterfaz();
 							actualizarInterfaz();
@@ -291,6 +308,24 @@ public class CharacterSelectFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			listener.onCharacterDeleted();
+		}
+	}
+	
+	private class OnRenameClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			listener.onCharacterRenamed();
+		}
+	}
+	
+	private class OnExportClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			listener.onCharacterExported();
 		}
 	}
 }

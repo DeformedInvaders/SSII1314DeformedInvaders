@@ -17,17 +17,16 @@
             android:id="@+id/imageButtonDeform2"
             android:contentDescription="@string/desc_deform_remove"
             android:background="@drawable/icon_tool_remove" />
-        
-      	<ImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonDeform4"
-            android:contentDescription="@string/desc_deform_reset"
-            android:background="@drawable/icon_tool_reset" />
 
         <ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform3"
             android:contentDescription="@string/desc_deform_move"
             android:background="@drawable/icon_tool_hand" />
 		
+	</LinearLayout>
+  
+    <LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style">
+                
 		<ImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform5"
             android:contentDescription="@string/desc_deform_record"
@@ -44,5 +43,15 @@
             android:background="@drawable/icon_media_play" />
 		
     </LinearLayout>
-
+    
+    <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
+    
+		<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonDeform4"
+            android:contentDescription="@string/desc_deform_reset"
+            android:background="@drawable/icon_tool_reset"
+            android:layout_marginRight="@dimen/FragmentButton_LayoutWidth_Dimen"/>
+        
+	</LinearLayout>
+        
 </RelativeLayout>

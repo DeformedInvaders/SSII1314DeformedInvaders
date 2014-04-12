@@ -162,6 +162,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		else
 		{
+			// Marcos
+			dibujarMarcoInterior(gl, Color.LTGRAY);
+			
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
 
@@ -186,9 +189,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
-
-			// Marcos
-			dibujarMarcoInterior(gl);
 		}
 	}
 

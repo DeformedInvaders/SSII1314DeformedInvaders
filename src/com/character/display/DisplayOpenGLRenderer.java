@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.MapaBits;
@@ -65,6 +66,12 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		if (personajeCargado)
 		{
+			if (estadoCaptura == TEstadoCaptura.Retocando)
+			{
+				// Marco Oscuro
+				dibujarMarcoInterior(gl, Color.WHITE);
+			}
+			
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
 
@@ -99,11 +106,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 						// Centrado de Marco
 						centrarPersonajeEnMarcoFinal(gl);
-					}
-					else if (estadoCaptura == TEstadoCaptura.Retocando)
-					{
-						// Marco Oscuro
-						dibujarMarcoExterior(gl);
 					}
 				}
 			}

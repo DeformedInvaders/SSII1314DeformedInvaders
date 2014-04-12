@@ -4,29 +4,29 @@ import java.io.IOException;
 
 import android.media.MediaRecorder;
 
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
+import com.creation.data.TTipoMovimiento;
 
 public class AudioRecorderManager
 {
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
 
 	private MediaRecorder recorder;
 	private TEstadoRecord estado;
 
 	/* Constructora */
 
-	public AudioRecorderManager(ExternalStorageManager manager)
+	public AudioRecorderManager(InternalStorageManager manager)
 	{
-		this.manager = manager;
+		internalManager = manager;
+		recorder = new MediaRecorder();
 
-		this.recorder = new MediaRecorder();
-
-		this.estado = TEstadoRecord.Parado;
+		estado = TEstadoRecord.Parado;
 	}
 
 	/* Métodos de Selección de Estado */
 
-	public boolean startRecording(String nombre)
+	public boolean startRecording(TTipoMovimiento tipo)
 	{
 		try
 		{
@@ -37,7 +37,7 @@ public class AudioRecorderManager
 				// Initialized
 				recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 				// DataSourceConfigured
-				recorder.setOutputFile(manager.guardarAudioTemp(nombre));
+				recorder.setOutputFile(internalManager.guardarAudioTemp(tipo));
 				// DataSourceConfigured
 				recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 				// DataSourceConfigured

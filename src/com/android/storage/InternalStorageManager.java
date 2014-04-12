@@ -1,5 +1,6 @@
 package com.android.storage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,8 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,55 +19,90 @@ import android.widget.Toast;
 
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
+import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
-import com.project.main.LoadingFragment;
+import com.project.main.OnLoadingListener;
 import com.project.main.R;
 
 public class InternalStorageManager
 {
-	private static final String PREFERENCES_GAME_FILE = "PreferencesGameDataBase";
-	private static final String CHARACTERS_NAMES_FILE = "CharactersNamesDataBase";
-	private static final String LOCKED_LEVELS_FILE = "LockedLevelDataBase";
-	private static final String SCORE_LEVELS_FILE = "ScoreLevelsDataBase";
+	private static final String CHARACTER_DIRECTORY = "CHARACTERS";
+	private static final String GAMEDATA_DIRECTORY = "GAMEDATA";
+	private static final String TEMP_DIRECTORY = "TEMP";
+	
+	private static final String DATA_FILE = "DATA";
+	private static final String AUDIO_FILE = "AUDIO";
+	private static final String PREFERENCES_FILE = "PREFERENCES";
+	private static final String LEVELS_FILE = "LOCKEDLEVELS";
+	private static final String SCORE_FILE = "SCORELEVELS";
+	
+	private static final String MUSIC_EXTENSION = ".3gp";
 
 	private Context mContext;
-	private List<String> nombres;
 
 	/* Constructora */
 
 	public InternalStorageManager(Context context)
 	{
 		mContext = context;
-		nombres = new ArrayList<String>();
-
-		cargarNombres();
+		
+		obtenerDirectorio(CHARACTER_DIRECTORY);
+		obtenerDirectorio(GAMEDATA_DIRECTORY);
+		obtenerDirectorio(TEMP_DIRECTORY);
 	}
 
 	/* Métodos Nombre de Directorios */
-
-	private boolean comprobarNombresInternos(String nombre)
+	
+	private File obtenerDirectorio(String name)
 	{
-		if (nombre.equals(PREFERENCES_GAME_FILE) || nombre.equals(CHARACTERS_NAMES_FILE) || nombre.equals(LOCKED_LEVELS_FILE) || nombre.equals(SCORE_LEVELS_FILE))
-		{
-			return false;
-		}
-
-		return true;
+		return mContext.getDir(name, Context.MODE_PRIVATE);
 	}
-
-	private boolean comprobarNombresUsados(String nombre)
+	
+	private File obtenerDirectorio(String path, String name)
 	{
-		Iterator<String> it = nombres.iterator();
-		while(it.hasNext())
+		File file = new File(mContext.getDir(path, Context.MODE_PRIVATE), evaluarNombre(name));
+		if(!file.exists())
 		{
-			if(it.next().equals(nombre))
-			{
-				return false;
-			}
+			file.mkdir();		
 		}
-		return true;
+		
+		return file;
+	}
+	
+	private boolean eliminarDirectorio(File file)
+	{
+		if(file.exists())
+		{
+			if(file.isDirectory())
+			{
+				File[] ficheros = file.listFiles();
+				if(ficheros != null)
+				{
+					for (int i = 0; i < ficheros.length; i++)
+					{
+						eliminarDirectorio(ficheros[i]);
+					}
+				}
+			}
+			
+			return file.delete();
+		}
+		
+		return false;
+	}
+	
+	private boolean comprobarDirectorio(String path, String name)
+	{
+		File dir = new File(mContext.getDir(path, Context.MODE_PRIVATE), evaluarNombre(name));
+		return dir.exists();
+	}
+	
+	private boolean comprobarFichero(String name)
+	{
+		File file = new File(name);
+		return file.exists();
 	}
 
 	private String evaluarNombre(String nombre)
@@ -74,209 +110,39 @@ public class InternalStorageManager
 		return nombre.toUpperCase(Locale.getDefault());
 	}
 
-	/* Métodos Lista de Nombres */
+	/* Métodos Personajes */
 
-	private boolean cargarNombres()
+	public List<Personaje> cargarListaPersonajes(OnLoadingListener listener)
 	{
-		try
-		{
-			FileInputStream file = mContext.openFileInput(CHARACTERS_NAMES_FILE);
-			ObjectInputStream data = new ObjectInputStream(file);
-
-			// Cargar Personaje Seleccionado
-			int numPersonajes = data.readInt();
-
-			for (int i = 0; i < numPersonajes; i++)
-			{
-				nombres.add(data.readUTF());
-			}
-
-			data.close();
-			file.close();
-
-			Log.d("TEST", "Names loaded");
-			return true;
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "File Name file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("TEST", "File Name sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("TEST", "File Name ioexception");
-		}
-
-		Log.d("TEST", "Names not loadead");
-		return false;
-	}
-
-	private boolean eliminarNombre(String nombre)
-	{
-		if (nombres.remove(nombre))
-		{
-			Log.d("TEST", "Name deleted");
-			return guardarNombres();
-		}
-
-		Log.d("TEST", "Name not deleted");
-		return false;
-	}
-
-	private boolean guardarNombres()
-	{
-		try
-		{
-			FileOutputStream file = mContext.openFileOutput(CHARACTERS_NAMES_FILE, Context.MODE_PRIVATE);
-			ObjectOutputStream data = new ObjectOutputStream(file);
-
-			// Guardar Número de Personajes
-			data.writeInt(nombres.size());
-
-			// Guardar Nombres
-			Iterator<String> it = nombres.iterator();
-			while (it.hasNext())
-			{
-				data.writeUTF(it.next());
-			}
-
-			data.flush();
-			data.close();
-			file.close();
-
-			Log.d("TEST", "Names saved");
-			return true;
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "File Name file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("TEST", "File Name sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("TEST", "File Name ioexception");
-		}
-
-		Log.d("TEST", "Names not loadead");
-		return false;
-	}
-
-	/* Métodos Lista de Personajes */
-
-	public List<Personaje> cargarListaPersonajes(LoadingFragment fragment)
-	{
-		int i = 0;
 		List<Personaje> lista = new ArrayList<Personaje>();
-
-		// Cargar Lista de Personajes
-		Iterator<String> it = nombres.iterator();
-		while (it.hasNext())
+		
+		File file = obtenerDirectorio(CHARACTER_DIRECTORY);
+		if (file.exists() && file.isDirectory())
 		{
-			String name = it.next();
-
-			fragment.updateProgressBarStatus(100 * i / nombres.size(), name);
-
-			Personaje p = cargarPersonaje(name);
-			if (p != null)
+			String[] personajes = file.list();
+			if(personajes != null)
 			{
-				lista.add(p);
+				for (int i = 0; i < personajes.length; i++)
+				{
+					 listener.onProgress(100 * i / personajes.length, personajes[i]);
+					
+					Personaje p = cargarPersonaje(personajes[i]);
+					if (p != null)
+					{
+						lista.add(p);
+					}
+				}
 			}
-
-			i++;
 		}
-
+		
 		return lista;
 	}
-
-	/* Métodos Personaje Seleccionado */
-
-	public boolean cargarPreferencias()
-	{
-		try
-		{
-			FileInputStream file = mContext.openFileInput(PREFERENCES_GAME_FILE);
-			ObjectInputStream data = new ObjectInputStream(file);
-
-			// Cargar Personaje Seleccionado			
-			GamePreferences.setCharacterParameters(data.readInt());
-			GamePreferences.setMusicParameters(data.readBoolean());
-			GamePreferences.setTipParameters(data.readBoolean());
-
-			data.close();
-			file.close();
-
-			Log.d("TEST", "Chosen loadead");
-			return true;
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "File Chosen file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("TEST", "File Chosen sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("TEST", "File Chosen ioexception");
-		}
-
-		Log.d("TEST", "Chosen not loadead");
-		GamePreferences.setCharacterParameters(-1);
-		GamePreferences.setMusicParameters(true);
-		GamePreferences.setTipParameters(true);
-		return false;
-	}
-
-	public boolean guardarPreferencias()
-	{
-		try
-		{
-			FileOutputStream file = mContext.openFileOutput(PREFERENCES_GAME_FILE, Context.MODE_PRIVATE);
-			ObjectOutputStream data = new ObjectOutputStream(file);
-
-			// Guardar Personaje Seleccionado
-			data.writeInt(GamePreferences.GET_CHARACTER_GAME());
-			data.writeBoolean(GamePreferences.MUSIC_ENABLED());
-			data.writeBoolean(GamePreferences.TIPS_ENABLED());
-			
-			data.flush();
-			data.close();
-			file.close();
-
-			Log.d("TEST", "Chosen saved");
-			return true;
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "File Chosen file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("TEST", "File Chosen sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("TEST", "File Chosen ioexception");
-		}
-
-		Log.d("TEST", "Chosen not saved");
-		return false;
-	}
-
-	/* Métodos Personaje Actual */
 
 	public Personaje cargarPersonaje(String nombre)
 	{
 		try
 		{
-			FileInputStream file = mContext.openFileInput(nombre);
+			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(CHARACTER_DIRECTORY, nombre), DATA_FILE));
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Personajes
@@ -284,139 +150,171 @@ public class InternalStorageManager
 			p.setEsqueleto((Esqueleto) data.readObject());
 			p.setTextura((Textura) data.readObject());
 			p.setMovimientos((Movimientos) data.readObject());
-			p.setNombre(nombre);
+			p.setNombre((String) data.readObject());
 
 			data.close();
 			file.close();
 
-			Log.d("TEST", "Character Loadead");
+			Log.d("INTERNAL", "Character Loadead");
 			return p;
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d("TEST", "File Character class not found");
+			Log.d("INTERNAL", "File Character class not found");
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("TEST", "File Character file not found");
+			Log.d("INTERNAL", "File Character file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("TEST", "File Character sream corrupted");
+			Log.d("INTERNAL", "File Character sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "File Character ioexception");
+			Log.d("INTERNAL", "File Character ioexception");
 		}
 
-		Log.d("TEST", "Character not loadead");
+		Log.d("INTERNAL", "Character not loadead");
 		return null;
 	}
 
 	public boolean guardarPersonaje(Personaje personaje)
 	{
-		// Comprobar Nombre de Fichero usado por el Sistema
-		if (!comprobarNombresInternos(personaje.getNombre()))
-		{
-			Toast.makeText(mContext, R.string.error_storage_internal_name, Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
 		// Comprobar Nombres de Personajes ya existentes
-		if (comprobarNombresUsados(personaje.getNombre()))
+		if (comprobarDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()))
 		{
 			Toast.makeText(mContext, R.string.error_storage_used_name, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		String nombreActual = evaluarNombre(personaje.getNombre());
-		nombres.add(nombreActual);
-
-		try
-		{
-			FileOutputStream file = mContext.openFileOutput(nombreActual, Context.MODE_PRIVATE);
-			ObjectOutputStream data = new ObjectOutputStream(file);
-
-			// Guardar Personajes
-			data.writeObject(personaje.getEsqueleto());
-			data.writeObject(personaje.getTextura());
-			data.writeObject(personaje.getMovimientos());
-
-			data.flush();
-			data.close();
-			file.close();
-
-			Log.d("TEST", "Character saved");
-			return guardarNombres();
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("TEST", "File Character file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("TEST", "File Character sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("TEST", "File Character ioexception");
-		}
-
-		Log.d("TEST", "Character not saved");
-		return false;
+		return actualizarPersonaje(personaje);
 	}
 	
 	public boolean actualizarPersonaje(Personaje personaje)
 	{
 		try
 		{
-			FileOutputStream file = mContext.openFileOutput(evaluarNombre(personaje.getNombre()), Context.MODE_PRIVATE);
+			FileOutputStream file = new FileOutputStream(new File(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()), DATA_FILE));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personajes
 			data.writeObject(personaje.getEsqueleto());
 			data.writeObject(personaje.getTextura());
 			data.writeObject(personaje.getMovimientos());
+			data.writeObject(personaje.getNombre());
 
 			data.flush();
 			data.close();
 			file.close();
 
-			Log.d("TEST", "Character saved");
+			Log.d("INTERNAL", "Character saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("TEST", "File Character file not found");
+			Log.d("INTERNAL", "File Character file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("TEST", "File Character sream corrupted");
+			Log.d("INTERNAL", "File Character sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "File Character ioexception");
+			Log.d("INTERNAL", "File Character ioexception");
 		}
 
-		Log.d("TEST", "Character not saved");
+		Log.d("INTERNAL", "Character not saved");
 		return false;
 	}
 
 	public boolean eliminarPersonaje(Personaje personaje)
 	{
-		String nombreActual = evaluarNombre(personaje.getNombre());
-
-		if (mContext.deleteFile(nombreActual))
-		{
-			Log.d("TEST", "File deleted");
-			return eliminarNombre(nombreActual);
-		}
-
-		Log.d("TEST", "File not deleted");
-		return false;
+		return eliminarDirectorio(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()));
 	}
 
-	/* Métodos Niveles */
+	public boolean renombrarPersonaje(Personaje personaje, String nombre)
+	{
+		// Comprobar Nombres de Personajes ya existentes
+		if (comprobarDirectorio(CHARACTER_DIRECTORY, nombre))
+		{
+			Toast.makeText(mContext, R.string.error_storage_used_name, Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		
+		eliminarPersonaje(personaje);
+		
+		personaje.setNombre(evaluarNombre(nombre));
+		return actualizarPersonaje(personaje);
+	}
+	
+	public boolean exportarPersonaje(Personaje personaje)
+	{
+		try
+		{
+			FileInputStream inFile = new FileInputStream(new File(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()), DATA_FILE));
+			FileOutputStream outFile = new FileOutputStream(new File(ExternalStorageManager.getDirectorioExterno(evaluarNombre(personaje.getNombre()))));
+
+			FileChannel inChannel = inFile.getChannel();
+			FileChannel outChannel = outFile.getChannel();
+			
+			inChannel.transferTo(0, inChannel.size(), outChannel);
+			    
+			inChannel.close();
+			outChannel.close();
+			
+			inFile.close();
+			outFile.close();
+			
+			return true;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/* Métodos Audio */
+	
+	public String cargarAudioTemp(TTipoMovimiento tipo)
+	{
+		return obtenerDirectorio(TEMP_DIRECTORY).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + MUSIC_EXTENSION;
+	}
+	
+	public String guardarAudioTemp(TTipoMovimiento tipo)
+	{
+		return cargarAudioTemp(tipo);
+	}
+	
+	public boolean comprobarAudioTemp(TTipoMovimiento tipo)
+	{
+		return comprobarFichero(cargarAudioTemp(tipo));
+	}
+	
+	public boolean eliminarAudioTemp(TTipoMovimiento tipo)
+	{
+		return eliminarDirectorio(new File(cargarAudioTemp(tipo)));
+	}
+	
+	public String cargarAudio(String nombre, TTipoMovimiento tipo)
+	{
+		return obtenerDirectorio(CHARACTER_DIRECTORY, nombre).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + MUSIC_EXTENSION;
+	}
+	
+	public boolean guardarAudio(String nombre, TTipoMovimiento tipo)
+	{
+		File file = new File(cargarAudioTemp(tipo));
+		return file.renameTo(new File(cargarAudio(nombre, tipo)));
+	}
+	
+	public boolean comprobarAudio(String nombre, TTipoMovimiento tipo)
+	{
+		return comprobarFichero(cargarAudio(nombre, tipo));
+	}
+	
+	/* Métodos Preferencias */
 
 	public boolean[] cargarNiveles()
 	{
@@ -424,7 +322,7 @@ public class InternalStorageManager
 
 		try
 		{
-			FileInputStream file = mContext.openFileInput(LOCKED_LEVELS_FILE);
+			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), LEVELS_FILE));
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Niveles Jugados
@@ -438,23 +336,23 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("TEST", "Levels loadead");
+			Log.d("INTERNAL", "Levels loadead");
 			return niveles;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("TEST", "File Levels file not found");
+			Log.d("INTERNAL", "File Levels file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("TEST", "File Levels sream corrupted");
+			Log.d("INTERNAL", "File Levels sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "File Levels ioexception");
+			Log.d("INTERNAL", "File Levels ioexception");
 		}
 
-		Log.d("TEST", "Levels not loadead");
+		Log.d("INTERNAL", "Levels not loadead");
 
 		niveles[0] = true;
 		return niveles;
@@ -464,7 +362,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileOutputStream file = mContext.openFileOutput(LOCKED_LEVELS_FILE, Context.MODE_PRIVATE);
+			FileOutputStream file = new FileOutputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), LEVELS_FILE));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personaje Seleccionado
@@ -477,23 +375,23 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("TEST", "Chosen saved");
+			Log.d("INTERNAL", "Levels saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("TEST", "File Chosen file not found");
+			Log.d("INTERNAL", "File Levels file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("TEST", "File Chosen sream corrupted");
+			Log.d("INTERNAL", "File Levels sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "File Chosen ioexception");
+			Log.d("INTERNAL", "File Levels ioexception");
 		}
 
-		Log.d("TEST", "Chosen not saved");
+		Log.d("INTERNAL", "Levels not saved");
 		return false;
 	}
 
@@ -503,7 +401,7 @@ public class InternalStorageManager
 
 		try
 		{
-			FileInputStream file = mContext.openFileInput(SCORE_LEVELS_FILE);
+			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), SCORE_FILE));
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Niveles Jugados
@@ -515,23 +413,23 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("TEST", "Levels loadead");
+			Log.d("INTERNAL", "Score loadead");
 			return puntuacion;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("TEST", "File Levels file not found");
+			Log.d("INTERNAL", "File Score file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("TEST", "File Levels sream corrupted");
+			Log.d("INTERNAL", "File Score sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "File Levels ioexception");
+			Log.d("INTERNAL", "File Score ioexception");
 		}
 
-		Log.d("TEST", "Levels not loadead");
+		Log.d("INTERNAL", "Score not loadead");
 
 		return puntuacion;
 	}
@@ -540,7 +438,7 @@ public class InternalStorageManager
 	{
 		try
 		{
-			FileOutputStream file = mContext.openFileOutput(SCORE_LEVELS_FILE, Context.MODE_PRIVATE);
+			FileOutputStream file = new FileOutputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), SCORE_FILE));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			// Guardar Personaje Seleccionado
@@ -553,23 +451,100 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("TEST", "Chosen saved");
+			Log.d("INTERNAL", "Score saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("TEST", "File Chosen file not found");
+			Log.d("INTERNAL", "File Score file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("TEST", "File Chosen sream corrupted");
+			Log.d("INTERNAL", "File Score sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("TEST", "File Chosen ioexception");
+			Log.d("INTERNAL", "File Score ioexception");
 		}
 
-		Log.d("TEST", "Chosen not saved");
+		Log.d("INTERNAL", "Score not saved");
 		return false;
 	}
+
+	public boolean cargarPreferencias()
+	{
+		try
+		{
+			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), PREFERENCES_FILE));
+			ObjectInputStream data = new ObjectInputStream(file);
+
+			// Cargar Personaje Seleccionado			
+			GamePreferences.setCharacterParameters(data.readInt());
+			GamePreferences.setMusicParameters(data.readBoolean());
+			GamePreferences.setTipParameters(data.readBoolean());
+
+			data.close();
+			file.close();
+
+			Log.d("INTERNAL", "Preferences loadead");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("INTERNAL", "File Preferences file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("INTERNAL", "File Preferences sream corrupted");
+		}
+		catch (IOException e)
+		{
+			Log.d("INTERNAL", "File Preferences ioexception");
+		}
+
+		Log.d("INTERNAL", "Preferences not loadead");
+		
+		GamePreferences.setCharacterParameters(-1);
+		GamePreferences.setMusicParameters(true);
+		GamePreferences.setTipParameters(true);
+		return false;
+	}
+
+	public boolean guardarPreferencias()
+	{
+		try
+		{
+			FileOutputStream file = new FileOutputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), PREFERENCES_FILE));
+			ObjectOutputStream data = new ObjectOutputStream(file);
+
+			// Guardar Personaje Seleccionado
+			data.writeInt(GamePreferences.GET_CHARACTER_GAME());
+			data.writeBoolean(GamePreferences.MUSIC_ENABLED());
+			data.writeBoolean(GamePreferences.TIPS_ENABLED());
+			
+			data.flush();
+			data.close();
+			file.close();
+
+			Log.d("INTERNAL", "Preferences saved");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d("INTERNAL", "File Preferences file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d("INTERNAL", "File Preferences sream corrupted");
+		}
+		catch (IOException e)
+		{
+			Log.d("INTERNAL", "File Preferences ioexception");
+		}
+
+		Log.d("INTERNAL", "Preferences not saved");
+		return false;
+	}
+
+
 }

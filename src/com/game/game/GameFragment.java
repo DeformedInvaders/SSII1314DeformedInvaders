@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.storage.ExternalStorageManager;
+import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
@@ -23,7 +23,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 {
 	private GameFragmentListener mCallback;
 
-	private ExternalStorageManager manager;
+	private InternalStorageManager internalManager;
 
 	private InstanciaNivel level;
 	private Personaje personaje;
@@ -37,17 +37,17 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* Constructora */
 
-	public static final GameFragment newInstance(Personaje p, ExternalStorageManager m, InstanciaNivel l)
+	public static final GameFragment newInstance(Personaje p, InternalStorageManager m, InstanciaNivel l)
 	{
 		GameFragment fragment = new GameFragment();
 		fragment.setParameters(p, m, l);
 		return fragment;
 	}
 
-	private void setParameters(Personaje p, ExternalStorageManager m, InstanciaNivel l)
+	private void setParameters(Personaje p, InternalStorageManager m, InstanciaNivel l)
 	{
 		personaje = p;
-		manager = m;
+		internalManager = m;
 		level = l;
 	}
 
@@ -88,7 +88,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		imageBackground.setBackgroundResource(level.getFondoNivel().getIdTexturaCielo());
 
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
-		canvas.setParameters(personaje, manager, this, level);
+		canvas.setParameters(personaje, internalManager, this, level);
 		
 		textoPuntuacion = (TextView) rootView.findViewById(R.id.textViewGame1);
 		
