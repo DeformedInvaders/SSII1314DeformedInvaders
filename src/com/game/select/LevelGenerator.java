@@ -75,7 +75,8 @@ public class LevelGenerator
 		listaNombres.add(mContext.getString(R.string.title_level_section_moon));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_moon, GamePreferences.ID_TYPE_MISSILE));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon_1, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon_2, GamePreferences.ID_TYPE_OBSTACLE + 1));
 
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, GamePreferences.ID_TYPE_ENEMY));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, GamePreferences.ID_TYPE_ENEMY + 1));
@@ -93,8 +94,9 @@ public class LevelGenerator
 		listaNombres.add(mContext.getString(R.string.title_level_section_newyork));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_newyork, GamePreferences.ID_TYPE_MISSILE));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork, GamePreferences.ID_TYPE_OBSTACLE));
-
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork_1, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork_2, GamePreferences.ID_TYPE_OBSTACLE + 1));
+		
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_1, GamePreferences.ID_TYPE_ENEMY));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_2, GamePreferences.ID_TYPE_ENEMY + 1));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_3, GamePreferences.ID_TYPE_ENEMY + 2));
@@ -111,8 +113,9 @@ public class LevelGenerator
 		listaNombres.add(mContext.getString(R.string.title_level_section_rome));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_rome, GamePreferences.ID_TYPE_MISSILE));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome, GamePreferences.ID_TYPE_OBSTACLE));
-
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome_1, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome_2, GamePreferences.ID_TYPE_OBSTACLE + 1));
+		
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_1, GamePreferences.ID_TYPE_ENEMY));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_2, GamePreferences.ID_TYPE_ENEMY + 1));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_3, GamePreferences.ID_TYPE_ENEMY + 2));
@@ -129,7 +132,8 @@ public class LevelGenerator
 		listaNombres.add(mContext.getString(R.string.title_level_section_egypt));
 		
 		listaEnemigos.add(new Misil(R.drawable.missile_egypt, GamePreferences.ID_TYPE_MISSILE));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt_1, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt_2, GamePreferences.ID_TYPE_OBSTACLE + 1));
 
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_1, GamePreferences.ID_TYPE_ENEMY));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_2, GamePreferences.ID_TYPE_ENEMY + 1));
@@ -147,7 +151,8 @@ public class LevelGenerator
 		listaNombres.add(mContext.getString(R.string.title_level_section_stonehenge));
 
 		listaEnemigos.add(new Misil(R.drawable.missile_stonehenge, GamePreferences.ID_TYPE_MISSILE));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge_1, GamePreferences.ID_TYPE_OBSTACLE));
+		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge_2, GamePreferences.ID_TYPE_OBSTACLE + 1));
 
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_1, GamePreferences.ID_TYPE_ENEMY));
 		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_2, GamePreferences.ID_TYPE_ENEMY + 1));

@@ -17,9 +17,11 @@ public class GamePreferences
 	public static final float NULL_SCALE_FACTOR = 1.0f;
 	
 	// Animación
-	private static final int TIME_INTERVAL_ANIMATION_FAST = 10;
+	private static final int TIME_INTERVAL_ANIMATION_SUPER_FAST = 10;
+	private static final int TIME_INTERVAL_ANIMATION_FAST = 12;
 	private static final int TIME_INTERVAL_ANIMATION_MEDIUM = 15;
-	private static final int TIME_INTERVAL_ANIMATION_SLOW = 20;
+	private static final int TIME_INTERVAL_ANIMATION_SLOW = 18;
+	private static final int TIME_INTERVAL_ANIMATION_SUPER_SLOW = 20;
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
@@ -32,11 +34,11 @@ public class GamePreferences
 	public static final int MAX_TEXTURE_CHARACTER = 1;
 	public static final int MAX_TEXTURE_STICKER = 5;
 	public static final int MAX_TEXTURE_BUBBLE = 3;
-	public static final int MAX_TEXTURE_OBSTACLE = 1;
+	public static final int MAX_TEXTURE_OBSTACLE = 2;
 	public static final int MAX_TEXTURE_MISSILE = 1;
 	public static final int MAX_TEXTURE_ENEMY = 4;
 
-	public static final int NUM_TYPE_ENEMIES = 6;
+	public static final int NUM_TYPE_ENEMIES = MAX_TEXTURE_OBSTACLE + MAX_TEXTURE_MISSILE + MAX_TEXTURE_ENEMY;
 	public static final int NUM_TYPE_STICKERS_EYES = 8;
 	public static final int NUM_TYPE_STICKERS_MOUTH = 7;
 	public static final int NUM_TYPE_STICKERS_WEAPON = 16;
@@ -212,22 +214,30 @@ public class GamePreferences
 	
 	public static final int TIME_INTERVAL_ANIMATION()
 	{
-		return TIME_INTERVAL_ANIMATION_SLOW;
+		return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
 	}
 	
 	public static final int TIME_INTERVAL_ANIMATION(int ciclos)
 	{
-		if(ciclos < MAX_NUM_CICLOS() / 3)
+		if(ciclos < MAX_NUM_CICLOS() / 6)
+		{
+			return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
+		}
+		else if(ciclos < 2 * MAX_NUM_CICLOS() / 6)
 		{
 			return TIME_INTERVAL_ANIMATION_SLOW;
 		}
-		else if(ciclos < 2 * MAX_NUM_CICLOS() / 3)
+		else if(ciclos < 3 * MAX_NUM_CICLOS() / 6)
 		{
 			return TIME_INTERVAL_ANIMATION_MEDIUM;
 		}
-		else
+		else if(ciclos < 4 * MAX_NUM_CICLOS() / 6)
 		{
 			return TIME_INTERVAL_ANIMATION_FAST;
+		}
+		else
+		{
+			return TIME_INTERVAL_ANIMATION_SUPER_FAST;
 		}
 	}
 	
