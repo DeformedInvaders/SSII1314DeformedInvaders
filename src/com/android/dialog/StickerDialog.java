@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.game.data.TTipoSticker;
 import com.project.main.GamePreferences;
+import com.project.main.GameStatistics;
 import com.project.main.R;
 
 public abstract class StickerDialog extends WindowDialog
@@ -16,7 +17,7 @@ public abstract class StickerDialog extends WindowDialog
 	/* Constructora */
 	int imageWidth, imageHeight;
 
-	public StickerDialog(Context context)
+	public StickerDialog(Context context, GameStatistics[] estadisticas)
 	{
 		super(context, R.layout.dialog_sticker_layout);
 		
@@ -37,9 +38,9 @@ public abstract class StickerDialog extends WindowDialog
 		
 		configurarPegatinas(eyeLayout, GamePreferences.RESOURCE_ID_STICKER_EYES, GamePreferences.NUM_TYPE_STICKERS_EYES, eyeListener);
 		configurarPegatinas(mouthLayout, GamePreferences.RESOURCE_ID_STICKER_MOUTH, GamePreferences.NUM_TYPE_STICKERS_MOUTH, mouthListener);
-		configurarPegatinas(weaponLayout, GamePreferences.RESOURCE_ID_STICKER_WEAPON, GamePreferences.NUM_TYPE_STICKERS_WEAPON, weaponListener);
-		configurarPegatinas(trinketLayout, GamePreferences.RESOURCE_ID_STICKER_TRINKET, GamePreferences.NUM_TYPE_STICKERS_TRINKET, trinketListener);
-		configurarPegatinas(helmetLayout, GamePreferences.RESOURCE_ID_STICKER_HELMET, GamePreferences.NUM_TYPE_STICKERS_HELMET, helmetListener);
+		configurarPegatinas(weaponLayout, estadisticas, GamePreferences.RESOURCE_ID_STICKER_WEAPON, GamePreferences.NUM_TYPE_STICKERS_WEAPON, weaponListener);
+		configurarPegatinas(trinketLayout, estadisticas,GamePreferences.RESOURCE_ID_STICKER_TRINKET, GamePreferences.NUM_TYPE_STICKERS_TRINKET, trinketListener);
+		configurarPegatinas(helmetLayout, estadisticas, GamePreferences.RESOURCE_ID_STICKER_HELMET, GamePreferences.NUM_TYPE_STICKERS_HELMET, helmetListener);
 	}
 	
 	private void configurarPegatinas(LinearLayout layout, String nombrePegatina, int numPegatinas, OnClickListener listener)
@@ -57,6 +58,27 @@ public abstract class StickerDialog extends WindowDialog
 			layout.addView(image);
 		}
 	}
+	
+	private void configurarPegatinas(LinearLayout layout, GameStatistics[] estadisticas, String nombrePegatina, int numPegatinas, OnClickListener listener)
+	{
+		for (int i = 0; i < numPegatinas; i++)
+		{
+			// FIXME Quitar el +1 al añadir pegatinas al nivel Luna
+			int pos = (i / (GamePreferences.NUM_LEVELS - 1)) + 1;
+			int imageId = mContext.getResources().getIdentifier(nombrePegatina + (i + 1), "drawable", mContext.getPackageName());
+						
+			ImageView image = new ImageView(mContext, null, R.style.Button_Fragment_Style);
+			image.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
+			image.setBackgroundResource(imageId);
+			image.setTag(i);
+			
+			if(estadisticas[pos].isPerfected())
+			{
+				image.setOnClickListener(listener);
+				layout.addView(image);
+			}
+		}
+	}
 
 	/* Métodos Abstractos */
 
@@ -65,10 +87,7 @@ public abstract class StickerDialog extends WindowDialog
 	/* Métodos Abstractos WindowDialog */
 
 	@Override
-	protected void onTouchOutsidePopUp(View v, MotionEvent event)
-	{
-		dismiss();
-	}
+	protected void onTouchOutsidePopUp(View v, MotionEvent event) { }
 
 	/* Métodos Listener onClick */
 

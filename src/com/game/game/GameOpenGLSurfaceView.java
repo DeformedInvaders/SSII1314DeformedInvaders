@@ -85,7 +85,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						renderer.pararAnimacion();
 						requestRender();
 	
-						listener.onGameFinished(renderer.getPuntuacion());
+						listener.onGameFinished(renderer.getPuntuacion(), renderer.getVidas());
 					break;
 					case FinJuegoDerrota:
 						renderer.pararAnimacion();

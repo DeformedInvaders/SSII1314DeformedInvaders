@@ -68,8 +68,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 
 	/* Niveles */
 	private LevelGenerator levelGenerator;
-	private boolean[] estadoNiveles;
-	private int[] puntuacionNiveles;
+	private GameStatistics[] estadisticasNiveles;
 
 	/* Métodos Activity */
 
@@ -226,11 +225,10 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Métodos Loading Fragment */
 
 	@Override
-	public void onLoadingListCharacters(List<Personaje> lista, boolean[] niveles, int[] puntuacion)
+	public void onLoadingListCharacters(List<Personaje> lista, GameStatistics[] niveles)
 	{
 		listaPersonajes = lista;
-		estadoNiveles = niveles;
-		puntuacionNiveles = puntuacion;
+		estadisticasNiveles = niveles;
 		
 		changeFragment(MainFragment.newInstance(listaPersonajes, internalManager));
 	}
@@ -254,7 +252,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onMainPlayButtonClicked()
 	{
-		changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
+		changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadisticasNiveles));
 	}
 
 	/* Métodos Design Fragment */
@@ -269,7 +267,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		else
 		{
 			personajeActual.setEsqueleto(esqueleto);
-			changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto()));
+			changeFragment(PaintFragment.newInstance(personajeActual.getEsqueleto(), estadisticasNiveles));
 		}
 	}
 
@@ -428,7 +426,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	@Override
 	public void onCharacterSelectionRepaintButtonClicked(int indice)
 	{
-		changeFragment(PaintFragment.newInstance(listaPersonajes.get(indice), indice));
+		changeFragment(PaintFragment.newInstance(listaPersonajes.get(indice), indice, estadisticasNiveles));
 	}
 	
 	@Override
@@ -458,23 +456,32 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 	/* Métodos Game Fragment */
 
 	@Override
-	public void onGameFinished(final TTipoLevel level, final int score, final int idImagen, final String nameLevel)
+	public void onGameFinished(final TTipoLevel level, final int score, final int idImagen, final String nameLevel, final boolean perfecto)
 	{
+		final boolean newStickers = !estadisticasNiveles[level.ordinal()].isPerfected();
+		
 		// Sonido Victoria
 		audioManager.startPlaying(R.raw.effect_level_complete, false);
 		
-		// Desbloquear Siguiente nivel
-		int nextLevel = (level.ordinal() + 1) % estadoNiveles.length;
-		estadoNiveles[nextLevel] = true;
+		// Aumentar número de Victorias
+		estadisticasNiveles[level.ordinal()].increaseVictories();	
 		
-		// Actualizar Puntuacion máxima
-		if (score > puntuacionNiveles[level.ordinal()])
+		// Actualizar logos
+		estadisticasNiveles[level.ordinal()].setCompleted();
+		
+		if(perfecto)
 		{
-			puntuacionNiveles[level.ordinal()] = score;
+			estadisticasNiveles[level.ordinal()].setPerfected();
 		}
 		
-		internalManager.guardarNiveles(estadoNiveles);
-		internalManager.guardarPuntuacion(puntuacionNiveles);
+		// Desbloquear Siguiente nivel
+		int nextLevel = (level.ordinal() + 1) % estadisticasNiveles.length;
+		estadisticasNiveles[nextLevel].setUnlocked();
+		
+		// Actualizar Puntuacion máxima
+		estadisticasNiveles[level.ordinal()].setMaxScore(score);
+		
+		internalManager.guardarEstadisticas(estadisticasNiveles);
 
 		// Publicar Nivel Completado
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), idImagen);
@@ -493,13 +500,21 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onPossitiveButtonClick()
 			{
+				if(newStickers)
+				{
+					Toast.makeText(getApplication(), R.string.text_game_newstikers, Toast.LENGTH_SHORT).show();
+				}
 				changeFragment(GameFragment.newInstance(listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME()), internalManager, levelGenerator.getInstanciaLevel(level)));
 			}
 
 			@Override
 			public void onNegativeButtonClick()
 			{
-				changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
+				if(newStickers)
+				{
+					Toast.makeText(getApplication(), R.string.text_game_newstikers, Toast.LENGTH_SHORT).show();
+				}
+				changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadisticasNiveles));
 			}
 		};
 
@@ -512,6 +527,9 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 		// Sonido Derrota
 		audioManager.startPlaying(R.raw.effect_game_over, false);
 		
+		// Aumentar número de Derrotas
+		estadisticasNiveles[level.ordinal()].increaseNumDeaths();
+		
 		ImageAlert alert = new ImageAlert(this, getString(R.string.text_game_fail), getString(R.string.text_button_replay), getString(R.string.text_button_levels), idImagen) {
 			@Override
 			public void onPossitiveButtonClick()
@@ -522,7 +540,7 @@ public class MainActivity extends FragmentActivity implements LoadingFragment.Lo
 			@Override
 			public void onNegativeButtonClick()
 			{
-				changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadoNiveles));
+				changeFragment(LevelSelectionFragment.newInstance(levelGenerator.getListaNiveles(), estadisticasNiveles));
 			}
 		};
 

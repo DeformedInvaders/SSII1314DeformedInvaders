@@ -41,10 +41,7 @@ public abstract class SizeDialog extends WindowDialog
 	/* Métodos Abstractos WindowDialog */
 
 	@Override
-	protected void onTouchOutsidePopUp(View v, MotionEvent event)
-	{
-		dismiss();
-	}
+	protected void onTouchOutsidePopUp(View v, MotionEvent event) { }
 
 	/* Métodos Privados */
 

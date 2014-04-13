@@ -1,6 +1,5 @@
 package com.game.select;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,43 +8,35 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.view.OpenGLFragment;
 import com.game.data.Nivel;
+import com.project.main.GameStatistics;
 import com.project.main.R;
 
 public class LevelSelectFragment extends OpenGLFragment
 {
 	private OnLevelListener listener;
 
-	private boolean lockNivel;
-	
-	private Typeface fuenteNivel;
-	private TTipoLevel tipoNivel;
-	private int fondoNivel, descripcionNivel, colorTextoNivel;
+	private GameStatistics estadisticas;
+	private Nivel nivel;
 
 	private ImageButton botonNivel;
 
 	/* Constructora */
 
-	public static final LevelSelectFragment newInstance(OnLevelListener l, Nivel nivel, boolean lock)
+	public static final LevelSelectFragment newInstance(OnLevelListener l, Nivel n, GameStatistics e)
 	{
 		LevelSelectFragment fragment = new LevelSelectFragment();
-		fragment.setParameters(l, nivel.getFondoNivel(), nivel.getDescripcionNivel(), nivel.getColorTextoNivel(), nivel.getTipoNivel(), nivel.getFuenteNivel(), lock);
+		fragment.setParameters(l, n, e);
 		return fragment;
 	}
 
-	private void setParameters(OnLevelListener l, int fondo, int descripcion, int color, TTipoLevel tipo, Typeface fuente, boolean lock)
+	private void setParameters(OnLevelListener l, Nivel n, GameStatistics e)
 	{
 		listener = l;
-
-		fondoNivel = fondo;
-		descripcionNivel = descripcion;
-		colorTextoNivel = color;
-		tipoNivel = tipo;
-		lockNivel = lock;
-		fuenteNivel = fuente;
+		nivel = n;
+		estadisticas = e;
 	}
 
 	/* Métodos Fragment */
@@ -57,12 +48,26 @@ public class LevelSelectFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect1);
-		imageBackground.setBackgroundResource(fondoNivel);
-
+		imageBackground.setBackgroundResource(nivel.getFondoNivel());
+		
+		ImageView imagenCompleted = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect2);
+		if(estadisticas.isCompleted())
+		{
+			imagenCompleted.setBackgroundResource(nivel.getImagenCompleted());
+			imagenCompleted.setVisibility(View.VISIBLE);
+		}
+		
+		ImageView imagenPerfected = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect3);
+		if(estadisticas.isPerfected())
+		{
+			imagenPerfected.setBackgroundResource(nivel.getImagenPerfected());
+			imagenPerfected.setVisibility(View.VISIBLE);
+		}
+		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewLevelSelect1);
-		textBackground.setText(getString(descripcionNivel));
-		textBackground.setTextColor(colorTextoNivel);
-		textBackground.setTypeface(fuenteNivel);
+		textBackground.setText(getString(nivel.getDescripcionNivel()));
+		textBackground.setTextColor(nivel.getColorTextoNivel());
+		textBackground.setTypeface(nivel.getFuenteNivel());
 
 		botonNivel = (ImageButton) rootView.findViewById(R.id.imageButtonLevel1);
 		botonNivel.setOnClickListener(new OnLevelClickListener());
@@ -91,7 +96,7 @@ public class LevelSelectFragment extends OpenGLFragment
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (lockNivel)
+		if (estadisticas.isUnlocked())
 		{
 			botonNivel.setBackgroundResource(R.drawable.icon_level_unlocked);
 		}
@@ -104,13 +109,13 @@ public class LevelSelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if (lockNivel)
+			if (estadisticas.isUnlocked())
 			{
-				listener.onLevelSelected(tipoNivel);
+				listener.onLevelSelected(nivel.getTipoNivel());
 			}
 			else
 			{
-				Toast.makeText(getActivity(), R.string.text_level_disabled, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_level_disabled);
 			}
 		}
 	}

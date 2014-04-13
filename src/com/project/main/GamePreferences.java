@@ -39,9 +39,9 @@ public class GamePreferences
 	public static final int NUM_TYPE_ENEMIES = 6;
 	public static final int NUM_TYPE_STICKERS_EYES = 8;
 	public static final int NUM_TYPE_STICKERS_MOUTH = 7;
-	public static final int NUM_TYPE_STICKERS_WEAPON = 12;
-	public static final int NUM_TYPE_STICKERS_TRINKET = 8;
-	public static final int NUM_TYPE_STICKERS_HELMET = 12;
+	public static final int NUM_TYPE_STICKERS_WEAPON = 16;
+	public static final int NUM_TYPE_STICKERS_TRINKET = 16;
+	public static final int NUM_TYPE_STICKERS_HELMET = 16;
 	
 	// Busqueda de recursos
 	public static final String RESOURCE_IMAGE_HEART = "imageViewGameHeart";

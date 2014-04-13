@@ -13,7 +13,8 @@
 		        android:id="@+id/linearLayoutSticker1">
 		        
 		        <TextView style="@style/Text_Section_Dialog_Style"
-  	        		android:text="@string/title_dialog_eyes"/>
+  	        		android:text="@string/title_dialog_eyes"
+  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
 		        	
 			</LinearLayout>
 			
@@ -27,7 +28,8 @@
 		        android:id="@+id/linearLayoutSticker2">
 				
 				<TextView style="@style/Text_Section_Dialog_Style"
-  	        		android:text="@string/title_dialog_mouths"/>
+  	        		android:text="@string/title_dialog_mouths"
+  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
 											
 			</LinearLayout>
 			
@@ -41,7 +43,8 @@
 		        android:id="@+id/linearLayoutSticker3">
 				
         		<TextView style="@style/Text_Section_Dialog_Style"
-  	        		android:text="@string/title_dialog_weapons"/>
+  	        		android:text="@string/title_dialog_weapons"
+  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
 		        				
 			</LinearLayout>
 			
@@ -55,7 +58,8 @@
 		        android:id="@+id/linearLayoutSticker4">
 				
 	       		<TextView style="@style/Text_Section_Dialog_Style"
-	  	        	android:text="@string/title_dialog_trinkets"/>
+	  	        	android:text="@string/title_dialog_trinkets"
+  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
 	       		
 			</LinearLayout>
 
@@ -69,7 +73,8 @@
 		        android:id="@+id/linearLayoutSticker5">
 				
            		<TextView style="@style/Text_Section_Dialog_Style"
- 	        		android:text="@string/title_dialog_helmets"/>			
+ 	        		android:text="@string/title_dialog_helmets"
+  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />			
 									
 			</LinearLayout>
 			

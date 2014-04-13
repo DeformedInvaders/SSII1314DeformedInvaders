@@ -143,6 +143,7 @@
 			
 			<string name="text_game_paused">Game paused.</string>
 			<string name="text_game_score">Score:</string>
+			<string name="text_game_newstikers">New stickers are now available.</string>
 			
 			<string name="text_summary">Level\'s Summary.</string>
 			
@@ -262,6 +263,8 @@
 	    
 	    <!-- Level Select Fragment -->
 	    	<string name="desc_select_background">Level Background.</string>
+	    	<string name="desc_select_completed">Completed Achievement.</string>
+	    	<string name="desc_select_perfected">Perfected Achievement.</string>
 	    	<string name="desc_magic">Play this level.</string>
 	    	
 	    <!-- Sticker Dialog -->		    

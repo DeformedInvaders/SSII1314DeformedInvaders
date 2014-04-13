@@ -8,11 +8,14 @@ public class Nivel
 {
 	private Typeface fuenteNivel;
 	private TTipoLevel tipoNivel;
-	private int fondoNivel, nombreNivel, descripcionNivel, colorTextoNivel, musicaNivel;
+	private int fondoNivel, imagenCompleted, imagenPerfected;
+	private int nombreNivel, descripcionNivel, colorTextoNivel, musicaNivel;
 
-	public Nivel(TTipoLevel numero, int fondo, int nombre, int descripcion, int color, Typeface fuente, int musica)
+	public Nivel(TTipoLevel numero, int fondo, int completed, int perfected, int nombre, int descripcion, int color, Typeface fuente, int musica)
 	{
 		fondoNivel = fondo;
+		imagenCompleted = completed;
+		imagenPerfected = perfected;
 		nombreNivel = nombre;
 		descripcionNivel = descripcion;
 		colorTextoNivel = color;
@@ -24,6 +27,16 @@ public class Nivel
 	public int getFondoNivel()
 	{
 		return fondoNivel;
+	}
+	
+	public int getImagenCompleted()
+	{
+		return imagenCompleted;
+	}
+	
+	public int getImagenPerfected()
+	{
+		return imagenPerfected;
 	}
 
 	public int getNombreNivel()

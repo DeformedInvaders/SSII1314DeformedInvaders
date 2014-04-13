@@ -23,6 +23,7 @@ import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.project.main.GamePreferences;
+import com.project.main.GameStatistics;
 import com.project.main.OnLoadingListener;
 import com.project.main.R;
 
@@ -35,8 +36,7 @@ public class InternalStorageManager
 	private static final String DATA_FILE = "DATA";
 	private static final String AUDIO_FILE = "AUDIO";
 	private static final String PREFERENCES_FILE = "PREFERENCES";
-	private static final String LEVELS_FILE = "LOCKEDLEVELS";
-	private static final String SCORE_FILE = "SCORELEVELS";
+	private static final String LEVELS_FILE = "LEVELS";
 	
 	private static final String MUSIC_EXTENSION = ".3gp";
 
@@ -160,19 +160,19 @@ public class InternalStorageManager
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Character class not found");
+			Log.d("INTERNAL", "Character class not found");
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Character file not found");
+			Log.d("INTERNAL", "Character file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "File Character sream corrupted");
+			Log.d("INTERNAL", "Character sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "File Character ioexception");
+			Log.d("INTERNAL", "Character ioexception");
 		}
 
 		Log.d("INTERNAL", "Character not loadead");
@@ -213,15 +213,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Character file not found");
+			Log.d("INTERNAL", "Character file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "File Character sream corrupted");
+			Log.d("INTERNAL", "Character sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "File Character ioexception");
+			Log.d("INTERNAL", "Character ioexception");
 		}
 
 		Log.d("INTERNAL", "Character not saved");
@@ -316,9 +316,9 @@ public class InternalStorageManager
 	
 	/* Métodos Preferencias */
 
-	public boolean[] cargarNiveles()
+	public GameStatistics[] cargarEstadisticas()
 	{
-		boolean[] niveles = new boolean[GamePreferences.NUM_LEVELS];
+		GameStatistics[] niveles = new GameStatistics[GamePreferences.NUM_LEVELS];
 
 		try
 		{
@@ -328,10 +328,10 @@ public class InternalStorageManager
 			// Cargar Niveles Jugados
 			for (int i = 0; i < GamePreferences.NUM_LEVELS; i++)
 			{
-				niveles[i] = data.readBoolean();
+				niveles[i] = (GameStatistics) data.readObject();
 			}
 
-			niveles[0] = true;
+			niveles[0].setUnlocked();
 
 			data.close();
 			file.close();
@@ -339,26 +339,35 @@ public class InternalStorageManager
 			Log.d("INTERNAL", "Levels loadead");
 			return niveles;
 		}
+		catch (ClassNotFoundException e)
+		{
+			Log.d("INTERNAL", "Levels class not found");
+		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Levels file not found");
+			Log.d("INTERNAL", "Levels file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "File Levels sream corrupted");
+			Log.d("INTERNAL", "Levels sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "File Levels ioexception");
+			Log.d("INTERNAL", "Levels ioexception");
 		}
 
 		Log.d("INTERNAL", "Levels not loadead");
 
-		niveles[0] = true;
+		for(int i = 0; i < GamePreferences.NUM_LEVELS; i++)
+		{
+			niveles[i] = new GameStatistics();
+		}
+		
+		niveles[0].setUnlocked();
 		return niveles;
 	}
 
-	public boolean guardarNiveles(boolean[] niveles)
+	public boolean guardarEstadisticas(GameStatistics[] niveles)
 	{
 		try
 		{
@@ -368,7 +377,7 @@ public class InternalStorageManager
 			// Guardar Personaje Seleccionado
 			for (int i = 0; i < niveles.length; i++)
 			{
-				data.writeBoolean(niveles[i]);
+				data.writeObject(niveles[i]);
 			}
 
 			data.flush();
@@ -380,94 +389,18 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Levels file not found");
+			Log.d("INTERNAL", "Levels file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "File Levels sream corrupted");
+			Log.d("INTERNAL", "Levels sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "File Levels ioexception");
+			Log.d("INTERNAL", "Levels ioexception");
 		}
 
 		Log.d("INTERNAL", "Levels not saved");
-		return false;
-	}
-
-	public int[] cargarPuntuaciones()
-	{
-		int[] puntuacion = new int[GamePreferences.NUM_LEVELS];
-
-		try
-		{
-			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), SCORE_FILE));
-			ObjectInputStream data = new ObjectInputStream(file);
-
-			// Cargar Niveles Jugados
-			for (int i = 0; i < GamePreferences.NUM_LEVELS; i++)
-			{
-				puntuacion[i] = data.readInt();
-			}
-
-			data.close();
-			file.close();
-
-			Log.d("INTERNAL", "Score loadead");
-			return puntuacion;
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("INTERNAL", "File Score file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("INTERNAL", "File Score sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("INTERNAL", "File Score ioexception");
-		}
-
-		Log.d("INTERNAL", "Score not loadead");
-
-		return puntuacion;
-	}
-
-	public boolean guardarPuntuacion(int[] puntuacion)
-	{
-		try
-		{
-			FileOutputStream file = new FileOutputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), SCORE_FILE));
-			ObjectOutputStream data = new ObjectOutputStream(file);
-
-			// Guardar Personaje Seleccionado
-			for (int i = 0; i < puntuacion.length; i++)
-			{
-				data.writeInt(puntuacion[i]);
-			}
-
-			data.flush();
-			data.close();
-			file.close();
-
-			Log.d("INTERNAL", "Score saved");
-			return true;
-		}
-		catch (FileNotFoundException e)
-		{
-			Log.d("INTERNAL", "File Score file not found");
-		}
-		catch (StreamCorruptedException e)
-		{
-			Log.d("INTERNAL", "File Score sream corrupted");
-		}
-		catch (IOException e)
-		{
-			Log.d("INTERNAL", "File Score ioexception");
-		}
-
-		Log.d("INTERNAL", "Score not saved");
 		return false;
 	}
 
@@ -491,15 +424,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Preferences file not found");
+			Log.d("INTERNAL", "Preferences file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "File Preferences sream corrupted");
+			Log.d("INTERNAL", "Preferences sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "File Preferences ioexception");
+			Log.d("INTERNAL", "Preferences ioexception");
 		}
 
 		Log.d("INTERNAL", "Preferences not loadead");
@@ -531,15 +464,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "File Preferences file not found");
+			Log.d("INTERNAL", "Preferences file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "File Preferences sream corrupted");
+			Log.d("INTERNAL", "Preferences sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "File Preferences ioexception");
+			Log.d("INTERNAL", "Preferences ioexception");
 		}
 
 		Log.d("INTERNAL", "Preferences not saved");

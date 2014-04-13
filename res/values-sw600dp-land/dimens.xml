@@ -8,6 +8,10 @@
     <dimen name="activity_horizontal_margin">32dp</dimen>
     
     <!-- Dialog dimensions -->
+    
+    <dimen name="ImageView_AchievementHeight_Dimen">150dp</dimen>
+    <dimen name="ImageView_AchievementWidth_Dimen">150dp</dimen>
+    
 	<dimen name="PaletteMain_LayoutHeight_Dimen">260dp</dimen>
     <dimen name="PaletteMain_LayoutWidth_Dimen">260dp</dimen>  
     

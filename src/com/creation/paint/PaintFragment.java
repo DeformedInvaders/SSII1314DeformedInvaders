@@ -21,6 +21,7 @@ import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoSticker;
 import com.project.main.GamePreferences;
+import com.project.main.GameStatistics;
 import com.project.main.R;
 
 public class PaintFragment extends OpenGLFragment
@@ -41,35 +42,39 @@ public class PaintFragment extends OpenGLFragment
 	private int personajeIndice;
 	private boolean personajeCargado;
 	
+	private GameStatistics[] estadoNiveles;
+	
 	private PaintDataSaved dataSaved;
 
 	/* Constructora */
 
-	public static final PaintFragment newInstance(Esqueleto e)
+	public static final PaintFragment newInstance(Esqueleto esqueleto, GameStatistics[] estadisticas)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(e);
+		fragment.setParameters(esqueleto, estadisticas);
 		return fragment;
 	}
 	
-	public static final PaintFragment newInstance(Personaje p, int i)
+	public static final PaintFragment newInstance(Personaje p, int indice, GameStatistics[] estadisticas)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(p, i);
+		fragment.setParameters(p, indice, estadisticas);
 		return fragment;
 	}
 
-	private void setParameters(Esqueleto e)
+	private void setParameters(Esqueleto e, GameStatistics[] estadisticas)
 	{
 		esqueleto = e;
 		personajeCargado = false;
+		estadoNiveles = estadisticas;
 	}
 	
-	private void setParameters(Personaje p, int i)
+	private void setParameters(Personaje p, int indice, GameStatistics[] estadisticas)
 	{
 		personaje = p;
-		personajeIndice = i;
+		personajeIndice = indice;
 		personajeCargado = true;
+		estadoNiveles = estadisticas;
 	}
 
 	public interface PaintFragmentListener
@@ -320,7 +325,7 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if (stickerDialog == null)
 			{
-				stickerDialog = new StickerDialog(mContext) {
+				stickerDialog = new StickerDialog(mContext, estadoNiveles) {
 					@Override
 					public void onStickerSelected(int tag, TTipoSticker tipo)
 					{

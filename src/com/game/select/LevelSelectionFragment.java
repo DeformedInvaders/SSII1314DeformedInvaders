@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.game.data.Nivel;
+import com.project.main.GameStatistics;
 import com.project.main.R;
 
 public class LevelSelectionFragment extends ViewPagerFragment implements OnLevelListener
@@ -19,18 +20,18 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	private LevelSelectionFragmentListener mCallback;
 
 	private List<Nivel> listaNiveles;
-	private boolean[] estadoNiveles;
+	private GameStatistics[] estadoNiveles;
 
 	/* Constructora */
 
-	public static final LevelSelectionFragment newInstance(List<Nivel> lista, boolean[] estado)
+	public static final LevelSelectionFragment newInstance(List<Nivel> lista, GameStatistics[] estado)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
 		fragment.setParameters(lista, estado);
 		return fragment;
 	}
 
-	private void setParameters(List<Nivel> lista, boolean[] estado)
+	private void setParameters(List<Nivel> lista, GameStatistics[] estado)
 	{
 		listaNiveles = lista;
 		estadoNiveles = estado;

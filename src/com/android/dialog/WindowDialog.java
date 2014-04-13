@@ -108,6 +108,7 @@ public abstract class WindowDialog implements OnTouchListener
 		if (action == MotionEvent.ACTION_OUTSIDE)
 		{
 			onTouchOutsidePopUp(v, event);
+			dismiss();
 			return true;
 		}
 

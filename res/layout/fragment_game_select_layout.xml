@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout style="@style/Layout_Fragment_Style"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Layout_Fragment_Style"
+    android:layout_width="match_parent" >
 
     <ImageView style="@style/ImageView_Background_Style"
         android:id="@+id/imageViewLevelSelect1"
         android:contentDescription="@string/desc_select_background" />
-
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" 
+        android:layout_alignParentBottom="true">
+	
+		<ImageView style="@style/ImageView_Achievement_Style"
+	        android:id="@+id/imageViewLevelSelect2"
+	        android:contentDescription="@string/desc_select_completed"/>
+	        
+		<ImageView style="@style/ImageView_Achievement_Style"
+	        android:id="@+id/imageViewLevelSelect3"
+	        android:contentDescription="@string/desc_select_perfected"/>
+	
+	</LinearLayout>
+	
     <TextView
         android:id="@+id/textViewLevelSelect1"
         android:layout_width="wrap_content"

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
@@ -53,7 +52,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	public interface GameFragmentListener
 	{
-		public void onGameFinished(TTipoLevel level, int score, int idImage, String nameLevel);
+		public void onGameFinished(TTipoLevel level, int score, int idImage, String nameLevel, boolean perfecto);
 
 		public void onGameFailed(TTipoLevel level, int idImage);
 	}
@@ -164,7 +163,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 			{
 				canvas.seleccionarPause();
 
-				Toast.makeText(getActivity(), R.string.text_game_paused, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_game_paused);
 			}
 			else
 			{
@@ -179,11 +178,19 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	/* Métodos de OnGameListener */
 
 	@Override
-	public void onGameFinished(int score)
+	public void onGameFinished(int score, int lives)
 	{
 		onScoreChanged(score);
 		
-		mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel());
+		if(lives == GamePreferences.MAX_LIVES)
+		{
+			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdTextureLevelPerfected(), level.getNombreNivel(), true);
+
+		}
+		else
+		{
+			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel(), false);
+		}
 	}
 
 	@Override

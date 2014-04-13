@@ -22,8 +22,7 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 
 	private InternalStorageManager manager;
 	private List<Personaje> lista;
-	private boolean[] niveles;
-	private int[] puntuacion;
+	private GameStatistics[] niveles;
 
 	private Handler handler;
 	private Thread threadProgressBar, threadLoadData;
@@ -48,7 +47,7 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 
 	public interface LoadingFragmentListener
 	{
-		public void onLoadingListCharacters(List<Personaje> lista, boolean[] niveles, int[] puntuacion);
+		public void onLoadingListCharacters(List<Personaje> lista, GameStatistics[] niveles);
 	}
 
 	/* Métodos Fragment */
@@ -147,8 +146,7 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 	private void cargarDatos()
 	{
 		// Cargar Niveles
-		niveles = manager.cargarNiveles();
-		puntuacion = manager.cargarPuntuaciones();
+		niveles = manager.cargarEstadisticas();
 		
 		textView.setText(getString(R.string.text_progressBar_level));
 
@@ -170,7 +168,7 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 				textView.setText(getString(R.string.text_progressBar_completed) + " " + "(100%)");
 
 				// Guardar datos
-				mCallback.onLoadingListCharacters(lista, niveles, puntuacion);
+				mCallback.onLoadingListCharacters(lista, niveles);
 			}
 		});
 	}
