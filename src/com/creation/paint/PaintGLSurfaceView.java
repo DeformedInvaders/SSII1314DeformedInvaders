@@ -104,6 +104,13 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		setEstado(TEstadoDetector.SimpleTouch);
 		requestRender();
 	}
+	
+	public void eliminarPegatina(TTipoSticker tipo)
+	{
+		renderer.eliminarPegatina(tipo);
+		setEstado(TEstadoDetector.SimpleTouch);
+		requestRender();		
+	}
 
 	public void anteriorAccion()
 	{

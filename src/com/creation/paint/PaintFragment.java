@@ -334,6 +334,15 @@ public class PaintFragment extends OpenGLFragment
 						reiniciarInterfaz();
 						actualizarInterfaz();
 					}
+					
+					@Override
+					public void onStickerDeleted(TTipoSticker tipo)
+					{
+						canvas.eliminarPegatina(tipo);
+						
+						reiniciarInterfaz();
+						actualizarInterfaz();
+					}
 				};
 			}
 			stickerDialog.show(v);

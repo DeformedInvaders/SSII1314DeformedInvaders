@@ -21,7 +21,8 @@
         android:allowBackup="true"
         android:icon="@drawable/application_icon"
         android:label="@string/title_app"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
         
         <activity
             android:name="com.project.main.MainActivity"

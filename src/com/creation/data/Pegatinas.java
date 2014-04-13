@@ -38,6 +38,12 @@ public class Pegatinas implements Serializable
 		indicePegatinas[tipo.ordinal()] = indice;
 		verticePegatinas[tipo.ordinal()] = vertice;
 	}
+	
+	public void deletePegatina(TTipoSticker tipo)
+	{
+		indicePegatinas[tipo.ordinal()] = -1;
+		verticePegatinas[tipo.ordinal()] = -1;	
+	}
 
 	/* Métodos de Obtención de Información */
 

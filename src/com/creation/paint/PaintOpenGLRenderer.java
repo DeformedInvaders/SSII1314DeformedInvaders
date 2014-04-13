@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.ProgressDialog;
@@ -116,6 +117,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	}
 
 	/* Métodos Renderer */
+	
+	@Override
+	public void onSurfaceCreated(GL10 gl, EGLConfig config)
+	{
+		super.onSurfaceCreated(gl, config);
+
+		cargarPegatinas(gl);
+	}
 
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -143,16 +152,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			recuperarCamara();
 		}
 
-		// Cargar Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-			
-			if (pegatinas.isCargada(tipoPegatinas))
-			{
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
-			}
-		}
+		cargarPegatinas(gl);
 
 		dibujarEsqueleto(gl);
 	}
@@ -207,6 +207,20 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		centrarPersonajeEnMarcoFinal(gl);
 	}
 
+	private void cargarPegatinas(GL10 gl)
+	{
+		// Cargar Pegatinas
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
+		{
+			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
+			
+			if (pegatinas.isCargada(tipoPegatinas))
+			{
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
+			}
+		}
+	}
+	
 	/* Métodos Abstráctos OpenGLRenderer */
 
 	@Override
@@ -442,6 +456,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		pegatinaActual = pegatina;
 		tipoPegatinaActual = tipo;
 		estado = TEstadoPaint.Pegatinas;
+	}
+	
+	public void eliminarPegatina(TTipoSticker tipo)
+	{
+		guardarPolilinea();
+		
+		descargarTexturaRectangulo(tipo);
+		pegatinas.deletePegatina(tipo);
+		estado = TEstadoPaint.Nada;
 	}
 
 	public void seleccionarCaptura() 

@@ -15,8 +15,9 @@ import com.project.main.R;
 public abstract class StickerDialog extends WindowDialog
 {
 	/* Constructora */
-	int imageWidth, imageHeight;
-
+	private int imageWidth, imageHeight;
+	private OnClickListener eyeListener, mouthListener, weaponListener, trinketListener, helmetListener, deleteListener;
+	
 	public StickerDialog(Context context, GameStatistics[] estadisticas)
 	{
 		super(context, R.layout.dialog_sticker_layout);
@@ -24,11 +25,12 @@ public abstract class StickerDialog extends WindowDialog
 		imageWidth = (int) mContext.getResources().getDimension(R.dimen.StickerButton_LayoutWidth_Dimen);
 		imageHeight = (int) mContext.getResources().getDimension(R.dimen.StickerButton_LayoutHeight_Dimen);
 
-		OnClickListener eyeListener = new OnEyeClickListener();
-		OnClickListener mouthListener = new OnMouthClickListener();
-		OnClickListener weaponListener = new OnWeaponClickListener();
-		OnClickListener trinketListener = new OnTrinketClickListener();
-		OnClickListener helmetListener = new OnHelmetClickListener();
+		eyeListener = new OnEyeClickListener();
+		mouthListener = new OnMouthClickListener();
+		weaponListener = new OnWeaponClickListener();
+		trinketListener = new OnTrinketClickListener();
+		helmetListener = new OnHelmetClickListener();
+		deleteListener = new OnDeleteClickListener();
 		
 		LinearLayout eyeLayout = (LinearLayout) findViewById(R.id.linearLayoutSticker1);
 		LinearLayout mouthLayout = (LinearLayout) findViewById(R.id.linearLayoutSticker2);
@@ -36,53 +38,59 @@ public abstract class StickerDialog extends WindowDialog
 		LinearLayout trinketLayout = (LinearLayout) findViewById(R.id.linearLayoutSticker4);
 		LinearLayout helmetLayout = (LinearLayout) findViewById(R.id.linearLayoutSticker5);
 		
-		configurarPegatinas(eyeLayout, GamePreferences.RESOURCE_ID_STICKER_EYES, GamePreferences.NUM_TYPE_STICKERS_EYES, eyeListener);
-		configurarPegatinas(mouthLayout, GamePreferences.RESOURCE_ID_STICKER_MOUTH, GamePreferences.NUM_TYPE_STICKERS_MOUTH, mouthListener);
-		configurarPegatinas(weaponLayout, estadisticas, GamePreferences.RESOURCE_ID_STICKER_WEAPON, GamePreferences.NUM_TYPE_STICKERS_WEAPON, weaponListener);
-		configurarPegatinas(trinketLayout, estadisticas,GamePreferences.RESOURCE_ID_STICKER_TRINKET, GamePreferences.NUM_TYPE_STICKERS_TRINKET, trinketListener);
-		configurarPegatinas(helmetLayout, estadisticas, GamePreferences.RESOURCE_ID_STICKER_HELMET, GamePreferences.NUM_TYPE_STICKERS_HELMET, helmetListener);
+		configurarPegatinas(eyeLayout, TTipoSticker.Eyes, GamePreferences.RESOURCE_ID_STICKER_EYES, GamePreferences.NUM_TYPE_STICKERS_EYES, eyeListener);
+		configurarPegatinas(mouthLayout, TTipoSticker.Mouth, GamePreferences.RESOURCE_ID_STICKER_MOUTH, GamePreferences.NUM_TYPE_STICKERS_MOUTH, mouthListener);
+		configurarPegatinas(weaponLayout, estadisticas, TTipoSticker.Weapon, GamePreferences.RESOURCE_ID_STICKER_WEAPON, GamePreferences.NUM_TYPE_STICKERS_WEAPON, weaponListener);
+		configurarPegatinas(trinketLayout, estadisticas, TTipoSticker.Trinket, GamePreferences.RESOURCE_ID_STICKER_TRINKET, GamePreferences.NUM_TYPE_STICKERS_TRINKET, trinketListener);
+		configurarPegatinas(helmetLayout, estadisticas, TTipoSticker.Helmet, GamePreferences.RESOURCE_ID_STICKER_HELMET, GamePreferences.NUM_TYPE_STICKERS_HELMET, helmetListener);
 	}
 	
-	private void configurarPegatinas(LinearLayout layout, String nombrePegatina, int numPegatinas, OnClickListener listener)
+	private void cargarPegatina(LinearLayout layout, String nombrePegatina, int tagImagen, OnClickListener listener)
+	{
+		int idImagen = mContext.getResources().getIdentifier(nombrePegatina + (tagImagen + 1), "drawable", mContext.getPackageName());
+		cargarPegatina(layout, nombrePegatina, idImagen, tagImagen, listener);
+	}
+	
+	private void cargarPegatina(LinearLayout layout, String nombrePegatina, int idImagen, int tagImagen, OnClickListener listener)
+	{
+		ImageView image = new ImageView(mContext, null, R.style.Button_Fragment_Style);
+		image.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
+		image.setBackgroundResource(idImagen);
+		image.setOnClickListener(listener);
+		image.setTag(tagImagen);
+		
+		layout.addView(image);		
+	}
+	
+	private void configurarPegatinas(LinearLayout layout, TTipoSticker tipo, String nombrePegatina, int numPegatinas, OnClickListener listener)
 	{
 		for (int i = 0; i < numPegatinas; i++)
-		{
-			int imageId = mContext.getResources().getIdentifier(nombrePegatina + (i + 1), "drawable", mContext.getPackageName());
-						
-			ImageView image = new ImageView(mContext, null, R.style.Button_Fragment_Style);
-			image.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
-			image.setBackgroundResource(imageId);
-			image.setOnClickListener(listener);
-			image.setTag(i);
-			
-			layout.addView(image);
+		{		
+			cargarPegatina(layout, nombrePegatina, i, listener);
 		}
+		
+		cargarPegatina(layout, nombrePegatina, R.drawable.sticker_delete, tipo.ordinal(), deleteListener);
 	}
 	
-	private void configurarPegatinas(LinearLayout layout, GameStatistics[] estadisticas, String nombrePegatina, int numPegatinas, OnClickListener listener)
+	private void configurarPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTipoSticker tipo, String nombrePegatina, int numPegatinas, OnClickListener listener)
 	{
 		for (int i = 0; i < numPegatinas; i++)
 		{
-			// FIXME Quitar el +1 al añadir pegatinas al nivel Luna
+			// FIXME Quitar el +-1 al añadir pegatinas al nivel Luna
 			int pos = (i / (GamePreferences.NUM_LEVELS - 1)) + 1;
-			int imageId = mContext.getResources().getIdentifier(nombrePegatina + (i + 1), "drawable", mContext.getPackageName());
-						
-			ImageView image = new ImageView(mContext, null, R.style.Button_Fragment_Style);
-			image.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
-			image.setBackgroundResource(imageId);
-			image.setTag(i);
-			
 			if(estadisticas[pos].isPerfected())
 			{
-				image.setOnClickListener(listener);
-				layout.addView(image);
+				cargarPegatina(layout, nombrePegatina, i, listener);
 			}
 		}
+		
+		cargarPegatina(layout, nombrePegatina, R.drawable.sticker_delete, tipo.ordinal(), deleteListener);
 	}
 
 	/* Métodos Abstractos */
 
 	public abstract void onStickerSelected(int tag, TTipoSticker tipo);
+	public abstract void onStickerDeleted(TTipoSticker tipo);
 
 	/* Métodos Abstractos WindowDialog */
 
@@ -139,5 +147,15 @@ public abstract class StickerDialog extends WindowDialog
 			onStickerSelected((Integer) v.getTag(), TTipoSticker.Helmet);
 			dismiss();
 		}
+	}
+	
+	private class OnDeleteClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			onStickerDeleted(TTipoSticker.values()[(Integer) v.getTag()]);
+			dismiss();
+		}		
 	}
 }
