@@ -10,7 +10,7 @@ public abstract class ChooseAlert extends WindowAlert
 
 	/* Constructora */
 
-	public ChooseAlert(Context context, String title, String textYes, String textNo, String[] list)
+	public ChooseAlert(Context context, int title, int textYes, int textNo, String[] list)
 	{
 		super(context, title);
 

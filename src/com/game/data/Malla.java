@@ -16,7 +16,7 @@ import com.creation.data.Textura;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.main.GamePreferences;
+import com.project.model.GamePreferences;
 
 public abstract class Malla extends Entidad
 {
@@ -173,12 +173,22 @@ public abstract class Malla extends Entidad
 	/* Métodos de Obtención de Información */
 
 	public Esqueleto getEsqueleto()
-	{
+	{ 
+		if (contorno == null || vertices == null || triangulos == null)
+		{
+			return null;
+		}
+		
 		return new Esqueleto(contorno, vertices, triangulos);
 	}
 
 	public Textura getTextura()
 	{
+		if (mapaBits == null || coords == null || pegatinas == null)
+		{
+			return null;
+		}
+		
 		return new Textura(mapaBits, coords, pegatinas);
 	}
 

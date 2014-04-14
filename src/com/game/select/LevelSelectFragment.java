@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.android.view.OpenGLFragment;
 import com.game.data.Nivel;
-import com.project.main.GameStatistics;
 import com.project.main.R;
+import com.project.model.GameStatistics;
 
 public class LevelSelectFragment extends OpenGLFragment
 {

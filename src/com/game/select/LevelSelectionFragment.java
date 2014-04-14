@@ -3,7 +3,6 @@ package com.game.select;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,8 @@ import android.view.ViewGroup;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.game.data.Nivel;
-import com.project.main.GameStatistics;
 import com.project.main.R;
+import com.project.model.GameStatistics;
 
 public class LevelSelectionFragment extends ViewPagerFragment implements OnLevelListener
 {
@@ -24,39 +23,26 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 
 	/* Constructora */
 
-	public static final LevelSelectionFragment newInstance(List<Nivel> lista, GameStatistics[] estado)
+	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
-		fragment.setParameters(lista, estado);
+		fragment.setParameters(c, lista, estado);
 		return fragment;
 	}
 
-	private void setParameters(List<Nivel> lista, GameStatistics[] estado)
+	private void setParameters(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado)
 	{
+		mCallback = c;
 		listaNiveles = lista;
 		estadoNiveles = estado;
 	}
 
 	public interface LevelSelectionFragmentListener
 	{
-		public void onLevelSelectionSelectClicked(TTipoLevel level);
+		public void onLevelSelectionSelectLevel(TTipoLevel level);
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (LevelSelectionFragmentListener) activity;
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mCallback = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -99,6 +85,6 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	@Override
 	public void onLevelSelected(TTipoLevel level)
 	{
-		mCallback.onLevelSelectionSelectClicked(level);
+		mCallback.onLevelSelectionSelectLevel(level);
 	}
 }

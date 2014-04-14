@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.controller.DataSaved;
 
-public class DeformDataSaved
+public class DeformDataSaved extends DataSaved
 {
 	private FloatArray handles;
 	private ShortArray indiceHandles;

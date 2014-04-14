@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
@@ -15,10 +17,14 @@ public class ExternalStorageManager
 	
 	private static final String TEMP_FILE = "/FILE.png";
 
+	private Context mContext;
+	
 	/* Constructora */
 
-	public ExternalStorageManager()
+	public ExternalStorageManager(Context context)
 	{
+		mContext = context;
+		
 		comprobarDirectorio(getDirectorioRaiz());
 	}
 
@@ -69,6 +75,12 @@ public class ExternalStorageManager
 		File file = new File(getFicheroTemp());
 		Log.d("EXTERNAL", "File SaveImage deleted");
 		return file.delete();
+	}
+	
+	public boolean guardarImagenTemp(int imagen)
+	{
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), imagen);
+		return guardarImagenTemp(bitmap);
 	}
 
 	public boolean guardarImagenTemp(Bitmap bitmap)

@@ -2,8 +2,9 @@ package com.creation.design;
 
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.controller.DataSaved;
 
-public class DesignDataSaved
+public class DesignDataSaved extends DataSaved
 {
 	private FloatArray puntos;
 	private FloatArray vertices;

@@ -15,8 +15,8 @@ import com.game.data.InstanciaNivel;
 import com.game.data.Misil;
 import com.game.data.Nivel;
 import com.game.data.Obstaculo;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class LevelGenerator
 {

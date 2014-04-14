@@ -1,4 +1,4 @@
-package com.project.main;
+package com.project.model;
 
 public class GamePreferences
 {
@@ -112,45 +112,45 @@ public class GamePreferences
 	private static boolean TIPS_GAME;
 	private static boolean MUSIC_GAME;
 	
-	public static final void setScreenParameters(float width, float height)
+	public static void setScreenParameters(float width, float height)
 	{
 		WIDTH_SCREEN = width;
 		HEIGHT_SCREEN = height;
 	}
 	
-	public static final void setTipParameters(boolean tips)
+	public static void setTipParameters(boolean tips)
 	{
 		TIPS_GAME = tips;
 	}
 	
-	public static final void setMusicParameters(boolean music)
+	public static void setMusicParameters(boolean music)
 	{
 		MUSIC_GAME = music;
 	}
 	
-	public static final void setCharacterParameters(int character)
+	public static void setCharacterParameters(int character)
 	{
 		CHARACTER_GAME = character;
 	}
 	
-	public static final void SWITCH_MUSIC_GAME()
+	public static void SWITCH_MUSIC_GAME()
 	{
 		MUSIC_GAME = !MUSIC_GAME;
 	}
 	
-	public static final void SWITCH_TIPS_GAME()
+	public static void SWITCH_TIPS_GAME()
 	{
 		TIPS_GAME = !TIPS_GAME;
 	}
 	
 	// Parametros Juego
 	
-	public static final boolean TIPS_ENABLED()
+	public static final boolean IS_TIPS_ENABLED()
 	{
 		return TIPS_GAME;
 	}
 	
-	public static final boolean MUSIC_ENABLED()
+	public static final boolean IS_MUSIC_ENABLED()
 	{
 		return MUSIC_GAME;
 	}

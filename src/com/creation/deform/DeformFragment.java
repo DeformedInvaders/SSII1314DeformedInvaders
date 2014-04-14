@@ -12,17 +12,15 @@ import android.widget.ImageButton;
 import com.android.alert.AudioAlert;
 import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
-import com.creation.data.Esqueleto;
 import com.creation.data.TTipoMovimiento;
-import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.lib.utils.FloatArray;
 import com.project.main.R;
 
 public class DeformFragment extends OpenGLFragment
 {
 	private DeformGLSurfaceView canvas;
-	private Esqueleto esqueleto;
-	private Textura textura;
+	private Personaje personaje;
 
 	private DeformDataSaved dataSaved;
 	private InternalStorageManager internalManager;
@@ -32,17 +30,16 @@ public class DeformFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final DeformFragment newInstance(InternalStorageManager m, Esqueleto e, Textura t, TTipoMovimiento n)
+	public static final DeformFragment newInstance(InternalStorageManager m, Personaje p, TTipoMovimiento n)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(m, e, t, n);
+		fragment.setParameters(m, p, n);
 		return fragment;
 	}
 
-	private void setParameters(InternalStorageManager m, Esqueleto e, Textura t, TTipoMovimiento n)
+	private void setParameters(InternalStorageManager m, Personaje p, TTipoMovimiento n)
 	{
-		esqueleto = e;
-		textura = t;
+		personaje = p;
 		internalManager = m;
 		movimiento = n;
 	}
@@ -56,7 +53,7 @@ public class DeformFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(esqueleto, textura, this);
+		canvas.setParameters(personaje, this);
 
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
@@ -273,7 +270,7 @@ public class DeformFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 
-			AudioAlert alert = new AudioAlert(getActivity(), getString(R.string.text_audio_record_title), getString(R.string.text_audio_record_description), getString(R.string.text_button_yes), getString(R.string.text_button_no), internalManager, movimiento)
+			AudioAlert alert = new AudioAlert(getActivity(), R.string.text_audio_record_title, R.string.text_audio_record_description, R.string.text_button_yes, R.string.text_button_no, internalManager, movimiento)
 			{
 				@Override
 				public void onPossitiveButtonClick()

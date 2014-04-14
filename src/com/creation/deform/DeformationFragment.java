@@ -3,7 +3,6 @@ package com.creation.deform;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,63 +13,46 @@ import android.widget.ImageButton;
 import com.android.storage.InternalStorageManager;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
-import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
-import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.lib.utils.FloatArray;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class DeformationFragment extends ViewPagerFragment
 {
 	private AnimationFragmentListener mCallback;
 
 	private ImageButton botonReady;
-
-	private Esqueleto esqueleto;
-	private Textura textura;
-
+	
+	private Personaje personaje;
 	private Movimientos movimientos;
 	private InternalStorageManager internalManager;
 
 	/* Constructora */
 
-	public static final DeformationFragment newInstance(Esqueleto e, Textura t, InternalStorageManager m)
+	public static final DeformationFragment newInstance(AnimationFragmentListener c, Personaje p, InternalStorageManager m)
 	{
 		DeformationFragment fragment = new DeformationFragment();
-		fragment.setParameters(e, t, m);
+		fragment.setParameters(c, p, m);
 		return fragment;
 	}
 
-	private void setParameters(Esqueleto e, Textura t, InternalStorageManager m)
+	private void setParameters(AnimationFragmentListener c, Personaje p, InternalStorageManager m)
 	{
-		esqueleto = e;
-		textura = t;
+		mCallback = c;
+		personaje = p;
 		internalManager = m;
+		movimientos = new Movimientos();
 	}
 
 	public interface AnimationFragmentListener
 	{
-		public void onAnimationReadyButtonClicked(Movimientos m);
+		public void onAnimationReady(Movimientos m);
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (AnimationFragmentListener) activity;
-		movimientos = new Movimientos();
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mCallback = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -86,10 +68,10 @@ public class DeformationFragment extends ViewPagerFragment
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 
-		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Run), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Jump), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Crouch), getString(R.string.title_animation_section_crouch));
-		viewPager.addView(DeformFragment.newInstance(internalManager, esqueleto, textura, TTipoMovimiento.Attack), getString(R.string.title_animation_section_attack));
+		viewPager.addView(DeformFragment.newInstance(internalManager, personaje, TTipoMovimiento.Run), getString(R.string.title_animation_section_run));
+		viewPager.addView(DeformFragment.newInstance(internalManager, personaje, TTipoMovimiento.Jump), getString(R.string.title_animation_section_jump));
+		viewPager.addView(DeformFragment.newInstance(internalManager, personaje, TTipoMovimiento.Crouch), getString(R.string.title_animation_section_crouch));
+		viewPager.addView(DeformFragment.newInstance(internalManager, personaje, TTipoMovimiento.Attack), getString(R.string.title_animation_section_attack));
 
 		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GamePreferences.VIDEO_DEFORM_HANDLES_PATH);
 		
@@ -136,7 +118,7 @@ public class DeformationFragment extends ViewPagerFragment
 			}
 			else
 			{
-				mCallback.onAnimationReadyButtonClicked(movimientos);
+				mCallback.onAnimationReady(movimientos);
 			}
 		}
 	}

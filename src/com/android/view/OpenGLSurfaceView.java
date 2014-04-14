@@ -12,7 +12,7 @@ import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
 import com.android.touch.TEstadoDetector;
 import com.android.touch.GameDetector;
-import com.project.main.GamePreferences;
+import com.project.model.GamePreferences;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView
 {

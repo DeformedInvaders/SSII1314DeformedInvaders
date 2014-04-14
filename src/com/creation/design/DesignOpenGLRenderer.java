@@ -13,7 +13,7 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.main.GamePreferences;
+import com.project.model.GamePreferences;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {

@@ -23,10 +23,10 @@ public class VideoAlert extends WindowAlert
 	private ImageButton botonNext, botonPrev;
 	private int pos, posMax;
 	
-	private List<String> listMessage;
+	private List<Integer> listMessage;
 	private List<Uri> listVideoPath;
 	
-	public VideoAlert(Context context, String title, String message, String textYes, Uri videoPath)
+	public VideoAlert(Context context, int title, int message, int textYes, Uri videoPath)
 	{
 		super(context, title);
 		
@@ -61,7 +61,7 @@ public class VideoAlert extends WindowAlert
 		});
 	}
 	
-	public VideoAlert(Context context, String title, List<String> message, String textYes, List<Uri> videoPath)
+	public VideoAlert(Context context, int title, List<Integer> message, int textYes, List<Uri> videoPath)
 	{
 		super(context, title);
 		

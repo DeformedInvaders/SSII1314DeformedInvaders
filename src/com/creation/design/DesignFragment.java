@@ -3,7 +3,6 @@ package com.creation.design;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,8 @@ import android.widget.ImageButton;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class DesignFragment extends OpenGLFragment
 {
@@ -28,32 +27,32 @@ public class DesignFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final DesignFragment newInstance()
+	public static final DesignFragment newInstance(DesignFragmentListener c)
 	{
 		DesignFragment fragment = new DesignFragment();
+		fragment.setParameters(c, null);
 		return fragment;
+	}
+	
+	public static final DesignFragment newInstance(DesignFragmentListener c, DesignDataSaved s)
+	{
+		DesignFragment fragment = new DesignFragment();
+		fragment.setParameters(c, s);
+		return fragment;
+	}
+	
+	private void setParameters(DesignFragmentListener c, DesignDataSaved s)
+	{
+		mCallback = c;
+		dataSaved = s;
 	}
 
 	public interface DesignFragmentListener
 	{
-		public void onDesignReadyButtonClicked(Esqueleto e);
+		public void onDesignReady(Esqueleto e, DesignDataSaved d);
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (DesignFragmentListener) activity;
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mCallback = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -73,6 +72,11 @@ public class DesignFragment extends OpenGLFragment
 		botonTriangular.setOnClickListener(new onTriangularClickListener());
 
 		setCanvasListener(canvas);
+		
+		if (dataSaved != null)
+		{
+			canvas.restoreData(dataSaved);
+		}
 
 		reiniciarInterfaz();
 		actualizarInterfaz();
@@ -175,7 +179,7 @@ public class DesignFragment extends OpenGLFragment
 			{
 				if (canvas.isPoligonoDentroMarco())
 				{
-					mCallback.onDesignReadyButtonClicked(canvas.getEsqueleto());
+					mCallback.onDesignReady(canvas.getEsqueleto(), canvas.saveData());
 				}
 				else
 				{

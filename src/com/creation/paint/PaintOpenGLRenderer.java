@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.ProgressDialog;
@@ -16,7 +15,6 @@ import android.graphics.Color;
 import com.android.view.OpenGLRenderer;
 import com.character.display.TEstadoCaptura;
 import com.creation.data.Accion;
-import com.creation.data.Esqueleto;
 import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
@@ -29,8 +27,8 @@ import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {
@@ -75,21 +73,29 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private Stack<Accion> siguientes;
 
 	/* Constructora */
-
-	public PaintOpenGLRenderer(Context context, Esqueleto esqueleto)
+	
+	public PaintOpenGLRenderer(Context context, Personaje personaje)
 	{
 		super(context);
 
 		estado = TEstadoPaint.Nada;
 
-		contorno = esqueleto.getContorno();
-		vertices = esqueleto.getVertices();
-		triangulos = esqueleto.getTriangulos();
+		contorno = personaje.getEsqueleto().getContorno();
+		vertices = personaje.getEsqueleto().getVertices();
+		triangulos = personaje.getEsqueleto().getTriangulos();
 
 		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 
-		pegatinas = new Pegatinas();
+		if (personaje.getTextura() != null)
+		{
+			pegatinas = personaje.getTextura().getPegatinas();
+		}
+		else
+		{
+			pegatinas = new Pegatinas();
+		}
+		
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
 		
@@ -108,23 +114,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		objetoVertice = new Handle(20, POINTWIDTH);
 	}
-	
-	public PaintOpenGLRenderer(Context context, Personaje personaje)
-	{
-		this(context, personaje.getEsqueleto());
-		
-		pegatinas = personaje.getTextura().getPegatinas();
-	}
 
 	/* Métodos Renderer */
-	
-	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{
-		super.onSurfaceCreated(gl, config);
-
-		cargarPegatinas(gl);
-	}
 
 	@Override
 	public void onDrawFrame(GL10 gl)
@@ -152,7 +143,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			recuperarCamara();
 		}
 
-		cargarPegatinas(gl);
+		// Cargar Pegatinas
+		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
+		{
+			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
+			
+			if (pegatinas.isCargada(tipoPegatinas))
+			{
+				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
+			}
+		}
 
 		dibujarEsqueleto(gl);
 	}
@@ -205,20 +205,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		// Centrado de Marco
 		centrarPersonajeEnMarcoFinal(gl);
-	}
-
-	private void cargarPegatinas(GL10 gl)
-	{
-		// Cargar Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-			
-			if (pegatinas.isCargada(tipoPegatinas))
-			{
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
-			}
-		}
 	}
 	
 	/* Métodos Abstráctos OpenGLRenderer */

@@ -18,7 +18,7 @@ public abstract class WebAlert extends WindowAlert
 
 	/* Constructora */
 
-	public WebAlert(Context context, String title, String textNo)
+	public WebAlert(Context context, int title, int textNo)
 	{
 		super(context, title);
 

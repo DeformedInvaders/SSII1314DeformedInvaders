@@ -9,22 +9,15 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.android.alert.VideoAlert;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class AlertFragment extends Fragment
 {
 	protected void sendAlertMessage(int tipsTitle, List<Integer> mensajes, List<String> videos)
 	{
-		if(GamePreferences.TIPS_ENABLED())
-		{
-			List<String> listaMensajes = new ArrayList<String>();
-			Iterator<Integer> itm = mensajes.iterator();
-			while(itm.hasNext())
-			{
-				listaMensajes.add(getString(itm.next()));
-			}
-			
+		if(GamePreferences.IS_TIPS_ENABLED())
+		{			
 			List<Uri> listaVideos = new ArrayList<Uri>();
 			Iterator<String> itu = videos.iterator();
 			while(itu.hasNext())
@@ -32,16 +25,16 @@ public class AlertFragment extends Fragment
 				listaVideos.add(Uri.parse(itu.next()));
 			}			
 			
-			VideoAlert alert = new VideoAlert(getActivity(), getString(tipsTitle), listaMensajes, getString(R.string.text_button_ready), listaVideos);
+			VideoAlert alert = new VideoAlert(getActivity(), tipsTitle, mensajes, R.string.text_button_ready, listaVideos);
 			alert.show();
 		}
 	}
 	
 	protected void sendAlertMessage(int tipsTitle, int tipsDescription, String tipsPath)
 	{
-		if(GamePreferences.TIPS_ENABLED())
+		if(GamePreferences.IS_TIPS_ENABLED())
 		{
-			VideoAlert alert = new VideoAlert(getActivity(), getString(tipsTitle), getString(tipsDescription), getString(R.string.text_button_ready), Uri.parse(tipsPath));
+			VideoAlert alert = new VideoAlert(getActivity(), tipsTitle, tipsDescription, R.string.text_button_ready, Uri.parse(tipsPath));
 			alert.show();
 		}
 	}
@@ -53,7 +46,7 @@ public class AlertFragment extends Fragment
 	
 	protected void sendMessage(int tipsTitle, int tipsDescription, String tipsPath, int toastMessage)
 	{
-		if(GamePreferences.TIPS_ENABLED())
+		if(GamePreferences.IS_TIPS_ENABLED())
 		{
 			sendAlertMessage(tipsTitle, tipsDescription, tipsPath);
 		}

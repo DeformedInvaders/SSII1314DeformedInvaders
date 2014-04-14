@@ -5,7 +5,7 @@ import java.io.Serializable;
 import android.content.Context;
 
 import com.game.data.TTipoSticker;
-import com.project.main.GamePreferences;
+import com.project.model.GamePreferences;
 
 public class Pegatinas implements Serializable
 {

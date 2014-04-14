@@ -8,9 +8,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.game.data.TTipoSticker;
-import com.project.main.GamePreferences;
-import com.project.main.GameStatistics;
 import com.project.main.R;
+import com.project.model.GamePreferences;
+import com.project.model.GameStatistics;
 
 public abstract class StickerDialog extends WindowDialog
 {

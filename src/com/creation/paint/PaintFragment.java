@@ -3,8 +3,6 @@ package com.creation.paint;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +14,16 @@ import com.android.dialog.ColorDialog;
 import com.android.dialog.SizeDialog;
 import com.android.dialog.StickerDialog;
 import com.android.view.OpenGLFragment;
-import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoSticker;
-import com.project.main.GamePreferences;
-import com.project.main.GameStatistics;
 import com.project.main.R;
+import com.project.model.GamePreferences;
+import com.project.model.GameStatistics;
 
 public class PaintFragment extends OpenGLFragment
 {
 	private PaintFragmentListener mCallback;
-	private Context mContext;
 
 	private ColorDialog colorDialog;
 	private SizeDialog sizeDialog;
@@ -36,11 +32,8 @@ public class PaintFragment extends OpenGLFragment
 	private PaintGLSurfaceView canvas;
 	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
 
-	private Esqueleto esqueleto;
 	private Personaje personaje;
-	
 	private int personajeIndice;
-	private boolean personajeCargado;
 	
 	private GameStatistics[] estadoNiveles;
 	
@@ -48,58 +41,43 @@ public class PaintFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final PaintFragment newInstance(Esqueleto esqueleto, GameStatistics[] estadisticas)
+	public static final PaintFragment newInstance(PaintFragmentListener c, Personaje p, GameStatistics[] e)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(esqueleto, estadisticas);
+		fragment.setParameters(c, p, -1, e, null);
 		return fragment;
 	}
 	
-	public static final PaintFragment newInstance(Personaje p, int indice, GameStatistics[] estadisticas)
+	public static final PaintFragment newInstance(PaintFragmentListener c, Personaje p, int n, GameStatistics[] e)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(p, indice, estadisticas);
+		fragment.setParameters(c, p, n, e, null);
 		return fragment;
 	}
-
-	private void setParameters(Esqueleto e, GameStatistics[] estadisticas)
+	
+	public static final PaintFragment newInstance(PaintFragmentListener c, Personaje p, GameStatistics[] e, PaintDataSaved s)
 	{
-		esqueleto = e;
-		personajeCargado = false;
-		estadoNiveles = estadisticas;
+		PaintFragment fragment = new PaintFragment();
+		fragment.setParameters(c, p, -1, e, s);
+		return fragment;
 	}
 	
-	private void setParameters(Personaje p, int indice, GameStatistics[] estadisticas)
+	private void setParameters(PaintFragmentListener c, Personaje p, int n, GameStatistics[] e, PaintDataSaved s)
 	{
+		mCallback = c;
 		personaje = p;
-		personajeIndice = indice;
-		personajeCargado = true;
-		estadoNiveles = estadisticas;
+		personajeIndice = n;
+		estadoNiveles = e;
+		dataSaved = s;
 	}
 
 	public interface PaintFragmentListener
 	{
-		public void onPaintReadyButtonClicked(Textura t);
-		public void onRepaintReadyButtonClicked(int i, Textura t);
+		public void onPaintReady(Textura t, PaintDataSaved d);
+		public void onRepaintReady(int i, Textura t);
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (PaintFragmentListener) activity;
-		mContext = activity.getApplicationContext();
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-
-		mCallback = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -109,14 +87,7 @@ public class PaintFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
-		if(personajeCargado)
-		{
-			canvas.setParameters(personaje);
-		}
-		else
-		{
-			canvas.setParameters(esqueleto);
-		}
+		canvas.setParameters(personaje);
 		
 		botonPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
 		botonCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
@@ -141,6 +112,11 @@ public class PaintFragment extends OpenGLFragment
 		botonListo.setOnClickListener(new OnReadyClickListener());
 
 		setCanvasListener(canvas);
+		
+		if (dataSaved != null)
+		{
+			canvas.restoreData(dataSaved);
+		}
 
 		reiniciarInterfaz();
 		actualizarInterfaz();
@@ -287,7 +263,7 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if (colorDialog == null)
 			{
-				colorDialog = new ColorDialog(mContext) {
+				colorDialog = new ColorDialog(getActivity()) {
 					@Override
 					public void onColorSelected(int color)
 					{
@@ -306,7 +282,7 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if (sizeDialog == null)
 			{
-				sizeDialog = new SizeDialog(mContext) {
+				sizeDialog = new SizeDialog(getActivity()) {
 					@Override
 					public void onSizeSelected(int size)
 					{
@@ -325,7 +301,7 @@ public class PaintFragment extends OpenGLFragment
 		{
 			if (stickerDialog == null)
 			{
-				stickerDialog = new StickerDialog(mContext, estadoNiveles) {
+				stickerDialog = new StickerDialog(getActivity(), estadoNiveles) {
 					@Override
 					public void onStickerSelected(int tag, TTipoSticker tipo)
 					{
@@ -405,13 +381,13 @@ public class PaintFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 
-			if(personajeCargado)
+			if(personajeIndice != -1)
 			{
-				mCallback.onRepaintReadyButtonClicked(personajeIndice, canvas.getTextura());
+				mCallback.onRepaintReady(personajeIndice, canvas.getTextura());
 			}
 			else
 			{
-				mCallback.onPaintReadyButtonClicked(canvas.getTextura());
+				mCallback.onPaintReady(canvas.getTextura(), canvas.saveData());
 			}
 		}
 	}

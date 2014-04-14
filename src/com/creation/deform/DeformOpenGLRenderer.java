@@ -13,17 +13,16 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
-import com.creation.data.Esqueleto;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
-import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.game.data.TTipoSticker;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
@@ -83,7 +82,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructora */
 
-	public DeformOpenGLRenderer(Context context, Esqueleto esqueleto, Textura textura)
+	public DeformOpenGLRenderer(Context context, Personaje personaje)
 	{
 		super(context);
 
@@ -92,10 +91,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		listaHandlesAnimacion = new ArrayList<FloatArray>();
 
 		// Esqueleto
-		contorno = esqueleto.getContorno();
-		vertices = esqueleto.getVertices();
+		contorno = personaje.getEsqueleto().getContorno();
+		vertices = personaje.getEsqueleto().getVertices();
 		verticesModificados = vertices.clone();
-		triangulos = esqueleto.getTriangulos();
+		triangulos = personaje.getEsqueleto().getTriangulos();
 
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 		bufferTriangulos = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
@@ -108,10 +107,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		reinciarHandlesSeleccionados();
 
 		// Textura
-		pegatinas = textura.getPegatinas();
+		pegatinas = personaje.getTextura().getPegatinas();
 
-		bitmap = textura.getMapaBits().getBitmap();
-		coords = textura.getCoordTextura();
+		bitmap = personaje.getTextura().getMapaBits().getBitmap();
+		coords = personaje.getTextura().getCoordTextura();
 
 		bufferCoords = BufferManager.construirBufferListaTriangulosRellenos(triangulos, coords);
 

@@ -3,8 +3,9 @@ package com.creation.paint;
 import java.util.Stack;
 
 import com.creation.data.Accion;
+import com.project.controller.DataSaved;
 
-public class PaintDataSaved
+public class PaintDataSaved extends DataSaved
 {
 	// Estructura de Datos
 	private TEstadoPaint estado;

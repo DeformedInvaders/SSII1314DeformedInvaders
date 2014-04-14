@@ -22,10 +22,10 @@ import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
-import com.project.main.GamePreferences;
-import com.project.main.GameStatistics;
-import com.project.main.OnLoadingListener;
+import com.loading.load.OnLoadingListener;
 import com.project.main.R;
+import com.project.model.GamePreferences;
+import com.project.model.GameStatistics;
 
 public class InternalStorageManager
 {
@@ -452,8 +452,8 @@ public class InternalStorageManager
 
 			// Guardar Personaje Seleccionado
 			data.writeInt(GamePreferences.GET_CHARACTER_GAME());
-			data.writeBoolean(GamePreferences.MUSIC_ENABLED());
-			data.writeBoolean(GamePreferences.TIPS_ENABLED());
+			data.writeBoolean(GamePreferences.IS_MUSIC_ENABLED());
+			data.writeBoolean(GamePreferences.IS_TIPS_ENABLED());
 			
 			data.flush();
 			data.close();

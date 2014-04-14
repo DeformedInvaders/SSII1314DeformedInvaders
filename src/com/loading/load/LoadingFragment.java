@@ -1,8 +1,7 @@
-package com.project.main;
+package com.loading.load;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -15,12 +14,13 @@ import android.widget.TextView;
 import com.android.storage.InternalStorageManager;
 import com.game.data.Personaje;
 import com.project.main.R;
+import com.project.model.GameStatistics;
 
 public class LoadingFragment extends Fragment implements OnLoadingListener
 {
 	private LoadingFragmentListener mCallback;
 
-	private InternalStorageManager manager;
+	private InternalStorageManager internalManager;
 	private List<Personaje> lista;
 	private GameStatistics[] niveles;
 
@@ -33,43 +33,30 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 
 	/* Constructora */
 
-	public static final LoadingFragment newInstance(InternalStorageManager manager)
+	public static final LoadingFragment newInstance(LoadingFragmentListener c, InternalStorageManager m)
 	{
 		LoadingFragment fragment = new LoadingFragment();
-		fragment.setParameters(manager);
+		fragment.setParameters(c, m);
 		return fragment;
 	}
 
-	private void setParameters(InternalStorageManager manager)
+	private void setParameters(LoadingFragmentListener c, InternalStorageManager m)
 	{
-		this.manager = manager;
-	}
-
-	public interface LoadingFragmentListener
-	{
-		public void onLoadingListCharacters(List<Personaje> lista, GameStatistics[] niveles);
-	}
-
-	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (LoadingFragmentListener) activity;
+		internalManager = m;
+		mCallback = c;
+		
 		handler = new Handler();
 
 		progressBarStatus = 0;
 		progressCompleted = false;
 	}
 
-	@Override
-	public void onDetach()
+	public interface LoadingFragmentListener
 	{
-		super.onDetach();
-		mCallback = null;
-		handler = null;
+		public void onLoadingDataFinished(List<Personaje> lista, GameStatistics[] niveles);
 	}
+
+	/* Métodos Fragment */
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -146,16 +133,16 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 	private void cargarDatos()
 	{
 		// Cargar Niveles
-		niveles = manager.cargarEstadisticas();
+		niveles = internalManager.cargarEstadisticas();
 		
 		textView.setText(getString(R.string.text_progressBar_level));
 
 		// Cargar Seleccionado
-		manager.cargarPreferencias();
+		internalManager.cargarPreferencias();
 		textView.setText(getString(R.string.text_progressBar_preferences));
 
 		// Cargar ListaPersonajes
-		lista = manager.cargarListaPersonajes(this);
+		lista = internalManager.cargarListaPersonajes(this);
 
 		progressBarStatus = 100;
 		progressCompleted = true;
@@ -165,10 +152,10 @@ public class LoadingFragment extends Fragment implements OnLoadingListener
 			public void run()
 			{
 				progressBar.setProgress(progressBarStatus);
-				textView.setText(getString(R.string.text_progressBar_completed) + " " + "(100%)");
+				textView.setText(getString(R.string.text_progressBar_completed) + " (100%)");
 
-				// Guardar datos
-				mCallback.onLoadingListCharacters(lista, niveles);
+				// Guardar datos				
+				mCallback.onLoadingDataFinished(lista, niveles);
 			}
 		});
 	}

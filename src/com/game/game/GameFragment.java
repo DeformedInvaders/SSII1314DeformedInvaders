@@ -1,6 +1,5 @@
 package com.game.game;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,8 @@ import com.android.view.OpenGLFragment;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.game.select.TTipoLevel;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class GameFragment extends OpenGLFragment implements OnGameListener
 {
@@ -36,44 +35,29 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* Constructora */
 
-	public static final GameFragment newInstance(Personaje p, InternalStorageManager m, InstanciaNivel l)
+	public static final GameFragment newInstance(GameFragmentListener c, Personaje p, InternalStorageManager m, InstanciaNivel l)
 	{
 		GameFragment fragment = new GameFragment();
-		fragment.setParameters(p, m, l);
+		fragment.setParameters(c, p, m, l);
 		return fragment;
 	}
 
-	private void setParameters(Personaje p, InternalStorageManager m, InstanciaNivel l)
+	private void setParameters(GameFragmentListener c, Personaje p, InternalStorageManager m, InstanciaNivel l)
 	{
+		mCallback = c;
 		personaje = p;
 		internalManager = m;
 		level = l;
+		gamePaused = true;
 	}
 
 	public interface GameFragmentListener
 	{
 		public void onGameFinished(TTipoLevel level, int score, int idImage, String nameLevel, boolean perfecto);
-
 		public void onGameFailed(TTipoLevel level, int idImage);
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (GameFragmentListener) activity;
-
-		gamePaused = true;
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mCallback = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

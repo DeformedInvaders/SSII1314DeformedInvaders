@@ -14,30 +14,42 @@ public abstract class WindowAlert
 
 	/* Constructora */
 
-	public WindowAlert(Context context, String title)
+	public WindowAlert(Context context, int title)
 	{
 		builder = new AlertDialog.Builder(context);
 
+		builder.setTitle(context.getString(title));
+	}
+	
+	public WindowAlert(Context context, String title)
+	{
+		builder = new AlertDialog.Builder(context);
+		
 		builder.setTitle(title);
 	}
 
 	/* Métodos Protegidos */
 
-	protected void setPositiveButton(CharSequence text, OnClickListener listener)
+	protected void setPositiveButton(int text, OnClickListener listener)
 	{
 		builder.setPositiveButton(text, listener);
 	}
 
-	protected void setNegativeButton(CharSequence text, OnClickListener listener)
+	protected void setNegativeButton(int text, OnClickListener listener)
 	{
 		builder.setNegativeButton(text, listener);
 	}
 
-	protected void setNeutralButton(CharSequence text, OnClickListener listener)
+	protected void setNeutralButton(int text, OnClickListener listener)
 	{
 		builder.setNeutralButton(text, listener);
 	}
 
+	protected void setMessage(int message)
+	{
+		builder.setMessage(message);
+	}
+	
 	protected void setMessage(CharSequence message)
 	{
 		builder.setMessage(message);
@@ -63,7 +75,20 @@ public abstract class WindowAlert
 		builder.setCancelable(cancelable);
 	}
 	
-	protected void changeMessage(String message)
+	protected void changeMessage(int message)
+	{
+		if(dialog != null)
+		{
+			TextView text = (TextView) dialog.findViewById(android.R.id.message);
+			text.setText(message);
+		}
+		else
+		{
+			setMessage(message);
+		}
+	}
+	
+	protected void changeMessage(CharSequence message)
 	{
 		if(dialog != null)
 		{

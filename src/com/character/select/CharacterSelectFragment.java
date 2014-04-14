@@ -20,8 +20,8 @@ import com.android.view.ViewPagerSwipeable;
 import com.character.display.DisplayGLSurfaceView;
 import com.character.display.TTipoDisplay;
 import com.game.data.Personaje;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public class CharacterSelectFragment extends OpenGLFragment
 {
@@ -205,7 +205,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 				{
 					String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getNombre() + " " + getString(R.string.text_social_create_character_final);
 
-					TextInputAlert alert = new TextInputAlert(getActivity(), getString(R.string.text_social_share_title), getString(R.string.text_social_share_description), text, getString(R.string.text_button_send), getString(R.string.text_button_cancel)) {
+					TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel) {
 						@Override
 						public void onPossitiveButtonClick(String text)
 						{

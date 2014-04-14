@@ -3,7 +3,6 @@ package com.character.select;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,49 +28,32 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 
 	/* Constructora */
 
-	public static final CharacterSelectionFragment newInstance(List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector c)
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector s)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
-		fragment.setParameters(l, im, em, c);
+		fragment.setParameters(c, l, im, em, s);
 		return fragment;
 	}
 
-	private void setParameters(List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector c)
+	private void setParameters(CharacterSelectionFragmentListener c, List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector s)
 	{
+		mCallback = c;
 		listaPersonajes = l;
 		internalManager = im;
 		externalManager = em;
-		connector = c;
+		connector = s;
 	}
 
 	public interface CharacterSelectionFragmentListener
 	{
-		public void onCharacterSelectionSelectClicked(int indice);
-		public void onCharacterSelectionDeleteButtonClicked(int indice);
-		public void onCharacterSelectionRepaintButtonClicked(int indice);
-		public void onCharacterSelectionRenameButtonClicked(int indice);
-		public void onCharacterSelectionExportButtonClicked(int indice);
+		public void onCharacterSelectionSelectCharacter(int indice);
+		public void onCharacterSelectionDeleteCharacter(int indice);
+		public void onCharacterSelectionRepaintCharacter(int indice);
+		public void onCharacterSelectionRenameCharacter(int indice);
+		public void onCharacterSelectionExportCharacter(int indice);
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (CharacterSelectionFragmentListener) activity;
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mCallback = null;
-		internalManager = null;
-		externalManager = null;
-		connector = null;
-		listaPersonajes = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -111,30 +93,30 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	@Override
 	public void onCharacterSelected()
 	{
-		mCallback.onCharacterSelectionSelectClicked(viewPager.getPosition());
+		mCallback.onCharacterSelectionSelectCharacter(viewPager.getPosition());
 	}
 
 	@Override
 	public void onCharacterDeleted()
 	{
-		mCallback.onCharacterSelectionDeleteButtonClicked(viewPager.getPosition());
+		mCallback.onCharacterSelectionDeleteCharacter(viewPager.getPosition());
 	}
 	
 	@Override
 	public void onCharacterRepainted()
 	{
-		mCallback.onCharacterSelectionRepaintButtonClicked(viewPager.getPosition());
+		mCallback.onCharacterSelectionRepaintCharacter(viewPager.getPosition());
 	}
 	
 	@Override
 	public void onCharacterRenamed()
 	{
-		mCallback.onCharacterSelectionRenameButtonClicked(viewPager.getPosition());
+		mCallback.onCharacterSelectionRenameCharacter(viewPager.getPosition());
 	}
 	
 	@Override
 	public void onCharacterExported()
 	{
-		mCallback.onCharacterSelectionExportButtonClicked(viewPager.getPosition());
+		mCallback.onCharacterSelectionExportCharacter(viewPager.getPosition());
 	}
 }

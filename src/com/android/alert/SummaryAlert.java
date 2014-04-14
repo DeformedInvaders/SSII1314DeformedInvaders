@@ -14,15 +14,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.game.data.Entidad;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
-public class SummaryAlert extends WindowAlert
+public abstract class SummaryAlert extends WindowAlert
 {	
 	private static final int sizeText = 30;
 	private static final int sizeTextSmall = 20;
 	
-	public SummaryAlert(Context context, String title, String textYes, List<Entidad> listaEnemigos)
+	public SummaryAlert(Context context, int title, int textYes, List<Entidad> listaEnemigos)
 	{
 		super(context, title);
 		
@@ -114,7 +114,10 @@ public class SummaryAlert extends WindowAlert
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int whichButton) { }
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				onPossitiveButtonClick();
+			}
 		});
 	}
 	
@@ -141,4 +144,8 @@ public class SummaryAlert extends WindowAlert
 		
 		return layout;
 	}
+	
+	/* Métodos Abstractos */
+
+	public abstract void onPossitiveButtonClick();
 }

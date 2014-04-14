@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoSticker;
@@ -22,13 +21,6 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TEstadoDetector.SimpleTouch);
 	}
 
-	public void setParameters(Esqueleto esqueleto)
-	{
-		// Asignar Renderer al GLSurfaceView
-		renderer = new PaintOpenGLRenderer(getContext(), esqueleto);
-		setRenderer(renderer);
-	}
-	
 	public void setParameters(Personaje personaje)
 	{
 		// Asignar Renderer al GLSurfaceView

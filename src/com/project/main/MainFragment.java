@@ -1,9 +1,6 @@
 package com.project.main;
 
-import java.util.List;
-
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +13,7 @@ import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
 import com.character.display.TTipoDisplay;
 import com.game.data.Personaje;
+import com.project.model.GamePreferences;
 
 public class MainFragment extends OpenGLFragment
 {
@@ -24,51 +22,37 @@ public class MainFragment extends OpenGLFragment
 	private DisplayGLSurfaceView canvas;
 	private ImageButton botonCrear, botonJugar, botonSeleccionar;
 
-	private List<Personaje> listaPersonajes;
-
+	private Personaje personaje;
+	private int numeroPersonajes;
+	
 	private InternalStorageManager internalManager;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(List<Personaje> lista, InternalStorageManager m)
+	public static final MainFragment newInstance(MainFragmentListener c, Personaje p, int n, InternalStorageManager m)
 	{
 		MainFragment fragment = new MainFragment();
-		fragment.setParameters(lista, m);
+		fragment.setParameters(c, p, n, m);
 		return fragment;
 	}
 
-	private void setParameters(List<Personaje> lista, InternalStorageManager m)
+	// FIXME Revisar atributos en onDetach y onDestroyView
+	private void setParameters(MainFragmentListener c, Personaje p, int n, InternalStorageManager m)
 	{
-		listaPersonajes = lista;
+		mCallback = c;
+		personaje = p;
+		numeroPersonajes = n;
 		internalManager = m;
 	}
 
 	public interface MainFragmentListener
 	{
-		public void onMainCreateButtonClicked();
-
-		public void onMainSelectButtonClicked();
-
-		public void onMainPlayButtonClicked();
+		public void onMainCreateCharacter();
+		public void onMainSelectCharacter();
+		public void onMainPlayGame();
 	}
 
 	/* Métodos Fragment */
-
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mCallback = (MainFragmentListener) activity;
-	}
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-
-		mCallback = null;
-		listaPersonajes = null;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -82,10 +66,9 @@ public class MainFragment extends OpenGLFragment
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
 		
-		if (GamePreferences.GET_CHARACTER_GAME() >= 0 && GamePreferences.GET_CHARACTER_GAME() < listaPersonajes.size() && !listaPersonajes.isEmpty())
+		if (personaje != null)
 		{
-			Personaje p = listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME());
-			canvas.setParameters(p, internalManager, TTipoDisplay.Main);
+			canvas.setParameters(personaje, internalManager, TTipoDisplay.Main);
 		}
 		else
 		{
@@ -145,11 +128,11 @@ public class MainFragment extends OpenGLFragment
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (!listaPersonajes.isEmpty() && listaPersonajes.size() <= GamePreferences.MAX_CHARACTERS)
+		if (numeroPersonajes > 0 && numeroPersonajes <= GamePreferences.MAX_CHARACTERS)
 		{
 			botonSeleccionar.setVisibility(View.VISIBLE);
-
-			if (GamePreferences.GET_CHARACTER_GAME() != -1)
+			
+			if (personaje != null)
 			{
 				botonJugar.setVisibility(View.VISIBLE);
 			}
@@ -163,7 +146,7 @@ public class MainFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onMainCreateButtonClicked();
+			mCallback.onMainCreateCharacter();
 		}
 	}
 
@@ -172,7 +155,7 @@ public class MainFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onMainSelectButtonClicked();
+			mCallback.onMainSelectCharacter();
 		}
 	}
 
@@ -181,7 +164,7 @@ public class MainFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			mCallback.onMainPlayButtonClicked();
+			mCallback.onMainPlayGame();
 		}
 	}
 }

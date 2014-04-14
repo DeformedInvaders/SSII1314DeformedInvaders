@@ -15,8 +15,8 @@ import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
 import com.android.storage.InternalStorageManager;
 import com.creation.data.TTipoMovimiento;
-import com.project.main.GamePreferences;
 import com.project.main.R;
+import com.project.model.GamePreferences;
 
 public abstract class AudioAlert extends WindowAlert
 {
@@ -34,7 +34,7 @@ public abstract class AudioAlert extends WindowAlert
 
 	/* Constructora */
 
-	public AudioAlert(Context context, String title, String messege, String textYes, String textNo, InternalStorageManager manager, TTipoMovimiento tipo)
+	public AudioAlert(Context context, int title, int messege, int textYes, int textNo, InternalStorageManager manager, TTipoMovimiento tipo)
 	{
 		super(context, title);
 

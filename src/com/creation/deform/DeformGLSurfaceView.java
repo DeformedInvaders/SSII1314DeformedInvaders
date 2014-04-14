@@ -8,10 +8,9 @@ import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.Esqueleto;
-import com.creation.data.Textura;
+import com.game.data.Personaje;
 import com.lib.utils.FloatArray;
-import com.project.main.GamePreferences;
+import com.project.model.GamePreferences;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
@@ -29,9 +28,9 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TEstadoDetector.MultiTouch);
 	}
 
-	public void setParameters(Esqueleto esqueleto, Textura textura, final DeformFragment fragmento)
+	public void setParameters(Personaje personaje, final DeformFragment fragmento)
 	{
-		renderer = new DeformOpenGLRenderer(getContext(), esqueleto, textura);
+		renderer = new DeformOpenGLRenderer(getContext(), personaje);
 		setRenderer(renderer);
 
 		handler = new Handler();

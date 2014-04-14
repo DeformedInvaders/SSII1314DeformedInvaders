@@ -23,7 +23,7 @@ import com.game.data.TTipoSticker;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
-import com.project.main.GamePreferences;
+import com.project.model.GamePreferences;
 
 public abstract class OpenGLRenderer implements Renderer
 {

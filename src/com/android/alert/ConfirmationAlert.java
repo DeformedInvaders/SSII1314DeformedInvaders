@@ -7,7 +7,7 @@ public abstract class ConfirmationAlert extends WindowAlert
 {
 	/* Constructora */
 
-	public ConfirmationAlert(Context context, String title, String messege, String textYes, String textNo)
+	public ConfirmationAlert(Context context, int title, int messege, int textYes, int textNo)
 	{
 		super(context, title);
 

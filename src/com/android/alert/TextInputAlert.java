@@ -10,19 +10,13 @@ public abstract class TextInputAlert extends WindowAlert
 
 	/* Constructora */
 
-	public TextInputAlert(Context context, String title, String messege, String textYes, String textNo)
-	{
-		this(context, title, messege, "", textYes, textNo);
-	}
-
-	public TextInputAlert(Context context, String title, String messege, String text, String textYes, String textNo)
+	public TextInputAlert(Context context, int title, int messege, int textYes, int textNo)
 	{
 		super(context, title);
 
 		setMessage(messege);
 
 		input = new EditText(context);
-		input.setText(text);
 		setView(input);
 		
 		setCancelable(false);
@@ -42,6 +36,20 @@ public abstract class TextInputAlert extends WindowAlert
 				onNegativeButtonClick(input.getText().toString());
 			}
 		});
+	}
+
+	public TextInputAlert(Context context, int title, int messege, int text, int textYes, int textNo)
+	{
+		this(context, title, messege, textYes, textNo);
+		
+		input.setText(text);
+	}
+	
+	public TextInputAlert(Context context, int title, int messege, String text, int textYes, int textNo)
+	{
+		this(context, title, messege, textYes, textNo);
+		
+		input.setText(text);
 	}
 
 	/* Métodos Abstractos */

@@ -75,9 +75,9 @@ public abstract class SocialConnector
 		return true;
 	}
 
-	private void evaluarRespuestaOAuth(String url, String title)
+	private void evaluarRespuestaOAuth(String url, int title)
 	{
-		WebAlert alert = new WebAlert(mContext, title, mContext.getString(R.string.text_button_close)) {
+		WebAlert alert = new WebAlert(mContext, title, R.string.text_button_close) {
 			@Override
 			public boolean evaluarURL(String url)
 			{
@@ -127,7 +127,7 @@ public abstract class SocialConnector
 		if (conectorTwitter.iniciarAutorizacion())
 		{
 			estadoTwitter = TEstadoSocial.OAuth;
-			evaluarRespuestaOAuth(conectorTwitter.getAuthorizationURL(), mContext.getString(R.string.text_twitter_title));
+			evaluarRespuestaOAuth(conectorTwitter.getAuthorizationURL(), R.string.text_twitter_title);
 		}
 		else
 		{
@@ -178,7 +178,7 @@ public abstract class SocialConnector
 		if (conectorFacebook.iniciarAutorizacion())
 		{
 			estadoFacebook = TEstadoSocial.OAuth;
-			evaluarRespuestaOAuth(conectorFacebook.getAuthorizationURL(), mContext.getString(R.string.text_facebook_title));
+			evaluarRespuestaOAuth(conectorFacebook.getAuthorizationURL(), R.string.text_facebook_title);
 		}
 		else
 		{
