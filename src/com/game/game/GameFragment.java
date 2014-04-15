@@ -1,5 +1,8 @@
 package com.game.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +90,22 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 		reiniciarInterfaz();
 		actualizarInterfaz();
+		
+		List<Integer> listaMensajes = new ArrayList<Integer>();
+		listaMensajes.add(R.string.text_tip_game_lives);
+		listaMensajes.add(R.string.text_tip_game_crouch);
+		listaMensajes.add(R.string.text_tip_game_jump);
+		listaMensajes.add(R.string.text_tip_game_attack);
+		listaMensajes.add(R.string.text_tip_game_complete);
+		
+		List<String> listaVideos = new ArrayList<String>();
+		listaVideos.add(GamePreferences.VIDEO_GAME_LIVES_PATH);
+		listaVideos.add(GamePreferences.VIDEO_GAME_CROUCH_PATH);
+		listaVideos.add(GamePreferences.VIDEO_GAME_JUMP_PATH);
+		listaVideos.add(GamePreferences.VIDEO_GAME_ATTACK_PATH);
+		listaVideos.add(GamePreferences.VIDEO_GAME_COMPLETE_PATH);
+		
+		sendAlertMessage(R.string.text_tip_game_title, listaMensajes, listaVideos);		
 		return rootView;
 	}
 

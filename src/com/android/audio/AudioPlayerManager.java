@@ -35,7 +35,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		{
 			if (estado != TEstadoPlay.Libre)
 			{
-				resetPlaying();
+				releasePlayer();
 			}
 			
 			player = new MediaPlayer();
@@ -63,7 +63,7 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	{
 		if (estado != TEstadoPlay.Libre)
 		{
-			resetPlaying();
+			releasePlayer();
 		}
 		
 		player = MediaPlayer.create(mContext, path);

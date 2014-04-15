@@ -74,6 +74,11 @@ public class GamePreferences
 	public static final String VIDEO_DEFORM_HANDLES_PATH = VIDEO_PATH + "tips_deform_handles";
 	public static final String VIDEO_DEFORM_UNDEFINED_PATH = VIDEO_PATH + "tips_deform_undefined";
 	
+	public static final String VIDEO_GAME_LIVES_PATH = VIDEO_PATH + "tips_game_lives";
+	public static final String VIDEO_GAME_CROUCH_PATH = VIDEO_PATH + "tips_game_crouch";
+	public static final String VIDEO_GAME_JUMP_PATH = VIDEO_PATH + "tips_game_jump";
+	public static final String VIDEO_GAME_ATTACK_PATH = VIDEO_PATH + "tips_game_attack";
+	public static final String VIDEO_GAME_COMPLETE_PATH = VIDEO_PATH + "tips_game_complete";
 	// Fuentes
 	private static final String FONT_PATH = "fonts/";
 	public static final String FONT_TYPEWRITER_PATH = FONT_PATH + "font_typewriter.ttf";

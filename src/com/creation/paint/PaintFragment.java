@@ -133,8 +133,7 @@ public class PaintFragment extends OpenGLFragment
 		listaVideos.add(GamePreferences.VIDEO_PAINT_STICKER_PATH);
 		listaVideos.add(GamePreferences.VIDEO_PAINT_ZOOM_PATH);
 		
-		sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);		
-		
+		sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);	
 		return rootView;
 	}
 
