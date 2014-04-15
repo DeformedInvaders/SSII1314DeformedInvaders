@@ -16,7 +16,6 @@ import com.creation.data.Textura;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
-import com.project.model.GamePreferences;
 
 public abstract class Malla extends Entidad
 {
@@ -59,15 +58,7 @@ public abstract class Malla extends Entidad
 		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipo);
 
 		// Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-			
-			if (pegatinas.isCargada(tipoPegatinas[i]))
-			{
-				renderer.cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas[i], context), tipo, id, tipoPegatinas[i]);
-			}
-		}
+		pegatinas.cargarTexturas(gl, renderer, context, tipo, id);
 	}
 
 	@Override
@@ -77,11 +68,7 @@ public abstract class Malla extends Entidad
 		renderer.descargarTexturaMalla(tipo);
 
 		// Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-			renderer.descargarTexturaRectangulo(tipo, id, tipoPegatinas[i]);
-		}
+		pegatinas.descargarTextura(renderer, tipo, id);
 	}
 
 	@Override
@@ -98,16 +85,7 @@ public abstract class Malla extends Entidad
 			renderer.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
 	
 			// Pegatinas
-			for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-			{
-				TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-				
-				if (pegatinas.isCargada(tipoPegatinas))
-				{
-					int indice = pegatinas.getVertice(tipoPegatinas);
-					renderer.dibujarTexturaRectangulo(gl, verticesAnimacion.get(2 * indice), verticesAnimacion.get(2 * indice + 1), tipo, id, tipoPegatinas);
-				}
-			}
+			pegatinas.dibujar(gl, renderer, verticesAnimacion, tipo, id);
 
 		gl.glPopMatrix();
 	}

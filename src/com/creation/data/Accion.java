@@ -1,6 +1,5 @@
 package com.creation.data;
 
-import com.game.data.TTipoSticker;
 
 public class Accion
 {

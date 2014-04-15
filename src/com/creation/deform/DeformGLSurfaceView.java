@@ -58,7 +58,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	/* Métodos Abstráctos OpenGLSurfaceView */
+	/* Métodos Abstractos OpenGLSurfaceView */
 
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)

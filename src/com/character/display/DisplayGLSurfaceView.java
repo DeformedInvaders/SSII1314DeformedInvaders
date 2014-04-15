@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.AttributeSet;
 
-import com.android.audio.AudioPlayerManager;
-import com.android.storage.InternalStorageManager;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
@@ -16,15 +14,10 @@ import com.project.model.GamePreferences;
 public class DisplayGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
+	private OnDisplayListener mListener;
 	private DisplayOpenGLRenderer renderer;
 
-	private TTipoDisplay tipoDisplay;
-
-	private String nombre;
-	private boolean personajeCargado;
-
-	private InternalStorageManager internalManager;
-	private AudioPlayerManager player;
+	private boolean personajeCargado, movimientoAleatorio;
 
 	private Handler handler;
 	private Runnable task;
@@ -59,26 +52,20 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	public void setParameters(Personaje p, InternalStorageManager m, TTipoDisplay e)
+	public void setParameters(OnDisplayListener listener, Personaje personaje, boolean random)
 	{
-		nombre = p.getNombre();
-		internalManager = m;
-		tipoDisplay = e;
+		mListener = listener;
+		movimientoAleatorio = random;
 		personajeCargado = true;
 
-		renderer = new DisplayOpenGLRenderer(getContext(), p);
+		renderer = new DisplayOpenGLRenderer(getContext(), personaje);
 		setRenderer(renderer);
-
-		player = new AudioPlayerManager(internalManager) {
-			@Override
-			public void onPlayerCompletion() { }
-		};
 	}
 
-	public void setParameters(TTipoDisplay e)
+	public void setParameters()
 	{
+		movimientoAleatorio = false;
 		personajeCargado = false;
-		tipoDisplay = e;
 
 		renderer = new DisplayOpenGLRenderer(getContext());
 		setRenderer(renderer);
@@ -89,30 +76,27 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (tipoDisplay == TTipoDisplay.Main)
+		if (movimientoAleatorio && personajeCargado)
 		{
-			if (personajeCargado)
+			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_MOVIMIENTOS);
+
+			switch (animacion)
 			{
-				int animacion = (int) Math.floor(Math.random() * 4);
-
-				switch (animacion)
-				{
-					case 0:
-						seleccionarRun();
-					break;
-					case 1:
-						seleccionarJump();
-					break;
-					case 2:
-						seleccionarCrouch();
-					break;
-					case 3:
-						seleccionarAttack();
-					break;
-				}
-
-				return true;
+				case 0:
+					seleccionarRun();
+				break;
+				case 1:
+					seleccionarJump();
+				break;
+				case 2:
+					seleccionarCrouch();
+				break;
+				case 3:
+					seleccionarAttack();
+				break;
 			}
+
+			return true;
 		}
 
 		return false;
@@ -144,10 +128,10 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		{
 			renderer.seleccionarRun();
 			requestRender();
+			mListener.onDisplayPlaySound(TTipoMovimiento.Run);
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, TTipoMovimiento.Run);
 		}
 	}
 
@@ -157,10 +141,10 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		{
 			renderer.seleccionarJump();
 			requestRender();
+			mListener.onDisplayPlaySound(TTipoMovimiento.Jump);
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, TTipoMovimiento.Jump);
 		}
 	}
 
@@ -170,10 +154,10 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		{
 			renderer.seleccionarCrouch();
 			requestRender();
+			mListener.onDisplayPlaySound(TTipoMovimiento.Crouch);
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, TTipoMovimiento.Crouch);
 		}
 	}
 
@@ -183,10 +167,10 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		{
 			renderer.seleccionarAttack();
 			requestRender();
+			mListener.onDisplayPlaySound(TTipoMovimiento.Attack);
 
 			task.run();
 			threadActivo = true;
-			player.startPlaying(nombre, TTipoMovimiento.Attack);
 		}
 	}
 

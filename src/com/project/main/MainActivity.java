@@ -13,9 +13,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.android.social.SocialConnector;
-import com.android.storage.ExternalStorageManager;
-import com.android.storage.InternalStorageManager;
+import com.android.storage.OnLoadingListener;
+import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.deform.DeformationFragment;
 import com.creation.design.DesignDataSaved;
@@ -27,6 +26,7 @@ import com.game.data.Nivel;
 import com.game.data.Personaje;
 import com.game.game.GameFragment;
 import com.game.select.LevelSelectionFragment;
+import com.game.select.TTipoLevel;
 import com.loading.load.LoadingFragment;
 import com.project.controller.GameController;
 import com.project.model.GameCore;
@@ -69,9 +69,15 @@ public class MainActivity extends FragmentActivity
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         
-        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels);
-        controller = new GameController(this, core);
+        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels) {
+			@Override
+			public void onSocialConectionStatusChanged()
+			{
+				actualizarActionBar();	
+			}
+        };
         
+        controller = new GameController(this, this, core);
         controller.onActivityStarted();
 	}
 	
@@ -223,15 +229,15 @@ public class MainActivity extends FragmentActivity
 		controller.actualizarMusica();
 	}
 
-	public void insertarLoadingFragmento(InternalStorageManager internalManager)
+	public void insertarLoadingFragmento(OnLoadingListener listener)
 	{
-		insertarFragmento(LoadingFragment.newInstance(controller, internalManager));
+		insertarFragmento(LoadingFragment.newInstance(listener));
 		cambiarTituloActionBar(R.string.title_app);
 	}
 
-	public void insertarMainFragmento(Personaje personaje, int numeroPersonajes, InternalStorageManager internalManager)
+	public void insertarMainFragmento(Personaje personaje, int numeroPersonajes)
 	{
-		insertarFragmento(MainFragment.newInstance(controller, personaje, numeroPersonajes, internalManager));
+		insertarFragmento(MainFragment.newInstance(controller, personaje, numeroPersonajes));
 		cambiarTituloActionBar(R.string.title_app);
 	}
 
@@ -265,15 +271,21 @@ public class MainActivity extends FragmentActivity
 		cambiarTituloActionBar(R.string.title_paint_phase);
 	}
 
-	public void insertarDeformationFragmento(Personaje nuevoPersonaje, InternalStorageManager internalManager)
+	public void insertarDeformationFragmento(Personaje nuevoPersonaje)
 	{
-		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje, internalManager));
+		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje));
 		cambiarTituloActionBar(R.string.title_deformation_phase);
 	}
 
-	public void insertarCharacterSelectionFragmento(List<Personaje> listaPersonajes, InternalStorageManager internalManager, ExternalStorageManager externalManager, SocialConnector socialConnector)
+	public void insertarCharacterSelectionFragmento(List<Personaje> listaPersonajes)
 	{
-		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes, internalManager, externalManager, socialConnector));
+		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes));
+		cambiarTituloActionBar(R.string.title_character_selection_phase);
+	}
+	
+	public void insertarCharacterSelectionFragmento(List<Personaje> listaPersonajes, CharacterSelectionDataSaved datosSalvados)
+	{
+		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes, datosSalvados));
 		cambiarTituloActionBar(R.string.title_character_selection_phase);
 	}
 
@@ -282,10 +294,16 @@ public class MainActivity extends FragmentActivity
 		insertarFragmento(LevelSelectionFragment.newInstance(controller, listaNiveles, estadisticasNiveles));
 		cambiarTituloActionBar(R.string.title_level_selection_phase);
 	}
-
-	public void insertarGameFragmento(Personaje personajeSeleccionado, InternalStorageManager internalManager, InstanciaNivel nivel)
+	
+	public void insertarLevelSelectionFragmento(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles, TTipoLevel nivel)
 	{
-		insertarFragmento(GameFragment.newInstance(controller, personajeSeleccionado, internalManager, nivel));
+		insertarFragmento(LevelSelectionFragment.newInstance(controller, listaNiveles, estadisticasNiveles, nivel));
+		cambiarTituloActionBar(R.string.title_level_selection_phase);
+	}
+
+	public void insertarGameFragmento(Personaje personajeSeleccionado, InstanciaNivel nivel)
+	{
+		insertarFragmento(GameFragment.newInstance(controller, personajeSeleccionado, nivel));
 		cambiarTituloActionBar(R.string.title_game_phase);
 	}
 }

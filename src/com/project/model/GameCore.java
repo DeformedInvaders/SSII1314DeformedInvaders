@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
+import com.android.storage.OnLoadingListener;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
@@ -19,16 +21,12 @@ import com.game.data.Nivel;
 import com.game.data.Personaje;
 import com.game.select.LevelGenerator;
 import com.game.select.TTipoLevel;
-import com.project.main.MainActivity;
 import com.project.main.R;
 
-public class GameCore
+public abstract class GameCore
 {
 	/* Contexto */
 	private Context mContext;
-	
-	/* Vista */
-	private MainActivity view;
 	
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
@@ -39,7 +37,7 @@ public class GameCore
 	private GameStatistics[] estadisticasNiveles;
 	
 	/* Musica */
-	private AudioPlayerManager audioManager;
+	private AudioPlayerManager audioManager, soundManager;
 	private int musicaSeleccionada;
 
 	/* Almacenamiento */
@@ -51,11 +49,9 @@ public class GameCore
 	
 	/* Constructora */
 	
-	public GameCore(MainActivity activity, int widthScreen, int heightScreen)
+	public GameCore(Context context, int widthScreen, int heightScreen)
 	{
-		mContext = activity;
-		
-		view = activity;
+		mContext = context;
 				
 		nuevoPersonaje = null;
 		levelGenerator = new LevelGenerator(mContext);
@@ -69,11 +65,16 @@ public class GameCore
 			@Override
 			public void onConectionStatusChange()
 			{
-				view.actualizarActionBar();
+				onSocialConectionStatusChanged();
 			}
 		};
 		
 		audioManager = new AudioPlayerManager(mContext) {
+			@Override
+			public void onPlayerCompletion() { }
+		};
+		
+		soundManager = new AudioPlayerManager(mContext) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
@@ -84,12 +85,22 @@ public class GameCore
         GamePreferences.setTipParameters(false);
 	}
 	
-	// FIXME Incluir Loading en GameCore.
-	public void cargarDatos(List<Personaje> personajes, GameStatistics[] estadisticas)
+	public boolean cargarDatos()
 	{
-		listaPersonajes = personajes;
-		estadisticasNiveles = estadisticas;
+		internalManager.cargarPreferencias();
+		estadisticasNiveles = internalManager.cargarEstadisticas();	
+		listaPersonajes = internalManager.cargarListaPersonajes();
+		return internalManager.setLoadingFinished();
 	}
+	
+	private void sendToastMessage(int message)
+	{
+		Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+	}
+	
+	/* Métodos abstractos */
+	
+	public abstract void onSocialConectionStatusChanged();
 	
 	/* Métodos de obtención de datos */
 	
@@ -101,26 +112,6 @@ public class GameCore
 	public GameStatistics[] getEstadisticasNiveles()
 	{
 		return estadisticasNiveles;
-	}
-	
-	public AudioPlayerManager getAudioManager()
-	{
-		return audioManager;
-	}
-
-	public InternalStorageManager getInternalManager()
-	{
-		return internalManager;
-	}
-	
-	public ExternalStorageManager getExternalManager()
-	{
-		return externalManager;
-	}
-
-	public SocialConnector getSocialConnector()
-	{
-		return socialConnector;
 	}
 
 	public List<Nivel> getListaNiveles()
@@ -170,6 +161,11 @@ public class GameCore
 		return listaPersonajes.size();
 	}
 	
+	public OnLoadingListener getLoadingListener()
+	{
+		return internalManager.getLoadingListener();
+	}
+	
 	/* Métodos de modificación del Personaje Actual */
 	
 	public boolean crearNuevoPersonaje()
@@ -195,7 +191,7 @@ public class GameCore
 		}
 		else
 		{
-			Toast.makeText(mContext, R.string.error_design, Toast.LENGTH_SHORT).show();
+			sendToastMessage(R.string.error_design);
 		}
 		
 		return false;
@@ -213,7 +209,7 @@ public class GameCore
 		}
 		else
 		{
-			Toast.makeText(mContext, R.string.error_paint, Toast.LENGTH_SHORT).show();
+			sendToastMessage(R.string.error_paint);
 		}
 		
 		return false;
@@ -231,7 +227,7 @@ public class GameCore
 		}
 		else
 		{
-			Toast.makeText(mContext, R.string.error_animation, Toast.LENGTH_SHORT).show();
+			sendToastMessage(R.string.error_animation);
 		}
 		
 		return false;		
@@ -254,7 +250,7 @@ public class GameCore
 				listaPersonajes.add(nuevoPersonaje);
 				nuevoPersonaje = null;
 
-				Toast.makeText(mContext, R.string.text_save_character_confirmation, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_save_character_confirmation);
 				return true;
 			}
 		}
@@ -289,7 +285,7 @@ public class GameCore
 		}
 		else
 		{
-			Toast.makeText(mContext, R.string.error_paint, Toast.LENGTH_SHORT).show();
+			sendToastMessage(R.string.error_paint);
 		}		
 		
 		return false;
@@ -302,7 +298,7 @@ public class GameCore
 			GamePreferences.setCharacterParameters(indice);
 			if (internalManager.guardarPreferencias())
 			{
-				Toast.makeText(mContext, R.string.text_select_character_confirmation, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_select_character_confirmation);
 				return true;
 			}
 		}
@@ -324,12 +320,12 @@ public class GameCore
 					internalManager.guardarPreferencias();
 				}
 	
-				Toast.makeText(mContext, R.string.text_delete_character_confirmation, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_delete_character_confirmation);
 				return true;
 			}
 		}
 
-		Toast.makeText(mContext, R.string.error_delete_character, Toast.LENGTH_SHORT).show();
+		sendToastMessage(R.string.error_delete_character);
 		return false;
 	}
 	
@@ -339,7 +335,7 @@ public class GameCore
 		{
 			if (internalManager.renombrarPersonaje(listaPersonajes.get(indice), nombre))
 			{
-				Toast.makeText(mContext, R.string.text_rename_character_confirmation, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_rename_character_confirmation);
 				return true;
 			}
 		}
@@ -351,9 +347,9 @@ public class GameCore
 	{
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
-			if (internalManager.exportarPersonaje(listaPersonajes.get(indice)))
+			if (externalManager.exportarPersonaje(listaPersonajes.get(indice)))
 			{
-				Toast.makeText(mContext, R.string.text_export_character_confirmation, Toast.LENGTH_SHORT).show();
+				sendToastMessage(R.string.text_export_character_confirmation);
 				return true;
 			}
 		}
@@ -459,6 +455,20 @@ public class GameCore
 
 	/* Métodos de modificación del AudioManager */
 	
+	public boolean reproducirSonido(TTipoMovimiento tipo)
+	{
+		return soundManager.startPlaying(internalManager.cargarAudio(getPersonajeSeleccionado().getNombre(), tipo));
+	}
+	
+	public boolean reproducirSonido(TTipoMovimiento tipo, int indice)
+	{
+		if (indice >= 0 && indice < listaPersonajes.size())
+		{
+			return soundManager.startPlaying(internalManager.cargarAudio(listaPersonajes.get(indice).getNombre(), tipo));
+		}
+		return false;
+	}
+	
 	public boolean reproducirMusica(boolean loop)
 	{
 		return audioManager.startPlaying(musicaSeleccionada, loop);
@@ -482,5 +492,18 @@ public class GameCore
 	public boolean continuarMusica()
 	{
 		return audioManager.resumePlaying();
+	}
+
+	public boolean publicarPost(String text, Bitmap bitmap)
+	{
+		if (externalManager.guardarImagenTemp(bitmap))
+		{
+			socialConnector.publicar(text, externalManager.cargarImagenTemp());
+			externalManager.eliminarImagenTemp();
+			return true;
+		}
+		
+		sendToastMessage(R.string.error_picture_character);
+		return false;
 	}	
 }

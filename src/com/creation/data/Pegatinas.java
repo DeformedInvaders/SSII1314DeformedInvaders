@@ -2,9 +2,13 @@ package com.creation.data;
 
 import java.io.Serializable;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import android.content.Context;
 
-import com.game.data.TTipoSticker;
+import com.android.view.OpenGLRenderer;
+import com.game.data.TTipoEntidad;
+import com.lib.utils.FloatArray;
 import com.project.model.GamePreferences;
 
 public class Pegatinas implements Serializable
@@ -21,14 +25,56 @@ public class Pegatinas implements Serializable
 
 	public Pegatinas()
 	{
-		indicePegatinas = new int[GamePreferences.MAX_TEXTURE_STICKER];
-		verticePegatinas = new int[GamePreferences.MAX_TEXTURE_STICKER];
+		indicePegatinas = new int[GamePreferences.NUM_TEXTURE_STICKER];
+		verticePegatinas = new int[GamePreferences.NUM_TEXTURE_STICKER];
 
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
 		{
 			indicePegatinas[i] = -1;
 			verticePegatinas[i] = -1;
 		}
+	}
+	
+	public void cargarTexturas(GL10 gl, OpenGLRenderer renderer, Context context, TTipoEntidad tipo, int id)
+	{
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
+		{
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			
+			if (isCargada(tipoPegatinas[i]))
+			{
+				renderer.cargarTexturaRectangulo(gl, getIndice(tipoPegatinas[i], context), tipo, id, tipoPegatinas[i]);
+			}
+		}
+	}
+	
+	public void descargarTextura(OpenGLRenderer renderer, TTipoEntidad tipo, int id)
+	{
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
+		{
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			renderer.descargarTexturaRectangulo(tipo, id, tipoPegatinas[i]);
+		}
+	}
+	
+	public void dibujar(GL10 gl, OpenGLRenderer renderer, FloatArray vertices, TTipoEntidad tipo, int id)
+	{
+		gl.glPushMatrix();
+		
+			gl.glTranslatef(0, 0, GamePreferences.DEEP_STICKERS);
+			
+			for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
+			{
+				TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
+				
+				if (isCargada(tipoPegatinas))
+				{
+					int indice = getVertice(tipoPegatinas);
+					renderer.dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipo, id, tipoPegatinas);
+				}
+			}
+			
+		gl.glPopMatrix();
 	}
 
 	/* Métodos de Modificación de Información */
@@ -47,12 +93,12 @@ public class Pegatinas implements Serializable
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isCargada(TTipoSticker tipo)
+	private boolean isCargada(TTipoSticker tipo)
 	{
 		return indicePegatinas[tipo.ordinal()] != -1;
 	}
 
-	public int getIndice(TTipoSticker tipo, Context context)
+	private int getIndice(TTipoSticker tipo, Context context)
 	{
 		int tag = indicePegatinas[tipo.ordinal()];
 		
@@ -79,10 +125,10 @@ public class Pegatinas implements Serializable
 				return -1;
 		}
 		
-		return context.getResources().getIdentifier(nombrePegatina + (tag + 1), "drawable", context.getPackageName());
+		return context.getResources().getIdentifier(nombrePegatina + tag, "drawable", context.getPackageName());
 	}
 
-	public int getVertice(TTipoSticker tipo)
+	private int getVertice(TTipoSticker tipo)
 	{
 		return verticePegatinas[tipo.ordinal()];
 	}

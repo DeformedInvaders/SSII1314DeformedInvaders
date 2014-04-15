@@ -7,11 +7,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.touch.GameDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
 import com.android.touch.TEstadoDetector;
-import com.android.touch.GameDetector;
 import com.project.model.GamePreferences;
 
 public abstract class OpenGLSurfaceView extends GLSurfaceView

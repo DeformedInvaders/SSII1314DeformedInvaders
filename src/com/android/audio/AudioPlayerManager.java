@@ -7,28 +7,14 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
-import com.android.storage.InternalStorageManager;
-import com.creation.data.TTipoMovimiento;
-
 public abstract class AudioPlayerManager implements OnCompletionListener
 {
 	private Context mContext;
-	private InternalStorageManager internalManager;
 
 	private MediaPlayer player;
 	private TEstadoPlay estado;
 
 	/* Constructora */
-
-	public AudioPlayerManager(InternalStorageManager manager)
-	{
-		internalManager = manager;
-
-		player = new MediaPlayer();
-		player.setOnCompletionListener(this);
-
-		estado = TEstadoPlay.Libre;
-	}
 	
 	public AudioPlayerManager(Context context)
 	{
@@ -43,23 +29,27 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	/* Métodos de Selección de Estado */
 	
-	private boolean startPlayingAudio(String path)
+	public boolean startPlaying(String path)
 	{
 		try
 		{
-			if (estado == TEstadoPlay.Libre)
+			if (estado != TEstadoPlay.Libre)
 			{
-				// Idle
-				player.setDataSource(path);
-				// Initialized
-				player.prepare();
-				// Prepared
-				player.start();
-				// Started
-
-				estado = TEstadoPlay.Reproduciendo;
-				return true;
+				resetPlaying();
 			}
+			
+			player = new MediaPlayer();
+			player.setOnCompletionListener(this);
+			// Idle
+			player.setDataSource(path);
+			// Initialized
+			player.prepare();
+			// Prepared
+			player.start();
+			// Started
+
+			estado = TEstadoPlay.Reproduciendo;
+			return true;
 		}
 		catch (IOException e)
 		{
@@ -71,48 +61,22 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean startPlaying(int path, boolean loop)
 	{
-		if(internalManager == null)
+		if (estado != TEstadoPlay.Libre)
 		{
-			if (estado != TEstadoPlay.Libre)
-			{
-				resetPlaying();
-			}
-			
-			player = MediaPlayer.create(mContext, path);
-			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			player.setLooping(loop);
-			player.setOnCompletionListener(this);
-			
-			// Prepared
-			player.start();
-			// Started
-
-			estado = TEstadoPlay.Reproduciendo;
-			return true;
-			
+			resetPlaying();
 		}
 		
-		return false;
-	}
+		player = MediaPlayer.create(mContext, path);
+		player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		player.setLooping(loop);
+		player.setOnCompletionListener(this);
+		
+		// Prepared
+		player.start();
+		// Started
 
-	public boolean startPlaying(String nombre, TTipoMovimiento tipo)
-	{
-		if (internalManager != null && internalManager.comprobarAudio(nombre, tipo))
-		{
-			return startPlayingAudio(internalManager.cargarAudio(nombre, tipo));
-		}
-
-		return false;
-	}
-
-	public boolean startPlaying(TTipoMovimiento tipo)
-	{
-		if (internalManager != null && internalManager.comprobarAudioTemp(tipo))
-		{
-			return startPlayingAudio(internalManager.cargarAudioTemp(tipo));
-		}
-
-		return false;
+		estado = TEstadoPlay.Reproduciendo;
+		return true;
 	}
 
 	public boolean pausePlaying()

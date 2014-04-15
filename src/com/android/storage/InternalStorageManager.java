@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -22,13 +21,14 @@ import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
-import com.loading.load.OnLoadingListener;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 import com.project.model.GameStatistics;
 
 public class InternalStorageManager
 {
+	private static final String INTERNAL_STORAGE_TAG = "INTERNAL";
+	
 	private static final String CHARACTER_DIRECTORY = "CHARACTERS";
 	private static final String GAMEDATA_DIRECTORY = "GAMEDATA";
 	private static final String TEMP_DIRECTORY = "TEMP";
@@ -41,16 +41,29 @@ public class InternalStorageManager
 	private static final String MUSIC_EXTENSION = ".3gp";
 
 	private Context mContext;
+	private OnLoadingListener mListener;
 
 	/* Constructora */
 
 	public InternalStorageManager(Context context)
 	{
 		mContext = context;
+		mListener = new OnLoadingListener();
 		
 		obtenerDirectorio(CHARACTER_DIRECTORY);
 		obtenerDirectorio(GAMEDATA_DIRECTORY);
 		obtenerDirectorio(TEMP_DIRECTORY);
+	}
+	
+	public OnLoadingListener getLoadingListener()
+	{
+		return mListener;
+	}
+	
+	public boolean setLoadingFinished()
+	{
+		mListener.setProgresoTerminado(mContext.getString(R.string.text_progressBar_completed) + " (100%)");
+		return true;
 	}
 
 	/* Métodos Nombre de Directorios */
@@ -112,7 +125,7 @@ public class InternalStorageManager
 
 	/* Métodos Personajes */
 
-	public List<Personaje> cargarListaPersonajes(OnLoadingListener listener)
+	public List<Personaje> cargarListaPersonajes()
 	{
 		List<Personaje> lista = new ArrayList<Personaje>();
 		
@@ -124,7 +137,10 @@ public class InternalStorageManager
 			{
 				for (int i = 0; i < personajes.length; i++)
 				{
-					 listener.onProgress(100 * i / personajes.length, personajes[i]);
+					int progreso = 100 * i / personajes.length;
+					String nombre = personajes[i];
+					
+					mListener.setProgreso(progreso, mContext.getString(R.string.text_progressBar_character_list) + " " + nombre + " (" + progreso + "%)");
 					
 					Personaje p = cargarPersonaje(personajes[i]);
 					if (p != null)
@@ -155,27 +171,27 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("INTERNAL", "Character Loadead");
+			Log.d(INTERNAL_STORAGE_TAG, "Character Loadead");
 			return p;
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d("INTERNAL", "Character class not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Character class not found");
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "Character file not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Character file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "Character sream corrupted");
+			Log.d(INTERNAL_STORAGE_TAG, "Character sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "Character ioexception");
+			Log.d(INTERNAL_STORAGE_TAG, "Character ioexception");
 		}
 
-		Log.d("INTERNAL", "Character not loadead");
+		Log.d(INTERNAL_STORAGE_TAG, "Character not loadead");
 		return null;
 	}
 
@@ -208,23 +224,23 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("INTERNAL", "Character saved");
+			Log.d(INTERNAL_STORAGE_TAG, "Character saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "Character file not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Character file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "Character sream corrupted");
+			Log.d(INTERNAL_STORAGE_TAG, "Character sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "Character ioexception");
+			Log.d(INTERNAL_STORAGE_TAG, "Character ioexception");
 		}
 
-		Log.d("INTERNAL", "Character not saved");
+		Log.d(INTERNAL_STORAGE_TAG, "Character not saved");
 		return false;
 	}
 
@@ -246,34 +262,6 @@ public class InternalStorageManager
 		
 		personaje.setNombre(evaluarNombre(nombre));
 		return actualizarPersonaje(personaje);
-	}
-	
-	public boolean exportarPersonaje(Personaje personaje)
-	{
-		try
-		{
-			FileInputStream inFile = new FileInputStream(new File(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()), DATA_FILE));
-			FileOutputStream outFile = new FileOutputStream(new File(ExternalStorageManager.getDirectorioExterno(evaluarNombre(personaje.getNombre()))));
-
-			FileChannel inChannel = inFile.getChannel();
-			FileChannel outChannel = outFile.getChannel();
-			
-			inChannel.transferTo(0, inChannel.size(), outChannel);
-			    
-			inChannel.close();
-			outChannel.close();
-			
-			inFile.close();
-			outFile.close();
-			
-			return true;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
-		return false;
 	}
 	
 	/* Métodos Audio */
@@ -319,6 +307,7 @@ public class InternalStorageManager
 	public GameStatistics[] cargarEstadisticas()
 	{
 		GameStatistics[] niveles = new GameStatistics[GamePreferences.NUM_LEVELS];
+		mListener.setProgreso(0, mContext.getString(R.string.text_progressBar_level));
 
 		try
 		{
@@ -336,27 +325,27 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("INTERNAL", "Levels loadead");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels loadead");
 			return niveles;
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d("INTERNAL", "Levels class not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels class not found");
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "Levels file not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "Levels sream corrupted");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "Levels ioexception");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels ioexception");
 		}
 
-		Log.d("INTERNAL", "Levels not loadead");
+		Log.d(INTERNAL_STORAGE_TAG, "Levels not loadead");
 
 		for(int i = 0; i < GamePreferences.NUM_LEVELS; i++)
 		{
@@ -384,28 +373,30 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("INTERNAL", "Levels saved");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "Levels file not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "Levels sream corrupted");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "Levels ioexception");
+			Log.d(INTERNAL_STORAGE_TAG, "Levels ioexception");
 		}
 
-		Log.d("INTERNAL", "Levels not saved");
+		Log.d(INTERNAL_STORAGE_TAG, "Levels not saved");
 		return false;
 	}
 
 	public boolean cargarPreferencias()
 	{
+		mListener.setProgreso(0, mContext.getString(R.string.text_progressBar_preferences));
+		
 		try
 		{
 			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), PREFERENCES_FILE));
@@ -419,23 +410,23 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("INTERNAL", "Preferences loadead");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences loadead");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "Preferences file not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "Preferences sream corrupted");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "Preferences ioexception");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences ioexception");
 		}
 
-		Log.d("INTERNAL", "Preferences not loadead");
+		Log.d(INTERNAL_STORAGE_TAG, "Preferences not loadead");
 		
 		GamePreferences.setCharacterParameters(-1);
 		GamePreferences.setMusicParameters(true);
@@ -459,23 +450,23 @@ public class InternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d("INTERNAL", "Preferences saved");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d("INTERNAL", "Preferences file not found");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d("INTERNAL", "Preferences sream corrupted");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d("INTERNAL", "Preferences ioexception");
+			Log.d(INTERNAL_STORAGE_TAG, "Preferences ioexception");
 		}
 
-		Log.d("INTERNAL", "Preferences not saved");
+		Log.d(INTERNAL_STORAGE_TAG, "Preferences not saved");
 		return false;
 	}
 

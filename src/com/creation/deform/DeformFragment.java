@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.android.alert.AudioAlert;
-import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
@@ -23,24 +22,22 @@ public class DeformFragment extends OpenGLFragment
 	private Personaje personaje;
 
 	private DeformDataSaved dataSaved;
-	private InternalStorageManager internalManager;
 	private TTipoMovimiento movimiento;
 
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 
 	/* Constructora */
 
-	public static final DeformFragment newInstance(InternalStorageManager m, Personaje p, TTipoMovimiento n)
+	public static final DeformFragment newInstance(Personaje p, TTipoMovimiento n)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(m, p, n);
+		fragment.setParameters(p, n);
 		return fragment;
 	}
 
-	private void setParameters(InternalStorageManager m, Personaje p, TTipoMovimiento n)
+	private void setParameters(Personaje p, TTipoMovimiento n)
 	{
 		personaje = p;
-		internalManager = m;
 		movimiento = n;
 	}
 
@@ -270,7 +267,7 @@ public class DeformFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 
-			AudioAlert alert = new AudioAlert(getActivity(), R.string.text_audio_record_title, R.string.text_audio_record_description, R.string.text_button_yes, R.string.text_button_no, internalManager, movimiento)
+			AudioAlert alert = new AudioAlert(getActivity(), R.string.text_audio_record_title, R.string.text_audio_record_description, R.string.text_button_yes, R.string.text_button_no, movimiento)
 			{
 				@Override
 				public void onPossitiveButtonClick()

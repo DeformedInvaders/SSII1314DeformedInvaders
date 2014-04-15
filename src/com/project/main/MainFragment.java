@@ -8,14 +8,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
-import com.character.display.TTipoDisplay;
+import com.character.display.OnDisplayListener;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.project.model.GamePreferences;
 
-public class MainFragment extends OpenGLFragment
+public class MainFragment extends OpenGLFragment implements OnDisplayListener
 {
 	private MainFragmentListener mCallback;
 
@@ -24,25 +24,22 @@ public class MainFragment extends OpenGLFragment
 
 	private Personaje personaje;
 	private int numeroPersonajes;
-	
-	private InternalStorageManager internalManager;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(MainFragmentListener c, Personaje p, int n, InternalStorageManager m)
+	public static final MainFragment newInstance(MainFragmentListener c, Personaje p, int n)
 	{
 		MainFragment fragment = new MainFragment();
-		fragment.setParameters(c, p, n, m);
+		fragment.setParameters(c, p, n);
 		return fragment;
 	}
 
 	// FIXME Revisar atributos en onDetach y onDestroyView
-	private void setParameters(MainFragmentListener c, Personaje p, int n, InternalStorageManager m)
+	private void setParameters(MainFragmentListener c, Personaje p, int n)
 	{
 		mCallback = c;
 		personaje = p;
 		numeroPersonajes = n;
-		internalManager = m;
 	}
 
 	public interface MainFragmentListener
@@ -50,6 +47,7 @@ public class MainFragment extends OpenGLFragment
 		public void onMainCreateCharacter();
 		public void onMainSelectCharacter();
 		public void onMainPlayGame();
+		public void onMainPlaySound(final TTipoMovimiento tipo);
 	}
 
 	/* Métodos Fragment */
@@ -68,11 +66,11 @@ public class MainFragment extends OpenGLFragment
 		
 		if (personaje != null)
 		{
-			canvas.setParameters(personaje, internalManager, TTipoDisplay.Main);
+			canvas.setParameters(this, personaje, true);
 		}
 		else
 		{
-			canvas.setParameters(TTipoDisplay.Main);
+			canvas.setParameters();
 		}
 
 		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
@@ -166,5 +164,13 @@ public class MainFragment extends OpenGLFragment
 		{
 			mCallback.onMainPlayGame();
 		}
+	}
+	
+	/* Métodos de la interfaz OnDisplayListener */
+
+	@Override
+	public void onDisplayPlaySound(TTipoMovimiento tipo)
+	{
+		mCallback.onMainPlaySound(tipo);
 	}
 }

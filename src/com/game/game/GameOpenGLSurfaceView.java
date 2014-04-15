@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 
-import com.android.audio.AudioPlayerManager;
-import com.android.storage.InternalStorageManager;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
@@ -17,13 +15,10 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
 	private GameOpenGLRenderer renderer;
-	private OnGameListener listener;
+	private OnGameListener mListener;
 
-	private String nombrePersonaje;
 	private boolean animacionFinalizada;
 	private int contadorCiclos;
-	
-	private AudioPlayerManager audioManager;
 
 	private Handler handler;
 	private Runnable task;
@@ -40,18 +35,12 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		contadorCiclos = 0;
 	}
 
-	public void setParameters(Personaje p, InternalStorageManager m, OnGameListener gl, InstanciaNivel l)
+	public void setParameters(OnGameListener listener, Personaje personaje, InstanciaNivel nivel)
 	{
-		nombrePersonaje = p.getNombre();
-		listener = gl;
+		mListener = listener;
 
-		renderer = new GameOpenGLRenderer(getContext(), p, l);
+		renderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
 		setRenderer(renderer);
-
-		audioManager = new AudioPlayerManager(m) {
-			@Override
-			public void onPlayerCompletion() { }
-		};
 
 		handler = new Handler();
 
@@ -70,12 +59,12 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				switch (renderer.isJuegoFinalizado())
 				{
 					case VidaPerdida:
-						listener.onLivesChanged(renderer.getVidas());
-						listener.onScoreChanged(renderer.getPuntuacion());
+						mListener.onGameLivesChanged(renderer.getVidas());
+						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 					break;
 					case CambioPuntuacion:
-						listener.onScoreChanged(renderer.getPuntuacion());
+						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 					break;
 					case Nada:
@@ -85,13 +74,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						renderer.pararAnimacion();
 						requestRender();
 	
-						listener.onGameFinished(renderer.getPuntuacion(), renderer.getVidas());
+						mListener.onGameFinished(renderer.getPuntuacion(), renderer.getVidas());
 					break;
 					case FinJuegoDerrota:
 						renderer.pararAnimacion();
 						requestRender();
 	
-						listener.onGameFailed();
+						mListener.onGameFailed();
 					break;
 				}
 				
@@ -140,8 +129,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				renderer.seleccionarJump();
 				requestRender();
-
-				audioManager.startPlaying(nombrePersonaje, TTipoMovimiento.Jump);
+				mListener.onGamePlaySound(TTipoMovimiento.Jump);
 
 				animacionFinalizada = false;
 			}
@@ -156,8 +144,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				renderer.seleccionarCrouch();
 				requestRender();
-
-				audioManager.startPlaying(nombrePersonaje, TTipoMovimiento.Crouch);
+				mListener.onGamePlaySound(TTipoMovimiento.Crouch);
 
 				animacionFinalizada = false;
 			}
@@ -172,8 +159,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				renderer.seleccionarAttack();
 				requestRender();
-
-				audioManager.startPlaying(nombrePersonaje, TTipoMovimiento.Attack);
+				mListener.onGamePlaySound(TTipoMovimiento.Attack);
 
 				animacionFinalizada = false;
 			}
@@ -187,7 +173,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			task.run();
 			threadActivo = true;
 			
-			listener.onScoreChanged(renderer.getPuntuacion());
+			mListener.onGameScoreChanged(renderer.getPuntuacion());
 		}
 	}
 

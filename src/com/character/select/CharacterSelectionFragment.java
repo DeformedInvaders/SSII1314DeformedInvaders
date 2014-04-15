@@ -3,54 +3,57 @@ package com.character.select;
 import java.util.Iterator;
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.social.SocialConnector;
-import com.android.storage.ExternalStorageManager;
-import com.android.storage.InternalStorageManager;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.project.main.R;
 
 public class CharacterSelectionFragment extends ViewPagerFragment implements OnCharacterListener
 {
-	private InternalStorageManager internalManager;
-	private ExternalStorageManager externalManager;
-	private SocialConnector connector;
-
 	private CharacterSelectionFragmentListener mCallback;
-
+	
 	private List<Personaje> listaPersonajes;
-
+	private int posicionInicial;
+	
 	/* Constructora */
 
-	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector s)
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Personaje> l)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
-		fragment.setParameters(c, l, im, em, s);
+		fragment.setParameters(c, l, -1);
+		return fragment;
+	}
+	
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Personaje> l, CharacterSelectionDataSaved datosSalvados)
+	{
+		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
+		fragment.setParameters(c, l, datosSalvados.getIndice());
 		return fragment;
 	}
 
-	private void setParameters(CharacterSelectionFragmentListener c, List<Personaje> l, InternalStorageManager im, ExternalStorageManager em, SocialConnector s)
+	private void setParameters(CharacterSelectionFragmentListener c, List<Personaje> l, int indice)
 	{
 		mCallback = c;
 		listaPersonajes = l;
-		internalManager = im;
-		externalManager = em;
-		connector = s;
+		posicionInicial = indice;
 	}
 
 	public interface CharacterSelectionFragmentListener
 	{
-		public void onCharacterSelectionSelectCharacter(int indice);
-		public void onCharacterSelectionDeleteCharacter(int indice);
-		public void onCharacterSelectionRepaintCharacter(int indice);
-		public void onCharacterSelectionRenameCharacter(int indice);
-		public void onCharacterSelectionExportCharacter(int indice);
+		public void onCharacterSelectionSelectCharacter(final int indice);
+		public void onCharacterSelectionDeleteCharacter(final int indice);
+		public void onCharacterSelectionRepaintCharacter(final int indice, final CharacterSelectionDataSaved datosSalvados);
+		public void onCharacterSelectionRenameCharacter(final int indice);
+		public void onCharacterSelectionExportCharacter(final int indice);
+		public void onCharacterSelectionPostPublish(final String mensaje, final Bitmap bitmap);
+		public void onCharacterSelectionPlaySound(final TTipoMovimiento tipo, final int indice);
 	}
 
 	/* Métodos Fragment */
@@ -69,7 +72,12 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		while (it.hasNext())
 		{
 			Personaje p = it.next();
-			viewPager.addView(CharacterSelectFragment.newInstance(this, p, viewPager, internalManager, externalManager, connector), p.getNombre());
+			viewPager.addView(CharacterSelectFragment.newInstance(this, p), p.getNombre());
+		}
+		
+		if (posicionInicial != -1)
+		{
+			viewPager.selectView(posicionInicial);
 		}
 
 		return rootView;
@@ -105,7 +113,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	@Override
 	public void onCharacterRepainted()
 	{
-		mCallback.onCharacterSelectionRepaintCharacter(viewPager.getPosition());
+		mCallback.onCharacterSelectionRepaintCharacter(viewPager.getPosition(), new CharacterSelectionDataSaved(viewPager.getPosition()));
 	}
 	
 	@Override
@@ -118,5 +126,23 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	public void onCharacterExported()
 	{
 		mCallback.onCharacterSelectionExportCharacter(viewPager.getPosition());
+	}
+
+	@Override
+	public void onPostPublished(String text, Bitmap bitmap)
+	{
+		mCallback.onCharacterSelectionPostPublish(text, bitmap);
+	}
+
+	@Override
+	public void onSetSwipeable(boolean swipeable)
+	{
+		viewPager.setSwipeable(swipeable);
+	}
+
+	@Override
+	public void onPlaySound(TTipoMovimiento tipo)
+	{
+		mCallback.onCharacterSelectionPlaySound(tipo, viewPager.getPosition());
 	}
 }

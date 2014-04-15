@@ -78,6 +78,14 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 
 		actionBar.addTab(actionBar.newTab().setText(s).setTabListener(pageAdapter));
 	}
+	
+	public void selectView(int position)
+	{
+		if (position > 0 && position < listaFragmentos.size())
+		{
+			actionBar.selectTab(actionBar.getTabAt(position));
+		}
+	}
 
 	public Iterator<T> iterator()
 	{

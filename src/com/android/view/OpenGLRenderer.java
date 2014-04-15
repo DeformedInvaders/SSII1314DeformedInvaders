@@ -17,9 +17,9 @@ import android.opengl.GLUtils;
 
 import com.creation.data.Handle;
 import com.creation.data.MapaBits;
+import com.creation.data.TTipoSticker;
 import com.game.data.Dimensiones;
 import com.game.data.TTipoEntidad;
-import com.game.data.TTipoSticker;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
@@ -43,14 +43,14 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_MISSILE = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND;
-	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.MAX_TEXTURE_MISSILE;
-	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.MAX_TEXTURE_OBSTACLE;
-	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + GamePreferences.MAX_TEXTURE_CHARACTER;
-	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.MAX_TEXTURE_STICKER;
-	private static final int POS_TEXTURE_BUBBLE = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.MAX_TEXTURE_ENEMY * (GamePreferences.MAX_TEXTURE_STICKER + 1);
+	private static final int POS_TEXTURE_MISSILE = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TEXTURE_BACKGROUND;
+	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.NUM_TEXTURE_MISSILE;
+	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.NUM_TEXTURE_OBSTACLE;
+	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + GamePreferences.NUM_TEXTURE_CHARACTER;
+	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.NUM_TEXTURE_STICKER;
+	private static final int POS_TEXTURE_BUBBLE = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.NUM_TEXTURE_ENEMY * (GamePreferences.NUM_TEXTURE_STICKER + 1);
 	
-	private static final int NUM_TEXTURES = POS_TEXTURE_BUBBLE + GamePreferences.MAX_TEXTURE_BUBBLE;
+	private static final int NUM_TEXTURES = POS_TEXTURE_BUBBLE + GamePreferences.NUM_TEXTURE_BUBBLE;
 	
 	private int[] nombreTexturas;
 
@@ -83,13 +83,13 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarMarcos();
 
 		// Fondo
-		indiceTexturaFondo = new int[GamePreferences.MAX_TEXTURE_BACKGROUND];
-		dibujarFondo = new boolean[GamePreferences.MAX_TEXTURE_BACKGROUND];
-		posFondo = new float[GamePreferences.MAX_TEXTURE_BACKGROUND];
+		indiceTexturaFondo = new int[GamePreferences.NUM_TEXTURE_BACKGROUND];
+		dibujarFondo = new boolean[GamePreferences.NUM_TEXTURE_BACKGROUND];
+		posFondo = new float[GamePreferences.NUM_TEXTURE_BACKGROUND];
 
 		fondoFinalFijado = false;
 
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
 		{
 			indiceTexturaFondo[i] = -1;
 		}
@@ -402,30 +402,13 @@ public abstract class OpenGLRenderer implements Renderer
 		int i = 0;
 		while (i < vertices.size)
 		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
+			float frameX = vertices.get(i);
+			float frameY = vertices.get(i + 1);
 
-			if (x <= marcoAnchuraLateral || x >= marcoAnchuraLateral + marcoAnchuraInterior || y <= marcoAlturaLateral || y >= marcoAlturaLateral + marcoAnchuraInterior)
+			if (frameX < xLeft || frameX > xLeft + marcoAnchuraInterior || frameY < yBottom || frameY > yBottom + marcoAnchuraInterior)
 			{
 				return false;
 			}
-
-			i = i + 2;
-		}
-
-		return true;
-	}
-
-	protected boolean recortarPoligonoDentroMarco(FloatArray vertices)
-	{
-		int i = 0;
-		while (i < vertices.size)
-		{
-			float frameX = convertToFrameXCoordinate(vertices.get(i));
-			float frameY = convertToFrameYCoordinate(vertices.get(i + 1));
-
-			vertices.set(i, frameX);
-			vertices.set(i + 1, frameY);
 
 			i = i + 2;
 		}
@@ -453,7 +436,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(xLeft, yBottom, -1.0f);
+			gl.glTranslatef(xLeft, yBottom, GamePreferences.DEEP_INSIDE_FRAMES);
 	
 			gl.glPushMatrix();
 	
@@ -469,7 +452,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(xLeft, yBottom, 1.0f);
+			gl.glTranslatef(xLeft, yBottom, GamePreferences.DEEP_OUTSIDE_FRAMES);
 	
 			gl.glPushMatrix();
 	
@@ -488,7 +471,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(xLeft, yBottom, 1.0f);
+			gl.glTranslatef(xLeft, yBottom, GamePreferences.DEEP_OUTSIDE_FRAMES);
 	
 			gl.glPushMatrix();
 			
@@ -885,28 +868,6 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	// Métodos de Contrucción de Textura para Fase Creación
-
-	protected void cargarTexturaMalla(GL10 gl, Bitmap textura)
-	{
-		cargarTexturaMalla(gl, textura, TTipoEntidad.Personaje);
-	}
-
-	protected void descargarTexturaMalla()
-	{
-		descargarTexturaMalla(TTipoEntidad.Personaje);
-	}
-
-	protected void cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoSticker posPegatina)
-	{
-		cargarTexturaRectangulo(gl, indiceTextura, TTipoEntidad.Personaje, 0, posPegatina);
-	}
-
-	protected void descargarTexturaRectangulo(TTipoSticker posPegatina)
-	{
-		descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, posPegatina);
-	}
-
 	// Métodos de Pintura de Texturas
 
 	private void dibujarTextura(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int posTextura)
@@ -996,7 +957,7 @@ public abstract class OpenGLRenderer implements Renderer
 		else
 		{
 			int i = 0;
-			while(i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1)
+			while(i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1)
 			{
 				indiceTexturaFondo[i] = indiceTexturas[i % (indiceTexturas.length - 1)];
 				dibujarFondo[i] = true;		
@@ -1010,7 +971,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void cargarTexturaFondo(GL10 gl)
 	{
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
 		{
 			if (indiceTexturaFondo[i] != -1)
 			{
@@ -1018,12 +979,12 @@ public abstract class OpenGLRenderer implements Renderer
 			}
 		}
 
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1; i++)
 		{
 			posFondo[i] = i * screenWidth;
 		}
 
-		posFondo[GamePreferences.MAX_TEXTURE_BACKGROUND - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
+		posFondo[GamePreferences.NUM_TEXTURE_BACKGROUND - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
 	}
 
 	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
@@ -1042,7 +1003,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void dibujarFondo(GL10 gl)
 	{
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
 		{
 			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
@@ -1059,7 +1020,7 @@ public abstract class OpenGLRenderer implements Renderer
 		puntos.add(xRight);		puntos.add(yBottom);
 		puntos.add(xRight);		puntos.add(yTop);
 
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
 		{
 			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
@@ -1070,7 +1031,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void desplazarFondo()
 	{
-		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.MAX_TEXTURE_BACKGROUND - 1;
+		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TEXTURE_BACKGROUND - 1;
 
 		// Activado de Último Fondo
 		if (posFondo[lastFondo] <= screenWidth)
@@ -1081,7 +1042,7 @@ public abstract class OpenGLRenderer implements Renderer
 			{
 				fondoFinalFijado = true;
 
-				for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
+				for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1; i++)
 				{
 					dibujarFondo[i] = false;
 				}
@@ -1089,7 +1050,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 
 		// Desplazamiento
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
 		{
 			posFondo[i] -= GamePreferences.DIST_MOVIMIENTO_BACKGROUND;
 		}
@@ -1097,7 +1058,7 @@ public abstract class OpenGLRenderer implements Renderer
 		// Reinicio de Fondo
 		if (posFondo[lastFondo] > screenWidth)
 		{
-			for (int i = 0; i < GamePreferences.MAX_TEXTURE_BACKGROUND - 1; i++)
+			for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1; i++)
 			{
 				if (posFondo[i] <= -screenWidth)
 				{

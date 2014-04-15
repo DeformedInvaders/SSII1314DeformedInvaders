@@ -5,9 +5,9 @@ import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
+import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
-import com.game.data.TTipoSticker;
 
 public class PaintGLSurfaceView extends OpenGLSurfaceView
 {
@@ -60,18 +60,21 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.seleccionarMano();
 		setEstado(TEstadoDetector.CamaraDetectors);
+		requestRender();
 	}
 
 	public void seleccionarPincel()
 	{
 		renderer.seleccionarPincel();
 		setEstado(TEstadoDetector.SimpleTouch);
+		requestRender();
 	}
 
 	public void seleccionarCubo()
 	{
 		renderer.seleccionarCubo();
 		setEstado(TEstadoDetector.SimpleTouch);
+		requestRender();
 	}
 
 	public int getColorPaleta()

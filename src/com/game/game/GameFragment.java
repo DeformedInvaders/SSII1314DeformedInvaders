@@ -9,8 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.game.select.TTipoLevel;
@@ -20,8 +20,6 @@ import com.project.model.GamePreferences;
 public class GameFragment extends OpenGLFragment implements OnGameListener
 {
 	private GameFragmentListener mCallback;
-
-	private InternalStorageManager internalManager;
 
 	private InstanciaNivel level;
 	private Personaje personaje;
@@ -35,26 +33,26 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* Constructora */
 
-	public static final GameFragment newInstance(GameFragmentListener c, Personaje p, InternalStorageManager m, InstanciaNivel l)
+	public static final GameFragment newInstance(GameFragmentListener c, Personaje p, InstanciaNivel l)
 	{
 		GameFragment fragment = new GameFragment();
-		fragment.setParameters(c, p, m, l);
+		fragment.setParameters(c, p, l);
 		return fragment;
 	}
 
-	private void setParameters(GameFragmentListener c, Personaje p, InternalStorageManager m, InstanciaNivel l)
+	private void setParameters(GameFragmentListener c, Personaje p, InstanciaNivel l)
 	{
 		mCallback = c;
 		personaje = p;
-		internalManager = m;
 		level = l;
 		gamePaused = true;
 	}
 
 	public interface GameFragmentListener
 	{
-		public void onGameFinished(TTipoLevel level, int score, int idImage, String nameLevel, boolean perfecto);
-		public void onGameFailed(TTipoLevel level, int idImage);
+		public void onGameFinished(final TTipoLevel nivel, final int score, final int idImage, final String nameLevel, final boolean perfecto);
+		public void onGameFailed(final TTipoLevel level, final int idImage);
+		public void onGamePlaySound(final TTipoMovimiento tipo);
 	}
 
 	/* Métodos Fragment */
@@ -71,7 +69,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		imageBackground.setBackgroundResource(level.getFondoNivel().getIdTexturaCielo());
 
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
-		canvas.setParameters(personaje, internalManager, this, level);
+		canvas.setParameters(this, personaje, level);
 		
 		textoPuntuacion = (TextView) rootView.findViewById(R.id.textViewGame1);
 		
@@ -164,7 +162,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	public void onGameFinished(int score, int lives)
 	{
-		onScoreChanged(score);
+		onGameScoreChanged(score);
 		
 		if(lives == GamePreferences.MAX_LIVES)
 		{
@@ -184,13 +182,13 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	}
 	
 	@Override
-	public void onScoreChanged(int score)
+	public void onGameScoreChanged(int score)
 	{
 		textoPuntuacion.setText(getActivity().getString(R.string.text_game_score)+" "+score);
 	}
 	
 	@Override
-	public void onLivesChanged(int lives)
+	public void onGameLivesChanged(int lives)
 	{
 		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
 		{
@@ -201,5 +199,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		{
 			imagenVidas[i].setBackgroundResource(R.drawable.lives_heart);
 		}
+	}
+
+	@Override
+	public void onGamePlaySound(TTipoMovimiento tipo)
+	{
+		mCallback.onGamePlaySound(tipo);
 	}
 }

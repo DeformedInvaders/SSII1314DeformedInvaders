@@ -7,6 +7,7 @@ import android.content.Context;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
+import com.creation.data.TTipoSticker;
 import com.game.game.TEstadoColision;
 import com.lib.math.Circle;
 import com.lib.math.Intersector;
@@ -57,7 +58,7 @@ public class Personaje extends Malla
 		super.cargarTextura(gl, renderer, context);
 		
 		// Burbuja
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BUBBLE; i++)
 		{
 			renderer.cargarTexturaRectangulo(gl, GamePreferences.DISTANCE_CHARACTER_WIDTH(), GamePreferences.DISTANCE_CHARACTER_WIDTH(), indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
@@ -69,7 +70,7 @@ public class Personaje extends Malla
 		super.descargarTextura(renderer);
 		
 		// Burbuja
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_BUBBLE; i++)
+		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BUBBLE; i++)
 		{
 			renderer.descargarTexturaRectangulo(TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}

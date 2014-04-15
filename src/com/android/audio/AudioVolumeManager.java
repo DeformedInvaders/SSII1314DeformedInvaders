@@ -46,7 +46,8 @@ public class AudioVolumeManager
 		return audio.getStreamVolume(AudioManager.STREAM_MUSIC) == audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 	}
 
-	public boolean isMinVolume() {
+	public boolean isMinVolume()
+	{
 		return audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0;
 	}
 }

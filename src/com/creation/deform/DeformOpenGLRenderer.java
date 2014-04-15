@@ -16,7 +16,7 @@ import com.android.view.OpenGLRenderer;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
 import com.game.data.Personaje;
-import com.game.data.TTipoSticker;
+import com.game.data.TTipoEntidad;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.utils.FloatArray;
@@ -130,18 +130,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// Textura
-		cargarTexturaMalla(gl, bitmap);
+		cargarTexturaMalla(gl, bitmap, TTipoEntidad.Personaje);
 
 		// Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-			
-			if (pegatinas.isCargada(tipoPegatinas))
-			{
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
-			}
-		}
+		pegatinas.cargarTexturas(gl, this, mContext, TTipoEntidad.Personaje, 0);
 	}
 
 	@Override
@@ -200,16 +192,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
 
 		// Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-			
-			if (pegatinas.isCargada(tipoPegatinas))
-			{
-				int indice = pegatinas.getVertice(tipoPegatinas);
-				dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipoPegatinas);
-			}
-		}
+		pegatinas.dibujar(gl, this, vertices, TTipoEntidad.Personaje, 0);
 	}
 
 	/* Métodos de Selección de Estado */
@@ -610,14 +593,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public DeformDataSaved saveData()
 	{
 		// Textura
-		descargarTexturaMalla();
-
+		descargarTexturaMalla(TTipoEntidad.Personaje);
+		
 		// Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-			descargarTexturaRectangulo(tipoPegatinas[i]);
-		}
+		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
 
 		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVerticesAnimacion);
 	}

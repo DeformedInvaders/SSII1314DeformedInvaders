@@ -216,9 +216,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
 		
-			//personaje.reiniciarVidas();
-			//personaje.desactivarBurbuja();
-			
 			return TEstadoGame.FinJuegoVictoria;
 		}
 

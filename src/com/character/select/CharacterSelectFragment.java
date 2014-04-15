@@ -12,24 +12,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.alert.TextInputAlert;
-import com.android.social.SocialConnector;
-import com.android.storage.ExternalStorageManager;
-import com.android.storage.InternalStorageManager;
 import com.android.view.OpenGLFragment;
-import com.android.view.ViewPagerSwipeable;
 import com.character.display.DisplayGLSurfaceView;
-import com.character.display.TTipoDisplay;
+import com.character.display.OnDisplayListener;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
-public class CharacterSelectFragment extends OpenGLFragment
+public class CharacterSelectFragment extends OpenGLFragment implements OnDisplayListener
 {
-	private InternalStorageManager internalManager;
-	private ExternalStorageManager externalManager;
-	private SocialConnector connector;
-	private ViewPagerSwipeable pager;
-
 	private Personaje personaje;
 	
 	private OnCharacterListener listener;
@@ -38,21 +30,17 @@ public class CharacterSelectFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Personaje personaje, ViewPagerSwipeable view, InternalStorageManager internalManager, ExternalStorageManager externalManager, SocialConnector connector)
+	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Personaje personaje)
 	{
 		CharacterSelectFragment fragment = new CharacterSelectFragment();
-		fragment.setParameters(listener, personaje, view, internalManager, externalManager, connector);
+		fragment.setParameters(listener, personaje);
 		return fragment;
 	}
 
-	private void setParameters(OnCharacterListener l, Personaje p, ViewPagerSwipeable s, InternalStorageManager im, ExternalStorageManager em,  SocialConnector c)
+	private void setParameters(OnCharacterListener l, Personaje p)
 	{
 		listener = l;
 		personaje = p;
-		pager = s;
-		internalManager = im;
-		externalManager = em;
-		connector = c;
 	}
 
 	/* Métodos Fragment */
@@ -64,7 +52,7 @@ public class CharacterSelectFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
-		canvas.setParameters(personaje, internalManager, TTipoDisplay.Selection);
+		canvas.setParameters(this, personaje, false);
 		
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GamePreferences.FONT_LOGO_PATH);
 		
@@ -118,7 +106,6 @@ public class CharacterSelectFragment extends OpenGLFragment
 		botonRename = null;
 		botonExport = null;
 		canvas = null;
-		pager = null;
 	}
 
 	@Override
@@ -196,51 +183,43 @@ public class CharacterSelectFragment extends OpenGLFragment
 			if (canvas.isEstadoReposo())
 			{
 				canvas.seleccionarRetoque();
-				pager.setSwipeable(false);
+				listener.onSetSwipeable(false);
 			}
 			else if (canvas.isEstadoRetoque())
-			{
-				Bitmap bitmap = canvas.getCapturaPantalla();
-				if (externalManager.guardarImagenTemp(bitmap))
-				{
-					String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getNombre() + " " + getString(R.string.text_social_create_character_final);
+			{				
+				final Bitmap bitmap = canvas.getCapturaPantalla();
+				String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getNombre() + " " + getString(R.string.text_social_create_character_final);
 
-					TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel) {
-						@Override
-						public void onPossitiveButtonClick(String text)
-						{
-							connector.publicar(text, externalManager.cargarImagenTemp());
-							canvas.seleccionarTerminado();
-							pager.setSwipeable(true);
-							
-							externalManager.eliminarImagenTemp();
+				TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel) {
+					@Override
+					public void onPossitiveButtonClick(String text)
+					{						
+						listener.onPostPublished(text, bitmap);
+						listener.onSetSwipeable(true);
+						
+						canvas.seleccionarTerminado();
 
-							reiniciarInterfaz();
-							actualizarInterfaz();
-						}
+						reiniciarInterfaz();
+						actualizarInterfaz();
+					}
 
-						@Override
-						public void onNegativeButtonClick(String text)
-						{
-							canvas.seleccionarTerminado();
-							pager.setSwipeable(true);
+					@Override
+					public void onNegativeButtonClick(String text)
+					{
+						canvas.seleccionarTerminado();
+						listener.onSetSwipeable(true);
 
-							reiniciarInterfaz();
-							actualizarInterfaz();
-						}
+						reiniciarInterfaz();
+						actualizarInterfaz();
+					}
 
-					};
+				};
 
-					reiniciarInterfaz();
-					actualizarInterfaz();
-					alert.show();
-				}
-				else
-				{
-					sendToastMessage(R.string.error_picture_character);
-				}
+				reiniciarInterfaz();
+				actualizarInterfaz();
+				alert.show();
 
-				pager.setSwipeable(false);
+				listener.onSetSwipeable(false);
 			}
 
 			reiniciarInterfaz();
@@ -327,5 +306,11 @@ public class CharacterSelectFragment extends OpenGLFragment
 		{
 			listener.onCharacterExported();
 		}
+	}
+
+	@Override
+	public void onDisplayPlaySound(TTipoMovimiento tipo)
+	{
+		listener.onPlaySound(tipo);
 	}
 }

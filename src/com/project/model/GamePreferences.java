@@ -25,20 +25,25 @@ public class GamePreferences
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
-	/* FIXME Cambiar al añadir tres velocidades */
+	// Texturas
+	public static final float DEEP_INSIDE_FRAMES = -0.1f;
+	public static final float DEEP_POLYLINES = 0.1f;
+	public static final float DEEP_STICKERS = 0.2f;
+	public static final float DEEP_OUTSIDE_FRAMES = 0.3f;
+	
+	/* FIXME Menos de 1 segundo no se graba nada */
 	public static final int TIME_DURATION_ANIMATION = 2000;
-	//public static final int TIME_DURACION_ANIMATION = TIME_INTERVAL_ANIMATION * NUM_FRAMES_ANIMATION;
 
 	// Enemigos
-	public static final int MAX_TEXTURE_BACKGROUND = 3;
-	public static final int MAX_TEXTURE_CHARACTER = 1;
-	public static final int MAX_TEXTURE_STICKER = 5;
-	public static final int MAX_TEXTURE_BUBBLE = 3;
-	public static final int MAX_TEXTURE_OBSTACLE = 2;
-	public static final int MAX_TEXTURE_MISSILE = 1;
-	public static final int MAX_TEXTURE_ENEMY = 4;
+	public static final int NUM_TEXTURE_BACKGROUND = 3;
+	public static final int NUM_TEXTURE_CHARACTER = 1;
+	public static final int NUM_TEXTURE_STICKER = 5;
+	public static final int NUM_TEXTURE_BUBBLE = 3;
+	public static final int NUM_TEXTURE_OBSTACLE = 2;
+	public static final int NUM_TEXTURE_MISSILE = 1;
+	public static final int NUM_TEXTURE_ENEMY = 4;
 
-	public static final int NUM_TYPE_ENEMIES = MAX_TEXTURE_OBSTACLE + MAX_TEXTURE_MISSILE + MAX_TEXTURE_ENEMY;
+	public static final int NUM_TYPE_ENEMIES = NUM_TEXTURE_OBSTACLE + NUM_TEXTURE_MISSILE + NUM_TEXTURE_ENEMY;
 	public static final int NUM_TYPE_STICKERS_EYES = 8;
 	public static final int NUM_TYPE_STICKERS_MOUTH = 7;
 	public static final int NUM_TYPE_STICKERS_WEAPON = 16;
@@ -56,19 +61,16 @@ public class GamePreferences
 	
 	// Video
 	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";
-	
 	public static final String VIDEO_DESIGN_DRAW_PATH = VIDEO_PATH + "tips_design_draw";
 	public static final String VIDEO_DESIGN_DRAG_PATH = VIDEO_PATH + "tips_design_drag";
 	public static final String VIDEO_DESIGN_ROTATE_PATH = VIDEO_PATH + "tips_design_rotate";
 	public static final String VIDEO_DESIGN_ZOOM_PATH = VIDEO_PATH + "tips_design_zoom";
 	public static final String VIDEO_DESIGN_OUTSIDE_PATH = VIDEO_PATH + "tips_design_outside";
 	public static final String VIDEO_DESIGN_NOREGULAR_PATH = VIDEO_PATH + "tips_design_noregular";
-
 	public static final String VIDEO_PAINT_PENCIL_PATH = VIDEO_PATH + "tips_paint_pencil";
 	public static final String VIDEO_PAINT_BUCKET_PATH = VIDEO_PATH + "tips_paint_bucket";
 	public static final String VIDEO_PAINT_STICKER_PATH = VIDEO_PATH + "tips_paint_sticker";
 	public static final String VIDEO_PAINT_ZOOM_PATH = VIDEO_PATH + "tips_paint_zoom";
-	
 	public static final String VIDEO_DEFORM_HANDLES_PATH = VIDEO_PATH + "tips_deform_handles";
 	public static final String VIDEO_DEFORM_UNDEFINED_PATH = VIDEO_PATH + "tips_deform_undefined";
 	
@@ -82,10 +84,6 @@ public class GamePreferences
 	public static final String FONT_EGYPT_PATH = FONT_PATH + "font_egypt.ttf";
 	public static final String FONT_STONEHENGE_PATH = FONT_PATH + "font_stonehenge.ttf";
 	
-	public static final int ID_TYPE_OBSTACLE = 0;
-	public static final int ID_TYPE_ENEMY = 0;
-	public static final int ID_TYPE_MISSILE = 0;
-	
 	// Puntuaciones
 	public static final int SCORE_LEVEL_COMPLETED = 100;
 	public static final int SCORE_ACTION_RIGHT = 50;
@@ -98,10 +96,11 @@ public class GamePreferences
 	public static final float DIST_MOVIMIENTO_CHARACTER = 30.0f;
 	
 	// Niveles
-	public static final int MAX_CHARACTERS = 10;
 	private static final int MAX_ENEMIES = 50;
+	public static final int MAX_CHARACTERS = 10;
 	public static final int MAX_LIVES = 3;
 	public static final int NUM_LEVELS = 5;
+	public static final int NUM_MOVIMIENTOS = 4;
 	
 	// Tamaño de Pantalla
 	private static float WIDTH_SCREEN;

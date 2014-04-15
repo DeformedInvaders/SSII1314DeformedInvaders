@@ -20,26 +20,35 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 
 	private List<Nivel> listaNiveles;
 	private GameStatistics[] estadoNiveles;
+	private int posicionInicial;
 
 	/* Constructora */
 
 	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
-		fragment.setParameters(c, lista, estado);
+		fragment.setParameters(c, lista, estado, -1);
+		return fragment;
+	}
+	
+	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado, TTipoLevel nivel)
+	{
+		LevelSelectionFragment fragment = new LevelSelectionFragment();
+		fragment.setParameters(c, lista, estado, nivel.ordinal());
 		return fragment;
 	}
 
-	private void setParameters(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado)
+	private void setParameters(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado, int nivel)
 	{
 		mCallback = c;
 		listaNiveles = lista;
 		estadoNiveles = estado;
+		posicionInicial = nivel;
 	}
 
 	public interface LevelSelectionFragmentListener
 	{
-		public void onLevelSelectionSelectLevel(TTipoLevel level);
+		public void onLevelSelectionSelectLevel(final TTipoLevel level);
 	}
 
 	/* Métodos Fragment */
@@ -62,6 +71,11 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 			viewPager.addView(LevelSelectFragment.newInstance(this, nivel, estadoNiveles[i]), getString(nivel.getNombreNivel()));
 
 			i++;
+		}
+		
+		if (posicionInicial != -1)
+		{
+			viewPager.selectView(posicionInicial);
 		}
 		
 		return rootView;

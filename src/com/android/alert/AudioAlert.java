@@ -11,9 +11,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.android.audio.AudioPlayerManager;
-import com.android.audio.AudioRecorderManager;
-import com.android.storage.InternalStorageManager;
 import com.creation.data.TTipoMovimiento;
 import com.project.main.R;
 import com.project.model.GamePreferences;
@@ -26,29 +23,27 @@ public abstract class AudioAlert extends WindowAlert
 	private ImageButton botonRecAudio, botonPlayAudio;
 
 	private CountDownTimer timer;
-	private AudioRecorderManager audioRecorder;
-	private AudioPlayerManager audioPlayer;
-	private InternalStorageManager internalManager;
+	//private AudioRecorderManager audioRecorder;
+	//private AudioPlayerManager audioPlayer;
 
 	private TTipoMovimiento movimiento;
 
 	/* Constructora */
 
-	public AudioAlert(Context context, int title, int messege, int textYes, int textNo, InternalStorageManager manager, TTipoMovimiento tipo)
+	public AudioAlert(Context context, int title, int messege, int textYes, int textNo, TTipoMovimiento tipo)
 	{
 		super(context, title);
 
 		movimiento = tipo;
-		internalManager = manager;
 
-		audioRecorder = new AudioRecorderManager(internalManager);
-		audioPlayer = new AudioPlayerManager(internalManager) {
+		/*audioRecorder = new AudioRecorderManager();
+		audioPlayer = new AudioPlayerManager(context) {
 			@Override
 			public void onPlayerCompletion()
 			{
 				botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play);
 			}
-		};
+		};*/
 
 		setMessage(messege);
 
@@ -91,8 +86,8 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				audioPlayer.stopPlaying();
-				audioRecorder.stopRecording();
+				/*audioPlayer.stopPlaying();
+				audioRecorder.stopRecording();*/
 				
 				onPossitiveButtonClick();
 			}
@@ -103,10 +98,10 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				if(audioPlayer.stopPlaying() &&	audioRecorder.stopRecording())
+				/*if(audioPlayer.stopPlaying() &&	audioRecorder.stopRecording())
 				{
 					internalManager.eliminarAudioTemp(movimiento);
-				}
+				}*/
 				
 				onNegativeButtonClick();
 			}
@@ -117,13 +112,13 @@ public abstract class AudioAlert extends WindowAlert
 			@Override
 			public void onFinish()
 			{
-				if (audioRecorder.stopRecording())
-				{
+				//if (audioRecorder.stopRecording())
+				//{
 					botonRecAudio.setBackgroundResource(R.drawable.icon_media_record);
 	
 					actualizarInterfaz();
 					reiniciarContadores();
-				}
+				//}
 			}
 
 			@Override
@@ -159,14 +154,14 @@ public abstract class AudioAlert extends WindowAlert
 
 	private void actualizarInterfaz()
 	{
-		if (internalManager.comprobarAudioTemp(movimiento))
-		{
-			botonPlayAudio.setVisibility(View.VISIBLE);
-		}
-		else
-		{
+		//if (internalManager.comprobarAudioTemp(movimiento))
+		//{
+		//	botonPlayAudio.setVisibility(View.VISIBLE);
+		//}
+		//else
+		//{
 			botonPlayAudio.setVisibility(View.INVISIBLE);
-		}
+		//}
 
 		botonRecAudio.setVisibility(View.VISIBLE);
 	}
@@ -178,13 +173,13 @@ public abstract class AudioAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			if (audioRecorder.startRecording(movimiento))
-			{
+			//if (audioRecorder.startRecording(internalManager.guardarAudioTemp(movimiento)))
+			//{
 				timer.start();
 				
 				botonRecAudio.setBackgroundResource(R.drawable.icon_media_record_selected);
 				actualizarInterfaz();
-			}
+			//}
 		}
 	}
 
@@ -193,10 +188,10 @@ public abstract class AudioAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			if (audioPlayer.startPlaying(movimiento))
-			{
+			//if (audioPlayer.startPlaying(internalManager.cargarAudioTemp(movimiento)))
+			//{
 				botonPlayAudio.setBackgroundResource(R.drawable.icon_media_play_selected);
-			}
+			//}
 		}
 	}
 }

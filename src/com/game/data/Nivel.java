@@ -1,8 +1,8 @@
 package com.game.data;
 
-import com.game.select.TTipoLevel;
-
 import android.graphics.Typeface;
+
+import com.game.select.TTipoLevel;
 
 public class Nivel
 {

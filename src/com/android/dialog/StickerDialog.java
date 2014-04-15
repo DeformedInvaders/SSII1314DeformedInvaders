@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.game.data.TTipoSticker;
+import com.creation.data.TTipoSticker;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 import com.project.model.GameStatistics;
@@ -47,7 +47,7 @@ public abstract class StickerDialog extends WindowDialog
 	
 	private void cargarPegatina(LinearLayout layout, String nombrePegatina, int tagImagen, OnClickListener listener)
 	{
-		int idImagen = mContext.getResources().getIdentifier(nombrePegatina + (tagImagen + 1), "drawable", mContext.getPackageName());
+		int idImagen = mContext.getResources().getIdentifier(nombrePegatina + tagImagen, "drawable", mContext.getPackageName());
 		cargarPegatina(layout, nombrePegatina, idImagen, tagImagen, listener);
 	}
 	
@@ -64,7 +64,7 @@ public abstract class StickerDialog extends WindowDialog
 	
 	private void configurarPegatinas(LinearLayout layout, TTipoSticker tipo, String nombrePegatina, int numPegatinas, OnClickListener listener)
 	{
-		for (int i = 0; i < numPegatinas; i++)
+		for (int i = 1; i <= numPegatinas; i++)
 		{		
 			cargarPegatina(layout, nombrePegatina, i, listener);
 		}
@@ -74,10 +74,10 @@ public abstract class StickerDialog extends WindowDialog
 	
 	private void configurarPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTipoSticker tipo, String nombrePegatina, int numPegatinas, OnClickListener listener)
 	{
-		for (int i = 0; i < numPegatinas; i++)
+		for (int i = 1; i <= numPegatinas; i++)
 		{
 			// FIXME Quitar el +-1 al añadir pegatinas al nivel Luna
-			int pos = (i / (GamePreferences.NUM_LEVELS - 1)) + 1;
+			int pos = (( i - 1) / (GamePreferences.NUM_LEVELS - 1)) + 1;
 			if(estadisticas[pos].isPerfected())
 			{
 				cargarPegatina(layout, nombrePegatina, i, listener);

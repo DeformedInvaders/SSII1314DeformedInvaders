@@ -14,9 +14,9 @@ import com.android.dialog.ColorDialog;
 import com.android.dialog.SizeDialog;
 import com.android.dialog.StickerDialog;
 import com.android.view.OpenGLFragment;
+import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
-import com.game.data.TTipoSticker;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 import com.project.model.GameStatistics;
@@ -73,8 +73,8 @@ public class PaintFragment extends OpenGLFragment
 
 	public interface PaintFragmentListener
 	{
-		public void onPaintReady(Textura t, PaintDataSaved d);
-		public void onRepaintReady(int i, Textura t);
+		public void onPaintReady(final Textura textura, final PaintDataSaved datosSalvados);
+		public void onRepaintReady(final Textura textura, final int indice);
 	}
 
 	/* Métodos Fragment */
@@ -383,7 +383,7 @@ public class PaintFragment extends OpenGLFragment
 
 			if(personajeIndice != -1)
 			{
-				mCallback.onRepaintReady(personajeIndice, canvas.getTextura());
+				mCallback.onRepaintReady(canvas.getTextura(), personajeIndice);
 			}
 			else
 			{

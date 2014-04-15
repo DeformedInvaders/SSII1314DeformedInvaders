@@ -56,7 +56,7 @@
 			
 		<!-- ProgressBar -->
 			<string name="text_progressBar">Loading store data.</string>
-			<string name="text_progressBar_level">Loading level data.</string>
+			<string name="text_progressBar_level">Loading level statistics.</string>
 			<string name="text_progressBar_preferences">Loading game preferences.</string>
 			<string name="text_progressBar_character_list">Loading character: </string>
 			<string name="text_progressBar_completed">Loading stored data completed.</string>

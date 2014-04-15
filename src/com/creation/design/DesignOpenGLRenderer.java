@@ -49,28 +49,40 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	public void onDrawFrame(GL10 gl)
 	{
 		super.onDrawFrame(gl);
-
-		if (estado == TEstadoDesign.Dibujando)
-		{
-			if (puntos.size > 0)
+				
+			if (estado == TEstadoDesign.Dibujando)
 			{
-				dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
-
-				if (puntos.size > 2)
+				if (puntos.size > 0)
 				{
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
+					// Centrado de Marco
+					centrarPersonajeEnMarcoInicio(gl);
+					
+					dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
+	
+					if (puntos.size > 2)
+					{
+						dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
+					}
+					
+					// Centrado de Marco
+					centrarPersonajeEnMarcoFinal(gl);
 				}
 			}
-		}
-		else
-		{
-			if (estado == TEstadoDesign.Retocando)
+			else
 			{
-				dibujarMarcoInterior(gl, Color.LTGRAY);
+				if (estado == TEstadoDesign.Retocando)
+				{
+					dibujarMarcoInterior(gl, Color.LTGRAY);
+				}
+				
+				// Centrado de Marco
+				centrarPersonajeEnMarcoInicio(gl);
+				
+				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
+				
+				// Centrado de Marco
+				centrarPersonajeEnMarcoFinal(gl);
 			}
-			
-			dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
-		}
 	}
 
 	/* Métodos Abstractos de OpenGLRenderer */
@@ -121,8 +133,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 		if (anyadir)
 		{
-			puntos.add(worldX);
-			puntos.add(worldY);
+			float frameX = convertToFrameXCoordinate(worldX);
+			float frameY = convertToFrameYCoordinate(worldY);
+			
+			puntos.add(frameX);
+			puntos.add(frameY);
 
 			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
 
@@ -187,8 +202,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 			float cWorldX = (lastWorldX + worldX) / 2.0f;
 			float cWorldY = (lastWorldY + worldY) / 2.0f;
+			
+			float cframeX = convertToFrameXCoordinate(cWorldX);
+			float cframeY = convertToFrameYCoordinate(cWorldY);
 
-			escalarVertices(factor, factor, cWorldX, cWorldY, vertices);
+			escalarVertices(factor, factor, cframeX, cframeY, vertices);
 			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
@@ -219,8 +237,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			float cWorldX = convertToWorldXCoordinate(pixelX, screenWidth);
 			float cWorldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			
+			float cframeX = convertToFrameXCoordinate(cWorldX);
+			float cframeY = convertToFrameYCoordinate(cWorldY);
 
-			rotarVertices(ang, cWorldX, cWorldY, vertices);
+			rotarVertices(ang, cframeX, cframeY, vertices);
 			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
@@ -249,8 +270,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoDesign.Terminado)
 		{
-			recortarPoligonoDentroMarco(vertices);
-
 			return new Esqueleto(contorno, vertices, triangulos);
 		}
 

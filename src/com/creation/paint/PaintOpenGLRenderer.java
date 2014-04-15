@@ -19,9 +19,10 @@ import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
 import com.creation.data.Polilinea;
+import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
-import com.game.data.TTipoSticker;
+import com.game.data.TTipoEntidad;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
@@ -144,15 +145,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		}
 
 		// Cargar Pegatinas
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-			
-			if (pegatinas.isCargada(tipoPegatinas))
-			{
-				cargarTexturaRectangulo(gl, pegatinas.getIndice(tipoPegatinas, mContext), tipoPegatinas);
-			}
-		}
+		pegatinas.cargarTexturas(gl, this, mContext, TTipoEntidad.Personaje, 0);
 
 		dibujarEsqueleto(gl);
 	}
@@ -167,36 +160,34 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		// Esqueleto
 		dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
 
-		// Detalles
-		if (lineaActual != null)
-		{
-			dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
-		}
+		gl.glPushMatrix();
+		
+			gl.glTranslatef(0.0f, 0.0f, GamePreferences.DEEP_POLYLINES);
+			
+			// Detalles
+			if (lineaActual != null)
+			{
+				dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
+			}
+	
+			Iterator<Polilinea> it = listaLineas.iterator();
+			while (it.hasNext())
+			{
+				Polilinea polilinea = it.next();
+				dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
+			}
 
-		Iterator<Polilinea> it = listaLineas.iterator();
-		while (it.hasNext())
-		{
-			Polilinea polilinea = it.next();
-			dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
-		}
-
+		gl.glPopMatrix();
+			
 		if (estado != TEstadoPaint.Captura)
 		{
 			// Contorno
 			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
 
 			// Dibujar Pegatinas
-			for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-			{
-				TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-				
-				if (pegatinas.isCargada(tipoPegatinas))
-				{
-					int indice = pegatinas.getVertice(tipoPegatinas);
-					dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipoPegatinas);
-				}
-			}
+			pegatinas.dibujar(gl, this, vertices, TTipoEntidad.Personaje, 0);
 
+			// Handles
 			if (estado == TEstadoPaint.Pegatinas)
 			{
 				dibujarListaHandle(gl, Color.BLACK, objetoVertice, vertices);
@@ -215,15 +206,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		lineaActual = null;
 		listaLineas.clear();
 
+		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
 		pegatinas = new Pegatinas();
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
-
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-			descargarTexturaRectangulo(tipoPegatinas[i]);
-		}
 
 		anteriores.clear();
 		siguientes.clear();
@@ -327,7 +313,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			pegatinas.setPegatina(pegatinaActual, j, tipoPegatinaActual);
 
-			descargarTexturaRectangulo(tipoPegatinaActual);
+			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipoPegatinaActual);
 			pegatinaAnyadida = true;
 
 			anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
@@ -448,7 +434,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		guardarPolilinea();
 		
-		descargarTexturaRectangulo(tipo);
+		descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipo);
 		pegatinas.deletePegatina(tipo);
 		estado = TEstadoPaint.Nada;
 	}
@@ -492,13 +478,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		color = Color.WHITE;
 		listaLineas = new ArrayList<Polilinea>();
+		
+		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
 		pegatinas = new Pegatinas();
-
-		for (int i = 0; i < GamePreferences.MAX_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-			descargarTexturaRectangulo(tipoPegatinas[i]);
-		}
 
 		Iterator<Accion> it = pila.iterator();
 		while (it.hasNext())
@@ -606,6 +588,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	public PaintDataSaved saveData()
 	{
+		// Pegatinas
+		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
+				
 		return new PaintDataSaved(anteriores, siguientes, estado);
 	}
 
