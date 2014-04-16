@@ -58,7 +58,7 @@ public class Personaje extends Malla
 		super.cargarTextura(gl, renderer, context);
 		
 		// Burbuja
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BUBBLE; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 		{
 			renderer.cargarTexturaRectangulo(gl, GamePreferences.DISTANCE_CHARACTER_WIDTH(), GamePreferences.DISTANCE_CHARACTER_WIDTH(), indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
@@ -70,7 +70,7 @@ public class Personaje extends Malla
 		super.descargarTextura(renderer);
 		
 		// Burbuja
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BUBBLE; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 		{
 			renderer.descargarTexturaRectangulo(TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}

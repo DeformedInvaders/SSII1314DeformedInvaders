@@ -43,14 +43,14 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
-	private static final int POS_TEXTURE_MISSILE = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TEXTURE_BACKGROUND;
-	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.NUM_TEXTURE_MISSILE;
-	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.NUM_TEXTURE_OBSTACLE;
-	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + GamePreferences.NUM_TEXTURE_CHARACTER;
-	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.NUM_TEXTURE_STICKER;
-	private static final int POS_TEXTURE_BUBBLE = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.NUM_TEXTURE_ENEMY * (GamePreferences.NUM_TEXTURE_STICKER + 1);
+	private static final int POS_TEXTURE_MISSILE = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TYPE_BACKGROUNDS;
+	private static final int POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.NUM_TYPE_MISSILES;
+	private static final int POS_TEXTURE_CHARACTER_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.NUM_TYPE_OBSTACLES;
+	private static final int POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + GamePreferences.NUM_TYPE_CHARACTER;
+	private static final int POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_CHARACTER_STICKER + GamePreferences.NUM_TYPE_STICKERS;
+	private static final int POS_TEXTURE_BUBBLE = POS_TEXTURE_ENEMY_SKELETON + GamePreferences.NUM_TYPE_OPPONENTS * (GamePreferences.NUM_TYPE_STICKERS + 1);
 	
-	private static final int NUM_TEXTURES = POS_TEXTURE_BUBBLE + GamePreferences.NUM_TEXTURE_BUBBLE;
+	private static final int NUM_TEXTURES = POS_TEXTURE_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
 	
 	private int[] nombreTexturas;
 
@@ -83,13 +83,13 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarMarcos();
 
 		// Fondo
-		indiceTexturaFondo = new int[GamePreferences.NUM_TEXTURE_BACKGROUND];
-		dibujarFondo = new boolean[GamePreferences.NUM_TEXTURE_BACKGROUND];
-		posFondo = new float[GamePreferences.NUM_TEXTURE_BACKGROUND];
+		indiceTexturaFondo = new int[GamePreferences.NUM_TYPE_BACKGROUNDS];
+		dibujarFondo = new boolean[GamePreferences.NUM_TYPE_BACKGROUNDS];
+		posFondo = new float[GamePreferences.NUM_TYPE_BACKGROUNDS];
 
 		fondoFinalFijado = false;
 
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
 			indiceTexturaFondo[i] = -1;
 		}
@@ -957,7 +957,7 @@ public abstract class OpenGLRenderer implements Renderer
 		else
 		{
 			int i = 0;
-			while(i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1)
+			while(i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1)
 			{
 				indiceTexturaFondo[i] = indiceTexturas[i % (indiceTexturas.length - 1)];
 				dibujarFondo[i] = true;		
@@ -971,7 +971,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void cargarTexturaFondo(GL10 gl)
 	{
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
 			if (indiceTexturaFondo[i] != -1)
 			{
@@ -979,12 +979,12 @@ public abstract class OpenGLRenderer implements Renderer
 			}
 		}
 
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
 		{
 			posFondo[i] = i * screenWidth;
 		}
 
-		posFondo[GamePreferences.NUM_TEXTURE_BACKGROUND - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
+		posFondo[GamePreferences.NUM_TYPE_BACKGROUNDS - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
 	}
 
 	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
@@ -1003,7 +1003,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void dibujarFondo(GL10 gl)
 	{
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
 			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
@@ -1020,7 +1020,7 @@ public abstract class OpenGLRenderer implements Renderer
 		puntos.add(xRight);		puntos.add(yBottom);
 		puntos.add(xRight);		puntos.add(yTop);
 
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
 			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
@@ -1031,7 +1031,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void desplazarFondo()
 	{
-		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TEXTURE_BACKGROUND - 1;
+		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TYPE_BACKGROUNDS - 1;
 
 		// Activado de Último Fondo
 		if (posFondo[lastFondo] <= screenWidth)
@@ -1042,7 +1042,7 @@ public abstract class OpenGLRenderer implements Renderer
 			{
 				fondoFinalFijado = true;
 
-				for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1; i++)
+				for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
 				{
 					dibujarFondo[i] = false;
 				}
@@ -1050,7 +1050,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 
 		// Desplazamiento
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
 			posFondo[i] -= GamePreferences.DIST_MOVIMIENTO_BACKGROUND;
 		}
@@ -1058,7 +1058,7 @@ public abstract class OpenGLRenderer implements Renderer
 		// Reinicio de Fondo
 		if (posFondo[lastFondo] > screenWidth)
 		{
-			for (int i = 0; i < GamePreferences.NUM_TEXTURE_BACKGROUND - 1; i++)
+			for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
 			{
 				if (posFondo[i] <= -screenWidth)
 				{

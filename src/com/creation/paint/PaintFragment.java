@@ -18,7 +18,7 @@ import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.project.main.R;
-import com.project.model.GamePreferences;
+import com.project.model.GameResources;
 import com.project.model.GameStatistics;
 
 public class PaintFragment extends OpenGLFragment
@@ -128,10 +128,10 @@ public class PaintFragment extends OpenGLFragment
 		listaMensajes.add(R.string.text_tip_paint_zoom_description);
 		
 		List<String> listaVideos = new ArrayList<String>();
-		listaVideos.add(GamePreferences.VIDEO_PAINT_PENCIL_PATH);
-		listaVideos.add(GamePreferences.VIDEO_PAINT_BUCKET_PATH);
-		listaVideos.add(GamePreferences.VIDEO_PAINT_STICKER_PATH);
-		listaVideos.add(GamePreferences.VIDEO_PAINT_ZOOM_PATH);
+		listaVideos.add(GameResources.VIDEO_PAINT_PENCIL_PATH);
+		listaVideos.add(GameResources.VIDEO_PAINT_BUCKET_PATH);
+		listaVideos.add(GameResources.VIDEO_PAINT_STICKER_PATH);
+		listaVideos.add(GameResources.VIDEO_PAINT_ZOOM_PATH);
 		
 		sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);	
 		return rootView;

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import com.android.audio.AudioPlayerManager;
+import com.android.audio.AudioRecorderManager;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
@@ -37,7 +38,8 @@ public abstract class GameCore
 	private GameStatistics[] estadisticasNiveles;
 	
 	/* Musica */
-	private AudioPlayerManager audioManager, soundManager;
+	private AudioPlayerManager audioPlayerManager, soundPlayerManager;
+	private AudioRecorderManager audioRecorderManager;
 	private int musicaSeleccionada;
 
 	/* Almacenamiento */
@@ -69,15 +71,17 @@ public abstract class GameCore
 			}
 		};
 		
-		audioManager = new AudioPlayerManager(mContext) {
+		audioPlayerManager = new AudioPlayerManager(mContext) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
 		
-		soundManager = new AudioPlayerManager(mContext) {
+		soundPlayerManager = new AudioPlayerManager(mContext) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
+		
+		audioRecorderManager = new AudioRecorderManager();
 		
 		GamePreferences.setScreenParameters(widthScreen, heightScreen);
 		
@@ -364,7 +368,7 @@ public abstract class GameCore
 		int posNivel = nivel.ordinal();
 		
 		// Sonido Victoria
-		audioManager.startPlaying(R.raw.effect_level_complete, false);
+		audioPlayerManager.startPlaying(R.raw.effect_level_complete, false);
 		
 		// Aumentar número de Victorias
 		estadisticasNiveles[posNivel].increaseVictories();	
@@ -400,7 +404,7 @@ public abstract class GameCore
 	public boolean actualizarEstadisticas(TTipoLevel nivel)
 	{
 		// Sonido Derrota
-		audioManager.startPlaying(R.raw.effect_game_over, false);
+		audioPlayerManager.startPlaying(R.raw.effect_game_over, false);
 		
 		// Aumentar número de Derrotas
 		estadisticasNiveles[nivel.ordinal()].increaseNumDeaths();
@@ -457,42 +461,44 @@ public abstract class GameCore
 	
 	public boolean reproducirSonido(TTipoMovimiento tipo)
 	{
-		return soundManager.startPlaying(internalManager.cargarAudio(getPersonajeSeleccionado().getNombre(), tipo));
+		return soundPlayerManager.startPlaying(internalManager.cargarAudio(getPersonajeSeleccionado().getNombre(), tipo));
 	}
 	
 	public boolean reproducirSonido(TTipoMovimiento tipo, int indice)
 	{
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
-			return soundManager.startPlaying(internalManager.cargarAudio(listaPersonajes.get(indice).getNombre(), tipo));
+			return soundPlayerManager.startPlaying(internalManager.cargarAudio(listaPersonajes.get(indice).getNombre(), tipo));
 		}
 		return false;
 	}
 	
 	public boolean reproducirMusica(boolean loop)
 	{
-		return audioManager.startPlaying(musicaSeleccionada, loop);
+		return audioPlayerManager.startPlaying(musicaSeleccionada, loop);
 	}
 	
 	public boolean reproducirMusica(int musica, boolean loop)
 	{
-		return audioManager.startPlaying(musica, loop);
+		return audioPlayerManager.startPlaying(musica, loop);
 	}
 	
 	public boolean pararMusica()
 	{
-		return audioManager.stopPlaying();
+		return audioPlayerManager.stopPlaying();
 	}
 	
 	public boolean pausarMusica()
 	{
-		return audioManager.pausePlaying();
+		return audioPlayerManager.pausePlaying();
 	}
 	
 	public boolean continuarMusica()
 	{
-		return audioManager.resumePlaying();
+		return audioPlayerManager.resumePlaying();
 	}
+	
+	/* Métodos de modificación del SocialConnector */
 
 	public boolean publicarPost(String text, Bitmap bitmap)
 	{
@@ -505,5 +511,25 @@ public abstract class GameCore
 		
 		sendToastMessage(R.string.error_picture_character);
 		return false;
+	}
+	
+	/* Métodos de modificación del AudioRecorder */
+
+	public void startRecording(TTipoMovimiento movimiento)
+	{
+		audioRecorderManager.startRecording(internalManager.cargarAudioTemp(movimiento));
+	}
+
+	public void stopRecording()
+	{
+		audioRecorderManager.stopRecording();
+	}
+
+	public void discardRecording(TTipoMovimiento movimiento)
+	{
+		if (audioRecorderManager.stopRecording())
+		{
+			internalManager.eliminarAudioTemp(movimiento);
+		}
 	}	
 }

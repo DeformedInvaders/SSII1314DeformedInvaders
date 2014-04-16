@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.android.alert.VideoAlert;
+import com.android.alert.VideoListAlert;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
@@ -25,7 +26,7 @@ public class AlertFragment extends Fragment
 				listaVideos.add(Uri.parse(itu.next()));
 			}			
 			
-			VideoAlert alert = new VideoAlert(getActivity(), tipsTitle, mensajes, R.string.text_button_ready, listaVideos);
+			VideoListAlert alert = new VideoListAlert(getActivity(), tipsTitle, mensajes, R.string.text_button_ready, listaVideos);
 			alert.show();
 		}
 	}

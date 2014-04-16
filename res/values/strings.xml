@@ -22,11 +22,11 @@
 			<string name="title_level_section_rome">Rome</string>
 			<string name="title_level_section_newyork">New York</string>
 			
-			<string name="text_level_section_moon">Moon, AD 2014.</string>
-			<string name="text_level_section_stonehenge">Stonehenge, 3125 BC.</string>
-			<string name="text_level_section_egypt">Ancient Egypt, 2562 BC.</string>
-			<string name="text_level_section_rome">Rome Empire, 435 BC.</string>
-			<string name="text_level_section_newyork">New York City, AD 1945.</string>
+			<string name="text_level_description_moon">Moon, AD 2014.</string>
+			<string name="text_level_description_stonehenge">Stonehenge, 3125 BC.</string>
+			<string name="text_level_description_egypt">Ancient Egypt, 2562 BC.</string>
+			<string name="text_level_description_rome">Rome Empire, 435 BC.</string>
+			<string name="text_level_description_newyork">New York City, AD 1945.</string>
 			
 		<!-- ActionBar Icons -->
 			<string name="title_menu_twitter">Twitter</string>
@@ -47,8 +47,8 @@
 			<string name="title_alert_enemies">Enemies:</string>
 			<string name="title_alert_obstacles">Obstacles:</string>
 			<string name="title_alert_missiles">Missiles:</string>
-			<string name="title_alert_initial">Intelligence Report.</string>
-			<string name="title_alert_final">Good luck.</string>
+			<string name="title_alert_initial">Intelligence Report.\n</string>
+			<string name="title_alert_final">\nGood luck.</string>
 			
 			<string name="title_alert_weaknesses_enemies">Known Weaknesses: Attack, Jump.</string>
 			<string name="title_alert_weaknesses_obstacles">Known Weaknesses: Jump.</string>
@@ -273,6 +273,16 @@
 	    	<string name="desc_select_completed">Completed Achievement.</string>
 	    	<string name="desc_select_perfected">Perfected Achievement.</string>
 	    	<string name="desc_magic">Play this level.</string>
+	    	
+	    <!-- Image Alert -->
+	    	<string name="desc_imagealert_picture">Image Alert</string>
+	    	
+	    <!-- VideoList Alert -->
+	    	<string name="desc_videolistalert_next">Next Video</string>
+	    	<string name="desc_videolistalert_prev">Prev Video</string>
+	    	
+	    <!-- Record Alert -->
+	    	<string name="desc_recordalert_record">Record Audio</string>
 	    	
 	    <!-- Sticker Dialog -->		    
 		    <string name="desc_sticker_eye">Eye sticker.</string>

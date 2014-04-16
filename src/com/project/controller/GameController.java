@@ -160,6 +160,24 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 			alert.show();
 		}
 	}
+	
+	@Override
+	public void onAnimationStartRecording(TTipoMovimiento movimiento)
+	{
+		core.startRecording(movimiento);
+	}
+
+	@Override
+	public void onAnimationStopRecording()
+	{
+		core.stopRecording();
+	}
+
+	@Override
+	public void onAnimationDiscardRecording(TTipoMovimiento movimiento)
+	{
+		core.discardRecording(movimiento);
+	}
 
 	// Métodos Character Selection Fragment
 

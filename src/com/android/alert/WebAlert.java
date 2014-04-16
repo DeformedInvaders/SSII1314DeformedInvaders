@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+
+import com.project.main.R;
 
 @SuppressLint("SetJavaScriptEnabled")
 public abstract class WebAlert extends WindowAlert
@@ -20,32 +18,17 @@ public abstract class WebAlert extends WindowAlert
 
 	public WebAlert(Context context, int title, int textNo)
 	{
-		super(context, title);
-
-		LinearLayout layout = new LinearLayout(context);
-
-		webView = new WebView(context);
+		super(context, title, false);
+		
+		setView(R.layout.alert_web_layout);
+		webView = (WebView) findViewById(R.id.webViewWebAlert1);
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.setWebViewClient(new WebClient());
-
-		EditText keyboardHack = new EditText(context);
-		keyboardHack.setVisibility(View.GONE);
-
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.addView(webView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		layout.addView(keyboardHack, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
-		setView(layout);
-		
-		setCancelable(false);
 		
 		setNegativeButton(textNo, new DialogInterface.OnClickListener()
 		{
 			@Override
-			public void onClick(DialogInterface dialog, int whichButton)
-			{
-				//dismiss();
-			}
+			public void onClick(DialogInterface dialog, int whichButton) { }
 		});
 	}
 

@@ -1,5 +1,11 @@
 package com.project.model;
 
+import com.creation.data.TTipoMovimiento;
+import com.creation.data.TTipoSticker;
+import com.game.data.TTipoEntidad;
+import com.game.game.TTipoEndgame;
+import com.game.select.TTipoLevel;
+
 public class GamePreferences
 {
 	// Multitouch
@@ -25,6 +31,11 @@ public class GamePreferences
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
+	// Velocidades
+	public static final float DIST_MOVIMIENTO_BACKGROUND = 4.0f;
+	public static final float DIST_MOVIMIENTO_ENEMY = 10.0f;
+	public static final float DIST_MOVIMIENTO_CHARACTER = 30.0f;
+	
 	// Texturas
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;
 	public static final float DEEP_POLYLINES = 0.1f;
@@ -34,78 +45,35 @@ public class GamePreferences
 	/* FIXME Menos de 1 segundo no se graba nada */
 	public static final int TIME_DURATION_ANIMATION = 2000;
 
-	// Enemigos
-	public static final int NUM_TEXTURE_BACKGROUND = 3;
-	public static final int NUM_TEXTURE_CHARACTER = 1;
-	public static final int NUM_TEXTURE_STICKER = 5;
-	public static final int NUM_TEXTURE_BUBBLE = 3;
-	public static final int NUM_TEXTURE_OBSTACLE = 2;
-	public static final int NUM_TEXTURE_MISSILE = 1;
-	public static final int NUM_TEXTURE_ENEMY = 4;
-
-	public static final int NUM_TYPE_ENEMIES = NUM_TEXTURE_OBSTACLE + NUM_TEXTURE_MISSILE + NUM_TEXTURE_ENEMY;
+	// Niveles
+	private static final int MAX_ENEMIES = 50;
+	public static final int MAX_CHARACTERS = 10;
+	public static final int MAX_LIVES = 3;
+	
+	public static final int NUM_TYPE_LEVELS = TTipoLevel.values().length;
+	public static final int NUM_TYPE_MOVIMIENTOS = TTipoMovimiento.values().length;
+	public static final int NUM_TYPE_STICKERS = TTipoSticker.values().length - 1;
+	public static final int NUM_TYPE_ENDGAME = TTipoEndgame.values().length;
+	
+	public static final int NUM_TYPE_BACKGROUNDS = 3;
+	public static final int NUM_TYPE_CHARACTER = 1;
+	public static final int NUM_TYPE_BUBBLES = 3;
+	public static final int NUM_TYPE_OBSTACLES = 2;
+	public static final int NUM_TYPE_MISSILES = 1;
+	public static final int NUM_TYPE_ENEMIES = 4;
+	
+	public static final int NUM_TYPE_OPPONENTS = NUM_TYPE_OBSTACLES + NUM_TYPE_MISSILES + NUM_TYPE_ENEMIES;
 	public static final int NUM_TYPE_STICKERS_EYES = 8;
 	public static final int NUM_TYPE_STICKERS_MOUTH = 7;
 	public static final int NUM_TYPE_STICKERS_WEAPON = 16;
 	public static final int NUM_TYPE_STICKERS_TRINKET = 16;
 	public static final int NUM_TYPE_STICKERS_HELMET = 16;
 	
-	// Busqueda de recursos
-	public static final String RESOURCE_IMAGE_HEART = "imageViewGameHeart";
-	
-	public static final String RESOURCE_ID_STICKER_EYES = "sticker_eyes_";
-	public static final String RESOURCE_ID_STICKER_MOUTH = "sticker_mouth_";
-	public static final String RESOURCE_ID_STICKER_WEAPON = "sticker_weapon_";
-	public static final String RESOURCE_ID_STICKER_TRINKET = "sticker_trinket_";
-	public static final String RESOURCE_ID_STICKER_HELMET = "sticker_helmet_";
-	
-	// Video
-	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";
-	public static final String VIDEO_DESIGN_DRAW_PATH = VIDEO_PATH + "tips_design_draw";
-	public static final String VIDEO_DESIGN_DRAG_PATH = VIDEO_PATH + "tips_design_drag";
-	public static final String VIDEO_DESIGN_ROTATE_PATH = VIDEO_PATH + "tips_design_rotate";
-	public static final String VIDEO_DESIGN_ZOOM_PATH = VIDEO_PATH + "tips_design_zoom";
-	public static final String VIDEO_DESIGN_OUTSIDE_PATH = VIDEO_PATH + "tips_design_outside";
-	public static final String VIDEO_DESIGN_NOREGULAR_PATH = VIDEO_PATH + "tips_design_noregular";
-	public static final String VIDEO_PAINT_PENCIL_PATH = VIDEO_PATH + "tips_paint_pencil";
-	public static final String VIDEO_PAINT_BUCKET_PATH = VIDEO_PATH + "tips_paint_bucket";
-	public static final String VIDEO_PAINT_STICKER_PATH = VIDEO_PATH + "tips_paint_sticker";
-	public static final String VIDEO_PAINT_ZOOM_PATH = VIDEO_PATH + "tips_paint_zoom";
-	public static final String VIDEO_DEFORM_HANDLES_PATH = VIDEO_PATH + "tips_deform_handles";
-	public static final String VIDEO_DEFORM_UNDEFINED_PATH = VIDEO_PATH + "tips_deform_undefined";
-	
-	public static final String VIDEO_GAME_LIVES_PATH = VIDEO_PATH + "tips_game_lives";
-	public static final String VIDEO_GAME_CROUCH_PATH = VIDEO_PATH + "tips_game_crouch";
-	public static final String VIDEO_GAME_JUMP_PATH = VIDEO_PATH + "tips_game_jump";
-	public static final String VIDEO_GAME_ATTACK_PATH = VIDEO_PATH + "tips_game_attack";
-	public static final String VIDEO_GAME_COMPLETE_PATH = VIDEO_PATH + "tips_game_complete";
-	// Fuentes
-	private static final String FONT_PATH = "fonts/";
-	public static final String FONT_TYPEWRITER_PATH = FONT_PATH + "font_typewriter.ttf";
-	public static final String FONT_LOGO_PATH = FONT_PATH + "font_logo.ttf";
-	public static final String FONT_MOON_PATH = FONT_PATH + "font_moon.ttf";
-	public static final String FONT_NEW_YORK_PATH = FONT_PATH + "font_new_york.ttf";
-	public static final String FONT_ROME_PATH = FONT_PATH + "font_rome.ttf";
-	public static final String FONT_EGYPT_PATH = FONT_PATH + "font_egypt.ttf";
-	public static final String FONT_STONEHENGE_PATH = FONT_PATH + "font_stonehenge.ttf";
-	
 	// Puntuaciones
 	public static final int SCORE_LEVEL_COMPLETED = 100;
 	public static final int SCORE_ACTION_RIGHT = 50;
 	public static final int SCORE_ACTION_WRONG = 10;
 	public static final int SCORE_LOSE_LIFE = -100;
-
-	// Velocidades
-	public static final float DIST_MOVIMIENTO_BACKGROUND = 4.0f;
-	public static final float DIST_MOVIMIENTO_ENEMY = 10.0f;
-	public static final float DIST_MOVIMIENTO_CHARACTER = 30.0f;
-	
-	// Niveles
-	private static final int MAX_ENEMIES = 50;
-	public static final int MAX_CHARACTERS = 10;
-	public static final int MAX_LIVES = 3;
-	public static final int NUM_LEVELS = 5;
-	public static final int NUM_MOVIMIENTOS = 4;
 	
 	// Tamaño de Pantalla
 	private static float WIDTH_SCREEN;
@@ -249,4 +217,40 @@ public class GamePreferences
 	{
 		return Math.round(HEIGHT_SCREEN / 3.2f);
 	}
+	
+	/* Tipos de Elementos */
+	
+	public static final int NUM_TYPE_STICKERS(TTipoSticker pegatina)
+	{
+		switch(pegatina)
+		{
+			case Trinket:
+				return NUM_TYPE_STICKERS_TRINKET;
+			case Helmet:
+				return NUM_TYPE_STICKERS_HELMET;
+			case Eyes:
+				return NUM_TYPE_STICKERS_EYES;
+			case Mouth:
+				return NUM_TYPE_STICKERS_MOUTH;
+			case Weapon:
+				return NUM_TYPE_STICKERS_WEAPON;
+			default:
+				return -1;
+		}
+	}
+	
+	public static final int NUM_TYPE_ENEMIES(TTipoEntidad entidad)
+	{
+		switch(entidad)
+		{
+			case Enemigo:
+				return NUM_TYPE_ENEMIES;
+			case Obstaculo:
+				return NUM_TYPE_OBSTACLES;
+			case Misil:
+				return NUM_TYPE_MISSILES;
+			default:
+				return -1;
+		}
+	}	
 }

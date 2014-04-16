@@ -1,5 +1,7 @@
 package com.android.alert;
 
+import com.project.main.R;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.EditText;
@@ -12,15 +14,13 @@ public abstract class TextInputAlert extends WindowAlert
 
 	public TextInputAlert(Context context, int title, int messege, int textYes, int textNo)
 	{
-		super(context, title);
+		super(context, title, false);
 
 		setMessage(messege);
 
-		input = new EditText(context);
-		setView(input);
+		setView(R.layout.alert_textinput_layout);
+		input = (EditText) findViewById(R.id.editTextInputTextAlert1);
 		
-		setCancelable(false);
-
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)

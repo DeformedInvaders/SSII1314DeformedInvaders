@@ -1,53 +1,32 @@
 package com.game.data;
 
+import com.game.game.TTipoEndgame;
+
 public class Background
 {
-	private int idTexturaFondo1, idTexturaFondo2, idTexturaFondo3, idTexturaCielo, idTexturaGameOver, idTexturaLevelCompleted, idTexturaLevelPerfected;
-
-	public void setBackground(int idFondo1, int idFondo2, int idFondo3, int idFondo4, int idFondo5, int idFondo6, int idFondo7)
+	private int[] idPolaroid;
+	private int[] idFondos;
+	private int idFondoSol;
+	
+	public Background(int fondoSol, int[] fondos, int[] polaroid)
 	{
-		idTexturaFondo1 = idFondo1;
-		idTexturaFondo2 = idFondo2;
-		idTexturaFondo3 = idFondo3;
-		idTexturaCielo = idFondo4;
-		idTexturaGameOver = idFondo5;
-		idTexturaLevelCompleted = idFondo6;
-		idTexturaLevelPerfected = idFondo7;
+		idFondos = fondos;
+		idFondoSol = fondoSol;
+		idPolaroid = polaroid;
 	}
 
-	public int getIdTexturaFondo1()
+	public int[] getIdTexturaFondos()
 	{
-		return idTexturaFondo1;
-	}
-
-	public int getIdTexturaFondo2()
-	{
-		return idTexturaFondo2;
-	}
-
-	public int getIdTexturaFondo3()
-	{
-		return idTexturaFondo3;
+		return idFondos;
 	}
 	
-	public int getIdTexturaCielo()
+	public int getIdTexturaSol()
 	{
-		return idTexturaCielo;
-	}
-
-	public int getIdTextureGameOver()
-	{
-		return idTexturaGameOver;
-	}
-
-	public int getIdTextureLevelCompleted()
-	{
-		return idTexturaLevelCompleted;
+		return idFondoSol;
 	}
 	
-	public int getIdTextureLevelPerfected()
+	public int getIdPolaroid(TTipoEndgame tipo)
 	{
-		return idTexturaLevelPerfected;
+		return idPolaroid[tipo.ordinal()];
 	}
-
 }

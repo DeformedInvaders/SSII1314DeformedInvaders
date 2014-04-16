@@ -3,84 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-  	<LinearLayout style="@style/Layout_Horizontal_Content_Dialog_Style">
-  	    
-		<ScrollView
-			android:layout_width="wrap_content"
-			android:layout_height="300dp">
-			  	    
-		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style"
-		        android:id="@+id/linearLayoutSticker1">
-		        
-		        <TextView style="@style/Text_Section_Dialog_Style"
-  	        		android:text="@string/title_dialog_eyes"
-  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
-		        	
-			</LinearLayout>
-			
-		</ScrollView>
-		
-		<ScrollView
-			android:layout_width="wrap_content"
-			android:layout_height="300dp" >
-			  	    
-		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style"
-		        android:id="@+id/linearLayoutSticker2">
-				
-				<TextView style="@style/Text_Section_Dialog_Style"
-  	        		android:text="@string/title_dialog_mouths"
-  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
-											
-			</LinearLayout>
-			
-		</ScrollView>
- 		
-		<ScrollView
-			android:layout_width="wrap_content"
-			android:layout_height="300dp" >
-			 	    
-		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style"
-		        android:id="@+id/linearLayoutSticker3">
-				
-        		<TextView style="@style/Text_Section_Dialog_Style"
-  	        		android:text="@string/title_dialog_weapons"
-  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
-		        				
-			</LinearLayout>
-			
-		</ScrollView>
-			
-		<ScrollView
-			android:layout_width="wrap_content"
-			android:layout_height="300dp" >
-			  	        	
-		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style"
-		        android:id="@+id/linearLayoutSticker4">
-				
-	       		<TextView style="@style/Text_Section_Dialog_Style"
-	  	        	android:text="@string/title_dialog_trinkets"
-  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />
-	       		
-			</LinearLayout>
-
-		</ScrollView>
-  	    
-		<ScrollView
-			android:layout_width="wrap_content"
-			android:layout_height="300dp" >
-			
-		    <LinearLayout style="@style/Layout_Vertical_Section_Dialog_Style"
-		        android:id="@+id/linearLayoutSticker5">
-				
-           		<TextView style="@style/Text_Section_Dialog_Style"
- 	        		android:text="@string/title_dialog_helmets"
-  	        		android:layout_width="@dimen/StickerButton_LayoutWidth_Dimen" />			
-									
-			</LinearLayout>
-			
-		</ScrollView>
-			
-	</LinearLayout>
+  	<LinearLayout style="@style/Layout_Horizontal_Content_Dialog_Style"
+  	    android:id="@+id/linearLayoutSticker1" />
 	
  	<ImageView style="@style/ImageView_Arrow_Dialog_Style"
  	    android:contentDescription="@string/desc_dialog_arrow" />

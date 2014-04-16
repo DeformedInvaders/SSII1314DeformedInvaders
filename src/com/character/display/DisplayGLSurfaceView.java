@@ -78,7 +78,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (movimientoAleatorio && personajeCargado)
 		{
-			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_MOVIMIENTOS);
+			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_MOVIMIENTOS);
 
 			switch (animacion)
 			{

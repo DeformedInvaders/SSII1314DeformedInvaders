@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    
+    <ImageView
+        android:id="@+id/imageViewSummaryAlert1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/polaroid_folder_mission"
+        android:contentDescription="@string/desc_select_background" />
+    
+    <ScrollView
+        android:id="@+id/scrollLayoutSummaryAlert1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+            
+            <TextView
+                android:id="@+id/textViewSummaryAlert1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_alert_initial"
+                android:textSize="30sp" />
+            
+            <LinearLayout
+                android:id="@+id/linearLayoutSummaryAlert1"
+				android:layout_width="match_parent"
+    			android:layout_height="wrap_content"
+    			android:orientation="vertical"/>
+            
+            <TextView
+                android:id="@+id/textViewSummaryAlert2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_alert_final"
+                android:textSize="30sp" />
+            
+        </LinearLayout>
+        
+    </ScrollView>
+
+</RelativeLayout>

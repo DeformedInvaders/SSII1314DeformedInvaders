@@ -9,11 +9,9 @@ public abstract class ConfirmationAlert extends WindowAlert
 
 	public ConfirmationAlert(Context context, int title, int messege, int textYes, int textNo)
 	{
-		super(context, title);
+		super(context, title, false);
 
 		setMessage(messege);
-		
-		setCancelable(false);
 
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

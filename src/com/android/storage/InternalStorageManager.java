@@ -306,7 +306,7 @@ public class InternalStorageManager
 
 	public GameStatistics[] cargarEstadisticas()
 	{
-		GameStatistics[] niveles = new GameStatistics[GamePreferences.NUM_LEVELS];
+		GameStatistics[] niveles = new GameStatistics[GamePreferences.NUM_TYPE_LEVELS];
 		mListener.setProgreso(0, mContext.getString(R.string.text_progressBar_level));
 
 		try
@@ -315,7 +315,7 @@ public class InternalStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Niveles Jugados
-			for (int i = 0; i < GamePreferences.NUM_LEVELS; i++)
+			for (int i = 0; i < GamePreferences.NUM_TYPE_LEVELS; i++)
 			{
 				niveles[i] = (GameStatistics) data.readObject();
 			}
@@ -347,7 +347,7 @@ public class InternalStorageManager
 
 		Log.d(INTERNAL_STORAGE_TAG, "Levels not loadead");
 
-		for(int i = 0; i < GamePreferences.NUM_LEVELS; i++)
+		for(int i = 0; i < GamePreferences.NUM_TYPE_LEVELS; i++)
 		{
 			niveles[i] = new GameStatistics();
 		}

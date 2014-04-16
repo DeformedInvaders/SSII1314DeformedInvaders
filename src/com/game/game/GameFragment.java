@@ -19,6 +19,7 @@ import com.game.data.Personaje;
 import com.game.select.TTipoLevel;
 import com.project.main.R;
 import com.project.model.GamePreferences;
+import com.project.model.GameResources;
 
 public class GameFragment extends OpenGLFragment implements OnGameListener
 {
@@ -69,7 +70,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewGame1);
-		imageBackground.setBackgroundResource(level.getFondoNivel().getIdTexturaCielo());
+		imageBackground.setBackgroundResource(level.getFondoNivel().getIdTexturaSol());
 
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(this, personaje, level);
@@ -81,7 +82,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
 		{
-			int id = getActivity().getResources().getIdentifier(GamePreferences.RESOURCE_IMAGE_HEART + (i + 1), "id", getActivity().getPackageName());
+			int id = getActivity().getResources().getIdentifier(GameResources.VIEW_IMAGE_HEART + (i + 1), GameResources.RESOURCE_ID, getActivity().getPackageName());
 			
 			imagenVidas[i] = (ImageView) rootView.findViewById(id);
 		}
@@ -99,11 +100,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		listaMensajes.add(R.string.text_tip_game_complete);
 		
 		List<String> listaVideos = new ArrayList<String>();
-		listaVideos.add(GamePreferences.VIDEO_GAME_LIVES_PATH);
-		listaVideos.add(GamePreferences.VIDEO_GAME_CROUCH_PATH);
-		listaVideos.add(GamePreferences.VIDEO_GAME_JUMP_PATH);
-		listaVideos.add(GamePreferences.VIDEO_GAME_ATTACK_PATH);
-		listaVideos.add(GamePreferences.VIDEO_GAME_COMPLETE_PATH);
+		listaVideos.add(GameResources.VIDEO_GAME_LIVES_PATH);
+		listaVideos.add(GameResources.VIDEO_GAME_CROUCH_PATH);
+		listaVideos.add(GameResources.VIDEO_GAME_JUMP_PATH);
+		listaVideos.add(GameResources.VIDEO_GAME_ATTACK_PATH);
+		listaVideos.add(GameResources.VIDEO_GAME_COMPLETE_PATH);
 		
 		sendAlertMessage(R.string.text_tip_game_title, listaMensajes, listaVideos);		
 		return rootView;
@@ -185,19 +186,19 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		if(lives == GamePreferences.MAX_LIVES)
 		{
-			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdTextureLevelPerfected(), level.getNombreNivel(), true);
+			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdPolaroid(TTipoEndgame.LevelPerfected), level.getNombreNivel(), true);
 
 		}
 		else
 		{
-			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdTextureLevelCompleted(), level.getNombreNivel(), false);
+			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdPolaroid(TTipoEndgame.LevelCompleted), level.getNombreNivel(), false);
 		}
 	}
 
 	@Override
 	public void onGameFailed()
 	{
-		mCallback.onGameFailed(level.getTipoNivel(), level.getFondoNivel().getIdTextureGameOver());
+		mCallback.onGameFailed(level.getTipoNivel(), level.getFondoNivel().getIdPolaroid(TTipoEndgame.GameOver));
 	}
 	
 	@Override

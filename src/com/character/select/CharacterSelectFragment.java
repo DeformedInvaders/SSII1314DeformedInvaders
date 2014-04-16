@@ -18,7 +18,7 @@ import com.character.display.OnDisplayListener;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.project.main.R;
-import com.project.model.GamePreferences;
+import com.project.model.GameResources;
 
 public class CharacterSelectFragment extends OpenGLFragment implements OnDisplayListener
 {
@@ -54,7 +54,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
 		canvas.setParameters(this, personaje, false);
 		
-		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GamePreferences.FONT_LOGO_PATH);
+		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GameResources.FONT_LOGO_PATH);
 		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewCharacterSelect1);
 		textBackground.setText(personaje.getNombre());

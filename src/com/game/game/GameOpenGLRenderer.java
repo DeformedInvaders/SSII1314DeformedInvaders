@@ -59,7 +59,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// BackGround
-		seleccionarTexturaFondo(background.getIdTexturaFondo1(), background.getIdTexturaFondo2(), background.getIdTexturaFondo3());
+		seleccionarTexturaFondo(background.getIdTexturaFondos());
 
 		// Protagonista
 		personaje.cargarTextura(gl, this, mContext);

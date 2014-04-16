@@ -10,6 +10,7 @@ import com.android.view.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
 import com.lib.utils.FloatArray;
 import com.project.model.GamePreferences;
+import com.project.model.GameResources;
 
 public class Pegatinas implements Serializable
 {
@@ -25,10 +26,10 @@ public class Pegatinas implements Serializable
 
 	public Pegatinas()
 	{
-		indicePegatinas = new int[GamePreferences.NUM_TEXTURE_STICKER];
-		verticePegatinas = new int[GamePreferences.NUM_TEXTURE_STICKER];
+		indicePegatinas = new int[GamePreferences.NUM_TYPE_STICKERS];
+		verticePegatinas = new int[GamePreferences.NUM_TYPE_STICKERS];
 
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
 			indicePegatinas[i] = -1;
 			verticePegatinas[i] = -1;
@@ -37,10 +38,10 @@ public class Pegatinas implements Serializable
 	
 	public void cargarTexturas(GL10 gl, OpenGLRenderer renderer, Context context, TTipoEntidad tipo, int id)
 	{
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
-		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-			
+		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+		
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+		{			
 			if (isCargada(tipoPegatinas[i]))
 			{
 				renderer.cargarTexturaRectangulo(gl, getIndice(tipoPegatinas[i], context), tipo, id, tipoPegatinas[i]);
@@ -50,9 +51,9 @@ public class Pegatinas implements Serializable
 	
 	public void descargarTextura(OpenGLRenderer renderer, TTipoEntidad tipo, int id)
 	{
-		for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
+		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
-			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
 			renderer.descargarTexturaRectangulo(tipo, id, tipoPegatinas[i]);
 		}
 	}
@@ -63,14 +64,13 @@ public class Pegatinas implements Serializable
 		
 			gl.glTranslatef(0, 0, GamePreferences.DEEP_STICKERS);
 			
-			for (int i = 0; i < GamePreferences.NUM_TEXTURE_STICKER; i++)
-			{
-				TTipoSticker tipoPegatinas = TTipoSticker.values()[i];
-				
-				if (isCargada(tipoPegatinas))
+			TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+			for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+			{				
+				if (isCargada(tipoPegatinas[i]))
 				{
-					int indice = getVertice(tipoPegatinas);
-					renderer.dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipo, id, tipoPegatinas);
+					int indice = getVertice(tipoPegatinas[i]);
+					renderer.dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipo, id, tipoPegatinas[i]);
 				}
 			}
 			
@@ -100,32 +100,8 @@ public class Pegatinas implements Serializable
 
 	private int getIndice(TTipoSticker tipo, Context context)
 	{
-		int tag = indicePegatinas[tipo.ordinal()];
-		
-		String nombrePegatina;
-		
-		switch (tipo)
-		{
-			case Eyes:
-				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_EYES;
-			break;
-			case Mouth:
-				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_MOUTH;
-			break;
-			case Weapon:
-				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_WEAPON;
-			break;
-			case Trinket:
-				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_TRINKET;
-			break;
-			case Helmet:
-				nombrePegatina = GamePreferences.RESOURCE_ID_STICKER_HELMET;
-			break;
-			default:
-				return -1;
-		}
-		
-		return context.getResources().getIdentifier(nombrePegatina + tag, "drawable", context.getPackageName());
+		String nombrePegatina = GameResources.GET_STICKER(tipo, indicePegatinas[tipo.ordinal()]);
+		return context.getResources().getIdentifier(nombrePegatina, GameResources.RESOURCE_DRAWABLE, context.getPackageName());
 	}
 
 	private int getVertice(TTipoSticker tipo)

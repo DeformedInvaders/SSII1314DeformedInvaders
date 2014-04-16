@@ -20,6 +20,9 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	{
 		mContext = context;
 		
+		player = new MediaPlayer();
+		player.setOnCompletionListener(this);
+		
 		estado = TEstadoPlay.Libre;
 	}
 
@@ -31,29 +34,25 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean startPlaying(String path)
 	{
-		try
+		if (estado == TEstadoPlay.Libre)
 		{
-			if (estado != TEstadoPlay.Libre)
+			try
 			{
-				releasePlayer();
+				// Idle
+				player.setDataSource(path);
+				// Initialized
+				player.prepare();
+				// Prepared
+				player.start();
+				// Started
+	
+				estado = TEstadoPlay.Reproduciendo;
+				return true;
 			}
-			
-			player = new MediaPlayer();
-			player.setOnCompletionListener(this);
-			// Idle
-			player.setDataSource(path);
-			// Initialized
-			player.prepare();
-			// Prepared
-			player.start();
-			// Started
-
-			estado = TEstadoPlay.Reproduciendo;
-			return true;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		return false;

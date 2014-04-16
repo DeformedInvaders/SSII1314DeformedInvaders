@@ -67,7 +67,6 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		while (it.hasNext())
 		{
 			Nivel nivel = it.next();
-
 			viewPager.addView(LevelSelectFragment.newInstance(this, nivel, estadoNiveles[i]), getString(nivel.getNombreNivel()));
 
 			i++;

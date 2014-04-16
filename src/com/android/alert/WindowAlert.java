@@ -4,28 +4,39 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 public abstract class WindowAlert
 {
+	protected Context mContext;
 	private AlertDialog.Builder builder;
 	private AlertDialog dialog;
+	
+	private View rootView;
+	private LayoutInflater layoutInflater;
 
 	/* Constructora */
 
-	public WindowAlert(Context context, int title)
+	public WindowAlert(Context context, int title, boolean cancelable)
 	{
+		mContext = context;
+		layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
 		builder = new AlertDialog.Builder(context);
-
 		builder.setTitle(context.getString(title));
+		builder.setCancelable(cancelable);
 	}
 	
-	public WindowAlert(Context context, String title)
+	public WindowAlert(Context context, String title, boolean cancelable)
 	{
-		builder = new AlertDialog.Builder(context);
+		mContext = context;
+		layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
+		builder = new AlertDialog.Builder(mContext);
 		builder.setTitle(title);
+		builder.setCancelable(cancelable);
 	}
 
 	/* Métodos Protegidos */
@@ -64,15 +75,21 @@ public abstract class WindowAlert
 	{
 		builder.setMultiChoiceItems(items, checkedItems, listener);
 	}
-
-	protected void setView(View view)
+	
+	protected View findViewById(int id)
 	{
-		builder.setView(view);
+		if (rootView != null)
+		{
+			return rootView.findViewById(id);
+		}
+		
+		return null;
 	}
 	
-	protected void setCancelable(boolean cancelable)
+	protected void setView(int layout)
 	{
-		builder.setCancelable(cancelable);
+		rootView = layoutInflater.inflate(layout, null);
+		builder.setView(rootView);
 	}
 	
 	protected void changeMessage(int message)

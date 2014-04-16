@@ -1,10 +1,9 @@
 package com.creation.data;
 
-
 public class Accion
 {
 	// Tipo de Acción
-	private int tipo;
+	private TTipoAccion tipo;
 
 	// Color
 	private int color;
@@ -20,13 +19,13 @@ public class Accion
 	public Accion(int color)
 	{
 		this.color = color;
-		this.tipo = 0;
+		this.tipo = TTipoAccion.Color;
 	}
 
 	public Accion(Polilinea linea)
 	{
 		this.linea = linea;
-		this.tipo = 1;
+		this.tipo = TTipoAccion.Polilinea;
 	}
 
 	public Accion(int indice, int vertice, TTipoSticker pegatina)
@@ -34,7 +33,7 @@ public class Accion
 		this.indice = indice;
 		this.pegatina = pegatina;
 		this.vertice = vertice;
-		this.tipo = 2;
+		this.tipo = TTipoAccion.Pegatina;
 	}
 
 	/* Métodos de Obtención de Información */
@@ -66,16 +65,16 @@ public class Accion
 
 	public boolean isTipoColor()
 	{
-		return tipo == 0;
+		return tipo == TTipoAccion.Color;
 	}
 
 	public boolean isTipoPolilinea()
 	{
-		return tipo == 1;
+		return tipo == TTipoAccion.Polilinea;
 	}
 
 	public boolean isTipoPegatina()
 	{
-		return tipo == 2;
+		return tipo == TTipoAccion.Pegatina;
 	}
 }

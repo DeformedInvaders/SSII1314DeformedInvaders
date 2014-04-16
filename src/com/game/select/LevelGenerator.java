@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.game.data.Background;
@@ -15,8 +14,10 @@ import com.game.data.InstanciaNivel;
 import com.game.data.Misil;
 import com.game.data.Nivel;
 import com.game.data.Obstaculo;
-import com.project.main.R;
+import com.game.data.TTipoEntidad;
+import com.game.game.TTipoEndgame;
 import com.project.model.GamePreferences;
+import com.project.model.GameResources;
 
 public class LevelGenerator
 {
@@ -36,146 +37,81 @@ public class LevelGenerator
 		listaEnemigos = new ArrayList<List<Entidad>>();
 		listaFondos = new ArrayList<Background>();
 
-		for (int i = 0; i < GamePreferences.NUM_LEVELS; i++)
+		TTipoLevel[] niveles = TTipoLevel.values();
+		for (int i = 0; i < GamePreferences.NUM_TYPE_LEVELS; i++)
 		{
 			listaEnemigos.add(new ArrayList<Entidad>());
-			listaFondos.add(new Background());
 
-			crearNivel(i, listaNiveles, listaEnemigos.get(i), listaNombres, listaFondos.get(i));
+			crearNivel(niveles[i], listaNiveles, listaEnemigos.get(i), listaNombres, listaFondos);
 		}
 	}
 
-	private void crearNivel(int nivel, List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
+	private int obtenerID(String id)
 	{
-		switch (nivel)
+		return mContext.getResources().getIdentifier(id, GameResources.RESOURCE_DRAWABLE, mContext.getPackageName());
+	}
+	
+	private void crearNivel(TTipoLevel nivel, List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, List<Background> listaBackground)
+	{
+		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GameResources.GET_FONT_PATH(nivel));
+		int logroCompletado = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelCompleted));
+		int logroPerfecto = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelPerfected));
+		
+		
+		listaNiveles.add(new Nivel(nivel, nivel.getFondoDisplay(), logroCompletado, logroPerfecto, nivel.getTitle(), nivel.getDescription(), nivel.getColor(), textFont, nivel.getMusica()));
+		listaNombres.add(mContext.getString(nivel.getTitle()));
+		
+		
+		for (int i = 0; i < GamePreferences.NUM_TYPE_MISSILES; i++)
 		{
-			case 0:
-				crearNivelLuna(listaNiveles, listaEnemigos, listaNombres, background);
-			break;
-			case 1:
-				crearNivelNewYork(listaNiveles, listaEnemigos, listaNombres, background);
-			break;
-			case 2:
-				crearNivelRoma(listaNiveles, listaEnemigos, listaNombres, background);
-			break;
-			case 3:
-				crearNivelEgipto(listaNiveles, listaEnemigos, listaNombres, background);
-			break;
-			case 4:
-				crearNivelStonehenge(listaNiveles, listaEnemigos, listaNombres, background);
-			break;
+			listaEnemigos.add(new Misil(obtenerID(GameResources.GET_ENEMIES(TTipoEntidad.Misil, nivel, i)), i));
 		}
+		
+		for (int i = 0; i < GamePreferences.NUM_TYPE_OBSTACLES; i++)
+		{
+			listaEnemigos.add(new Obstaculo(obtenerID(GameResources.GET_ENEMIES(TTipoEntidad.Obstaculo, nivel, i)), i));
+		}
+		
+		for (int i = 0; i < GamePreferences.NUM_TYPE_ENEMIES; i++)
+		{
+			listaEnemigos.add(new Enemigo(obtenerID(GameResources.GET_ENEMIES(TTipoEntidad.Enemigo, nivel, i)), i));
+		}
+		
+		int[] fondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS];
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
+		{
+			fondos[i] = obtenerID(GameResources.GET_BACKGROUND(nivel, i));
+		}
+		
+		int[] polaroids = new int[GamePreferences.NUM_TYPE_ENDGAME];
+		TTipoEndgame[] finJuegos = TTipoEndgame.values();
+		for (int i = 0; i < GamePreferences.NUM_TYPE_ENDGAME; i++)
+		{
+			polaroids[i] = obtenerID(GameResources.GET_POLAROID(nivel, finJuegos[i]));
+		}
+		
+		listaBackground.add(new Background(nivel.getFondoSol(), fondos, polaroids));
 	}
+	
+	/*
+	Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_MOON_PATH);
+	
+	listaNiveles.add(new Nivel(TTipoLevel.Moon, R.drawable.background_moon_1, R.drawable.achievement_moon_completed, R.drawable.achievement_moon_perfected, R.string.title_level_section_moon, R.string.text_level_description_moon, Color.WHITE, textFont, R.raw.music_moon));
+	listaNombres.add(mContext.getString(R.string.title_level_section_moon));
 
-	private void crearNivelLuna(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
-	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_MOON_PATH);
-		
-		listaNiveles.add(new Nivel(TTipoLevel.Moon, R.drawable.background_moon_1, R.drawable.achievement_moon_completed, R.drawable.achievement_moon_perfected, R.string.title_level_section_moon, R.string.text_level_section_moon, Color.WHITE, textFont, R.raw.music_moon));
-		listaNombres.add(mContext.getString(R.string.title_level_section_moon));
+	listaEnemigos.add(new Misil(R.drawable.missile_moon, 0));
+	
+	listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon_1, 0));
+	listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon_2, 1));
 
-		listaEnemigos.add(new Misil(R.drawable.missile_moon, 0));
-		
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon_1, 0));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_moon_2, 1));
+	listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, 0));
+	listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, 1));
+	listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_2, 2));
+	listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_2, 3));
+	
+	background.setBackground(R.drawable.background_moon_2, R.drawable.background_moon_3, R.drawable.background_moon_4, R.drawable.background_moon_5, R.drawable.polaroid_gameover_moon, R.drawable.polaroid_levelcompleted_moon, R.drawable.polaroid_levelperfected_moon);
 
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, 0));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_1, 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_2, 2));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_moon_2, 3));
-
-		background.setBackground(R.drawable.background_moon_2, R.drawable.background_moon_3, R.drawable.background_moon_4, R.drawable.background_moon_5, R.drawable.polaroid_gameover_moon, R.drawable.polaroid_levelcompleted_moon, R.drawable.polaroid_levelperfected_moon);
-	}
-
-	private void crearNivelNewYork(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
-	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_NEW_YORK_PATH);
-		
-		listaNiveles.add(new Nivel(TTipoLevel.NewYork, R.drawable.background_newyork_1, R.drawable.achievement_newyork_completed, R.drawable.achievement_newyork_perfected, R.string.title_level_section_newyork, R.string.text_level_section_newyork, Color.BLACK, textFont, R.raw.music_newyork));
-		listaNombres.add(mContext.getString(R.string.title_level_section_newyork));
-
-		listaEnemigos.add(new Misil(R.drawable.missile_newyork, 0));
-		
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork_1, 0));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_newyork_2, 1));
-		
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_1, 0));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_2, 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_3, 2));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_newyork_4, 3));
-
-		background.setBackground(R.drawable.background_newyork_2, R.drawable.background_newyork_3, R.drawable.background_newyork_4, R.drawable.background_newyork_5, R.drawable.polaroid_gameover_newyork, R.drawable.polaroid_levelcompleted_newyork, R.drawable.polaroid_levelperfected_newyork);
-	}
-
-	private void crearNivelRoma(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
-	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_ROME_PATH);
-		
-		listaNiveles.add(new Nivel(TTipoLevel.Rome, R.drawable.background_rome_1, R.drawable.achievement_rome_completed, R.drawable.achievement_rome_perfected, R.string.title_level_section_rome, R.string.text_level_section_rome, Color.WHITE, textFont, R.raw.music_rome));
-		listaNombres.add(mContext.getString(R.string.title_level_section_rome));
-
-		listaEnemigos.add(new Misil(R.drawable.missile_rome, 0));
-		
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome_1, 0));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_rome_2, 1));
-		
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_1, 0));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_2, 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_3, 2));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_rome_4, 3));
-
-		background.setBackground(R.drawable.background_rome_2, R.drawable.background_rome_3, R.drawable.background_rome_4, R.drawable.background_rome_5, R.drawable.polaroid_gameover_rome, R.drawable.polaroid_levelcompleted_rome, R.drawable.polaroid_levelperfected_rome);
-	}
-
-	private void crearNivelEgipto(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
-	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_EGYPT_PATH);
-		
-		listaNiveles.add(new Nivel(TTipoLevel.Egypt, R.drawable.background_egypt_1, R.drawable.achievement_egypt_completed, R.drawable.achievement_egypt_perfected, R.string.title_level_section_egypt, R.string.text_level_section_egypt, Color.BLACK, textFont, R.raw.music_egypt));
-		listaNombres.add(mContext.getString(R.string.title_level_section_egypt));
-		
-		listaEnemigos.add(new Misil(R.drawable.missile_egypt, 0));
-		
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt_1, 0));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_egypt_2, 1));
-
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_1, 0));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_2, 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_3, 2));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_egypt_4, 3));
-		
-		background.setBackground(R.drawable.background_egypt_2, R.drawable.background_egypt_3, R.drawable.background_egypt_4, R.drawable.background_egypt_5, R.drawable.polaroid_gameover_egypt, R.drawable.polaroid_levelcompleted_egypt, R.drawable.polaroid_levelperfected_egypt);
-	}
-
-	private void crearNivelStonehenge(List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, Background background)
-	{
-		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GamePreferences.FONT_STONEHENGE_PATH);
-		
-		listaNiveles.add(new Nivel(TTipoLevel.Stonehenge, R.drawable.background_stonehenge_1, R.drawable.achievement_stonehenge_completed, R.drawable.achievement_stonehenge_perfected, R.string.title_level_section_stonehenge, R.string.text_level_section_stonehenge, Color.BLACK, textFont, R.raw.music_stonhenge));
-		listaNombres.add(mContext.getString(R.string.title_level_section_stonehenge));
-
-		listaEnemigos.add(new Misil(R.drawable.missile_stonehenge, 0));
-		
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge_1, 0));
-		listaEnemigos.add(new Obstaculo(R.drawable.obstacle_stonehenge_2, 1));
-
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_1, 0));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_2, 1));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_3, 2));
-		listaEnemigos.add(new Enemigo(R.drawable.enemy_stonehenge_4, 3));
-
-		background.setBackground(R.drawable.background_stonehenge_2, R.drawable.background_stonehenge_3, R.drawable.background_stonehenge_4, R.drawable.background_stonehenge_5, R.drawable.polaroid_gameover_stonehenge, R.drawable.polaroid_levelcompleted_stonehenge, R.drawable.polaroid_levelperfected_stonehenge);
-	}
-
-	private List<Entidad> getListaEnemigos(int indice)
-	{
-		return listaEnemigos.get(indice);
-	}
-
-	private Background getFondo(int indice)
-	{
-		return listaFondos.get(indice);
-	}
+	 */
 
 	private List<InstanciaEntidad> getColaEnemigos(int indice)
 	{
@@ -184,7 +120,7 @@ public class LevelGenerator
 		float posXActual = GamePreferences.POS_ENEMIES_INICIO();
 		while (posXActual < GamePreferences.POS_ENEMIES_FINAL())
 		{
-			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_ENEMIES);
+			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_OPPONENTS);
 			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMY());
 			float posYEnemigo = GamePreferences.DISTANCE_ENEMY_GROUND();
 			
@@ -200,12 +136,13 @@ public class LevelGenerator
 	public InstanciaNivel getInstanciaLevel(TTipoLevel level)
 	{
 		int indice = level.ordinal();
-		return new InstanciaNivel(level, listaNombres.get(indice), getListaEnemigos(indice), getColaEnemigos(indice), getFondo(indice));
+		return new InstanciaNivel(level, listaNombres.get(indice), listaEnemigos.get(indice), getColaEnemigos(indice), listaFondos.get(indice));
 	}
 	
 	public Nivel getLevel(TTipoLevel level)
 	{
-		return listaNiveles.get(level.ordinal());
+		int indice = level.ordinal();
+		return listaNiveles.get(indice);
 	}
 
 	public List<Nivel> getListaNiveles()

@@ -2,9 +2,9 @@ package com.android.alert;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+
+import com.project.main.R;
 
 public abstract class ImageAlert extends WindowAlert
 {
@@ -12,30 +12,38 @@ public abstract class ImageAlert extends WindowAlert
 
 	public ImageAlert(Context context, int title, int textYes, int textNo, int idImage)
 	{
-		super(context, title);
+		super(context, title, false);
 
-		construirAlert(context, textYes, textNo, idImage);
+		setView(R.layout.alert_image_layout);
+		
+		ImageView image = (ImageView) findViewById(R.id.imageViewImageAlert1);
+		image.setImageResource(idImage);
+	
+		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				onPossitiveButtonClick();
+			}
+		});
+	
+		setNegativeButton(textNo, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				onNegativeButtonClick();
+			}
+		});
 	}
 	
 	public ImageAlert(Context context, String title, int textYes, int textNo, int idImage)
 	{
-		super(context, title);
+		super(context, title, false);
 
-		construirAlert(context, textYes, textNo, idImage);
-	}
-	
-	private void construirAlert(Context context, int textYes, int textNo, int idImage)
-	{
-		RelativeLayout layout = new RelativeLayout(context);
+		ImageView image = (ImageView) findViewById(R.id.imageViewImageAlert1);
+		image.setImageResource(idImage);
 		
-			ImageView image = new ImageView(context);
-			image.setImageResource(idImage);
-		
-			layout.addView(image, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-	
-		setView(layout);
-		
-		setCancelable(false);
+		setView(R.layout.alert_image_layout);
 	
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

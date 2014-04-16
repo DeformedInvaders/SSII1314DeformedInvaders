@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <VideoView
+        android:id="@+id/videoViewVideoAlert1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="horizontal"
+		android:gravity="center_horizontal">
+		
+		<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonVideoAlert1"
+            android:contentDescription="@string/desc_videolistalert_prev"
+            android:background="@drawable/icon_tool_prev" />
+                
+     	<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonVideoAlert2"
+            android:contentDescription="@string/desc_videolistalert_next"
+            android:background="@drawable/icon_tool_next" />
+        
+    </LinearLayout>
+
+</LinearLayout>

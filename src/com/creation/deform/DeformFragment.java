@@ -9,36 +9,35 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.alert.AudioAlert;
+import com.android.alert.RecordAlert;
 import com.android.view.OpenGLFragment;
-import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.lib.utils.FloatArray;
 import com.project.main.R;
 
 public class DeformFragment extends OpenGLFragment
 {
+	private OnDeformListener mListener;
 	private DeformGLSurfaceView canvas;
 	private Personaje personaje;
 
 	private DeformDataSaved dataSaved;
-	private TTipoMovimiento movimiento;
 
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 
 	/* Constructora */
 
-	public static final DeformFragment newInstance(Personaje p, TTipoMovimiento n)
+	public static final DeformFragment newInstance(OnDeformListener l, Personaje p)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(p, n);
+		fragment.setParameters(l, p);
 		return fragment;
 	}
 
-	private void setParameters(Personaje p, TTipoMovimiento n)
+	private void setParameters(OnDeformListener l, Personaje p)
 	{
+		mListener = l;
 		personaje = p;
-		movimiento = n;
 	}
 
 	/* Métodos Fragment */
@@ -267,7 +266,7 @@ public class DeformFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 
-			AudioAlert alert = new AudioAlert(getActivity(), R.string.text_audio_record_title, R.string.text_audio_record_description, R.string.text_button_yes, R.string.text_button_no, movimiento)
+			RecordAlert alert = new RecordAlert(getActivity(), R.string.text_audio_record_title, R.string.text_audio_record_description, R.string.text_button_yes, R.string.text_button_no)
 			{
 				@Override
 				public void onPossitiveButtonClick()
@@ -287,6 +286,18 @@ public class DeformFragment extends OpenGLFragment
 
 					reiniciarInterfaz();
 					actualizarInterfaz();
+				}
+
+				@Override
+				public void onStartRecording()
+				{
+					mListener.onStartRecording();
+				}
+
+				@Override
+				public void onStopRecording()
+				{
+					mListener.onStopRecording();
 				}
 			};
 

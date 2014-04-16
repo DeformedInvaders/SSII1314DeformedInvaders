@@ -12,12 +12,10 @@ public abstract class ChooseAlert extends WindowAlert
 
 	public ChooseAlert(Context context, int title, int textYes, int textNo, String[] list)
 	{
-		super(context, title);
+		super(context, title, false);
 
 		selected = -1;
 		lista = list;
-		
-		setCancelable(false);
 
 		setSingleChoiceItems(lista, selected, new DialogInterface.OnClickListener() {
 			@Override

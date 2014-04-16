@@ -16,9 +16,9 @@ import android.widget.PopupWindow;
 public abstract class WindowDialog implements OnTouchListener
 {
 	protected Context mContext;
+	private PopupWindow popupWindow;
 	
 	private View rootView;
-	private PopupWindow popupWindow;
 	private LayoutInflater layoutInflater;
 
 	/* Constructora */

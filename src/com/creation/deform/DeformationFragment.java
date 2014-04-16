@@ -18,8 +18,9 @@ import com.game.data.Personaje;
 import com.lib.utils.FloatArray;
 import com.project.main.R;
 import com.project.model.GamePreferences;
+import com.project.model.GameResources;
 
-public class DeformationFragment extends ViewPagerFragment
+public class DeformationFragment extends ViewPagerFragment implements OnDeformListener
 {
 	private AnimationFragmentListener mCallback;
 
@@ -47,6 +48,9 @@ public class DeformationFragment extends ViewPagerFragment
 	public interface AnimationFragmentListener
 	{
 		public void onAnimationReady(final Movimientos movimientos);
+		public void onAnimationStartRecording(TTipoMovimiento movimiento);
+		public void onAnimationStopRecording();
+		public void onAnimationDiscardRecording(TTipoMovimiento movimiento);
 	}
 
 	/* Métodos Fragment */
@@ -65,12 +69,13 @@ public class DeformationFragment extends ViewPagerFragment
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 		viewPager.setSwipeable(false);
 
-		viewPager.addView(DeformFragment.newInstance(personaje, TTipoMovimiento.Run), getString(R.string.title_animation_section_run));
-		viewPager.addView(DeformFragment.newInstance(personaje, TTipoMovimiento.Jump), getString(R.string.title_animation_section_jump));
-		viewPager.addView(DeformFragment.newInstance(personaje, TTipoMovimiento.Crouch), getString(R.string.title_animation_section_crouch));
-		viewPager.addView(DeformFragment.newInstance(personaje, TTipoMovimiento.Attack), getString(R.string.title_animation_section_attack));
+		TTipoMovimiento[] movimientos = TTipoMovimiento.values();
+		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
+		{
+			viewPager.addView(DeformFragment.newInstance(this, personaje), getString(movimientos[i].getTitle()));
+		}
 
-		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GamePreferences.VIDEO_DEFORM_HANDLES_PATH);
+		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GameResources.VIDEO_DEFORM_HANDLES_PATH);
 		
 		return rootView;
 	}
@@ -111,7 +116,7 @@ public class DeformationFragment extends ViewPagerFragment
 
 			if (!movimientos.isReady())
 			{
-				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_deform_undefined_description, GamePreferences.VIDEO_DEFORM_UNDEFINED_PATH, R.string.error_deform);
+				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_deform_undefined_description, GameResources.VIDEO_DEFORM_UNDEFINED_PATH, R.string.error_deform);
 			}
 			else
 			{
@@ -126,5 +131,25 @@ public class DeformationFragment extends ViewPagerFragment
 	public void onPageSelected(int position)
 	{
 		actualizarMovimientos();
+	}
+	
+	/* Métodos Abstractos OnDeformListener */
+
+	@Override
+	public void onStartRecording()
+	{
+		mCallback.onAnimationStartRecording(TTipoMovimiento.values()[viewPager.getPosition()]);
+	}
+
+	@Override
+	public void onStopRecording()
+	{
+		mCallback.onAnimationStopRecording();	
+	}
+
+	@Override
+	public void onDiscardRecording()
+	{
+		mCallback.onAnimationDiscardRecording(TTipoMovimiento.values()[viewPager.getPosition()]);	
 	}
 }
