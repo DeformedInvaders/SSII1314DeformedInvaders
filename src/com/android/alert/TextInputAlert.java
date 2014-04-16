@@ -12,13 +12,21 @@ public abstract class TextInputAlert extends WindowAlert
 
 	/* Constructora */
 
-	public TextInputAlert(Context context, int title, int messege, int textYes, int textNo)
+	public TextInputAlert(Context context, int title, int messege, int textYes, int textNo, boolean restringido)
 	{
 		super(context, title, false);
 
 		setMessage(messege);
 
-		setView(R.layout.alert_textinput_layout);
+		if (restringido)
+		{
+			setView(R.layout.alert_textinput_restricted_layout);
+		}
+		else
+		{
+			setView(R.layout.alert_textinput_layout);
+		}
+		
 		input = (EditText) findViewById(R.id.editTextInputTextAlert1);
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
@@ -38,16 +46,16 @@ public abstract class TextInputAlert extends WindowAlert
 		});
 	}
 
-	public TextInputAlert(Context context, int title, int messege, int text, int textYes, int textNo)
+	public TextInputAlert(Context context, int title, int messege, int text, int textYes, int textNo, boolean restringido)
 	{
-		this(context, title, messege, textYes, textNo);
+		this(context, title, messege, textYes, textNo, restringido);
 		
 		input.setText(text);
 	}
 	
-	public TextInputAlert(Context context, int title, int messege, String text, int textYes, int textNo)
+	public TextInputAlert(Context context, int title, int messege, String text, int textYes, int textNo, boolean restringido)
 	{
-		this(context, title, messege, textYes, textNo);
+		this(context, title, messege, textYes, textNo, restringido);
 		
 		input.setText(text);
 	}

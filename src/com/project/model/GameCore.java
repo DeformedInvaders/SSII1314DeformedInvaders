@@ -459,16 +459,34 @@ public abstract class GameCore
 
 	/* Métodos de modificación del AudioManager */
 	
+	public boolean reproducirSonidoTemp(TTipoMovimiento tipo)
+	{
+		if (internalManager.comprobarAudioTemp(tipo))
+		{
+			return soundPlayerManager.startPlaying(internalManager.cargarAudioTemp(tipo));
+		}
+		
+		return false;
+	}
+	
 	public boolean reproducirSonido(TTipoMovimiento tipo)
 	{
-		return soundPlayerManager.startPlaying(internalManager.cargarAudio(getPersonajeSeleccionado().getNombre(), tipo));
+		if (internalManager.comprobarAudio(getPersonajeSeleccionado().getNombre(), tipo))
+		{
+			return soundPlayerManager.startPlaying(internalManager.cargarAudio(getPersonajeSeleccionado().getNombre(), tipo));
+		}
+		
+		return false;
 	}
 	
 	public boolean reproducirSonido(TTipoMovimiento tipo, int indice)
 	{
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
-			return soundPlayerManager.startPlaying(internalManager.cargarAudio(listaPersonajes.get(indice).getNombre(), tipo));
+			if (internalManager.comprobarAudio(listaPersonajes.get(indice).getNombre(), tipo))
+			{
+				return soundPlayerManager.startPlaying(internalManager.cargarAudio(listaPersonajes.get(indice).getNombre(), tipo));
+			}
 		}
 		return false;
 	}

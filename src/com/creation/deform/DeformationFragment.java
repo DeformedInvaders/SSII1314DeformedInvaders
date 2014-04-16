@@ -20,7 +20,7 @@ import com.project.main.R;
 import com.project.model.GamePreferences;
 import com.project.model.GameResources;
 
-public class DeformationFragment extends ViewPagerFragment implements OnDeformListener
+public class DeformationFragment extends ViewPagerFragment implements OnDeformationListener
 {
 	private AnimationFragmentListener mCallback;
 
@@ -48,9 +48,10 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformLi
 	public interface AnimationFragmentListener
 	{
 		public void onAnimationReady(final Movimientos movimientos);
-		public void onAnimationStartRecording(TTipoMovimiento movimiento);
+		public void onAnimationStartRecording(final TTipoMovimiento movimiento);
 		public void onAnimationStopRecording();
-		public void onAnimationDiscardRecording(TTipoMovimiento movimiento);
+		public void onAnimationDiscardRecording(final TTipoMovimiento movimiento);
+		public void onAnimationPlaySound(final TTipoMovimiento movimiento);
 	}
 
 	/* Métodos Fragment */
@@ -151,5 +152,11 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformLi
 	public void onDiscardRecording()
 	{
 		mCallback.onAnimationDiscardRecording(TTipoMovimiento.values()[viewPager.getPosition()]);	
+	}
+
+	@Override
+	public void onPlaySound()
+	{
+		mCallback.onAnimationPlaySound(TTipoMovimiento.values()[viewPager.getPosition()]);
 	}
 }

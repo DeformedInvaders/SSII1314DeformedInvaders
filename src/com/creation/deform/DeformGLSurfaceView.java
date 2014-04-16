@@ -14,6 +14,7 @@ import com.project.model.GamePreferences;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
 {
+	private OnDeformListener mListener;
 	private DeformOpenGLRenderer renderer;
 
 	private Handler handler;
@@ -28,8 +29,10 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TEstadoDetector.MultiTouch);
 	}
 
-	public void setParameters(Personaje personaje, final DeformFragment fragmento)
+	public void setParameters(OnDeformListener listener, Personaje personaje)
 	{
+		mListener = listener;
+		
 		renderer = new DeformOpenGLRenderer(getContext(), personaje);
 		setRenderer(renderer);
 
@@ -47,8 +50,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 				else
 				{
 					renderer.seleccionarReposo();
-					fragmento.reiniciarInterfaz();
-					fragmento.actualizarInterfaz();
+					mListener.onAnimationFinished();
 
 					threadActivo = false;
 				}
@@ -120,6 +122,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 			renderer.selecionarPlay();
 			requestRender();
 
+			mListener.onPlaySound();
 			task.run();
 			threadActivo = true;
 		}

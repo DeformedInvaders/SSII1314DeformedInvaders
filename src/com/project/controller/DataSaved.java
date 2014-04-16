@@ -1,5 +1,6 @@
 package com.project.controller;
 
-public class DataSaved {
+public class DataSaved
+{
 
 }

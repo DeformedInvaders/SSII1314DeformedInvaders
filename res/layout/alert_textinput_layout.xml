@@ -8,7 +8,6 @@
         android:id="@+id/editTextInputTextAlert1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         android:inputType="text"
         android:ems="10" >
         

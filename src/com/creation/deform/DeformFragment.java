@@ -15,9 +15,9 @@ import com.game.data.Personaje;
 import com.lib.utils.FloatArray;
 import com.project.main.R;
 
-public class DeformFragment extends OpenGLFragment
+public class DeformFragment extends OpenGLFragment implements OnDeformListener
 {
-	private OnDeformListener mListener;
+	private OnDeformationListener mListener;
 	private DeformGLSurfaceView canvas;
 	private Personaje personaje;
 
@@ -27,14 +27,14 @@ public class DeformFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final DeformFragment newInstance(OnDeformListener l, Personaje p)
+	public static final DeformFragment newInstance(OnDeformationListener l, Personaje p)
 	{
 		DeformFragment fragment = new DeformFragment();
 		fragment.setParameters(l, p);
 		return fragment;
 	}
 
-	private void setParameters(OnDeformListener l, Personaje p)
+	private void setParameters(OnDeformationListener l, Personaje p)
 	{
 		mListener = l;
 		personaje = p;
@@ -49,7 +49,7 @@ public class DeformFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(personaje, this);
+		canvas.setParameters(this, personaje);
 
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
@@ -327,5 +327,20 @@ public class DeformFragment extends OpenGLFragment
 		}
 
 		return null;
+	}
+	
+	/* Métodos abstractos de OnDeformListener */
+
+	@Override
+	public void onPlaySound()
+	{
+		mListener.onPlaySound();
+	}
+
+	@Override
+	public void onAnimationFinished()
+	{
+		reiniciarInterfaz();
+		actualizarInterfaz();
 	}
 }

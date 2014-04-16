@@ -45,12 +45,13 @@ public abstract class StickerDialog extends WindowDialog
 		scroll.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 3 * imageHeight));
 		
 			LinearLayout layout = new LinearLayout(mContext);
-			layout.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, LayoutParams.WRAP_CONTENT));
+			layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			layout.setOrientation(LinearLayout.VERTICAL);
 			layout.setPadding(10, 0, 10, 0);
 			
 				TextView titulo = new TextView(mContext);
 				titulo.setText(tipo.getTitle());
+				titulo.setTextAppearance(mContext, R.style.Text_Section_Dialog_Style);
 			
 			layout.addView(titulo);
 		

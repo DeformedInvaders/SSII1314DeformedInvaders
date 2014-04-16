@@ -136,7 +136,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	{
 		if (core.actualizarNuevoPersonaje(movimientos))
 		{
-			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_save_character_title, R.string.text_save_character_description, R.string.text_button_yes, R.string.text_button_no) {
+			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_save_character_title, R.string.text_save_character_description, R.string.text_button_yes, R.string.text_button_no, true) {
 				@Override
 				public void onPossitiveButtonClick(String text)
 				{
@@ -162,7 +162,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	}
 	
 	@Override
-	public void onAnimationStartRecording(TTipoMovimiento movimiento)
+	public void onAnimationStartRecording(final TTipoMovimiento movimiento)
 	{
 		core.startRecording(movimiento);
 	}
@@ -174,9 +174,15 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	}
 
 	@Override
-	public void onAnimationDiscardRecording(TTipoMovimiento movimiento)
+	public void onAnimationDiscardRecording(final TTipoMovimiento movimiento)
 	{
 		core.discardRecording(movimiento);
+	}
+	
+	@Override
+	public void onAnimationPlaySound(final TTipoMovimiento movimiento)
+	{
+		core.reproducirSonidoTemp(movimiento);
 	}
 
 	// Métodos Character Selection Fragment
@@ -213,7 +219,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	@Override
 	public void onCharacterSelectionRenameCharacter(final int indice)
 	{
-		TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, R.string.text_button_rename, R.string.text_button_cancel) {
+		TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, R.string.text_button_rename, R.string.text_button_cancel, true) {
 			@Override
 			public void onPossitiveButtonClick(String text)
 			{

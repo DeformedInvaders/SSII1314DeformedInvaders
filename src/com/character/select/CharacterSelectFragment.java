@@ -190,7 +190,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 				final Bitmap bitmap = canvas.getCapturaPantalla();
 				String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getNombre() + " " + getString(R.string.text_social_create_character_final);
 
-				TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel) {
+				TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel, false) {
 					@Override
 					public void onPossitiveButtonClick(String text)
 					{						

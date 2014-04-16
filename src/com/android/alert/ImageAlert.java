@@ -40,10 +40,10 @@ public abstract class ImageAlert extends WindowAlert
 	{
 		super(context, title, false);
 
+		setView(R.layout.alert_image_layout);
+		
 		ImageView image = (ImageView) findViewById(R.id.imageViewImageAlert1);
 		image.setImageResource(idImage);
-		
-		setView(R.layout.alert_image_layout);
 	
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
