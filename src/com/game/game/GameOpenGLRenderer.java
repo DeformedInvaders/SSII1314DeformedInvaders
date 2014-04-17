@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 
+import com.android.view.BackgroundDataSaved;
 import com.android.view.OpenGLRenderer;
 import com.game.data.Background;
 import com.game.data.Entidad;
@@ -34,9 +35,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructura */
 
-	public GameOpenGLRenderer(Context context, Personaje p, InstanciaNivel l)
+	public GameOpenGLRenderer(Context context, int color, Personaje p, InstanciaNivel l)
 	{
-		super(context);
+		super(context, color);
 
 		personaje = p;
 		background = l.getFondoNivel();
@@ -277,7 +278,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	/* Métodos de Guardado de Información */
 
-	public void saveData()
+	public BackgroundDataSaved saveData()
 	{
 		// Personaje
 		personaje.descargarTextura(this);
@@ -288,5 +289,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		{
 			it.next().descargarTextura(this);
 		}
+		
+		return backgroundSaveData();
+	}
+	
+	public void restoreData(BackgroundDataSaved data)
+	{
+		backgroundRestoreData(data);
 	}
 }

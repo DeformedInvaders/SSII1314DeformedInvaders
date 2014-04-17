@@ -29,7 +29,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 
 	/* Constructora */
 
-	public OpenGLSurfaceView(Context context, AttributeSet attrs, TEstadoDetector estado)
+	public OpenGLSurfaceView(Context context, AttributeSet attrs, TEstadoDetector estado, boolean transparente)
 	{
 		super(context, attrs);
 
@@ -42,8 +42,11 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 		getHolder().setFormat(PixelFormat.RGBA_8888);
 		
 		// Activar Formato fondo transparente
-		setZOrderOnTop(true);
-
+		if (transparente)
+		{
+			setZOrderOnTop(true);
+		}
+		
 		// Crear Contexto OpenGL ES 1.0
 		setEGLContextClientVersion(1);
 	}

@@ -9,12 +9,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
+import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
 import com.lib.math.Intersector;
@@ -72,19 +72,17 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private Handle objetoVertice, objetoHandle, objetoHandleSeleccionado;
 
 	/* Textura */
-
-	private Bitmap bitmap;
-	private FloatArray coords;
-	private FloatBuffer bufferCoords;
-
+	private Textura textura;
+	private FloatBuffer coordsTextura;
+	
 	// Pegatinas
 	private Pegatinas pegatinas;
 
 	/* Constructora */
 
-	public DeformOpenGLRenderer(Context context, Personaje personaje)
+	public DeformOpenGLRenderer(Context context, int color, Personaje personaje)
 	{
-		super(context);
+		super(context, color);
 
 		estado = TEstadoDeform.Nada;
 		modoGrabar = false;
@@ -107,16 +105,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		reinciarHandlesSeleccionados();
 
 		// Textura
-		pegatinas = personaje.getTextura().getPegatinas();
+		textura = personaje.getTextura();
+		coordsTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getCoordTextura());
+		pegatinas = textura.getPegatinas();
 
-		bitmap = personaje.getTextura().getMapaBits().getBitmap();
-		coords = personaje.getTextura().getCoordTextura();
-
-		bufferCoords = BufferManager.construirBufferListaTriangulosRellenos(triangulos, coords);
-
-		objetoHandle = new Handle(20, POINTWIDTH);
-		objetoVertice = new Handle(20, POINTWIDTH / 2);
-		objetoHandleSeleccionado = new Handle(20, 2 * POINTWIDTH);
+		objetoHandle = new Handle(20, GamePreferences.POINT_WIDTH);
+		objetoVertice = new Handle(20, GamePreferences.POINT_WIDTH / 2);
+		objetoHandleSeleccionado = new Handle(20, 2 * GamePreferences.POINT_WIDTH);
 
 		// Deformador
 		deformator = new Deformator(verticesModificados, triangulos, handles, indiceHandles);
@@ -130,7 +125,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// Textura
-		cargarTexturaMalla(gl, bitmap, TTipoEntidad.Personaje);
+		textura.cargarTextura(gl, this, mContext, TTipoEntidad.Personaje);
 
 		// Pegatinas
 		pegatinas.cargarTexturas(gl, this, mContext, TTipoEntidad.Personaje, 0);
@@ -146,7 +141,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
 
-			dibujarPersonaje(gl, triangulosAnimacion, contornoAnimacion, bufferCoords, pegatinas, verticesAnimacion);
+			dibujarPersonaje(gl, triangulosAnimacion, contornoAnimacion, verticesAnimacion);
 
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
@@ -159,23 +154,23 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
 
-			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, bufferCoords, pegatinas, verticesModificados);
+			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, verticesModificados);
 
 			if (estado != TEstadoDeform.Deformar)
 			{
-				dibujarListaHandle(gl, Color.RED, objetoVertice, verticesModificados);
+				BufferManager.dibujarListaHandle(gl, Color.RED, objetoVertice, verticesModificados);
 			}
 
 			// Handles
 			if (handles.size > 0)
 			{
-				dibujarListaHandle(gl, Color.BLACK, objetoHandle, handles);
+				BufferManager.dibujarListaHandle(gl, Color.BLACK, objetoHandle, handles);
 			}
 
 			// Seleccionado
 			if (estado == TEstadoDeform.Deformar)
 			{
-				dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado, handleSeleccionado);
+				BufferManager.dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado, handleSeleccionado);
 			}
 
 			// Centrado de Marco
@@ -183,13 +178,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatBuffer coordTriangulos, Pegatinas pegatinas, FloatArray vertices)
+	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatArray vertices)
 	{
 		// Textura
-		dibujarTexturaMalla(gl, triangulos, coordTriangulos);
+		textura.dibujar(gl, this, triangulos, coordsTextura, TTipoEntidad.Personaje);
 
 		// Contorno
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, contorno);
+		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
 
 		// Pegatinas
 		pegatinas.dibujar(gl, this, vertices, TTipoEntidad.Personaje, 0);
@@ -439,6 +434,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 		deformator.moverHandles(listaHandlesAnimacion.get(listaHandlesAnimacion.size() - 1), frame);
 		listaVerticesAnimacion.add(frame.clone());
+		
+		//FIXME Comprobar comportamiento de algoritmo.
+		android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
+		android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
+		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
+		android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
 	}
 
 	@Override
@@ -593,7 +594,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public DeformDataSaved saveData()
 	{
 		// Textura
-		descargarTexturaMalla(TTipoEntidad.Personaje);
+		textura.descargarTextura(this, TTipoEntidad.Personaje);
 		
 		// Pegatinas
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);

@@ -59,7 +59,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	private ShortArray triangulos;
 
-	private int color;
+	private int colorPintura;
 
 	// Texturas
 	private TEstadoCaptura estadoCaptura;
@@ -75,9 +75,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructora */
 	
-	public PaintOpenGLRenderer(Context context, Personaje personaje)
+	public PaintOpenGLRenderer(Context context, int color, Personaje personaje)
 	{
-		super(context);
+		super(context, color);
 
 		estado = TEstadoPaint.Nada;
 
@@ -103,7 +103,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		listaLineas = new ArrayList<Polilinea>();
 		lineaActual = null;
 
-		color = Color.WHITE;
+		colorPintura = Color.WHITE;
 
 		colorPaleta = Color.RED;
 		sizeLinea = 6;
@@ -113,7 +113,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		estadoCaptura = TEstadoCaptura.Nada;
 
-		objetoVertice = new Handle(20, POINTWIDTH);
+		objetoVertice = new Handle(20, GamePreferences.POINT_WIDTH);
 	}
 
 	/* Métodos Renderer */
@@ -158,7 +158,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		centrarPersonajeEnMarcoInicio(gl);
 
 		// Esqueleto
-		dibujarBuffer(gl, GL10.GL_TRIANGLES, SIZELINE, color, bufferVertices);
+		BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, colorPintura, bufferVertices);
 
 		gl.glPushMatrix();
 		
@@ -167,14 +167,14 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Detalles
 			if (lineaActual != null)
 			{
-				dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
+				BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
 			}
 	
 			Iterator<Polilinea> it = listaLineas.iterator();
 			while (it.hasNext())
 			{
 				Polilinea polilinea = it.next();
-				dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
+				BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
 			}
 
 		gl.glPopMatrix();
@@ -182,7 +182,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if (estado != TEstadoPaint.Captura)
 		{
 			// Contorno
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferContorno);
+			BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
 
 			// Dibujar Pegatinas
 			pegatinas.dibujar(gl, this, vertices, TTipoEntidad.Personaje, 0);
@@ -190,7 +190,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Handles
 			if (estado == TEstadoPaint.Pegatinas)
 			{
-				dibujarListaHandle(gl, Color.BLACK, objetoVertice, vertices);
+				BufferManager.dibujarListaHandle(gl, Color.BLACK, objetoVertice, vertices);
 			}
 		}
 
@@ -215,7 +215,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		siguientes.clear();
 
 		estado = TEstadoPaint.Nada;
-		color = Color.WHITE;
+		colorPintura = Color.WHITE;
 		sizeLinea = 6;
 
 		return true;
@@ -291,9 +291,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		if (GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
 		{
-			if (colorPaleta != color)
+			if (colorPaleta != colorPintura)
 			{
-				color = colorPaleta;
+				colorPintura = colorPaleta;
 
 				anteriores.push(new Accion(colorPaleta));
 				siguientes.clear();
@@ -476,7 +476,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	private void actualizarEstado(Stack<Accion> pila)
 	{
-		color = Color.WHITE;
+		colorPintura = Color.WHITE;
 		listaLineas = new ArrayList<Polilinea>();
 		
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
@@ -488,7 +488,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			Accion accion = it.next();
 			if (accion.isTipoColor())
 			{
-				color = accion.getColor();
+				colorPintura = accion.getColor();
 			}
 			else if (accion.isTipoPolilinea())
 			{

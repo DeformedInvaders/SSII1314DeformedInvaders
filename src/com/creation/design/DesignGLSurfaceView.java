@@ -1,6 +1,7 @@
 package com.creation.design;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
@@ -16,10 +17,10 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 
 	public DesignGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.SimpleTouch);
+		super(context, attrs, TEstadoDetector.SimpleTouch, false);
 
 		// Asignar Renderer al GLSurfaceView
-		renderer = new DesignOpenGLRenderer(getContext());
+		renderer = new DesignOpenGLRenderer(getContext(), Color.WHITE);
 		setRenderer(renderer);
 	}
 

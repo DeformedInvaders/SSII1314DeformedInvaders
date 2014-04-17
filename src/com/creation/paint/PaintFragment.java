@@ -162,8 +162,7 @@ public class PaintFragment extends OpenGLFragment
 	public void onResume()
 	{
 		super.onResume();
-		canvas.onResume();
-
+		
 		if (dataSaved != null)
 		{
 			canvas.restoreData(dataSaved);
@@ -171,6 +170,8 @@ public class PaintFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 		}
+		
+		canvas.onResume();
 	}
 
 	@Override

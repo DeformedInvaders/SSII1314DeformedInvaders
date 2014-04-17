@@ -1,6 +1,7 @@
 package com.creation.paint;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
@@ -18,13 +19,13 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 
 	public PaintGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.SimpleTouch);
+		super(context, attrs, TEstadoDetector.SimpleTouch, false);
 	}
 
 	public void setParameters(Personaje personaje)
 	{
 		// Asignar Renderer al GLSurfaceView
-		renderer = new PaintOpenGLRenderer(getContext(), personaje);
+		renderer = new PaintOpenGLRenderer(getContext(), Color.WHITE, personaje);
 		setRenderer(renderer);
 	}
 
@@ -179,5 +180,6 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public void restoreData(PaintDataSaved data)
 	{
 		renderer.restoreData(data);
+		requestRender();
 	}
 }

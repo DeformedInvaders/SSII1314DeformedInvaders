@@ -3,6 +3,7 @@ package com.creation.deform;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
 
@@ -26,14 +27,14 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 
 	public DeformGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.MultiTouch);
+		super(context, attrs, TEstadoDetector.MultiTouch, false);
 	}
 
 	public void setParameters(OnDeformListener listener, Personaje personaje)
 	{
 		mListener = listener;
 		
-		renderer = new DeformOpenGLRenderer(getContext(), personaje);
+		renderer = new DeformOpenGLRenderer(getContext(), Color.WHITE, personaje);
 		setRenderer(renderer);
 
 		handler = new Handler();

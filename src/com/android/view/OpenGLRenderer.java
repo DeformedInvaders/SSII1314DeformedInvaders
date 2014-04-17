@@ -15,7 +15,6 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 
-import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.creation.data.TTipoSticker;
 import com.game.data.Dimensiones;
@@ -38,8 +37,7 @@ public abstract class OpenGLRenderer implements Renderer
 	private int screenHeight, screenWidth;
 
 	// Parámetros de la Escena
-	protected static final int SIZELINE = 3;
-	protected static final int POINTWIDTH = 7;
+	private int colorFondo;
 
 	// Parámetros de Texturas
 	private static final int POS_TEXTURE_BACKGROUND = 0;
@@ -75,9 +73,11 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* Constructoras */
 
-	public OpenGLRenderer(Context context)
+	public OpenGLRenderer(Context context, int color)
 	{
 		mContext = context;
+		
+		colorFondo = color;
 
 		// Marcos
 		actualizarMarcos();
@@ -85,7 +85,6 @@ public abstract class OpenGLRenderer implements Renderer
 		// Fondo
 		indiceTexturaFondo = new int[GamePreferences.NUM_TYPE_BACKGROUNDS];
 		dibujarFondo = new boolean[GamePreferences.NUM_TYPE_BACKGROUNDS];
-		posFondo = new float[GamePreferences.NUM_TYPE_BACKGROUNDS];
 
 		fondoFinalFijado = false;
 
@@ -131,7 +130,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glShadeModel(GL10.GL_SMOOTH);
 
 		// Color de Fondo Blanco
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		gl.glClearColor(Color.red(colorFondo), Color.green(colorFondo), Color.blue(colorFondo), Color.alpha(colorFondo));
 
 		// Limpiar Buffer de Profundidad
 		gl.glClearDepthf(1.0f);
@@ -182,15 +181,15 @@ public abstract class OpenGLRenderer implements Renderer
 
 		// Marco
 		actualizarMarcos();
-
-		// Reiniciar la Matriz de ModeladoVista
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
-
+		
 		// Fondo
 		cargarTexturaFondo(gl);
 
 		actualizarTexturaFondo();
+
+		// Reiniciar la Matriz de ModeladoVista
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
 	}
 
 	@Override
@@ -202,6 +201,7 @@ public abstract class OpenGLRenderer implements Renderer
 		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
 
 		// Limpiar Buffer de Color y de Profundidad
+		gl.glClearColor(Color.red(colorFondo), Color.green(colorFondo), Color.blue(colorFondo), Color.alpha(colorFondo));
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		// Activar Matriz de ModeladoVista
@@ -292,61 +292,27 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void trasladarVertices(float vx, float vy, FloatArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
-		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
-
-			vertices.set(i, x + vx);
-			vertices.set(i + 1, y + vy);
-
-			i = i + 2;
-		}
+		BufferManager.trasladarVertices(vx, vy, vertices);
 	}
 
 	protected void escalarVertices(float fx, float fy, float cx, float cy, FloatArray vertices)
 	{
-		trasladarVertices(-cx, -cy, vertices);
-		escalarVertices(fx, fy, vertices);
-		trasladarVertices(cx, cy, vertices);
+		BufferManager.escalarVertices(fx, fy, cx, cy, vertices);
 	}
 
 	protected void escalarVertices(float fx, float fy, FloatArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
-		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
-
-			vertices.set(i, x * fx);
-			vertices.set(i + 1, y * fy);
-
-			i = i + 2;
-		}
+		BufferManager.escalarVertices(fx, fy, vertices);
 	}
 
 	protected void rotarVertices(float ang, float cx, float cy, FloatArray vertices)
 	{
-		trasladarVertices(-cx, -cy, vertices);
-		rotarVertices(ang, vertices);
-		trasladarVertices(cx, cy, vertices);
+		BufferManager.rotarVertices(ang, cx, cy, vertices);
 	}
 
 	protected void rotarVertices(float ang, FloatArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
-		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
-
-			vertices.set(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)));
-			vertices.set(i + 1, (float) (x * Math.sin(ang) + y * Math.cos(ang)));
-
-			i = i + 2;
-		}
+		BufferManager.rotarVertices(ang, vertices);
 	}
 
 	/* Métodos de Copia de Seguridad de la Cámara */
@@ -441,7 +407,7 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
+				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
 	
 			gl.glPopMatrix();
 	
@@ -457,10 +423,10 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(0, marcoAlturaLateral, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
+				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
 		
 				gl.glTranslatef(marcoAnchuraLateral + marcoAnchuraInterior, 0, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
+				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
 	
 			gl.glPopMatrix();
 
@@ -475,10 +441,10 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 			
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
+				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 				gl.glTranslatef(0, marcoAlturaLateral + marcoAnchuraInterior, 0);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
+				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 			gl.glPopMatrix();
 
@@ -593,93 +559,6 @@ public abstract class OpenGLRenderer implements Renderer
 		return buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_HANDLES);
 	}
 
-	/* Métodos de Pintura en la Tubería Gráfica */
-
-	// Pintura de un Buffer de Puntos
-	protected void dibujarBuffer(GL10 gl, int type, int size, int color, FloatBuffer bufferPuntos)
-	{
-		gl.glColor4f(Color.red(color) / 255.0f, Color.green(color) / 255.0f, Color.blue(color) / 255.0f, Color.alpha(color) / 255.0f);
-		gl.glFrontFace(GL10.GL_CW);
-
-		if (type == GL10.GL_POINTS)
-		{
-			gl.glPointSize(size);
-		}
-		else
-		{
-			gl.glLineWidth(size);
-		}
-
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
-
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	}
-
-	public void dibujarBuffer(GL10 gl, int color, FloatBuffer bufferPuntos)
-	{
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, color, bufferPuntos);
-	}
-
-	// Pintura de una Lista de Handles
-	protected void dibujarListaIndiceHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
-	{
-		gl.glPushMatrix();
-
-		int i = 0;
-		while (i < posiciones.size)
-		{
-			float estado = posiciones.get(i + 1);
-
-			if (estado == 1)
-			{
-				float x = posiciones.get(i + 2);
-				float y = posiciones.get(i + 3);
-				float z = 0.0f;
-
-				gl.glPushMatrix();
-				gl.glTranslatef(x, y, z);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle.getBufferRelleno());
-				
-				gl.glTranslatef(0.0f, 0.0f, 1.0f);
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE / 2, Color.WHITE, handle.getBufferContorno());
-				
-				gl.glPopMatrix();
-			}
-
-			i = i + 4;
-		}
-
-		gl.glPopMatrix();
-	}
-
-	// Pintura de una Lista de Handles
-	protected void dibujarListaHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
-	{
-		gl.glPushMatrix();
-
-		int i = 0;
-		while (i < posiciones.size)
-		{
-			float x = posiciones.get(i);
-			float y = posiciones.get(i + 1);
-			float z = 0.0f;
-
-			gl.glPushMatrix();
-			gl.glTranslatef(x, y, z);
-			dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, SIZELINE, color, handle.getBufferRelleno());
-			
-			gl.glTranslatef(0.0f, 0.0f, 1.0f);
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE / 2, Color.WHITE, handle.getBufferContorno());
-			gl.glPopMatrix();
-
-			i = i + 2;
-		}
-
-		gl.glPopMatrix();
-	}
-
 	/* Métodos de Construcción de Texturas */
 
 	// Métodos de Gestión de posición de Texturas
@@ -763,21 +642,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		Bitmap textura = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-
-			gl.glGenTextures(1, nombreTexturas, posTextura);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
-	
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-	
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, textura, 0);
-
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-
-		cargadaTextura[posTextura] = true;
-
-		textura.recycle();
+		cargarTextura(gl, textura, posTextura);
 	}
 
 	private void descargarTextura(int posTextura)
@@ -979,13 +844,27 @@ public abstract class OpenGLRenderer implements Renderer
 			}
 		}
 
-		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
+		if (posFondo == null)
 		{
-			posFondo[i] = i * screenWidth;
+			posFondo = new float[GamePreferences.NUM_TYPE_BACKGROUNDS];
+			
+			for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
+			{
+				posFondo[i] = i * screenWidth;
+			}
+	
+			posFondo[GamePreferences.NUM_TYPE_BACKGROUNDS - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
 		}
-
-		posFondo[GamePreferences.NUM_TYPE_BACKGROUNDS - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
 	}
+	
+	private void descargarTexturaFondo()
+	{
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
+		{
+			descargarTextura(POS_TEXTURE_BACKGROUND + i);
+		}
+	}
+	 
 
 	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
 	{
@@ -1066,5 +945,21 @@ public abstract class OpenGLRenderer implements Renderer
 				}
 			}
 		}
+	}
+	
+	/* Métodos de Guardado de Información */
+	
+	protected BackgroundDataSaved backgroundSaveData()
+	{		
+		descargarTexturaFondo();
+		
+		return new BackgroundDataSaved(indiceTexturaFondo, posFondo, dibujarFondo);
+	}
+
+	protected void backgroundRestoreData(BackgroundDataSaved data)
+	{		
+		indiceTexturaFondo = data.getIndiceTexturaFondo();
+		posFondo = data.getPosFondo();
+		dibujarFondo = data.getDibujarFondo();
 	}
 }

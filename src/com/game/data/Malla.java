@@ -10,7 +10,6 @@ import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
-import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
 import com.lib.opengl.BufferManager;
@@ -40,83 +39,102 @@ public abstract class Malla extends Entidad
 	protected FloatBuffer bufferContornoAnimacion;
 
 	// Texturas
-	private MapaBits mapaBits;
-	private FloatArray coords;
-	private FloatBuffer bufferCoords;
+	private Textura textura;
+	private FloatBuffer coordTextura;
 
 	// Pegatinas
 	private Pegatinas pegatinas;
 
 	protected float posicionX, posicionY;
+	protected boolean esqueletoReady, texturaReady, movimientosReady;
 
 	/* Métodos abstractos de Entidad */
 
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		// Textura
-		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipo);
-
-		// Pegatinas
-		pegatinas.cargarTexturas(gl, renderer, context, tipo, id);
+		if (texturaReady)
+		{
+			// Textura
+			textura.cargarTextura(gl, renderer, context, tipo);
+	
+			// Pegatinas
+			pegatinas.cargarTexturas(gl, renderer, context, tipo, id);
+		}
 	}
 
 	@Override
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
-		// Textura
-		renderer.descargarTexturaMalla(tipo);
-
-		// Pegatinas
-		pegatinas.descargarTextura(renderer, tipo, id);
+		if (texturaReady)
+		{
+			// Textura
+			textura.descargarTextura(renderer, tipo);
+	
+			// Pegatinas
+			pegatinas.descargarTextura(renderer, tipo, id);
+		}
 	}
 
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		gl.glPushMatrix();
-
-			gl.glTranslatef(posicionX, posicionY, 0.0f);
+		if (esqueletoReady && texturaReady && movimientosReady)
+		{
+			gl.glPushMatrix();
 	
-			// Textura
-			renderer.dibujarTexturaMalla(gl, bufferTriangulosAnimacion, bufferCoords, tipo);
+				gl.glTranslatef(posicionX, posicionY, 0.0f);
+		
+				// Textura
+				textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipo);
+		
+				// Contorno
+				BufferManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
+		
+				// Pegatinas
+				pegatinas.dibujar(gl, renderer, verticesAnimacion, tipo, id);
 	
-			// Contorno
-			renderer.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
-	
-			// Pegatinas
-			pegatinas.dibujar(gl, renderer, verticesAnimacion, tipo, id);
-
-		gl.glPopMatrix();
+			gl.glPopMatrix();
+		}
 	}
 
 	/* Métodos de Animación */
 
 	protected void iniciar()
 	{
-		posicionY = 0.0f;
-
-		posicionAnimacion = 0;
-		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-		bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-		bufferContornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		if (movimientosReady)
+		{
+			posicionY = 0.0f;
+	
+			posicionAnimacion = 0;
+			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
+			bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
+			bufferContornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		}
 	}
 
 	public void reposo()
 	{
-		verticesAnimacion = vertices;
-		bufferTriangulosAnimacion = bufferTriangulos;
-		bufferContornoAnimacion = bufferContorno;
+		if (movimientosReady)
+		{
+			verticesAnimacion = vertices;
+			bufferTriangulosAnimacion = bufferTriangulos;
+			bufferContornoAnimacion = bufferContorno;
+		}
 	}
 
 	public boolean animar()
 	{ 
-		verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
-		BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
-		posicionAnimacion++;
-
-		return posicionAnimacion == listaVerticesAnimacion.size() - 1;
+		if (movimientosReady)
+		{
+			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
+			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
+			posicionAnimacion++;
+	
+			return posicionAnimacion == listaVerticesAnimacion.size() - 1;
+		}
+		return false;
 	}
 
 	/* Métodos de Modificación de Información */
@@ -129,18 +147,20 @@ public abstract class Malla extends Entidad
 
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 		bufferTriangulos = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
+		
+		esqueletoReady = true;
 	}
 
 	public void setTextura(Textura t)
 	{
-		mapaBits = t.getMapaBits();
-		pegatinas = t.getPegatinas();
-		coords = t.getCoordTextura();
+		textura = t;
+		pegatinas = textura.getPegatinas();
+		coordTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getCoordTextura());
 
-		width = mapaBits.getWidth();
-		height = mapaBits.getHeight();
-
-		bufferCoords = BufferManager.construirBufferListaTriangulosRellenos(triangulos, coords);
+		width = textura.getWidth();
+		height = textura.getHeight();
+		
+		texturaReady = true;
 	}
 
 	public void setNombre(String n)
@@ -150,24 +170,34 @@ public abstract class Malla extends Entidad
 
 	/* Métodos de Obtención de Información */
 
+	public boolean isEsqueletoReady()
+	{
+		return esqueletoReady;
+	}
+	
+	public boolean isTexturaReady()
+	{
+		return texturaReady;
+	}
+	
+	public boolean isMovimientosReady()
+	{
+		return movimientosReady;
+	}
+	
 	public Esqueleto getEsqueleto()
 	{ 
-		if (contorno == null || vertices == null || triangulos == null)
+		if(isEsqueletoReady())
 		{
-			return null;
+			return new Esqueleto(contorno, vertices, triangulos);
 		}
 		
-		return new Esqueleto(contorno, vertices, triangulos);
+		return null;
 	}
 
 	public Textura getTextura()
 	{
-		if (mapaBits == null || coords == null || pegatinas == null)
-		{
-			return null;
-		}
-		
-		return new Textura(mapaBits, coords, pegatinas);
+		return textura;
 	}
 
 	public String getNombre()

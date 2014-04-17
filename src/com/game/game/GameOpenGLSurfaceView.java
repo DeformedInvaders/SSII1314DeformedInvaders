@@ -1,10 +1,12 @@
 package com.game.game;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
+import com.android.view.BackgroundDataSaved;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
@@ -29,7 +31,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public GameOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.GameDetectors);
+		super(context, attrs, TEstadoDetector.GameDetectors, true);
 
 		animacionFinalizada = true;
 		contadorCiclos = 0;
@@ -39,7 +41,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		mListener = listener;
 
-		renderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
+		renderer = new GameOpenGLRenderer(getContext(), Color.argb(0, 0, 0, 0), personaje, nivel);
 		setRenderer(renderer);
 
 		handler = new Handler();
@@ -188,8 +190,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	/* Métodos de Guardado de Información */
 
-	public void saveData()
+	public BackgroundDataSaved saveData()
 	{
-		renderer.saveData();
+		return renderer.saveData();
+	}
+	
+	public void restoreData(BackgroundDataSaved data)
+	{
+		renderer.restoreData(data);
+		requestRender();
 	}
 }

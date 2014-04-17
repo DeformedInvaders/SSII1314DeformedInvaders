@@ -36,6 +36,8 @@ public class Pegatinas implements Serializable
 		}
 	}
 	
+	/* Métodos de representación en renderer */
+	
 	public void cargarTexturas(GL10 gl, OpenGLRenderer renderer, Context context, TTipoEntidad tipo, int id)
 	{
 		TTipoSticker[] tipoPegatinas = TTipoSticker.values();

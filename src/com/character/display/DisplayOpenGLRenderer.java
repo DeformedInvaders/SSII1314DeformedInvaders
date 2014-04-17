@@ -25,9 +25,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructura */
 
-	public DisplayOpenGLRenderer(Context context)
+	public DisplayOpenGLRenderer(Context context, int color)
 	{
-		super(context);
+		super(context, color);
 
 		personajeCargado = false;
 
@@ -35,9 +35,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TEstadoCaptura.Nada;
 	}
 
-	public DisplayOpenGLRenderer(Context context, Personaje p)
+	public DisplayOpenGLRenderer(Context context, int color, Personaje p)
 	{
-		super(context);
+		super(context, color);
 
 		personajeCargado = true;
 		personaje = p;

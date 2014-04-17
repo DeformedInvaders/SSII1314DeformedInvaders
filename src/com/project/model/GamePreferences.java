@@ -8,6 +8,10 @@ import com.game.select.TTipoLevel;
 
 public class GamePreferences
 {
+	// OpenGL
+	public static final int SIZE_LINE = 3;
+	public static final int POINT_WIDTH = 7;
+	
 	// Multitouch
 	public static final int NUM_HANDLES = 10;
 	

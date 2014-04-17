@@ -4,8 +4,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import android.graphics.Color;
+
+import com.creation.data.Handle;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
+import com.project.model.GamePreferences;
 
 public class BufferManager
 {
@@ -236,5 +242,153 @@ public class BufferManager
 
 			j++;
 		}
+	}
+	
+	/* Métodos de Transformación de Puntos */
+	
+	public static void trasladarVertices(float vx, float vy, FloatArray vertices)
+	{
+		int i = 0;
+		while (i < vertices.size)
+		{
+			float x = vertices.get(i);
+			float y = vertices.get(i + 1);
+
+			vertices.set(i, x + vx);
+			vertices.set(i + 1, y + vy);
+
+			i = i + 2;
+		}
+	}
+
+	public static void escalarVertices(float fx, float fy, float cx, float cy, FloatArray vertices)
+	{
+		trasladarVertices(-cx, -cy, vertices);
+		escalarVertices(fx, fy, vertices);
+		trasladarVertices(cx, cy, vertices);
+	}
+
+	public static void escalarVertices(float fx, float fy, FloatArray vertices)
+	{
+		int i = 0;
+		while (i < vertices.size)
+		{
+			float x = vertices.get(i);
+			float y = vertices.get(i + 1);
+
+			vertices.set(i, x * fx);
+			vertices.set(i + 1, y * fy);
+
+			i = i + 2;
+		}
+	}
+
+	public static void rotarVertices(float ang, float cx, float cy, FloatArray vertices)
+	{
+		trasladarVertices(-cx, -cy, vertices);
+		rotarVertices(ang, vertices);
+		trasladarVertices(cx, cy, vertices);
+	}
+
+	public static void rotarVertices(float ang, FloatArray vertices)
+	{
+		int i = 0;
+		while (i < vertices.size)
+		{
+			float x = vertices.get(i);
+			float y = vertices.get(i + 1);
+
+			vertices.set(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)));
+			vertices.set(i + 1, (float) (x * Math.sin(ang) + y * Math.cos(ang)));
+
+			i = i + 2;
+		}
+	}
+	
+	/* Métodos de Pintura en la Tubería Gráfica */
+
+	// Pintura de un Buffer de Puntos
+	public static void dibujarBuffer(GL10 gl, int type, int size, int color, FloatBuffer bufferPuntos)
+	{
+		gl.glColor4f(Color.red(color) / 255.0f, Color.green(color) / 255.0f, Color.blue(color) / 255.0f, Color.alpha(color) / 255.0f);
+		gl.glFrontFace(GL10.GL_CW);
+
+		if (type == GL10.GL_POINTS)
+		{
+			gl.glPointSize(size);
+		}
+		else
+		{
+			gl.glLineWidth(size);
+		}
+
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
+
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+	}
+	
+	public static void dibujarBuffer(GL10 gl, int color, FloatBuffer bufferPuntos)
+	{
+		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, color, bufferPuntos);
+	}
+
+	// Pintura de una Lista de Handles
+	public static void dibujarListaIndiceHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
+	{
+		gl.glPushMatrix();
+
+		int i = 0;
+		while (i < posiciones.size)
+		{
+			float estado = posiciones.get(i + 1);
+
+			if (estado == 1)
+			{
+				float x = posiciones.get(i + 2);
+				float y = posiciones.get(i + 3);
+				float z = 0.0f;
+
+				gl.glPushMatrix();
+				gl.glTranslatef(x, y, z);
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, color, handle.getBufferRelleno());
+				
+				gl.glTranslatef(0.0f, 0.0f, 1.0f);
+				dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());
+				
+				gl.glPopMatrix();
+			}
+
+			i = i + 4;
+		}
+
+		gl.glPopMatrix();
+	}
+
+	// Pintura de una Lista de Handles
+	public static void dibujarListaHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
+	{
+		gl.glPushMatrix();
+
+		int i = 0;
+		while (i < posiciones.size)
+		{
+			float x = posiciones.get(i);
+			float y = posiciones.get(i + 1);
+			float z = 0.0f;
+
+			gl.glPushMatrix();
+			gl.glTranslatef(x, y, z);
+			dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, color, handle.getBufferRelleno());
+			
+			gl.glTranslatef(0.0f, 0.0f, 1.0f);
+			dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());
+			gl.glPopMatrix();
+
+			i = i + 2;
+		}
+
+		gl.glPopMatrix();
 	}
 }

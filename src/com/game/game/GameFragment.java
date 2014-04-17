@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.view.BackgroundDataSaved;
 import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
@@ -34,6 +35,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	private ImageView[] imagenVidas;
 
 	private boolean gamePaused;
+	
+	BackgroundDataSaved data;
 
 	/* Constructora */
 
@@ -124,15 +127,21 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	public void onResume()
 	{
 		super.onResume();
+		
+		if (data != null)
+		{
+			canvas.restoreData(data);
+		}
+		
 		canvas.onResume();
 	}
 
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-		canvas.saveData();
+		super.onPause();		
 		canvas.onPause();
+		data = canvas.saveData();
 	}
 
 	/* Métodos abstractos de OpenGLFragment */

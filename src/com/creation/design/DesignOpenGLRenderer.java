@@ -33,9 +33,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructora */
 
-	public DesignOpenGLRenderer(Context context)
+	public DesignOpenGLRenderer(Context context, int color)
 	{
-		super(context);
+		super(context, color);
 
 		estado = TEstadoDesign.Dibujando;
 
@@ -57,11 +57,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 					// Centrado de Marco
 					centrarPersonajeEnMarcoInicio(gl);
 					
-					dibujarBuffer(gl, GL10.GL_POINTS, POINTWIDTH, Color.RED, bufferPoligono);
+					BufferManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoligono);
 	
 					if (puntos.size > 2)
 					{
-						dibujarBuffer(gl, GL10.GL_LINE_LOOP, SIZELINE, Color.BLACK, bufferPoligono);
+						BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferPoligono);
 					}
 					
 					// Centrado de Marco
@@ -78,7 +78,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				// Centrado de Marco
 				centrarPersonajeEnMarcoInicio(gl);
 				
-				dibujarBuffer(gl, GL10.GL_LINES, SIZELINE, Color.BLACK, bufferMalla);
+				BufferManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferMalla);
 				
 				// Centrado de Marco
 				centrarPersonajeEnMarcoFinal(gl);

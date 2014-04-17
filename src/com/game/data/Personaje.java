@@ -92,16 +92,19 @@ public class Personaje extends Malla
 	{
 		boolean finAnimacion = super.animar();
 		
-		if (estado == TTipoMovimiento.Jump)
+		if (movimientosReady)
 		{
-			if (posicionAnimacion <= listaVerticesAnimacion.size() / 2)
+			if (estado == TTipoMovimiento.Jump)
 			{
-				posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER;
-			}
-			else
-			{
-				posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER;
-			}
+				if (posicionAnimacion <= listaVerticesAnimacion.size() / 2)
+				{
+					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER;
+				}
+				else
+				{
+					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER;
+				}
+		}
 		}
 
 		return finAnimacion;
@@ -121,26 +124,35 @@ public class Personaje extends Malla
 
 	public void mover()
 	{
-		estado = TTipoMovimiento.Run;
-		listaVerticesAnimacion = movimientos.get(estado);
-		
-		iniciar();
+		if (movimientosReady)
+		{
+			estado = TTipoMovimiento.Run;
+			listaVerticesAnimacion = movimientos.get(estado);
+			
+			iniciar();
+		}
 	}
 
 	public void saltar()
 	{
-		estado = TTipoMovimiento.Jump;
-		listaVerticesAnimacion = movimientos.get(estado);
-		
-		iniciar();
+		if (movimientosReady)
+		{
+			estado = TTipoMovimiento.Jump;
+			listaVerticesAnimacion = movimientos.get(estado);
+			
+			iniciar();
+		}
 	}
 
 	public void agachar()
 	{
-		estado = TTipoMovimiento.Crouch;
-		listaVerticesAnimacion = movimientos.get(estado);
-		
-		iniciar();
+		if (movimientosReady)
+		{
+			estado = TTipoMovimiento.Crouch;
+			listaVerticesAnimacion = movimientos.get(estado);
+			
+			iniciar();
+		}
 	}
 
 	public void atacar()
@@ -187,7 +199,8 @@ public class Personaje extends Malla
 	public void setMovimientos(Movimientos m)
 	{
 		movimientos = m;
-
+		movimientosReady = true;
+		
 		reposo();
 	}
 	
