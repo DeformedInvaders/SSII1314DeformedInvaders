@@ -913,18 +913,26 @@ public abstract class OpenGLRenderer implements Renderer
 		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TYPE_BACKGROUNDS - 1;
 
 		// Activado de Último Fondo
-		if (posFondo[lastFondo] <= screenWidth)
+		if (posFondo[lastFondo] >= screenWidth - GamePreferences.DIST_MOVIMIENTO_BACKGROUND && posFondo[lastFondo] <= screenWidth + GamePreferences.DIST_MOVIMIENTO_BACKGROUND)
 		{
 			dibujarFondo[lastFondo] = true;
-
-			if (posFondo[lastFondo] <= 0.0f)
+			
+			for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
 			{
-				fondoFinalFijado = true;
-
-				for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
+				if (posFondo[i] > screenWidth)
 				{
 					dibujarFondo[i] = false;
 				}
+			}
+		}
+		
+		if (posFondo[lastFondo] <= 0.0f)
+		{
+			fondoFinalFijado = true;
+
+			for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS - 1; i++)
+			{
+				dibujarFondo[i] = false;
 			}
 		}
 
@@ -941,7 +949,7 @@ public abstract class OpenGLRenderer implements Renderer
 			{
 				if (posFondo[i] <= -screenWidth)
 				{
-					posFondo[i] = screenWidth;
+					posFondo[i] = (GamePreferences.NUM_TYPE_BACKGROUNDS - 2) * screenWidth;
 				}
 			}
 		}

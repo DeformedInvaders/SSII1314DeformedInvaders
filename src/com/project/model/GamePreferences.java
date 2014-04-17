@@ -59,7 +59,7 @@ public class GamePreferences
 	public static final int NUM_TYPE_STICKERS = TTipoSticker.values().length - 1;
 	public static final int NUM_TYPE_ENDGAME = TTipoEndgame.values().length;
 	
-	public static final int NUM_TYPE_BACKGROUNDS = 3;
+	public static final int NUM_TYPE_BACKGROUNDS = 5;
 	public static final int NUM_TYPE_CHARACTER = 1;
 	public static final int NUM_TYPE_BUBBLES = 3;
 	public static final int NUM_TYPE_OBSTACLES = 2;
