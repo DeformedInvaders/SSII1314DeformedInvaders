@@ -1,33 +1,42 @@
 package com.lib.utils;
 
-public class Mesh {
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 
-	private FloatArray vertices;
-	private ShortArray triangulos;
+public class Mesh
+{
+	private VertexArray vertices;
+	private TriangleArray triangulos;
 
-	public Mesh() {
-		this.vertices = new FloatArray();
-		this.triangulos = new ShortArray();
+	public Mesh()
+	{
+		this.vertices = new VertexArray();
+		this.triangulos = new TriangleArray();
 	}
 
-	public Mesh(FloatArray vertices, ShortArray triangulos) {
+	public Mesh(VertexArray vertices, TriangleArray triangulos)
+	{
 		this.vertices = vertices;
 		this.triangulos = triangulos;
 	}
 
-	public FloatArray getVertices() {
+	public VertexArray getVertices()
+	{
 		return vertices;
 	}
 
-	public void setVertices(FloatArray vertices) {
+	public void setVertices(VertexArray vertices)
+	{
 		this.vertices = vertices;
 	}
 
-	public ShortArray getTriangulos() {
+	public TriangleArray getTriangulos()
+	{
 		return triangulos;
 	}
 
-	public void setTriangulos(ShortArray triangulos) {
+	public void setTriangulos(TriangleArray triangulos)
+	{
 		this.triangulos = triangulos;
 	}
 

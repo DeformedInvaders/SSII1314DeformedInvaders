@@ -13,8 +13,9 @@ import com.creation.data.Esqueleto;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
 import com.lib.opengl.BufferManager;
-import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 
 public abstract class Malla extends Entidad
 {
@@ -22,19 +23,19 @@ public abstract class Malla extends Entidad
 	private String nombre;
 
 	// Esqueleto
-	protected ShortArray contorno;
+	protected HullArray contorno;
 	private FloatBuffer bufferContorno;
 
-	protected FloatArray vertices;
+	protected VertexArray vertices;
 
-	protected ShortArray triangulos;
+	protected TriangleArray triangulos;
 	private FloatBuffer bufferTriangulos;
 
 	// Animación
-	protected List<FloatArray> listaVerticesAnimacion;
+	protected List<VertexArray> listaVerticesAnimacion;
 
 	protected int posicionAnimacion;
-	protected FloatArray verticesAnimacion;
+	protected VertexArray verticesAnimacion;
 	protected FloatBuffer bufferTriangulosAnimacion;
 	protected FloatBuffer bufferContornoAnimacion;
 

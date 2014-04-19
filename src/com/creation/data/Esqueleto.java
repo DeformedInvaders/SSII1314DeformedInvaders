@@ -2,16 +2,17 @@ package com.creation.data;
 
 import java.io.Serializable;
 
-import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 
 public class Esqueleto implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private ShortArray contorno;
-	private FloatArray vertices;
-	private ShortArray triangulos;
+	private HullArray contorno;
+	private VertexArray vertices;
+	private TriangleArray triangulos;
 
 	/* Constructora */
 
@@ -20,7 +21,7 @@ public class Esqueleto implements Serializable
 
 	}
 
-	public Esqueleto(ShortArray contorno, FloatArray vertices, ShortArray triangulos)
+	public Esqueleto(HullArray contorno, VertexArray vertices, TriangleArray triangulos)
 	{
 		this.contorno = contorno;
 		this.vertices = vertices;
@@ -29,17 +30,17 @@ public class Esqueleto implements Serializable
 
 	/* Métodos de Obtención de Información */
 
-	public ShortArray getContorno()
+	public HullArray getContorno()
 	{
 		return contorno;
 	}
 
-	public FloatArray getVertices()
+	public VertexArray getVertices()
 	{
 		return vertices;
 	}
 
-	public ShortArray getTriangulos()
+	public TriangleArray getTriangulos()
 	{
 		return triangulos;
 	}

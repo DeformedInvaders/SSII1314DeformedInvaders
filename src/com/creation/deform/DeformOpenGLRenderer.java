@@ -19,6 +19,9 @@ import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 import com.project.main.R;
@@ -36,10 +39,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	// Información de Movimiento
 	private List<FloatArray> listaHandlesAnimacion;
-	private List<FloatArray> listaVerticesAnimacion;
+	private List<VertexArray> listaVerticesAnimacion;
 
 	// Informacion para la reproduccion de la animacion
-	private FloatArray verticesAnimacion;
+	private VertexArray verticesAnimacion;
 	private FloatBuffer triangulosAnimacion;
 	private FloatBuffer contornoAnimacion;
 	private int posicionAnimacion;
@@ -47,15 +50,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	/* Esqueleto */
 
 	// Indice de Vertices que forman en ConvexHull
-	private ShortArray contorno;
+	private HullArray contorno;
 	private FloatBuffer bufferContorno;
 
 	// Coordenadas de Vertices
-	private FloatArray vertices;
-	private FloatArray verticesModificados;
+	private VertexArray vertices;
+	private VertexArray verticesModificados;
 
 	// Indice de Vertices que forman Triángulos
-	private ShortArray triangulos;
+	private TriangleArray triangulos;
 	private FloatBuffer bufferTriangulos;
 
 	/* Handles */
@@ -178,7 +181,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, FloatArray vertices)
+	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, VertexArray vertices)
 	{
 		// Textura
 		textura.dibujar(gl, this, triangulos, coordsTextura, TTipoEntidad.Personaje);
@@ -258,8 +261,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			if (!indiceHandles.contains(j))
 			{
 				indiceHandles.add(j);
-				handles.add(verticesModificados.get(2 * j));
-				handles.add(verticesModificados.get(2 * j + 1));
+				handles.add(verticesModificados.getXVertex(j));
+				handles.add(verticesModificados.getYVertex(j));
 
 				// Añadir Handle Nuevo
 				deformator.anyadirHandles(handles, indiceHandles);
@@ -336,21 +339,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private boolean moverHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		// Conversión Pixel - Punto
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-
-		float frameX = convertToFrameXCoordinate(worldX);
-		float frameY = convertToFrameYCoordinate(worldY);
+		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
 		int indiceHandleSeleccionado = (int) handleSeleccionado.get(4 * pointer);
 		float lastFrameX = handles.get(2 * indiceHandleSeleccionado);
 		float lastFrameY = handles.get(2 * indiceHandleSeleccionado);
 
-		float lastWorldX = convertFromFrameXCoordinate(lastFrameX);
-		float lastWorldY = convertFromFrameYCoordinate(lastFrameY);
-
-		float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-		float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+		float lastPixelX = convertFrameXToPixelXCoordinate(lastFrameX, screenWidth);
+		float lastPixelY = convertFrameYToPixelYCoordinate(lastFrameY, screenHeight);
 
 		if (Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3 * GamePreferences.MAX_DISTANCE_PIXELS)
 		{
@@ -418,7 +415,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			numFramesRepetir = Math.round((float) GamePreferences.NUM_FRAMES_ANIMATION / (float) listaHandlesAnimacion.size());
 		}
 
-		FloatArray frame = vertices.clone();
+		VertexArray frame = vertices.clone();
 		
 		int i = 0;
 		while (i < listaHandlesAnimacion.size())
@@ -467,7 +464,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		estado = TEstadoDeform.Deformar;
 
 		listaHandlesAnimacion.clear();
-		listaVerticesAnimacion = new ArrayList<FloatArray>();
+		listaVerticesAnimacion = new ArrayList<VertexArray>();
 
 		reiniciarHandles();
 
@@ -508,8 +505,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			short pos = indiceHandles.get(i);
 
-			float x = vertices.get(2 * pos);
-			float y = vertices.get(2 * pos + 1);
+			float x = vertices.getXVertex(pos);
+			float y = vertices.getYVertex(pos);
 
 			handles.set(2 * i, x);
 			handles.set(2 * i + 1, y);
@@ -579,7 +576,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return estado == TEstadoDeform.Reproducir;
 	}
 
-	public List<FloatArray> getMovimientos()
+	public List<VertexArray> getMovimientos()
 	{
 		return listaVerticesAnimacion;
 	}

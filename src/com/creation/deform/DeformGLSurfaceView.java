@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.game.data.Personaje;
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 import com.project.model.GamePreferences;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView
@@ -181,7 +181,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 		return renderer.isEstadoReproduccion();
 	}
 
-	public List<FloatArray> getMovimientos()
+	public List<VertexArray> getMovimientos()
 	{
 		return renderer.getMovimientos();
 	}

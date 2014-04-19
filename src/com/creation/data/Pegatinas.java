@@ -8,7 +8,7 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 import com.project.model.GamePreferences;
 import com.project.model.GameResources;
 
@@ -60,7 +60,7 @@ public class Pegatinas implements Serializable
 		}
 	}
 	
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, FloatArray vertices, TTipoEntidad tipo, int id)
+	public void dibujar(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TTipoEntidad tipo, int id)
 	{
 		gl.glPushMatrix();
 		

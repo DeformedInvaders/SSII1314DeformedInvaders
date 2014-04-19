@@ -1,4 +1,4 @@
-package com.game.data;
+package com.lib.opengl;
 
 public class Dimensiones
 {

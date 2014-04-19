@@ -11,8 +11,9 @@ import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
-import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 import com.project.model.GamePreferences;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer
@@ -21,10 +22,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private TEstadoDesign estado;
 	private Triangulator triangulator;
 
-	private FloatArray puntos;
-	private FloatArray vertices;
-	private ShortArray triangulos;
-	private ShortArray contorno;
+	private VertexArray puntos;
+	private VertexArray vertices;
+	private TriangleArray triangulos;
+	private HullArray contorno;
 
 	private FloatBuffer bufferPoligono;
 	private FloatBuffer bufferMalla;
@@ -39,7 +40,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 		estado = TEstadoDesign.Dibujando;
 
-		puntos = new FloatArray();
+		puntos = new VertexArray();
 		poligonoSimple = false;
 	}
 
@@ -52,14 +53,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				
 			if (estado == TEstadoDesign.Dibujando)
 			{
-				if (puntos.size > 0)
+				if (puntos.getNumVertices() > 0)
 				{
 					// Centrado de Marco
 					centrarPersonajeEnMarcoInicio(gl);
 					
 					BufferManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoligono);
 	
-					if (puntos.size > 2)
+					if (puntos.getNumVertices() > 1)
 					{
 						BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferPoligono);
 					}
@@ -114,27 +115,23 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	private boolean anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		// Conversión Pixel - Punto
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-
 		boolean anyadir = true;
 
-		if (puntos.size > 0)
+		if (puntos.getNumVertices() > 0)
 		{
-			float lastWorldX = puntos.get(puntos.size - 2);
-			float lastWorldY = puntos.get(puntos.size - 1);
+			float lastFrameX = puntos.getLastXVertex();
+			float lastFrameY = puntos.getLastYVertex();
 
-			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+			float lastPixelX = convertFrameXToPixelXCoordinate(lastFrameX, screenWidth);
+			float lastPixelY = convertFrameYToPixelYCoordinate(lastFrameY, screenHeight);
 
 			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
 		}
 
 		if (anyadir)
 		{
-			float frameX = convertToFrameXCoordinate(worldX);
-			float frameY = convertToFrameYCoordinate(worldY);
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
 			puntos.add(frameX);
 			puntos.add(frameY);
@@ -194,20 +191,17 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoDesign.Retocando)
 		{
-			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
-			float lastWorldX = convertToWorldXCoordinate(lastPixelX, screenWidth);
-			float lastWorldY = convertToWorldYCoordinate(lastPixelY, screenHeight);
+			float lastFrameX = convertPixelXToFrameXCoordinate(lastPixelX, screenWidth);
+			float lastFrameY = convertPixelYToFrameYCoordinate(lastPixelY, screenHeight);
 
-			float cWorldX = (lastWorldX + worldX) / 2.0f;
-			float cWorldY = (lastWorldY + worldY) / 2.0f;
-			
-			float cframeX = convertToFrameXCoordinate(cWorldX);
-			float cframeY = convertToFrameYCoordinate(cWorldY);
+			float cFrameX = (frameX + lastFrameX) / 2.0f;
+			float cFrameY = (frameY + lastFrameY) / 2.0f;
 
-			escalarVertices(factor, factor, cframeX, cframeY, vertices);
-			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			escalarVertices(factor, factor, cFrameX, cFrameY, vertices);
+			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
 
@@ -216,17 +210,17 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoDesign.Retocando)
 		{
-			float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-			float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
-			float lastWorldX = convertToWorldXCoordinate(lastPixelX, screenWidth);
-			float lastWorldY = convertToWorldYCoordinate(lastPixelY, screenHeight);
+			float lastFrameX = convertPixelXToFrameXCoordinate(lastPixelX, screenWidth);
+			float lastFrameY = convertPixelYToFrameYCoordinate(lastPixelY, screenHeight);
 
-			float dWorldX = worldX - lastWorldX;
-			float dWorldY = worldY - lastWorldY;
+			float dWorldX = frameX - lastFrameX;
+			float dWorldY = frameY - lastFrameY;
 
 			trasladarVertices(dWorldX, dWorldY, vertices);
-			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
 
@@ -235,14 +229,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoDesign.Retocando)
 		{
-			float cWorldX = convertToWorldXCoordinate(pixelX, screenWidth);
-			float cWorldY = convertToWorldYCoordinate(pixelY, screenHeight);
+			float cFrameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float cFrameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			float cframeX = convertToFrameXCoordinate(cWorldX);
-			float cframeY = convertToFrameYCoordinate(cWorldY);
-
-			rotarVertices(ang, cframeX, cframeY, vertices);
-			BufferManager.construirBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			rotarVertices(ang, cFrameX, cFrameY, vertices);
+			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
 		}
 	}
 
@@ -293,7 +284,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isPoligonoCompleto()
 	{
-		return puntos.size >= 6;
+		return puntos.getNumVertices() >= 3;
 	}
 
 	public boolean isPoligonoDentroMarco()

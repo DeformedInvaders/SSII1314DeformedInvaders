@@ -26,8 +26,9 @@ import com.game.data.TTipoEntidad;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
-import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
@@ -43,7 +44,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	// Detalles
 	private List<Polilinea> listaLineas;
-	private FloatArray lineaActual;
+	private VertexArray lineaActual;
 	private FloatBuffer bufferLineaActual;
 
 	// Pegatinas
@@ -51,13 +52,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private boolean pegatinaAnyadida;
 
 	// Esqueleto
-	private ShortArray contorno;
+	private HullArray contorno;
 	private FloatBuffer bufferContorno;
 
-	private FloatArray vertices;
+	private VertexArray vertices;
 	private FloatBuffer bufferVertices;
 
-	private ShortArray triangulos;
+	private TriangleArray triangulos;
 
 	private int colorPintura;
 
@@ -65,7 +66,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private TEstadoCaptura estadoCaptura;
 
 	private MapaBits textura;
-	private FloatArray coordsTextura;
+	private VertexArray coordsTextura;
 
 	private Handle objetoVertice;
 
@@ -242,32 +243,28 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	private boolean anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		// Conversión Pixel - Punto
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-
 		if (lineaActual == null)
 		{
-			lineaActual = new FloatArray();
+			lineaActual = new VertexArray();
 		}
 
 		boolean anyadir = true;
 
-		if (lineaActual.size > 0)
+		if (lineaActual.getNumVertices() > 0)
 		{
-			float lastWorldX = lineaActual.get(lineaActual.size - 2);
-			float lastWorldY = lineaActual.get(lineaActual.size - 1);
+			float lastFrameX = lineaActual.getLastXVertex();
+			float lastFrameY = lineaActual.getLastYVertex();
 
-			float lastPixelX = convertToPixelXCoordinate(lastWorldX, screenWidth);
-			float lastPixelY = convertToPixelYCoordinate(lastWorldY, screenHeight);
+			float lastPixelX = convertFrameXToPixelXCoordinate(lastFrameX, screenWidth);
+			float lastPixelY = convertFrameYToPixelYCoordinate(lastFrameY, screenHeight);
 
 			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
 		}
 
 		if (anyadir)
 		{
-			float frameX = convertToFrameXCoordinate(worldX);
-			float frameY = convertToFrameYCoordinate(worldY);
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
 			lineaActual.add(frameX);
 			lineaActual.add(frameY);
@@ -282,12 +279,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	private boolean pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		// Conversión Pixel - Punto
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
-
-		float frameX = convertToFrameXCoordinate(worldX);
-		float frameY = convertToFrameYCoordinate(worldY);
+		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
 		if (GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
 		{

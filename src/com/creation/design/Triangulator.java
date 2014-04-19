@@ -7,6 +7,9 @@ import com.lib.math.DelaunayTriangulator;
 import com.lib.math.EarClippingTriangulator;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Vector2;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
@@ -17,18 +20,18 @@ public class Triangulator
 	private final static int DEEP_TRIANGULATOR = 2;
 	private final static float MAX_LONG_EDGE_TRIANGULATOR = 20.0f;
 	
-	private FloatArray vertices;
-	private ShortArray triangulos;
-	private ShortArray contorno;
+	private VertexArray vertices;
+	private TriangleArray triangulos;
+	private HullArray contorno;
 	private boolean poligonoSimple;
 	
 	/* SECTION Constructora */
 	
-	public Triangulator(FloatArray puntos)
+	public Triangulator(VertexArray puntos)
 	{
 		poligonoSimple = false;
 		
-		if(puntos.size > 4)
+		if(puntos.getNumVertices() > 2)
 		{			
 			// TODO Calcular Iteraciones en función del Area del Poligono
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
@@ -36,40 +39,18 @@ public class Triangulator
 			poligonoSimple = calcularPoligonoSimple(bsplineVertices, false).size == 0;
 			if(poligonoSimple)
 			{
-				/*	float areaMesh = calcularAreaMesh(bsplineVertices);
-				int profundidad = 0;
-				if (areaMesh>50000)
-					profundidad = 2;
-				else if (areaMesh<=50000)
-					profundidad = 2; */
 				Mesh m = calcularMeshGenerator(bsplineVertices, DEEP_TRIANGULATOR, MAX_LONG_EDGE_TRIANGULATOR);
 				vertices = m.getVertices();
 				triangulos = m.getTriangulos();
 				
-				contorno = new ShortArray(NUM_BSPLINE_VERTICES);
-				for(int i = 0; i < NUM_BSPLINE_VERTICES; i++) contorno.add(i);
-			}
-		}
-	}
-	
-	public Triangulator(FloatArray puntos, FloatArray verticesInterseccion, FloatArray lineasBSpline)
-	{
-		poligonoSimple = false;
+				contorno = new HullArray(NUM_BSPLINE_VERTICES);
 				
-		if(puntos.size > 4){	
-			poligonoSimple = calcularPoligonoSimple(lineasBSpline, false).size == 0;
-			if(poligonoSimple)
-			{
-				Mesh m = calcularMeshGenerator(lineasBSpline, verticesInterseccion);
-
-				vertices = m.getVertices();
-				triangulos = m.getTriangulos();
-
-				contorno = new ShortArray(NUM_BSPLINE_VERTICES);
-				for(int i = 0; i < NUM_BSPLINE_VERTICES; i++) contorno.add(i);
+				for(short i = 0; i < NUM_BSPLINE_VERTICES; i++)
+				{
+					contorno.addVertex(i);
+				}
 			}
 		}
-
 	}
 	
 	/* SECTION Métodos de Obtención de Información */
@@ -79,17 +60,17 @@ public class Triangulator
 		return poligonoSimple;
 	}
 	
-	public FloatArray getVertices()
+	public VertexArray getVertices()
 	{
 		return vertices;
 	}
 	
-	public ShortArray getTriangulos()
+	public TriangleArray getTriangulos()
 	{
 		return triangulos;
 	}
 	
-	public ShortArray getContorno()
+	public HullArray getContorno()
 	{
 		return contorno;
 	}
@@ -120,17 +101,6 @@ public class Triangulator
 		return earClippingCalculator.computeTriangles(vertices);
 	}
 	
-	public float calcularAreaMesh(FloatArray bsplineVertices) {
-		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
-		return delaunayMeshGenerator.calcularAreaMesh(bsplineVertices);
-	}
-	
-	private Mesh calcularMeshGenerator(FloatArray vertices, FloatArray auxVertices)
-	{
-		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
-		return delaunayMeshGenerator.computeMesh(vertices, auxVertices);
-	}
-	
 	public static Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
 	{
 		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
@@ -141,5 +111,4 @@ public class Triangulator
 	{
 		return GeometryUtils.isPolygonSimple(vertices, continuo);
 	}
-
 }

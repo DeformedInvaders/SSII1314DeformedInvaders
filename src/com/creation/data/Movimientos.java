@@ -3,14 +3,14 @@ package com.creation.data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 import com.project.model.GamePreferences;
 
 public class Movimientos implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<FloatArray>[] movimientos;
+	private List<VertexArray>[] movimientos;
 
 	/* Constructora */
 
@@ -21,14 +21,14 @@ public class Movimientos implements Serializable
 
 	/* Métodos de Modificación de Información */
 
-	public void set(List<FloatArray> movimiento, TTipoMovimiento tipo)
+	public void set(List<VertexArray> movimiento, TTipoMovimiento tipo)
 	{
 		movimientos[tipo.ordinal()] = movimiento;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public List<FloatArray> get(TTipoMovimiento tipo)
+	public List<VertexArray> get(TTipoMovimiento tipo)
 	{
 		return movimientos[tipo.ordinal()];
 	}

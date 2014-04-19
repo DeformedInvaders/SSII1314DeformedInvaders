@@ -1,22 +1,23 @@
 package com.creation.design;
 
-import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
+import com.lib.opengl.HullArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 import com.project.controller.DataSaved;
 
 public class DesignDataSaved extends DataSaved
 {
-	private FloatArray puntos;
-	private FloatArray vertices;
-	private ShortArray triangulos;
-	private ShortArray contorno;
+	private VertexArray puntos;
+	private VertexArray vertices;
+	private TriangleArray triangulos;
+	private HullArray contorno;
 
 	private TEstadoDesign estado;
 	private boolean poligonoSimple;
 
 	/* Constructora */
 
-	public DesignDataSaved(FloatArray puntos, FloatArray vertices, ShortArray triangulos, ShortArray contorno, TEstadoDesign estado, boolean poligonoSimple)
+	public DesignDataSaved(VertexArray puntos, VertexArray vertices, TriangleArray triangulos, HullArray contorno, TEstadoDesign estado, boolean poligonoSimple)
 	{
 		this.puntos = puntos;
 		this.vertices = vertices;
@@ -28,22 +29,22 @@ public class DesignDataSaved extends DataSaved
 
 	/* Métodos de Obtención de Información */
 
-	public FloatArray getPuntos()
+	public VertexArray getPuntos()
 	{
 		return puntos;
 	}
 
-	public FloatArray getVertices()
+	public VertexArray getVertices()
 	{
 		return vertices;
 	}
 
-	public ShortArray getTriangulos()
+	public TriangleArray getTriangulos()
 	{
 		return triangulos;
 	}
 
-	public ShortArray getContorno()
+	public HullArray getContorno()
 	{
 		return contorno;
 	}

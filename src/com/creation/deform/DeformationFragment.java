@@ -15,7 +15,7 @@ import com.android.view.ViewPagerSwipeable;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 import com.project.model.GameResources;
@@ -97,7 +97,7 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformat
 		Iterator<DeformFragment> it = viewPager.iterator();
 		while (it.hasNext())
 		{
-			List<FloatArray> movimiento = it.next().getMovimientos();
+			List<VertexArray> movimiento = it.next().getMovimientos();
 
 			if (movimiento != null && movimiento.size() > 0)
 			{

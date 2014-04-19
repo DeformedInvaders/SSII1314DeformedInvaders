@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import com.android.alert.RecordAlert;
 import com.android.view.OpenGLFragment;
 import com.game.data.Personaje;
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 import com.project.main.R;
 
 public class DeformFragment extends OpenGLFragment implements OnDeformListener
@@ -319,7 +319,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 
 	/* Métodos de Obtención de Información */
 
-	public List<FloatArray> getMovimientos()
+	public List<VertexArray> getMovimientos()
 	{
 		if (canvas != null)
 		{

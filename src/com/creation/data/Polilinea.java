@@ -2,11 +2,11 @@ package com.creation.data;
 
 import java.nio.FloatBuffer;
 
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 
 public class Polilinea
 {
-	private FloatArray puntos;
+	private VertexArray puntos;
 	private FloatBuffer buffer;
 
 	private int color;
@@ -14,9 +14,9 @@ public class Polilinea
 
 	/* Constructora */
 
-	public Polilinea(int color, int size, FloatArray puntos, FloatBuffer buffer)
+	public Polilinea(int color, int size, VertexArray puntos, FloatBuffer buffer)
 	{
-		this.puntos = new FloatArray();
+		this.puntos = new VertexArray();
 
 		this.size = size;
 		this.color = color;
@@ -27,7 +27,7 @@ public class Polilinea
 
 	/* Métodos de Obtención de Información */
 
-	public FloatArray getPuntos()
+	public VertexArray getPuntos()
 	{
 		return puntos;
 	}

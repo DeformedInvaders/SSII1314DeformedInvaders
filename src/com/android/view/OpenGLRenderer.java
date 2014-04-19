@@ -17,10 +17,11 @@ import android.opengl.GLUtils;
 
 import com.creation.data.MapaBits;
 import com.creation.data.TTipoSticker;
-import com.game.data.Dimensiones;
 import com.game.data.TTipoEntidad;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
+import com.lib.opengl.Dimensiones;
+import com.lib.opengl.VertexArray;
 import com.lib.utils.FloatArray;
 import com.project.model.GamePreferences;
 
@@ -240,7 +241,7 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarTexturaFondo();
 	}
 
-	public void camaradrag(float dWorldX, float dWorldY)
+	private void camaradrag(float dWorldX, float dWorldY)
 	{
 		xLeft += dWorldX;
 		xRight += dWorldX;
@@ -256,11 +257,11 @@ public abstract class OpenGLRenderer implements Renderer
 
 	public void camaradrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		float worldX = convertToWorldXCoordinate(pixelX, screenWidth);
-		float worldY = convertToWorldYCoordinate(pixelY, screenHeight);
+		float worldX = convertPixelXToWorldXCoordinate(pixelX, screenWidth);
+		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
 
-		float lastWorldX = convertToWorldXCoordinate(lastPixelX, screenWidth);
-		float lastWorldY = convertToWorldYCoordinate(lastPixelY, screenHeight);
+		float lastWorldX = convertPixelXToWorldXCoordinate(lastPixelX, screenWidth);
+		float lastWorldY = convertPixelYToWorldYCoordinate(lastPixelY, screenHeight);
 
 		float dWorldX = lastWorldX - worldX;
 		float dWorldY = lastWorldY - worldY;
@@ -290,27 +291,27 @@ public abstract class OpenGLRenderer implements Renderer
 
 	public void coordsRotate(float ang, float pixelX, float pixelY, float screenWidth, float screenHeight) { }
 
-	protected void trasladarVertices(float vx, float vy, FloatArray vertices)
+	protected void trasladarVertices(float vx, float vy, VertexArray vertices)
 	{
 		BufferManager.trasladarVertices(vx, vy, vertices);
 	}
 
-	protected void escalarVertices(float fx, float fy, float cx, float cy, FloatArray vertices)
+	protected void escalarVertices(float fx, float fy, float cx, float cy, VertexArray vertices)
 	{
 		BufferManager.escalarVertices(fx, fy, cx, cy, vertices);
 	}
 
-	protected void escalarVertices(float fx, float fy, FloatArray vertices)
+	protected void escalarVertices(float fx, float fy, VertexArray vertices)
 	{
 		BufferManager.escalarVertices(fx, fy, vertices);
 	}
 
-	protected void rotarVertices(float ang, float cx, float cy, FloatArray vertices)
+	protected void rotarVertices(float ang, float cx, float cy, VertexArray vertices)
 	{
 		BufferManager.rotarVertices(ang, cx, cy, vertices);
 	}
 
-	protected void rotarVertices(float ang, FloatArray vertices)
+	protected void rotarVertices(float ang, VertexArray vertices)
 	{
 		BufferManager.rotarVertices(ang, vertices);
 	}
@@ -363,20 +364,17 @@ public abstract class OpenGLRenderer implements Renderer
 		recMarcoInterior = BufferManager.construirBufferListaPuntos(recC);
 	}
 
-	protected boolean isPoligonoDentroMarco(FloatArray vertices)
+	protected boolean isPoligonoDentroMarco(VertexArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
+		for (int i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float frameX = vertices.get(i);
-			float frameY = vertices.get(i + 1);
-
+			float frameX = vertices.getYVertex(i);
+			float frameY = vertices.getYVertex(i);
+			
 			if (frameX < xLeft || frameX > xLeft + marcoAnchuraInterior || frameY < yBottom || frameY > yBottom + marcoAnchuraInterior)
 			{
 				return false;
 			}
-
-			i = i + 2;
 		}
 
 		return true;
@@ -479,84 +477,107 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* Métodos de Conversión de Coordenadas */
 
-	protected float convertToWorldXCoordinate(float pixelX, float screenWidth)
+	protected float convertPixelXToWorldXCoordinate(float pixelX, float screenWidth)
 	{
 		return xLeft + (xRight - xLeft) * pixelX / screenWidth;
 	}
 
-	protected float convertToWorldYCoordinate(float pixelY, float screenHeight)
+	protected float convertPixelYToWorldYCoordinate(float pixelY, float screenHeight)
 	{
 		return yBottom + (yTop - yBottom) * (screenHeight - pixelY) / screenHeight;
 	}
+	
+	protected float convertPixelXToFrameXCoordinate(float pixelX, float screenWidth)
+	{
+		return convertWorldXToFrameXCoordinate(convertPixelXToWorldXCoordinate(pixelX, screenWidth));
+	}
+	
+	protected float convertPixelYToFrameYCoordinate(float pixelY, float screenHeight)
+	{
+		return convertWorldYToFrameYCoordinate(convertPixelYToWorldYCoordinate(pixelY, screenHeight));
+	}
 
-	protected float convertToPixelXCoordinate(float worldX, float screenWidth)
+	protected float convertWorldXToPixelXCoordinate(float worldX, float screenWidth)
 	{
 		return (worldX - xLeft) * screenWidth / (xRight - xLeft);
 	}
 
-	protected float convertToPixelYCoordinate(float worldY, float screenHeight)
+	protected float convertWorldYToPixelYCoordinate(float worldY, float screenHeight)
 	{
 		return screenHeight - (worldY - yBottom) * screenHeight / (yTop - yBottom);
 	}
 
-	protected float convertToFrameXCoordinate(float worldX)
+	protected float convertWorldXToFrameXCoordinate(float worldX)
 	{
 		return worldX - marcoAnchuraLateral;
 	}
 
-	protected float convertToFrameYCoordinate(float worldY)
+	protected float convertWorldYToFrameYCoordinate(float worldY)
 	{
 		return worldY - marcoAlturaLateral;
 	}
 
-	protected float convertFromFrameXCoordinate(float frameX)
+	protected float convertFrameXToWorldXCoordinate(float frameX)
 	{
 		return frameX + marcoAnchuraLateral;
 	}
 
-	protected float convertFromFrameYCoordinate(float frameY)
+	protected float convertFrameYToWorldYCoordinate(float frameY)
 	{
 		return frameY + marcoAlturaLateral;
+	}
+	
+	protected float convertFrameXToPixelXCoordinate(float frameX, float screenWidth)
+	{
+		return convertWorldXToPixelXCoordinate(convertFrameXToWorldXCoordinate(frameX), screenWidth);
+	}
+
+	protected float convertFrameYToPixelYCoordinate(float frameY, float screenHeight)
+	{
+		return convertWorldYToPixelYCoordinate(convertFrameYToWorldYCoordinate(frameY), screenHeight);
+	}
+	
+	protected float convertFrameXToTextureXCoordinate(float frameX, float textureWidth)
+	{
+		return frameX / textureWidth;
+	}
+	
+	protected float convertFrameYToTextureYCoordinate(float frameY, float textureHeight)
+	{
+		return (textureHeight - frameY) / textureHeight;
 	}
 
 	/* Métodos de Búsqueda de Pixeles */
 
-	private short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight, float epsilon)
+	private short buscarPixel(VertexArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight, float epsilon)
 	{
-		int minpos = -1;
-		int j = 0;
-		while (j < vertices.size)
+		for (int i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float framepX = vertices.get(j);
-			float framepY = vertices.get(j + 1);
-
-			float worldpX = convertFromFrameXCoordinate(framepX);
-			float worldpY = convertFromFrameYCoordinate(framepY);
-
-			float lastpX = convertToPixelXCoordinate(worldpX, screenWidth);
-			float lastpY = convertToPixelYCoordinate(worldpY, screenHeight);
+			float frameX = vertices.getXVertex(i);
+			float frameY = vertices.getYVertex(i);
+			
+			float lastpX = convertFrameXToPixelXCoordinate(frameX, screenWidth);
+			float lastpY = convertFrameYToPixelYCoordinate(frameY, screenHeight);
 
 			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
 			if (distancia < epsilon)
 			{
-				minpos = j / 2;
-				return (short) minpos;
+				return (short) i;
 			}
-
-			j = j + 2;
 		}
-
-		return (short) minpos;
+		
+		return -1;
 	}
 	
-	protected short buscarPixel(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	protected short buscarPixel(VertexArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		return buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_PIXELS);
 	}
 	
-	protected short buscarHandle(FloatArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	// FIXME Revisar
+	protected short buscarHandle(FloatArray handles, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		return buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_HANDLES);
+		return buscarPixel(new VertexArray(handles), pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_HANDLES);
 	}
 
 	/* Métodos de Construcción de Texturas */
@@ -599,25 +620,21 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Contrucción de Textura
 
-	protected FloatArray construirTextura(FloatArray puntos, float textureWidth, float textureHeight)
+	protected VertexArray construirTextura(VertexArray vertices, float textureWidth, float textureHeight)
 	{
-		FloatArray textura = new FloatArray(puntos.size);
+		VertexArray textura = new VertexArray(vertices.getNumVertices());
 
-		int i = 0;
-		while (i < puntos.size)
+		for (int i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float frameX = puntos.get(i);
-			float frameY = puntos.get(i + 1);
-
-			// Conversión a Coordenadas de Textura
-			float coordX = frameX / textureWidth;
-			float coordY = (textureHeight - frameY) / textureHeight;
-
-			textura.add(coordX);
-			textura.add(coordY);
-
-			i = i + 2;
+			float frameX = vertices.getXVertex(i);
+			float frameY = vertices.getYVertex(i);
+			
+			float coordX = convertFrameXToTextureXCoordinate(frameX, textureWidth);
+			float coordY = convertFrameYToTextureYCoordinate(frameY, textureHeight);
+			
+			textura.addVertex(coordX, coordY);
 		}
+		
 		return textura;
 	}
 
@@ -698,24 +715,25 @@ public abstract class OpenGLRenderer implements Renderer
 			cargarTextura(gl, bitmap, posTextura);
 			bitmap.recycle();
 
-			FloatArray puntos = new FloatArray();
+			VertexArray vertices = new VertexArray();
 			
+			// FIXME Cambiar al añadir enemigos con mallas.
 			if(tipoEntidad == TTipoEntidad.Personaje)// || tipoEntidad == TTipoEntidad.Enemigo)
 			{
-				puntos.add(-textureWidth/2);	puntos.add(-textureHeight/2);
-				puntos.add(-textureWidth/2);	puntos.add(textureHeight/2);
-				puntos.add(textureWidth/2);		puntos.add(-textureHeight/2);
-				puntos.add(textureWidth/2);		puntos.add(textureHeight/2);
+				vertices.addVertex(-textureWidth/2, -textureHeight/2);
+				vertices.addVertex(-textureWidth/2, textureHeight/2);
+				vertices.addVertex(textureWidth/2, -textureHeight/2);
+				vertices.addVertex(textureWidth/2, textureHeight/2);
 			}
 			else
 			{
-				puntos.add(0.0f);				puntos.add(0.0f);
-				puntos.add(0.0f);				puntos.add(textureHeight);
-				puntos.add(textureWidth);		puntos.add(0.0f);
-				puntos.add(textureWidth);		puntos.add(textureHeight);
+				vertices.addVertex(0.0f, 0.0f);
+				vertices.addVertex(0.0f, textureHeight);
+				vertices.addVertex(textureWidth, 0.0f);
+				vertices.addVertex(textureWidth, textureHeight);
 			}
 			
-			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(puntos);
+			vertTextura[posTextura] = BufferManager.construirBufferListaPuntos(vertices);
 
 			return new Dimensiones(textureHeight, textureWidth);
 		}
@@ -893,17 +911,17 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void actualizarTexturaFondo()
 	{
-		FloatArray puntos = new FloatArray();
-		puntos.add(xLeft);		puntos.add(yBottom);
-		puntos.add(xLeft);		puntos.add(yTop);
-		puntos.add(xRight);		puntos.add(yBottom);
-		puntos.add(xRight);		puntos.add(yTop);
+		VertexArray vertices = new VertexArray();
+		vertices.addVertex(xLeft, yBottom);
+		vertices.addVertex(xLeft, yTop);
+		vertices.addVertex(xRight, yBottom);
+		vertices.addVertex(xRight, yTop);
 
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
 			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
-				vertTextura[POS_TEXTURE_BACKGROUND + i] = BufferManager.construirBufferListaPuntos(puntos);
+				vertTextura[POS_TEXTURE_BACKGROUND + i] = BufferManager.construirBufferListaPuntos(vertices);
 			}
 		}
 	}

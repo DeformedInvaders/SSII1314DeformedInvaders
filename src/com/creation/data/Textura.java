@@ -9,19 +9,19 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
-import com.lib.utils.FloatArray;
+import com.lib.opengl.VertexArray;
 
 public class Textura implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
 	private MapaBits mapaBits;
-	private FloatArray coordTextura;
+	private VertexArray coordTextura;
 	private Pegatinas pegatinas;
 
 	/* Constructora */
 
-	public Textura(MapaBits mapaBits, FloatArray coordTextura, Pegatinas pegatinas)
+	public Textura(MapaBits mapaBits, VertexArray coordTextura, Pegatinas pegatinas)
 	{
 		this.mapaBits = mapaBits;
 		this.coordTextura = coordTextura;
@@ -35,7 +35,7 @@ public class Textura implements Serializable
 		return mapaBits;
 	}
 
-	public FloatArray getCoordTextura()
+	public VertexArray getCoordTextura()
 	{
 		return coordTextura;
 	}

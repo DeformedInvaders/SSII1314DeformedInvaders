@@ -5,13 +5,16 @@ import java.util.Iterator;
 
 import com.lib.math.Intersector;
 import com.lib.matrix.Matrix;
+import com.lib.opengl.EdgeArray;
+import com.lib.opengl.TriangleArray;
+import com.lib.opengl.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.ShortArray;
 
 public class Deformator
 {
-	private FloatArray vertices;
-	private ShortArray vecinos;
+	private VertexArray vertices;
+	private EdgeArray vecinos;
 
 	private int numVertices, numAristas, numHandles;
 	private static final float w = 1000;
@@ -38,13 +41,13 @@ public class Deformator
 
 	/* Constructora */
 
-	public Deformator(FloatArray puntos, ShortArray triangulos, FloatArray handles, ShortArray indiceHandles)
+	public Deformator(VertexArray puntos, TriangleArray triangulos, FloatArray handles, ShortArray indiceHandles)
 	{
 		vertices = puntos.clone();
 		vecinos = construirAristas(triangulos);
 
-		numVertices = vertices.size / 2;
-		numAristas = vecinos.size / 4;
+		numVertices = vertices.getNumVertices();
+		numAristas = vecinos.getNumEdges();
 		numHandles = indiceHandles.size;
 
 		// Calcular Matriz G
@@ -127,7 +130,7 @@ public class Deformator
 	}
 
 	// Modificación de Posición de Handles
-	public void moverHandles(FloatArray handles, FloatArray verticesModificados)
+	public void moverHandles(FloatArray handles, VertexArray verticesModificados)
 	{
 		// Actualizar MatrizB
 		actualizarMatrizB1(handles, matrizB1);
@@ -142,10 +145,11 @@ public class Deformator
 
 		// Actualizar Valores de los Vertices después del Ajuste de Traslación y
 		// Rotación
-		FloatArray verticesTrasRot = vertices.clone();
-		for (int i = 0; i < 2 * numVertices; i++)
+		VertexArray verticesTrasRot = vertices.clone();
+		for (int i = 0; i < numVertices; i++)
 		{
-			verticesTrasRot.set(i, (float) m1.get(i, 0));
+			verticesTrasRot.setXVertex(i, (float) m1.get(2 * i, 0));
+			verticesTrasRot.setYVertex(i, (float) m1.get(2 * i + 1, 0));
 		}
 
 		// Cálculo de Ajuste de Escalación
@@ -163,21 +167,21 @@ public class Deformator
 		// Actualizar Valores de los Vertices después del Ajuste de Escala
 		for (int i = 0; i < numVertices; i++)
 		{
-			verticesModificados.set(2 * i, (float) m2x.get(i, 0));
-			verticesModificados.set(2 * i + 1, (float) m2y.get(i, 0));
+			verticesModificados.setXVertex(i, (float) m2x.get(i, 0));
+			verticesModificados.setYVertex(i, (float) m2y.get(i, 0));
 		}
 	}
 
 	/* Ajuste de Traslación y Rotación */
 
 	// Cálculo Matriz G
-	private void calcularMatrizG(int a, int b, int c, int d, FloatArray vertices, Matrix m)
+	private void calcularMatrizG(int a, int b, int c, int d, VertexArray vertices, Matrix m)
 	{
-		float vix = vertices.get(2 * a);
-		float viy = vertices.get(2 * a + 1);
+		float vix = vertices.getXVertex(a);
+		float viy = vertices.getYVertex(a);
 
-		float vjx = vertices.get(2 * b);
-		float vjy = vertices.get(2 * b + 1);
+		float vjx = vertices.getXVertex(b);
+		float vjy = vertices.getYVertex(b);
 
 		float vlx = 0;
 		float vly = 0;
@@ -187,14 +191,14 @@ public class Deformator
 
 		if (c != -1)
 		{
-			vlx = vertices.get(2 * c);
-			vly = vertices.get(2 * c + 1);
+			vlx = vertices.getXVertex(c);
+			vly = vertices.getYVertex(c);
 		}
 
 		if (d != -1)
 		{
-			vrx = vertices.get(2 * d);
-			vry = vertices.get(2 * d + 1);
+			vrx = vertices.getXVertex(d);
+			vry = vertices.getYVertex(d);
 		}
 
 		m.set(0, 0, vix);
@@ -220,12 +224,12 @@ public class Deformator
 	}
 
 	// Cálculo Matriz E
-	private void calcularMatrizE(int a, int b, FloatArray vertices, Matrix m)
+	private void calcularMatrizE(int a, int b, VertexArray vertices, Matrix m)
 	{
-		float vix = vertices.get(2 * a);
-		float viy = vertices.get(2 * a + 1);
-		float vjx = vertices.get(2 * b);
-		float vjy = vertices.get(2 * b + 1);
+		float vix = vertices.getXVertex(a);
+		float viy = vertices.getYVertex(a);
+		float vjx = vertices.getXVertex(b);
+		float vjy = vertices.getYVertex(b);
 
 		float ex = vjx - vix;
 		float ey = vjy - viy;
@@ -237,7 +241,7 @@ public class Deformator
 	}
 
 	// Cálculo Matriz H
-	private void calcularMatrizH(int a, int b, int c, int d, FloatArray vertices, Matrix m)
+	private void calcularMatrizH(int a, int b, int c, int d, VertexArray vertices, Matrix m)
 	{
 		// Matriz h1 constante inicializada en la constructora.
 
@@ -259,16 +263,15 @@ public class Deformator
 	}
 
 	// Cálculo Matriz A1
-	private void calcularMatrizA1(FloatArray vertices, FloatArray handles, ShortArray indiceHandles, Matrix m)
+	private void calcularMatrizA1(VertexArray vertices, FloatArray handles, ShortArray indiceHandles, Matrix m)
 	{
-		int i = 0;
 		int j = 0;
-		while (i < vecinos.size)
+		for (int i = 0; i < numAristas; i++)
 		{
-			int a = vecinos.get(i);
-			int b = vecinos.get(i + 1);
-			int c = vecinos.get(i + 2);
-			int d = vecinos.get(i + 3);
+			int a = vecinos.getAVertex(i);
+			int b = vecinos.getBVertex(i);
+			int c = vecinos.getLVertex(i);
+			int d = vecinos.getRVertex(i);
 
 			calcularMatrizH(a, b, c, d, vertices, matrizH);
 
@@ -298,7 +301,6 @@ public class Deformator
 				m.set(j + 1, 2 * d + 1, matrizH.get(1, 7));
 			}
 
-			i = i + 4;
 			j = j + 2;
 		}
 
@@ -345,17 +347,15 @@ public class Deformator
 	// Cálculo Matriz A2
 	private void calcularMatrizA2(ShortArray indiceHandles, Matrix m)
 	{
-		int i = 0;
 		int j = 0;
-		while (i < vecinos.size)
+		for (int i = 0; i < numAristas; i++)
 		{
-			int a = vecinos.get(i);
-			int b = vecinos.get(i + 1);
+			int a = vecinos.getAVertex(i);
+			int b = vecinos.getBVertex(i);
 
 			m.set(j, a, 1);
 			m.set(j, b, -1);
 
-			i = i + 4;
 			j = j + 1;
 		}
 
@@ -369,13 +369,13 @@ public class Deformator
 	}
 
 	// Cálculo Matriz V
-	private void calcularMatrizV(int a, int b, int c, int d, FloatArray vertices, Matrix m)
+	private void calcularMatrizV(int a, int b, int c, int d, VertexArray vertices, Matrix m)
 	{
-		float vix = vertices.get(2 * a);
-		float viy = vertices.get(2 * a + 1);
+		float vix = vertices.getXVertex(a);
+		float viy = vertices.getYVertex(a);
 
-		float vjx = vertices.get(2 * b);
-		float vjy = vertices.get(2 * b + 1);
+		float vjx = vertices.getXVertex(b);
+		float vjy = vertices.getYVertex(b);
 
 		float vlx = 0;
 		float vly = 0;
@@ -385,14 +385,14 @@ public class Deformator
 
 		if (c != -1)
 		{
-			vlx = vertices.get(2 * c);
-			vly = vertices.get(2 * c + 1);
+			vlx = vertices.getXVertex(c);
+			vly = vertices.getYVertex(c);
 		}
 
 		if (d != -1)
 		{
-			vrx = vertices.get(2 * d);
-			vry = vertices.get(2 * d + 1);
+			vrx = vertices.getXVertex(d);
+			vry = vertices.getYVertex(d);
 		}
 
 		m.set(0, 0, vix);
@@ -409,7 +409,7 @@ public class Deformator
 	}
 
 	// Cálculo Matriz T
-	private void calcularMatrizT(int a, int b, int c, int d, FloatArray vertices, Matrix m)
+	private void calcularMatrizT(int a, int b, int c, int d, VertexArray vertices, Matrix m)
 	{
 		calcularMatrizG(a, b, c, d, vertices, matrizG);
 
@@ -438,23 +438,22 @@ public class Deformator
 	}
 
 	// Cálculo Matriz B2
-	private void calcularMatrizB2(FloatArray vertices, FloatArray verticesTrasRot, FloatArray handles, Matrix m, Matrix n)
+	private void calcularMatrizB2(VertexArray vertices, VertexArray verticesTrasRot, FloatArray handles, Matrix m, Matrix n)
 	{
-		int i = 0;
 		int j = 0;
-		while (i < vecinos.size)
+		for (int i = 0; i < numAristas; i++)
 		{
-			int a = vecinos.get(i);
-			int b = vecinos.get(i + 1);
-			int c = vecinos.get(i + 2);
-			int d = vecinos.get(i + 3);
+			int a = vecinos.getAVertex(i);
+			int b = vecinos.getBVertex(i);
+			int c = vecinos.getLVertex(i);
+			int d = vecinos.getRVertex(i);
 
 			calcularMatrizT(a, b, c, d, verticesTrasRot, matrizT);
 
-			float vix = vertices.get(2 * a);
-			float viy = vertices.get(2 * a + 1);
-			float vjx = vertices.get(2 * b);
-			float vjy = vertices.get(2 * b + 1);
+			float vix = vertices.getXVertex(a);
+			float viy = vertices.getYVertex(a);
+			float vjx = vertices.getXVertex(b);
+			float vjy = vertices.getYVertex(b);
 
 			float ex = vjx - vix;
 			float ey = vjy - viy;
@@ -465,7 +464,6 @@ public class Deformator
 			m.set(j, 0, tex);
 			n.set(j, 0, tey);
 
-			i = i + 4;
 			j = j + 1;
 		}
 
@@ -482,40 +480,34 @@ public class Deformator
 
 	/* Cálculo de Vecinos */
 
-	private ShortArray construirAristas(ShortArray triangulos)
+	private EdgeArray construirAristas(TriangleArray triangulos)
 	{
 		ArrayList<Arista> aristas = new ArrayList<Arista>();
 
-		int i = 0;
-		while (i < triangulos.size)
+		for (int i = 0; i < triangulos.getNumTriangles(); i++)
 		{
-			int a = triangulos.get(i);
-			int b = triangulos.get(i + 1);
-			int c = triangulos.get(i + 2);
+			short a = triangulos.getAVertex(i);
+			short b = triangulos.getBVertex(i);
+			short c = triangulos.getCVertex(i);
 
 			anyadirArista(a, b, c, aristas);
 			anyadirArista(b, c, a, aristas);
-			anyadirArista(c, a, b, aristas);
-
-			i = i + 3;
+			anyadirArista(c, a, b, aristas);			
 		}
 
-		ShortArray vecinos = new ShortArray();
+		EdgeArray vecinos = new EdgeArray();
 
 		Iterator<Arista> it = aristas.iterator();
 		while (it.hasNext())
 		{
 			Arista arista = it.next();
-			vecinos.add(arista.getVerticeA());
-			vecinos.add(arista.getVerticeB());
-			vecinos.add(arista.getVecinoL());
-			vecinos.add(arista.getVecinoR());
+			vecinos.addEdge(arista.getVerticeA(), arista.getVerticeB(), arista.getVecinoL(), arista.getVecinoR());
 		}
 
 		return vecinos;
 	}
 
-	private boolean anyadirArista(int a, int b, int c, ArrayList<Arista> aristas)
+	private boolean anyadirArista(short a, short b, short c, ArrayList<Arista> aristas)
 	{
 		Iterator<Arista> it = aristas.iterator();
 		while (it.hasNext())
@@ -542,20 +534,20 @@ public class Deformator
 
 	private class Arista
 	{
-		private int verticeA;
-		private int verticeB;
+		private short verticeA;
+		private short verticeB;
 
-		private int vecinoR;
-		private int vecinoL;
+		private short vecinoR;
+		private short vecinoL;
 
-		public Arista(int a, int b, int c, FloatArray puntos)
+		public Arista(short a, short b, short c, VertexArray puntos)
 		{
 			this.verticeA = a;
 			this.verticeB = b;
 			this.vecinoR = -1;
 			this.vecinoL = -1;
 
-			int lado = Intersector.pointLineSide(puntos.get(2 * a), puntos.get(2 * a + 1), puntos.get(2 * b), puntos.get(2 * b + 1), puntos.get(2 * c), puntos.get(2 * c + 1));
+			int lado = Intersector.pointLineSide(puntos.getXVertex(a), puntos.getYVertex(a), puntos.getXVertex(b), puntos.getYVertex(b), puntos.getXVertex(c), puntos.getYVertex(c));
 
 			if (lado == -1)
 			{
@@ -567,37 +559,37 @@ public class Deformator
 			}
 		}
 
-		public int getVerticeA()
+		public short getVerticeA()
 		{
 			return verticeA;
 		}
 
-		public int getVerticeB()
+		public short getVerticeB()
 		{
 			return verticeB;
 		}
 
-		public int getVecinoR()
+		public short getVecinoR()
 		{
 			return vecinoR;
 		}
 
-		public int getVecinoL()
+		public short getVecinoL()
 		{
 			return vecinoL;
 		}
 
-		public void setVecinoR(int r)
+		public void setVecinoR(short r)
 		{
 			this.vecinoR = r;
 		}
 
-		public void setVecinoL(int l)
+		public void setVecinoL(short l)
 		{
 			this.vecinoL = l;
 		}
 
-		public boolean equals(int a, int b)
+		public boolean equals(short a, short b)
 		{
 			return (verticeA == a && verticeB == b) || (verticeA == b && verticeB == a);
 		}

@@ -10,7 +10,6 @@ import android.graphics.Color;
 
 import com.creation.data.Handle;
 import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
 import com.project.model.GamePreferences;
 
 public class BufferManager
@@ -32,7 +31,7 @@ public class BufferManager
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP
-	public static FloatBuffer construirBufferListaPuntos(FloatArray vertices)
+	public static FloatBuffer construirBufferListaPuntos(VertexArray vertices)
 	{
 		float[] arrayVertices = new float[vertices.size];
 		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
@@ -41,18 +40,19 @@ public class BufferManager
 	}
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de indice de vertices
-	public static FloatBuffer construirBufferListaIndicePuntos(ShortArray indices, FloatArray vertices)
+	public static FloatBuffer construirBufferListaIndicePuntos(HullArray contorno, VertexArray vertices)
 	{
-		float[] arrayVertices = new float[2 * indices.size];
+		float[] arrayVertices = new float[2 * contorno.getNumVertex()];
 
-		int i = 0;
-		while (i < indices.size)
+		int j = 0;
+		for (int i = 0; i < contorno.getNumVertex(); i++)
 		{
-			int pos = indices.get(i);
-			arrayVertices[2 * pos] = vertices.get(2 * pos);
-			arrayVertices[2 * pos + 1] = vertices.get(2 * pos + 1);
+			int a = contorno.getVertex(i);
+			
+			arrayVertices[j] = vertices.getXVertex(a);
+			arrayVertices[j + 1] = vertices.getYVertex(a);
 
-			i++;
+			j = j + 2;
 		}
 
 		return construirBufferListaPuntos(arrayVertices);
@@ -60,26 +60,23 @@ public class BufferManager
 
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_LINES
-	public static FloatBuffer construirBufferListaLineas(ShortArray triangulos, FloatArray vertices)
+	public static FloatBuffer construirBufferListaLineas(LineArray lineas, VertexArray vertices)
 	{
-		int arrayLong = 2 * (triangulos.size - 1);
-		float[] arrayVertices = new float[2 * arrayLong];
+		float[] arrayVertices = new float[4 * lineas.getNumLines()];
 
 		int j = 0;
-		int i = 0;
-		while (j < triangulos.size)
+		for (int i = 0; i < lineas.getNumLines(); i++)
 		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j + 1);
+			short a = lineas.getAVertex(i);
+			short b = lineas.getBVertex(i);
+			
+			arrayVertices[j] = vertices.getXVertex(a);
+			arrayVertices[j + 1] = vertices.getYVertex(a);
 
-			arrayVertices[i] = vertices.get(2 * a);
-			arrayVertices[i + 1] = vertices.get(2 * a + 1);
-
-			arrayVertices[i + 2] = vertices.get(2 * b);
-			arrayVertices[i + 3] = vertices.get(2 * b + 1);
-
-			j = j + 1;
-			i = i + 4;
+			arrayVertices[j + 2] = vertices.getXVertex(b);
+			arrayVertices[j + 3] = vertices.getYVertex(b);
+			
+			j = j + 4;
 		}
 
 		return construirBufferListaPuntos(arrayVertices);
@@ -87,39 +84,36 @@ public class BufferManager
 
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_LINES
-	public static FloatBuffer construirBufferListaTriangulos(ShortArray triangulos, FloatArray vertices)
+	public static FloatBuffer construirBufferListaTriangulos(TriangleArray triangulos, VertexArray vertices)
 	{
-		int arrayLong = 2 * triangulos.size;
-		float[] arrayVertices = new float[2 * arrayLong];
+		float[] arrayVertices = new float[12 * triangulos.getNumTriangles()];
 
 		int j = 0;
-		int i = 0;
-		while (j < triangulos.size)
+		for (int i = 0; i < triangulos.getNumTriangles(); i++)
 		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j + 1);
-			short c = triangulos.get(j + 2);
+			short a = triangulos.getAVertex(i);
+			short b = triangulos.getBVertex(i);
+			short c = triangulos.getCVertex(i);
 
-			arrayVertices[i] = vertices.get(2 * a);
-			arrayVertices[i + 1] = vertices.get(2 * a + 1);
+			arrayVertices[j] = vertices.getXVertex(a);
+			arrayVertices[j + 1] = vertices.getYVertex(a);
 
-			arrayVertices[i + 2] = vertices.get(2 * b);
-			arrayVertices[i + 3] = vertices.get(2 * b + 1);
+			arrayVertices[j + 2] = vertices.getXVertex(b);
+			arrayVertices[j + 3] = vertices.getYVertex(b);
 
-			arrayVertices[i + 4] = vertices.get(2 * b);
-			arrayVertices[i + 5] = vertices.get(2 * b + 1);
+			arrayVertices[j + 4] = vertices.getXVertex(b);
+			arrayVertices[j + 5] = vertices.getYVertex(b);
 
-			arrayVertices[i + 6] = vertices.get(2 * c);
-			arrayVertices[i + 7] = vertices.get(2 * c + 1);
+			arrayVertices[j + 6] = vertices.getXVertex(c);
+			arrayVertices[j + 7] = vertices.getYVertex(c);
 
-			arrayVertices[i + 8] = vertices.get(2 * c);
-			arrayVertices[i + 9] = vertices.get(2 * c + 1);
+			arrayVertices[j + 8] = vertices.getXVertex(c);
+			arrayVertices[j + 9] = vertices.getYVertex(c);
 
-			arrayVertices[i + 10] = vertices.get(2 * a);
-			arrayVertices[i + 11] = vertices.get(2 * a + 1);
-
-			j = j + 3;
-			i = i + 12;
+			arrayVertices[j + 10] = vertices.getXVertex(a);
+			arrayVertices[j + 11] = vertices.getYVertex(a);
+			
+			j = j + 12;			
 		}
 
 		return construirBufferListaPuntos(arrayVertices);
@@ -127,30 +121,27 @@ public class BufferManager
 
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_TRIANGLES
-	public static FloatBuffer construirBufferListaTriangulosRellenos(ShortArray triangulos, FloatArray vertices)
+	public static FloatBuffer construirBufferListaTriangulosRellenos(TriangleArray triangulos, VertexArray vertices)
 	{
-		int arrayLong = triangulos.size;
-		float[] arrayVertices = new float[2 * arrayLong];
+		float[] arrayVertices = new float[6 * triangulos.getNumTriangles()];
 
 		int j = 0;
-		int i = 0;
-		while (j < triangulos.size)
+		for (int i = 0; i < triangulos.getNumTriangles(); i++)
 		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j + 1);
-			short c = triangulos.get(j + 2);
+			short a = triangulos.getAVertex(i);
+			short b = triangulos.getBVertex(i);
+			short c = triangulos.getCVertex(i);
 
-			arrayVertices[i] = vertices.get(2 * a);
-			arrayVertices[i + 1] = vertices.get(2 * a + 1);
+			arrayVertices[j] = vertices.getXVertex(a);
+			arrayVertices[j + 1] = vertices.getYVertex(a);
 
-			arrayVertices[i + 2] = vertices.get(2 * b);
-			arrayVertices[i + 3] = vertices.get(2 * b + 1);
+			arrayVertices[j + 2] = vertices.getXVertex(b);
+			arrayVertices[j + 3] = vertices.getYVertex(b);
 
-			arrayVertices[i + 4] = vertices.get(2 * c);
-			arrayVertices[i + 5] = vertices.get(2 * c + 1);
+			arrayVertices[j + 4] = vertices.getXVertex(c);
+			arrayVertices[j + 5] = vertices.getYVertex(c);
 
-			j = j + 3;
-			i = i + 6;
+			j = j + 6;
 		}
 
 		return construirBufferListaPuntos(arrayVertices);
@@ -159,7 +150,7 @@ public class BufferManager
 	/* Metodos de Actualización de Buffers de Pintura */
 
 	// Actualiza los valores de un buffer de pintura para puntos
-	public static void actualizarBufferListaPuntos(FloatBuffer buffer, FloatArray vertices)
+	public static void actualizarBufferListaPuntos(FloatBuffer buffer, VertexArray vertices)
 	{
 		float[] arrayVertices = new float[vertices.size];
 		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
@@ -170,138 +161,125 @@ public class BufferManager
 
 	// Actualizar los valores de un buffer de pintura para triangulos.
 	// Uso para GL_LINES
-	public static void construirBufferListaTriangulos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
+	public static void actualizarBufferListaTriangulos(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
 	{
 		int j = 0;
-		int i = 0;
-		while (j < triangulos.size)
+		for (int i = 0; i < triangulos.getNumTriangles(); i++)
 		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j + 1);
-			short c = triangulos.get(j + 2);
+			short a = triangulos.getAVertex(i);
+			short b = triangulos.getBVertex(i);
+			short c = triangulos.getCVertex(i);
 
-			buffer.put(i, vertices.get(2 * a));
-			buffer.put(i + 1, vertices.get(2 * a + 1));
+			buffer.put(j, vertices.getXVertex(a));
+			buffer.put(j + 1, vertices.getYVertex(a));
 
-			buffer.put(i + 2, vertices.get(2 * b));
-			buffer.put(i + 3, vertices.get(2 * b + 1));
+			buffer.put(j + 2, vertices.getXVertex(b));
+			buffer.put(j + 3, vertices.getYVertex(b));
 
-			buffer.put(i + 4, vertices.get(2 * b));
-			buffer.put(i + 5, vertices.get(2 * b + 1));
+			buffer.put(j + 4, vertices.getXVertex(b));
+			buffer.put(j + 5, vertices.getYVertex(b));
 
-			buffer.put(i + 6, vertices.get(2 * c));
-			buffer.put(i + 7, vertices.get(2 * c + 1));
+			buffer.put(j + 6, vertices.getXVertex(c));
+			buffer.put(j + 7, vertices.getYVertex(c));
 
-			buffer.put(i + 8, vertices.get(2 * c));
-			buffer.put(i + 9, vertices.get(2 * c + 1));
+			buffer.put(j + 8, vertices.getXVertex(c));
+			buffer.put(j + 9, vertices.getYVertex(c));
 
-			buffer.put(i + 10, vertices.get(2 * a));
-			buffer.put(i + 11, vertices.get(2 * a + 1));
+			buffer.put(j + 10, vertices.getXVertex(a));
+			buffer.put(j + 11, vertices.getYVertex(a));
 
-			j = j + 3;
-			i = i + 12;
+			j = j + 12;
 		}
 	}
 
 	// Actualiza los valores de un buffer de pintura para triangulos
 	// Uso para GL_TRIANGLES
-	public static void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, ShortArray triangulos, FloatArray vertices)
+	public static void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
 	{
 		int j = 0;
-		int i = 0;
-		while (j < triangulos.size)
+		for (int i = 0; i < triangulos.getNumTriangles(); i++)
 		{
-			short a = triangulos.get(j);
-			short b = triangulos.get(j + 1);
-			short c = triangulos.get(j + 2);
+			short a = triangulos.getAVertex(i);
+			short b = triangulos.getBVertex(i);
+			short c = triangulos.getCVertex(i);
 
-			buffer.put(i, vertices.get(2 * a));
-			buffer.put(i + 1, vertices.get(2 * a + 1));
+			buffer.put(j, vertices.getXVertex(a));
+			buffer.put(j + 1, vertices.getYVertex(a));
 
-			buffer.put(i + 2, vertices.get(2 * b));
-			buffer.put(i + 3, vertices.get(2 * b + 1));
+			buffer.put(j + 2, vertices.getXVertex(b));
+			buffer.put(j + 3, vertices.getYVertex(b));
 
-			buffer.put(i + 4, vertices.get(2 * c));
-			buffer.put(i + 5, vertices.get(2 * c + 1));
+			buffer.put(j + 4, vertices.getXVertex(c));
+			buffer.put(j + 5, vertices.getYVertex(c));
 
-			j = j + 3;
-			i = i + 6;
+			j = j + 6;
 		}
 	}
 
 	// Actualiza los valores de un buffer de pintura para indice puntos
-	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer, ShortArray contorno, FloatArray vertices)
+	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer, HullArray contorno, VertexArray vertices)
 	{
 		int j = 0;
-		while (j < contorno.size)
+		for (int i = 0; i < contorno.getNumVertex(); i++)
 		{
-			short a = contorno.get(j);
-
-			buffer.put(2 * j, vertices.get(2 * a));
-			buffer.put(2 * j + 1, vertices.get(2 * a + 1));
-
-			j++;
+			short a = contorno.getVertex(i);
+			
+			buffer.put(j, vertices.getXVertex(a));
+			buffer.put(j + 1, vertices.getYVertex(a));
+			
+			j = j + 2;
 		}
 	}
 	
 	/* Métodos de Transformación de Puntos */
 	
-	public static void trasladarVertices(float vx, float vy, FloatArray vertices)
+	public static void trasladarVertices(float vx, float vy, VertexArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
+		for (int i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
-
-			vertices.set(i, x + vx);
-			vertices.set(i + 1, y + vy);
-
-			i = i + 2;
+			float x = vertices.getXVertex(i);
+			float y = vertices.getYVertex(i);
+			
+			vertices.setXVertex(i, x + vx);
+			vertices.setYVertex(i, y + vy);
 		}
 	}
 
-	public static void escalarVertices(float fx, float fy, float cx, float cy, FloatArray vertices)
+	public static void escalarVertices(float fx, float fy, float cx, float cy, VertexArray vertices)
 	{
 		trasladarVertices(-cx, -cy, vertices);
 		escalarVertices(fx, fy, vertices);
 		trasladarVertices(cx, cy, vertices);
 	}
 
-	public static void escalarVertices(float fx, float fy, FloatArray vertices)
+	public static void escalarVertices(float fx, float fy, VertexArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
+		for (int i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
-
-			vertices.set(i, x * fx);
-			vertices.set(i + 1, y * fy);
-
-			i = i + 2;
+			float x = vertices.getXVertex(i);
+			float y = vertices.getYVertex(i);
+			
+			vertices.setXVertex(i, x * fx);
+			vertices.setYVertex(i, y * fy);
 		}
 	}
 
-	public static void rotarVertices(float ang, float cx, float cy, FloatArray vertices)
+	public static void rotarVertices(float ang, float cx, float cy, VertexArray vertices)
 	{
 		trasladarVertices(-cx, -cy, vertices);
 		rotarVertices(ang, vertices);
 		trasladarVertices(cx, cy, vertices);
 	}
 
-	public static void rotarVertices(float ang, FloatArray vertices)
+	public static void rotarVertices(float ang, VertexArray vertices)
 	{
-		int i = 0;
-		while (i < vertices.size)
+		for (int i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float x = vertices.get(i);
-			float y = vertices.get(i + 1);
-
-			vertices.set(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)));
-			vertices.set(i + 1, (float) (x * Math.sin(ang) + y * Math.cos(ang)));
-
-			i = i + 2;
+			float x = vertices.getXVertex(i);
+			float y = vertices.getYVertex(i);
+			
+			vertices.setXVertex(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)));
+			vertices.setYVertex(i, (float) (x * Math.sin(ang) + y * Math.cos(ang)));
 		}
 	}
 	
@@ -334,6 +312,7 @@ public class BufferManager
 		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, color, bufferPuntos);
 	}
 
+	// FIXME revisar
 	// Pintura de una Lista de Handles
 	public static void dibujarListaIndiceHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
 	{
@@ -366,6 +345,7 @@ public class BufferManager
 		gl.glPopMatrix();
 	}
 
+	// FIXME revisar
 	// Pintura de una Lista de Handles
 	public static void dibujarListaHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
 	{
@@ -376,10 +356,9 @@ public class BufferManager
 		{
 			float x = posiciones.get(i);
 			float y = posiciones.get(i + 1);
-			float z = 0.0f;
 
 			gl.glPushMatrix();
-			gl.glTranslatef(x, y, z);
+			gl.glTranslatef(x, y, 0.0f);
 			dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, color, handle.getBufferRelleno());
 			
 			gl.glTranslatef(0.0f, 0.0f, 1.0f);
