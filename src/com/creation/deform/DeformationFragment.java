@@ -15,7 +15,7 @@ import com.android.view.ViewPagerSwipeable;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 import com.project.model.GameResources;

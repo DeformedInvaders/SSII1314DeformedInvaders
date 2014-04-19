@@ -6,12 +6,15 @@ import java.nio.FloatBuffer;
 
 public class Handle
 {
+	private int colorHandle;
 	private FloatBuffer bufferRelleno, bufferContorno;
 
 	/* Constructora */
 
-	public Handle(int numIter, float radio)
+	public Handle(int numIter, float radio, int color)
 	{
+		colorHandle = color;
+		
 		int longVertices = (numIter + 1) * 2;
 		int longArray = longVertices + 2;
 		
@@ -61,5 +64,10 @@ public class Handle
 	public FloatBuffer getBufferContorno()
 	{
 		return bufferContorno;
+	}
+	
+	public int getColor()
+	{
+		return colorHandle;
 	}
 }

@@ -17,13 +17,12 @@ import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
+import com.lib.buffer.BufferManager;
+import com.lib.buffer.HandleArray;
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 import com.lib.math.Intersector;
-import com.lib.opengl.BufferManager;
-import com.lib.opengl.HullArray;
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
-import com.lib.utils.FloatArray;
-import com.lib.utils.ShortArray;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
@@ -38,7 +37,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	/* Movimientos */
 
 	// Información de Movimiento
-	private List<FloatArray> listaHandlesAnimacion;
+	private List<HandleArray> listaHandlesAnimacion;
 	private List<VertexArray> listaVerticesAnimacion;
 
 	// Informacion para la reproduccion de la animacion
@@ -64,15 +63,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	/* Handles */
 
 	// Coordenadas de Handles
-	private FloatArray handles;
-
-	// Indice Vertice asociado a Handles
-	private ShortArray indiceHandles;
-
-	// Coordenadas de Handles Seleccionados
-	private FloatArray handleSeleccionado;
-
-	private Handle objetoVertice, objetoHandle, objetoHandleSeleccionado;
+	private HandleArray handles;
+	private short[] punteros;
+	
+	private Handle objetoHandle, objetoHandleSeleccionado;
 
 	/* Textura */
 	private Textura textura;
@@ -89,7 +83,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 		estado = TEstadoDeform.Nada;
 		modoGrabar = false;
-		listaHandlesAnimacion = new ArrayList<FloatArray>();
+		listaHandlesAnimacion = new ArrayList<HandleArray>();
+		listaVerticesAnimacion = new ArrayList<VertexArray>();
 
 		// Esqueleto
 		contorno = personaje.getEsqueleto().getContorno();
@@ -101,23 +96,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		bufferTriangulos = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
 
 		// Handles
-		handles = new FloatArray();
-		indiceHandles = new ShortArray();
-
-		handleSeleccionado = new FloatArray();
-		reinciarHandlesSeleccionados();
-
+		handles = new HandleArray();
+		punteros = new short[GamePreferences.NUM_HANDLES];
+		
+		reiniciarHandles();
+		
 		// Textura
 		textura = personaje.getTextura();
 		coordsTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getCoordTextura());
 		pegatinas = textura.getPegatinas();
 
-		objetoHandle = new Handle(20, GamePreferences.POINT_WIDTH);
-		objetoVertice = new Handle(20, GamePreferences.POINT_WIDTH / 2);
-		objetoHandleSeleccionado = new Handle(20, 2 * GamePreferences.POINT_WIDTH);
+		objetoHandle = new Handle(20, GamePreferences.POINT_WIDTH, Color.BLACK);
+		objetoHandleSeleccionado = new Handle(20, 2 * GamePreferences.POINT_WIDTH, Color.RED);
 
 		// Deformador
-		deformator = new Deformator(verticesModificados, triangulos, handles, indiceHandles);
+		deformator = new Deformator(verticesModificados, triangulos, handles);
 	}
 
 	/* Métodos Renderer */
@@ -159,22 +152,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, verticesModificados);
 
-			if (estado != TEstadoDeform.Deformar)
-			{
-				BufferManager.dibujarListaHandle(gl, Color.RED, objetoVertice, verticesModificados);
-			}
-
 			// Handles
-			if (handles.size > 0)
-			{
-				BufferManager.dibujarListaHandle(gl, Color.BLACK, objetoHandle, handles);
-			}
-
-			// Seleccionado
-			if (estado == TEstadoDeform.Deformar)
-			{
-				BufferManager.dibujarListaIndiceHandle(gl, Color.RED, objetoHandleSeleccionado, handleSeleccionado);
-			}
+			BufferManager.dibujarListaHandle(gl, objetoHandle, objetoHandleSeleccionado, handles);
 
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
@@ -219,15 +198,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		modoGrabar = false;
 
 		handles.clear();
-		indiceHandles.clear();
-		reinciarHandlesSeleccionados();
 
 		verticesModificados = vertices.clone();
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 
 		listaHandlesAnimacion.clear();
-		listaVerticesAnimacion = null;
+		listaVerticesAnimacion.clear();
 
 		return true;
 	}
@@ -253,21 +230,17 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	private boolean anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		// Pixel pertenece a los Vértices
-		short j = buscarPixel(verticesModificados, pixelX, pixelY, screenWidth, screenHeight);
-		if (j != -1)
+		short triangle = buscarTriangulo(contorno, verticesModificados, triangulos, pixelX, pixelY, screenWidth, screenHeight);
+		if (triangle != -1)
 		{
-			// Vértice no pertenece a los Handles
-			if (!indiceHandles.contains(j))
-			{
-				indiceHandles.add(j);
-				handles.add(verticesModificados.getXVertex(j));
-				handles.add(verticesModificados.getYVertex(j));
-
-				// Añadir Handle Nuevo
-				deformator.anyadirHandles(handles, indiceHandles);
-			}
-
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+			
+			handles.addHandle(frameX, frameY, triangle, verticesModificados, triangulos);
+			
+			// Añadir Handle Nuevo
+			deformator.anyadirHandles(handles);
+			
 			return true;
 		}
 
@@ -276,17 +249,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	private boolean eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		// Pixel pertenece a los Vértices
-		short j = buscarHandle(handles, pixelX, pixelY, screenWidth, screenHeight);
-		if (j != -1)
+		short handle = buscarHandle(handles, vertices, triangulos, pixelX, pixelY, screenWidth, screenHeight);
+		if (handle != -1)
 		{
-			indiceHandles.removeIndex(j);
-			
-			handles.removeIndex(2 * j + 1);
-			handles.removeIndex(2 * j);
+			handles.removeHandle(handle);
 			
 			// Eliminar Handle
-			deformator.anyadirHandles(handles, indiceHandles);
+			deformator.eliminarHandles(handles);
 			
 			return true;
 		}
@@ -296,22 +265,21 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	private boolean seleccionarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		// Pixel pertenece a los Vértices
-		short j = buscarHandle(handles, pixelX, pixelY, screenWidth, screenHeight);
-		if (j != -1)
+		short handle = buscarHandle(handles, vertices, triangulos, pixelX, pixelY, screenWidth, screenHeight);
+		if (handle != -1)
 		{
-			// Seleccionar Handle
-			handleSeleccionado.set(4 * pointer, j);
-			handleSeleccionado.set(4 * pointer + 1, 1);
-			handleSeleccionado.set(4 * pointer + 2, handles.get(2 * j));
-			handleSeleccionado.set(4 * pointer + 3, handles.get(2 * j + 1));
-
-			if (modoGrabar)
+			if (!handles.isSelectedHandle(handle))
 			{
-				listaHandlesAnimacion.add(handles.clone());
+				handles.setSelectedHandle(handle, true);
+				punteros[pointer] = handle;
+	
+				if (modoGrabar)
+				{
+					listaHandlesAnimacion.add(handles.clone());
+				}
+				
+				return true;
 			}
-			
-			return true;
 		}
 
 		return false;
@@ -323,7 +291,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if (estado == TEstadoDeform.Deformar)
 		{
 			// Handle sin Pulsar
-			if (handleSeleccionado.get(4 * pointer + 1) == 0)
+			if (punteros[pointer] == -1 || !handles.isSelectedHandle(punteros[pointer]))
 			{
 				return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 			}
@@ -338,24 +306,19 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	private boolean moverHandle(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		// Conversión Pixel - Punto
-		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
-		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
-
-		int indiceHandleSeleccionado = (int) handleSeleccionado.get(4 * pointer);
-		float lastFrameX = handles.get(2 * indiceHandleSeleccionado);
-		float lastFrameY = handles.get(2 * indiceHandleSeleccionado);
+		float lastFrameX = handles.getXCoordHandle((short) pointer);
+		float lastFrameY = handles.getYCoordHandle((short) pointer);
 
 		float lastPixelX = convertFrameXToPixelXCoordinate(lastFrameX, screenWidth);
 		float lastPixelY = convertFrameYToPixelYCoordinate(lastFrameY, screenHeight);
 
 		if (Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3 * GamePreferences.MAX_DISTANCE_PIXELS)
 		{
-			handles.set(2 * indiceHandleSeleccionado, frameX);
-			handles.set(2 * indiceHandleSeleccionado + 1, frameY);
-
-			handleSeleccionado.set(4 * pointer + 2, frameX);
-			handleSeleccionado.set(4 * pointer + 3, frameY);
+			// Conversión Pixel - Punto
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+			
+			handles.setCoordsHandle(punteros[pointer], frameX, frameY);
 			
 			if (modoGrabar)
 			{
@@ -375,12 +338,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		{
 			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 
-			reinciarHandlesSeleccionados();
+			reiniciarHandles();
 
 			if (modoGrabar && listaHandlesAnimacion.size() > 0)
 			{
 				modoGrabar = false;
-				estado = TEstadoDeform.Nada;
 				
 				final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_character_title), mContext.getString(R.string.text_processing_character_description), true);
 
@@ -396,6 +358,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				thread.start();
 				return true;
 			}
+			
+			estado = TEstadoDeform.Nada;
 		}
 
 		return false;
@@ -455,6 +419,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 		return false;
 	}
+	
+	private void reiniciarHandles()
+	{
+		for (short i = 0; i < handles.getNumHandles(); i++)
+		{
+			handles.setSelectedHandle(i, false);
+			handles.setCoordsHandle(i, verticesModificados, triangulos);
+		}
+		
+		for (short i = 0; i < GamePreferences.NUM_HANDLES; i++)
+		{
+			punteros[i] = -1;
+		}
+	}
 
 	/* Métodos de Selección de Estado */
 
@@ -463,12 +441,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		modoGrabar = true;
 		estado = TEstadoDeform.Deformar;
 
+		verticesModificados = vertices.clone();
+		
 		listaHandlesAnimacion.clear();
-		listaVerticesAnimacion = new ArrayList<VertexArray>();
+		listaVerticesAnimacion.clear();
 
 		reiniciarHandles();
 
-		verticesModificados = vertices.clone();
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}
@@ -498,37 +477,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return posicionAnimacion == listaVerticesAnimacion.size();
 	}
 
-	private void reiniciarHandles()
-	{
-		// Handles
-		for (int i = 0; i < indiceHandles.size; i++)
-		{
-			short pos = indiceHandles.get(i);
-
-			float x = vertices.getXVertex(pos);
-			float y = vertices.getYVertex(pos);
-
-			handles.set(2 * i, x);
-			handles.set(2 * i + 1, y);
-		}
-	}
-
-	private void reinciarHandlesSeleccionados()
-	{
-		handleSeleccionado.clear();
-		
-		for (int i = 0; i < GamePreferences.NUM_HANDLES; i++)
-		{
-			// Indice Handle
-			handleSeleccionado.add(-1);
-			// Estado Handle
-			handleSeleccionado.add(0);
-			// Posicion Handle
-			handleSeleccionado.add(0);
-			handleSeleccionado.add(0);
-		}
-	}
-
 	public void seleccionarAudio()
 	{
 		estado = TEstadoDeform.Audio;
@@ -543,7 +491,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isHandlesVacio()
 	{
-		return indiceHandles.size == 0;
+		return handles.getNumHandles() == 0;
 	}
 
 	public boolean isEstadoAnyadir()
@@ -583,7 +531,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isGrabacionReady()
 	{
-		return listaVerticesAnimacion != null && listaVerticesAnimacion.size() > 0;
+		return listaVerticesAnimacion.size() > 0;
 	}
 
 	/* Métodos de Guardado de Información */
@@ -596,7 +544,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// Pegatinas
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
 
-		return new DeformDataSaved(handles, indiceHandles, verticesModificados, estado, listaVerticesAnimacion);
+		return new DeformDataSaved(handles, verticesModificados, estado, listaVerticesAnimacion);
 	}
 
 	public void restoreData(DeformDataSaved data)
@@ -604,11 +552,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		modoGrabar = false;
 		estado = data.getEstado();
 		handles = data.getHandles();
-		indiceHandles = data.getIndiceHandles();
 		verticesModificados = data.getVerticesModificados();
 		listaVerticesAnimacion = data.getListaVertices();
 
-		deformator.anyadirHandles(handles, indiceHandles);
+		deformator.anyadirHandles(handles);
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}

@@ -149,34 +149,37 @@ public class GeometryUtils {
 		return centroid;
 	}
 
-	public static ShortArray isPolygonSimple(FloatArray vertices,
-			boolean continuo) {
+	public static ShortArray isPolygonSimple(FloatArray vertices, boolean continuo)
+	{
 		ShortArray listaCortes = new ShortArray();
 		FloatArray listaVertices = new FloatArray(vertices);
 
-		if (!continuo) {
+		if (!continuo)
+		{
 			listaVertices.add(vertices.get(0));
 			listaVertices.add(vertices.get(1));
 		}
 
 		int i = 0;
-		while (i < listaVertices.size - 4) {
+		while (i < listaVertices.size - 4)
+		{
 			float p1x = listaVertices.get(i);
 			float p1y = listaVertices.get(i + 1);
 			float p2x = listaVertices.get(i + 2);
 			float p2y = listaVertices.get(i + 3);
 
 			int j = i + 4;
-			while (j < listaVertices.size - 2) {
+			while (j < listaVertices.size - 2)
+			{
 				float p3x = listaVertices.get(j);
 				float p3y = listaVertices.get(j + 1);
 				float p4x = listaVertices.get(j + 2);
 				float p4y = listaVertices.get(j + 3);
 
-				if (i != 0 || j + 3 != listaVertices.size - 1) {
-					if (Intersector.intersectSegments(new Vector2(p1x, p1y),
-							new Vector2(p2x, p2y), new Vector2(p3x, p3y),
-							new Vector2(p4x, p4y), null)) {
+				if (i != 0 || j + 3 != listaVertices.size - 1)
+				{
+					if (Intersector.intersectSegments(new Vector2(p1x, p1y), new Vector2(p2x, p2y), new Vector2(p3x, p3y), new Vector2(p4x, p4y), null))
+					{
 						listaCortes.add(i / 2);
 						listaCortes.add(i / 2 + 1);
 						listaCortes.add(j / 2);
@@ -193,14 +196,14 @@ public class GeometryUtils {
 		return listaCortes;
 	}
 
-	public static boolean isPointInsideMesh(ShortArray contorno,
-			FloatArray vertices, float x, float y) {
+	public static boolean isPointInsideMesh(ShortArray contorno, FloatArray vertices, float x, float y)
+	{
 		Array<Vector2> polygon = new Array<Vector2>(2 * contorno.size);
 		int j = 0;
-		while (j < contorno.size) {
+		while (j < contorno.size)
+		{
 			int pos = contorno.get(j);
-			polygon.add(new Vector2(vertices.get(2 * pos), vertices
-					.get(2 * pos + 1)));
+			polygon.add(new Vector2(vertices.get(2 * pos), vertices.get(2 * pos + 1)));
 			j = j + 2;
 		}
 

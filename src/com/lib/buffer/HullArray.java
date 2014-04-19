@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 import com.lib.utils.ShortArray;
 
@@ -24,7 +24,7 @@ public class HullArray extends ShortArray
 		add(a);
 	}
 	
-	public short getVertex(int vertex)
+	public short getVertex(short vertex)
 	{
 		return get(vertex);
 	}

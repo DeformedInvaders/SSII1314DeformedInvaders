@@ -9,7 +9,7 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 
 public class Textura implements Serializable
 {

@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 import com.lib.utils.ShortArray;
 
@@ -27,22 +27,22 @@ public class EdgeArray extends ShortArray
 		add(r);
 	}
 	
-	public short getAVertex(int edge)
+	public short getAVertex(short edge)
 	{
 		return get(4 * edge);
 	}
 	
-	public short getBVertex(int edge)
+	public short getBVertex(short edge)
 	{
 		return get(4 * edge + 1);
 	}
 	
-	public short getLVertex(int edge)
+	public short getLVertex(short edge)
 	{
 		return get(4 * edge + 2);
 	}
 	
-	public short getRVertex(int edge)
+	public short getRVertex(short edge)
 	{
 		return get(4 * edge + 3);
 	}

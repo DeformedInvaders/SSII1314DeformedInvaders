@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 import com.lib.utils.ShortArray;
 
@@ -25,12 +25,12 @@ public class LineArray extends ShortArray
 		add(b);
 	}
 	
-	public short getAVertex(int line)
+	public short getAVertex(short line)
 	{
 		return get(2 * line);
 	}
 	
-	public short getBVertex(int line)
+	public short getBVertex(short line)
 	{
 		return get(2 * line + 1);
 	}

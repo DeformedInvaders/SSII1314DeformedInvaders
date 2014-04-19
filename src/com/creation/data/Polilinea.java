@@ -2,7 +2,7 @@ package com.creation.data;
 
 import java.nio.FloatBuffer;
 
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 
 public class Polilinea
 {

@@ -3,7 +3,7 @@ package com.creation.data;
 import java.io.Serializable;
 import java.util.List;
 
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 import com.project.model.GamePreferences;
 
 public class Movimientos implements Serializable

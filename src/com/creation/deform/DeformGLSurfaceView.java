@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.game.data.Personaje;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 import com.project.model.GamePreferences;
 
 public class DeformGLSurfaceView extends OpenGLSurfaceView

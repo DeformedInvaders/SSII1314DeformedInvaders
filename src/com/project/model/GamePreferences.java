@@ -44,7 +44,8 @@ public class GamePreferences
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;
 	public static final float DEEP_POLYLINES = 0.1f;
 	public static final float DEEP_STICKERS = 0.2f;
-	public static final float DEEP_OUTSIDE_FRAMES = 0.3f;
+	public static final float DEEP_HANDLE = 0.3f;
+	public static final float DEEP_OUTSIDE_FRAMES = 0.4f;
 	
 	/* FIXME Menos de 1 segundo no se graba nada */
 	public static final int TIME_DURATION_ANIMATION = 2000;

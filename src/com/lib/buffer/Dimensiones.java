@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 public class Dimensiones
 {

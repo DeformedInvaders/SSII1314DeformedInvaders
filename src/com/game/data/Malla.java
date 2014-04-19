@@ -12,10 +12,10 @@ import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
-import com.lib.opengl.BufferManager;
-import com.lib.opengl.HullArray;
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.BufferManager;
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 
 public abstract class Malla extends Entidad
 {

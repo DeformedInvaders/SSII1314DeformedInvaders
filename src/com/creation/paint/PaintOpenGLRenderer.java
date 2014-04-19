@@ -23,12 +23,12 @@ import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
+import com.lib.buffer.BufferManager;
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
-import com.lib.opengl.BufferManager;
-import com.lib.opengl.HullArray;
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
@@ -114,7 +114,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		estadoCaptura = TEstadoCaptura.Nada;
 
-		objetoVertice = new Handle(20, GamePreferences.POINT_WIDTH);
+		objetoVertice = new Handle(20, GamePreferences.POINT_WIDTH, Color.BLACK);
 	}
 
 	/* Métodos Renderer */
@@ -191,7 +191,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Handles
 			if (estado == TEstadoPaint.Pegatinas)
 			{
-				BufferManager.dibujarListaHandle(gl, Color.BLACK, objetoVertice, vertices);
+				BufferManager.dibujarListaHandle(gl, objetoVertice, vertices);
 			}
 		}
 
@@ -301,7 +301,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private boolean anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		// Pixel pertenece a los Vértices
-		short j = buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight);
+		short j = buscarVertice(vertices, pixelX, pixelY, screenWidth, screenHeight);
 		if (j != -1)
 		{
 			pegatinas.setPegatina(pegatinaActual, j, tipoPegatinaActual);

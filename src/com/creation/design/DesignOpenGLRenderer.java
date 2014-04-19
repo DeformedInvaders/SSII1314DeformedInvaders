@@ -9,11 +9,11 @@ import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
+import com.lib.buffer.BufferManager;
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 import com.lib.math.Intersector;
-import com.lib.opengl.BufferManager;
-import com.lib.opengl.HullArray;
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
 import com.project.model.GamePreferences;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer

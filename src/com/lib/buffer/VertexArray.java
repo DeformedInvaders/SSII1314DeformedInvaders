@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 import com.lib.utils.FloatArray;
 
@@ -25,22 +25,18 @@ public class VertexArray extends FloatArray
 		add(y);
 	}
 	
-	public void setXVertex(int vertex, float x)
+	public void setVertex(short vertex, float x, float y)
 	{
 		set(2 * vertex, x);
-	}
-	
-	public void setYVertex(int vertex, float y)
-	{
 		set(2 * vertex + 1, y);
 	}
 	
-	public float getXVertex(int vertex)
+	public float getXVertex(short vertex)
 	{
 		return get(2 * vertex);
 	}
 	
-	public float getYVertex(int vertex)
+	public float getYVertex(short vertex)
 	{
 		return get(2 * vertex + 1);
 	}

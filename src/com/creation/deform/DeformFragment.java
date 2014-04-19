@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import com.android.alert.RecordAlert;
 import com.android.view.OpenGLFragment;
 import com.game.data.Personaje;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 import com.project.main.R;
 
 public class DeformFragment extends OpenGLFragment implements OnDeformListener

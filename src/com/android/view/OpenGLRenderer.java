@@ -18,11 +18,14 @@ import android.opengl.GLUtils;
 import com.creation.data.MapaBits;
 import com.creation.data.TTipoSticker;
 import com.game.data.TTipoEntidad;
+import com.lib.buffer.BufferManager;
+import com.lib.buffer.Dimensiones;
+import com.lib.buffer.HandleArray;
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
+import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
-import com.lib.opengl.BufferManager;
-import com.lib.opengl.Dimensiones;
-import com.lib.opengl.VertexArray;
-import com.lib.utils.FloatArray;
 import com.project.model.GamePreferences;
 
 public abstract class OpenGLRenderer implements Renderer
@@ -366,7 +369,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected boolean isPoligonoDentroMarco(VertexArray vertices)
 	{
-		for (int i = 0; i < vertices.getNumVertices(); i++)
+		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float frameX = vertices.getYVertex(i);
 			float frameY = vertices.getYVertex(i);
@@ -548,10 +551,60 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	/* Métodos de Búsqueda de Pixeles */
-
-	private short buscarPixel(VertexArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight, float epsilon)
+	
+	protected short buscarTriangulo(HullArray contorno, VertexArray vertices, TriangleArray triangulos, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		for (int i = 0; i < vertices.getNumVertices(); i++)
+		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+		
+		if (GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
+		{			
+			for (short i = 0; i < triangulos.getNumTriangles(); i++)
+			{
+				short a = triangulos.getAVertex(i);
+				short b = triangulos.getCVertex(i);
+				short c = triangulos.getBVertex(i);
+				
+				float aX = vertices.getXVertex(a);
+				float aY = vertices.getYVertex(a);
+				float bX = vertices.getXVertex(b);
+				float bY = vertices.getYVertex(b);
+				float cX = vertices.getXVertex(c);
+				float cY = vertices.getYVertex(c);
+				
+				if (Intersector.isPointInTriangle(frameX, frameY, aX, aY, bX, bY, cX, cY))
+				{
+					return i;
+				}
+			}
+		}
+		
+		return -1;
+	}
+	
+	protected short buscarHandle(HandleArray handles, VertexArray vertices, TriangleArray triangulos, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		for (short i = 0; i < handles.getNumHandles(); i++)
+		{
+			float frameX = handles.getXCoordHandle(i);
+			float frameY = handles.getYCoordHandle(i);
+			
+			float lastPixelX = convertFrameXToPixelXCoordinate(frameX, screenWidth);
+			float lastPixelY = convertFrameYToPixelYCoordinate(frameY, screenHeight);
+
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY));
+			if (distancia < GamePreferences.MAX_DISTANCE_HANDLES)
+			{
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	protected short buscarVertice(VertexArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float frameX = vertices.getXVertex(i);
 			float frameY = vertices.getYVertex(i);
@@ -560,24 +613,13 @@ public abstract class OpenGLRenderer implements Renderer
 			float lastpY = convertFrameYToPixelYCoordinate(frameY, screenHeight);
 
 			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
-			if (distancia < epsilon)
+			if (distancia < GamePreferences.MAX_DISTANCE_PIXELS)
 			{
 				return (short) i;
 			}
 		}
 		
 		return -1;
-	}
-	
-	protected short buscarPixel(VertexArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		return buscarPixel(vertices, pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_PIXELS);
-	}
-	
-	// FIXME Revisar
-	protected short buscarHandle(FloatArray handles, float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		return buscarPixel(new VertexArray(handles), pixelX, pixelY, screenWidth, screenHeight, GamePreferences.MAX_DISTANCE_HANDLES);
 	}
 
 	/* Métodos de Construcción de Texturas */
@@ -624,7 +666,7 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		VertexArray textura = new VertexArray(vertices.getNumVertices());
 
-		for (int i = 0; i < vertices.getNumVertices(); i++)
+		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float frameX = vertices.getXVertex(i);
 			float frameY = vertices.getYVertex(i);

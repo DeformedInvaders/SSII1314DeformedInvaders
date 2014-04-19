@@ -1,7 +1,7 @@
 package com.lib.math;
 
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;

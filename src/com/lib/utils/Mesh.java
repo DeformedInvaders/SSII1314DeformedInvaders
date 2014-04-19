@@ -1,7 +1,7 @@
 package com.lib.utils;
 
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 
 public class Mesh
 {

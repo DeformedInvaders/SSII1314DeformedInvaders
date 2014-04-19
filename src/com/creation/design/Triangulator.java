@@ -1,5 +1,8 @@
 package com.creation.design;
 
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 import com.lib.math.BSpline;
 import com.lib.math.ConvexHull;
 import com.lib.math.DelaunayMeshGenerator;
@@ -7,9 +10,6 @@ import com.lib.math.DelaunayTriangulator;
 import com.lib.math.EarClippingTriangulator;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Vector2;
-import com.lib.opengl.HullArray;
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
@@ -25,7 +25,7 @@ public class Triangulator
 	private HullArray contorno;
 	private boolean poligonoSimple;
 	
-	/* SECTION Constructora */
+	/* Constructora */
 	
 	public Triangulator(VertexArray puntos)
 	{
@@ -33,7 +33,7 @@ public class Triangulator
 		
 		if(puntos.getNumVertices() > 2)
 		{			
-			// TODO Calcular Iteraciones en función del Area del Poligono
+			// FIXME Calcular Iteraciones en función del Area del Poligono
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
 			
 			poligonoSimple = calcularPoligonoSimple(bsplineVertices, false).size == 0;
@@ -53,7 +53,7 @@ public class Triangulator
 		}
 	}
 	
-	/* SECTION Métodos de Obtención de Información */
+	/* Métodos de Obtención de Información */
 	
 	public boolean getPoligonSimple()
 	{
@@ -75,7 +75,7 @@ public class Triangulator
 		return contorno;
 	}
 	
-	/* SECTION Métodos Públicos Estáticos */
+	/* Métodos Públicos Estáticos */
 	
 	public static FloatArray calcularConvexHull(FloatArray vertices, boolean ordenados)
 	{

@@ -8,7 +8,7 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.VertexArray;
 import com.project.model.GamePreferences;
 import com.project.model.GameResources;
 

@@ -1,8 +1,8 @@
 package com.creation.design;
 
-import com.lib.opengl.HullArray;
-import com.lib.opengl.TriangleArray;
-import com.lib.opengl.VertexArray;
+import com.lib.buffer.HullArray;
+import com.lib.buffer.TriangleArray;
+import com.lib.buffer.VertexArray;
 import com.project.controller.DataSaved;
 
 public class DesignDataSaved extends DataSaved

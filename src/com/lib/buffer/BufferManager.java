@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -9,7 +9,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.graphics.Color;
 
 import com.creation.data.Handle;
-import com.lib.utils.FloatArray;
 import com.project.model.GamePreferences;
 
 public class BufferManager
@@ -45,9 +44,9 @@ public class BufferManager
 		float[] arrayVertices = new float[2 * contorno.getNumVertex()];
 
 		int j = 0;
-		for (int i = 0; i < contorno.getNumVertex(); i++)
+		for (short i = 0; i < contorno.getNumVertex(); i++)
 		{
-			int a = contorno.getVertex(i);
+			short a = contorno.getVertex(i);
 			
 			arrayVertices[j] = vertices.getXVertex(a);
 			arrayVertices[j + 1] = vertices.getYVertex(a);
@@ -65,7 +64,7 @@ public class BufferManager
 		float[] arrayVertices = new float[4 * lineas.getNumLines()];
 
 		int j = 0;
-		for (int i = 0; i < lineas.getNumLines(); i++)
+		for (short i = 0; i < lineas.getNumLines(); i++)
 		{
 			short a = lineas.getAVertex(i);
 			short b = lineas.getBVertex(i);
@@ -89,7 +88,7 @@ public class BufferManager
 		float[] arrayVertices = new float[12 * triangulos.getNumTriangles()];
 
 		int j = 0;
-		for (int i = 0; i < triangulos.getNumTriangles(); i++)
+		for (short i = 0; i < triangulos.getNumTriangles(); i++)
 		{
 			short a = triangulos.getAVertex(i);
 			short b = triangulos.getBVertex(i);
@@ -126,7 +125,7 @@ public class BufferManager
 		float[] arrayVertices = new float[6 * triangulos.getNumTriangles()];
 
 		int j = 0;
-		for (int i = 0; i < triangulos.getNumTriangles(); i++)
+		for (short i = 0; i < triangulos.getNumTriangles(); i++)
 		{
 			short a = triangulos.getAVertex(i);
 			short b = triangulos.getBVertex(i);
@@ -164,7 +163,7 @@ public class BufferManager
 	public static void actualizarBufferListaTriangulos(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
 	{
 		int j = 0;
-		for (int i = 0; i < triangulos.getNumTriangles(); i++)
+		for (short i = 0; i < triangulos.getNumTriangles(); i++)
 		{
 			short a = triangulos.getAVertex(i);
 			short b = triangulos.getBVertex(i);
@@ -197,7 +196,7 @@ public class BufferManager
 	public static void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
 	{
 		int j = 0;
-		for (int i = 0; i < triangulos.getNumTriangles(); i++)
+		for (short i = 0; i < triangulos.getNumTriangles(); i++)
 		{
 			short a = triangulos.getAVertex(i);
 			short b = triangulos.getBVertex(i);
@@ -220,7 +219,7 @@ public class BufferManager
 	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer, HullArray contorno, VertexArray vertices)
 	{
 		int j = 0;
-		for (int i = 0; i < contorno.getNumVertex(); i++)
+		for (short i = 0; i < contorno.getNumVertex(); i++)
 		{
 			short a = contorno.getVertex(i);
 			
@@ -235,13 +234,12 @@ public class BufferManager
 	
 	public static void trasladarVertices(float vx, float vy, VertexArray vertices)
 	{
-		for (int i = 0; i < vertices.getNumVertices(); i++)
+		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float x = vertices.getXVertex(i);
 			float y = vertices.getYVertex(i);
 			
-			vertices.setXVertex(i, x + vx);
-			vertices.setYVertex(i, y + vy);
+			vertices.setVertex(i, x + vx, y + vy);
 		}
 	}
 
@@ -254,13 +252,12 @@ public class BufferManager
 
 	public static void escalarVertices(float fx, float fy, VertexArray vertices)
 	{
-		for (int i = 0; i < vertices.getNumVertices(); i++)
+		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float x = vertices.getXVertex(i);
 			float y = vertices.getYVertex(i);
 			
-			vertices.setXVertex(i, x * fx);
-			vertices.setYVertex(i, y * fy);
+			vertices.setVertex(i, x * fx, y * fy);
 		}
 	}
 
@@ -273,13 +270,12 @@ public class BufferManager
 
 	public static void rotarVertices(float ang, VertexArray vertices)
 	{
-		for (int i = 0; i < vertices.getNumVertices(); i++)
+		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float x = vertices.getXVertex(i);
 			float y = vertices.getYVertex(i);
 			
-			vertices.setXVertex(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)));
-			vertices.setYVertex(i, (float) (x * Math.sin(ang) + y * Math.cos(ang)));
+			vertices.setVertex(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)), (float) (x * Math.sin(ang) + y * Math.cos(ang)));
 		}
 	}
 	
@@ -312,62 +308,43 @@ public class BufferManager
 		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, color, bufferPuntos);
 	}
 
-	// FIXME revisar
 	// Pintura de una Lista de Handles
-	public static void dibujarListaIndiceHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
+	public static void dibujarListaHandle(GL10 gl, Handle handle, Handle handleSeleccionado, HandleArray handles)
 	{
-		gl.glPushMatrix();
-
-		int i = 0;
-		while (i < posiciones.size)
+		for (short i = 0; i < handles.getNumHandles(); i++)
 		{
-			float estado = posiciones.get(i + 1);
-
-			if (estado == 1)
-			{
-				float x = posiciones.get(i + 2);
-				float y = posiciones.get(i + 3);
-				float z = 0.0f;
-
-				gl.glPushMatrix();
-				gl.glTranslatef(x, y, z);
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, color, handle.getBufferRelleno());
-				
-				gl.glTranslatef(0.0f, 0.0f, 1.0f);
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());
-				
-				gl.glPopMatrix();
-			}
-
-			i = i + 4;
-		}
-
-		gl.glPopMatrix();
-	}
-
-	// FIXME revisar
-	// Pintura de una Lista de Handles
-	public static void dibujarListaHandle(GL10 gl, int color, Handle handle, FloatArray posiciones)
-	{
-		gl.glPushMatrix();
-
-		int i = 0;
-		while (i < posiciones.size)
-		{
-			float x = posiciones.get(i);
-			float y = posiciones.get(i + 1);
-
 			gl.glPushMatrix();
-			gl.glTranslatef(x, y, 0.0f);
-			dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, color, handle.getBufferRelleno());
 			
-			gl.glTranslatef(0.0f, 0.0f, 1.0f);
-			dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());
+				gl.glTranslatef(handles.getXCoordHandle(i), handles.getYCoordHandle(i), GamePreferences.DEEP_HANDLE);
+				
+				if (handles.isSelectedHandle(i))
+				{
+					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handleSeleccionado.getColor(), handleSeleccionado.getBufferRelleno());
+					dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handleSeleccionado.getBufferContorno());
+				}
+				else
+				{
+					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handle.getColor(), handle.getBufferRelleno());
+					dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());					
+				}
+			
 			gl.glPopMatrix();
-
-			i = i + 2;
 		}
-
-		gl.glPopMatrix();
+	}
+	
+	//FIXME Eliminar al modificar pegatinas
+	public static void dibujarListaHandle(GL10 gl, Handle handle, VertexArray vertices)
+	{
+		for (short i = 0; i < vertices.getNumVertices(); i++)
+		{
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(vertices.getXVertex(i), vertices.getYVertex(i), GamePreferences.DEEP_HANDLE);
+				
+				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handle.getColor(), handle.getBufferRelleno());
+				dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());					
+			
+			gl.glPopMatrix();
+		}
 	}
 }

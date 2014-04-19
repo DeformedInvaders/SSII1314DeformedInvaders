@@ -1,4 +1,4 @@
-package com.lib.opengl;
+package com.lib.buffer;
 
 import com.lib.utils.ShortArray;
 
@@ -26,17 +26,17 @@ public class TriangleArray extends ShortArray
 		add(c);
 	}
 	
-	public short getAVertex(int triangle)
+	public short getAVertex(short triangle)
 	{
 		return get(3 * triangle);
 	}
 	
-	public short getBVertex(int triangle)
+	public short getBVertex(short triangle)
 	{
 		return get(3 * triangle + 1);
 	}
 	
-	public short getCVertex(int triangle)
+	public short getCVertex(short triangle)
 	{
 		return get(3 * triangle + 2);
 	}

@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.TTipoSticker;
-import com.lib.opengl.Dimensiones;
+import com.lib.buffer.Dimensiones;
 
 public abstract class Rectangulo extends Entidad
 {
