@@ -68,8 +68,8 @@ public class GamePreferences
 	public static final int NUM_TYPE_ENEMIES = 4;
 	
 	public static final int NUM_TYPE_OPPONENTS = NUM_TYPE_OBSTACLES + NUM_TYPE_MISSILES + NUM_TYPE_ENEMIES;
-	public static final int NUM_TYPE_STICKERS_EYES = 8;
-	public static final int NUM_TYPE_STICKERS_MOUTH = 7;
+	public static final int NUM_TYPE_STICKERS_EYES = 12;
+	public static final int NUM_TYPE_STICKERS_MOUTH = 12;
 	public static final int NUM_TYPE_STICKERS_WEAPON = 16;
 	public static final int NUM_TYPE_STICKERS_TRINKET = 16;
 	public static final int NUM_TYPE_STICKERS_HELMET = 16;

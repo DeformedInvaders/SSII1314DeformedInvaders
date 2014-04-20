@@ -145,7 +145,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (canvas.isEstadoReposo() && !canvas.isEstadoAnimacion())
+		if (canvas.isEstadoReposo() || !canvas.isEstadoAnimacion())
 		{
 			botonCamara.setVisibility(View.VISIBLE);
 		}

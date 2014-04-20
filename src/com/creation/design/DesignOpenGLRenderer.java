@@ -76,8 +76,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 								BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
 							}
 						}
-						
-						BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoligono);
+						else
+						{
+							BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoligono);
+						}
 					}
 					
 					// Centrado de Marco

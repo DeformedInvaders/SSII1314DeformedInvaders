@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- STRINGS -->
+    		<string name="title_app">Deformed Invaders</string>
     	<!-- ActionBar Titles -->
-		    <string name="title_app">DEFORMED INVADERS</string>
-		    <string name="title_design_phase">Define the design.</string>
-		    <string name="title_paint_phase">Define the texture.</string>
-		    <string name="title_deformation_phase">Define the animation.</string>
-		    <string name="title_character_selection_phase">Select a character.</string>
-		    <string name="title_level_selection_phase">Select a level.</string>
-		    <string name="title_game_phase">Enjoy the game.</string>
+		    <string name="title_main_phase">Deformed Invaders</string>
+		    <string name="title_design_phase">Designing your character.</string>
+		    <string name="title_paint_phase">Painting your character.</string>
+		    <string name="title_deformation_phase">Animating your character.</string>
+		    <string name="title_character_selection_phase">Selecting a character.</string>
+		    <string name="title_level_selection_phase">Selecting a level.</string>
 	    
 	    <!-- ActionBar PagerView Section Titles -->
 			<string name="title_animation_section_run">Run</string>

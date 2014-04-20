@@ -342,13 +342,13 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	private void cambiarEstadoLoading(OnLoadingListener listener)
 	{
 		estado = TEstadoController.Loading;
-		view.insertarLoadingFragmento(listener);
+		view.insertarLoadingFragmento(listener, estado.getTitle());
 	}
 
 	private void cambiarEstadoMain(Personaje personaje, int numeroPersonajes)
 	{
 		estado = TEstadoController.Main;
-		view.insertarMainFragmento(personaje, numeroPersonajes);
+		view.insertarMainFragmento(personaje, numeroPersonajes, estado.getTitle());
 	
 		pila.clear();
 		pila.push(new Estado(estado));
@@ -357,67 +357,67 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	private void cambiarEstadoDesign()
 	{
 		estado = TEstadoController.Design;
-		view.insertarDesignFragmento();
+		view.insertarDesignFragmento(estado.getTitle());
 	}
 	
 	private void cambiarEstadoDesign(DesignDataSaved datosSalvados)
 	{
 		estado = TEstadoController.Design;
-		view.insertarDesignFragmento(datosSalvados);
+		view.insertarDesignFragmento(datosSalvados, estado.getTitle());
 	}
 
 	private void cambiarEstadoPaint(Personaje nuevoPersonaje, GameStatistics[] estadisticasNiveles)
 	{		
 		estado = TEstadoController.Paint;
-		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles);
+		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, estado.getTitle());
 	}
 	
 	private void cambiarEstadoPaint(Personaje nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados)
 	{		
 		estado = TEstadoController.Paint;
-		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, datosSalvados);
+		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, datosSalvados, estado.getTitle());
 	}
 	
 	private void cambiarEstadoRepaint(Personaje personaje, int indice, GameStatistics[] estadisticasNiveles)
 	{		
 		estado = TEstadoController.Repaint;
-		view.insertarPaintFragmento(personaje, indice, estadisticasNiveles);
+		view.insertarPaintFragmento(personaje, indice, estadisticasNiveles, estado.getTitle());
 	}
 
 	private void cambiarEstadoDeformation(Personaje nuevoPersonaje)
 	{		
 		estado = TEstadoController.Deformation;
-		view.insertarDeformationFragmento(nuevoPersonaje);
+		view.insertarDeformationFragmento(nuevoPersonaje, estado.getTitle());
 	}
 
 	private void cambiarEstadoCharacterSelection(List<Personaje> listaPersonajes)
 	{
 		estado = TEstadoController.CharacterSelection;
-		view.insertarCharacterSelectionFragmento(listaPersonajes);
+		view.insertarCharacterSelectionFragmento(listaPersonajes, estado.getTitle());
 	}
 	
 	private void cambiarEstadoCharacterSelection(List<Personaje> listaPersonajes, CharacterSelectionDataSaved datosSalvados)
 	{
 		estado = TEstadoController.CharacterSelection;
-		view.insertarCharacterSelectionFragmento(listaPersonajes, datosSalvados);
+		view.insertarCharacterSelectionFragmento(listaPersonajes, datosSalvados, estado.getTitle());
 	}
 
 	private void cambiarEstadoLevelSelection(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles)
 	{
 		estado = TEstadoController.LevelSelection;
-		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles);
+		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, estado.getTitle());
 	}
 	
 	private void cambiarEstadoLevelSelection(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles, TTipoLevel nivel)
 	{
 		estado = TEstadoController.LevelSelection;
-		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, nivel);
+		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, nivel, estado.getTitle());
 	}
 
 	private void cambiarEstadoGame(Personaje personajeSeleccionado, InstanciaNivel nivel)
 	{		
 		estado = TEstadoController.Game;
-		view.insertarGameFragmento(personajeSeleccionado, nivel);
+		view.insertarGameFragmento(personajeSeleccionado, nivel, nivel.getTipoNivel().getDescription());
 	}
 	
 	public boolean isEstadoDesapilador()

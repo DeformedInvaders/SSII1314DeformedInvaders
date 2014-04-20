@@ -1,6 +1,5 @@
 package com.project.controller;
 
-
 public class Estado
 {
 	private DataSaved datosSalvados;

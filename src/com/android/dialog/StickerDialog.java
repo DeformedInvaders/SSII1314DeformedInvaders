@@ -80,18 +80,42 @@ public abstract class StickerDialog extends WindowDialog
 	
 	private void construirPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTipoSticker tipo, OnClickListener listener)
 	{
+		boolean pegatinaAnyiadida = false;
+		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS(tipo); i++)
 		{
-			// FIXME Añadir pegatinas al nivel Luna
-			int pos = (( i - 1) / (GamePreferences.NUM_TYPE_LEVELS - 1)) + 1;
-			
-			if (tipo == TTipoSticker.Eyes || tipo == TTipoSticker.Mouth || estadisticas[pos].isPerfected())
+			if (tipo == TTipoSticker.Eyes || tipo == TTipoSticker.Mouth)
 			{
-				cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+				if (i < GamePreferences.NUM_TYPE_STICKERS(tipo) - 4)
+				{
+					// Pegatinas Básicas
+					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+					pegatinaAnyiadida = true;
+				}
+				else if(estadisticas[0].isPerfected())
+				{
+					// Pegatinas Nivel Luna
+					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+					pegatinaAnyiadida = true;
+				}
+			}
+			else
+			{
+				// Pegatinas Resto Niveles
+				int pos = (i / (GamePreferences.NUM_TYPE_LEVELS - 1)) + 1;
+				if (estadisticas[pos].isPerfected())
+				{
+					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+					pegatinaAnyiadida = true;
+				}
 			}
 		}
 		
-		cargarPegatina(layout, R.drawable.sticker_delete, 0, new OnDeleteStickerClickListener(tipo));
+		// Opción Eliminar Pegatina
+		if (pegatinaAnyiadida)
+		{
+			cargarPegatina(layout, R.drawable.sticker_delete, 0, new OnDeleteStickerClickListener(tipo));
+		}
 	}
 
 	/* Métodos Abstractos */
