@@ -15,7 +15,6 @@ import android.graphics.Color;
 import com.android.view.OpenGLRenderer;
 import com.character.display.TEstadoCaptura;
 import com.creation.data.Accion;
-import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
 import com.creation.data.Polilinea;
@@ -68,8 +67,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private MapaBits textura;
 	private VertexArray coordsTextura;
 
-	private Handle objetoVertice;
-
 	// Anterior Siguiente Buffers
 	private Stack<Accion> anteriores;
 	private Stack<Accion> siguientes;
@@ -113,8 +110,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		siguientes = new Stack<Accion>();
 
 		estadoCaptura = TEstadoCaptura.Nada;
-
-		objetoVertice = new Handle(20, GamePreferences.POINT_WIDTH, Color.BLACK);
 	}
 
 	/* Métodos Renderer */
@@ -186,13 +181,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
 
 			// Dibujar Pegatinas
-			pegatinas.dibujar(gl, this, vertices, TTipoEntidad.Personaje, 0);
-
-			// Handles
-			if (estado == TEstadoPaint.Pegatinas)
-			{
-				BufferManager.dibujarListaHandle(gl, objetoVertice, vertices);
-			}
+			pegatinas.dibujar(gl, this, vertices, triangulos, TTipoEntidad.Personaje, 0);
 		}
 
 		// Centrado de Marco
@@ -208,7 +197,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		listaLineas.clear();
 
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
-		pegatinas = new Pegatinas();
+		pegatinas.eliminarPegatinas();
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
 
@@ -266,8 +255,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
-			lineaActual.add(frameX);
-			lineaActual.add(frameY);
+			lineaActual.addVertex(frameX, frameY);
 
 			bufferLineaActual = BufferManager.construirBufferListaPuntos(lineaActual);
 
@@ -300,16 +288,18 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	private boolean anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		// Pixel pertenece a los Vértices
-		short j = buscarVertice(vertices, pixelX, pixelY, screenWidth, screenHeight);
-		if (j != -1)
+		short triangle = buscarTriangulo(contorno, vertices, triangulos, pixelX, pixelY, screenWidth, screenHeight);
+		if (triangle != -1)
 		{
-			pegatinas.setPegatina(pegatinaActual, j, tipoPegatinaActual);
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+			
+			pegatinas.setPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
 
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipoPegatinaActual);
 			pegatinaAnyadida = true;
 
-			anteriores.push(new Accion(pegatinaActual, j, tipoPegatinaActual));
+			anteriores.push(new Accion(tipoPegatinaActual));
 			siguientes.clear();
 
 			return true;
@@ -337,12 +327,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			return guardarPolilinea();
 		}
 
-		return false;
-	}
-
-	@Override
-	protected boolean onMultiTouchEvent()
-	{
 		return false;
 	}
 
@@ -428,7 +412,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		guardarPolilinea();
 		
 		descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipo);
-		pegatinas.deletePegatina(tipo);
+		pegatinas.eliminarPegatinas(tipo);
 		estado = TEstadoPaint.Nada;
 	}
 
@@ -473,7 +457,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		listaLineas = new ArrayList<Polilinea>();
 		
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
-		pegatinas = new Pegatinas();
+		pegatinas.ocultarPegatinas();
 
 		Iterator<Accion> it = pila.iterator();
 		while (it.hasNext())
@@ -489,7 +473,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			}
 			else if (accion.isTipoPegatina())
 			{
-				pegatinas.setPegatina(accion.getIndicePegatina(), accion.getVerticePegatina(), accion.getTipoPegatina());
+				pegatinas.mostrarPegatina(accion.getTipoPegatina());
 			}
 		}
 	}

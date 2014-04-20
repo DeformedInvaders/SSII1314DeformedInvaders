@@ -82,9 +82,9 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	}
 
 	@Override
-	protected boolean onMultiTouchEvent()
+	protected boolean onMultiTouchPostMove()
 	{
-		return renderer.onMultiTouchEvent();
+		return renderer.onMultiTouchPostMove();
 	}
 
 	/* Métodos de modifiación del Renderer */

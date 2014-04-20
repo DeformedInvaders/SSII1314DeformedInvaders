@@ -129,6 +129,10 @@ public class DesignFragment extends OpenGLFragment
 		botonListo.setVisibility(View.INVISIBLE);
 		botonReset.setVisibility(View.INVISIBLE);
 		botonTriangular.setVisibility(View.INVISIBLE);
+		
+		botonTriangular.setBackgroundResource(R.drawable.icon_tool_triangulate);
+		
+		canvas.setEstado(TEstadoDetector.SimpleTouch);
 	}
 
 	@Override
@@ -140,6 +144,16 @@ public class DesignFragment extends OpenGLFragment
 			botonReset.setVisibility(View.VISIBLE);
 			botonTriangular.setVisibility(View.VISIBLE);
 		}
+		
+		if (canvas.isEstadoTriangulando())
+		{
+			botonTriangular.setBackgroundResource(R.drawable.icon_tool_triangulate_selected);
+		}
+		
+		if (canvas.isEstadoRetocando())
+		{
+			canvas.setEstado(TEstadoDetector.CoordDetectors);
+		}
 	}
 
 	/* Métodos Listener onClick */
@@ -149,9 +163,9 @@ public class DesignFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if (canvas.isEstadoDibujando() || canvas.isEstadoTriangulando())
+			if (canvas.isEstadoDibujando())
 			{
-				if (canvas.seleccionarTriangular())
+				if (canvas.isPoligonoSimple())
 				{
 					List<Integer> listaMensajes = new ArrayList<Integer>();
 					listaMensajes.add(R.string.text_tip_design_drag_description);
@@ -164,14 +178,10 @@ public class DesignFragment extends OpenGLFragment
 					listaVideos.add(GameResources.VIDEO_DESIGN_ROTATE_PATH);
 					
 					sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);
-
-					canvas.setEstado(TEstadoDetector.CoordDetectors);
 					canvas.seleccionarRetoque();
 				}
 				else
-				{
-					canvas.setEstado(TEstadoDetector.SimpleTouch);
-					
+				{					
 					sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GameResources.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 				}
 			}
@@ -186,6 +196,9 @@ public class DesignFragment extends OpenGLFragment
 					sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_outside_description, GameResources.VIDEO_DESIGN_OUTSIDE_PATH, R.string.error_retouch);
 				}
 			}
+
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 
@@ -195,7 +208,6 @@ public class DesignFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			canvas.reiniciar();
-			canvas.setEstado(TEstadoDetector.SimpleTouch);
 
 			reiniciarInterfaz();
 			actualizarInterfaz();
@@ -207,11 +219,7 @@ public class DesignFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if (!canvas.seleccionarTriangular())
-			{
-				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GameResources.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
-			}
-
+			canvas.seleccionarTriangular();
 			reiniciarInterfaz();
 			actualizarInterfaz();
 		}

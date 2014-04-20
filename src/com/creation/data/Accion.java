@@ -9,7 +9,6 @@ public class Accion
 	private int color;
 
 	// Pegatina
-	private int indice, vertice;
 	private TTipoSticker pegatina;
 	
 	// Polilinea
@@ -28,11 +27,9 @@ public class Accion
 		this.tipo = TTipoAccion.Polilinea;
 	}
 
-	public Accion(int indice, int vertice, TTipoSticker pegatina)
+	public Accion(TTipoSticker pegatina)
 	{
-		this.indice = indice;
 		this.pegatina = pegatina;
-		this.vertice = vertice;
 		this.tipo = TTipoAccion.Pegatina;
 	}
 
@@ -51,16 +48,6 @@ public class Accion
 	public TTipoSticker getTipoPegatina()
 	{
 		return pegatina;
-	}
-
-	public int getVerticePegatina()
-	{
-		return vertice;
-	}
-
-	public int getIndicePegatina()
-	{
-		return indice;
 	}
 
 	public boolean isTipoColor()

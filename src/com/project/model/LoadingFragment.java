@@ -1,4 +1,4 @@
-package com.loading.load;
+package com.project.model;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

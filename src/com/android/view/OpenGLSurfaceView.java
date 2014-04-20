@@ -14,7 +14,7 @@ import com.android.touch.ScaleDetector;
 import com.android.touch.TEstadoDetector;
 import com.project.model.GamePreferences;
 
-public abstract class OpenGLSurfaceView extends GLSurfaceView
+public class OpenGLSurfaceView extends GLSurfaceView
 {
 	private Context mContext;
 	private TEstadoDetector estado;
@@ -28,7 +28,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	private GameDetector gameDetector;
 
 	/* Constructora */
-
+	
 	public OpenGLSurfaceView(Context context, AttributeSet attrs, TEstadoDetector estado, boolean transparente)
 	{
 		super(context, attrs);
@@ -52,14 +52,28 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 	}
 
 	/* Métodos Abstractos */
+	
+	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
 
-	protected abstract boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
+	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
 
-	protected abstract boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-
-	protected abstract boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-
-	protected abstract boolean onMultiTouchEvent();
+	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
+	
+	protected boolean onMultiTouchPostMove()
+	{
+		return false;
+	}
+	
+	/* Métodos de Modificación del Renderer */
 
 	protected void setRenderer(OpenGLRenderer r)
 	{
@@ -203,7 +217,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 			{
 				pointCount = GamePreferences.NUM_HANDLES;
 			}
-
+			
 			for (int i = 0; i < pointCount; i++)
 			{
 				float pixelX = event.getX(i);
@@ -229,7 +243,7 @@ public abstract class OpenGLSurfaceView extends GLSurfaceView
 
 			if (action == MotionEvent.ACTION_MOVE && activo)
 			{
-				onMultiTouchEvent();
+				onMultiTouchPostMove();
 			}
 
 			requestRender();

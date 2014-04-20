@@ -93,7 +93,7 @@ public abstract class Malla extends Entidad
 				BufferManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
 		
 				// Pegatinas
-				pegatinas.dibujar(gl, renderer, verticesAnimacion, tipo, id);
+				pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipo, id);
 	
 			gl.glPopMatrix();
 		}

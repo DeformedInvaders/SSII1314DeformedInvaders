@@ -27,11 +27,11 @@ import com.game.data.Personaje;
 import com.game.game.GameFragment;
 import com.game.select.LevelSelectionFragment;
 import com.game.select.TTipoLevel;
-import com.loading.load.LoadingFragment;
 import com.project.controller.GameController;
 import com.project.model.GameCore;
 import com.project.model.GamePreferences;
 import com.project.model.GameStatistics;
+import com.project.model.LoadingFragment;
 
 public class MainActivity extends FragmentActivity
 {

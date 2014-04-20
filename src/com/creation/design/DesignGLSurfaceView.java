@@ -44,12 +44,6 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 		return renderer.onTouchUp(x, y, width, height, pos);
 	}
 
-	@Override
-	protected boolean onMultiTouchEvent()
-	{
-		return false;
-	}
-
 	protected void reiniciar()
 	{
 		renderer.reiniciar();
@@ -58,11 +52,10 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de Selección de Estado */
 
-	public boolean seleccionarTriangular()
+	public void seleccionarTriangular()
 	{
-		boolean triangulado = renderer.seleccionarTriangular();
+		renderer.seleccionarTriangular();
 		requestRender();
-		return triangulado;
 	}
 
 	public void seleccionarRetoque()
@@ -96,6 +89,11 @@ public class DesignGLSurfaceView extends OpenGLSurfaceView
 	public boolean isPoligonoCompleto()
 	{
 		return renderer.isPoligonoCompleto();
+	}
+	
+	public boolean isPoligonoSimple()
+	{
+		return renderer.isPoligonoSimple();
 	}
 
 	public boolean isPoligonoDentroMarco()

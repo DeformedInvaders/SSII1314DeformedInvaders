@@ -23,14 +23,15 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private Triangulator triangulator;
 
 	private VertexArray puntos;
+	private FloatBuffer bufferPoligono;
+	
 	private VertexArray vertices;
 	private TriangleArray triangulos;
-	private HullArray contorno;
-
-	private FloatBuffer bufferPoligono;
 	private FloatBuffer bufferMalla;
+	private HullArray contorno;
+	private FloatBuffer bufferContorno;
 
-	private boolean poligonoSimple;
+	private boolean poligonoSimple, poligonoTriangulado;
 
 	/* Constructora */
 
@@ -41,7 +42,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		estado = TEstadoDesign.Dibujando;
 
 		puntos = new VertexArray();
+		
 		poligonoSimple = false;
+		poligonoTriangulado = false;
 	}
 
 	/* Métodos Renderer */
@@ -62,7 +65,19 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	
 					if (puntos.getNumVertices() > 1)
 					{
-						BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferPoligono);
+						if (poligonoSimple)
+						{
+							if (poligonoTriangulado)
+							{
+								BufferManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferMalla);
+							}
+							else
+							{
+								BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
+							}
+						}
+						
+						BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoligono);
 					}
 					
 					// Centrado de Marco
@@ -71,16 +86,19 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				if (estado == TEstadoDesign.Retocando)
-				{
-					dibujarMarcoInterior(gl, Color.LTGRAY);
-				}
+				dibujarMarcoInterior(gl, Color.LTGRAY);
 				
 				// Centrado de Marco
 				centrarPersonajeEnMarcoInicio(gl);
 				
-				BufferManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferMalla);
-				
+				if (poligonoTriangulado)
+				{
+					BufferManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferMalla);
+				}
+				else
+				{
+					BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
+				}
 				// Centrado de Marco
 				centrarPersonajeEnMarcoFinal(gl);
 			}
@@ -98,6 +116,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		vertices = null;
 		triangulos = null;
 		contorno = null;
+		
+		poligonoSimple = false;
+		poligonoTriangulado = false;
 
 		return true;
 	}
@@ -133,8 +154,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			puntos.add(frameX);
-			puntos.add(frameY);
+			puntos.addVertex(frameX, frameY);
 
 			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
 
@@ -172,6 +192,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if (poligonoSimple)
 			{
 				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
+				bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 			}
 
 			return true;
@@ -179,13 +200,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 		return false;
 	}
-
-	@Override
-	protected boolean onMultiTouchEvent()
-	{
-		return false;
-	}
-
+	
 	@Override
 	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
@@ -202,6 +217,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 			escalarVertices(factor, factor, cFrameX, cFrameY, vertices);
 			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
 		}
 	}
 
@@ -221,6 +237,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 			trasladarVertices(dWorldX, dWorldY, vertices);
 			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
 		}
 	}
 
@@ -234,20 +251,15 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			
 			rotarVertices(ang, cFrameX, cFrameY, vertices);
 			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
 		}
 	}
 
 	/* Métodos de Selección de Estado */
 
-	public boolean seleccionarTriangular()
+	public void seleccionarTriangular()
 	{
-		if (poligonoSimple)
-		{
-			estado = TEstadoDesign.Triangulando;
-			return true;
-		}
-
-		return false;
+		poligonoTriangulado = !poligonoTriangulado;
 	}
 
 	public void seleccionarRetoque()
@@ -261,6 +273,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoDesign.Terminado)
 		{
+			estado = TEstadoDesign.Retocando;
 			return new Esqueleto(contorno, vertices, triangulos);
 		}
 
@@ -274,7 +287,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoTriangulando()
 	{
-		return estado == TEstadoDesign.Triangulando;
+		return poligonoTriangulado;
 	}
 
 	public boolean isEstadoRetocando()
@@ -285,6 +298,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	public boolean isPoligonoCompleto()
 	{
 		return puntos.getNumVertices() >= 3;
+	}
+	
+	public boolean isPoligonoSimple()
+	{
+		return poligonoSimple;
 	}
 
 	public boolean isPoligonoDentroMarco()
@@ -318,6 +336,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		{
 			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
 			bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
+			bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 		}
 	}
 }

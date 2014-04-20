@@ -103,24 +103,6 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		return false;
 	}
 
-	@Override
-	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
-	{
-		return false;
-	}
-
-	@Override
-	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
-	{
-		return false;
-	}
-
-	@Override
-	protected boolean onMultiTouchEvent()
-	{
-		return false;
-	}
-
 	/* Métodos de Selección de Estado */
 
 	public void seleccionarRun()

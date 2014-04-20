@@ -8,6 +8,8 @@ import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
+import com.lib.buffer.StickerArray;
+import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
 import com.project.model.GamePreferences;
 import com.project.model.GameResources;
@@ -16,24 +18,13 @@ public class Pegatinas implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	// ID Drawable
-	private int[] indicePegatinas;
-
-	// Vertice Asociado
-	private int[] verticePegatinas;
+	private StickerArray pegatinas;
 
 	/* Constructora */
 
 	public Pegatinas()
 	{
-		indicePegatinas = new int[GamePreferences.NUM_TYPE_STICKERS];
-		verticePegatinas = new int[GamePreferences.NUM_TYPE_STICKERS];
-
-		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
-		{
-			indicePegatinas[i] = -1;
-			verticePegatinas[i] = -1;
-		}
+		pegatinas = new StickerArray();
 	}
 	
 	/* Métodos de representación en renderer */
@@ -60,7 +51,7 @@ public class Pegatinas implements Serializable
 		}
 	}
 	
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TTipoEntidad tipo, int id)
+	public void dibujar(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TriangleArray triangulos, TTipoEntidad tipo, int id)
 	{
 		gl.glPushMatrix();
 		
@@ -71,8 +62,7 @@ public class Pegatinas implements Serializable
 			{				
 				if (isCargada(tipoPegatinas[i]))
 				{
-					int indice = getVertice(tipoPegatinas[i]);
-					renderer.dibujarTexturaRectangulo(gl, vertices.get(2 * indice), vertices.get(2 * indice + 1), tipo, id, tipoPegatinas[i]);
+					renderer.dibujarTexturaRectangulo(gl, pegatinas.getXCoords(tipoPegatinas[i], vertices, triangulos), pegatinas.getYCoords(tipoPegatinas[i], vertices, triangulos), tipo, id, tipoPegatinas[i]);
 				}
 			}
 			
@@ -81,34 +71,49 @@ public class Pegatinas implements Serializable
 
 	/* Métodos de Modificación de Información */
 
-	public void setPegatina(int indice, int vertice, TTipoSticker tipo)
+	public void setPegatina(TTipoSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
 	{
-		indicePegatinas[tipo.ordinal()] = indice;
-		verticePegatinas[tipo.ordinal()] = vertice;
+		pegatinas.setSticker(tipo, id, x, y, index, vertices, triangulos);
 	}
 	
-	public void deletePegatina(TTipoSticker tipo)
+	public void eliminarPegatinas(TTipoSticker tipo)
 	{
-		indicePegatinas[tipo.ordinal()] = -1;
-		verticePegatinas[tipo.ordinal()] = -1;	
+		pegatinas.removeSticker(tipo);	
+	}
+	
+	public void eliminarPegatinas()
+	{
+		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+		{
+			pegatinas.removeSticker(tipoPegatinas[i]);
+		}
+	}
+	
+	public void ocultarPegatinas()
+	{
+		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+		{
+			pegatinas.hideStickers(tipoPegatinas[i]);
+		}
+	}
+	
+	public void mostrarPegatina(TTipoSticker tipo)
+	{
+		pegatinas.showSticker(tipo);
 	}
 
 	/* Métodos de Obtención de Información */
 
 	private boolean isCargada(TTipoSticker tipo)
 	{
-		return indicePegatinas[tipo.ordinal()] != -1;
+		return pegatinas.isLoadedSticker(tipo);
 	}
 
 	private int getIndice(TTipoSticker tipo, Context context)
 	{
-		String nombrePegatina = GameResources.GET_STICKER(tipo, indicePegatinas[tipo.ordinal()]);
+		String nombrePegatina = GameResources.GET_STICKER(tipo, pegatinas.getIdSticker(tipo));
 		return context.getResources().getIdentifier(nombrePegatina, GameResources.RESOURCE_DRAWABLE, context.getPackageName());
 	}
-
-	private int getVertice(TTipoSticker tipo)
-	{
-		return verticePegatinas[tipo.ordinal()];
-	}
-
 }

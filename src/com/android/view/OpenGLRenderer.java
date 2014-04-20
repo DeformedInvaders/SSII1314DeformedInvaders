@@ -111,17 +111,32 @@ public abstract class OpenGLRenderer implements Renderer
 	}
 
 	/* Métodos Abstractos */
-
-	protected abstract boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-
-	protected abstract boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-
-	protected abstract boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer);
-
-	protected abstract boolean onMultiTouchEvent();
-
-	protected abstract boolean reiniciar();
-
+	
+	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
+	
+	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
+	
+	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
+	
+	protected boolean onMultiTouchPostMove()
+	{
+		return false;
+	}
+	
+	protected boolean reiniciar()
+	{
+		return false;
+	}
+	
 	/* Métodos Renderer */
 
 	@Override
@@ -371,16 +386,21 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
-			float frameX = vertices.getYVertex(i);
+			float frameX = vertices.getXVertex(i);
 			float frameY = vertices.getYVertex(i);
 			
-			if (frameX < xLeft || frameX > xLeft + marcoAnchuraInterior || frameY < yBottom || frameY > yBottom + marcoAnchuraInterior)
+			if (isPuntoFueraMarco(frameX, frameY))
 			{
 				return false;
 			}
 		}
 
 		return true;
+	}
+	
+	protected boolean isPuntoFueraMarco(float x, float y)
+	{
+		return (x < xLeft || x > xLeft + marcoAnchuraInterior || y < yBottom || y > yBottom + marcoAnchuraInterior);
 	}
 
 	protected void centrarPersonajeEnMarcoInicio(GL10 gl)

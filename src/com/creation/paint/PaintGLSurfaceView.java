@@ -49,12 +49,6 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		return renderer.onTouchUp(x, y, width, height, pos);
 	}
 
-	@Override
-	protected boolean onMultiTouchEvent()
-	{
-		return false;
-	}
-
 	/* Métodos de Selección de Estado */
 
 	public void seleccionarMano()

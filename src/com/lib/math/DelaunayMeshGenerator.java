@@ -43,8 +43,12 @@ public class DelaunayMeshGenerator
 				if (Math.abs(poligono.area()) > AREA_TRIANG)
 				{
 					Vector2 centroGravedad = GeometryUtils.triangleCentroid(vert[0], vert[1], vert[2], vert[3], vert[4], vert[5], new Vector2());
-					delaunayPuntos.add(centroGravedad.x);
-					delaunayPuntos.add(centroGravedad.y);
+					
+					if (Intersector.isPointInTriangle(centroGravedad.x, centroGravedad.y, vert[0], vert[1], vert[2], vert[3], vert[4], vert[5]))
+					{
+						delaunayPuntos.add(centroGravedad.x);
+						delaunayPuntos.add(centroGravedad.y);
+					}
 				}
 				
 				j = j + 3;

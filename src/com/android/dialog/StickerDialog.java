@@ -82,7 +82,7 @@ public abstract class StickerDialog extends WindowDialog
 	{
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS(tipo); i++)
 		{
-			// FIXME Quitar el +-1 al añadir pegatinas al nivel Luna
+			// FIXME Añadir pegatinas al nivel Luna
 			int pos = (( i - 1) / (GamePreferences.NUM_TYPE_LEVELS - 1)) + 1;
 			
 			if (tipo == TTipoSticker.Eyes || tipo == TTipoSticker.Mouth || estadisticas[pos].isPerfected())

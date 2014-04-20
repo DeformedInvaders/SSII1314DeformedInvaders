@@ -59,30 +59,6 @@ public class BufferManager
 
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_LINES
-	public static FloatBuffer construirBufferListaLineas(LineArray lineas, VertexArray vertices)
-	{
-		float[] arrayVertices = new float[4 * lineas.getNumLines()];
-
-		int j = 0;
-		for (short i = 0; i < lineas.getNumLines(); i++)
-		{
-			short a = lineas.getAVertex(i);
-			short b = lineas.getBVertex(i);
-			
-			arrayVertices[j] = vertices.getXVertex(a);
-			arrayVertices[j + 1] = vertices.getYVertex(a);
-
-			arrayVertices[j + 2] = vertices.getXVertex(b);
-			arrayVertices[j + 3] = vertices.getYVertex(b);
-			
-			j = j + 4;
-		}
-
-		return construirBufferListaPuntos(arrayVertices);
-	}
-
-	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
-	// Uso para GL_LINES
 	public static FloatBuffer construirBufferListaTriangulos(TriangleArray triangulos, VertexArray vertices)
 	{
 		float[] arrayVertices = new float[12 * triangulos.getNumTriangles()];
@@ -327,22 +303,6 @@ public class BufferManager
 					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handle.getColor(), handle.getBufferRelleno());
 					dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());					
 				}
-			
-			gl.glPopMatrix();
-		}
-	}
-	
-	//FIXME Eliminar al modificar pegatinas
-	public static void dibujarListaHandle(GL10 gl, Handle handle, VertexArray vertices)
-	{
-		for (short i = 0; i < vertices.getNumVertices(); i++)
-		{
-			gl.glPushMatrix();
-			
-				gl.glTranslatef(vertices.getXVertex(i), vertices.getYVertex(i), GamePreferences.DEEP_HANDLE);
-				
-				dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handle.getColor(), handle.getBufferRelleno());
-				dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());					
 			
 			gl.glPopMatrix();
 		}

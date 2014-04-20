@@ -1,13 +1,9 @@
 package com.creation.deform;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.lib.buffer.EdgeArray;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
-import com.lib.math.Intersector;
 import com.lib.matrix.Matrix;
 
 public class Deformator
@@ -46,7 +42,9 @@ public class Deformator
 	{
 		vertices = mesh;
 		triangulos = triangles;
-		aristas = construirAristas(triangulos);
+		aristas = new EdgeArray();
+		
+		construirAristas(triangulos);
 
 		numVertices = vertices.getNumVertices();
 		numAristas = aristas.getNumEdges();
@@ -487,119 +485,17 @@ public class Deformator
 
 	/* Cálculo de Vecinos */
 
-	// FIXME Utilizar directamente EdgeArray
-	private EdgeArray construirAristas(TriangleArray triangulos)
+	private void construirAristas(TriangleArray triangulos)
 	{
-		ArrayList<Arista> aristas = new ArrayList<Arista>();
-
 		for (short i = 0; i < triangulos.getNumTriangles(); i++)
 		{
 			short a = triangulos.getAVertex(i);
 			short b = triangulos.getBVertex(i);
 			short c = triangulos.getCVertex(i);
-
-			anyadirArista(a, b, c, aristas);
-			anyadirArista(b, c, a, aristas);
-			anyadirArista(c, a, b, aristas);			
-		}
-
-		EdgeArray vecinos = new EdgeArray();
-
-		Iterator<Arista> it = aristas.iterator();
-		while (it.hasNext())
-		{
-			Arista arista = it.next();
-			vecinos.addEdge(arista.getVerticeA(), arista.getVerticeB(), arista.getVecinoL(), arista.getVecinoR());
-		}
-
-		return vecinos;
-	}
-
-	private boolean anyadirArista(short a, short b, short c, ArrayList<Arista> aristas)
-	{
-		Iterator<Arista> it = aristas.iterator();
-		while (it.hasNext())
-		{
-			Arista arista = it.next();
-			if (arista.equals(a, b))
-			{
-				if (arista.getVecinoL() == -1)
-				{
-					arista.setVecinoL(c);
-				}
-				else
-				{
-					arista.setVecinoR(c);
-				}
-				
-				return false;
-			}
-		}
-
-		aristas.add(new Arista(a, b, c, vertices));
-		return true;
-	}
-
-	private class Arista
-	{
-		private short verticeA;
-		private short verticeB;
-
-		private short vecinoR;
-		private short vecinoL;
-
-		public Arista(short a, short b, short c, VertexArray puntos)
-		{
-			this.verticeA = a;
-			this.verticeB = b;
-			this.vecinoR = -1;
-			this.vecinoL = -1;
-
-			int lado = Intersector.pointLineSide(puntos.getXVertex(a), puntos.getYVertex(a), puntos.getXVertex(b), puntos.getYVertex(b), puntos.getXVertex(c), puntos.getYVertex(c));
-
-			if (lado == -1)
-			{
-				this.vecinoL = c;
-			}
-			else if (lado == 1)
-			{
-				this.vecinoR = c;
-			}
-		}
-
-		public short getVerticeA()
-		{
-			return verticeA;
-		}
-
-		public short getVerticeB()
-		{
-			return verticeB;
-		}
-
-		public short getVecinoR()
-		{
-			return vecinoR;
-		}
-
-		public short getVecinoL()
-		{
-			return vecinoL;
-		}
-
-		public void setVecinoR(short r)
-		{
-			this.vecinoR = r;
-		}
-
-		public void setVecinoL(short l)
-		{
-			this.vecinoL = l;
-		}
-
-		public boolean equals(short a, short b)
-		{
-			return (verticeA == a && verticeB == b) || (verticeA == b && verticeB == a);
+			
+			aristas.addEdge(a, b, c, vertices);
+			aristas.addEdge(b, c, a, vertices);
+			aristas.addEdge(c, a, b, vertices);		
 		}
 	}
 }

@@ -160,16 +160,16 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 
-	public void dibujarPersonaje(GL10 gl, FloatBuffer triangulos, FloatBuffer contorno, VertexArray vertices)
+	public void dibujarPersonaje(GL10 gl, FloatBuffer malla, FloatBuffer contorno, VertexArray vertices)
 	{
 		// Textura
-		textura.dibujar(gl, this, triangulos, coordsTextura, TTipoEntidad.Personaje);
+		textura.dibujar(gl, this, malla, coordsTextura, TTipoEntidad.Personaje);
 
 		// Contorno
 		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
 
 		// Pegatinas
-		pegatinas.dibujar(gl, this, vertices, TTipoEntidad.Personaje, 0);
+		pegatinas.dibujar(gl, this, vertices, triangulos, TTipoEntidad.Personaje, 0);
 	}
 
 	/* Métodos de Selección de Estado */
@@ -314,18 +314,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 		if (Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > 3 * GamePreferences.MAX_DISTANCE_PIXELS)
 		{
-			// Conversión Pixel - Punto
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			handles.setCoordsHandle(punteros[pointer], frameX, frameY);
-			
-			if (modoGrabar)
+			if (!isPuntoFueraMarco(frameX, frameY))
 			{
-				listaHandlesAnimacion.add(handles.clone());
+				handles.setCoordsHandle(punteros[pointer], frameX, frameY);
+				
+				if (modoGrabar)
+				{
+					listaHandlesAnimacion.add(handles.clone());
+				}
+				
+				return true;
 			}
-
-			return true;
 		}
 
 		return false;
@@ -402,9 +404,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
 		android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
 	}
-
+	
 	@Override
-	protected boolean onMultiTouchEvent()
+	protected boolean onMultiTouchPostMove()
 	{
 		if (estado == TEstadoDeform.Deformar)
 		{
