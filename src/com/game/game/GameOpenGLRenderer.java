@@ -6,6 +6,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.android.view.BackgroundDataSaved;
@@ -15,6 +16,7 @@ import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
+import com.project.main.R;
 import com.project.model.GamePreferences;
 
 public class GameOpenGLRenderer extends OpenGLRenderer
@@ -32,6 +34,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	// Puntuancion
 	private int puntuacion;
 	private boolean puntuacionModificada;
+	
+	// Texturas
+	private boolean texturasCargadas;
 
 	/* Constructura */
 
@@ -50,6 +55,21 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		puntuacion = 0;
 		puntuacionModificada = false;
+		
+		texturasCargadas = false;
+		
+		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_level_title), mContext.getString(R.string.text_processing_level_description), true);
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run()
+			{
+				while(!texturasCargadas);
+				alert.dismiss();
+			}
+		});
+		
+		thread.start();
 	}
 
 	/* Métodos Renderer */
@@ -71,6 +91,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		{
 			it.next().cargarTextura(gl, this, mContext);
 		}
+		
+		texturasCargadas = true;
 	}
 
 	@Override
