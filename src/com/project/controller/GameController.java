@@ -63,6 +63,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 		if (core.cargarDatos())
 		{
 			cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+			actualizarMusica();
 		}
 	}
 	
@@ -125,6 +126,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 	{
 		if (core.repintarPersonaje(indice, textura))
 		{
+			pila.pop();
 			cambiarEstadoCharacterSelection(core.getListaPersonajes());
 		}
 	}
@@ -270,6 +272,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 			public void onPossitiveButtonClick()
 			{
 				cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level));
+				actualizarMusica();
 			}
 		};
 		
@@ -300,6 +303,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 				public void onNegativeButtonClick()
 				{
 					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level);
+					actualizarMusica();
 				}
 			};
 	
@@ -323,6 +327,7 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 				public void onNegativeButtonClick()
 				{
 					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level);
+					actualizarMusica();
 				}
 			};
 	

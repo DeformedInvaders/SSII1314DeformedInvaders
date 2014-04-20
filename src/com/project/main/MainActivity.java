@@ -225,8 +225,6 @@ public class MainActivity extends FragmentActivity
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.frameLayoutMain1, fragmento);
 		transaction.commit();
-		
-		controller.actualizarMusica();
 	}
 
 	public void insertarLoadingFragmento(OnLoadingListener listener, int title)
