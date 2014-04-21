@@ -109,14 +109,14 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonExport = null;
 	}
 	
-	@Override
+	/*@Override
 	public void onDetach()
 	{
 		super.onDetach();
 		
 		mListener = null;
 		personaje = null;
-	}
+	}*/
 
 	@Override
 	public void onResume()

@@ -85,7 +85,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		botonNivel = null;
 	}
 	
-	@Override
+	/*@Override
 	public void onDetach()
 	{
 		super.onDetach();
@@ -93,7 +93,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		mListener = null;
 		estadisticas = null;
 		nivel = null;
-	}
+	}*/
 
 	/* Métodos abstractos de OpenGLFragment */
 

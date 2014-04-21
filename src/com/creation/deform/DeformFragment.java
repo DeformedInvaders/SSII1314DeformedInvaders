@@ -91,7 +91,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonAudio = null;
 	}
 
-	@Override
+	/*@Override
 	public void onDetach()
 	{
 		super.onDetach();
@@ -99,7 +99,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		mListener = null;
 		personaje = null;
 		dataSaved = null;
-	}
+	}*/
 
 	@Override
 	public void onResume()
