@@ -48,7 +48,7 @@ public abstract class Malla extends Entidad
 
 	protected float posicionX, posicionY;
 	protected boolean esqueletoReady, texturaReady, movimientosReady;
-
+	
 	/* Métodos abstractos de Entidad */
 
 	@Override
@@ -57,10 +57,10 @@ public abstract class Malla extends Entidad
 		if (texturaReady)
 		{
 			// Textura
-			textura.cargarTextura(gl, renderer, context, tipo);
+			textura.cargarTextura(gl, renderer, context, tipoEntidad, idEntidad);
 	
 			// Pegatinas
-			pegatinas.cargarTexturas(gl, renderer, context, tipo, id);
+			pegatinas.cargarTexturas(gl, renderer, context, tipoEntidad, idEntidad);
 		}
 	}
 
@@ -70,10 +70,10 @@ public abstract class Malla extends Entidad
 		if (texturaReady)
 		{
 			// Textura
-			textura.descargarTextura(renderer, tipo);
+			textura.descargarTextura(renderer, tipoEntidad, idEntidad);
 	
 			// Pegatinas
-			pegatinas.descargarTextura(renderer, tipo, id);
+			pegatinas.descargarTextura(renderer, tipoEntidad, idEntidad);
 		}
 	}
 
@@ -87,24 +87,25 @@ public abstract class Malla extends Entidad
 				gl.glTranslatef(posicionX, posicionY, 0.0f);
 		
 				// Textura
-				textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipo);
+				textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipoEntidad, idEntidad);
 		
 				// Contorno
 				BufferManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
 		
 				// Pegatinas
-				pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipo, id);
+				pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipoEntidad, idEntidad);
 	
 			gl.glPopMatrix();
 		}
 	}
 
 	/* Métodos de Animación */
-
+	
 	protected void iniciar()
 	{
 		if (movimientosReady)
 		{
+			posicionX = 0.0f;
 			posicionY = 0.0f;
 	
 			posicionAnimacion = 0;

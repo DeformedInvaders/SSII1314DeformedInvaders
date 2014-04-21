@@ -164,7 +164,6 @@ public abstract class StickerDialog extends WindowDialog
 		public void onClick(View v)
 		{
 			onStickerDeleted(tipoPegatina);
-			dismiss();
 		}		
 	}
 }

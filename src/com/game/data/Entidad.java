@@ -5,13 +5,13 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
+import com.project.model.GamePreferences;
 
 public abstract class Entidad
 {
-	protected TTipoEntidad tipo;
-	protected int id;
-	
-	protected int textura;
+	protected TTipoEntidad tipoEntidad;
+	protected int idEntidad;
+	protected int texturaEntidad;
 
 	protected float width = 0.0f;
 	protected float height = 0.0f;
@@ -24,28 +24,35 @@ public abstract class Entidad
 
 	public abstract void dibujar(GL10 gl, OpenGLRenderer renderer);
 
+	public boolean animar()
+	{ 
+		return false;
+	}
+
+	/* Métodos públicos */
+	
 	public int getId()
 	{
-		return id;
+		return idEntidad;
 	}
 
 	public float getWidth()
 	{
-		return width;
+		return width * GamePreferences.GAME_SCALE_FACTOR;
 	}
 	
 	public float getHeight()
 	{
-		return height;
+		return height * GamePreferences.GAME_SCALE_FACTOR;
 	}
 
 	public TTipoEntidad getTipo()
 	{
-		return tipo;
+		return tipoEntidad;
 	}
 	
 	public int getIndiceTextura()
 	{
-		return textura;
+		return texturaEntidad;
 	}
 }

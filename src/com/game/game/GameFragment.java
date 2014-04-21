@@ -192,6 +192,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	public void onGameFinished(int score, int lives)
 	{
 		onGameScoreChanged(score);
+		onGameLivesChanged(lives);
 		
 		if(lives == GamePreferences.MAX_LIVES)
 		{
@@ -205,8 +206,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	}
 
 	@Override
-	public void onGameFailed()
+	public void onGameFailed(int score, int lives)
 	{
+		onGameScoreChanged(score);
+		onGameLivesChanged(lives);
+		
 		mCallback.onGameFailed(level.getTipoNivel(), level.getFondoNivel().getIdPolaroid(TTipoEndgame.GameOver));
 	}
 	

@@ -40,6 +40,10 @@ public class GameResources
 	private static final String DRAWABLE_PERFECTED_ID = "levelperfected";
 	private static final String DRAWABLE_COMPLETED_ID = "levelcompleted";
 	
+	// Enemies Files
+	private static final String ENEMIES_PATH = "enemies/enemy_";
+	private static final String ENEMIES_EXTENSION = ".di";
+	
 	// Raw Video
 	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";
 	
@@ -112,6 +116,25 @@ public class GameResources
 				return null;
 		}
 	}	
+	
+	public static final String GET_ENEMIES_FILES(TTipoLevel nivel, int pos)
+	{
+		switch(nivel)
+		{
+			case Moon:
+				return ENEMIES_PATH + DRAWABLE_MOON_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case NewYork:
+				return ENEMIES_PATH + DRAWABLE_NEWYORK_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case Rome:
+				return ENEMIES_PATH + DRAWABLE_ROME_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case Egypt:
+				return ENEMIES_PATH + DRAWABLE_EGYPT_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case Stonehenge:
+				return ENEMIES_PATH + DRAWABLE_STONEHENGE_ID + (pos + 1) + ENEMIES_EXTENSION;
+			default:
+				return null;
+		}
+	}
 	
 	public static final String GET_STICKER(TTipoSticker pegatina, int pos)
 	{

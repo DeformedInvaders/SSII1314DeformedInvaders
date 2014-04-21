@@ -121,7 +121,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// Textura
-		textura.cargarTextura(gl, this, mContext, TTipoEntidad.Personaje);
+		textura.cargarTextura(gl, this, mContext, TTipoEntidad.Personaje, 0);
 
 		// Pegatinas
 		pegatinas.cargarTexturas(gl, this, mContext, TTipoEntidad.Personaje, 0);
@@ -163,7 +163,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void dibujarPersonaje(GL10 gl, FloatBuffer malla, FloatBuffer contorno, VertexArray vertices)
 	{
 		// Textura
-		textura.dibujar(gl, this, malla, coordsTextura, TTipoEntidad.Personaje);
+		textura.dibujar(gl, this, malla, coordsTextura, TTipoEntidad.Personaje, 0);
 
 		// Contorno
 		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
@@ -541,7 +541,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public DeformDataSaved saveData()
 	{
 		// Textura
-		textura.descargarTextura(this, TTipoEntidad.Personaje);
+		textura.descargarTextura(this, TTipoEntidad.Personaje, 0);
 		
 		// Pegatinas
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);

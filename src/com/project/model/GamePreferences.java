@@ -12,6 +12,9 @@ public class GamePreferences
 	public static final int SIZE_LINE = 3;
 	public static final int POINT_WIDTH = 7;
 	
+	// FIXME Calcular con tipo de pantalla
+	public static final float GAME_SCALE_FACTOR = 0.5f;
+	
 	// Multitouch
 	public static final int NUM_HANDLES = 10;
 	
@@ -36,9 +39,10 @@ public class GamePreferences
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
 	// Velocidades
+	// FIXME Calcular con tipo de pantalla
 	public static final float DIST_MOVIMIENTO_BACKGROUND = 4.0f;
-	public static final float DIST_MOVIMIENTO_ENEMY = 10.0f;
-	public static final float DIST_MOVIMIENTO_CHARACTER = 30.0f;
+	public static final float DIST_MOVIMIENTO_ENEMY = 12.0f;
+	public static final float DIST_MOVIMIENTO_CHARACTER = 40.0f;
 	
 	// Texturas
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;

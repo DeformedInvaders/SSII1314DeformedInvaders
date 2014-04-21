@@ -82,7 +82,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						renderer.pararAnimacion();
 						requestRender();
 	
-						mListener.onGameFailed();
+						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidas());
 					break;
 				}
 				

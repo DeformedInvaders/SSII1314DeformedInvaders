@@ -54,14 +54,12 @@ public abstract class GameCore
 	public GameCore(Context context, int widthScreen, int heightScreen)
 	{
 		mContext = context;
-				
+		
 		nuevoPersonaje = null;
 		levelGenerator = new LevelGenerator(mContext);
 		
 		internalManager = new InternalStorageManager(mContext);
 		externalManager = new ExternalStorageManager(mContext);
-		
-		levelGenerator = new LevelGenerator(mContext);
 		
 		socialConnector = new SocialConnector(mContext) {
 			@Override

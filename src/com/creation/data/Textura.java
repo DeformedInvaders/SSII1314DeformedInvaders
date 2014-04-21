@@ -57,18 +57,18 @@ public class Textura implements Serializable
 	
 	/* Métodos de representación en renderer */
 	
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context, TTipoEntidad tipo)
+	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context, TTipoEntidad tipoEntidad, int posEntidad)
 	{
-		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipo);
+		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipoEntidad, posEntidad);
 	}
 
-	public void descargarTextura(OpenGLRenderer renderer, TTipoEntidad tipo)
+	public void descargarTextura(OpenGLRenderer renderer, TTipoEntidad tipoEntidad, int posEntidad)
 	{
-		renderer.descargarTexturaMalla(tipo);
+		renderer.descargarTexturaMalla(tipoEntidad, posEntidad);
 	}
 
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, FloatBuffer triangulos, FloatBuffer coordenadas, TTipoEntidad tipo)
+	public void dibujar(GL10 gl, OpenGLRenderer renderer, FloatBuffer triangulos, FloatBuffer coordenadas, TTipoEntidad tipoEntidad, int posEntidad)
 	{
-		renderer.dibujarTexturaMalla(gl, triangulos, coordenadas, tipo);
+		renderer.dibujarTexturaMalla(gl, triangulos, coordenadas, tipoEntidad, posEntidad);
 	}
 }

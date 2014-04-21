@@ -7,13 +7,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.creation.paint.TTipoSize;
 import com.project.main.R;
 
 public abstract class SizeDialog extends WindowDialog
 {
 	private Button botonMas, botonMenos;
 	private ImageView botonPincel;
-	private int posicion;
+	private TTipoSize size;
 
 	/* Constructora */
 
@@ -21,7 +22,7 @@ public abstract class SizeDialog extends WindowDialog
 	{
 		super(context, R.layout.dialog_size_layout);
 
-		posicion = 0;
+		size = TTipoSize.Small;
 
 		botonMas = (Button) findViewById(R.id.imageButtonSize1);
 		botonMenos = (Button) findViewById(R.id.imageButtonSize2);
@@ -36,7 +37,7 @@ public abstract class SizeDialog extends WindowDialog
 
 	/* Métodos Abstractos */
 
-	public abstract void onSizeSelected(int size);
+	public abstract void onSizeSelected(TTipoSize size);
 
 	/* Métodos Abstractos WindowDialog */
 
@@ -47,7 +48,7 @@ public abstract class SizeDialog extends WindowDialog
 
 	private void actualizarBotones()
 	{
-		if (posicion > 0)
+		if (size.ordinal() > 0)
 		{
 			botonMenos.setEnabled(true);
 		}
@@ -56,7 +57,7 @@ public abstract class SizeDialog extends WindowDialog
 			botonMenos.setEnabled(false);
 		}
 
-		if (posicion < 2)
+		if (size.ordinal() < 2)
 		{
 			botonMas.setEnabled(true);
 		}
@@ -64,19 +65,8 @@ public abstract class SizeDialog extends WindowDialog
 		{
 			botonMas.setEnabled(false);
 		}
-
-		switch (posicion)
-		{
-			case 0:
-				botonPincel.setBackgroundResource(R.drawable.image_size_small);
-				break;
-			case 1:
-				botonPincel.setBackgroundResource(R.drawable.image_size_medium);
-				break;
-			case 2:
-				botonPincel.setBackgroundResource(R.drawable.image_size_big);
-				break;
-		}
+		
+		botonPincel.setBackgroundResource(size.getImage());
 	}
 
 	/* Métodos Listener onClick */
@@ -86,7 +76,8 @@ public abstract class SizeDialog extends WindowDialog
 		@Override
 		public void onClick(View arg0)
 		{
-			posicion++;
+			TTipoSize[] tipoSize = TTipoSize.values();
+			size = tipoSize[size.ordinal() + 1];
 			actualizarBotones();
 		}
 	}
@@ -96,7 +87,8 @@ public abstract class SizeDialog extends WindowDialog
 		@Override
 		public void onClick(View arg0)
 		{
-			posicion--;
+			TTipoSize[] tipoSize = TTipoSize.values();
+			size = tipoSize[size.ordinal() - 1];
 			actualizarBotones();
 		}
 	}
@@ -106,7 +98,7 @@ public abstract class SizeDialog extends WindowDialog
 		@Override
 		public void onClick(View arg0)
 		{
-			onSizeSelected(posicion);
+			onSizeSelected(size);
 			dismiss();
 		}
 	}

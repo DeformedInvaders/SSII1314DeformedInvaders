@@ -1,62 +1,73 @@
 package com.game.data;
 
-public class Enemigo extends Rectangulo
+import java.util.List;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import com.android.view.OpenGLRenderer;
+import com.lib.buffer.VertexArray;
+import com.project.model.GamePreferences;
+
+public class Enemigo extends Malla
 {
-	// private List<FloatArray> movimiento;
+	private List<VertexArray> movimiento;
 
 	/* Constructora */
-
-	/*
-	public Enemigo(int idEnemigo)
-	{
-		tipo = TTipoEntidad.Enemigo;
-		id = idEnemigo;
-	}
-	*/
 	
 	public Enemigo(int indiceTextura, int idEnemigo)
 	{
-		tipo = TTipoEntidad.Enemigo;
-		id = idEnemigo;
-		textura = indiceTextura;
+		tipoEntidad = TTipoEntidad.Enemigo;
+		texturaEntidad = indiceTextura;
+		idEntidad = idEnemigo;
 	}
 
 	/* Métodos abstractos de Entidad */
-
-	/*
+	
 	@Override
-	public void avanzar()
+	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		posicionX -= DIST_AVANCE;
+		gl.glPushMatrix();
+		
+			gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
+			gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
+		
+			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR, GamePreferences.GAME_SCALE_FACTOR, 1.0f);
+			
+			super.dibujar(gl, renderer);
+			
+		gl.glPopMatrix();
 	}
-	*/
 	
 	/* Métodos de Animación */
-
-	/*
-	public void mover()
+	
+	@Override
+	public boolean animar()
 	{
-		listaVerticesAnimacion = movimiento;
-		iniciar();
+		boolean finAnimacion = super.animar();
+		
+		posicionAnimacion = posicionAnimacion % listaVerticesAnimacion.size();
+		
+		return finAnimacion;
 	}
-	*/
 	
 	/* Métodos de Modificación de Información */
 
-	/*
-	public void setMovimientos(List<FloatArray> m)
+	public void setMovimientos(List<VertexArray> m)
 	{
-		movimiento = m
+		movimiento = m;
+		movimientosReady = true;
+		
+		listaVerticesAnimacion = movimiento;
 		reposo();
+		
+		iniciar();
 	}
-	*/
 	
 	/* Métodos de Obtención de Información */
-
-	/*
-	public List<FloatArray> getMovimientos()
+	
+	public List<VertexArray> getMovimientos()
 	{
 		return movimiento;
 	}
-	*/
+	
 }

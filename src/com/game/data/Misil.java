@@ -6,8 +6,8 @@ public class Misil extends Rectangulo
 
 	public Misil(int indiceTextura, int idMisil)
 	{
-		tipo = TTipoEntidad.Misil;
-		id = idMisil;
-		textura = indiceTextura;
+		tipoEntidad = TTipoEntidad.Misil;
+		idEntidad = idMisil;
+		texturaEntidad = indiceTextura;
 	}
 }

@@ -2,6 +2,7 @@ package com.creation.data;
 
 import java.nio.FloatBuffer;
 
+import com.creation.paint.TTipoSize;
 import com.lib.buffer.VertexArray;
 
 public class Polilinea
@@ -10,11 +11,11 @@ public class Polilinea
 	private FloatBuffer buffer;
 
 	private int color;
-	private int size;
+	private TTipoSize size;
 
 	/* Constructora */
 
-	public Polilinea(int color, int size, VertexArray puntos, FloatBuffer buffer)
+	public Polilinea(int color, TTipoSize size, VertexArray puntos, FloatBuffer buffer)
 	{
 		this.puntos = new VertexArray();
 
@@ -42,7 +43,7 @@ public class Polilinea
 		return color;
 	}
 
-	public int getSize()
+	public TTipoSize getSize()
 	{
 		return size;
 	}

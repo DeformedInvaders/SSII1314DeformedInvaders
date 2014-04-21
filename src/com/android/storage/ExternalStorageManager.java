@@ -79,8 +79,14 @@ public class ExternalStorageManager
 		comprobarDirectorio(getDirectorioRaiz());
 		
 		File file = new File(getFicheroTemp());
+		boolean ficheroEliminado = file.delete();
 		Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage deleted");
-		return file.delete();
+		
+		file = new File(getDirectorioRaiz());
+		boolean directorioEliminado = file.delete();
+		Log.d(EXTERNAL_STORAGE_TAG, "Root Directory deleted");
+		
+		return ficheroEliminado && directorioEliminado;
 	}
 	
 	public boolean guardarImagenTemp(int imagen)
@@ -125,6 +131,8 @@ public class ExternalStorageManager
 	
 	public boolean exportarPersonaje(Personaje personaje)
 	{
+		comprobarDirectorio(getDirectorioRaiz());
+		
 		try
 		{
 			FileOutputStream file = new FileOutputStream(new File(getDirectorioExterno(personaje.getNombre())));
@@ -140,23 +148,23 @@ public class ExternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d(EXTERNAL_STORAGE_TAG, "Character exported");
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " exported");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character file not found");
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character sream corrupted");
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character ioexception");
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " ioexception");
 		}
 
-		Log.d(EXTERNAL_STORAGE_TAG, "Character not exported");
+		Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " not exported");
 		return false;
 	}
 }

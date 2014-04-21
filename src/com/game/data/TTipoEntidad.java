@@ -2,5 +2,5 @@ package com.game.data;
 
 public enum TTipoEntidad
 {
-	Personaje, Enemigo, Obstaculo, Misil, Burbuja
+	Personaje, Obstaculo, Misil, Burbuja, Enemigo
 }

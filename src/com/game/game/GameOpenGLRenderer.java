@@ -103,17 +103,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		gl.glPushMatrix();
 
 			gl.glTranslatef(GamePreferences.DISTANCE_CHARACTER_RIGHT(), GamePreferences.DISTANCE_CHARACTER_BOTTOM(), 0.0f);
-	
-			// Escala del Juego
-			gl.glPushMatrix();
-	
-				gl.glScalef(0.5f, 0.5f, 0.0f);
 		
+			gl.glPushMatrix();
+			
 				// Protagonista
-				personaje.dibujar(gl, this);
-				
-				// Burbuja
-	
+				personaje.dibujar(gl, this, true);
+			
 			gl.glPopMatrix();
 	
 			// Cola Enemigos
@@ -195,6 +190,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			}
 		}
 
+		// Enemigos		
+		for (int i = 0; i < GamePreferences.NUM_TYPE_OPPONENTS; i++)
+		{
+			tipoEnemigos.get(i).animar();
+		}
+		
 		// Personaje
 		return personaje.animar();
 	}
@@ -232,10 +233,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 						puntuacion += GamePreferences.SCORE_LOSE_LIFE;
 
 						if (!personaje.isAlive())
-						{
-							personaje.reiniciarVidas();
-							personaje.desactivarBurbuja();
-							
+						{						
 							return TEstadoGame.FinJuegoDerrota;
 						}
 						

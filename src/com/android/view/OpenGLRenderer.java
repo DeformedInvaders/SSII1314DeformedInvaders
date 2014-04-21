@@ -159,8 +159,8 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 
 		// Activar Back-Face Culling
-		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);
+		//gl.glEnable(GL10.GL_CULL_FACE);
+		//gl.glCullFace(GL10.GL_BACK);
 
 		// Activar Transparencia
 		gl.glEnable(GL10.GL_BLEND);
@@ -646,14 +646,14 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Gestión de posición de Texturas
 
-	private int obtenerPosicionTexturaMalla(TTipoEntidad tipoEntidad)
+	private int obtenerPosicionTexturaMalla(TTipoEntidad tipoEntidad, int posEntidad)
 	{
 		switch (tipoEntidad)
 		{
 			case Personaje:
 				return POS_TEXTURE_CHARACTER_SKELETON;
 			case Enemigo:
-				return POS_TEXTURE_ENEMY_SKELETON;
+				return POS_TEXTURE_ENEMY_SKELETON + posEntidad * (GamePreferences.NUM_TYPE_STICKERS + 1);
 			default:
 				return -1;
 		}
@@ -666,9 +666,7 @@ public abstract class OpenGLRenderer implements Renderer
 			case Personaje:
 				return POS_TEXTURE_CHARACTER_STICKER + tipoPegatina.ordinal();
 			case Enemigo:
-				// FIXME Cambiar al añadir enemigos con mallas.
-				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
-				// return POS_TEXTURE_ENEMY_SKELETON * (posEntidad + 1) + tipoPegatina.ordinal();
+				return POS_TEXTURE_ENEMY_SKELETON + posEntidad * (GamePreferences.NUM_TYPE_STICKERS + 1) + tipoPegatina.ordinal() + 1;
 			case Obstaculo:
 				return POS_TEXTURE_OBSTACLE + posEntidad;
 			case Misil:
@@ -731,9 +729,9 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Contrucción de Textura para Entidades
 
-	public void cargarTexturaMalla(GL10 gl, Bitmap textura, TTipoEntidad tipo)
+	public void cargarTexturaMalla(GL10 gl, Bitmap textura, TTipoEntidad tipoEntidad, int posEntidad)
 	{
-		int posTextura = obtenerPosicionTexturaMalla(tipo);
+		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
 
 		if (posTextura != -1 && !cargadaTextura[posTextura])
 		{
@@ -741,9 +739,9 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void descargarTexturaMalla(TTipoEntidad tipo)
+	public void descargarTexturaMalla(TTipoEntidad tipoEntidad, int posEntidad)
 	{
-		int posTextura = obtenerPosicionTexturaMalla(tipo);
+		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
 
 		if (posTextura != -1)
 		{
@@ -779,8 +777,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 			VertexArray vertices = new VertexArray();
 			
-			// FIXME Cambiar al añadir enemigos con mallas.
-			if(tipoEntidad == TTipoEntidad.Personaje)// || tipoEntidad == TTipoEntidad.Enemigo)
+			if(tipoEntidad == TTipoEntidad.Personaje || tipoEntidad == TTipoEntidad.Enemigo)
 			{
 				vertices.addVertex(-textureWidth/2, -textureHeight/2);
 				vertices.addVertex(-textureWidth/2, textureHeight/2);
@@ -840,9 +837,9 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Pintura de Texturas para Entidades
 
-	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTipoEntidad tipo)
+	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTipoEntidad tipoEntidad, int posEntidad)
 	{
-		int posTextura = obtenerPosicionTexturaMalla(tipo);
+		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
 
 		if (posTextura != -1 && cargadaTextura[posTextura])
 		{
@@ -882,7 +879,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura)
 	{
-		dibujarTexturaMalla(gl, bufferPuntos, bufferCoordTextura, TTipoEntidad.Personaje);
+		dibujarTexturaMalla(gl, bufferPuntos, bufferCoordTextura, TTipoEntidad.Personaje, 0);
 	}
 
 	protected void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoSticker posPegatina)

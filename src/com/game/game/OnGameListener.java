@@ -5,7 +5,7 @@ import com.creation.data.TTipoMovimiento;
 public interface OnGameListener
 {
 	public void onGameFinished(int score, int lives);
-	public void onGameFailed();
+	public void onGameFailed(int score, int lives);
 	public void onGameScoreChanged(int score);
 	public void onGameLivesChanged(int lives);
 	

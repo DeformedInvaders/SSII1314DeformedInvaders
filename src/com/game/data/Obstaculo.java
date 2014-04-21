@@ -6,8 +6,8 @@ public class Obstaculo extends Rectangulo
 
 	public Obstaculo(int indiceTextura, int idObstaculo)
 	{
-		tipo = TTipoEntidad.Obstaculo;
-		id = idObstaculo;
-		textura = indiceTextura;
+		tipoEntidad = TTipoEntidad.Obstaculo;
+		idEntidad = idObstaculo;
+		texturaEntidad = indiceTextura;
 	}
 }

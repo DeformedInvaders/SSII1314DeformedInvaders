@@ -37,7 +37,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private TEstadoPaint estado;
 
 	private int colorPaleta;
-	private int sizeLinea;
+	private TTipoSize sizeLinea;
 	private int pegatinaActual;
 	private TTipoSticker tipoPegatinaActual;
 
@@ -104,7 +104,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		colorPintura = Color.WHITE;
 
 		colorPaleta = Color.RED;
-		sizeLinea = 6;
+		sizeLinea = TTipoSize.Small;
 
 		anteriores = new Stack<Accion>();
 		siguientes = new Stack<Accion>();
@@ -163,14 +163,20 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Detalles
 			if (lineaActual != null)
 			{
-				BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea, colorPaleta, bufferLineaActual);
+				synchronized (lineaActual)
+				{
+					BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea.getSize(), colorPaleta, bufferLineaActual);
+				}
 			}
-	
-			Iterator<Polilinea> it = listaLineas.iterator();
-			while (it.hasNext())
+			
+			synchronized (listaLineas)
 			{
-				Polilinea polilinea = it.next();
-				BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize(), polilinea.getColor(), polilinea.getBuffer());
+				Iterator<Polilinea> it = listaLineas.iterator();
+				while (it.hasNext())
+				{
+					Polilinea polilinea = it.next();
+					BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize().getSize(), polilinea.getColor(), polilinea.getBuffer());
+				}
 			}
 
 		gl.glPopMatrix();
@@ -206,7 +212,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		estado = TEstadoPaint.Nada;
 		colorPintura = Color.WHITE;
-		sizeLinea = 6;
+		sizeLinea = TTipoSize.Small;
 
 		return true;
 	}
@@ -255,10 +261,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
-			lineaActual.addVertex(frameX, frameY);
-
-			bufferLineaActual = BufferManager.construirBufferListaPuntos(lineaActual);
-
+			synchronized (lineaActual)
+			{
+				lineaActual.addVertex(frameX, frameY);
+	
+				bufferLineaActual = BufferManager.construirBufferListaPuntos(lineaActual);
+			}
+			
 			return true;
 		}
 
@@ -334,12 +343,15 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (lineaActual != null)
 		{
-			Polilinea polilinea = new Polilinea(colorPaleta, sizeLinea, lineaActual, bufferLineaActual);
-
-			listaLineas.add(polilinea);
-			anteriores.push(new Accion(polilinea));
-			siguientes.clear();
-			lineaActual = null;
+			synchronized (listaLineas)
+			{
+				Polilinea polilinea = new Polilinea(colorPaleta, sizeLinea, lineaActual, bufferLineaActual);
+	
+				listaLineas.add(polilinea);
+				anteriores.push(new Accion(polilinea));
+				siguientes.clear();
+				lineaActual = null;
+			}
 
 			return true;
 		}
@@ -372,30 +384,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		colorPaleta = color;
 	}
 
-	public int getColorPaleta()
+	public void seleccionarSize(TTipoSize size)
 	{
-		return colorPaleta;
-	}
-
-	public void setColorPaleta(int colorPaleta)
-	{
-		this.colorPaleta = colorPaleta;
-	}
-
-	public void seleccionarSize(int pos)
-	{
-		if (pos == 0)
-		{
-			sizeLinea = 6;
-		}
-		else if (pos == 1)
-		{
-			sizeLinea = 11;
-		}
-		else if (pos == 2)
-		{
-			sizeLinea = 16;
-		}
+		sizeLinea = size;
 	}
 
 	public void seleccionarPegatina(int pegatina, TTipoSticker tipo)

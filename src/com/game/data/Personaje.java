@@ -27,8 +27,9 @@ public class Personaje extends Malla
 
 	public Personaje()
 	{
-		tipo = TTipoEntidad.Personaje;
-		id = 0;
+		tipoEntidad = TTipoEntidad.Personaje;
+		idEntidad = 0;
+		texturaEntidad = -1;
 		
 		posicionX = 0.0f;
 		posicionY = 0.0f;
@@ -76,15 +77,23 @@ public class Personaje extends Malla
 		}
 	}
 	
-	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void dibujar(GL10 gl, OpenGLRenderer renderer, boolean escala)
 	{
-		super.dibujar(gl, renderer);
+		gl.glPushMatrix();
 		
-		if (burbuja && vidas > 0)
-		{
-			renderer.dibujarTexturaRectangulo(gl, posicionX, posicionY, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
-		}
+			if (escala)
+			{
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR, GamePreferences.GAME_SCALE_FACTOR, 1.0f);
+			}
+			
+			dibujar(gl, renderer);
+			
+			if (burbuja && vidas > 0)
+			{
+				renderer.dibujarTexturaRectangulo(gl, posicionX, posicionY, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
+			}
+		
+		gl.glPopMatrix();
 	}
 
 	@Override
@@ -96,15 +105,15 @@ public class Personaje extends Malla
 		{
 			if (estado == TTipoMovimiento.Jump)
 			{
-				if (posicionAnimacion <= listaVerticesAnimacion.size() / 2)
+				if (posicionAnimacion < 2 * listaVerticesAnimacion.size() / 6)
 				{
 					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER;
 				}
-				else
+				else if (posicionAnimacion >= 4 * listaVerticesAnimacion.size() / 6)
 				{
 					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER;
 				}
-		}
+			}
 		}
 
 		return finAnimacion;
@@ -170,8 +179,8 @@ public class Personaje extends Malla
 		float widthEntidad = entidad.getWidth();
 		float heightEntidad = entidad.getHeight();
 
-		Circle areaPersonaje = new Circle(posicionX + width / 4, posicionY + height / 4, width / 5);
-		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 4, posicionYEntidad + heightEntidad / 4, widthEntidad / 5);
+		Circle areaPersonaje = new Circle(getPosicionX() + getWidth() / 2.0f, getPosicionY() + getHeight() / 2.0f, getWidth() / 2.5f);
+		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 2.0f, posicionYEntidad + heightEntidad / 2.0f, heightEntidad / 3.0f);
 
 		// Hay colisión entre el personaje y el enemigo
 		if (Intersector.overlaps(areaPersonaje, areaEntidad))
@@ -239,5 +248,15 @@ public class Personaje extends Malla
 	public int getVidas()
 	{
 		return vidas;
+	}
+	
+	private float getPosicionX()
+	{
+		return posicionX * GamePreferences.GAME_SCALE_FACTOR;
+	}
+	
+	private float getPosicionY()
+	{
+		return posicionY * GamePreferences.GAME_SCALE_FACTOR;
 	}
 }

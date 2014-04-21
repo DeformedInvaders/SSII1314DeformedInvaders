@@ -72,20 +72,15 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 
-	public int getColorPaleta()
-	{
-		return renderer.getColorPaleta();
-	}
-
 	public void seleccionarColor(int color)
 	{
 		renderer.seleccionarColor(color);
 		setEstado(TEstadoDetector.SimpleTouch);
 	}
 
-	public void seleccionarSize(int pos)
+	public void seleccionarSize(TTipoSize size)
 	{
-		renderer.seleccionarSize(pos);
+		renderer.seleccionarSize(size);
 	}
 
 	public void seleccionarPegatina(int pegatina, TTipoSticker tipo)

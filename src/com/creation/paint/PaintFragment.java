@@ -284,7 +284,7 @@ public class PaintFragment extends OpenGLFragment
 			{
 				sizeDialog = new SizeDialog(getActivity()) {
 					@Override
-					public void onSizeSelected(int size)
+					public void onSizeSelected(TTipoSize size)
 					{
 						canvas.seleccionarSize(size);
 					}
