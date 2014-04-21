@@ -24,4 +24,12 @@ public abstract class ViewPagerFragment extends AlertFragment
 		super.onPause();
 		savedPosition = viewPager.getPosition();
 	}
+	
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+
+		viewPager = null;
+	}
 }

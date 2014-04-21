@@ -21,13 +21,14 @@ import com.project.main.R;
 import com.project.model.GameResources;
 
 public class CharacterSelectFragment extends OpenGLFragment implements OnDisplayListener
-{
-	private Personaje personaje;
+{	
+	private OnCharacterListener mListener;
 	
-	private OnCharacterListener listener;
 	private DisplayGLSurfaceView canvas;
 	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete, botonRename, botonExport;
 
+	private Personaje personaje;
+	
 	/* Constructora */
 
 	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Personaje personaje)
@@ -39,7 +40,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 
 	private void setParameters(OnCharacterListener l, Personaje p)
 	{
-		listener = l;
+		mListener = l;
 		personaje = p;
 	}
 
@@ -94,7 +95,8 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-
+		
+		canvas = null;
 		botonReady = null;
 		botonDelete = null;
 		botonCamara = null;
@@ -105,7 +107,15 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonRepaint = null;
 		botonRename = null;
 		botonExport = null;
-		canvas = null;
+	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mListener = null;
+		personaje = null;
 	}
 
 	@Override
@@ -183,7 +193,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 			if (canvas.isEstadoReposo())
 			{
 				canvas.seleccionarRetoque();
-				listener.onSetSwipeable(false);
+				mListener.onSetSwipeable(false);
 			}
 			else if (canvas.isEstadoRetoque())
 			{				
@@ -194,8 +204,8 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 					@Override
 					public void onPossitiveButtonClick(String text)
 					{						
-						listener.onPostPublished(text, bitmap);
-						listener.onSetSwipeable(true);
+						mListener.onPostPublished(text, bitmap);
+						mListener.onSetSwipeable(true);
 						
 						canvas.seleccionarTerminado();
 
@@ -207,7 +217,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 					public void onNegativeButtonClick(String text)
 					{
 						canvas.seleccionarTerminado();
-						listener.onSetSwipeable(true);
+						mListener.onSetSwipeable(true);
 
 						reiniciarInterfaz();
 						actualizarInterfaz();
@@ -219,7 +229,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 				actualizarInterfaz();
 				alert.show();
 
-				listener.onSetSwipeable(false);
+				mListener.onSetSwipeable(false);
 			}
 
 			reiniciarInterfaz();
@@ -268,7 +278,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			listener.onCharacterSelected();
+			mListener.onCharacterSelected();
 		}
 	}
 	
@@ -277,7 +287,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			listener.onCharacterRepainted();
+			mListener.onCharacterRepainted();
 		}
 	}
 
@@ -286,7 +296,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			listener.onCharacterDeleted();
+			mListener.onCharacterDeleted();
 		}
 	}
 	
@@ -295,7 +305,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			listener.onCharacterRenamed();
+			mListener.onCharacterRenamed();
 		}
 	}
 	
@@ -304,13 +314,13 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			listener.onCharacterExported();
+			mListener.onCharacterExported();
 		}
 	}
 
 	@Override
 	public void onDisplayPlaySound(TTipoMovimiento tipo)
 	{
-		listener.onPlaySound(tipo);
+		mListener.onPlaySound(tipo);
 	}
 }

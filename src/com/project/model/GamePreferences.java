@@ -51,7 +51,7 @@ public class GamePreferences
 	public static final float DEEP_HANDLE = 0.3f;
 	public static final float DEEP_OUTSIDE_FRAMES = 0.4f;
 	
-	/* FIXME Menos de 1 segundo no se graba nada */
+	/* FIXME Reducir tiempo, menos de 1 segundo no graba nada */
 	public static final int TIME_DURATION_ANIMATION = 2000;
 
 	// Niveles

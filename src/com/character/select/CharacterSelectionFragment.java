@@ -84,11 +84,12 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	}
 
 	@Override
-	public void onDestroyView()
+	public void onDetach()
 	{
-		super.onDestroyView();
-
-		viewPager = null;
+		super.onDetach();
+		
+		mCallback = null;
+		listaPersonajes = null;
 	}
 
 	/* Métodos abstractos de ViewPagerFragment */

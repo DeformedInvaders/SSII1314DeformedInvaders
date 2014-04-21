@@ -18,13 +18,14 @@ import com.project.main.R;
 public class DeformFragment extends OpenGLFragment implements OnDeformListener
 {
 	private OnDeformationListener mListener;
-	private DeformGLSurfaceView canvas;
+	
 	private Personaje personaje;
 
-	private DeformDataSaved dataSaved;
-
+	private DeformGLSurfaceView canvas;
 	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 
+	private DeformDataSaved dataSaved;
+	
 	/* Constructora */
 
 	public static final DeformFragment newInstance(OnDeformationListener l, Personaje p)
@@ -79,6 +80,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	{
 		super.onDestroyView();
 
+		canvas = null;
+		
 		botonAnyadir = null;
 		botonEliminar = null;
 		botonDeformar = null;
@@ -93,7 +96,9 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	{
 		super.onDetach();
 
-		canvas = null;
+		mListener = null;
+		personaje = null;
+		dataSaved = null;
 	}
 
 	@Override

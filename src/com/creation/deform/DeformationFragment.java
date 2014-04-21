@@ -88,6 +88,16 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformat
 
 		botonReady = null;
 	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mCallback = null;
+		personaje = null;
+		movimientos = null;
+	}
 
 	/* Métodos Listener onClick */
 

@@ -96,6 +96,15 @@ public class DesignFragment extends OpenGLFragment
 		botonReset = null;
 		botonTriangular = null;
 	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mCallback = null;
+		dataSaved = null;
+	}
 
 	@Override
 	public void onResume()

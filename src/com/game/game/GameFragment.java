@@ -36,7 +36,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	private boolean gamePaused;
 	
-	BackgroundDataSaved data;
+	BackgroundDataSaved dataSaved;
 
 	/* Constructora */
 
@@ -121,6 +121,18 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		canvas = null;
 		textoPuntuacion = null;
 		botonPlay = null;
+		imagenVidas = null;
+	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mCallback = null;
+		level = null;
+		personaje = null;
+		dataSaved = null;
 	}
 
 	@Override
@@ -128,9 +140,9 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		super.onResume();
 		
-		if (data != null)
+		if (dataSaved != null)
 		{
-			canvas.restoreData(data);
+			canvas.restoreData(dataSaved);
 		}
 		
 		canvas.onResume();
@@ -141,7 +153,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		super.onPause();		
 		canvas.onPause();
-		data = canvas.saveData();
+		dataSaved = canvas.saveData();
 	}
 
 	/* Métodos abstractos de OpenGLFragment */

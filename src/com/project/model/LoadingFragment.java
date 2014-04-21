@@ -46,4 +46,12 @@ public class LoadingFragment extends AlertFragment
 
 		return rootView;
 	}
+
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mListener = null;
+	}
 }

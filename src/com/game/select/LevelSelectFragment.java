@@ -16,7 +16,7 @@ import com.project.model.GameStatistics;
 
 public class LevelSelectFragment extends OpenGLFragment
 {
-	private OnLevelListener listener;
+	private OnLevelListener mListener;
 
 	private GameStatistics estadisticas;
 	private Nivel nivel;
@@ -34,7 +34,7 @@ public class LevelSelectFragment extends OpenGLFragment
 
 	private void setParameters(OnLevelListener l, Nivel n, GameStatistics e)
 	{
-		listener = l;
+		mListener = l;
 		nivel = n;
 		estadisticas = e;
 	}
@@ -84,6 +84,16 @@ public class LevelSelectFragment extends OpenGLFragment
 
 		botonNivel = null;
 	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+
+		mListener = null;
+		estadisticas = null;
+		nivel = null;
+	}
 
 	/* Métodos abstractos de OpenGLFragment */
 
@@ -111,7 +121,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		{
 			if (estadisticas.isUnlocked())
 			{
-				listener.onLevelSelected(nivel.getTipoNivel());
+				mListener.onLevelSelected(nivel.getTipoNivel());
 			}
 			else
 			{

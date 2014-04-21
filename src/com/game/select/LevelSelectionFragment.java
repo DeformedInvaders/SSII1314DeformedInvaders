@@ -79,13 +79,15 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		
 		return rootView;
 	}
-
+	
 	@Override
-	public void onDestroyView()
+	public void onDetach()
 	{
-		super.onDestroyView();
-
-		viewPager = null;
+		super.onDetach();
+		
+		mCallback = null;
+		listaNiveles = null;
+		estadoNiveles = null;
 	}
 
 	/* Métodos abstractos de ViewPagerFragment */

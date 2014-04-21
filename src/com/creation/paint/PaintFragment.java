@@ -157,6 +157,17 @@ public class PaintFragment extends OpenGLFragment
 		botonSize = null;
 		botonPegatina = null;
 	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mCallback = null;
+		personaje = null;
+		estadoNiveles = null;
+		dataSaved = null;
+	}
 
 	@Override
 	public void onResume()

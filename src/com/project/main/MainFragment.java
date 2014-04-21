@@ -34,7 +34,6 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		return fragment;
 	}
 
-	// FIXME Revisar atributos en onDetach y onDestroyView
 	private void setParameters(MainFragmentListener c, Personaje p, int n)
 	{
 		mCallback = c;
@@ -97,6 +96,15 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		botonCrear = null;
 		botonJugar = null;
 		botonSeleccionar = null;
+	}
+	
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		
+		mCallback = null;
+		personaje = null;
 	}
 
 	@Override
