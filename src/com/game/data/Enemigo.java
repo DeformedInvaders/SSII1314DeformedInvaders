@@ -31,7 +31,7 @@ public class Enemigo extends Malla
 			gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
 			gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
 		
-			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR, GamePreferences.GAME_SCALE_FACTOR, 1.0f);
+			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
 			
 			super.dibujar(gl, renderer);
 			

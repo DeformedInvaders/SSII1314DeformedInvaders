@@ -8,9 +8,9 @@ import com.lib.utils.ShortArray;
 
 public class DelaunayMeshGenerator
 {
+	// TODO Calcular area dependiendo de la pantalla.
 	private final static float AREA_TRIANG = 700.0f;
 
-	// FIXME Quitar profundidad controlando ausencia de cambios.
 	public Mesh computeMesh(FloatArray vertices, int profundidad, float longitud)
 	{	
 		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();

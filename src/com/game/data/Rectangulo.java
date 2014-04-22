@@ -36,6 +36,6 @@ public abstract class Rectangulo extends Entidad
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTipoSticker.Nada, GamePreferences.GAME_SCALE_FACTOR, GamePreferences.GAME_SCALE_FACTOR);
+		renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTipoSticker.Nada, GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR());
 	}
 }

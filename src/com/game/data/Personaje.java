@@ -83,7 +83,7 @@ public class Personaje extends Malla
 		
 			if (escala)
 			{
-				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR, GamePreferences.GAME_SCALE_FACTOR, 1.0f);
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
 			}
 			
 			dibujar(gl, renderer);
@@ -252,11 +252,11 @@ public class Personaje extends Malla
 	
 	private float getPosicionX()
 	{
-		return posicionX * GamePreferences.GAME_SCALE_FACTOR;
+		return posicionX * GamePreferences.GAME_SCALE_FACTOR();
 	}
 	
 	private float getPosicionY()
 	{
-		return posicionY * GamePreferences.GAME_SCALE_FACTOR;
+		return posicionY * GamePreferences.GAME_SCALE_FACTOR();
 	}
 }

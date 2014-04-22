@@ -12,9 +12,6 @@ public class GamePreferences
 	public static final int SIZE_LINE = 3;
 	public static final int POINT_WIDTH = 7;
 	
-	// FIXME Calcular con tipo de pantalla
-	public static final float GAME_SCALE_FACTOR = 0.5f;
-	
 	// Multitouch
 	public static final int NUM_HANDLES = 10;
 	
@@ -70,13 +67,13 @@ public class GamePreferences
 	public static final int NUM_TYPE_OBSTACLES = 2;
 	public static final int NUM_TYPE_MISSILES = 1;
 	public static final int NUM_TYPE_ENEMIES = 4;
-	
 	public static final int NUM_TYPE_OPPONENTS = NUM_TYPE_OBSTACLES + NUM_TYPE_MISSILES + NUM_TYPE_ENEMIES;
-	public static final int NUM_TYPE_STICKERS_EYES = 12;
-	public static final int NUM_TYPE_STICKERS_MOUTH = 12;
-	public static final int NUM_TYPE_STICKERS_WEAPON = 16;
-	public static final int NUM_TYPE_STICKERS_TRINKET = 16;
-	public static final int NUM_TYPE_STICKERS_HELMET = 16;
+	
+	private static final int NUM_TYPE_STICKERS_EYES = 12;
+	private static final int NUM_TYPE_STICKERS_MOUTH = 12;
+	private static final int NUM_TYPE_STICKERS_WEAPON = 16;
+	private static final int NUM_TYPE_STICKERS_TRINKET = 16;
+	private static final int NUM_TYPE_STICKERS_HELMET = 16;
 	
 	// Puntuaciones
 	public static final int SCORE_LEVEL_COMPLETED = 100;
@@ -262,4 +259,14 @@ public class GamePreferences
 				return -1;
 		}
 	}	
+	
+	/* DISTANCIAS Y FACTORES */
+	
+	public static final float GAME_SCALE_FACTOR()
+	{
+		final float GAME_FACTOR = 0.5f;
+		final float GAME_HEIGHT_BASE = 800;
+		
+		return GAME_FACTOR * HEIGHT_SCREEN / GAME_HEIGHT_BASE;
+	}
 }
