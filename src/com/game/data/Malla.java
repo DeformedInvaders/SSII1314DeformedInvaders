@@ -12,10 +12,11 @@ import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
-import com.lib.buffer.BufferManager;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
+import com.lib.opengl.BufferManager;
+import com.lib.opengl.OpenGLManager;
 
 public abstract class Malla extends Entidad
 {
@@ -90,7 +91,7 @@ public abstract class Malla extends Entidad
 				textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipoEntidad, idEntidad);
 		
 				// Contorno
-				BufferManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
+				OpenGLManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
 		
 				// Pegatinas
 				pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipoEntidad, idEntidad);

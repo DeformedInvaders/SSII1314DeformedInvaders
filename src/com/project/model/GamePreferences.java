@@ -36,7 +36,7 @@ public class GamePreferences
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
 	// Velocidades
-	// FIXME Calcular con tipo de pantalla
+	// FIXME Calcular distancias en funicón del tamaño de pantalla
 	public static final float DIST_MOVIMIENTO_BACKGROUND = 4.0f;
 	public static final float DIST_MOVIMIENTO_ENEMY = 12.0f;
 	public static final float DIST_MOVIMIENTO_CHARACTER = 40.0f;
@@ -262,6 +262,7 @@ public class GamePreferences
 	
 	/* DISTANCIAS Y FACTORES */
 	
+	// TODO Comprobar comportamiento del escalado de enemigos.
 	public static final float GAME_SCALE_FACTOR()
 	{
 		final float GAME_FACTOR = 0.5f;

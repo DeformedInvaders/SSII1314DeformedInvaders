@@ -22,12 +22,13 @@ import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
-import com.lib.buffer.BufferManager;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
+import com.lib.opengl.OpenGLManager;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
@@ -154,7 +155,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		centrarPersonajeEnMarcoInicio(gl);
 
 		// Esqueleto
-		BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, colorPintura, bufferVertices);
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, colorPintura, bufferVertices);
 
 		gl.glPushMatrix();
 		
@@ -165,7 +166,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			{
 				synchronized (lineaActual)
 				{
-					BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea.getSize(), colorPaleta, bufferLineaActual);
+					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea.getSize(), colorPaleta, bufferLineaActual);
 				}
 			}
 			
@@ -175,7 +176,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				while (it.hasNext())
 				{
 					Polilinea polilinea = it.next();
-					BufferManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize().getSize(), polilinea.getColor(), polilinea.getBuffer());
+					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize().getSize(), polilinea.getColor(), polilinea.getBuffer());
 				}
 			}
 
@@ -184,7 +185,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if (estado != TEstadoPaint.Captura)
 		{
 			// Contorno
-			BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
+			OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
 
 			// Dibujar Pegatinas
 			pegatinas.dibujar(gl, this, vertices, triangulos, TTipoEntidad.Personaje, 0);

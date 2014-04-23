@@ -17,12 +17,13 @@ import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
-import com.lib.buffer.BufferManager;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
+import com.lib.opengl.OpenGLManager;
 import com.project.main.R;
 import com.project.model.GamePreferences;
 
@@ -153,7 +154,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, verticesModificados);
 
 			// Handles
-			BufferManager.dibujarListaHandle(gl, objetoHandle, objetoHandleSeleccionado, handles);
+			OpenGLManager.dibujarListaHandle(gl, objetoHandle, objetoHandleSeleccionado, handles);
 
 			// Centrado de Marco
 			centrarPersonajeEnMarcoFinal(gl);
@@ -166,7 +167,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		textura.dibujar(gl, this, malla, coordsTextura, TTipoEntidad.Personaje, 0);
 
 		// Contorno
-		BufferManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
 
 		// Pegatinas
 		pegatinas.dibujar(gl, this, vertices, triangulos, TTipoEntidad.Personaje, 0);

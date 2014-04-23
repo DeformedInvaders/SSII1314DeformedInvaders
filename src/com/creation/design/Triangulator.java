@@ -33,13 +33,13 @@ public class Triangulator
 		
 		if(puntos.getNumVertices() > 2)
 		{			
-			// TODO Calcular iteraciones en función del poligono
+			// FIXME Calcular iteraciones en función del poligono
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
 			
 			poligonoSimple = calcularPoligonoSimple(bsplineVertices, false).size == 0;
 			if(poligonoSimple)
 			{
-				// TODO Quitar profundidad controlando ausencia de cambios.
+				// FIXME Quitar profundidad controlando ausencia de cambios.
 				Mesh m = calcularMeshGenerator(bsplineVertices, DEEP_TRIANGULATOR, MAX_LONG_EDGE_TRIANGULATOR);
 				vertices = m.getVertices();
 				triangulos = m.getTriangulos();

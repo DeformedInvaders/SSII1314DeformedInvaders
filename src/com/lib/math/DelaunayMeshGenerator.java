@@ -8,7 +8,7 @@ import com.lib.utils.ShortArray;
 
 public class DelaunayMeshGenerator
 {
-	// TODO Calcular area dependiendo de la pantalla.
+	// FIXME Calcular area dependiendo de la pantalla.
 	private final static float AREA_TRIANG = 700.0f;
 
 	public Mesh computeMesh(FloatArray vertices, int profundidad, float longitud)

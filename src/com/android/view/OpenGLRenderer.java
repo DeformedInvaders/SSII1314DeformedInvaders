@@ -1,7 +1,5 @@
 package com.android.view;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -13,12 +11,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
-import android.opengl.GLUtils;
 
 import com.creation.data.MapaBits;
 import com.creation.data.TTipoSticker;
 import com.game.data.TTipoEntidad;
-import com.lib.buffer.BufferManager;
 import com.lib.buffer.Dimensiones;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.HullArray;
@@ -26,6 +22,8 @@ import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
+import com.lib.opengl.BufferManager;
+import com.lib.opengl.OpenGLManager;
 import com.project.model.GamePreferences;
 
 public abstract class OpenGLRenderer implements Renderer
@@ -158,7 +156,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 
-		// Activar Back-Face Culling
+		// FIXME Activar Back-Face Culling
 		//gl.glEnable(GL10.GL_CULL_FACE);
 		//gl.glCullFace(GL10.GL_BACK);
 
@@ -428,7 +426,7 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0);
-				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
+				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
 	
 			gl.glPopMatrix();
 	
@@ -444,10 +442,10 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(0, marcoAlturaLateral, 0);
-				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
+				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
 		
 				gl.glTranslatef(marcoAnchuraLateral + marcoAnchuraInterior, 0, 0);
-				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
+				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
 	
 			gl.glPopMatrix();
 
@@ -462,40 +460,19 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 			
-				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
+			OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 				gl.glTranslatef(0, marcoAlturaLateral + marcoAnchuraInterior, 0);
-				BufferManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
+				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 			gl.glPopMatrix();
 
 		gl.glPopMatrix();
 	}
 
-	private MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)
-	{
-		int screenshotSize = width * height;
-		ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
-		bb.order(ByteOrder.nativeOrder());
-
-		gl.glReadPixels(leftX, leftY, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb);
-
-		int pixelsBuffer[] = new int[screenshotSize];
-		bb.asIntBuffer().get(pixelsBuffer);
-		bb = null;
-
-		for (int i = 0; i < screenshotSize; ++i)
-		{
-			pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
-		}
-
-		MapaBits textura = new MapaBits(pixelsBuffer, width, height);
-		return textura;
-	}
-
 	protected MapaBits capturaPantalla(GL10 gl)
 	{
-		return capturaPantalla(gl, (int) marcoAnchuraLateral, (int) marcoAlturaLateral, (int) marcoAnchuraInterior, (int) marcoAnchuraInterior);
+		return OpenGLManager.capturaPantalla(gl, (int) marcoAnchuraLateral, (int) marcoAlturaLateral, (int) marcoAnchuraInterior, (int) marcoAnchuraInterior);
 	}
 
 	/* Métodos de Conversión de Coordenadas */
@@ -700,17 +677,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void cargarTextura(GL10 gl, Bitmap textura, int posTextura)
 	{
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-
-			gl.glGenTextures(1, nombreTexturas, posTextura);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
-	
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-	
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, textura, 0);
-
-		gl.glDisable(GL10.GL_TEXTURE_2D);
+		OpenGLManager.cargarTextura(gl, textura, nombreTexturas, posTextura);
 
 		cargadaTextura[posTextura] = true;
 	}
@@ -810,31 +777,6 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	// Métodos de Pintura de Texturas
-
-	private void dibujarTextura(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int posTextura)
-	{
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
-			gl.glFrontFace(GL10.GL_CW);
-			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	
-			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, bufferPuntos);
-			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, bufferCoordTextura);
-	
-			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			
-			gl.glDrawArrays(type, 0, bufferPuntos.capacity() / 2);
-			
-				gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-				
-			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-	}
-
 	// Métodos de Pintura de Texturas para Entidades
 
 	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTipoEntidad tipoEntidad, int posEntidad)
@@ -843,7 +785,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 		if (posTextura != -1 && cargadaTextura[posTextura])
 		{
-			dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, posTextura);
+			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, nombreTexturas[posTextura]);
 		}
 	}
 
@@ -859,7 +801,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 				gl.glScalef(scaleX, scaleY, 0.0f);
 	
-				dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
+				OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, nombreTexturas[posTextura]);
 
 			gl.glPopMatrix();
 		}
@@ -951,7 +893,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 				gl.glTranslatef(posFondo, 0.0f, 0.0f);
 	
-				dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, posTextura);
+				OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, nombreTexturas[posTextura]);
 
 			gl.glPopMatrix();
 		}
