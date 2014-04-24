@@ -35,7 +35,10 @@ public class LevelGenerator
 		mContext = context;
 		
 		manager = new AssetsStorageManager(mContext);
-
+	}
+	
+	public void cargarEnemigos()
+	{
 		listaNiveles = new ArrayList<Nivel>();
 		listaNombres = new ArrayList<String>();
 		listaEnemigos = new ArrayList<List<Entidad>>();

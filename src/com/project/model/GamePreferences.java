@@ -35,12 +35,6 @@ public class GamePreferences
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	
-	// Velocidades
-	// FIXME Calcular distancias en funicón del tamaño de pantalla
-	public static final float DIST_MOVIMIENTO_BACKGROUND = 4.0f;
-	public static final float DIST_MOVIMIENTO_ENEMY = 12.0f;
-	public static final float DIST_MOVIMIENTO_CHARACTER = 40.0f;
-	
 	// Texturas
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;
 	public static final float DEEP_POLYLINES = 0.1f;
@@ -145,12 +139,12 @@ public class GamePreferences
 		return HEIGHT_SCREEN - HEIGHT_SCREEN * 0.30f;
 	}
 	
-	public static final float DISTANCE_CHARACTER_RIGHT()
+	public static final float DISTANCE_GAME_RIGHT()
 	{
 		return WIDTH_SCREEN / 25.0f;
 	}
 	
-	public static final float DISTANCE_CHARACTER_BOTTOM()
+	public static final float DISTANCE_GAME_BOTTOM()
 	{
 		return HEIGHT_SCREEN / 16.0f;
 	}
@@ -182,12 +176,12 @@ public class GamePreferences
 	
 	private static final float MAX_NUM_CICLOS()
 	{
-		return Math.round(POS_ENEMIES_FINAL() / DIST_MOVIMIENTO_ENEMY);
+		return Math.round(POS_ENEMIES_FINAL() / DIST_MOVIMIENTO_ENEMIES());
 	}
 	
 	public static final int NUM_ITERATION_BACKGROUND()
 	{
-		return Math.round(MAX_NUM_CICLOS() * DIST_MOVIMIENTO_BACKGROUND / WIDTH_SCREEN);
+		return Math.round(MAX_NUM_CICLOS() * DIST_MOVIMIENTO_BACKGROUND() / WIDTH_SCREEN);
 	}
 	
 	public static final int TIME_INTERVAL_ANIMATION()
@@ -263,11 +257,38 @@ public class GamePreferences
 	/* DISTANCIAS Y FACTORES */
 	
 	// TODO Comprobar comportamiento del escalado de enemigos.
+	public static final float SCREEN_SCALE_FACTOR()
+	{
+		final float GAME_HEIGHT_BASE = 800.0f;
+		
+		return HEIGHT_SCREEN / GAME_HEIGHT_BASE;
+	}
+	
 	public static final float GAME_SCALE_FACTOR()
 	{
-		final float GAME_FACTOR = 0.5f;
-		final float GAME_HEIGHT_BASE = 800;
-		
-		return GAME_FACTOR * HEIGHT_SCREEN / GAME_HEIGHT_BASE;
+		return 0.5f;
 	}
+	
+	// TODO Comprobar distancias en función del tamaño de pantalla
+	public static final float DIST_MOVIMIENTO_BACKGROUND()
+	{
+		final float BACKGROUND_DISTANCE_BASE = 4.0f;
+		
+		return BACKGROUND_DISTANCE_BASE;
+	}
+	
+	public static final float DIST_MOVIMIENTO_ENEMIES()
+	{
+		final float ENEMIES_DISTANCE_BASE = 12.0f;
+		
+		return ENEMIES_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
+	}
+	
+	public static final float DIST_MOVIMIENTO_CHARACTER()
+	{
+		final float CHARACTER_DISTANCE_BASE = 20.0f;
+		
+		return CHARACTER_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
+	}
+	
 }

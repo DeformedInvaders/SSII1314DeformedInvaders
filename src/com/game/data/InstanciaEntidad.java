@@ -48,7 +48,7 @@ public class InstanciaEntidad
 
 	public void avanzar(OpenGLRenderer renderer, Entidad entidad)
 	{
-		posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMY;
+		posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 
 		pintar = posicionX < renderer.getScreenWidth() && posicionX > -entidad.getWidth();
 	}

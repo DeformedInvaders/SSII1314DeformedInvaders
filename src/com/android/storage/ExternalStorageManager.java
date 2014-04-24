@@ -1,9 +1,11 @@
 package com.android.storage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 
@@ -13,14 +15,17 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
+import com.creation.data.Esqueleto;
+import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
+import com.creation.data.Textura;
 import com.game.data.Personaje;
 
 public class ExternalStorageManager
 {
 	private static final String EXTERNAL_STORAGE_TAG = "EXTERNAL";
 	
-	private static final String ROOT_DIRECTORY = "/DEFORMINVADERS";
+	private static final String ROOT_DIRECTORY = "/DEFORMEDINVADERS";
 	private static final String TEMP_FILE = "/FILE.png";
 
 	private Context mContext;
@@ -79,14 +84,9 @@ public class ExternalStorageManager
 		comprobarDirectorio(getDirectorioRaiz());
 		
 		File file = new File(getFicheroTemp());
-		boolean ficheroEliminado = file.delete();
 		Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage deleted");
 		
-		file = new File(getDirectorioRaiz());
-		boolean directorioEliminado = file.delete();
-		Log.d(EXTERNAL_STORAGE_TAG, "Root Directory deleted");
-		
-		return ficheroEliminado && directorioEliminado;
+		return file.delete();
 	}
 	
 	public boolean guardarImagenTemp(int imagen)
@@ -129,6 +129,56 @@ public class ExternalStorageManager
 	
 	/* Método Temporal de Exportación de Personajes a Enemigos */
 	
+	public String[] listaFicheros()
+	{
+		comprobarDirectorio(getDirectorioRaiz());
+		
+		File file = new File(getDirectorioRaiz());
+		return file.list();
+	}
+	
+	public Personaje importarPersonaje(String nombre)
+	{
+		comprobarDirectorio(getDirectorioRaiz());
+		
+		try
+		{
+			FileInputStream file = new FileInputStream(new File(getDirectorioRaiz() + "/" + nombre));
+			ObjectInputStream data = new ObjectInputStream(file);
+
+			Personaje personaje = new Personaje();
+			personaje.setEsqueleto((Esqueleto) data.readObject());
+			personaje.setTextura((Textura) data.readObject());
+			personaje.setMovimientos((Movimientos) data.readObject());
+			personaje.setNombre((String) data.readObject());
+			
+			data.close();
+			file.close();
+
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " imported");
+			return personaje;
+		}
+		catch (ClassNotFoundException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " class not found");
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " sream corrupted");
+		}
+		catch (IOException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " ioexception");
+		}
+
+		Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " not imported");
+		return null;
+	}
+	
 	public boolean exportarPersonaje(Personaje personaje)
 	{
 		comprobarDirectorio(getDirectorioRaiz());
@@ -138,10 +188,9 @@ public class ExternalStorageManager
 			FileOutputStream file = new FileOutputStream(new File(getDirectorioExterno(personaje.getNombre())));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
-			// Guardar Personajes
 			data.writeObject(personaje.getEsqueleto());
 			data.writeObject(personaje.getTextura());
-			data.writeObject(personaje.getMovimientos().get(TTipoMovimiento.Run));
+			data.writeObject(personaje.getMovimientos());
 			data.writeObject(personaje.getNombre());
 
 			data.flush();
@@ -165,6 +214,43 @@ public class ExternalStorageManager
 		}
 
 		Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " not exported");
+		return false;
+	}
+	
+	public boolean exportarEnemigo(Personaje personaje)
+	{
+		comprobarDirectorio(getDirectorioRaiz());
+		
+		try
+		{
+			FileOutputStream file = new FileOutputStream(new File(getDirectorioExterno(personaje.getNombre())));
+			ObjectOutputStream data = new ObjectOutputStream(file);
+
+			data.writeObject(personaje.getEsqueleto());
+			data.writeObject(personaje.getTextura());
+			data.writeObject(personaje.getMovimientos().get(TTipoMovimiento.Run));
+
+			data.flush();
+			data.close();
+			file.close();
+
+			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " exported");
+			return true;
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " sream corrupted");
+		}
+		catch (IOException e)
+		{
+			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " ioexception");
+		}
+
+		Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " not exported");
 		return false;
 	}
 }

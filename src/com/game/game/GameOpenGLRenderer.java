@@ -102,14 +102,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		gl.glPushMatrix();
 
-			gl.glTranslatef(GamePreferences.DISTANCE_CHARACTER_RIGHT(), GamePreferences.DISTANCE_CHARACTER_BOTTOM(), 0.0f);
+			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
 		
-			gl.glPushMatrix();
-			
-				// Protagonista
-				personaje.dibujar(gl, this, true);
-			
-			gl.glPopMatrix();
+			// Protagonista
+			personaje.dibujar(gl, this);
 	
 			// Cola Enemigos
 			Iterator<InstanciaEntidad> it = listaEnemigos.iterator();
@@ -153,7 +149,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public boolean reproducirAnimacion()
 	{
 		// Background
-		desplazarFondo();
+		desplazarTexturaFondo();
 
 		// Lista Enemigos
 		Iterator<InstanciaEntidad> it = listaEnemigos.iterator();

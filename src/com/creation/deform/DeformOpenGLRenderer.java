@@ -399,7 +399,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		deformator.moverHandles(listaHandlesAnimacion.get(listaHandlesAnimacion.size() - 1), frame);
 		listaVerticesAnimacion.add(frame.clone());
 		
-		//FIXME Comprobar comportamiento de algoritmo.
+		//TODO Comprobar comportamiento de algoritmo.
 		android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
 		android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
 		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);

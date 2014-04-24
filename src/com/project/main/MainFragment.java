@@ -20,7 +20,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	private MainFragmentListener mCallback;
 
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCrear, botonJugar, botonSeleccionar;
+	private ImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar;
 
 	private Personaje personaje;
 	private int numeroPersonajes;
@@ -43,6 +43,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 
 	public interface MainFragmentListener
 	{
+		public void onMainImportCharacter();
 		public void onMainCreateCharacter();
 		public void onMainSelectCharacter();
 		public void onMainPlayGame();
@@ -75,10 +76,12 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
 		botonSeleccionar = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
 		botonJugar = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
-
+		botonImportar = (ImageButton) rootView.findViewById(R.id.imageButtonMain4);
+		
 		botonCrear.setOnClickListener(new OnAddClickListener());
 		botonSeleccionar.setOnClickListener(new OnViewClickListener());
 		botonJugar.setOnClickListener(new OnGameClickListener());
+		botonImportar.setOnClickListener(new OnImportClickListener());
 
 		setCanvasListener(canvas);
 
@@ -96,6 +99,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		botonCrear = null;
 		botonJugar = null;
 		botonSeleccionar = null;
+		botonImportar = null;
 	}
 	
 	@Override
@@ -171,6 +175,15 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		public void onClick(View v)
 		{
 			mCallback.onMainPlayGame();
+		}
+	}
+	
+	private class OnImportClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			mCallback.onMainImportCharacter();
 		}
 	}
 	

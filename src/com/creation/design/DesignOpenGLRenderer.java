@@ -61,8 +61,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				{
 					// Centrado de Marco
 					centrarPersonajeEnMarcoInicio(gl);
-					
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoligono);
 	
 					if (puntos.getNumVertices() > 1)
 					{
@@ -79,6 +77,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 						}
 						else
 						{
+							OpenGLManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoligono);
 							OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoligono);
 						}
 					}

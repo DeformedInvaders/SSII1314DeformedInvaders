@@ -26,16 +26,26 @@ public class Enemigo extends Malla
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		gl.glPushMatrix();
-		
-			gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
-			gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
-		
-			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
+		if (esqueletoReady && texturaReady && movimientosReady)
+		{
+			float factorEscala = GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
 			
-			super.dibujar(gl, renderer);
+			gl.glPushMatrix();
 			
-		gl.glPopMatrix();
+				gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
+				gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
+			
+				gl.glPushMatrix();
+				
+					gl.glScalef(factorEscala, factorEscala, 1.0f);
+					
+					super.dibujar(gl, renderer);
+				
+				gl.glPopMatrix();
+
+			gl.glPopMatrix();
+		
+		}
 	}
 	
 	/* Métodos de Animación */

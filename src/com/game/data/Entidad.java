@@ -38,12 +38,12 @@ public abstract class Entidad
 
 	public float getWidth()
 	{
-		return width * GamePreferences.GAME_SCALE_FACTOR();
+		return width * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
 	}
 	
 	public float getHeight()
 	{
-		return height * GamePreferences.GAME_SCALE_FACTOR();
+		return height * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
 	}
 
 	public TTipoEntidad getTipo()

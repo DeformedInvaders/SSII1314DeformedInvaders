@@ -26,7 +26,15 @@
             android:id="@+id/imageButtonMain3"
             android:contentDescription="@string/desc_main_select"
             android:background="@drawable/icon_main_selection" />
-        
+    </LinearLayout>
+	
+	<LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
+    
+   		<ImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonMain4"
+            android:contentDescription="@string/desc_main_import"
+            android:background="@drawable/icon_main_import" />
+    
     </LinearLayout>
 
 </RelativeLayout>

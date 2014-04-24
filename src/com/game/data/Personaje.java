@@ -16,9 +16,12 @@ import com.project.model.GamePreferences;
 
 public class Personaje extends Malla
 {
+	// Nombre
+	private String nombre;
+	
+	// Movimientos
 	private Movimientos movimientos;
-
-	private TTipoMovimiento estado;
+	private TTipoMovimiento tipoMovimiento;
 	
 	private int vidas;
 	private boolean burbuja;
@@ -77,23 +80,35 @@ public class Personaje extends Malla
 		}
 	}
 	
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, boolean escala)
+	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		gl.glPushMatrix();
-		
-			if (escala)
-			{
+		if (esqueletoReady && texturaReady && movimientosReady)
+		{
+			gl.glPushMatrix();
+	
+				gl.glTranslatef(posicionX, posicionY, 0.0f);
+				
+				if (burbuja)
+				{
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
+				}
+				
+				super.dibujar(gl, renderer);			
+	
+			gl.glPopMatrix();
+		}
+
+		if (burbuja && vidas > 0)
+		{
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(posicionX, posicionY, 0.0f);
 				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
-			}
+				
+				renderer.dibujarTexturaRectangulo(gl, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
 			
-			dibujar(gl, renderer);
-			
-			if (burbuja && vidas > 0)
-			{
-				renderer.dibujarTexturaRectangulo(gl, posicionX, posicionY, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
-			}
-		
-		gl.glPopMatrix();
+			gl.glPopMatrix();
+		}
 	}
 
 	@Override
@@ -103,15 +118,15 @@ public class Personaje extends Malla
 		
 		if (movimientosReady)
 		{
-			if (estado == TTipoMovimiento.Jump)
+			if (tipoMovimiento == TTipoMovimiento.Jump)
 			{
 				if (posicionAnimacion < 2 * listaVerticesAnimacion.size() / 6)
 				{
-					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER;
+					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
 				}
 				else if (posicionAnimacion >= 4 * listaVerticesAnimacion.size() / 6)
 				{
-					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER;
+					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
 				}
 			}
 		}
@@ -135,8 +150,8 @@ public class Personaje extends Malla
 	{
 		if (movimientosReady)
 		{
-			estado = TTipoMovimiento.Run;
-			listaVerticesAnimacion = movimientos.get(estado);
+			tipoMovimiento = TTipoMovimiento.Run;
+			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
 			
 			iniciar();
 		}
@@ -146,8 +161,8 @@ public class Personaje extends Malla
 	{
 		if (movimientosReady)
 		{
-			estado = TTipoMovimiento.Jump;
-			listaVerticesAnimacion = movimientos.get(estado);
+			tipoMovimiento = TTipoMovimiento.Jump;
+			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
 			
 			iniciar();
 		}
@@ -157,8 +172,8 @@ public class Personaje extends Malla
 	{
 		if (movimientosReady)
 		{
-			estado = TTipoMovimiento.Crouch;
-			listaVerticesAnimacion = movimientos.get(estado);
+			tipoMovimiento = TTipoMovimiento.Crouch;
+			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
 			
 			iniciar();
 		}
@@ -166,8 +181,8 @@ public class Personaje extends Malla
 
 	public void atacar()
 	{
-		estado = TTipoMovimiento.Attack;
-		listaVerticesAnimacion = movimientos.get(estado);
+		tipoMovimiento = TTipoMovimiento.Attack;
+		listaVerticesAnimacion = movimientos.get(tipoMovimiento);
 		
 		iniciar();
 	}
@@ -179,20 +194,20 @@ public class Personaje extends Malla
 		float widthEntidad = entidad.getWidth();
 		float heightEntidad = entidad.getHeight();
 
-		Circle areaPersonaje = new Circle(getPosicionX() + getWidth() / 2.0f, getPosicionY() + getHeight() / 2.0f, getWidth() / 2.5f);
+		Circle areaPersonaje = new Circle(posicionX + getWidth() / 2.0f, posicionY + getHeight() / 2.0f, getWidth() / 2.5f);
 		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 2.0f, posicionYEntidad + heightEntidad / 2.0f, heightEntidad / 3.0f);
 
 		// Hay colisión entre el personaje y el enemigo
 		if (Intersector.overlaps(areaPersonaje, areaEntidad))
 		{
 			// Enemigo derrotado
-			if (entidad.getTipo() == TTipoEntidad.Enemigo && estado == TTipoMovimiento.Attack)
+			if (entidad.getTipo() == TTipoEntidad.Enemigo && tipoMovimiento == TTipoMovimiento.Attack)
 			{
 				instancia.setDerrotado();
 				return TEstadoColision.EnemigoDerrotado;
 			}
 			
-			if (entidad.getTipo() == TTipoEntidad.Misil && estado == TTipoMovimiento.Crouch)
+			if (entidad.getTipo() == TTipoEntidad.Misil && tipoMovimiento == TTipoMovimiento.Crouch)
 			{
 				return TEstadoColision.Nada;
 			}
@@ -211,6 +226,11 @@ public class Personaje extends Malla
 		movimientosReady = true;
 		
 		reposo();
+	}
+	
+	public void setNombre(String n)
+	{
+		nombre = n;
 	}
 	
 	public void activarBurbuja()
@@ -240,6 +260,16 @@ public class Personaje extends Malla
 		return movimientos;
 	}
 	
+	public float getWidth()
+	{
+		return width * GamePreferences.GAME_SCALE_FACTOR();
+	}
+	
+	public float getHeight()
+	{
+		return height * GamePreferences.GAME_SCALE_FACTOR();
+	}
+	
 	public boolean isAlive()
 	{
 		return vidas > 0;
@@ -250,13 +280,8 @@ public class Personaje extends Malla
 		return vidas;
 	}
 	
-	private float getPosicionX()
+	public String getNombre()
 	{
-		return posicionX * GamePreferences.GAME_SCALE_FACTOR();
-	}
-	
-	private float getPosicionY()
-	{
-		return posicionY * GamePreferences.GAME_SCALE_FACTOR();
+		return nombre;
 	}
 }

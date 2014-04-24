@@ -77,6 +77,12 @@ public class GameController implements MainActivity.ActivityListener, MainFragme
 			cambiarEstadoDesign();
 		}
 	}
+	
+	@Override
+	public void onMainImportCharacter()
+	{
+		core.importarPersonaje();
+	}
 
 	@Override
 	public void onMainSelectCharacter()

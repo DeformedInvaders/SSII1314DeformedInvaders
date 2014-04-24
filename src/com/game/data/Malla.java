@@ -20,17 +20,14 @@ import com.lib.opengl.OpenGLManager;
 
 public abstract class Malla extends Entidad
 {
-	// Nombre
-	private String nombre;
-
 	// Esqueleto
 	protected HullArray contorno;
-	private FloatBuffer bufferContorno;
+	protected FloatBuffer bufferContorno;
 
 	protected VertexArray vertices;
 
 	protected TriangleArray triangulos;
-	private FloatBuffer bufferTriangulos;
+	protected FloatBuffer bufferTriangulos;
 
 	// Animación
 	protected List<VertexArray> listaVerticesAnimacion;
@@ -41,11 +38,11 @@ public abstract class Malla extends Entidad
 	protected FloatBuffer bufferContornoAnimacion;
 
 	// Texturas
-	private Textura textura;
-	private FloatBuffer coordTextura;
+	protected Textura textura;
+	protected FloatBuffer coordTextura;
 
 	// Pegatinas
-	private Pegatinas pegatinas;
+	protected Pegatinas pegatinas;
 
 	protected float posicionX, posicionY;
 	protected boolean esqueletoReady, texturaReady, movimientosReady;
@@ -77,26 +74,20 @@ public abstract class Malla extends Entidad
 			pegatinas.descargarTextura(renderer, tipoEntidad, idEntidad);
 		}
 	}
-
+	
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
 		if (esqueletoReady && texturaReady && movimientosReady)
 		{
-			gl.glPushMatrix();
+			// Textura
+			textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipoEntidad, idEntidad);
 	
-				gl.glTranslatef(posicionX, posicionY, 0.0f);
-		
-				// Textura
-				textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipoEntidad, idEntidad);
-		
-				// Contorno
-				OpenGLManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
-		
-				// Pegatinas
-				pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipoEntidad, idEntidad);
-	
-			gl.glPopMatrix();
+			// Contorno
+			OpenGLManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
+			
+			// Pegatinas
+			pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipoEntidad, idEntidad);
 		}
 	}
 
@@ -166,11 +157,6 @@ public abstract class Malla extends Entidad
 		texturaReady = true;
 	}
 
-	public void setNombre(String n)
-	{
-		nombre = n;
-	}
-
 	/* Métodos de Obtención de Información */
 
 	public boolean isEsqueletoReady()
@@ -201,10 +187,5 @@ public abstract class Malla extends Entidad
 	public Textura getTextura()
 	{
 		return textura;
-	}
-
-	public String getNombre()
-	{
-		return nombre;
 	}
 }

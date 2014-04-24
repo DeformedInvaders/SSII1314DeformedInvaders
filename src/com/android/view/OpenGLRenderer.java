@@ -54,7 +54,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private int[] nombreTexturas;
 
-	private FloatBuffer coordTextura;
+	private FloatBuffer coordTexturaRectangulo;
 	private FloatBuffer[] vertTextura;
 
 	private boolean[] cargadaTextura;
@@ -101,7 +101,7 @@ public abstract class OpenGLRenderer implements Renderer
 		vertTextura = new FloatBuffer[NUM_TEXTURES];
 
 		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
-		coordTextura = BufferManager.construirBufferListaPuntos(texture);
+		coordTexturaRectangulo = BufferManager.construirBufferListaPuntos(texture);
 
 		// Se inicializan los parámetros de la cámara en el
 		// método onSurfaceChanged llamado automáticamente
@@ -715,23 +715,6 @@ public abstract class OpenGLRenderer implements Renderer
 			descargarTextura(posTextura);
 		}
 	}
-
-	public Dimensiones cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
-	{
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
-
-		float textureHeight = bitmap.getHeight();
-		float textureWidth = bitmap.getWidth();
-		
-		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
-	}
-	
-	public Dimensiones cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
-	{
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
-		
-		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
-	}
 	
 	private Dimensiones cargarTexturaRectangulo(GL10 gl, Bitmap bitmap, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
@@ -767,6 +750,23 @@ public abstract class OpenGLRenderer implements Renderer
 		return null;
 	}
 
+	public Dimensiones cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	{
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+
+		float textureHeight = bitmap.getHeight();
+		float textureWidth = bitmap.getWidth();
+		
+		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
+	}
+	
+	public Dimensiones cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	{
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		
+		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
+	}
+
 	public void descargarTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
@@ -789,44 +789,14 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina, float scaleX, float scaleY)
+	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
 		if (posTextura != -1 && cargadaTextura[posTextura])
 		{
-			gl.glPushMatrix();
-
-				gl.glTranslatef(x, y, 0.0f);
-	
-				gl.glScalef(scaleX, scaleY, 0.0f);
-	
-				OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, nombreTexturas[posTextura]);
-
-			gl.glPopMatrix();
+			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTexturaRectangulo, nombreTexturas[posTextura]);
 		}
-	}
-
-	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina, float scaleX, float scaleY)
-	{
-		dibujarTexturaRectangulo(gl, 0.0f, 0.0f, tipoEntidad, posEntidad, posPegatina, scaleX, scaleY);
-	}
-
-	public void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
-	{
-		dibujarTexturaRectangulo(gl, x, y, tipoEntidad, posEntidad, posPegatina, 1.0f, 1.0f);
-	}
-
-	// Métodos de Pintura de Textura para Fase Creación
-
-	protected void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura)
-	{
-		dibujarTexturaMalla(gl, bufferPuntos, bufferCoordTextura, TTipoEntidad.Personaje, 0);
-	}
-
-	protected void dibujarTexturaRectangulo(GL10 gl, float x, float y, TTipoSticker posPegatina)
-	{
-		dibujarTexturaRectangulo(gl, x, y, TTipoEntidad.Personaje, 0, posPegatina);
 	}
 
 	/* Métodos de Pintura de Fondo */
@@ -883,21 +853,6 @@ public abstract class OpenGLRenderer implements Renderer
 			descargarTextura(POS_TEXTURE_BACKGROUND + i);
 		}
 	}
-	 
-
-	private void dibujarTexturaFondo(GL10 gl, boolean dibujarFondo, float posFondo, int posTextura)
-	{
-		if (dibujarFondo)
-		{
-			gl.glPushMatrix();
-
-				gl.glTranslatef(posFondo, 0.0f, 0.0f);
-	
-				OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[posTextura], coordTextura, nombreTexturas[posTextura]);
-
-			gl.glPopMatrix();
-		}
-	}
 
 	private void dibujarFondo(GL10 gl)
 	{
@@ -905,7 +860,16 @@ public abstract class OpenGLRenderer implements Renderer
 		{
 			if (cargadaTextura[POS_TEXTURE_BACKGROUND + i])
 			{
-				dibujarTexturaFondo(gl, dibujarFondo[i], posFondo[i], POS_TEXTURE_BACKGROUND + i);
+				if (dibujarFondo[i])
+				{
+					gl.glPushMatrix();
+		
+						gl.glTranslatef(posFondo[i], 0.0f, 0.0f);
+			
+						OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, vertTextura[POS_TEXTURE_BACKGROUND + i], coordTexturaRectangulo, nombreTexturas[POS_TEXTURE_BACKGROUND + i]);
+		
+					gl.glPopMatrix();
+				}
 			}
 		}
 	}
@@ -927,12 +891,12 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	protected void desplazarFondo()
+	protected void desplazarTexturaFondo()
 	{
 		int lastFondo = POS_TEXTURE_BACKGROUND + GamePreferences.NUM_TYPE_BACKGROUNDS - 1;
 
 		// Activado de Último Fondo
-		if (posFondo[lastFondo] >= screenWidth - GamePreferences.DIST_MOVIMIENTO_BACKGROUND && posFondo[lastFondo] <= screenWidth + GamePreferences.DIST_MOVIMIENTO_BACKGROUND)
+		if (posFondo[lastFondo] >= screenWidth - GamePreferences.DIST_MOVIMIENTO_BACKGROUND() && posFondo[lastFondo] <= screenWidth + GamePreferences.DIST_MOVIMIENTO_BACKGROUND())
 		{
 			dibujarFondo[lastFondo] = true;
 			
@@ -958,7 +922,7 @@ public abstract class OpenGLRenderer implements Renderer
 		// Desplazamiento
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
 		{
-			posFondo[i] -= GamePreferences.DIST_MOVIMIENTO_BACKGROUND;
+			posFondo[i] -= GamePreferences.DIST_MOVIMIENTO_BACKGROUND();
 		}
 
 		// Reinicio de Fondo

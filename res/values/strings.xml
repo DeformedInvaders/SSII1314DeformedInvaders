@@ -102,6 +102,12 @@
 			<string name="text_replace_character_confirmation">Character replaced.</string>
 			<string name="text_select_character_confirmation">Character selected.</string>
 			
+			<string name="text_export_character_title">Please wait&#x2026;</string>
+			<string name="text_export_character_description">Exporting your character.</string>
+			
+			<string name="text_import_character_title">Importing your character.</string>
+			<string name="text_import_character_confirmation">Character imported.</string>
+			
 			<string name="text_delete_character_title">Deleting your character.</string>
 			<string name="text_delete_character_description">Are you sure to delete this character?.</string>
 			<string name="text_delete_character_confirmation">Character deleted.</string>
@@ -177,6 +183,8 @@
 		    
 		    <string name="text_button_rename">Rename</string>
 		    <string name="text_button_ready">Ready</string>
+		    
+		    <string name="text_button_import">Import</string>
 			
 		<!-- Errors -->
 			<string name="error_play">Coming Soon</string>
@@ -190,6 +198,7 @@
 			<string name="error_picture_character">The character cannot be pictured.</string>
 			<string name="error_save_character">The character cannot be saved.</string>
 			<string name="error_delete_character">The character cannot be deleted.</string>
+			<string name="error_import_character">The character cannot be imported.</string>
 			
 			<string name="error_internet_connection">There is no internet connection.</string>
 			<string name="error_social_connection">There is no social connection.</string>
@@ -209,6 +218,7 @@
 	
 	    <!-- Main Fragment -->
 		    <string name="desc_main_new">Create a new character.</string>
+		    <string name="desc_main_import">Import a created character.</string>
 		    <string name="desc_main_select">Select a character.</string>
 		    <string name="desc_main_play">Select a level.</string>
 		    

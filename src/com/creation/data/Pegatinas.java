@@ -53,6 +53,8 @@ public class Pegatinas implements Serializable
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TriangleArray triangulos, TTipoEntidad tipo, int id)
 	{
+		float factorEscala = GamePreferences.SCREEN_SCALE_FACTOR();
+		
 		gl.glPushMatrix();
 		
 			gl.glTranslatef(0, 0, GamePreferences.DEEP_STICKERS);
@@ -62,7 +64,14 @@ public class Pegatinas implements Serializable
 			{				
 				if (isCargada(tipoPegatinas[i]))
 				{
-					renderer.dibujarTexturaRectangulo(gl, pegatinas.getXCoords(tipoPegatinas[i], vertices, triangulos), pegatinas.getYCoords(tipoPegatinas[i], vertices, triangulos), tipo, id, tipoPegatinas[i]);
+					gl.glPushMatrix();
+					
+						gl.glTranslatef(pegatinas.getXCoords(tipoPegatinas[i], vertices, triangulos), pegatinas.getYCoords(tipoPegatinas[i], vertices, triangulos), 0.0f);
+						gl.glScalef(factorEscala, factorEscala, 1.0f);
+						
+						renderer.dibujarTexturaRectangulo(gl, tipo, id, tipoPegatinas[i]);
+					
+					gl.glPopMatrix();
 				}
 			}
 			
