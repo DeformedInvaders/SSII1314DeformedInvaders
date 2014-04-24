@@ -103,7 +103,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		gl.glPushMatrix();
 
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
-		
+					
 			// Protagonista
 			personaje.dibujar(gl, this);
 	

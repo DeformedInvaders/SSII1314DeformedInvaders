@@ -34,17 +34,17 @@ public class Enemigo extends Malla
 			
 				gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
 				gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
-			
-				gl.glPushMatrix();
+				gl.glScalef(factorEscala, factorEscala, 1.0f);
 				
-					gl.glScalef(factorEscala, factorEscala, 1.0f);
-					
-					super.dibujar(gl, renderer);
+				// Pintura de Lados Traseros
+				gl.glCullFace(GL10.GL_FRONT);
 				
-				gl.glPopMatrix();
+				super.dibujar(gl, renderer);
+				
+				// Pintura de Lados Frontales
+				gl.glCullFace(GL10.GL_BACK);
 
 			gl.glPopMatrix();
-		
 		}
 	}
 	

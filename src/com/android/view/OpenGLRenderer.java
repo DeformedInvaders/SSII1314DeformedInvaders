@@ -156,9 +156,9 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 
-		// FIXME Activar Back-Face Culling
-		//gl.glEnable(GL10.GL_CULL_FACE);
-		//gl.glCullFace(GL10.GL_BACK);
+		// Activar Back-Face Culling
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
 
 		// Activar Transparencia
 		gl.glEnable(GL10.GL_BLEND);
