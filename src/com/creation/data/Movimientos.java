@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.lib.buffer.VertexArray;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class Movimientos implements Serializable
 {

@@ -15,7 +15,7 @@ import com.creation.data.Textura;
 import com.game.data.Enemigo;
 import com.game.select.TTipoLevel;
 import com.lib.buffer.VertexArray;
-import com.project.model.GameResources;
+import com.main.model.GameResources;
 
 public class AssetsStorageManager
 {

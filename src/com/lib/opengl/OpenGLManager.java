@@ -9,7 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.lib.buffer.HandleArray;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

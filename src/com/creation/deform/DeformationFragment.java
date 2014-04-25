@@ -16,9 +16,9 @@ import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.lib.buffer.VertexArray;
+import com.main.model.GamePreferences;
+import com.main.model.GameResources;
 import com.project.main.R;
-import com.project.model.GamePreferences;
-import com.project.model.GameResources;
 
 public class DeformationFragment extends ViewPagerFragment implements OnDeformationListener
 {

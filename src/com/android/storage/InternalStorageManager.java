@@ -21,9 +21,9 @@ import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
+import com.main.model.GamePreferences;
+import com.main.model.GameStatistics;
 import com.project.main.R;
-import com.project.model.GamePreferences;
-import com.project.model.GameStatistics;
 
 public class InternalStorageManager
 {

@@ -11,8 +11,8 @@ import com.game.data.TTipoEntidad;
 import com.lib.buffer.StickerArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
-import com.project.model.GamePreferences;
-import com.project.model.GameResources;
+import com.main.model.GamePreferences;
+import com.main.model.GameResources;
 
 public class Pegatinas implements Serializable
 {

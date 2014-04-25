@@ -2,7 +2,7 @@ package com.lib.buffer;
 
 import com.creation.data.TTipoSticker;
 import com.lib.utils.FloatArray;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class StickerArray extends FloatArray
 {

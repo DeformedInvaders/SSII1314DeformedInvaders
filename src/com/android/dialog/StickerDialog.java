@@ -11,10 +11,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.creation.data.TTipoSticker;
+import com.main.model.GamePreferences;
+import com.main.model.GameResources;
+import com.main.model.GameStatistics;
 import com.project.main.R;
-import com.project.model.GamePreferences;
-import com.project.model.GameResources;
-import com.project.model.GameStatistics;
 
 public abstract class StickerDialog extends WindowDialog
 {

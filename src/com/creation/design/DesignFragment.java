@@ -13,8 +13,8 @@ import android.widget.ImageButton;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
+import com.main.model.GameResources;
 import com.project.main.R;
-import com.project.model.GameResources;
 
 public class DesignFragment extends OpenGLFragment
 {

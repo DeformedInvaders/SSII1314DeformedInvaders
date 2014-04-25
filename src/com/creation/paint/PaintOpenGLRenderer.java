@@ -29,8 +29,8 @@ import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
+import com.main.model.GamePreferences;
 import com.project.main.R;
-import com.project.model.GamePreferences;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {

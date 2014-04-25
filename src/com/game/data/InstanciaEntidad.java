@@ -3,7 +3,7 @@ package com.game.data;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.android.view.OpenGLRenderer;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class InstanciaEntidad
 {

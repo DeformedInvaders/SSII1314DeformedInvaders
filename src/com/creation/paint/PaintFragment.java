@@ -17,9 +17,9 @@ import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
+import com.main.model.GameResources;
+import com.main.model.GameStatistics;
 import com.project.main.R;
-import com.project.model.GameResources;
-import com.project.model.GameStatistics;
 
 public class PaintFragment extends OpenGLFragment
 {

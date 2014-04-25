@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.android.alert.VideoAlert;
 import com.android.alert.VideoListAlert;
+import com.main.model.GamePreferences;
 import com.project.main.R;
-import com.project.model.GamePreferences;
 
 public class AlertFragment extends Fragment
 {

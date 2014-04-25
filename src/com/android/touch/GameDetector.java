@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 
 import com.android.view.OpenGLSurfaceView;
 import com.game.game.GameOpenGLSurfaceView;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class GameDetector
 {

@@ -16,8 +16,8 @@ import com.game.data.Nivel;
 import com.game.data.Obstaculo;
 import com.game.data.TTipoEntidad;
 import com.game.game.TTipoEndgame;
-import com.project.model.GamePreferences;
-import com.project.model.GameResources;
+import com.main.model.GamePreferences;
+import com.main.model.GameResources;
 
 public class LevelGenerator
 {

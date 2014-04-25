@@ -24,7 +24,7 @@ import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public abstract class OpenGLRenderer implements Renderer
 {

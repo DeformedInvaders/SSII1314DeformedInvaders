@@ -11,8 +11,8 @@ import com.creation.data.TTipoSticker;
 import com.game.game.TEstadoColision;
 import com.lib.math.Circle;
 import com.lib.math.Intersector;
+import com.main.model.GamePreferences;
 import com.project.main.R;
-import com.project.model.GamePreferences;
 
 public class Personaje extends Malla
 {

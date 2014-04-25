@@ -17,8 +17,8 @@ import com.character.display.DisplayGLSurfaceView;
 import com.character.display.OnDisplayListener;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
+import com.main.model.GameResources;
 import com.project.main.R;
-import com.project.model.GameResources;
 
 public class CharacterSelectFragment extends OpenGLFragment implements OnDisplayListener
 {	

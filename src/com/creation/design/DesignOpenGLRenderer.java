@@ -15,7 +15,7 @@ import com.lib.buffer.VertexArray;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {

@@ -10,7 +10,7 @@ import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class DisplayGLSurfaceView extends OpenGLSurfaceView
 {

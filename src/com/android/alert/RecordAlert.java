@@ -8,8 +8,8 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import com.main.model.GamePreferences;
 import com.project.main.R;
-import com.project.model.GamePreferences;
 
 public abstract class RecordAlert extends WindowAlert
 {

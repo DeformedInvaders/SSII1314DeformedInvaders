@@ -12,9 +12,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.game.data.Entidad;
+import com.main.model.GamePreferences;
+import com.main.model.GameResources;
 import com.project.main.R;
-import com.project.model.GamePreferences;
-import com.project.model.GameResources;
 
 public abstract class SummaryAlert extends WindowAlert
 {	

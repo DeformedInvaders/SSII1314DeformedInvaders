@@ -16,8 +16,8 @@ import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
+import com.main.model.GamePreferences;
 import com.project.main.R;
-import com.project.model.GamePreferences;
 
 public class GameOpenGLRenderer extends OpenGLRenderer
 {

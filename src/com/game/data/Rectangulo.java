@@ -7,7 +7,7 @@ import android.content.Context;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.TTipoSticker;
 import com.lib.buffer.Dimensiones;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public abstract class Rectangulo extends Entidad
 {

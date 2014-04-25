@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.game.data.Nivel;
+import com.main.model.GameStatistics;
 import com.project.main.R;
-import com.project.model.GameStatistics;
 
 public class LevelSelectionFragment extends ViewPagerFragment implements OnLevelListener
 {

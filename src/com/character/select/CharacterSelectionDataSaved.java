@@ -1,6 +1,6 @@
 package com.character.select;
 
-import com.project.controller.DataSaved;
+import com.main.controller.DataSaved;
 
 public class CharacterSelectionDataSaved extends DataSaved
 {

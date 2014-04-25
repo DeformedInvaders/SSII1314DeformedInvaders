@@ -18,9 +18,9 @@ import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.game.select.TTipoLevel;
+import com.main.model.GamePreferences;
+import com.main.model.GameResources;
 import com.project.main.R;
-import com.project.model.GamePreferences;
-import com.project.model.GameResources;
 
 public class GameFragment extends OpenGLFragment implements OnGameListener
 {
@@ -146,6 +146,9 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		}
 		
 		canvas.onResume();
+		
+		reiniciarInterfaz();
+		actualizarInterfaz();
 	}
 
 	@Override
@@ -154,6 +157,9 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		super.onPause();		
 		canvas.onPause();
 		dataSaved = canvas.saveData();
+		
+		canvas.seleccionarPause();
+		gamePaused = true;
 	}
 
 	/* Métodos abstractos de OpenGLFragment */

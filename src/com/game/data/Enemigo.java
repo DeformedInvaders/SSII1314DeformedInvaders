@@ -6,7 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.android.view.OpenGLRenderer;
 import com.lib.buffer.VertexArray;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class Enemigo extends Malla
 {

@@ -5,7 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public abstract class Entidad
 {

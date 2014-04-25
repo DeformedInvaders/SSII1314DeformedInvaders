@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import com.android.view.OpenGLRenderer;
 import com.lib.math.Intersector;
 import com.lib.math.Vector2;
-import com.project.model.GamePreferences;
+import com.main.model.GamePreferences;
 
 public class RotateDetector
 {
