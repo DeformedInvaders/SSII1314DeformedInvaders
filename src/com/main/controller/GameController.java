@@ -66,14 +66,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 			public void run()
 			{
 				if (core.cargarDatos())
-				{
-					alert.dismiss();
-					
+				{					
 					view.runOnUiThread(new Runnable() {
 				        @Override
 				        public void run()
 				        {
-				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());             
+				        	view.actualizarActionBar();
+				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());  
+				        	alert.dismiss();
 				        }
 				    });
 				}			
