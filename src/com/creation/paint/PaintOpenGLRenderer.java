@@ -33,7 +33,7 @@ import com.main.model.GamePreferences;
 import com.project.main.R;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
-{
+{	
 	// Estructura de Datos
 	private TEstadoPaint estado;
 
@@ -134,9 +134,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Construir Textura
 			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
 
-			// Desactivar Modo Captura
-			estadoCaptura = TEstadoCaptura.Terminado;
-
 			// Restaurar posición anterior de la Cámara
 			recuperarCamara();
 		}
@@ -145,6 +142,12 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		pegatinas.cargarTexturas(gl, this, mContext, TTipoEntidad.Personaje, 0);
 
 		dibujarEsqueleto(gl);
+		
+		if (estado == TEstadoPaint.Captura && estadoCaptura == TEstadoCaptura.Capturando)
+		{
+			// Desactivar Modo Captura
+			estadoCaptura = TEstadoCaptura.Terminado;
+		}
 	}
 
 	private void dibujarEsqueleto(GL10 gl)
@@ -514,10 +517,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		return estado == TEstadoPaint.Pegatinas;
 	}
-
+	
 	public Textura getTextura()
 	{
-		if (estadoCaptura == TEstadoCaptura.Capturando)
+		if (estado == TEstadoPaint.Captura && estadoCaptura == TEstadoCaptura.Capturando)
 		{
 			final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_character_title), mContext.getString(R.string.text_processing_character_description), true);
 
@@ -529,19 +532,19 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 					estado = TEstadoPaint.Nada;
 					estadoCaptura = TEstadoCaptura.Nada;
-					
+
 					alert.dismiss();
 				}
 			});
-			
+
 			thread.start();
 
 			// Esperar por la finalización del thread.
-			
+
 			try
 			{
 				thread.join();
-				
+
 				return new Textura(textura, coordsTextura, pegatinas);
 			}
 			catch (InterruptedException e)
@@ -549,7 +552,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				e.printStackTrace();
 			}
 		}
-
+		
 		return null;
 	}
 

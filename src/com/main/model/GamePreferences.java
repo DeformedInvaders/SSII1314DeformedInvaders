@@ -159,7 +159,7 @@ public class GamePreferences
 		return HEIGHT_SCREEN / 4.0f;
 	}
 	
-	public static final float DISTANCE_BETWEEN_ENEMY()
+	public static final float DISTANCE_BETWEEN_ENEMIES()
 	{
 		return WIDTH_SCREEN / 1.8f;
 	}
@@ -171,7 +171,7 @@ public class GamePreferences
 	
 	public static final float POS_ENEMIES_FINAL()
 	{
-		return POS_ENEMIES_INICIO() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMY();
+		return POS_ENEMIES_INICIO() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMIES() * 1.5f;
 	}
 	
 	private static final float MAX_NUM_CICLOS()

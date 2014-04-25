@@ -11,7 +11,7 @@ import com.creation.data.Textura;
 import com.game.data.Personaje;
 
 public class PaintGLSurfaceView extends OpenGLSurfaceView
-{
+{	
 	// Renderer
 	private PaintOpenGLRenderer renderer;
 
@@ -23,7 +23,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	}
 
 	public void setParameters(Personaje personaje)
-	{
+	{		
 		// Asignar Renderer al GLSurfaceView
 		renderer = new PaintOpenGLRenderer(getContext(), Color.WHITE, personaje);
 		setRenderer(renderer);
@@ -117,13 +117,6 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de Obtención de Información */
 
-	public Textura getTextura()
-	{
-		renderer.seleccionarCaptura();
-		requestRender();
-		return renderer.getTextura();
-	}
-
 	public boolean isBufferSiguienteVacio()
 	{
 		return renderer.isBufferSiguienteVacio();
@@ -157,6 +150,13 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 	public boolean isEstadoPegatinas()
 	{
 		return renderer.isEstadoPegatinas();
+	}
+	
+	public Textura getTextura()
+	{
+		renderer.seleccionarCaptura();
+		requestRender();
+		return renderer.getTextura();
 	}
 
 	/* Métodos de Guardado de Información */

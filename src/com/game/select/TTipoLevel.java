@@ -13,7 +13,7 @@ public enum TTipoLevel
 		switch(this)
 		{
 			case Moon: 
-				return R.string.title_level_section_stonehenge;
+				return R.string.title_level_section_moon;
 			case NewYork:
 				return R.string.title_level_section_newyork;
 			case Rome:

@@ -53,6 +53,11 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		view = activity;
 		pila = new Stack<Estado>();
 	}
+	
+	private void sendToastMessage(int message)
+	{
+		Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+	}
 
 	/* Callbacks de la Vista */
 	
@@ -72,12 +77,12 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 				        public void run()
 				        {
 				        	view.actualizarActionBar();
-				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());  
-				        	alert.dismiss();
+				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
 				        }
 				    });
-				}			
+				}	
 				
+				alert.dismiss();
 			}
 		});
 		
@@ -167,7 +172,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onRepaintReady(final Textura textura, final int indice)
 	{
-		if (core.repintarPersonaje(indice, textura))
+    	if (core.repintarPersonaje(indice, textura))
 		{
 			cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
 		}
@@ -307,7 +312,16 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 			@Override
 			public void run()
 			{
-				core.exportarPersonaje(indice);				
+				if (core.exportarPersonaje(indice))
+				{
+					view.runOnUiThread(new Runnable() {
+				        @Override
+				        public void run()
+				        {
+				        	sendToastMessage(R.string.text_export_character_confirmation);				        	
+				        }
+				    });
+				}
 				alert.dismiss();
 			}
 		});
@@ -349,7 +363,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		if(!core.isNivelPerfecto(level))
 		{
-			Toast.makeText(mContext, R.string.text_game_newstikers, Toast.LENGTH_SHORT).show();
+			sendToastMessage(R.string.text_game_newstikers);
 		}
 		
 		if (core.actualizarEstadisticas(level, score, idImagen, nameLevel, perfecto))

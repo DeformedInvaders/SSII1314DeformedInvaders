@@ -174,7 +174,15 @@ public abstract class GameCore
 	
 	public boolean crearNuevoPersonaje()
 	{
-		nuevoPersonaje = new Personaje();
+		if (nuevoPersonaje == null)
+		{
+			nuevoPersonaje = new Personaje();
+		}
+		else
+		{
+			descartarNuevoPersonaje();
+		}
+		
 		return true;
 	}
 	
@@ -262,6 +270,13 @@ public abstract class GameCore
 		if (nuevoPersonaje != null)
 		{
 			nuevoPersonaje = null;
+			
+			TTipoMovimiento[] movimientos = TTipoMovimiento.values();
+			for (int i = 0; i < movimientos.length; i++)
+			{
+				internalManager.eliminarAudioTemp(movimientos[i]);
+			}
+			
 			return true;
 		}
 		
@@ -380,11 +395,7 @@ public abstract class GameCore
 	{	
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
-			if (externalManager.exportarPersonaje(listaPersonajes.get(indice)))
-			{
-				sendToastMessage(R.string.text_export_character_confirmation);
-				return true;
-			}
+			return externalManager.exportarPersonaje(listaPersonajes.get(indice));
 		}
 		
 		return false;
