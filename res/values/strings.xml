@@ -92,6 +92,9 @@
 			<string name="text_tip_game_attack">You can attack enemies using this double touch gesture.</string>
 			<string name="text_tip_game_complete">Completing the game you will unlock the next level. If you perfect the game, new stickers will be available for your character.</string>
 			
+			<string name="text_loading_character_title">Please wait&#x2026;</string>
+			<string name="text_loading_character_description">Loading your characters and stored data.</string>
+			
 			<string name="text_processing_character_title">Please wait&#x2026;</string>
 			<string name="text_processing_character_description">Procesing your character.</string>
 		

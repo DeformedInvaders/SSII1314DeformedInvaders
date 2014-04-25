@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.android.storage.OnLoadingListener;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.deform.DeformationFragment;
@@ -45,10 +44,10 @@ public class ViewActivity extends FragmentActivity
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
 	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos;
-
+	
 	/* Métodos Activity */
 	
-	public interface ActivityListener
+	public interface ActivityFragmentListener
 	{
 		public void onActivityStarted();
 	}
@@ -79,6 +78,7 @@ public class ViewActivity extends FragmentActivity
         };
         
         controller = new GameController(this, this, core);
+        
         controller.onActivityStarted();
 	}
 	
@@ -226,12 +226,6 @@ public class ViewActivity extends FragmentActivity
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.frameLayoutMain1, fragmento);
 		transaction.commit();
-	}
-
-	public void insertarLoadingFragmento(OnLoadingListener listener, int title)
-	{
-		insertarFragmento(LoadingFragment.newInstance(listener));
-		cambiarTituloActionBar(title);
 	}
 
 	public void insertarMainFragmento(Personaje personaje, int numeroPersonajes, int title)

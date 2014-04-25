@@ -3,15 +3,16 @@ package com.main.controller;
 import java.util.List;
 import java.util.Stack;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
+import com.android.alert.ChooseAlert;
 import com.android.alert.ConfirmationAlert;
 import com.android.alert.ImageAlert;
 import com.android.alert.SummaryAlert;
 import com.android.alert.TextInputAlert;
-import com.android.storage.OnLoadingListener;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.data.Esqueleto;
@@ -32,11 +33,11 @@ import com.game.select.TTipoLevel;
 import com.main.model.GameCore;
 import com.main.model.GamePreferences;
 import com.main.model.GameStatistics;
-import com.main.view.ViewActivity;
 import com.main.view.MainFragment;
+import com.main.view.ViewActivity;
 import com.project.main.R;
 
-public class GameController implements ViewActivity.ActivityListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
+public class GameController implements ViewActivity.ActivityFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
 {	
 	private Context mContext;
 	private GameCore core;
@@ -58,12 +59,29 @@ public class GameController implements ViewActivity.ActivityListener, MainFragme
 	@Override
 	public void onActivityStarted()
 	{
-		cambiarEstadoLoading(core.getLoadingListener());
+		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_loading_character_title), mContext.getString(R.string.text_loading_character_description), true);
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (core.cargarDatos())
+				{
+					alert.dismiss();
+					
+					view.runOnUiThread(new Runnable() {
+				        @Override
+				        public void run()
+				        {
+				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());             
+				        }
+				    });
+				}			
+				
+			}
+		});
 		
-		if (core.cargarDatos())
-		{
-			cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
-		}
+		thread.start();
 	}
 	
 	// Métodos Main Fragment
@@ -80,7 +98,28 @@ public class GameController implements ViewActivity.ActivityListener, MainFragme
 	@Override
 	public void onMainImportCharacter()
 	{
-		core.importarPersonaje();
+		String[] listaFicheros = core.getListaFicheros();
+		if (listaFicheros != null)
+		{
+			ChooseAlert alert = new ChooseAlert(mContext, R.string.text_import_character_title, R.string.text_button_import, R.string.text_button_cancel, listaFicheros) {
+				@Override
+				public void onSelectedPossitiveButtonClick(String selected)
+				{
+					if (core.importarPersonaje(selected))
+					{
+						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+					}
+				}
+	
+				@Override
+				public void onNoSelectedPossitiveButtonClick() { }
+	
+				@Override
+				public void onNegativeButtonClick() { }			
+			};
+			
+			alert.show();
+		}
 	}
 
 	@Override
@@ -231,21 +270,25 @@ public class GameController implements ViewActivity.ActivityListener, MainFragme
 	@Override
 	public void onCharacterSelectionRenameCharacter(final int indice)
 	{
-		TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, R.string.text_button_rename, R.string.text_button_cancel, true) {
-			@Override
-			public void onPossitiveButtonClick(String text)
-			{
-				if (core.renombrarPersonaje(indice, text))
+		Personaje personaje = core.getPersonaje(indice);
+		if (personaje != null)
+		{
+			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, personaje.getNombre(), R.string.text_button_rename, R.string.text_button_cancel, true) {
+				@Override
+				public void onPossitiveButtonClick(String text)
 				{
-					cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
+					if (core.renombrarPersonaje(indice, text))
+					{
+						cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
+					}
 				}
-			}
-
-			@Override
-			public void onNegativeButtonClick(String text) { }
-		};
-
-		alert.show();
+	
+				@Override
+				public void onNegativeButtonClick(String text) { }
+			};
+	
+			alert.show();
+		}
 	}
 	
 	@Override
@@ -258,7 +301,18 @@ public class GameController implements ViewActivity.ActivityListener, MainFragme
 	@Override
 	public void onCharacterSelectionExportCharacter(final int indice)
 	{
-		core.exportarPersonaje(indice);
+		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_export_character_title), mContext.getString(R.string.text_export_character_description), true);
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run()
+			{
+				core.exportarPersonaje(indice);				
+				alert.dismiss();
+			}
+		});
+		
+		thread.start();
 	}
 	
 	@Override
@@ -350,12 +404,6 @@ public class GameController implements ViewActivity.ActivityListener, MainFragme
 
 
 	/* Métodos de Modificación de la Vista */
-	
-	private void cambiarEstadoLoading(OnLoadingListener listener)
-	{
-		estado = TEstadoController.Loading;
-		view.insertarLoadingFragmento(listener, estado.getTitle());
-	}
 
 	private void cambiarEstadoMain(Personaje personaje, int numeroPersonajes)
 	{

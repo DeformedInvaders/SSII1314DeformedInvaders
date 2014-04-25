@@ -3,18 +3,15 @@ package com.main.model;
 import java.io.File;
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
-import com.android.alert.ChooseAlert;
 import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
 import com.android.social.SocialConnector;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
-import com.android.storage.OnLoadingListener;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
@@ -92,12 +89,12 @@ public abstract class GameCore
 	public boolean cargarDatos()
 	{
 		levelGenerator.cargarEnemigos();
-		
 		internalManager.cargarPreferencias();
-		estadisticasNiveles = internalManager.cargarEstadisticas();	
+		
+		estadisticasNiveles = internalManager.cargarEstadisticas();			
 		listaPersonajes = internalManager.cargarListaPersonajes();
 		
-		return internalManager.setLoadingFinished();
+		return true;
 	}
 	
 	private void sendToastMessage(int message)
@@ -124,6 +121,11 @@ public abstract class GameCore
 	public List<Nivel> getListaNiveles()
 	{
 		return levelGenerator.getListaNiveles();
+	}
+	
+	public String[] getListaFicheros()
+	{
+		return externalManager.listaFicheros();
 	}
 
 	public InstanciaNivel getNivel(TTipoLevel nivel)
@@ -157,7 +159,7 @@ public abstract class GameCore
 	{
 		if (GamePreferences.GET_CHARACTER_GAME() != -1)
 		{
-			return listaPersonajes.get(GamePreferences.GET_CHARACTER_GAME());
+			return getPersonaje(GamePreferences.GET_CHARACTER_GAME());
 		}
 		
 		return null;
@@ -166,11 +168,6 @@ public abstract class GameCore
 	public int getNumeroPersonajes()
 	{
 		return listaPersonajes.size();
-	}
-	
-	public OnLoadingListener getLoadingListener()
-	{
-		return internalManager.getLoadingListener();
 	}
 	
 	/* Métodos de modificación del Personaje Actual */
@@ -273,43 +270,28 @@ public abstract class GameCore
 
 	/* Métodos de modificación de la Lista de Personajes */
 	
-	public void importarPersonaje()
+	public boolean importarPersonaje(String nombre)
 	{
-		String[] listaFicheros = externalManager.listaFicheros();
-		if (listaFicheros != null)
+		Personaje personaje = externalManager.importarPersonaje(nombre);
+		if (personaje != null)
 		{
-			ChooseAlert alert = new ChooseAlert(mContext, R.string.text_import_character_title, R.string.text_button_import, R.string.text_button_cancel, listaFicheros) {
-				@Override
-				public void onSelectedPossitiveButtonClick(String selected)
-				{
-					Personaje personaje = externalManager.importarPersonaje(selected);
-					if (personaje != null)
-					{
-						if (internalManager.guardarPersonaje(personaje))
-						{
-							listaPersonajes.add(personaje);
-							sendToastMessage(R.string.text_import_character_confirmation);
-						}
-						else
-						{
-							sendToastMessage(R.string.error_storage_used_name);
-						}
-					}
-					else
-					{
-						sendToastMessage(R.string.error_import_character);
-					}
-				}
-	
-				@Override
-				public void onNoSelectedPossitiveButtonClick() { }
-	
-				@Override
-				public void onNegativeButtonClick() { }			
-			};
-			
-			alert.show();
+			if (internalManager.guardarPersonaje(personaje))
+			{
+				listaPersonajes.add(personaje);
+				sendToastMessage(R.string.text_import_character_confirmation);
+				return true;
+			}
+			else
+			{
+				sendToastMessage(R.string.error_storage_used_name);
+			}
 		}
+		else
+		{
+			sendToastMessage(R.string.error_import_character);
+		}
+		
+		return false;
 	}
 	
 	public boolean repintarPersonaje(int indice, Textura textura)
@@ -354,11 +336,21 @@ public abstract class GameCore
 			if (internalManager.eliminarPersonaje(listaPersonajes.get(indice)))
 			{
 				listaPersonajes.remove(indice);
+				
+				int seleccionado = GamePreferences.GET_CHARACTER_GAME();
 	
-				if (GamePreferences.GET_CHARACTER_GAME() == indice)
+				if (seleccionado != -1)
 				{
-					GamePreferences.setCharacterParameters(-1);
-					internalManager.guardarPreferencias();
+					if (indice < seleccionado)
+					{
+						GamePreferences.setCharacterParameters(seleccionado - 1);
+						internalManager.guardarPreferencias();
+					}
+					else if (indice == seleccionado)
+					{
+						GamePreferences.setCharacterParameters(-1);
+						internalManager.guardarPreferencias();
+					}
 				}
 	
 				sendToastMessage(R.string.text_delete_character_confirmation);
@@ -384,27 +376,18 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public void exportarPersonaje(final int indice)
-	{		
-		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_export_character_title), mContext.getString(R.string.text_export_character_description), true);
-
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run()
+	public boolean exportarPersonaje(final int indice)
+	{	
+		if (indice >= 0 && indice < listaPersonajes.size())
+		{
+			if (externalManager.exportarPersonaje(listaPersonajes.get(indice)))
 			{
-				if (indice >= 0 && indice < listaPersonajes.size())
-				{
-					if (externalManager.exportarPersonaje(listaPersonajes.get(indice)))
-					{
-						//sendToastMessage(R.string.text_export_character_confirmation);
-					}
-				}
-				
-				alert.dismiss();
+				sendToastMessage(R.string.text_export_character_confirmation);
+				return true;
 			}
-		});
+		}
 		
-		thread.start();
+		return false;
 	}
 
 	/* Métodos de modificación de la Estadisticas del Juego */

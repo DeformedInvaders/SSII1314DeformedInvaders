@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,29 +43,16 @@ public class InternalStorageManager
 	private static final String MUSIC_EXTENSION = ".3gp";
 
 	private Context mContext;
-	private OnLoadingListener mListener;
 
 	/* Constructora */
 
 	public InternalStorageManager(Context context)
 	{
 		mContext = context;
-		mListener = new OnLoadingListener();
 		
 		obtenerDirectorio(CHARACTER_DIRECTORY);
 		obtenerDirectorio(GAMEDATA_DIRECTORY);
 		obtenerDirectorio(TEMP_DIRECTORY);
-	}
-	
-	public OnLoadingListener getLoadingListener()
-	{
-		return mListener;
-	}
-	
-	public boolean setLoadingFinished()
-	{
-		mListener.setProgresoTerminado(mContext.getString(R.string.text_progressBar_completed) + " (100%)");
-		return true;
 	}
 
 	/* Métodos Nombre de Directorios */
@@ -132,17 +121,33 @@ public class InternalStorageManager
 		File file = obtenerDirectorio(CHARACTER_DIRECTORY);
 		if (file.exists() && file.isDirectory())
 		{
-			String[] personajes = file.list();
+			File[] personajes = file.listFiles();		
+			
 			if(personajes != null)
 			{
+				Arrays.sort(personajes, new Comparator<File>() {
+					@Override
+					public int compare(File file1, File file2)
+					{
+						long timeFile1 = file1.lastModified();
+						long timeFile2 = file2.lastModified();
+						
+						if (timeFile1 < timeFile2)
+						{
+							return -1;
+						}
+						else if (timeFile1 > timeFile2)
+						{
+							return 1;
+						}
+						
+						return 0;
+					}
+				});
+				
 				for (int i = 0; i < personajes.length; i++)
-				{
-					int progreso = 100 * i / personajes.length;
-					String nombre = personajes[i];
-					
-					mListener.setProgreso(progreso, mContext.getString(R.string.text_progressBar_character_list) + " " + nombre + " (" + progreso + "%)");
-					
-					Personaje p = cargarPersonaje(personajes[i]);
+				{					
+					Personaje p = cargarPersonaje(personajes[i].getName());
 					if (p != null)
 					{
 						lista.add(p);
@@ -204,15 +209,28 @@ public class InternalStorageManager
 			return false;
 		}
 
-		return actualizarPersonaje(personaje);
+		return actualizarPersonaje(personaje, 0);
 	}
 	
 	public boolean actualizarPersonaje(Personaje personaje)
 	{
+		return actualizarPersonaje(personaje, 0);
+	}
+	
+	private boolean actualizarPersonaje(Personaje personaje, long fileDate)
+	{
 		try
-		{
-			FileOutputStream file = new FileOutputStream(new File(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()), DATA_FILE));
-			ObjectOutputStream data = new ObjectOutputStream(file);
+		{	
+			File file = obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre());
+			long timeFileCreated = file.lastModified();
+			
+			FileOutputStream outFile = new FileOutputStream(new File(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()), DATA_FILE));
+			ObjectOutputStream data = new ObjectOutputStream(outFile);
+			
+			if (fileDate > 0)
+			{
+				timeFileCreated = fileDate;
+			}
 
 			// Guardar Personajes
 			data.writeObject(personaje.getEsqueleto());
@@ -222,7 +240,9 @@ public class InternalStorageManager
 
 			data.flush();
 			data.close();
-			file.close();
+			outFile.close();
+			
+			file.setLastModified(timeFileCreated);
 
 			Log.d(INTERNAL_STORAGE_TAG, "Character saved");
 			return true;
@@ -246,7 +266,9 @@ public class InternalStorageManager
 
 	public boolean eliminarPersonaje(Personaje personaje)
 	{
-		return eliminarDirectorio(obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()));
+		File file = obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre());
+		
+		return eliminarDirectorio(file);
 	}
 
 	public boolean renombrarPersonaje(Personaje personaje, String nombre)
@@ -258,10 +280,12 @@ public class InternalStorageManager
 			return false;
 		}
 		
-		eliminarPersonaje(personaje);
+		File file = obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre());
+		long fileDate = file.lastModified();
 		
+		eliminarPersonaje(personaje);
 		personaje.setNombre(evaluarNombre(nombre));
-		return actualizarPersonaje(personaje);
+		return actualizarPersonaje(personaje, fileDate);
 	}
 	
 	/* Métodos Audio */
@@ -307,7 +331,6 @@ public class InternalStorageManager
 	public GameStatistics[] cargarEstadisticas()
 	{
 		GameStatistics[] niveles = new GameStatistics[GamePreferences.NUM_TYPE_LEVELS];
-		mListener.setProgreso(0, mContext.getString(R.string.text_progressBar_level));
 
 		try
 		{
@@ -395,8 +418,6 @@ public class InternalStorageManager
 
 	public boolean cargarPreferencias()
 	{
-		mListener.setProgreso(0, mContext.getString(R.string.text_progressBar_preferences));
-		
 		try
 		{
 			FileInputStream file = new FileInputStream(new File(obtenerDirectorio(GAMEDATA_DIRECTORY), PREFERENCES_FILE));
