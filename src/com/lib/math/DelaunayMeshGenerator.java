@@ -5,13 +5,11 @@ import com.lib.buffer.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
+import com.main.model.GamePreferences;
 
 public class DelaunayMeshGenerator
 {
-	// FIXME Calcular area dependiendo de la pantalla.
-	private final static float AREA_TRIANG = 700.0f;
-
-	public Mesh computeMesh(FloatArray vertices, int profundidad, float longitud)
+	public Mesh computeMesh(FloatArray vertices)
 	{	
 		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();
 		
@@ -19,8 +17,12 @@ public class DelaunayMeshGenerator
 		ShortArray delaunayTriangulos = delaunayCalculator.computeTriangles(delaunayPuntos, false);
 		delaunayCalculator.trim(delaunayTriangulos, delaunayPuntos, vertices, 0, vertices.size);
 
-		for (int i = 1; i < profundidad; i++)
+		boolean meshChanged = true;
+		
+		while(meshChanged)
 		{
+			meshChanged = false;
+			
 			Polygon poligono = new Polygon();
 			float[] vert = new float[6];
 			
@@ -40,7 +42,7 @@ public class DelaunayMeshGenerator
 				
 				poligono.setVertices(vert);
 				
-				if (Math.abs(poligono.area()) > AREA_TRIANG)
+				if (Math.abs(poligono.area()) > GamePreferences.MAX_AREA_TRIANGULATOR())
 				{
 					Vector2 centroGravedad = GeometryUtils.triangleCentroid(vert[0], vert[1], vert[2], vert[3], vert[4], vert[5], new Vector2());
 					
@@ -48,6 +50,8 @@ public class DelaunayMeshGenerator
 					{
 						delaunayPuntos.add(centroGravedad.x);
 						delaunayPuntos.add(centroGravedad.y);
+						
+						meshChanged = true;
 					}
 				}
 				

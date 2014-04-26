@@ -262,7 +262,7 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarTexturaFondo();
 	}
 
-	private void camaradrag(float dWorldX, float dWorldY)
+	private void camaraDrag(float dWorldX, float dWorldY)
 	{
 		xLeft += dWorldX;
 		xRight += dWorldX;
@@ -276,7 +276,7 @@ public abstract class OpenGLRenderer implements Renderer
 		actualizarTexturaFondo();
 	}
 
-	public void camaradrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	public void camaraDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
 		float worldX = convertPixelXToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
@@ -287,7 +287,7 @@ public abstract class OpenGLRenderer implements Renderer
 		float dWorldX = lastWorldX - worldX;
 		float dWorldY = lastWorldY - worldY;
 
-		camaradrag(dWorldX, dWorldY);
+		camaraDrag(dWorldX, dWorldY);
 	}
 
 	public void camaraRestore()

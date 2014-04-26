@@ -17,8 +17,6 @@ import com.lib.utils.ShortArray;
 public class Triangulator
 {
 	private final static int NUM_BSPLINE_VERTICES = 60;
-	private final static int DEEP_TRIANGULATOR = 2;
-	private final static float MAX_LONG_EDGE_TRIANGULATOR = 20.0f;
 	
 	private VertexArray vertices;
 	private TriangleArray triangulos;
@@ -32,15 +30,13 @@ public class Triangulator
 		poligonoSimple = false;
 		
 		if(puntos.getNumVertices() > 2)
-		{			
-			// FIXME Calcular iteraciones en función del poligono
+		{
 			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
 			
 			poligonoSimple = calcularPoligonoSimple(bsplineVertices, false).size == 0;
 			if(poligonoSimple)
 			{
-				// FIXME Quitar profundidad controlando ausencia de cambios.
-				Mesh m = calcularMeshGenerator(bsplineVertices, DEEP_TRIANGULATOR, MAX_LONG_EDGE_TRIANGULATOR);
+				Mesh m = calcularMeshGenerator(bsplineVertices);
 				vertices = m.getVertices();
 				triangulos = m.getTriangulos();
 				
@@ -102,10 +98,10 @@ public class Triangulator
 		return earClippingCalculator.computeTriangles(vertices);
 	}
 	
-	public static Mesh calcularMeshGenerator(FloatArray vertices, int profundidad, float longitud)
+	public static Mesh calcularMeshGenerator(FloatArray vertices)
 	{
 		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
-		return delaunayMeshGenerator.computeMesh(vertices, profundidad, longitud);
+		return delaunayMeshGenerator.computeMesh(vertices);
 	}
 	
 	public static ShortArray calcularPoligonoSimple(FloatArray vertices, boolean continuo)

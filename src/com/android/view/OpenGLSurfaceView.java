@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.touch.DoubleTapDetector;
 import com.android.touch.GameDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
@@ -26,6 +27,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 	private MoveDetector moveDetector;
 	private RotateDetector rotateDetector;
 	private GameDetector gameDetector;
+	private DoubleTapDetector doubleTapDetector;
 
 	/* Constructora */
 	
@@ -120,12 +122,18 @@ public class OpenGLSurfaceView extends GLSurfaceView
 			{
 				rotateDetector = new RotateDetector(renderer);
 			}
+			
+			if (doubleTapDetector == null)
+			{
+				doubleTapDetector = new DoubleTapDetector(renderer);
+			}
 
-			boolean estadoCamara = estado == TEstadoDetector.CamaraDetectors;
+			boolean modoCamara = estado == TEstadoDetector.CamaraDetectors;
 
-			scaleDetector.setEstado(estadoCamara);
-			moveDetector.setEstado(estadoCamara);
-			rotateDetector.setEstado(estadoCamara);
+			scaleDetector.setEstado(modoCamara);
+			moveDetector.setEstado(modoCamara);
+			rotateDetector.setEstado(modoCamara);
+			doubleTapDetector.setEstado(modoCamara);
 		}
 		else if (estado == TEstadoDetector.GameDetectors)
 		{
@@ -197,18 +205,22 @@ public class OpenGLSurfaceView extends GLSurfaceView
 
 			if (event.getPointerCount() == 1)
 			{
-				moveDetector.onTouchEvent(event, screenWidth, screenHeight);
+				if (!doubleTapDetector.onTouchEvent(event, screenWidth, screenHeight))
+				{
+					moveDetector.onTouchEvent(event, screenWidth, screenHeight);
+				}
 			}
 			else if (event.getPointerCount() == 2)
 			{
 				if (rotateDetector.onTouchEvent(event, screenWidth, screenHeight))
 				{
-					moveDetector.onStopEvent(event);
+					doubleTapDetector.onStopEvent();
+					moveDetector.onStopEvent();
 				}
 				else
 				{
 					scaleDetector.onTouchEvent(event, screenWidth, screenHeight);
-					moveDetector.onStopEvent(event);
+					moveDetector.onStopEvent();
 				}
 			}
 

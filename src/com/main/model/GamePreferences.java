@@ -291,4 +291,9 @@ public class GamePreferences
 		return CHARACTER_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
 	}
 	
+	public static final float MAX_AREA_TRIANGULATOR()
+	{
+		return 1500.0f * SCREEN_SCALE_FACTOR();
+	}
+	
 }

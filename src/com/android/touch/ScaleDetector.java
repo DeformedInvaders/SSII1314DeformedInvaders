@@ -16,7 +16,7 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 	private float lastPixelX, lastPixelY;
 	private float screenWidth, screenHeight;
 
-	private boolean camara;
+	private boolean modoCamara;
 
 	/* Contructora */
 
@@ -24,14 +24,14 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 	{
 		this.renderer = renderer;
 		this.detector = new ScaleGestureDetector(context, this);
-		this.camara = true;
+		this.modoCamara = true;
 	}
 
 	/* Métodos de Modificación de Estado */
 
 	public void setEstado(boolean camara)
 	{
-		this.camara = camara;
+		this.modoCamara = camara;
 	}
 
 	/* Métodos Listener onTouch */
@@ -69,7 +69,7 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 			factor = GamePreferences.MIN_SCALE_FACTOR;
 		}
 
-		if (camara)
+		if (modoCamara)
 		{
 			factor = 2 * GamePreferences.NULL_SCALE_FACTOR - factor;
 

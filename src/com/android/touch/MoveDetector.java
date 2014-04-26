@@ -3,17 +3,15 @@ package com.android.touch;
 import android.view.MotionEvent;
 
 import com.android.view.OpenGLRenderer;
-import com.main.model.GamePreferences;
 
 public class MoveDetector
 {
 	private OpenGLRenderer renderer;
 
-	private boolean camara;
+	private boolean modoCamara;
 	private boolean bloqueado;
 
 	private float lastPixelX, lastPixelY;
-	private long lastTap;
 
 	/* Constructora */
 
@@ -21,15 +19,14 @@ public class MoveDetector
 	{
 		this.renderer = renderer;
 		this.bloqueado = false;
-		this.lastTap = System.currentTimeMillis();
-		this.camara = true;
+		this.modoCamara = true;
 	}
 
 	/* Métodos de Modificación de Estado */
 
 	public void setEstado(boolean camara)
 	{
-		this.camara = camara;
+		this.modoCamara = camara;
 	}
 
 	/* Métodos Listener onTouch */
@@ -40,7 +37,7 @@ public class MoveDetector
 		
 		if (!bloqueado)
 		{
-			if(camara)
+			if(modoCamara)
 			{
 				return onTouchEventCamara(event, screenWidth, screenHeight);
 			}
@@ -100,7 +97,7 @@ public class MoveDetector
 		return true;
 	}
 
-	public boolean onStopEvent(MotionEvent event)
+	public boolean onStopEvent()
 	{
 		bloqueado = true;
 		return true;
@@ -108,29 +105,17 @@ public class MoveDetector
 
 	private void dragOnCamaraDown(float pixelX, float pixelY, float screenWith, float screenHeight)
 	{
-		long time = System.currentTimeMillis();
+		// Drag
+		lastPixelX = pixelX;
+		lastPixelY = pixelY;
 
-		if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
-		{
-			// Double Touch
-			renderer.camaraRestore();
-		}
-		else
-		{
-			// Drag
-			lastPixelX = pixelX;
-			lastPixelY = pixelY;
-
-			renderer.salvarCamara();
-		}
-
-		lastTap = time;
+		renderer.salvarCamara();
 	}
 
 	private void dragOnCamaraMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		renderer.recuperarCamara();
-		renderer.camaradrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
+		renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
 	}
 
 	private void dragOnCoordsDown(float pixelX, float pixelY, float screenWith, float screenHeight)
