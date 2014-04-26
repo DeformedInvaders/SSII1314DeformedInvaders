@@ -57,6 +57,11 @@ public class OpenGLSurfaceView extends GLSurfaceView
 	{
 		return false;
 	}
+	
+	protected boolean onTouchPointerDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
 
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
@@ -68,7 +73,17 @@ public class OpenGLSurfaceView extends GLSurfaceView
 		return false;
 	}
 	
-	protected boolean onMultiTouchPostMove()
+	protected boolean onTouchPointerUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
+	
+	protected boolean onMultiTouchPre(int action, int countPointers)
+	{
+		return false;
+	}
+	
+	protected boolean onMultiTouchPost(int action)
 	{
 		return false;
 	}
@@ -154,12 +169,14 @@ public class OpenGLSurfaceView extends GLSurfaceView
 			switch (action)
 			{
 				case MotionEvent.ACTION_DOWN:
+				case MotionEvent.ACTION_POINTER_DOWN:
 					onTouchDown(pixelX, pixelY, screenWidth, screenHeight, 0);
 				break;
 				case MotionEvent.ACTION_MOVE:
 					onTouchMove(pixelX, pixelY, screenWidth, screenHeight, 0);
 				break;
 				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_POINTER_UP:
 					onTouchUp(pixelX, pixelY, screenWidth, screenHeight, 0);
 				break;
 			}
@@ -218,6 +235,8 @@ public class OpenGLSurfaceView extends GLSurfaceView
 				pointCount = GamePreferences.NUM_HANDLES;
 			}
 			
+			onMultiTouchPre(action, pointCount);
+			
 			for (int i = 0; i < pointCount; i++)
 			{
 				float pixelX = event.getX(i);
@@ -228,22 +247,26 @@ public class OpenGLSurfaceView extends GLSurfaceView
 				switch (action)
 				{
 					case MotionEvent.ACTION_DOWN:
-					case MotionEvent.ACTION_POINTER_DOWN:
 						activo |= onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
+					break;
+					case MotionEvent.ACTION_POINTER_DOWN:
+						activo |= onTouchPointerDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 					case MotionEvent.ACTION_MOVE:
 						activo |= onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 					case MotionEvent.ACTION_UP:
-					case MotionEvent.ACTION_POINTER_UP:
 						activo |= onTouchUp(pixelX, pixelY, screenWidth, screenHeight, pointer);
+					break;
+					case MotionEvent.ACTION_POINTER_UP:
+						activo |= onTouchPointerUp(pixelX, pixelY, screenWidth, screenHeight, pointer);
 					break;
 				}
 			}
 
-			if (action == MotionEvent.ACTION_MOVE && activo)
+			if (activo)
 			{
-				onMultiTouchPostMove();
+				onMultiTouchPost(action);
 			}
 
 			requestRender();

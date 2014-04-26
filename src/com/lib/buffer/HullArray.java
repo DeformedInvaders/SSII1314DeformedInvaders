@@ -4,6 +4,11 @@ import com.lib.utils.ShortArray;
 
 public class HullArray extends ShortArray
 {
+	/*
+		HULL ARRAY
+		a: Índice de los puntos que forman el contorno.
+	*/
+	
 	public HullArray()
 	{
 		super();

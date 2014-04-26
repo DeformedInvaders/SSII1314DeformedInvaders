@@ -4,6 +4,13 @@ import com.lib.utils.ShortArray;
 
 public class TriangleArray extends ShortArray
 {
+	/*
+		TRIANGLE ARRAY
+		a, b, c: Índice de los puntos que forman el triángulo.
+	*/
+	
+	private static final int TRIANGLE_SIZE = 3;
+	
 	public TriangleArray()
 	{
 		super();
@@ -11,7 +18,7 @@ public class TriangleArray extends ShortArray
 	
 	public TriangleArray(int size)
 	{
-		super(3 * size);
+		super(TRIANGLE_SIZE * size);
 	}
 	
 	public TriangleArray(ShortArray list)
@@ -28,21 +35,21 @@ public class TriangleArray extends ShortArray
 	
 	public short getAVertex(short triangle)
 	{
-		return get(3 * triangle);
+		return get(TRIANGLE_SIZE * triangle);
 	}
 	
 	public short getBVertex(short triangle)
 	{
-		return get(3 * triangle + 1);
+		return get(TRIANGLE_SIZE * triangle + 1);
 	}
 	
 	public short getCVertex(short triangle)
 	{
-		return get(3 * triangle + 2);
+		return get(TRIANGLE_SIZE * triangle + 2);
 	}
 	
 	public int getNumTriangles()
 	{
-		return size / 3;
+		return size / TRIANGLE_SIZE;
 	}
 }

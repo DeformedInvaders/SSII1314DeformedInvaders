@@ -4,6 +4,13 @@ import com.lib.utils.FloatArray;
 
 public class VertexArray extends FloatArray
 {
+	/*
+		VERTEX ARRAY
+		x, y: Coordenadas de los puntos.
+	*/
+	
+	private static final int VERTEX_SIZE = 2;
+
 	public VertexArray()
 	{
 		super();
@@ -11,7 +18,7 @@ public class VertexArray extends FloatArray
 	
 	public VertexArray(int size)
 	{
-		super(2 * size);
+		super(VERTEX_SIZE * size);
 	}
 	
 	public VertexArray(FloatArray list)
@@ -27,18 +34,18 @@ public class VertexArray extends FloatArray
 	
 	public void setVertex(short vertex, float x, float y)
 	{
-		set(2 * vertex, x);
-		set(2 * vertex + 1, y);
+		set(VERTEX_SIZE * vertex, x);
+		set(VERTEX_SIZE * vertex + 1, y);
 	}
 	
 	public float getXVertex(short vertex)
 	{
-		return get(2 * vertex);
+		return get(VERTEX_SIZE * vertex);
 	}
 	
 	public float getYVertex(short vertex)
 	{
-		return get(2 * vertex + 1);
+		return get(VERTEX_SIZE * vertex + 1);
 	}
 	
 	public float getLastXVertex()
@@ -53,13 +60,13 @@ public class VertexArray extends FloatArray
 	
 	public void removeVertex(int vertex)
 	{
-		removeIndex(2 * vertex + 1);
-		removeIndex(2 * vertex);
+		removeIndex(VERTEX_SIZE * vertex + 1);
+		removeIndex(VERTEX_SIZE * vertex);
 	}
 	
 	public int getNumVertices()
 	{
-		return size / 2;
+		return size / VERTEX_SIZE;
 	}
 	
 	public VertexArray clone()

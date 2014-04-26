@@ -1,16 +1,28 @@
 package com.lib.buffer;
 
 import com.creation.data.TTipoSticker;
+import com.lib.math.Vector2;
 import com.lib.utils.FloatArray;
 import com.main.model.GamePreferences;
 
 public class StickerArray extends FloatArray
 {
+	/*
+		STICKER ARRAY
+		id: Identificador de la pegatina.
+		index: Índice del triángulo al que pertenece la pegatina.
+		alfa, beta, gamma: Coordenadas baricéntricas dentro del triángulo.
+		theta: Ángulo inicial de rotación de la pegatina.
+		iota: Ángulo que forma el eje Y con el vector AP. A vértice del triángulo, P posición de la pegatina.
+	*/
+	
+	private static final int SIZE_STICKER = 7;
+	
 	public StickerArray()
 	{
-		super(6 * GamePreferences.NUM_TYPE_STICKERS);
+		super(SIZE_STICKER * GamePreferences.NUM_TYPE_STICKERS);
 		
-		for (int i = 0; i < 6 * GamePreferences.NUM_TYPE_STICKERS; i++)
+		for (int i = 0; i < SIZE_STICKER * GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
 			add(-1);
 		}
@@ -35,47 +47,60 @@ public class StickerArray extends FloatArray
 		float beta = ((cY - aY) * (x - cX) + (aX - cX) * (y - cY))/((bY - cY) * (aX - cX) + (cX - bX) * (aY - cY));
 		float gamma = 1 - alfa - beta;
 		
-		set(6 * sticker, 0);
-		set(6 * sticker + 1, id);
-		set(6 * sticker + 2, index);
-		set(6 * sticker + 3, alfa);
-		set(6 * sticker + 4, beta);
-		set(6 * sticker + 5, gamma);
+		float theta = 0.0f;
+		
+		Vector2 v = new Vector2(x - aX, y - aY);
+		float iota = v.angle();
+		
+		set(SIZE_STICKER * sticker, id);
+		set(SIZE_STICKER * sticker + 1, index);
+		set(SIZE_STICKER * sticker + 2, alfa);
+		set(SIZE_STICKER * sticker + 3, beta);
+		set(SIZE_STICKER * sticker + 4, gamma);
+		set(SIZE_STICKER * sticker + 5, theta);
+		set(SIZE_STICKER * sticker + 6, iota);
+	}
+	
+	public void setThetaSticker(TTipoSticker tipo, float theta)
+	{
+		short sticker = (short) tipo.ordinal();
+		
+		set(SIZE_STICKER * sticker + 5, theta);
 	}
 	
 	public int getIdSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		return (int) get(6 * sticker + 1);
+		return (int) get(SIZE_STICKER * sticker);
 	}
 	
 	public short getIndexSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		return (short) get(6 * sticker + 2);
+		return (short) get(SIZE_STICKER * sticker + 1);
 	}
 	
 	public float getAlfaSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 
-		return get(6 * sticker + 3);
+		return get(SIZE_STICKER * sticker + 2);
 	}
 	
 	public float getBetaSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		return get(6 * sticker + 4);
+		return get(SIZE_STICKER * sticker + 3);
 	}
 	
 	public float getGammaSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		return get(6 * sticker + 5);
+		return get(SIZE_STICKER * sticker + 4);
 	}
 	
 	public float getXCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
@@ -114,41 +139,51 @@ public class StickerArray extends FloatArray
 		return alfa * aY + beta * bY + gamma * cY;
 	}
 	
+	public float getThetaSticker(TTipoSticker tipo)
+	{
+		short sticker = (short) tipo.ordinal();
+		
+		return get(SIZE_STICKER * sticker + 4);
+	}
+	
+	public float getIotaSticker(TTipoSticker tipo)
+	{
+		short sticker = (short) tipo.ordinal();
+		
+		return get(SIZE_STICKER * sticker + 5);
+	}
+	
 	public void removeSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		set(6 * sticker, -1);
-		set(6 * sticker + 1, -1);
-		set(6 * sticker + 2, -1);
-		set(6 * sticker + 3, -1);
-		set(6 * sticker + 4, -1);
-		set(6 * sticker + 5, -1);
+		for (int i = 0; i < SIZE_STICKER; i++)
+		{
+			set(SIZE_STICKER * sticker + i, -1.0f);
+		}
 	}
 	
-	public void hideStickers(TTipoSticker tipo)
+/*	public void hideStickers(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		set(6 * sticker, -1);
+		set(SIZE_STICKER * sticker, -1);
 	}
 	
 	public void showSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		set(6 * sticker, 0);
+		set(SIZE_STICKER * sticker, 0);
 	}
-	
+*/	
 	public boolean isLoadedSticker(TTipoSticker tipo)
-	{
-		short sticker = (short) tipo.ordinal();
-		
-		return get(6 * sticker) != -1 && getIdSticker(tipo) != -1;
+	{		
+		return getIdSticker(tipo) != -1;
 	}
 	
 	public int getNumSticker()
 	{
-		return size / 5;
+		return size / SIZE_STICKER;
 	}
 }

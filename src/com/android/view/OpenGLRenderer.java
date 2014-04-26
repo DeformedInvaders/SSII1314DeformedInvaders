@@ -115,6 +115,11 @@ public abstract class OpenGLRenderer implements Renderer
 		return false;
 	}
 	
+	protected boolean onTouchPointerDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		return false;
+	}
+	
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		return false;
@@ -125,7 +130,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return false;
 	}
 	
-	protected boolean onMultiTouchPostMove()
+	protected boolean onTouchPointerUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		return false;
 	}

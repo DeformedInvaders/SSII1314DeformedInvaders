@@ -14,7 +14,6 @@ import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.character.display.TEstadoCaptura;
-import com.creation.data.Accion;
 import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
 import com.creation.data.Polilinea;
@@ -289,7 +288,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			{
 				colorPintura = colorPaleta;
 
-				anteriores.push(new Accion(colorPaleta));
+				anteriores.push(new AccionColor(colorPaleta));
 				siguientes.clear();
 
 				return true;
@@ -312,7 +311,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipoPegatinaActual);
 			pegatinaAnyadida = true;
 
-			anteriores.push(new Accion(tipoPegatinaActual));
+			anteriores.push(new AccionPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle));
 			siguientes.clear();
 
 			return true;
@@ -352,7 +351,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				Polilinea polilinea = new Polilinea(colorPaleta, sizeLinea, lineaActual, bufferLineaActual);
 	
 				listaLineas.add(polilinea);
-				anteriores.push(new Accion(polilinea));
+				anteriores.push(new AccionPolilinea(polilinea));
 				siguientes.clear();
 				lineaActual = null;
 			}
@@ -452,7 +451,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		listaLineas = new ArrayList<Polilinea>();
 		
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
-		pegatinas.ocultarPegatinas();
+		pegatinas.eliminarPegatinas();
 
 		Iterator<Accion> it = pila.iterator();
 		while (it.hasNext())
@@ -460,17 +459,32 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			Accion accion = it.next();
 			if (accion.isTipoColor())
 			{
-				colorPintura = accion.getColor();
+				actualizarEstado((AccionColor) accion);
 			}
 			else if (accion.isTipoPolilinea())
 			{
-				listaLineas.add(accion.getLinea());
+				actualizarEstado((AccionPolilinea) accion);
 			}
 			else if (accion.isTipoPegatina())
 			{
-				pegatinas.mostrarPegatina(accion.getTipoPegatina());
+				actualizarEstado((AccionPegatina) accion);
 			}
 		}
+	}
+	
+	private void actualizarEstado(AccionColor accion)
+	{
+		colorPintura = accion.getColorFondo();
+	}
+	
+	private void actualizarEstado(AccionPolilinea accion)
+	{
+		listaLineas.add(accion.getPolilinea());
+	}
+	
+	private void actualizarEstado(AccionPegatina accion)
+	{
+		pegatinas.setPegatina(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), vertices, triangulos);
 	}
 
 	/* Métodos de Obtención de Información */

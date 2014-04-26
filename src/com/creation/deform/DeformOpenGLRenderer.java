@@ -66,6 +66,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	// Coordenadas de Handles
 	private HandleArray handles;
 	private short[] punteros;
+	private int numPunteros;
 	
 	private Handle objetoHandle, objetoHandleSeleccionado;
 
@@ -99,6 +100,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		// Handles
 		handles = new HandleArray();
 		punteros = new short[GamePreferences.NUM_HANDLES];
+		numPunteros = 0;
 		
 		reiniciarHandles();
 		
@@ -273,6 +275,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			{
 				handles.setSelectedHandle(handle, true);
 				punteros[pointer] = handle;
+				numPunteros++;
 	
 				if (modoGrabar)
 				{
@@ -333,15 +336,36 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 		return false;
 	}
+	
+	@Override
+	protected boolean onTouchPointerUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		if (estado == TEstadoDeform.Deformar)
+		{
+			handles.setSelectedHandle(punteros[pointer], true);
+			
+			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
+		}
+
+		return false;
+	}
 
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
 		if (estado == TEstadoDeform.Deformar)
 		{
+			handles.setSelectedHandle(punteros[pointer], true);
+			
 			onTouchMove(pixelX, pixelY, screenWidth, screenHeight, pointer);
-
-			reiniciarHandles();
+			
+			handles.setSelectedHandle(punteros[pointer], false);
+			
+			// Reiniciar punteros
+			for (short i = 0; i < GamePreferences.NUM_HANDLES; i++)
+			{
+				punteros[i] = -1;
+			}
 
 			if (modoGrabar && listaHandlesAnimacion.size() > 0)
 			{
@@ -354,6 +378,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					public void run()
 					{
 						construirListadeMovimientos();
+						estado = TEstadoDeform.Nada;
 						alert.dismiss();
 					}
 				});
@@ -361,8 +386,42 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				thread.start();
 				return true;
 			}
-			
-			estado = TEstadoDeform.Nada;
+		}
+
+		return false;
+	}
+	
+	protected boolean onMultiTouchPreAction(int countPointer)
+	{
+		if (estado == TEstadoDeform.Deformar)
+		{
+			if (numPunteros > countPointer)
+			{
+				numPunteros = 0;
+				
+				for (short i = 0; i < handles.getNumHandles(); i++)
+				{
+					handles.setSelectedHandle(i, false);
+				}
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	protected boolean onMultiTouchPostAction()
+	{
+		if (estado == TEstadoDeform.Deformar)
+		{
+			// Cambiar Posicion de los Handles
+			deformator.moverHandles(handles, verticesModificados);
+
+			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
+
+			return true;
 		}
 
 		return false;
@@ -404,23 +463,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
 		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
 		android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
-	}
-	
-	@Override
-	protected boolean onMultiTouchPostMove()
-	{
-		if (estado == TEstadoDeform.Deformar)
-		{
-			// Cambiar Posicion de los Handles
-			deformator.moverHandles(handles, verticesModificados);
-
-			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
-
-			return true;
-		}
-
-		return false;
 	}
 	
 	private void reiniciarHandles()

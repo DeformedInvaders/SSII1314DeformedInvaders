@@ -5,6 +5,14 @@ import com.lib.utils.ShortArray;
 
 public class EdgeArray extends ShortArray
 {
+	/*
+		EDGE ARRAY
+		a, b: Índice de los puntos que forman la arista.
+		l, r: Índice de los puntos vecinos izquierdo y derecho de los triángulos que comparten la arista. -1 si no hay vecino.
+	*/
+	
+	private static final int SIZE_EDGE = 4;
+
 	public EdgeArray()
 	{
 		super();
@@ -12,7 +20,7 @@ public class EdgeArray extends ShortArray
 	
 	public EdgeArray(int size)
 	{
-		super(4 * size);
+		super(SIZE_EDGE * size);
 	}
 	
 	public EdgeArray(ShortArray list)
@@ -62,36 +70,36 @@ public class EdgeArray extends ShortArray
 	
 	public short getAVertex(short edge)
 	{
-		return get(4 * edge);
+		return get(SIZE_EDGE * edge);
 	}
 	
 	public short getBVertex(short edge)
 	{
-		return get(4 * edge + 1);
+		return get(SIZE_EDGE * edge + 1);
 	}
 	
 	public short getLVertex(short edge)
 	{
-		return get(4 * edge + 2);
+		return get(SIZE_EDGE * edge + 2);
 	}
 	
 	public short getRVertex(short edge)
 	{
-		return get(4 * edge + 3);
+		return get(SIZE_EDGE * edge + 3);
 	}
 	
 	public void setLVertex(short edge, short l)
 	{
-		set(4 * edge + 2, l);
+		set(SIZE_EDGE * edge + 2, l);
 	}
 	
 	public void setRVertex(short edge, short r)
 	{
-		set(4 * edge + 3, r);
+		set(SIZE_EDGE * edge + 3, r);
 	}
 	
 	public int getNumEdges()
 	{
-		return size / 4;
+		return size / SIZE_EDGE;
 	}
 }

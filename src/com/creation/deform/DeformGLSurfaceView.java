@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
@@ -68,6 +69,12 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		return renderer.onTouchDown(x, y, width, height, pos);
 	}
+	
+	@Override
+	protected boolean onTouchPointerDown(float x, float y, float width, float height, int pos)
+	{
+		return renderer.onTouchDown(x, y, width, height, pos);
+	}
 
 	@Override
 	protected boolean onTouchMove(float x, float y, float width, float height, int pos)
@@ -80,11 +87,33 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		return renderer.onTouchUp(x, y, width, height, pos);
 	}
+	
+	@Override
+	protected boolean onTouchPointerUp(float x, float y, float width, float height, int pos)
+	{
+		return renderer.onTouchPointerUp(x, y, width, height, pos);
+	}
+	
+	@Override
+	protected boolean onMultiTouchPre(int action, int countPounter)
+	{
+		if (action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE)
+		{
+			return renderer.onMultiTouchPreAction(countPounter);
+		}
+		
+		return false;
+	}
 
 	@Override
-	protected boolean onMultiTouchPostMove()
+	protected boolean onMultiTouchPost(int action)
 	{
-		return renderer.onMultiTouchPostMove();
+		if (action == MotionEvent.ACTION_MOVE)
+		{
+			return renderer.onMultiTouchPostAction();
+		}
+		
+		return false;
 	}
 
 	/* Métodos de modifiación del Renderer */

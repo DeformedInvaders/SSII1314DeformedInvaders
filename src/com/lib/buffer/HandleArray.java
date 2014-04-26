@@ -4,6 +4,16 @@ import com.lib.utils.FloatArray;
 
 public class HandleArray extends FloatArray
 {
+	/*
+		HANDLE ARRAY
+		x, y: Coordenadas de la posición del handle.
+		index: Índice del triángulo al que pertenece el handle.
+		alfa, beta, gamma: Coordenadas baricéntricas dentro del triángulo.
+		selected: Handle Seleccionado.
+	*/
+	
+	private static final int SIZE_HANDLE = 7;
+
 	public HandleArray()
 	{
 		super();
@@ -11,7 +21,7 @@ public class HandleArray extends FloatArray
 	
 	public HandleArray(int size)
 	{
-		super(7 * size);
+		super(SIZE_HANDLE * size);
 	}
 	
 	public HandleArray(FloatArray list)
@@ -47,8 +57,8 @@ public class HandleArray extends FloatArray
 	
 	public void setCoordsHandle(short handle, float x, float y)
 	{
-		set(7 * handle, x);
-		set(7 * handle + 1, y);
+		set(SIZE_HANDLE * handle, x);
+		set(SIZE_HANDLE * handle + 1, y);
 	}
 	
 	public void setCoordsHandle(short handle, VertexArray vertices, TriangleArray triangulos)
@@ -77,77 +87,77 @@ public class HandleArray extends FloatArray
 	
 	public void setIndexHandle(short handle, short index)
 	{
-		set(7 * handle + 2, index);
+		set(SIZE_HANDLE * handle + 2, index);
 	}
 	
 	public void setCoordsVertex(short handle, float alfa, float beta, float gamma)
 	{
-		set(7 * handle + 3, alfa);
-		set(7 * handle + 4, beta);
-		set(7 * handle + 5, gamma);
+		set(SIZE_HANDLE * handle + 3, alfa);
+		set(SIZE_HANDLE * handle + 4, beta);
+		set(SIZE_HANDLE * handle + 5, gamma);
 	}
 	
 	public void setSelectedHandle(short handle, boolean selected)
 	{
 		if (selected)
 		{
-			set(7 * handle + 6, 1.0f);
+			set(SIZE_HANDLE * handle + 6, 1.0f);
 		}
 		else
 		{
-			set(7 * handle + 6, 0.0f);
+			set(SIZE_HANDLE * handle + 6, 0.0f);
 		}
 	}
 	
 	public float getXCoordHandle(short handle)
 	{		
-		return get(7 * handle);
+		return get(SIZE_HANDLE * handle);
 	}
 	
 	public float getYCoordHandle(short handle)
 	{
-		return get(7 * handle + 1);
+		return get(SIZE_HANDLE * handle + 1);
 	}
 	
 	public short getIndexHandle(short handle)
 	{
-		return (short) get(7 * handle + 2);
+		return (short) get(SIZE_HANDLE * handle + 2);
 	}
 	
 	public float getAlfaHandle(short handle)
 	{
-		return get(7 * handle + 3);
+		return get(SIZE_HANDLE * handle + 3);
 	}
 	
 	public float getBetaHandle(short handle)
 	{
-		return get(7 * handle + 4);
+		return get(SIZE_HANDLE * handle + 4);
 	}
 	
 	public float getGammaHandle(short handle)
 	{
-		return get(7 * handle + 5);
+		return get(SIZE_HANDLE * handle + 5);
 	}
 	
 	public boolean isSelectedHandle(short handle)
 	{
-		return get(7 * handle + 6) == 1.0f;
+		return get(SIZE_HANDLE * handle + 6) == 1.0f;
 	}
 	
 	public void removeHandle(int handle)
 	{
-		removeIndex(7 * handle + 6);
-		removeIndex(7 * handle + 5);
-		removeIndex(7 * handle + 4);
-		removeIndex(7 * handle + 3);
-		removeIndex(7 * handle + 2);
-		removeIndex(7 * handle + 1);
-		removeIndex(7 * handle);
+		removeIndex(SIZE_HANDLE * handle + 6);
+		removeIndex(SIZE_HANDLE * handle + 5);
+		removeIndex(SIZE_HANDLE * handle + 4);
+		removeIndex(SIZE_HANDLE * handle + 3);
+		removeIndex(SIZE_HANDLE * handle + 2);
+		removeIndex(SIZE_HANDLE * handle + 1);
+		removeIndex(SIZE_HANDLE * handle);
 	}
 	
 	public int getNumHandles()
 	{
-		return size / 7;
+		return size / SIZE_HANDLE;
 	}
 	
 	public HandleArray clone()

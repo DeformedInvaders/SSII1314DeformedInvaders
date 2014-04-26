@@ -68,6 +68,8 @@ public class Pegatinas implements Serializable
 					
 						gl.glTranslatef(pegatinas.getXCoords(tipoPegatinas[i], vertices, triangulos), pegatinas.getYCoords(tipoPegatinas[i], vertices, triangulos), 0.0f);
 						gl.glScalef(factorEscala, factorEscala, 1.0f);
+						gl.glRotatef(pegatinas.getIotaSticker(tipoPegatinas[i]), 0.0f, 0.0f, 1.0f);
+						gl.glRotatef(pegatinas.getThetaSticker(tipoPegatinas[i]), 0.0f, 0.0f, 1.0f);
 						
 						renderer.dibujarTexturaRectangulo(gl, tipo, id, tipoPegatinas[i]);
 					
@@ -97,20 +99,6 @@ public class Pegatinas implements Serializable
 		{
 			pegatinas.removeSticker(tipoPegatinas[i]);
 		}
-	}
-	
-	public void ocultarPegatinas()
-	{
-		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
-		{
-			pegatinas.hideStickers(tipoPegatinas[i]);
-		}
-	}
-	
-	public void mostrarPegatina(TTipoSticker tipo)
-	{
-		pegatinas.showSticker(tipo);
 	}
 
 	/* Métodos de Obtención de Información */
