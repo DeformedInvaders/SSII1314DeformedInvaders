@@ -50,17 +50,10 @@
 			<string name="title_alert_initial">Intelligence Report.\n</string>
 			<string name="title_alert_final">\nGood luck.</string>
 			
-			<string name="title_alert_weaknesses_enemies">Known Weaknesses: Attack, Jump.</string>
-			<string name="title_alert_weaknesses_obstacles">Known Weaknesses: Jump.</string>
-			<string name="title_alert_weaknesses_missiles">Known Weaknesses: Crouch.</string>
-			
-		<!-- ProgressBar -->
-			<string name="text_progressBar">Loading store data.</string>
-			<string name="text_progressBar_level">Loading level statistics.</string>
-			<string name="text_progressBar_preferences">Loading game preferences.</string>
-			<string name="text_progressBar_character_list">Loading character: </string>
-			<string name="text_progressBar_completed">Loading stored data completed.</string>
-			
+			<string name="title_alert_weaknesses_enemies">How to proceed: Attack, Jump.</string>
+			<string name="title_alert_weaknesses_obstacles">How to proceed: Jump.</string>
+			<string name="title_alert_weaknesses_missiles">How to proceed: Crouch.</string>
+				
 		<!-- Dialogs -->
 		
 			<string name="text_tip_design_draw_title">Drawing your character\'s shape.</string>
@@ -89,7 +82,7 @@
 			<string name="text_tip_game_lives">Your shield can only stand for 3 strikes. Once your shield is destroy, It\'s over!</string>
 			<string name="text_tip_game_crouch">You can crouch from missiles using this drag gesture.</string>
 			<string name="text_tip_game_jump">You can jump from obstacles and enemies using this drag gesture.</string>
-			<string name="text_tip_game_attack">You can attack enemies using this double touch gesture.</string>
+			<string name="text_tip_game_attack">You can attack enemies using this touch gesture.</string>
 			<string name="text_tip_game_complete">Completing the game you will unlock the next level. If you perfect the game, new stickers will be available for your character.</string>
 			
 			<string name="text_loading_character_title">Please wait&#x2026;</string>
@@ -102,11 +95,11 @@
 			<string name="text_save_character_description">Introduce a name for your new character.</string>
 			<string name="text_save_character_confirmation">Character saved.</string>
 			
-			<string name="text_replace_character_confirmation">Character replaced.</string>
 			<string name="text_select_character_confirmation">Character selected.</string>
 			
 			<string name="text_export_character_title">Please wait&#x2026;</string>
 			<string name="text_export_character_description">Exporting your character.</string>
+			<string name="text_export_character_confirmation">Character exported.</string>
 			
 			<string name="text_import_character_title">Importing your character.</string>
 			<string name="text_import_character_confirmation">Character imported.</string>
@@ -119,19 +112,12 @@
 			<string name="text_rename_character_description">Introduce a new name for your character.</string>
 			<string name="text_rename_character_confirmation">Character renamed.</string>
 			
-			<string name="text_export_character_confirmation">Character exported.</string>
-			
 			<string name="text_audio_record_title">Recording audio.</string>
 			<string name="text_audio_record_description">Record a sound for this animation.</string>
 			<string name="text_audio_record_confirmation">Audio recorded.</string>
 			
-			<string name="text_audio_play_title">Playing audio.</string>
-			<string name="text_audio_play_confirmation">Audio played.</string>
-			
 			<string name="text_social_share_title">Updating your status.</string>
 			<string name="text_social_share_description">Make sure your text is at or under the 140 character.</string>
-			
-			<string name="text_social_photo_title">Uploading a picture.</string>
 			
 			<string name="text_social_create_character_initial">I just created</string>
 			<string name="text_social_create_character_final">using #DeformedInvaders</string>
@@ -143,15 +129,12 @@
 			<string name="text_twitter_title">Twitter OAuth.</string>
 			<string name="text_facebook_title">Facebook OAuth.</string>
 			
-			<string name="text_twitter_oauth_permission">Twitter permission granted.</string>
 			<string name="text_twitter_oauth_sign_in">Twitter account connected.</string>
 			<string name="text_twitter_post">Tweet sent.</string>
 			
-			<string name="text_facebook_oauth_permission">Facebook permission granted.</string>
 			<string name="text_facebook_oauth_sign_in">Facebook account connected.</string>
 			<string name="text_facebook_post">Post sent.</string>
 
-			<string name="text_level_enabled">The level is unlocked!</string>
 			<string name="text_level_disabled">The level is still locked!</string>
 			
 			<string name="text_game_finish">You finish this level with a score of </string>			
@@ -175,9 +158,6 @@
 		    <string name="text_button_send">Send</string>
 		    <string name="text_button_close">Close</string>
 		    
-		    <string name="text_button_record">Record</string>
-		    <string name="text_button_play">Play</string>
-		    
 		    <string name="text_button_plus">+</string>
 		    <string name="text_button_minus">-</string>
 		    
@@ -190,7 +170,6 @@
 		    <string name="text_button_import">Import</string>
 			
 		<!-- Errors -->
-			<string name="error_play">Coming Soon</string>
 			<string name="error_design">Something wrong happened with the skeleton.</string>
 			<string name="error_triangle">The polygon is not simple.</string>
 			<string name="error_retouch">The polygon is not inside the frame.</string>
@@ -214,7 +193,6 @@
 			<string name="error_facebook_oauth_sign_in">Facebook account not connected.</string>
 			<string name="error_facebook_post">Post not send.</string>
 			
-			<string name="error_storage_internal_name">The name is not available.</string>
 			<string name="error_storage_used_name">The name is already used by another character.</string>
 			
 	<!-- IMAGE DESCRIPTIONS -->
@@ -268,22 +246,8 @@
 	    	
 	    <!-- Game Fragment -->
 	    	<string name="desc_game_play">Resume the game.</string>
-	    	<string name="desc_game_pause">Pause the game.</string>
 	    	<string name="desc_game_heart">Live of the character.</string>
 	    	
-	    <!-- Audio Fragment -->
-	    	<string name="desc_audio_record">Record with the microphone.</string>
-	    	<string name="desc_audio_play">Play the recorded audio.</string>
-	    	<string name="desc_audio_plus">Increase the audio volume.</string>
-	    	<string name="desc_audio_minus">Decrease the audio volume.</string>
-	    	
-	    <!-- Social Fragment -->
-	    	<string name="desc_social_twitter">Twitter account.</string>
-	    	<string name="desc_social_facebook">Facebook account.</string>
-	    	<string name="desc_social_share">Share status.</string>
-	    	<string name="desc_social_photo">Share a photo.</string>
-	    	<string name="desc_social_wifi">Wifi connection.</string>
-	    
 	    <!-- Level Select Fragment -->
 	    	<string name="desc_select_background">Level Background.</string>
 	    	<string name="desc_select_completed">Completed Achievement.</string>
@@ -300,13 +264,6 @@
 	    <!-- Record Alert -->
 	    	<string name="desc_recordalert_record">Record Audio</string>
 	    	
-	    <!-- Sticker Dialog -->		    
-		    <string name="desc_sticker_eye">Eye sticker.</string>
-		    <string name="desc_sticker_mouth">Mouth sticker.</string>
-		    <string name="desc_sticker_weapon">Weapon sticker.</string>
-		    <string name="desc_sticker_trinket">Trinket sticker.</string>
-			<string name="desc_sticker_helmet">Helmet sticker.</string>
-		
 		<!-- Size Dialog -->	
 		    <string name="desc_size_pencil">Pencil size.</string>
 

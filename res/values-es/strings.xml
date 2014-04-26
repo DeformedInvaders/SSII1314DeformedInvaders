@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- STRINGS -->
+    		<string name="title_app">Deformed Invaders</string>
+    	<!-- ActionBar Titles -->
+		    <string name="title_main_phase">Deformed Invaders</string>
+		    <string name="title_design_phase">Diseñando tu personaje.</string>
+		    <string name="title_paint_phase">Pintando tu personaje.</string>
+		    <string name="title_deformation_phase">Animando tu personaje.</string>
+		    <string name="title_character_selection_phase">Seleccionando tu personaje.</string>
+		    <string name="title_level_selection_phase">Seleccionando un nivel.</string>
+	    
+	    <!-- ActionBar PagerView Section Titles -->
+			<string name="title_animation_section_run">Correr</string>
+			<string name="title_animation_section_jump">Saltar</string>
+			<string name="title_animation_section_crouch">Agacharse</string>
+			<string name="title_animation_section_attack">Atacar</string>
+			
+			<string name="title_level_section_moon">Luna</string>
+			<string name="title_level_section_stonehenge">Stonehenge</string>
+			<string name="title_level_section_egypt">Egipto</string>
+			<string name="title_level_section_rome">Roma</string>
+			<string name="title_level_section_newyork">Nueva York</string>
+			
+			<string name="text_level_description_moon">Luna, 2014 DC.</string>
+			<string name="text_level_description_stonehenge">Stonehenge, 3125 AC.</string>
+			<string name="text_level_description_egypt">Antiguo Egipto, 2562 AC.</string>
+			<string name="text_level_description_rome">Imperio Romano, 435 AC.</string>
+			<string name="text_level_description_newyork">Nueva York, 1945 DC.</string>
+			
+		<!-- ActionBar Icons -->
+			<string name="title_menu_twitter">Twitter</string>
+			<string name="title_menu_facebook">Facebook</string>
+			<string name="title_menu_music">Música</string>
+			<string name="title_menu_tips">Consejos</string>
+		
+		<!-- Dialog Section Titles -->	
+			<string name="title_dialog_size">Grosor:</string>
+			<string name="title_dialog_color">Color:</string>
+			<string name="title_dialog_eyes">Ojos:</string>
+			<string name="title_dialog_mouths">Bocas:</string>
+			<string name="title_dialog_weapons">Armas:</string>
+			<string name="title_dialog_trinkets">Accesorios:</string>
+			<string name="title_dialog_helmets">Cascos:</string>
+			
+		<!-- Alert Section Titles -->	
+			<string name="title_alert_enemies">Enemigos:</string>
+			<string name="title_alert_obstacles">Obstáculos:</string>
+			<string name="title_alert_missiles">Misiles:</string>
+			<string name="title_alert_initial">Informe de Inteligencia.\n</string>
+			<string name="title_alert_final">\nBuena suerte.</string>
+			
+			<string name="title_alert_weaknesses_enemies">Known Weaknesses: Atacar, Saltar.</string>
+			<string name="title_alert_weaknesses_obstacles">Known Weaknesses: Saltar.</string>
+			<string name="title_alert_weaknesses_missiles">Known Weaknesses: Agacharse.</string>
+				
+		<!-- Dialogs -->
+		
+			<string name="text_tip_design_draw_title">Dibujando el contorno de tu personaje.</string>
+			<string name="text_tip_design_draw_description">Dibuja el contorno de tu personaje usando tu dedo. El contorno no puede cortarse.</string>
+			
+			<string name="text_tip_problem_title">Tenemos un problema.</string>
+			<string name="text_tip_design_noregular_description">El contorno no puede cortarse.</string>
+			<string name="text_tip_design_outside_description">El contorno tiene que estar dentro del rectángulo gris.</string>
+			
+			<string name="text_tip_design_touch_title">Cambiando el tamaño de tu personaje.</string>
+			<string name="text_tip_design_drag_description">Puedes mover a tu personaje usando este gesto de arrastre.</string>
+			<string name="text_tip_design_rotate_description">Puedes girar a tu personaje usando este gesto de rotación.</string>
+			<string name="text_tip_design_zoom_description">Puedes ampliar o encoger tu personaje usando este gesto de zoom.</string>
+		
+			<string name="text_tip_paint_tools_title">Pintando tu personaje.</string>
+			<string name="text_tip_paint_pencil_description">Puedes añadir detalles extra en tu personaje usando la herramienta lápiz.</string>
+			<string name="text_tip_paint_bucket_description">Puedes cambiar el color de tu personaje usando la herramienta cubo.</string>
+			<string name="text_tip_paint_sticker_description">Puedes añadir pegatinas prediseñadas a tu personaje con la herramienta pegatina.</string>
+			<string name="text_tip_paint_zoom_description">Puedes ampliar o reducir tu presonaje usando el gesto de zoom. También puedes devolver a tu presonaje a la posición inicial usando este gesto de doble pulsación.</string>
+
+			<string name="text_tip_deform_handles_title">Animando tu personaje.</string>
+			<string name="text_tip_deform_handles_description">Puedes añadir o eliminar tiradores y moverlos con el objetivo de deformar tu personaje.</string>
+			<string name="text_tip_deform_undefined_description">Tienes que definir todos los movimientos para tu personaje. Recuerda que puedes grabar un sonido para cada uno.</string>
+						
+			<string name="text_tip_game_title">Jugando con tu personaje.</string>
+			<string name="text_tip_game_lives">Tu escudo sólo puede aguantar tres golpes. Una vez tu escudo sea destruido, ¡se acabó!</string>
+			<string name="text_tip_game_crouch">Puedes agacharte de misiles usando este gesto de arrastre.</string>
+			<string name="text_tip_game_jump">Puedes saltar de obstáculos y enemigos usando este gesto de arrastre.</string>
+			<string name="text_tip_game_attack">Puedes atacar a enemigos usando este gesto de pulsación.</string>
+			<string name="text_tip_game_complete">Completando el juego desbloquearás el nivel siguiente. Si perfeccionas el nivel, nuevas pegatinas estarán disponibles para tu personaje.</string>
+			
+			<string name="text_loading_character_title">Por favor espere&#x2026;</string>
+			<string name="text_loading_character_description">Loading your characters and stored data.</string>
+			
+			<string name="text_processing_character_title">Por favor espere&#x2026;</string>
+			<string name="text_processing_character_description">Procesando tu personaje.</string>
+		
+			<string name="text_save_character_title">Guardando tu personaje.</string>
+			<string name="text_save_character_description">Introduce un nombre para tu personaje.</string>
+			<string name="text_save_character_confirmation">Personaje guardado.</string>
+			
+			<string name="text_select_character_confirmation">Personaje seleccionado.</string>
+			
+			<string name="text_export_character_title">Por favor espere&#x2026;</string>
+			<string name="text_export_character_description">Exportando tu personaje.</string>
+			<string name="text_export_character_confirmation">Personaje exportado.</string>
+			
+			<string name="text_import_character_title">Importando tu personaje.</string>
+			<string name="text_import_character_confirmation">Personaje importado.</string>
+			
+			<string name="text_delete_character_title">Eliminando tu personaje.</string>
+			<string name="text_delete_character_description">¿Estás seguro de eliminar este personaje?.</string>
+			<string name="text_delete_character_confirmation">Personaje eliminado.</string>
+			
+			<string name="text_rename_character_title">Renombrando tu personaje.</string>
+			<string name="text_rename_character_description">Introduce un nuevo nombre para tu personaje.</string>
+			<string name="text_rename_character_confirmation">Personaje renombrado.</string>
+			
+			<string name="text_audio_record_title">Grabando un sonido.</string>
+			<string name="text_audio_record_description">Graba un sonido para esta animación.</string>
+			<string name="text_audio_record_confirmation">Sonido grabado.</string>
+			
+			<string name="text_social_share_title">Actualizando tu estado.</string>
+			<string name="text_social_share_description">Asegurate que el texto es igual o inferior a 140 caracteres.</string>
+			
+			<string name="text_social_create_character_initial">He creado a</string>
+			<string name="text_social_create_character_final">usando #DeformedInvaders</string>
+			
+			<string name="text_social_level_completed_initial">He completado el nivel</string>
+			<string name="text_social_level_completed_middle">con una puntuación de</string>
+			<string name="text_social_level_completed_final">usando #DeformedInvaders</string>		
+			
+			<string name="text_twitter_title">Twitter OAuth.</string>
+			<string name="text_facebook_title">Facebook OAuth.</string>
+			
+			<string name="text_twitter_oauth_sign_in">Cuenta de Twitter conectada.</string>
+			<string name="text_twitter_post">Tweet enviado.</string>
+			
+			<string name="text_facebook_oauth_sign_in">Cuenta de Facebook conectada.</string>
+			<string name="text_facebook_post">Post enviado.</string>
+
+			<string name="text_level_disabled">¡El nivel todavía está bloqueado!</string>
+			
+			<string name="text_game_finish">Has finalizado el nivel con una puntuación de </string>			
+			<string name="text_game_fail">Has muerto.</string>
+			
+			<string name="text_game_paused">Juego pausado.</string>
+			<string name="text_game_score">Puntuación:</string>
+			<string name="text_game_newstikers">Nuevas pegatinas están disponibles.</string>
+			
+			<string name="text_processing_level_title">Por favor espere&#x2026;</string>
+			<string name="text_processing_level_description">Cargando el nivel.</string>
+			
+			<string name="text_summary">Resumen del nivel.</string>
+			
+			<string name="text_button_yes">Si</string>
+			<string name="text_button_no">No</string>
+
+			<string name="text_button_ok">OK</string>
+		    <string name="text_button_cancel">Cancelar</string>
+		    
+		    <string name="text_button_send">Enviar</string>
+		    <string name="text_button_close">Cerrar</string>
+		    
+		    <string name="text_button_plus">+</string>
+		    <string name="text_button_minus">-</string>
+		    
+		    <string name="text_button_replay">Repetir</string>
+		    <string name="text_button_levels">Niveles</string>
+		    
+		    <string name="text_button_rename">Renombrar</string>
+		    <string name="text_button_ready">Listo</string>
+		    
+		    <string name="text_button_import">Importar</string>
+			
+		<!-- Errors -->
+			<string name="error_play">Próximamente</string>
+			<string name="error_design">Ha ocurrido un problema con el esqueleto.</string>
+			<string name="error_triangle">El poligono no es simple.</string>
+			<string name="error_retouch">El poligono no está dentro del marco.</string>
+			<string name="error_paint">Ha ocurrido un problema con la textura.</string>
+			<string name="error_deform">Hay movimientos sin definir.</string>
+			<string name="error_animation">Ha ocurrido un problema con los movimientos.</string>
+			
+			<string name="error_picture_character">El personaje no se ha podido dibujar.</string>
+			<string name="error_save_character">El personaje no se ha podido guardar.</string>
+			<string name="error_delete_character">El pesronaje no se ha podido eliminar.</string>
+			<string name="error_import_character">El personaje no se ha podido importar.</string>
+			
+			<string name="error_internet_connection">No hay conexión a internet.</string>
+			<string name="error_social_connection">No hay redes sociales conectadas.</string>
+			
+			<string name="error_twitter_oauth_permission">Permisos Twitter no concedidos.</string>
+			<string name="error_twitter_oauth_sign_in">Cuenta Twitter no conectada.</string>
+			<string name="error_twitter_post">Tweet no enviado.</string>
+			
+			<string name="error_facebook_oauth_permission">Permisos Facebook no concedidos.</string>
+			<string name="error_facebook_oauth_sign_in">Cuenta Facebook no conectada.</string>
+			<string name="error_facebook_post">Post no enviado.</string>
+				
+			<string name="error_storage_used_name">El nombre ya está usado por otro perssonaje.</string>
+			
+	<!-- IMAGE DESCRIPTIONS -->
+	
+	    <!-- Main Fragment -->
+		    <string name="desc_main_new">Crear un personaje nuevo.</string>
+		    <string name="desc_main_import">Importar un personaje creado.</string>
+		    <string name="desc_main_select">Selecionar un personaje.</string>
+		    <string name="desc_main_play">Seleccionar un nivel.</string>
+		    
+		<!-- Design Fragment -->
+		    <string name="desc_design_ready">Listo para definir la textura.</string>
+		    <string name="desc_design_reset">Reiniciar el diseño.</string>
+		    <string name="desc_design_triangle">Probar el diseño.</string>
+		    
+		<!-- Paint Fragment -->
+		    <string name="desc_paint_bucket">Seleccionar la herramienta cubo.</string>
+		    <string name="desc_paint_pencil">Seleccionar la herramienta pincel.</string>
+		    <string name="desc_paint_hand">Seleccionar la herramienta mano.</string>
+		    <string name="desc_paint_next">Rehacer la última acción.</string>
+		    <string name="desc_paint_prev">Deshacer la última acción.</string>
+		    <string name="desc_paint_reset">Reiniciar la textura.</string>
+		    <string name="desc_paint_color">Cambiar el color del cubo.</string>
+		    <string name="desc_paint_size">Cambiar el tamaño del pincel.</string>
+		    <string name="desc_paint_eye">Añadir una etiqueta.</string>
+		    <string name="desc_paint_ready">Listo para definir las animaciones.</string>
+		    
+		<!-- Deform Fragment -->
+		    <string name="desc_deform_add">Añadir un nuevo tirador.</string>
+		    <string name="desc_deform_remove">Eliminar un tirador.</string>
+		    <string name="desc_deform_move">Mover un tirador.</string>
+		    <string name="desc_deform_reset">Reiniciar la animación.</string>
+		    <string name="desc_deform_record">Grabar la animación.</string>
+		    <string name="desc_deform_audio">Grabar audio de la animación.</string>
+		    <string name="desc_deform_play">Reproduce la animación.</string>
+			
+		<!-- Animation Fragment -->
+		    <string name="desc_animation_ready">Listo para guardar el personaje.</string>
+		    
+		<!-- Character Select Fragment -->
+	    	<string name="desc_select_select">Selecciona este personaje.</string>
+	    	<string name="desc_select_delete">Elimina este personaje.</string>
+	    	<string name="desc_select_camera">Publicar este personaje.</string>
+	    	<string name="desc_select_rename">Renombrar este personaje.</string>
+	    	<string name="desc_select_repaint">Repintar este personaje.</string>
+	    	<string name="desc_select_export">Exportar este personaje.</string>
+	    	<string name="desc_select_run">Reproducir animación correr.</string>
+	    	<string name="desc_select_jump">Reproducir animación saltar.</string>
+	    	<string name="desc_select_crouch">Reproducir animación agacharse.</string>
+	    	<string name="desc_select_attack">Reproducir animación atacar.</string>
+	    	
+	    <!-- Game Fragment -->
+	    	<string name="desc_game_play">Reanudar el juego.</string>
+	    	<string name="desc_game_heart">Vidas del personaje.</string>
+	    	
+	    <!-- Level Select Fragment -->
+	    	<string name="desc_select_background">Fondo el nivel.</string>
+	    	<string name="desc_select_completed">Logro nivel completado.</string>
+	    	<string name="desc_select_perfected">Logro nivel perfeccionado.</string>
+	    	<string name="desc_magic">Jugar el nivel.</string>
+	    	
+	    <!-- Image Alert -->
+	    	<string name="desc_imagealert_picture">Imagen de alerta.</string>
+	    	
+	    <!-- VideoList Alert -->
+	    	<string name="desc_videolistalert_next">Video siguiente.</string>
+	    	<string name="desc_videolistalert_prev">Video anterior.</string>
+	    	
+	    <!-- Record Alert -->
+	    	<string name="desc_recordalert_record">Grabar sonido.</string>
+	    	
+		<!-- Size Dialog -->	
+		    <string name="desc_size_pencil">Tamaño del Pincel.</string>
+
+		<!-- Color Dialog -->	
+		    <string name="desc_color_palette_secondary">Paleta de Colores Secundaria.</string>
+		    <string name="desc_color_cursor_main">Cursor de Color Principal.</string>
+		    <string name="desc_color_cursor_secondary">Cursor de Color Secundario.</string>
+		    <string name="desc_color_selected">Color Seleccionado.</string>
+
+		<!-- Dialogs -->	
+		    <string name="desc_dialog_arrow">Flecha del Dialogo.</string>
+
+</resources>

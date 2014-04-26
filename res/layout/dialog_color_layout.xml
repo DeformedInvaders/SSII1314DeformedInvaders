@@ -42,18 +42,18 @@
   	    
 	    <LinearLayout style="@style/Layout_Horizontal_Section_Dialog_Style" >
 	        
-			<Button style="@style/Button_Color_Style"
-				android:id="@+id/imageButtonColor1"
-				android:text="@string/text_button_ok" />
-			
-			 <ImageView style="@style/Button_Color_Style"
+	        <Button style="@style/Button_Color_Style"
+				android:id="@+id/imageButtonColor2"
+				android:text="@string/text_button_cancel" />
+	        
+        	<ImageView style="@style/Button_Color_Style"
 				android:id="@+id/imageViewColor3"
 				android:contentDescription="@string/desc_color_selected"/>
 			
 			<Button style="@style/Button_Color_Style"
-				android:id="@+id/imageButtonColor2"
-				android:text="@string/text_button_cancel" />
-		
+				android:id="@+id/imageButtonColor1"
+				android:text="@string/text_button_ok" />
+			
 		</LinearLayout>
 		
 	</LinearLayout>

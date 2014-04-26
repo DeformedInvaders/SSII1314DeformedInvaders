@@ -260,6 +260,10 @@ public abstract class GameCore
 				sendToastMessage(R.string.text_save_character_confirmation);
 				return true;
 			}
+			else
+			{
+				sendToastMessage(R.string.error_save_character);
+			}
 		}
 		
 		return false;
