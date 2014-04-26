@@ -164,4 +164,19 @@ public class HandleArray extends FloatArray
 	{
 		return new HandleArray(super.clone());
 	}
+	
+	public HandleArray interpolar(HandleArray handles, int alfa)
+	{
+		HandleArray handleInterpolado = clone();
+		
+		for (short i = 0; i < getNumHandles(); i++)
+		{
+			float x = handles.getXCoordHandle(i) * alfa + getXCoordHandle(i) * (1 - alfa);
+			float y = handles.getYCoordHandle(i) * alfa + getYCoordHandle(i) * (1 - alfa);
+			
+			handleInterpolado.setCoordsHandle(i, x, y);
+		}
+		
+		return handleInterpolado;
+	}
 }

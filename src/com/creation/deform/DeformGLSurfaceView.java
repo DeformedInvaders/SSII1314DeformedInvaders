@@ -35,7 +35,7 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		mListener = listener;
 		
-		renderer = new DeformOpenGLRenderer(getContext(), Color.WHITE, personaje);
+		renderer = new DeformOpenGLRenderer(getContext(), Color.WHITE, mListener, personaje);
 		setRenderer(renderer);
 
 		handler = new Handler();
@@ -48,12 +48,12 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 				{
 					requestRender();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
+					
 				}
 				else
 				{
 					renderer.seleccionarReposo();
 					mListener.onAnimationFinished();
-
 					threadActivo = false;
 				}
 			}
@@ -226,5 +226,4 @@ public class DeformGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.restoreData(data);
 	}
-
 }

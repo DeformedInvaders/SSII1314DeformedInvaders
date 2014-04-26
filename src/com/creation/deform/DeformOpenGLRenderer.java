@@ -30,6 +30,8 @@ import com.project.main.R;
 public class DeformOpenGLRenderer extends OpenGLRenderer
 {
 	private Deformator deformator;
+	
+	private OnDeformListener mListener;
 
 	// Modo Grabado
 	private TEstadoDeform estado;
@@ -79,12 +81,14 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructora */
 
-	public DeformOpenGLRenderer(Context context, int color, Personaje personaje)
+	public DeformOpenGLRenderer(Context context, int color, OnDeformListener listener, Personaje personaje)
 	{
 		super(context, color);
-
+		
+		mListener = listener;
 		estado = TEstadoDeform.Nada;
 		modoGrabar = false;
+		
 		listaHandlesAnimacion = new ArrayList<HandleArray>();
 		listaVerticesAnimacion = new ArrayList<VertexArray>();
 
@@ -324,12 +328,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			if (!isPuntoFueraMarco(frameX, frameY))
 			{
 				handles.setCoordsHandle(punteros[pointer], frameX, frameY);
-				
-				if (modoGrabar)
-				{
-					listaHandlesAnimacion.add(handles.clone());
-				}
-				
 				return true;
 			}
 		}
@@ -415,6 +413,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoDeform.Deformar)
 		{
+			if (modoGrabar)
+			{
+				listaHandlesAnimacion.add(handles.clone());
+			}
+			
 			// Cambiar Posicion de los Handles
 			deformator.moverHandles(handles, verticesModificados);
 
@@ -442,27 +445,36 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 
 		VertexArray frame = vertices.clone();
+		HandleArray lastHandles = null;
 		
 		int i = 0;
 		while (i < listaHandlesAnimacion.size())
 		{
-			for(int j = 0; j < numFramesRepetir; j++)
+			if (lastHandles != null)
 			{
-				deformator.moverHandles(listaHandlesAnimacion.get(i), frame);
-				listaVerticesAnimacion.add(frame.clone());
+				for(int j = 0; j < numFramesRepetir - 1; j++)
+				{
+					HandleArray handleInterpolado = lastHandles.interpolar(listaHandlesAnimacion.get(i), j / numFramesRepetir);
+					
+					deformator.moverHandles(handleInterpolado, frame);
+					listaVerticesAnimacion.add(frame.clone());
+				}
 			}
+			
+			deformator.moverHandles(listaHandlesAnimacion.get(i), frame);
+			listaVerticesAnimacion.add(frame.clone());
+			lastHandles = listaHandlesAnimacion.get(i);
 			
 			i = i + numFramesDescartar;
 		}
-
-		deformator.moverHandles(listaHandlesAnimacion.get(listaHandlesAnimacion.size() - 1), frame);
-		listaVerticesAnimacion.add(frame.clone());
 		
 		//TODO Comprobar comportamiento de algoritmo.
 		android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
 		android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
 		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
 		android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
+		
+		mListener.onAnimationFinished();
 	}
 	
 	private void reiniciarHandles()

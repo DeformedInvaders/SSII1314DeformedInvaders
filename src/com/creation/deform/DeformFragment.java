@@ -345,7 +345,13 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	@Override
 	public void onAnimationFinished()
 	{
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		getActivity().runOnUiThread(new Runnable() {
+	        @Override
+	        public void run()
+	        {
+	    		reiniciarInterfaz();
+	    		actualizarInterfaz();
+	        }
+	    });
 	}
 }

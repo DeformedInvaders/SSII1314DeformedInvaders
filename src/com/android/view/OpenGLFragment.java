@@ -21,11 +21,11 @@ public abstract class OpenGLFragment<T extends OpenGLSurfaceView> extends AlertF
 			@Override
 			public boolean onTouch(View view, MotionEvent event)
 			{
-				canvas.onTouch(view, event);
+				boolean touch = canvas.onTouch(view, event);
 
 				reiniciarInterfaz();
 				actualizarInterfaz();
-				return true;
+				return touch;
 			}
 		});
 	}
