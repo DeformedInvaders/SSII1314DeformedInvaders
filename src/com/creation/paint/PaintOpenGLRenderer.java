@@ -28,6 +28,7 @@ import com.lib.math.GeometryUtils;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
+import com.lib.search.TriangleQuadTreeSearcher;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -60,6 +61,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	private TriangleArray triangulos;
 
 	private int colorPintura;
+	
+	// Buscador de Triángulos
+	private TriangleQuadTreeSearcher buscador;
 
 	// Texturas
 	private TEstadoCaptura estadoCaptura;
@@ -85,7 +89,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
-
+		
 		if (personaje.getTextura() != null)
 		{
 			pegatinas = personaje.getTextura().getPegatinas();
@@ -300,12 +304,12 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	private boolean anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		short triangle = buscarTriangulo(contorno, vertices, triangulos, pixelX, pixelY, screenWidth, screenHeight);
+		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+		
+		short triangle = buscador.searchTriangle(frameX, frameY);
 		if (triangle != -1)
-		{
-			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
-			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
-			
+		{			
 			pegatinas.setPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
 
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipoPegatinaActual);
@@ -399,6 +403,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		pegatinaActual = pegatina;
 		tipoPegatinaActual = tipo;
 		estado = TEstadoPaint.Pegatinas;
+		
+		if (buscador == null)
+		{
+			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, marcoAnchuraInterior, marcoAnchuraInterior);
+		}
 	}
 	
 	public void eliminarPegatina(TTipoSticker tipo)

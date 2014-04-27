@@ -1065,6 +1065,30 @@ public final class Intersector {
 
 		return closestX + closestY < c.radius * c.radius;
 	}
+	
+	public static boolean overlaps(Rectangle r, Polygon p)
+	{
+		float[] vertices = {r.x, r.y, r.x + r.width, r.y, r.x + r.width, r.y + r.height, r.x, r.y + r.height};		
+		return overlapConvexPolygons(p, new Polygon(vertices));
+	}
+	
+	public static boolean contains(Rectangle r, Polygon p)
+	{
+		float[] vertices = p.getVertices();
+		
+		int i = 0;
+		while(i < vertices.length)
+		{
+			if (!r.contains(vertices[i], vertices[i + 1]))
+			{
+				return false;
+			}
+			
+			i = i + 2;
+		}
+		
+		return true;
+	}
 
 	/**
 	 * Check whether specified convex polygons overlap.

@@ -24,6 +24,7 @@ import com.lib.buffer.VertexArray;
 import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
+import com.lib.search.TriangleQuadTreeSearcher;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -62,6 +63,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	// Indice de Vertices que forman Triángulos
 	private TriangleArray triangulos;
 	private FloatBuffer bufferTriangulos;
+	
+	// Buscador de Triángulos
+	private TriangleQuadTreeSearcher buscador;
 
 	/* Handles */
 
@@ -182,8 +186,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	/* Métodos de Selección de Estado */
 
 	public void seleccionarAnyadir()
-	{
+	{		
 		estado = TEstadoDeform.Anyadir;
+		
+		if (buscador == null)
+		{
+			buscador = new TriangleQuadTreeSearcher(triangulos, verticesModificados, 0.0f, 0.0f, marcoAnchuraInterior, marcoAnchuraInterior);
+		}
 	}
 
 	public void seleccionarEliminar()
@@ -194,6 +203,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarMover()
 	{
 		estado = TEstadoDeform.Deformar;
+		
+		buscador = null;
 	}
 
 	/* Métodos Abstractos de OpenGLRenderer */
@@ -203,6 +214,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		estado = TEstadoDeform.Nada;
 		modoGrabar = false;
+		
+		buscador = null;
 
 		handles.clear();
 
@@ -237,12 +250,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	private boolean anyadirHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		short triangle = buscarTriangulo(contorno, verticesModificados, triangulos, pixelX, pixelY, screenWidth, screenHeight);
+		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+		
+		short triangle = buscador.searchTriangle(frameX, frameY);
 		if (triangle != -1)
-		{
-			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
-			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
-			
+		{			
 			handles.addHandle(frameX, frameY, triangle, verticesModificados, triangulos);
 			
 			// Añadir Handle Nuevo
@@ -252,6 +265,26 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 
 		return false;
+	}
+	
+	private short buscarHandle(HandleArray handles, VertexArray vertices, TriangleArray triangulos, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		for (short i = 0; i < handles.getNumHandles(); i++)
+		{
+			float frameX = handles.getXCoordHandle(i);
+			float frameY = handles.getYCoordHandle(i);
+			
+			float lastPixelX = convertFrameXToPixelXCoordinate(frameX, screenWidth);
+			float lastPixelY = convertFrameYToPixelYCoordinate(frameY, screenHeight);
+
+			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY));
+			if (distancia < GamePreferences.MAX_DISTANCE_HANDLES)
+			{
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 
 	private boolean eliminarHandle(float pixelX, float pixelY, float screenWidth, float screenHeight)
@@ -468,7 +501,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			i = i + numFramesDescartar;
 		}
 		
-		//TODO Comprobar comportamiento de algoritmo.
+		//TODO Comprobar comportamiento del algoritmo.
 		android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
 		android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
 		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);

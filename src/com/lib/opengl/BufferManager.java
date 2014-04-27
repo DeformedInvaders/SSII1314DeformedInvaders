@@ -38,10 +38,10 @@ public class BufferManager
 	// Construcción de un buffer de pintura para puntos a partir de una lista de indice de vertices
 	public static FloatBuffer construirBufferListaIndicePuntos(HullArray contorno, VertexArray vertices)
 	{
-		float[] arrayVertices = new float[2 * contorno.getNumVertex()];
+		float[] arrayVertices = new float[2 * contorno.getNumVertices()];
 
 		int j = 0;
-		for (short i = 0; i < contorno.getNumVertex(); i++)
+		for (short i = 0; i < contorno.getNumVertices(); i++)
 		{
 			short a = contorno.getVertex(i);
 			
@@ -192,7 +192,7 @@ public class BufferManager
 	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer, HullArray contorno, VertexArray vertices)
 	{
 		int j = 0;
-		for (short i = 0; i < contorno.getNumVertex(); i++)
+		for (short i = 0; i < contorno.getNumVertices(); i++)
 		{
 			short a = contorno.getVertex(i);
 			

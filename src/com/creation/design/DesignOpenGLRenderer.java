@@ -309,13 +309,21 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isPoligonoDentroMarco()
 	{
-		if (isPoligonoDentroMarco(vertices))
+		for (short i = 0; i < contorno.getNumVertices(); i++)
 		{
-			estado = TEstadoDesign.Terminado;
-			return true;
+			short a = contorno.get(i);
+			
+			float frameX = vertices.getXVertex(a);
+			float frameY = vertices.getYVertex(a);
+			
+			if (isPuntoFueraMarco(frameX, frameY))
+			{
+				return false;
+			}
 		}
-
-		return false;
+		
+		estado = TEstadoDesign.Terminado;
+		return true;
 	}
 
 	/* Métodos de Guardado de Información */

@@ -1,7 +1,8 @@
-package com.lib.buffer;
+package com.lib.search;
 
 import com.lib.math.Intersector;
 import com.lib.math.Polygon;
+import com.lib.math.Rectangle;
 
 public class QuadTreeSearcher
 {
@@ -12,8 +13,7 @@ public class QuadTreeSearcher
 	private Polygon[] polygonElements;
 	private int numElements;
 	
-	private Polygon region;
-	private float regionX, regionY, regionHeight, regionWidth;
+	private Rectangle region;
 	
 	private QuadTreeSearcher[] childrens;
 	private boolean subdivided;
@@ -30,17 +30,12 @@ public class QuadTreeSearcher
 			idElements[i] = -1;
 		}
 		
-		float[] rectangle = {x, y, x + width, y, x + width, y + height, x, y + height};
-		region = new Polygon(rectangle);
-		regionX = x;
-		regionY = y;
-		regionWidth = width;
-		regionHeight = height;
+		region = new Rectangle(x, y, width, height);
 	}
 	
 	public boolean insertElement(Polygon polygon, short id)
 	{
-		if (!Intersector.overlapConvexPolygons(region, polygon))
+		if (!Intersector.overlaps(region, polygon) && !Intersector.contains(region, polygon))
 		{
 			return false;
 		}
@@ -74,7 +69,7 @@ public class QuadTreeSearcher
 		{
 			for (int j = 0; j < MAX_SUBDIVISIONS; j++)
 			{
-				childrens[i * MAX_SUBDIVISIONS + j] = new QuadTreeSearcher(regionX + i * regionWidth / MAX_SUBDIVISIONS, regionY + j * regionHeight / MAX_SUBDIVISIONS, regionWidth / MAX_SUBDIVISIONS, regionHeight / MAX_SUBDIVISIONS); 
+				childrens[i * MAX_SUBDIVISIONS + j] = new QuadTreeSearcher(region.x + i * region.width / MAX_SUBDIVISIONS, region.y + j * region.height / MAX_SUBDIVISIONS, region.width / MAX_SUBDIVISIONS, region.height / MAX_SUBDIVISIONS); 
 			}
 		}
 		
@@ -97,6 +92,7 @@ public class QuadTreeSearcher
 		if (!region.contains(x, y))
 		{
 			return -1;
+			
 		}
 		
 		if (!subdivided)

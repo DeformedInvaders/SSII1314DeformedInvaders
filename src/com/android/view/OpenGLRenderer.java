@@ -16,12 +16,7 @@ import com.creation.data.MapaBits;
 import com.creation.data.TTipoSticker;
 import com.game.data.TTipoEntidad;
 import com.lib.buffer.Dimensiones;
-import com.lib.buffer.HandleArray;
-import com.lib.buffer.HullArray;
-import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
-import com.lib.math.GeometryUtils;
-import com.lib.math.Intersector;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
 import com.main.model.GamePreferences;
@@ -67,7 +62,7 @@ public abstract class OpenGLRenderer implements Renderer
 	protected boolean fondoFinalFijado;
 
 	// Marco
-	private float marcoAnchuraInterior, marcoAlturaLateral, marcoAnchuraLateral;
+	protected float marcoAnchuraInterior, marcoAlturaLateral, marcoAnchuraLateral;
 	private FloatBuffer recMarcoLateral, recMarcoFrontal, recMarcoInterior;
 
 	// Contexto
@@ -384,22 +379,6 @@ public abstract class OpenGLRenderer implements Renderer
 		float[] recC = { 0, 0, 0, marcoAnchuraInterior, marcoAnchuraInterior, 0, marcoAnchuraInterior,marcoAnchuraInterior };
 		recMarcoInterior = BufferManager.construirBufferListaPuntos(recC);
 	}
-
-	protected boolean isPoligonoDentroMarco(VertexArray vertices)
-	{
-		for (short i = 0; i < vertices.getNumVertices(); i++)
-		{
-			float frameX = vertices.getXVertex(i);
-			float frameY = vertices.getYVertex(i);
-			
-			if (isPuntoFueraMarco(frameX, frameY))
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
 	
 	protected boolean isPuntoFueraMarco(float x, float y)
 	{
@@ -550,78 +529,6 @@ public abstract class OpenGLRenderer implements Renderer
 	protected float convertFrameYToTextureYCoordinate(float frameY, float textureHeight)
 	{
 		return (textureHeight - frameY) / textureHeight;
-	}
-
-	/* Métodos de Búsqueda de Pixeles */
-	
-	protected short buscarTriangulo(HullArray contorno, VertexArray vertices, TriangleArray triangulos, float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
-		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
-		
-		if (GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
-		{			
-			for (short i = 0; i < triangulos.getNumTriangles(); i++)
-			{
-				short a = triangulos.getAVertex(i);
-				short b = triangulos.getCVertex(i);
-				short c = triangulos.getBVertex(i);
-				
-				float aX = vertices.getXVertex(a);
-				float aY = vertices.getYVertex(a);
-				float bX = vertices.getXVertex(b);
-				float bY = vertices.getYVertex(b);
-				float cX = vertices.getXVertex(c);
-				float cY = vertices.getYVertex(c);
-				
-				if (Intersector.isPointInTriangle(frameX, frameY, aX, aY, bX, bY, cX, cY))
-				{
-					return i;
-				}
-			}
-		}
-		
-		return -1;
-	}
-	
-	protected short buscarHandle(HandleArray handles, VertexArray vertices, TriangleArray triangulos, float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		for (short i = 0; i < handles.getNumHandles(); i++)
-		{
-			float frameX = handles.getXCoordHandle(i);
-			float frameY = handles.getYCoordHandle(i);
-			
-			float lastPixelX = convertFrameXToPixelXCoordinate(frameX, screenWidth);
-			float lastPixelY = convertFrameYToPixelYCoordinate(frameY, screenHeight);
-
-			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY));
-			if (distancia < GamePreferences.MAX_DISTANCE_HANDLES)
-			{
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	protected short buscarVertice(VertexArray vertices, float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		for (short i = 0; i < vertices.getNumVertices(); i++)
-		{
-			float frameX = vertices.getXVertex(i);
-			float frameY = vertices.getYVertex(i);
-			
-			float lastpX = convertFrameXToPixelXCoordinate(frameX, screenWidth);
-			float lastpY = convertFrameYToPixelYCoordinate(frameY, screenHeight);
-
-			float distancia = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastpX, lastpY));
-			if (distancia < GamePreferences.MAX_DISTANCE_PIXELS)
-			{
-				return (short) i;
-			}
-		}
-		
-		return -1;
 	}
 
 	/* Métodos de Construcción de Texturas */

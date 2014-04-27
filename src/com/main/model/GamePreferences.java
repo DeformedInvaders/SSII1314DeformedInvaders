@@ -169,6 +169,7 @@ public class GamePreferences
 		return WIDTH_SCREEN;
 	}
 	
+	// TODO Comprobar comportamiento del algoritmo.
 	public static final float POS_ENEMIES_FINAL()
 	{
 		return POS_ENEMIES_INICIO() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMIES() * 1.5f;

@@ -34,7 +34,7 @@ public class HullArray extends ShortArray
 		return get(vertex);
 	}
 	
-	public int getNumVertex()
+	public int getNumVertices()
 	{
 		return size;
 	}

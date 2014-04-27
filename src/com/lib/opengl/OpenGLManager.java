@@ -6,14 +6,14 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.opengl.GLUtils;
+
 import com.creation.data.Handle;
 import com.creation.data.MapaBits;
 import com.lib.buffer.HandleArray;
 import com.main.model.GamePreferences;
-
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.opengl.GLUtils;
 
 public class OpenGLManager
 {
@@ -44,11 +44,6 @@ public class OpenGLManager
 
 			gl.glGenTextures(1, nombreTexturas, posTextura);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, nombreTexturas[posTextura]);
-	
-			//gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-			//gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-			
-			// TODO Comprobar comportamiento del cargado de texturas.
 			
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
