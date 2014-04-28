@@ -504,7 +504,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipo);
 			pegatinas.eliminarPegatina(tipo);
 			
-			anteriores.push(new AccionPegatina(tipoPegatinaActual));
+			anteriores.push(new AccionPegatina(tipo));
 			siguientes.clear();
 		}
 		

@@ -399,6 +399,7 @@ public abstract class GameCore
 	{	
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
+			//return externalManager.exportarEnemigo(listaPersonajes.get(indice));
 			return externalManager.exportarPersonaje(listaPersonajes.get(indice));
 		}
 		
