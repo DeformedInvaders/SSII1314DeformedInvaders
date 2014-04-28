@@ -84,6 +84,20 @@ public class Pegatinas implements Serializable
 
 	/* Métodos de Modificación de Información */
 
+	public void anyadirPegatina(TTipoSticker tipo, int id, float x, float y, short index, float factor, float angulo, VertexArray vertices, TriangleArray triangulos)
+	{
+		if (id == -1)
+		{
+			eliminarPegatina(tipo);
+		}
+		else
+		{
+			pegatinas.setSticker(tipo, id, x, y, index, vertices, triangulos);
+			pegatinas.setFactorSticker(tipo, factor);
+			pegatinas.setThetaSticker(tipo, angulo);
+		}
+	}
+	
 	public void anyadirPegatina(TTipoSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
 	{
 		if (id == -1)
@@ -110,20 +124,6 @@ public class Pegatinas implements Serializable
 		}
 	}
 	
-	public void seleccionarPegatina(TTipoSticker tipo)
-	{
-		pegatinas.setSelectedSticker(tipo, true);
-	}
-	
-	public void deseleccionarPegatinas()
-	{
-		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
-		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
-		{
-			pegatinas.setSelectedSticker(tipoPegatinas[i], false);
-		}
-	}
-	
 	public void ampliarPegatina(TTipoSticker tipo, float factor)
 	{
 		pegatinas.setFactorSticker(tipo, factor);
@@ -139,12 +139,42 @@ public class Pegatinas implements Serializable
 		pegatinas.setCoords(tipo, x, y, index, vertices, triangulos);
 	}
 	
-	public void recuperarSticker(TTipoSticker tipo)
+	public void recuperarPegatina(TTipoSticker tipo)
 	{
 		pegatinas.restoreSticker(tipo);
 	}
 
 	/* Métodos de Obtención de Información */
+	
+	public float getXCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	{
+		return pegatinas.getXCoords(tipo, vertices, triangulos);
+	}
+	
+	public float getYCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	{
+		return pegatinas.getYCoords(tipo, vertices, triangulos);
+	}
+	
+	public int getId(TTipoSticker tipo)
+	{
+		return pegatinas.getIdSticker(tipo);
+	}
+	
+	public float getTheta(TTipoSticker tipo)
+	{
+		return pegatinas.getThetaSticker(tipo);
+	}
+	
+	public float getFactor(TTipoSticker tipo)
+	{
+		return pegatinas.getFactorSticker(tipo);
+	}
+	
+	public short getIndice(TTipoSticker tipo)
+	{
+		return pegatinas.getIndexSticker(tipo);
+	}
 
 	public boolean isCargada(TTipoSticker tipo)
 	{
@@ -155,15 +185,5 @@ public class Pegatinas implements Serializable
 	{
 		String nombrePegatina = GameResources.GET_STICKER(tipo, pegatinas.getIdSticker(tipo));
 		return context.getResources().getIdentifier(nombrePegatina, GameResources.RESOURCE_DRAWABLE, context.getPackageName());
-	}
-	
-	public float getXCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
-	{
-		return pegatinas.getXCoords(tipo, vertices, triangulos);
-	}
-	
-	public float getYCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
-	{
-		return pegatinas.getYCoords(tipo, vertices, triangulos);
 	}
 }

@@ -9,8 +9,17 @@ public class AccionPegatina extends Accion
 	private int idPegatina;
 	private float posXPegatina, posYPegatina;
 	private short indiceTriangulo;
+	private float factorEscala, anguloRotacion;
 	
-	public AccionPegatina(TTipoSticker tipo, int id, float x, float y, short indice)
+	public AccionPegatina(TTipoSticker tipo)
+	{
+		tipoAccion = TTipoAccion.Pegatina;
+		
+		tipoPegatina = tipo;
+		idPegatina = -1;
+	}
+	
+	public AccionPegatina(TTipoSticker tipo, int id, float x, float y, short indice, float factor, float angulo)
 	{
 		tipoAccion = TTipoAccion.Pegatina;
 		
@@ -19,6 +28,8 @@ public class AccionPegatina extends Accion
 		posXPegatina = x;
 		posYPegatina = y;
 		indiceTriangulo = indice;
+		factorEscala = factor;
+		anguloRotacion = angulo;
 	}
 	
 	/* Métodos de Obtención de Información */
@@ -46,5 +57,15 @@ public class AccionPegatina extends Accion
 	public float getPosYPegatina()
 	{
 		return posYPegatina;
+	}
+
+	public float getFactorEscala()
+	{
+		return factorEscala;
+	}
+
+	public float getAnguloRotacion()
+	{
+		return anguloRotacion;
 	}	
 }

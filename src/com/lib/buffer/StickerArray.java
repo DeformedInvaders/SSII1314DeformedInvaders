@@ -16,7 +16,6 @@ public class StickerArray extends FloatArray
 		kappa: Ángulo iota actual.
 		theta: Ángulo de rotación de la pegatina.
 		factor: Factor de escalado de la pegatina.
-		selected: Pegatina Seleccionada.
 	*/
 	
 	private static final int ID_STICKER = 0;
@@ -27,15 +26,12 @@ public class StickerArray extends FloatArray
 	private static final int ANGLE_IOTA_STICKER = 5;
 	private static final int ANGLE_THETA_STICKER = 6;
 	private static final int FACTOR_SCALE_STICKER = 7;
-	private static final int SELECTED_STICKER = 8;
 	
-	private static final float TRUE = 1.0f;
-	private static final float FALSE = 0.0f;
 	private static final float NULL_ROTATE = 0.0f;
 	private static final float NULL_SCALE = 1.0f;
 	private static final short NULL_INDEX = -1;
 	
-	private static final int SIZE_STICKER = 9;
+	private static final int SIZE_STICKER = 8;
 	
 	public StickerArray()
 	{
@@ -51,7 +47,6 @@ public class StickerArray extends FloatArray
 			add(NULL_ROTATE);
 			add(NULL_ROTATE);
 			add(NULL_SCALE);
-			add(NULL_ROTATE);
 		}
 	}
 	
@@ -91,12 +86,12 @@ public class StickerArray extends FloatArray
 		setSticker(tipo, id, x, y, index, vertices, triangulos);
 	}
 	
-	public void setThetaSticker(TTipoSticker tipo, float angRad)
+	public void setThetaSticker(TTipoSticker tipo, float ang)
 	{
 		short sticker = (short) tipo.ordinal();
 		float oldAng = getThetaSticker(tipo);
 		
-		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, (float) (oldAng + Math.toDegrees(angRad)));
+		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, (float) (oldAng + ang));
 	}
 	
 	public void setFactorSticker(TTipoSticker tipo, float factor)
@@ -105,20 +100,6 @@ public class StickerArray extends FloatArray
 		float oldFactor = getFactorSticker(tipo);
 		
 		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, oldFactor * factor);
-	}
-	
-	public void setSelectedSticker(TTipoSticker tipo, boolean select)
-	{
-		short sticker = (short) tipo.ordinal();
-		
-		if (select)
-		{
-			set(SIZE_STICKER * sticker + SELECTED_STICKER, TRUE);
-		}
-		else
-		{
-			set(SIZE_STICKER * sticker + SELECTED_STICKER, FALSE);
-		}
 	}
 	
 	public int getIdSticker(TTipoSticker tipo)
@@ -228,13 +209,6 @@ public class StickerArray extends FloatArray
 		return get(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER);
 	}
 	
-	public boolean isSelectedSticker(TTipoSticker tipo)
-	{
-		short sticker = (short) tipo.ordinal();
-	
-		return get(SIZE_STICKER * sticker + SELECTED_STICKER) == TRUE;
-	}
-	
 	public void removeSticker(TTipoSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
@@ -244,7 +218,6 @@ public class StickerArray extends FloatArray
 			set(SIZE_STICKER * sticker + i, NULL_INDEX);
 		}
 		
-		setSelectedSticker(tipo, false);
 		restoreSticker(tipo);
 	}
 	

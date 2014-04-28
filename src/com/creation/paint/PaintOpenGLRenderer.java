@@ -315,7 +315,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipoPegatinaActual);
 			pegatinaAnyadida = true;
 
-			anteriores.push(new AccionPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle));
+			anteriores.push(new AccionPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, pegatinas.getFactor(tipoPegatinaActual), pegatinas.getTheta(tipoPegatinaActual)));
 			siguientes.clear();
 
 			return true;
@@ -378,9 +378,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				if (triangle != -1)
 				{			
 					pegatinas.moverPegatina(tipoPegatinaActual, newStickerFrameX, newtStickerFrameY, triangle, vertices, triangulos);
-
-					anteriores.push(new AccionPegatina(tipoPegatinaActual, pegatinaActual, newStickerFrameX, newtStickerFrameY, triangle));
-					siguientes.clear();
 				}
 			}
 		}
@@ -391,7 +388,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoPaint.EditarPegatinas)
 		{
-			pegatinas.rotarPegatina(tipoPegatinaActual, angRad);
+			pegatinas.rotarPegatina(tipoPegatinaActual, (float) Math.toDegrees(angRad));
 		}
 	}
 	
@@ -400,10 +397,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoPaint.EditarPegatinas)
 		{
-			pegatinas.recuperarSticker(tipoPegatinaActual);
+			pegatinas.recuperarPegatina(tipoPegatinaActual);
 		}
 	}
-
 
 	private boolean guardarPolilinea()
 	{
@@ -424,31 +420,54 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		return false;
 	}
+	
+	private boolean guardarPegatina()
+	{
+		if (estado == TEstadoPaint.EditarPegatinas)
+		{
+			int id = pegatinas.getId(tipoPegatinaActual);
+			float x = pegatinas.getXCoords(tipoPegatinaActual, vertices, triangulos);
+			float y = pegatinas.getYCoords(tipoPegatinaActual, vertices, triangulos);
+			short indice = pegatinas.getIndice(tipoPegatinaActual);
+			float factor = pegatinas.getFactor(tipoPegatinaActual);
+			float angulo = pegatinas.getTheta(tipoPegatinaActual);
 
+			anteriores.push(new AccionPegatina(tipoPegatinaActual, id, x, y, indice, factor, angulo));
+			siguientes.clear();
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/* Métodos de Selección de Estado */
 
 	public void seleccionarNada()
 	{
 		guardarPolilinea();
-		pegatinas.deseleccionarPegatinas();		
+		guardarPegatina();
 		estado = TEstadoPaint.Nada;
 	}
 	
 	public void seleccionarMano()
 	{
 		guardarPolilinea();
+		guardarPegatina();
 		estado = TEstadoPaint.Mano;
 	}
 
 	public void seleccionarPincel()
 	{
 		guardarPolilinea();
+		guardarPegatina();
 		estado = TEstadoPaint.Pincel;
 	}
 
 	public void seleccionarCubo()
 	{
 		guardarPolilinea();
+		guardarPegatina();
 		estado = TEstadoPaint.Cubo;
 	}
 
@@ -485,7 +504,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipo);
 			pegatinas.eliminarPegatina(tipo);
 			
-			anteriores.push(new AccionPegatina(tipoPegatinaActual, -1, -1.0f, -1.0f, (short) -1));
+			anteriores.push(new AccionPegatina(tipoPegatinaActual));
 			siguientes.clear();
 		}
 		
@@ -499,7 +518,6 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if (pegatinas.isCargada(tipo))
 		{
 			tipoPegatinaActual = tipo;
-			pegatinas.seleccionarPegatina(tipo);
 			estado = TEstadoPaint.EditarPegatinas;
 		}
 		else
@@ -582,7 +600,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	private void actualizarEstado(AccionPegatina accion)
 	{
-		pegatinas.anyadirPegatina(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), vertices, triangulos);
+		pegatinas.anyadirPegatina(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), accion.getFactorEscala(), accion.getAnguloRotacion(), vertices, triangulos);
 	}
 
 	/* Métodos de Obtención de Información */

@@ -20,6 +20,7 @@ public class VideoAlert extends WindowAlert
 		setMessage(message);
 		
 		setView(R.layout.alert_video_layout);
+		// FIXME Controlar el ancho y alto del video
 		
 		video = (VideoView) findViewById(R.id.videoViewVideoAlert1);
 		video.setVideoURI(videoPath);
