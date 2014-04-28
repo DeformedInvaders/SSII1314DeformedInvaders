@@ -301,37 +301,14 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* Métodos de modificación de puntos */
 
-	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
+	public void pointsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
 
-	public void coordsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
+	public void pointsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight) { }
 
-	public void coordsRotate(float ang, float pixelX, float pixelY, float screenWidth, float screenHeight) { }
+	public void pointsRotate(float angRad, float pixelX, float pixelY, float screenWidth, float screenHeight) { }
 
-	protected void trasladarVertices(float vx, float vy, VertexArray vertices)
-	{
-		BufferManager.trasladarVertices(vx, vy, vertices);
-	}
-
-	protected void escalarVertices(float fx, float fy, float cx, float cy, VertexArray vertices)
-	{
-		BufferManager.escalarVertices(fx, fy, cx, cy, vertices);
-	}
-
-	protected void escalarVertices(float fx, float fy, VertexArray vertices)
-	{
-		BufferManager.escalarVertices(fx, fy, vertices);
-	}
-
-	protected void rotarVertices(float ang, float cx, float cy, VertexArray vertices)
-	{
-		BufferManager.rotarVertices(ang, cx, cy, vertices);
-	}
-
-	protected void rotarVertices(float ang, VertexArray vertices)
-	{
-		BufferManager.rotarVertices(ang, vertices);
-	}
-
+	public void pointsRestore() { }
+	
 	/* Métodos de Copia de Seguridad de la Cámara */
 
 	public void salvarCamara()
@@ -395,17 +372,24 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glTranslatef(-marcoAnchuraLateral, -marcoAlturaLateral, 0.0f);
 	}
 
-	protected void dibujarMarcoExterior(GL10 gl, int color)
+	protected void dibujarMarcoExterior(GL10 gl, int color, float deep)
 	{
-		dibujarMarcoFrontal(gl, color);
-		dibujarMarcoLateral(gl, color);
+		dibujarMarcoFrontal(gl, color, deep);
+		dibujarMarcoLateral(gl, color, deep);
+	}
+	
+	protected void dibujarMarcoCompleto(GL10 gl, int color, float deep)
+	{
+		dibujarMarcoFrontal(gl, color, deep);
+		dibujarMarcoInterior(gl, color, deep);
+		dibujarMarcoLateral(gl, color, deep);
 	}
 
-	protected void dibujarMarcoInterior(GL10 gl, int color)
+	protected void dibujarMarcoInterior(GL10 gl, int color, float deep)
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(xLeft, yBottom, GamePreferences.DEEP_INSIDE_FRAMES);
+			gl.glTranslatef(xLeft, yBottom, deep);
 	
 			gl.glPushMatrix();
 	
@@ -417,11 +401,11 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
-	private void dibujarMarcoLateral(GL10 gl, int color)
+	private void dibujarMarcoLateral(GL10 gl, int color, float deep)
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(xLeft, yBottom, GamePreferences.DEEP_OUTSIDE_FRAMES);
+			gl.glTranslatef(xLeft, yBottom, deep);
 	
 			gl.glPushMatrix();
 	
@@ -436,11 +420,11 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 
-	private void dibujarMarcoFrontal(GL10 gl, int color)
+	private void dibujarMarcoFrontal(GL10 gl, int color, float deep)
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(xLeft, yBottom, GamePreferences.DEEP_OUTSIDE_FRAMES);
+			gl.glTranslatef(xLeft, yBottom, deep);
 	
 			gl.glPushMatrix();
 			

@@ -51,6 +51,13 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de Selección de Estado */
 
+	public void seleccionarNada()
+	{
+		renderer.seleccionarNada();
+		setEstado(TEstadoDetector.SimpleTouch);
+		requestRender();
+	}
+	
 	public void seleccionarMano()
 	{
 		renderer.seleccionarMano();
@@ -83,7 +90,7 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarSize(size);
 	}
 
-	public void seleccionarPegatina(int pegatina, TTipoSticker tipo)
+	public void anyadirPegatina(int pegatina, TTipoSticker tipo)
 	{
 		renderer.seleccionarPegatina(pegatina, tipo);
 		setEstado(TEstadoDetector.SimpleTouch);
@@ -95,6 +102,13 @@ public class PaintGLSurfaceView extends OpenGLSurfaceView
 		renderer.eliminarPegatina(tipo);
 		setEstado(TEstadoDetector.SimpleTouch);
 		requestRender();		
+	}
+	
+	public void editarPegatina(TTipoSticker tipo)
+	{
+		renderer.editarPegatina(tipo);
+		setEstado(TEstadoDetector.CoordDetectors);
+		requestRender();
 	}
 
 	public void anteriorAccion()

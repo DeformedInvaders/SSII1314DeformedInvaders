@@ -314,25 +314,39 @@ public class PaintFragment extends OpenGLFragment
 			{
 				stickerDialog = new StickerDialog(getActivity(), estadoNiveles) {
 					@Override
-					public void onStickerSelected(int tag, TTipoSticker tipo)
+					public void onAddSticker(int tag, TTipoSticker tipo)
 					{
-						canvas.seleccionarPegatina(tag, tipo);
+						canvas.anyadirPegatina(tag, tipo);
 
 						reiniciarInterfaz();
 						actualizarInterfaz();
 					}
 					
 					@Override
-					public void onStickerDeleted(TTipoSticker tipo)
+					public void onDeleteSticker(TTipoSticker tipo)
 					{
 						canvas.eliminarPegatina(tipo);
 						
 						reiniciarInterfaz();
 						actualizarInterfaz();
 					}
+					
+					@Override
+					public void onEditSticker(TTipoSticker tipo)
+					{
+						canvas.editarPegatina(tipo);
+						
+						reiniciarInterfaz();
+						actualizarInterfaz();
+					}
 				};
 			}
+			
 			stickerDialog.show(v);
+			canvas.seleccionarNada();
+			
+			reiniciarInterfaz();
+			actualizarInterfaz();
 		}
 	}
 

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.MapaBits;
 import com.game.data.Personaje;
+import com.main.model.GamePreferences;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer 
 {
@@ -71,7 +72,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			if (estadoCaptura == TEstadoCaptura.Retocando)
 			{
 				// Marco Oscuro
-				dibujarMarcoInterior(gl, Color.WHITE);
+				dibujarMarcoInterior(gl, Color.WHITE, GamePreferences.DEEP_INSIDE_FRAMES);
 			}
 			
 			// Centrado de Marco

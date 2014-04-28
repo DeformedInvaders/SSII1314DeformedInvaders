@@ -43,7 +43,7 @@ public class MoveDetector
 			}
 			else
 			{
-				return onTouchEventCoords(event, screenWidth, screenHeight);
+				return onTouchEventPoints(event, screenWidth, screenHeight);
 			}
 		}
 		else
@@ -77,7 +77,7 @@ public class MoveDetector
 		return true;
 	}
 	
-	private boolean onTouchEventCoords(MotionEvent event, float screenWidth, float screenHeight)
+	private boolean onTouchEventPoints(MotionEvent event, float screenWidth, float screenHeight)
 	{
 		int action = event.getActionMasked();
 
@@ -87,10 +87,10 @@ public class MoveDetector
 		switch (action) 
 		{
 			case MotionEvent.ACTION_DOWN:
-				dragOnCoordsDown(pixelX, pixelY, screenWidth, screenHeight);
+				dragOnPointsDown(pixelX, pixelY, screenWidth, screenHeight);
 			break;
 			case MotionEvent.ACTION_MOVE:
-				dragOnCoordsMove(pixelX, pixelY, screenWidth, screenHeight);
+				dragOnPointsMove(pixelX, pixelY, screenWidth, screenHeight);
 			break;
 		}
 
@@ -105,7 +105,6 @@ public class MoveDetector
 
 	private void dragOnCamaraDown(float pixelX, float pixelY, float screenWith, float screenHeight)
 	{
-		// Drag
 		lastPixelX = pixelX;
 		lastPixelY = pixelY;
 
@@ -118,15 +117,15 @@ public class MoveDetector
 		renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
 	}
 
-	private void dragOnCoordsDown(float pixelX, float pixelY, float screenWith, float screenHeight)
+	private void dragOnPointsDown(float pixelX, float pixelY, float screenWith, float screenHeight)
 	{
 		lastPixelX = pixelX;
 		lastPixelY = pixelY;
 	}
 
-	private void dragOnCoordsMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private void dragOnPointsMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		renderer.coordsDrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
+		renderer.pointsDrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
 
 		lastPixelX = pixelX;
 		lastPixelY = pixelY;

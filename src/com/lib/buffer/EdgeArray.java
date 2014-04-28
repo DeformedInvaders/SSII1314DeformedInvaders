@@ -11,6 +11,13 @@ public class EdgeArray extends ShortArray
 		l, r: Índice de los puntos vecinos izquierdo y derecho de los triángulos que comparten la arista. -1 si no hay vecino.
 	*/
 	
+	private static final int INDEX_A_EDGE = 0;
+	private static final int INDEX_B_EDGE = 1;
+	private static final int INDEX_L_EDGE = 2;
+	private static final int INDEX_R_EDGE = 3;
+	
+	private static final short NULL_INDEX = -1;
+	
 	private static final int SIZE_EDGE = 4;
 
 	public EdgeArray()
@@ -28,14 +35,13 @@ public class EdgeArray extends ShortArray
 		super(list);
 	}
 	
-	
 	public boolean addEdge(short a, short b, short c, VertexArray vertices)
 	{
 		for (short i = 0; i < getNumEdges(); i++)
 		{
 			if ((getAVertex(i) == a && getAVertex(i) == b) || (getAVertex(i) == b && getBVertex(i) == a))
 			{
-				if (getLVertex(i) == -1)
+				if (getLVertex(i) == NULL_INDEX)
 				{
 					setLVertex(i, c);
 				}
@@ -57,11 +63,11 @@ public class EdgeArray extends ShortArray
 		if (lado == -1)
 		{
 			add(c);
-			add(-1);
+			add(NULL_INDEX);
 		}
 		else
 		{
-			add(-1);
+			add(NULL_INDEX);
 			add(c);
 		}
 		
@@ -70,32 +76,32 @@ public class EdgeArray extends ShortArray
 	
 	public short getAVertex(short edge)
 	{
-		return get(SIZE_EDGE * edge);
+		return get(SIZE_EDGE * edge + INDEX_A_EDGE);
 	}
 	
 	public short getBVertex(short edge)
 	{
-		return get(SIZE_EDGE * edge + 1);
+		return get(SIZE_EDGE * edge + INDEX_B_EDGE);
 	}
 	
 	public short getLVertex(short edge)
 	{
-		return get(SIZE_EDGE * edge + 2);
+		return get(SIZE_EDGE * edge + INDEX_L_EDGE);
 	}
 	
 	public short getRVertex(short edge)
 	{
-		return get(SIZE_EDGE * edge + 3);
+		return get(SIZE_EDGE * edge + INDEX_R_EDGE);
 	}
 	
 	public void setLVertex(short edge, short l)
 	{
-		set(SIZE_EDGE * edge + 2, l);
+		set(SIZE_EDGE * edge + INDEX_L_EDGE, l);
 	}
 	
 	public void setRVertex(short edge, short r)
 	{
-		set(SIZE_EDGE * edge + 3, r);
+		set(SIZE_EDGE * edge + INDEX_R_EDGE, r);
 	}
 	
 	public int getNumEdges()

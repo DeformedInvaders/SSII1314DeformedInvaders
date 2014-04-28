@@ -156,7 +156,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		else
 		{
 			// Marcos
-			dibujarMarcoInterior(gl, Color.LTGRAY);
+			dibujarMarcoInterior(gl, Color.LTGRAY, GamePreferences.DEEP_INSIDE_FRAMES);
 			
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);

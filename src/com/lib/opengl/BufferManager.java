@@ -234,21 +234,21 @@ public class BufferManager
 		}
 	}
 
-	public static void rotarVertices(float ang, float cx, float cy, VertexArray vertices)
+	public static void rotarVertices(float angRad, float cx, float cy, VertexArray vertices)
 	{
 		trasladarVertices(-cx, -cy, vertices);
-		rotarVertices(ang, vertices);
+		rotarVertices(angRad, vertices);
 		trasladarVertices(cx, cy, vertices);
 	}
 
-	public static void rotarVertices(float ang, VertexArray vertices)
+	public static void rotarVertices(float angRad, VertexArray vertices)
 	{
 		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
 			float x = vertices.getXVertex(i);
 			float y = vertices.getYVertex(i);
 			
-			vertices.setVertex(i, (float) (x * Math.cos(ang) - y * Math.sin(ang)), (float) (x * Math.sin(ang) + y * Math.cos(ang)));
+			vertices.setVertex(i, (float) (x * Math.cos(angRad) - y * Math.sin(angRad)), (float) (x * Math.sin(angRad) + y * Math.cos(angRad)));
 		}
 	}
 }

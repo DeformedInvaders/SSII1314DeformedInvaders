@@ -235,7 +235,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		{
 			return pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TEstadoPaint.Pegatinas)
+		else if (estado == TEstadoPaint.AnyadirPegatinas)
 		{
 			return anyadirPegatina(pixelX, pixelY, screenWidth, screenHeight);
 		}
@@ -310,7 +310,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		short triangle = buscador.searchTriangle(frameX, frameY);
 		if (triangle != -1)
 		{			
-			pegatinas.setPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
+			pegatinas.anyadirPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
 
 			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipoPegatinaActual);
 			pegatinaAnyadida = true;
@@ -345,6 +345,65 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		return false;
 	}
+	
+	@Override
+	public void pointsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	{
+		if (estado == TEstadoPaint.EditarPegatinas)
+		{
+			pegatinas.ampliarPegatina(tipoPegatinaActual, factor);
+		}
+	}
+
+	@Override
+	public void pointsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	{
+		if (estado == TEstadoPaint.EditarPegatinas)
+		{
+			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
+			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
+
+			float lastFrameX = convertPixelXToFrameXCoordinate(lastPixelX, screenWidth);
+			float lastFrameY = convertPixelYToFrameYCoordinate(lastPixelY, screenHeight);
+			
+			float dWorldX = frameX - lastFrameX;
+			float dWorldY = frameY - lastFrameY;
+
+			if (Math.abs(Intersector.distancePoints(0.0f, 0.0f, dWorldX, dWorldY)) > GamePreferences.MAX_DISTANCE_PIXELS)
+			{
+				float newStickerFrameX = pegatinas.getXCoords(tipoPegatinaActual, vertices, triangulos) + dWorldX;
+				float newtStickerFrameY = pegatinas.getYCoords(tipoPegatinaActual, vertices, triangulos) + dWorldY;
+				
+				short triangle = buscador.searchTriangle(newStickerFrameX, newtStickerFrameY);
+				if (triangle != -1)
+				{			
+					pegatinas.moverPegatina(tipoPegatinaActual, newStickerFrameX, newtStickerFrameY, triangle, vertices, triangulos);
+
+					anteriores.push(new AccionPegatina(tipoPegatinaActual, pegatinaActual, newStickerFrameX, newtStickerFrameY, triangle));
+					siguientes.clear();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void pointsRotate(float angRad, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	{
+		if (estado == TEstadoPaint.EditarPegatinas)
+		{
+			pegatinas.rotarPegatina(tipoPegatinaActual, angRad);
+		}
+	}
+	
+	@Override
+	public void pointsRestore()
+	{
+		if (estado == TEstadoPaint.EditarPegatinas)
+		{
+			pegatinas.recuperarSticker(tipoPegatinaActual);
+		}
+	}
+
 
 	private boolean guardarPolilinea()
 	{
@@ -368,6 +427,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	/* Métodos de Selección de Estado */
 
+	public void seleccionarNada()
+	{
+		guardarPolilinea();
+		pegatinas.deseleccionarPegatinas();		
+		estado = TEstadoPaint.Nada;
+	}
+	
 	public void seleccionarMano()
 	{
 		guardarPolilinea();
@@ -402,7 +468,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		pegatinaActual = pegatina;
 		tipoPegatinaActual = tipo;
-		estado = TEstadoPaint.Pegatinas;
+		estado = TEstadoPaint.AnyadirPegatinas;
 		
 		if (buscador == null)
 		{
@@ -414,9 +480,32 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		guardarPolilinea();
 		
-		descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipo);
-		pegatinas.eliminarPegatinas(tipo);
+		if (pegatinas.isCargada(tipo))
+		{
+			descargarTexturaRectangulo(TTipoEntidad.Personaje, 0, tipo);
+			pegatinas.eliminarPegatina(tipo);
+			
+			anteriores.push(new AccionPegatina(tipoPegatinaActual, -1, -1.0f, -1.0f, (short) -1));
+			siguientes.clear();
+		}
+		
 		estado = TEstadoPaint.Nada;
+	}
+	
+	public void editarPegatina(TTipoSticker tipo)
+	{
+		guardarPolilinea();
+		
+		if (pegatinas.isCargada(tipo))
+		{
+			tipoPegatinaActual = tipo;
+			pegatinas.seleccionarPegatina(tipo);
+			estado = TEstadoPaint.EditarPegatinas;
+		}
+		else
+		{
+			estado = TEstadoPaint.Nada;
+		}
 	}
 
 	public void seleccionarCaptura() 
@@ -493,7 +582,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	private void actualizarEstado(AccionPegatina accion)
 	{
-		pegatinas.setPegatina(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), vertices, triangulos);
+		pegatinas.anyadirPegatina(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), vertices, triangulos);
 	}
 
 	/* Métodos de Obtención de Información */
@@ -538,7 +627,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoPegatinas()
 	{
-		return estado == TEstadoPaint.Pegatinas;
+		return estado == TEstadoPaint.AnyadirPegatinas || estado == TEstadoPaint.EditarPegatinas;
 	}
 	
 	public Textura getTextura()

@@ -68,8 +68,10 @@ public class Pegatinas implements Serializable
 					
 						gl.glTranslatef(pegatinas.getXCoords(tipoPegatinas[i], vertices, triangulos), pegatinas.getYCoords(tipoPegatinas[i], vertices, triangulos), 0.0f);
 						gl.glScalef(factorEscala, factorEscala, 1.0f);
+						gl.glRotatef(pegatinas.getKappaSticker(tipoPegatinas[i], vertices, triangulos), 0.0f, 0.0f, 1.0f);
 						gl.glRotatef(pegatinas.getIotaSticker(tipoPegatinas[i]), 0.0f, 0.0f, 1.0f);
 						gl.glRotatef(pegatinas.getThetaSticker(tipoPegatinas[i]), 0.0f, 0.0f, 1.0f);
+						gl.glScalef(pegatinas.getFactorSticker(tipoPegatinas[i]), pegatinas.getFactorSticker(tipoPegatinas[i]), 1.0f);
 						
 						renderer.dibujarTexturaRectangulo(gl, tipo, id, tipoPegatinas[i]);
 					
@@ -82,12 +84,19 @@ public class Pegatinas implements Serializable
 
 	/* Métodos de Modificación de Información */
 
-	public void setPegatina(TTipoSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	public void anyadirPegatina(TTipoSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
 	{
-		pegatinas.setSticker(tipo, id, x, y, index, vertices, triangulos);
+		if (id == -1)
+		{
+			eliminarPegatina(tipo);
+		}
+		else
+		{
+			pegatinas.setSticker(tipo, id, x, y, index, vertices, triangulos);
+		}
 	}
 	
-	public void eliminarPegatinas(TTipoSticker tipo)
+	public void eliminarPegatina(TTipoSticker tipo)
 	{
 		pegatinas.removeSticker(tipo);	
 	}
@@ -97,13 +106,47 @@ public class Pegatinas implements Serializable
 		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
-			pegatinas.removeSticker(tipoPegatinas[i]);
+			eliminarPegatina(tipoPegatinas[i]);
 		}
+	}
+	
+	public void seleccionarPegatina(TTipoSticker tipo)
+	{
+		pegatinas.setSelectedSticker(tipo, true);
+	}
+	
+	public void deseleccionarPegatinas()
+	{
+		TTipoSticker[] tipoPegatinas = TTipoSticker.values();
+		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
+		{
+			pegatinas.setSelectedSticker(tipoPegatinas[i], false);
+		}
+	}
+	
+	public void ampliarPegatina(TTipoSticker tipo, float factor)
+	{
+		pegatinas.setFactorSticker(tipo, factor);
+	}
+	
+	public void rotarPegatina(TTipoSticker tipo, float ang)
+	{
+		pegatinas.setThetaSticker(tipo, ang);
+	}
+	
+	public void moverPegatina(TTipoSticker tipo, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	{
+		pegatinas.setCoords(tipo, x, y, index, vertices, triangulos);
+	}
+	
+	public void recuperarSticker(TTipoSticker tipo)
+	{
+		pegatinas.restoreSticker(tipo);
 	}
 
 	/* Métodos de Obtención de Información */
 
-	private boolean isCargada(TTipoSticker tipo)
+	public boolean isCargada(TTipoSticker tipo)
 	{
 		return pegatinas.isLoadedSticker(tipo);
 	}
@@ -112,5 +155,15 @@ public class Pegatinas implements Serializable
 	{
 		String nombrePegatina = GameResources.GET_STICKER(tipo, pegatinas.getIdSticker(tipo));
 		return context.getResources().getIdentifier(nombrePegatina, GameResources.RESOURCE_DRAWABLE, context.getPackageName());
+	}
+	
+	public float getXCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	{
+		return pegatinas.getXCoords(tipo, vertices, triangulos);
+	}
+	
+	public float getYCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	{
+		return pegatinas.getYCoords(tipo, vertices, triangulos);
 	}
 }

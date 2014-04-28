@@ -9,7 +9,11 @@ public class TriangleArray extends ShortArray
 		a, b, c: Índice de los puntos que forman el triángulo.
 	*/
 	
-	private static final int TRIANGLE_SIZE = 3;
+	private static final int INDEX_A_TRIANGLE = 0;
+	private static final int INDEX_B_TRIANGLE = 1;
+	private static final int INDEX_C_TRIANGLE = 2;
+	
+	private static final int SIZE_TRIANGLE = 3;
 	
 	public TriangleArray()
 	{
@@ -18,7 +22,7 @@ public class TriangleArray extends ShortArray
 	
 	public TriangleArray(int size)
 	{
-		super(TRIANGLE_SIZE * size);
+		super(SIZE_TRIANGLE * size);
 	}
 	
 	public TriangleArray(ShortArray list)
@@ -35,21 +39,21 @@ public class TriangleArray extends ShortArray
 	
 	public short getAVertex(short triangle)
 	{
-		return get(TRIANGLE_SIZE * triangle);
+		return get(SIZE_TRIANGLE * triangle + INDEX_A_TRIANGLE);
 	}
 	
 	public short getBVertex(short triangle)
 	{
-		return get(TRIANGLE_SIZE * triangle + 1);
+		return get(SIZE_TRIANGLE * triangle + INDEX_B_TRIANGLE);
 	}
 	
 	public short getCVertex(short triangle)
 	{
-		return get(TRIANGLE_SIZE * triangle + 2);
+		return get(SIZE_TRIANGLE * triangle + INDEX_C_TRIANGLE);
 	}
 	
 	public int getNumTriangles()
 	{
-		return size / TRIANGLE_SIZE;
+		return size / SIZE_TRIANGLE;
 	}
 }

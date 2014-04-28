@@ -80,7 +80,7 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 			float pixelX = detector.getFocusX();
 			float pixelY = detector.getFocusY();
 
-			renderer.coordsZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
+			renderer.pointsZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
 		}
 
 		return true;

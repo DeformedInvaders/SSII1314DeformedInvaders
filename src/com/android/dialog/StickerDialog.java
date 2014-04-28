@@ -115,13 +115,15 @@ public abstract class StickerDialog extends WindowDialog
 		if (pegatinaAnyiadida)
 		{
 			cargarPegatina(layout, R.drawable.sticker_delete, 0, new OnDeleteStickerClickListener(tipo));
+			cargarPegatina(layout, R.drawable.sticker_edit, 0, new OnEditStickerClickListener(tipo));
 		}
 	}
 
 	/* Métodos Abstractos */
 
-	public abstract void onStickerSelected(int tag, TTipoSticker tipo);
-	public abstract void onStickerDeleted(TTipoSticker tipo);
+	public abstract void onAddSticker(int tag, TTipoSticker tipo);
+	public abstract void onDeleteSticker(TTipoSticker tipo);
+	public abstract void onEditSticker(TTipoSticker tipo);
 
 	/* Métodos Abstractos WindowDialog */
 
@@ -144,7 +146,7 @@ public abstract class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			onStickerSelected((Integer) v.getTag(), tipoPegatina);
+			onAddSticker((Integer) v.getTag(), tipoPegatina);
 			dismiss();
 		}
 	}
@@ -163,7 +165,27 @@ public abstract class StickerDialog extends WindowDialog
 		@Override
 		public void onClick(View v)
 		{
-			onStickerDeleted(tipoPegatina);
+			onDeleteSticker(tipoPegatina);
+			dismiss();
+		}		
+	}
+	
+	public class OnEditStickerClickListener implements OnClickListener
+	{
+		private TTipoSticker tipoPegatina;
+	
+		public OnEditStickerClickListener(TTipoSticker tipo)
+		{
+			super();
+			
+			tipoPegatina = tipo;
+		}
+	
+		@Override
+		public void onClick(View v)
+		{
+			onEditSticker(tipoPegatina);
+			dismiss();
 		}		
 	}
 }

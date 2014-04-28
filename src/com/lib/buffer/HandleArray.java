@@ -12,6 +12,17 @@ public class HandleArray extends FloatArray
 		selected: Handle Seleccionado.
 	*/
 	
+	private static final int COORD_X_HANDLE = 0;
+	private static final int COORD_Y_HANDLE = 1;
+	private static final int INDEX_TRIANGLE_HANDLE = 2;
+	private static final int ANGLE_ALFA_HANDLE = 3;
+	private static final int ANGLE_BETA_HANDLE = 4;
+	private static final int ANGLE_GAMMA_HANDLE = 5;
+	private static final int SELECTED_HANDLE = 6;
+	
+	private static final float TRUE = 1.0f;
+	private static final float FALSE = 0.0f;
+	
 	private static final int SIZE_HANDLE = 7;
 
 	public HandleArray()
@@ -52,13 +63,13 @@ public class HandleArray extends FloatArray
 		add(alfa);
 		add(beta);
 		add(gamma);
-		add(0.0f);
+		add(FALSE);
 	}
 	
 	public void setCoordsHandle(short handle, float x, float y)
 	{
-		set(SIZE_HANDLE * handle, x);
-		set(SIZE_HANDLE * handle + 1, y);
+		set(SIZE_HANDLE * handle + COORD_X_HANDLE, x);
+		set(SIZE_HANDLE * handle + COORD_Y_HANDLE, y);
 	}
 	
 	public void setCoordsHandle(short handle, VertexArray vertices, TriangleArray triangulos)
@@ -87,72 +98,72 @@ public class HandleArray extends FloatArray
 	
 	public void setIndexHandle(short handle, short index)
 	{
-		set(SIZE_HANDLE * handle + 2, index);
+		set(SIZE_HANDLE * handle + INDEX_TRIANGLE_HANDLE, index);
 	}
 	
 	public void setCoordsVertex(short handle, float alfa, float beta, float gamma)
 	{
-		set(SIZE_HANDLE * handle + 3, alfa);
-		set(SIZE_HANDLE * handle + 4, beta);
-		set(SIZE_HANDLE * handle + 5, gamma);
+		set(SIZE_HANDLE * handle + ANGLE_ALFA_HANDLE, alfa);
+		set(SIZE_HANDLE * handle + ANGLE_BETA_HANDLE, beta);
+		set(SIZE_HANDLE * handle + ANGLE_GAMMA_HANDLE, gamma);
 	}
 	
 	public void setSelectedHandle(short handle, boolean selected)
 	{
 		if (selected)
 		{
-			set(SIZE_HANDLE * handle + 6, 1.0f);
+			set(SIZE_HANDLE * handle + SELECTED_HANDLE, TRUE);
 		}
 		else
 		{
-			set(SIZE_HANDLE * handle + 6, 0.0f);
+			set(SIZE_HANDLE * handle + SELECTED_HANDLE, FALSE);
 		}
 	}
 	
 	public float getXCoordHandle(short handle)
 	{		
-		return get(SIZE_HANDLE * handle);
+		return get(SIZE_HANDLE * handle + COORD_X_HANDLE);
 	}
 	
 	public float getYCoordHandle(short handle)
 	{
-		return get(SIZE_HANDLE * handle + 1);
+		return get(SIZE_HANDLE * handle + COORD_Y_HANDLE);
 	}
 	
 	public short getIndexHandle(short handle)
 	{
-		return (short) get(SIZE_HANDLE * handle + 2);
+		return (short) get(SIZE_HANDLE * handle + INDEX_TRIANGLE_HANDLE);
 	}
 	
 	public float getAlfaHandle(short handle)
 	{
-		return get(SIZE_HANDLE * handle + 3);
+		return get(SIZE_HANDLE * handle + ANGLE_ALFA_HANDLE);
 	}
 	
 	public float getBetaHandle(short handle)
 	{
-		return get(SIZE_HANDLE * handle + 4);
+		return get(SIZE_HANDLE * handle + ANGLE_BETA_HANDLE);
 	}
 	
 	public float getGammaHandle(short handle)
 	{
-		return get(SIZE_HANDLE * handle + 5);
+		return get(SIZE_HANDLE * handle + ANGLE_GAMMA_HANDLE);
 	}
 	
 	public boolean isSelectedHandle(short handle)
 	{
-		return get(SIZE_HANDLE * handle + 6) == 1.0f;
+		return get(SIZE_HANDLE * handle + SELECTED_HANDLE) == TRUE;
 	}
 	
 	public void removeHandle(int handle)
 	{
-		removeIndex(SIZE_HANDLE * handle + 6);
-		removeIndex(SIZE_HANDLE * handle + 5);
-		removeIndex(SIZE_HANDLE * handle + 4);
-		removeIndex(SIZE_HANDLE * handle + 3);
-		removeIndex(SIZE_HANDLE * handle + 2);
-		removeIndex(SIZE_HANDLE * handle + 1);
-		removeIndex(SIZE_HANDLE * handle);
+		removeIndex(SIZE_HANDLE * handle + SELECTED_HANDLE);
+		removeIndex(SIZE_HANDLE * handle + ANGLE_GAMMA_HANDLE);
+		removeIndex(SIZE_HANDLE * handle + ANGLE_BETA_HANDLE);
+		removeIndex(SIZE_HANDLE * handle + ANGLE_ALFA_HANDLE);
+		removeIndex(SIZE_HANDLE * handle + INDEX_TRIANGLE_HANDLE);
+		removeIndex(SIZE_HANDLE * handle + COORD_Y_HANDLE);
+		removeIndex(SIZE_HANDLE * handle + COORD_X_HANDLE);
 	}
 	
 	public int getNumHandles()

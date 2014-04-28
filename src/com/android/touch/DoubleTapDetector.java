@@ -38,12 +38,9 @@ public class DoubleTapDetector
 		
 		if (!bloqueado)
 		{
-			if (modoCamara)
+			if (action == MotionEvent.ACTION_UP)
 			{
-				if (action == MotionEvent.ACTION_UP)
-				{
-					return tapOnCamaraDown();
-				}
+				return tapOnTouchUp();
 			}
 		}
 		else
@@ -63,14 +60,21 @@ public class DoubleTapDetector
 		return true;
 	}
 
-	private boolean tapOnCamaraDown()
+	private boolean tapOnTouchUp()
 	{
 		long time = System.currentTimeMillis();
 
 		if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
 		{
 			// Double Touch
-			renderer.camaraRestore();
+			if (modoCamara)
+			{
+				renderer.camaraRestore();
+			}
+			else
+			{
+				renderer.pointsRestore();
+			}
 			
 			return true;
 		}

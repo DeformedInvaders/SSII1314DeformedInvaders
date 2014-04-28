@@ -47,19 +47,19 @@ public class RotateDetector
 			{
 			case MotionEvent.ACTION_DOWN:
 			case MotionEvent.ACTION_POINTER_DOWN:
-				return rotateOnCoordDown(pixelX1, pixelY1, pixelX2, pixelY2, screenWidth, screenHeight);
+				return rotateOnPointsDown(pixelX1, pixelY1, pixelX2, pixelY2, screenWidth, screenHeight);
 			case MotionEvent.ACTION_MOVE:
-				return rotateOnCoordMove(pixelX1, pixelY1, pixelX2, pixelY2, screenWidth, screenHeight);
+				return rotateOnPointsMove(pixelX1, pixelY1, pixelX2, pixelY2, screenWidth, screenHeight);
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
-				return rotateOnCoordUp();
+				return rotateOnPointsUp();
 			}
 		}
 
 		return false;
 	}
 
-	private boolean rotateOnCoordDown(float pixelX1, float pixelY1, float pixelX2, float pixelY2, float screenWith, float screenHeight)
+	private boolean rotateOnPointsDown(float pixelX1, float pixelY1, float pixelX2, float pixelY2, float screenWith, float screenHeight)
 	{
 		fijoPixelX = pixelX1;
 		fijoPixelY = pixelY1;
@@ -76,7 +76,7 @@ public class RotateDetector
 		return true;
 	}
 
-	private boolean rotateOnCoordMove(float pixelX1, float pixelY1, float pixelX2, float pixelY2, float screenWidth, float screenHeight)
+	private boolean rotateOnPointsMove(float pixelX1, float pixelY1, float pixelX2, float pixelY2, float screenWidth, float screenHeight)
 	{
 		if (Intersector.distancePoints(pixelX1, pixelY1, fijoPixelX, fijoPixelY) > GamePreferences.MAX_DRIFT_ROTATION)
 		{
@@ -91,7 +91,7 @@ public class RotateDetector
 			float ang1 = v1.angleRad();
 			float ang2 = v2.angleRad();
 
-			renderer.coordsRotate(ang1 - ang2, fijoPixelX, fijoPixelY, screenWidth, screenHeight);
+			renderer.pointsRotate(ang1 - ang2, fijoPixelX, fijoPixelY, screenWidth, screenHeight);
 
 			lastPixelX = pixelX2;
 			lastPixelY = pixelY2;
@@ -102,7 +102,7 @@ public class RotateDetector
 		return false;
 	}
 
-	private boolean rotateOnCoordUp()
+	private boolean rotateOnPointsUp()
 	{
 		started = false;
 		return true;

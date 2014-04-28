@@ -9,7 +9,10 @@ public class VertexArray extends FloatArray
 		x, y: Coordenadas de los puntos.
 	*/
 	
-	private static final int VERTEX_SIZE = 2;
+	private static final int COORD_X_VERTEX = 0;
+	private static final int COORD_Y_VERTEX = 1;
+	
+	private static final int SIZE_VERTEX = 2;
 
 	public VertexArray()
 	{
@@ -18,7 +21,7 @@ public class VertexArray extends FloatArray
 	
 	public VertexArray(int size)
 	{
-		super(VERTEX_SIZE * size);
+		super(SIZE_VERTEX * size);
 	}
 	
 	public VertexArray(FloatArray list)
@@ -34,18 +37,18 @@ public class VertexArray extends FloatArray
 	
 	public void setVertex(short vertex, float x, float y)
 	{
-		set(VERTEX_SIZE * vertex, x);
-		set(VERTEX_SIZE * vertex + 1, y);
+		set(SIZE_VERTEX * vertex + COORD_X_VERTEX, x);
+		set(SIZE_VERTEX * vertex + COORD_Y_VERTEX, y);
 	}
 	
 	public float getXVertex(short vertex)
 	{
-		return get(VERTEX_SIZE * vertex);
+		return get(SIZE_VERTEX * vertex + COORD_X_VERTEX);
 	}
 	
 	public float getYVertex(short vertex)
 	{
-		return get(VERTEX_SIZE * vertex + 1);
+		return get(SIZE_VERTEX * vertex + COORD_Y_VERTEX);
 	}
 	
 	public float getLastXVertex()
@@ -60,13 +63,13 @@ public class VertexArray extends FloatArray
 	
 	public void removeVertex(int vertex)
 	{
-		removeIndex(VERTEX_SIZE * vertex + 1);
-		removeIndex(VERTEX_SIZE * vertex);
+		removeIndex(SIZE_VERTEX * vertex + COORD_Y_VERTEX);
+		removeIndex(SIZE_VERTEX * vertex + COORD_X_VERTEX);
 	}
 	
 	public int getNumVertices()
 	{
-		return size / VERTEX_SIZE;
+		return size / SIZE_VERTEX;
 	}
 	
 	public VertexArray clone()

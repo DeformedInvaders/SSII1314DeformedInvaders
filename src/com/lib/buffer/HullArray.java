@@ -9,6 +9,10 @@ public class HullArray extends ShortArray
 		a: Índice de los puntos que forman el contorno.
 	*/
 	
+	private static final int INDEX_POINT_HULL = 0;
+	
+	private static final int SIZE_HULL = 1;
+	
 	public HullArray()
 	{
 		super();
@@ -31,11 +35,11 @@ public class HullArray extends ShortArray
 	
 	public short getVertex(short vertex)
 	{
-		return get(vertex);
+		return get(SIZE_HULL * vertex + INDEX_POINT_HULL);
 	}
 	
 	public int getNumVertices()
 	{
-		return size;
+		return size / SIZE_HULL;
 	}
 }

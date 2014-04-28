@@ -88,7 +88,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				dibujarMarcoInterior(gl, Color.LTGRAY);
+				dibujarMarcoInterior(gl, Color.LTGRAY, GamePreferences.DEEP_INSIDE_FRAMES);
 				
 				// Centrado de Marco
 				centrarPersonajeEnMarcoInicio(gl);
@@ -204,7 +204,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	}
 	
 	@Override
-	public void coordsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	public void pointsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
 		if (estado == TEstadoDesign.Retocando)
 		{
@@ -217,14 +217,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float cFrameX = (frameX + lastFrameX) / 2.0f;
 			float cFrameY = (frameY + lastFrameY) / 2.0f;
 
-			escalarVertices(factor, factor, cFrameX, cFrameY, vertices);
+			BufferManager.escalarVertices(factor, factor, cFrameX, cFrameY, vertices);
 			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
 			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
 		}
 	}
 
 	@Override
-	public void coordsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
+	public void pointsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
 		if (estado == TEstadoDesign.Retocando)
 		{
@@ -237,21 +237,21 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float dWorldX = frameX - lastFrameX;
 			float dWorldY = frameY - lastFrameY;
 
-			trasladarVertices(dWorldX, dWorldY, vertices);
+			BufferManager.trasladarVertices(dWorldX, dWorldY, vertices);
 			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
 			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
 		}
 	}
 
 	@Override
-	public void coordsRotate(float ang, float pixelX, float pixelY, float screenWidth, float screenHeight)
+	public void pointsRotate(float angRad, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		if (estado == TEstadoDesign.Retocando)
 		{
 			float cFrameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float cFrameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			rotarVertices(ang, cFrameX, cFrameY, vertices);
+			BufferManager.rotarVertices(angRad, cFrameX, cFrameY, vertices);
 			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
 			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
 		}
