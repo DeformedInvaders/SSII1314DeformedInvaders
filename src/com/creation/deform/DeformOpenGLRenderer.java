@@ -502,10 +502,13 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		//TODO Comprobar comportamiento del algoritmo.
-		android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
-		android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
-		android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
-		android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
+		if (GamePreferences.IS_DEBUG_ENABLED())
+		{
+			android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
+			android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
+			android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
+			android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
+		}
 		
 		mListener.onAnimationFinished();
 	}

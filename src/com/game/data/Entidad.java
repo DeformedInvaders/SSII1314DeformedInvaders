@@ -5,7 +5,8 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.view.OpenGLRenderer;
-import com.main.model.GamePreferences;
+import com.creation.data.Handle;
+import com.lib.math.Circle;
 
 public abstract class Entidad
 {
@@ -15,6 +16,9 @@ public abstract class Entidad
 
 	protected float width = 0.0f;
 	protected float height = 0.0f;
+	
+	protected Circle area;
+	protected Handle handle;
 
 	/* Métodos abstractos a implementar */
 
@@ -23,6 +27,10 @@ public abstract class Entidad
 	public abstract void descargarTextura(OpenGLRenderer renderer);
 
 	public abstract void dibujar(GL10 gl, OpenGLRenderer renderer);
+	
+	public abstract float getWidth();
+	
+	public abstract float getHeight();
 
 	public boolean animar()
 	{ 
@@ -36,16 +44,6 @@ public abstract class Entidad
 		return idEntidad;
 	}
 
-	public float getWidth()
-	{
-		return width * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
-	}
-	
-	public float getHeight()
-	{
-		return height * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
-	}
-
 	public TTipoEntidad getTipo()
 	{
 		return tipoEntidad;
@@ -54,5 +52,20 @@ public abstract class Entidad
 	public int getIndiceTextura()
 	{
 		return texturaEntidad;
+	}
+	
+	public Circle getArea()
+	{
+		return area;
+	}
+	
+	public void moverArea(float x, float y)
+	{
+		area.setPosition(getWidth() / 2.0f + x, getHeight() / 2.0f + y);
+	}
+	
+	public void restaurarArea()
+	{
+		moverArea(0.0f, 0.0f);
 	}
 }

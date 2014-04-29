@@ -24,4 +24,10 @@
 		android:icon="@drawable/icon_social_facebook_disconnected"
 		android:title="@string/title_menu_facebook"
 		android:showAsAction="ifRoom"/>
+	
+	<item
+	    android:id="@+id/menuIcon5"
+		android:icon="@drawable/icon_tool_debug_enabled"
+		android:title="@string/title_menu_debug"
+		android:showAsAction="ifRoom"/>
 </menu>

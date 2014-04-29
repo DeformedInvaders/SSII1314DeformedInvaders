@@ -81,8 +81,7 @@ public class GamePreferences
 	
 	// Opciones del Juego
 	private static int CHARACTER_GAME;
-	private static boolean TIPS_GAME;
-	private static boolean MUSIC_GAME;
+	private static boolean TIPS_GAME, MUSIC_GAME, DEBUG_GAME;
 	
 	public static void setScreenParameters(float width, float height)
 	{
@@ -100,6 +99,11 @@ public class GamePreferences
 		MUSIC_GAME = music;
 	}
 	
+	public static void setDebugParameters(boolean debug)
+	{
+		DEBUG_GAME = debug;
+	}
+	
 	public static void setCharacterParameters(int character)
 	{
 		CHARACTER_GAME = character;
@@ -115,6 +119,11 @@ public class GamePreferences
 		TIPS_GAME = !TIPS_GAME;
 	}
 	
+	public static void SWITCH_DEBUG_GAME()
+	{
+		DEBUG_GAME = !DEBUG_GAME;
+	}
+	
 	// Parametros Juego
 	
 	public static final boolean IS_TIPS_ENABLED()
@@ -125,6 +134,11 @@ public class GamePreferences
 	public static final boolean IS_MUSIC_ENABLED()
 	{
 		return MUSIC_GAME;
+	}
+	
+	public static final boolean IS_DEBUG_ENABLED()
+	{
+		return DEBUG_GAME;
 	}
 	
 	public static final int GET_CHARACTER_GAME()

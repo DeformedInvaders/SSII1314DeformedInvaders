@@ -118,13 +118,11 @@ public class OpenGLManager
 				
 				if (handles.isSelectedHandle(i))
 				{
-					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handleSeleccionado.getColor(), handleSeleccionado.getBufferRelleno());
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handleSeleccionado.getBufferContorno());
+					handle.dibujar(gl);
 				}
 				else
 				{
-					dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handle.getColor(), handle.getBufferRelleno());
-					dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, handle.getBufferContorno());					
+					handleSeleccionado.dibujar(gl);
 				}
 			
 			gl.glPopMatrix();

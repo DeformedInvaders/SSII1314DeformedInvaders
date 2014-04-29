@@ -9,7 +9,6 @@ import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.TTipoSticker;
 import com.game.game.TEstadoColision;
-import com.lib.math.Circle;
 import com.lib.math.Intersector;
 import com.main.model.GamePreferences;
 import com.project.main.R;
@@ -109,6 +108,19 @@ public class Personaje extends Malla
 			
 			gl.glPopMatrix();
 		}
+		
+		if (GamePreferences.IS_DEBUG_ENABLED())
+		{
+			if (burbuja)
+			{
+				gl.glPushMatrix();
+				
+					gl.glTranslatef(area.x, area.y, 0.0f);
+					handle.dibujar(gl);
+			
+				gl.glPopMatrix();
+			}
+		}
 	}
 
 	@Override
@@ -128,6 +140,8 @@ public class Personaje extends Malla
 				{
 					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
 				}
+				
+				moverArea(posicionX, posicionY);
 			}
 		}
 
@@ -189,17 +203,13 @@ public class Personaje extends Malla
 
 	public TEstadoColision colision(Entidad entidad, InstanciaEntidad instancia)
 	{
-		float posicionXEntidad = instancia.getPosicionX();
-		float posicionYEntidad = instancia.getPosicionY();
-		float widthEntidad = entidad.getWidth();
-		float heightEntidad = entidad.getHeight();
-
-		Circle areaPersonaje = new Circle(posicionX + getWidth() / 2.0f, posicionY + getHeight() / 2.0f, getWidth() / 2.5f);
-		Circle areaEntidad = new Circle(posicionXEntidad + widthEntidad / 2.0f, posicionYEntidad + heightEntidad / 2.0f, heightEntidad / 3.0f);
-
+		entidad.moverArea(instancia.getPosicionX(), instancia.getPosicionY());
+		
 		// Hay colisión entre el personaje y el enemigo
-		if (Intersector.overlaps(areaPersonaje, areaEntidad))
+		if (Intersector.overlaps(area, entidad.getArea()))
 		{
+			entidad.restaurarArea();
+			
 			// Enemigo derrotado
 			if (entidad.getTipo() == TTipoEntidad.Enemigo && tipoMovimiento == TTipoMovimiento.Attack)
 			{
@@ -215,6 +225,7 @@ public class Personaje extends Malla
 			return TEstadoColision.Colision;
 		}
 
+		entidad.restaurarArea();
 		return TEstadoColision.Nada;
 	}
 

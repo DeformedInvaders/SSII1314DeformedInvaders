@@ -45,6 +45,16 @@ public class Enemigo extends Malla
 				gl.glCullFace(GL10.GL_BACK);
 
 			gl.glPopMatrix();
+			
+			if (GamePreferences.IS_DEBUG_ENABLED())
+			{
+				gl.glPushMatrix();
+				
+					gl.glTranslatef(area.x, area.y, 0.0f);
+					handle.dibujar(gl);
+				
+				gl.glPopMatrix();
+			}
 		}
 	}
 	

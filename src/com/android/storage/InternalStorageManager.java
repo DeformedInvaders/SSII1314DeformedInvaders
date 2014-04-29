@@ -427,6 +427,7 @@ public class InternalStorageManager
 			GamePreferences.setCharacterParameters(data.readInt());
 			GamePreferences.setMusicParameters(data.readBoolean());
 			GamePreferences.setTipParameters(data.readBoolean());
+			GamePreferences.setDebugParameters(data.readBoolean());
 
 			data.close();
 			file.close();
@@ -452,6 +453,7 @@ public class InternalStorageManager
 		GamePreferences.setCharacterParameters(-1);
 		GamePreferences.setMusicParameters(true);
 		GamePreferences.setTipParameters(true);
+		GamePreferences.setDebugParameters(true);
 		return false;
 	}
 
@@ -466,6 +468,7 @@ public class InternalStorageManager
 			data.writeInt(GamePreferences.GET_CHARACTER_GAME());
 			data.writeBoolean(GamePreferences.IS_MUSIC_ENABLED());
 			data.writeBoolean(GamePreferences.IS_TIPS_ENABLED());
+			data.writeBoolean(GamePreferences.IS_DEBUG_ENABLED());
 			
 			data.flush();
 			data.close();

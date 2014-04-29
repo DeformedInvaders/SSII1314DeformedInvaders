@@ -43,7 +43,7 @@ public class ViewActivity extends FragmentActivity
 	
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
-	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos;
+	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, botonDebug;
 	
 	/* Métodos Activity */
 	
@@ -113,6 +113,7 @@ public class ViewActivity extends FragmentActivity
 		botonMusica = menu.getItem(1);
 		botonTwitter = menu.getItem(2);
 		botonFacebook = menu.getItem(3);
+		botonDebug = menu.getItem(4);
 		
 		actualizarActionBar();
 
@@ -132,6 +133,8 @@ public class ViewActivity extends FragmentActivity
 				return onMenuTwitterButtonClicked();
 			case R.id.menuIcon4:
 				return onMenuFacebookButtonClicked();
+			case R.id.menuIcon5:
+				return onMenuDebugButtonClicked();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -162,6 +165,15 @@ public class ViewActivity extends FragmentActivity
 	public boolean onMenuTipsButtonClicked()
 	{
 		GamePreferences.SWITCH_TIPS_GAME();
+		core.actualizarPreferencias();
+		
+		actualizarActionBar();
+		return true;
+	}
+	
+	public boolean onMenuDebugButtonClicked()
+	{
+		GamePreferences.SWITCH_DEBUG_GAME();
 		core.actualizarPreferencias();
 		
 		actualizarActionBar();
@@ -204,6 +216,15 @@ public class ViewActivity extends FragmentActivity
 		else
 		{
 			botonConsejos.setIcon(R.drawable.icon_tool_tips_disabled);
+		}
+		
+		if (GamePreferences.IS_DEBUG_ENABLED())
+		{
+			botonDebug.setIcon(R.drawable.icon_tool_debug_enabled);
+		}
+		else
+		{
+			botonDebug.setIcon(R.drawable.icon_tool_debug_disabled);
 		}
 	}
 

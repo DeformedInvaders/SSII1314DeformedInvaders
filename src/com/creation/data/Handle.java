@@ -4,6 +4,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import android.graphics.Color;
+
+import com.lib.opengl.OpenGLManager;
+import com.main.model.GamePreferences;
+
 public class Handle
 {
 	private int colorHandle;
@@ -55,19 +62,10 @@ public class Handle
 	}
 
 	/* Métodos de Obtención de Información */
-
-	public FloatBuffer getBufferRelleno()
-	{
-		return bufferRelleno;
-	}
 	
-	public FloatBuffer getBufferContorno()
+	public void dibujar(GL10 gl)
 	{
-		return bufferContorno;
-	}
-	
-	public int getColor()
-	{
-		return colorHandle;
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, colorHandle, bufferRelleno);
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, bufferContorno);
 	}
 }

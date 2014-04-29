@@ -10,13 +10,16 @@ import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Esqueleto;
+import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
+import com.lib.math.Circle;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
+import com.main.model.GamePreferences;
 
 public abstract class Malla extends Entidad
 {
@@ -104,6 +107,8 @@ public abstract class Malla extends Entidad
 			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 			bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
 			bufferContornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+		
+			moverArea(posicionX, posicionY);
 		}
 	}
 
@@ -150,14 +155,28 @@ public abstract class Malla extends Entidad
 		textura = t;
 		pegatinas = textura.getPegatinas();
 		coordTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getCoordTextura());
-
+		texturaReady = true;
+		
 		width = textura.getWidth();
 		height = textura.getHeight();
 		
-		texturaReady = true;
+		area = new Circle(getWidth() / 2.0f, getHeight() / 2.0f, getWidth() / 2.5f);
+		handle = new Handle(50, area.radius, Color.RED);
 	}
 
 	/* Métodos de Obtención de Información */
+	
+	@Override
+	public float getWidth()
+	{
+		return width * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
+	}
+	
+	@Override
+	public float getHeight()
+	{
+		return height * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
+	}
 
 	public boolean isEsqueletoReady()
 	{

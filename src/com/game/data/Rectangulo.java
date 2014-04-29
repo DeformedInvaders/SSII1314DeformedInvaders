@@ -3,10 +3,13 @@ package com.game.data;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
+import com.creation.data.Handle;
 import com.creation.data.TTipoSticker;
 import com.lib.buffer.Dimensiones;
+import com.lib.math.Circle;
 import com.main.model.GamePreferences;
 
 public abstract class Rectangulo extends Entidad
@@ -21,6 +24,10 @@ public abstract class Rectangulo extends Entidad
 		{
 			width = dim.getWidth();
 			height = dim.getHeight();
+			
+			area = new Circle(getWidth() / 2.0f, getHeight() / 2.0f, getWidth() / 2.5f);
+			
+			handle = new Handle(50, area.radius, Color.BLACK);
 		}
 	}
 
@@ -43,5 +50,27 @@ public abstract class Rectangulo extends Entidad
 			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTipoSticker.Nada);
 			
 		gl.glPopMatrix();
+		
+		if (GamePreferences.IS_DEBUG_ENABLED())
+		{
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(area.x, area.y, 0.0f);
+				handle.dibujar(gl);
+			
+			gl.glPopMatrix();
+		}
+	}
+	
+	@Override
+	public float getWidth()
+	{
+		return width * GamePreferences.SCREEN_SCALE_FACTOR();
+	}
+	
+	@Override
+	public float getHeight()
+	{
+		return height * GamePreferences.SCREEN_SCALE_FACTOR();
 	}
 }
