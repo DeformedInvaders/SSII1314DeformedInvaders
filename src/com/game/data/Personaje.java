@@ -201,10 +201,8 @@ public class Personaje extends Malla
 		iniciar();
 	}
 
-	public TEstadoColision colision(Entidad entidad, InstanciaEntidad instancia)
+	public TEstadoColision colision(Entidad entidad)
 	{
-		entidad.moverArea(instancia.getPosicionX(), instancia.getPosicionY());
-		
 		// Hay colisión entre el personaje y el enemigo
 		if (Intersector.overlaps(area, entidad.getArea()))
 		{
@@ -213,7 +211,6 @@ public class Personaje extends Malla
 			// Enemigo derrotado
 			if (entidad.getTipo() == TTipoEntidad.Enemigo && tipoMovimiento == TTipoMovimiento.Attack)
 			{
-				instancia.setDerrotado();
 				return TEstadoColision.EnemigoDerrotado;
 			}
 			
@@ -225,7 +222,6 @@ public class Personaje extends Malla
 			return TEstadoColision.Colision;
 		}
 
-		entidad.restaurarArea();
 		return TEstadoColision.Nada;
 	}
 
