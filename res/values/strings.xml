@@ -73,7 +73,8 @@
 			<string name="text_tip_paint_pencil_description">You can draw extra details on your character with the pencil tool.</string>
 			<string name="text_tip_paint_bucket_description">You can chage the color of your character with the bucket tool.</string>
 			<string name="text_tip_paint_sticker_description">You can add predesigned stickers to your character with the sticker tool.</string>
-			<string name="text_tip_paint_zoom_description">You can lengthen or shrink your character using this zoom gesture. Also you can restore your character to it\'s original position using this double touch gesture.</string>
+			<string name="text_tip_paint_editsticker_description">You can drag, lengthen, shrink, rotate or delete any sticker that your character has.</string>
+			<string name="text_tip_paint_zoom_description">You can move zoom in/out or restore the camera in order to make the painting easier.</string>
 
 			<string name="text_tip_deform_handles_title">Deformating your character.</string>
 			<string name="text_tip_deform_handles_description">You can add and remove handles and drag them in order to deform your character.</string>

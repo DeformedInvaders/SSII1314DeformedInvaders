@@ -73,7 +73,8 @@
 			<string name="text_tip_paint_pencil_description">Puedes añadir detalles extra en tu personaje usando la herramienta lápiz.</string>
 			<string name="text_tip_paint_bucket_description">Puedes cambiar el color de tu personaje usando la herramienta cubo.</string>
 			<string name="text_tip_paint_sticker_description">Puedes añadir pegatinas prediseñadas a tu personaje con la herramienta pegatina.</string>
-			<string name="text_tip_paint_zoom_description">Puedes ampliar o reducir tu presonaje usando el gesto de zoom. También puedes devolver a tu presonaje a la posición inicial usando este gesto de doble pulsación.</string>
+			<string name="text_tip_paint_editsticker_description">Puedes arrastrar, ampliar, encoger, rotar o eliminar cualquier pegatina que tu personaje tenga.</string>
+			<string name="text_tip_paint_zoom_description">Puedes mover, acercar, alejar o restaurar la cámara para que la pintura sea mas fácil.</string>
 
 			<string name="text_tip_deform_handles_title">Animando tu personaje.</string>
 			<string name="text_tip_deform_handles_description">Puedes añadir o eliminar tiradores y moverlos con el objetivo de deformar tu personaje.</string>

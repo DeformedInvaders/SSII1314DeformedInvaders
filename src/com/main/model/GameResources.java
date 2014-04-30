@@ -57,6 +57,7 @@ public class GameResources
 	public static final String VIDEO_PAINT_PENCIL_PATH = VIDEO_PATH + "tips_paint_pencil";
 	public static final String VIDEO_PAINT_BUCKET_PATH = VIDEO_PATH + "tips_paint_bucket";
 	public static final String VIDEO_PAINT_STICKER_PATH = VIDEO_PATH + "tips_paint_sticker";
+	public static final String VIDEO_PAINT_EDITSTICKER_PATH = VIDEO_PATH + "tips_paint_editsticker";
 	public static final String VIDEO_PAINT_ZOOM_PATH = VIDEO_PATH + "tips_paint_zoom";
 	
 	public static final String VIDEO_DEFORM_HANDLES_PATH = VIDEO_PATH + "tips_deform_handles";

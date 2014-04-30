@@ -41,23 +41,29 @@ public abstract class StickerDialog extends WindowDialog
 	
 	private LinearLayout construirLayout(LinearLayout mainLayout, TTipoSticker tipo)
 	{
-		ScrollView scroll = new ScrollView(mContext);
-		scroll.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 3 * imageHeight));
+		LinearLayout typeLayout = new LinearLayout(mContext);
+		typeLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		typeLayout.setOrientation(LinearLayout.VERTICAL);
 		
-			LinearLayout layout = new LinearLayout(mContext);
-			layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-			layout.setOrientation(LinearLayout.VERTICAL);
-			layout.setPadding(10, 0, 10, 0);
+			TextView titulo = new TextView(mContext);
+			titulo.setText(tipo.getTitle());
+			titulo.setTextAppearance(mContext, R.style.Text_Section_Dialog_Style);
 			
-				TextView titulo = new TextView(mContext);
-				titulo.setText(tipo.getTitle());
-				titulo.setTextAppearance(mContext, R.style.Text_Section_Dialog_Style);
+			ScrollView scroll = new ScrollView(mContext);
+			scroll.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 3 * imageHeight));
 			
-			layout.addView(titulo);
+				LinearLayout layout = new LinearLayout(mContext);
+				layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				layout.setOrientation(LinearLayout.VERTICAL);
+				layout.setPadding(10, 0, 10, 0);
+			
+			scroll.addView(layout);
+			
+			typeLayout.addView(titulo);
+			typeLayout.addView(scroll);
 		
-		scroll.addView(layout);
+		mainLayout.addView(typeLayout);
 		
-		mainLayout.addView(scroll);
 		return layout;
 	}
 

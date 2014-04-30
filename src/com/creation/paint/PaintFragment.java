@@ -125,12 +125,14 @@ public class PaintFragment extends OpenGLFragment
 		listaMensajes.add(R.string.text_tip_paint_pencil_description);
 		listaMensajes.add(R.string.text_tip_paint_bucket_description);
 		listaMensajes.add(R.string.text_tip_paint_sticker_description);
+		listaMensajes.add(R.string.text_tip_paint_editsticker_description);
 		listaMensajes.add(R.string.text_tip_paint_zoom_description);
 		
 		List<String> listaVideos = new ArrayList<String>();
 		listaVideos.add(GameResources.VIDEO_PAINT_PENCIL_PATH);
 		listaVideos.add(GameResources.VIDEO_PAINT_BUCKET_PATH);
 		listaVideos.add(GameResources.VIDEO_PAINT_STICKER_PATH);
+		listaVideos.add(GameResources.VIDEO_PAINT_EDITSTICKER_PATH);
 		listaVideos.add(GameResources.VIDEO_PAINT_ZOOM_PATH);
 		
 		sendAlertMessage(R.string.text_tip_paint_tools_title, listaMensajes, listaVideos);	
