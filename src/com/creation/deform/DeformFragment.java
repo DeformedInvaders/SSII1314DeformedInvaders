@@ -51,7 +51,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		// Instanciar Elementos de la GUI
 		canvas = (DeformGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
 		canvas.setParameters(this, personaje);
-
+		setCanvasListener(canvas);
+		
 		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
 		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
 		botonDeformar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
@@ -67,8 +68,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonGrabar.setOnClickListener(new OnRecordClickListener());
 		botonAudio.setOnClickListener(new OnAudioClickListener());
 		botonReproducir.setOnClickListener(new OnPlayClickListener());
-
-		setCanvasListener(canvas);
 
 		reiniciarInterfaz();
 		actualizarInterfaz();

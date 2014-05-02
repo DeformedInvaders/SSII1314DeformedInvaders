@@ -118,11 +118,11 @@ public class OpenGLManager
 				
 				if (handles.isSelectedHandle(i))
 				{
-					handle.dibujar(gl);
+					handleSeleccionado.dibujar(gl);
 				}
 				else
 				{
-					handleSeleccionado.dibujar(gl);
+					handle.dibujar(gl);
 				}
 			
 			gl.glPopMatrix();

@@ -121,7 +121,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		objetoHandleSeleccionado = new Handle(20, 2 * GamePreferences.POINT_WIDTH, Color.RED);
 
 		// Deformador
-		deformator = new Deformator(verticesModificados, triangulos, handles);
+		//deformator = new Deformator(verticesModificados, triangulos, handles);
 	}
 
 	/* Métodos Renderer */
@@ -188,6 +188,11 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarAnyadir()
 	{		
 		estado = TEstadoDeform.Anyadir;
+		
+		if (deformator == null)
+		{
+			deformator = new Deformator(verticesModificados, triangulos, handles);
+		}
 		
 		if (buscador == null)
 		{
@@ -647,8 +652,16 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		handles = data.getHandles();
 		verticesModificados = data.getVerticesModificados();
 		listaVerticesAnimacion = data.getListaVertices();
-
-		deformator.anyadirHandles(handles);
+		
+		if (deformator == null)
+		{
+			deformator = new Deformator(verticesModificados, triangulos, handles);
+		}
+		else if (handles.getNumHandles() > 0)
+		{
+			deformator.anyadirHandles(handles);
+		}
+		
 		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulos, triangulos, verticesModificados);
 		BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, verticesModificados);
 	}

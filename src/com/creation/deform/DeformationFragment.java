@@ -10,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.android.view.ViewPagerFragment;
-import com.android.view.ViewPagerSwipeable;
+import com.android.view.ViewFrameFragment;
+import com.android.view.ViewFrameSwipeable;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
@@ -20,7 +20,7 @@ import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.project.main.R;
 
-public class DeformationFragment extends ViewPagerFragment implements OnDeformationListener
+public class DeformationFragment extends ViewFrameFragment implements OnDeformationListener
 {
 	private AnimationFragmentListener mCallback;
 
@@ -65,15 +65,14 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformat
 		// Instanciar Elementos de la GUI
 		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);
 		botonReady.setOnClickListener(new OnReadyClickListener());
-
-		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewAnimation1);
-		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
-		viewPager.setSwipeable(false);
-
+		
+		frameLayout = (ViewFrameSwipeable) rootView.findViewById(R.id.frameViewAnimation1);
+		frameLayout.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());		
+		
 		TTipoMovimiento[] movimientos = TTipoMovimiento.values();
 		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
 		{
-			viewPager.addView(DeformFragment.newInstance(this, personaje), getString(movimientos[i].getTitle()));
+			frameLayout.addView(DeformFragment.newInstance(this, personaje), getString(movimientos[i].getTitle()));
 		}
 
 		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GameResources.VIDEO_DEFORM_HANDLES_PATH);
@@ -104,7 +103,7 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformat
 	private void actualizarMovimientos()
 	{
 		int i = 0;
-		Iterator<DeformFragment> it = viewPager.iterator();
+		Iterator<DeformFragment> it = frameLayout.iterator();
 		while (it.hasNext())
 		{
 			List<VertexArray> movimiento = it.next().getMovimientos();
@@ -149,7 +148,7 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformat
 	@Override
 	public void onStartRecording()
 	{
-		mCallback.onAnimationStartRecording(TTipoMovimiento.values()[viewPager.getPosition()]);
+		mCallback.onAnimationStartRecording(TTipoMovimiento.values()[frameLayout.getPosition()]);
 	}
 
 	@Override
@@ -161,12 +160,12 @@ public class DeformationFragment extends ViewPagerFragment implements OnDeformat
 	@Override
 	public void onDiscardRecording()
 	{
-		mCallback.onAnimationDiscardRecording(TTipoMovimiento.values()[viewPager.getPosition()]);	
+		mCallback.onAnimationDiscardRecording(TTipoMovimiento.values()[frameLayout.getPosition()]);	
 	}
 
 	@Override
 	public void onPlaySound()
 	{
-		mCallback.onAnimationPlaySound(TTipoMovimiento.values()[viewPager.getPosition()]);
+		mCallback.onAnimationPlaySound(TTipoMovimiento.values()[frameLayout.getPosition()]);
 	}
 }

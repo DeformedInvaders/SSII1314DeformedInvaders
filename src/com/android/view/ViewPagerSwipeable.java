@@ -29,11 +29,7 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 
 	public ViewPagerSwipeable(Context context)
 	{
-		super(context);
-
-		swipeable = true;
-		listaFragmentos = new ArrayList<T>();
-		listaNombres = new ArrayList<String>();
+		this(context, null);
 	}
 
 	public ViewPagerSwipeable(Context context, AttributeSet attrs)

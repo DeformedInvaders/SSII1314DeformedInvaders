@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout_Fragment_Style" >
 
-    <com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
-        android:id="@+id/pagerViewAnimation1" />
+    <!--<com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
+        android:id="@+id/pagerViewAnimation1" />-->
+	
+	<com.android.view.ViewFrameSwipeable style="@style/ViewPager_Style"
+        android:id="@+id/frameViewAnimation1" />
 
     <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 

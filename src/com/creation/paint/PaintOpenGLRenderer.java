@@ -8,7 +8,6 @@ import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 
@@ -30,7 +29,6 @@ import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
 import com.lib.search.TriangleQuadTreeSearcher;
 import com.main.model.GamePreferences;
-import com.project.main.R;
 
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {	
@@ -652,35 +650,12 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TEstadoPaint.Captura && estadoCaptura == TEstadoCaptura.Capturando)
 		{
-			final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_character_title), mContext.getString(R.string.text_processing_character_description), true);
+			while (estadoCaptura != TEstadoCaptura.Terminado);
 
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run()
-				{
-					while (estadoCaptura != TEstadoCaptura.Terminado);
-
-					estado = TEstadoPaint.Nada;
-					estadoCaptura = TEstadoCaptura.Nada;
-
-					alert.dismiss();
-				}
-			});
-
-			thread.start();
-
-			// Esperar por la finalización del thread.
-
-			try
-			{
-				thread.join();
-
-				return new Textura(textura, coordsTextura, pegatinas);
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
+			estado = TEstadoPaint.Nada;
+			estadoCaptura = TEstadoCaptura.Nada;
+			
+			return new Textura(textura, coordsTextura, pegatinas);
 		}
 		
 		return null;

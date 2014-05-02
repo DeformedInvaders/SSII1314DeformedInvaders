@@ -246,6 +246,7 @@ public class ViewActivity extends FragmentActivity
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.frameLayoutMain1, fragmento);
+		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 		transaction.commit();
 	}
 
