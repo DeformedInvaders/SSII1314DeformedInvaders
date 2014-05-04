@@ -23,6 +23,9 @@ import com.project.main.R;
 
 public class GameOpenGLRenderer extends OpenGLRenderer
 {
+	// Estado
+	private TEstadoGame estado;
+	
 	// Background
 	private Background background;
 
@@ -48,6 +51,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		super(context, color);
 
+		estado = TEstadoGame.FaseEnemies;
+		
 		personaje = p;
 		background = l.getFondoNivel();
 
@@ -99,6 +104,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		texturasCargadas = true;
+		
+		// TODO GAME: Añadir cargado de texturas nuevas.
 	}
 
 	@Override
@@ -106,6 +113,19 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 
+		switch (estado)
+		{
+			case FaseEnemies:
+				onDrawEnemiesPhase(gl);
+			break;
+			case FaseBoss:
+				onDrawBossPhase(gl);
+			break;
+		}
+	}
+	
+	private void onDrawEnemiesPhase(GL10 gl)
+	{
 		gl.glPushMatrix();
 
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
@@ -139,8 +159,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 				gl.glPopMatrix();
 			}
-
+	
 		gl.glPopMatrix();
+	}
+	
+	private void onDrawBossPhase(GL10 gl)
+	{
+		// TODO GAME: Dibujar elementos de la escena.
 	}
 
 	/* Métodos de Modificación de Estado */
@@ -165,12 +190,20 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		personaje.atacar();
 	}
 	
-	public void pararAnimacion()
+	public boolean playAnimation()
 	{
-		personaje.reposo();
+		switch (estado)
+		{
+			case FaseEnemies:
+				return playAnimationEnemiesPhase();
+			case FaseBoss:
+				return playAnimationBossPhase();
+		}
+		
+		return false;
 	}
 	
-	public boolean reproducirAnimacion()
+	private boolean playAnimationEnemiesPhase()
 	{
 		// Background
 		desplazarTexturaFondo();
@@ -214,17 +247,39 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		// Animar personaje
 		return personaje.animar();
 	}
+	
+	private boolean playAnimationBossPhase()
+	{
+		// TODO GAME: Reproducir animación nueva
+		return false;
+	}
 
 	/* Métodos de Obtención de Información */
+	
+	public TEventoGame isGameEnded()
+	{
+		switch (estado)
+		{
+			case FaseEnemies:
+				return isGameEndedEnemiesPhase();
+			case FaseBoss:
+				return isGameEndedBossPhase();
+		}
+		
+		return TEventoGame.Nada;
+	}
 
-	public TEstadoGame isJuegoFinalizado()
+	private TEventoGame isGameEndedEnemiesPhase()
 	{
 		// Final del juego
 		if (fondoFinalFijado)
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
-		
-			return TEstadoGame.FinJuegoVictoria;
+			estado = TEstadoGame.FaseBoss;
+			
+			// TODO GAME: Cambiar fin de juego.
+			personaje.reposo();
+			return TEventoGame.FinJuegoVictoria;
 		}
 		
 		// Colision con enemigo actual
@@ -241,7 +296,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				posEnemigoActual++;
 				
 				puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-				return TEstadoGame.CambioPuntuacion;
+				return TEventoGame.CambioPuntuacion;
 			case Colision:
 				posEnemigoActual++;
 				
@@ -249,11 +304,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				puntuacion += GamePreferences.SCORE_LOSE_LIFE;
 
 				if (!personaje.isAlive())
-				{						
-					return TEstadoGame.FinJuegoDerrota;
+				{					
+					personaje.reposo();
+					return TEventoGame.FinJuegoDerrota;
 				}
 				
-				return TEstadoGame.VidaPerdida;
+				return TEventoGame.VidaPerdida;
 			default:
 			break;
 		}
@@ -263,10 +319,16 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		{
 			puntuacionModificada = false;
 			
-			return TEstadoGame.CambioPuntuacion;
+			return TEventoGame.CambioPuntuacion;
 		}
 
-		return TEstadoGame.Nada;
+		return TEventoGame.Nada;
+	}
+	
+	private TEventoGame isGameEndedBossPhase()
+	{
+		// TODO GAME: Comprobar final del juego.
+		return TEventoGame.Nada;
 	}
 	
 	public int getPuntuacion()

@@ -50,7 +50,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void run()
 			{
-				if (renderer.reproducirAnimacion())
+				if (renderer.playAnimation())
 				{
 					renderer.seleccionarRun();
 					animacionFinalizada = true;
@@ -58,7 +58,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 				requestRender();
 
-				switch (renderer.isJuegoFinalizado())
+				switch (renderer.isGameEnded())
 				{
 					case VidaPerdida:
 						mListener.onGameLivesChanged(renderer.getVidas());
@@ -73,20 +73,15 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 					break;
 					case FinJuegoVictoria:
-						renderer.pararAnimacion();
-						requestRender();
-	
 						mListener.onGameFinished(renderer.getPuntuacion(), renderer.getVidas());
 					break;
-					case FinJuegoDerrota:
-						renderer.pararAnimacion();
-						requestRender();
-	
+					case FinJuegoDerrota:	
 						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidas());
 					break;
 				}
 				
 				contadorCiclos++;
+				requestRender();
 			}
 		};
 
