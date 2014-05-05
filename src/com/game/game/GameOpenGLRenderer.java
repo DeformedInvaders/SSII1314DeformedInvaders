@@ -149,15 +149,18 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			// Dibujar enemigo actual
 			if (GamePreferences.IS_DEBUG_ENABLED())
 			{
-				InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
-				Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
-				
-				gl.glPushMatrix();
-	
-					gl.glTranslatef(instancia.getPosicionX() + entidad.getWidth() / 2.0f, instancia.getPosicionY() + entidad.getHeight() / 2.0f, 0.0f);
-					handleEnemigoActual.dibujar(gl);
+				if (posEnemigoActual < listaEnemigos.size())
+				{
+					InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
+					Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+					
+					gl.glPushMatrix();
 		
-				gl.glPopMatrix();
+						gl.glTranslatef(instancia.getPosicionX() + entidad.getWidth() / 2.0f, instancia.getPosicionY() + entidad.getHeight() / 2.0f, 0.0f);
+						handleEnemigoActual.dibujar(gl);
+			
+					gl.glPopMatrix();
+				}
 			}
 	
 		gl.glPopMatrix();
@@ -214,28 +217,31 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			listaEnemigos.get(i).avanzar();
 		}
 		
-		InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
-		Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
-		if(instancia.getPosicionX() < -entidad.getWidth())
+		if (posEnemigoActual < listaEnemigos.size())
 		{
-			switch(entidad.getTipo())
+			InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
+			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+			if(instancia.getPosicionX() < -entidad.getWidth())
 			{
-				case Enemigo:
-					puntuacion += GamePreferences.SCORE_ACTION_WRONG;
-					puntuacionModificada = true;
-				break;
-				case Obstaculo:
-					puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-					puntuacionModificada = true;
-				break;
-				case Misil:
-					puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-					puntuacionModificada = true;
-				default:
-				break;
+				switch(entidad.getTipo())
+				{
+					case Enemigo:
+						puntuacion += GamePreferences.SCORE_ACTION_WRONG;
+						puntuacionModificada = true;
+					break;
+					case Obstaculo:
+						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+						puntuacionModificada = true;
+					break;
+					case Misil:
+						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+						puntuacionModificada = true;
+					default:
+					break;
+				}
+				
+				posEnemigoActual++;
 			}
-			
-			posEnemigoActual++;
 		}
 
 		// Animar tipo de enemigos		
@@ -283,35 +289,42 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Colision con enemigo actual
-		InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
-		Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
-		entidad.moverArea(instancia.getPosicionX(), instancia.getPosicionY());
-		
-		TEstadoColision colision = personaje.colision(entidad);
-		entidad.restaurarArea();
-		
-		switch (colision)
+		if (posEnemigoActual < listaEnemigos.size())
 		{
-			case EnemigoDerrotado:
-				posEnemigoActual++;
-				
-				puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-				return TEventoGame.CambioPuntuacion;
-			case Colision:
-				posEnemigoActual++;
-				
-				personaje.quitarVida();
-				puntuacion += GamePreferences.SCORE_LOSE_LIFE;
-
-				if (!personaje.isAlive())
-				{					
-					personaje.reposo();
-					return TEventoGame.FinJuegoDerrota;
-				}
-				
-				return TEventoGame.VidaPerdida;
-			default:
-			break;
+			InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
+			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+			entidad.moverArea(instancia.getPosicionX(), instancia.getPosicionY());
+			
+			TEstadoColision colision = personaje.colision(entidad);
+			entidad.restaurarArea();
+			
+			switch (colision)
+			{
+				case EnemigoDerrotado:
+					posEnemigoActual++;
+					
+					puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+					return TEventoGame.CambioPuntuacion;
+				case Colision:
+					posEnemigoActual++;
+					
+					if (!GamePreferences.IS_DEBUG_ENABLED())
+					{
+						personaje.quitarVida();
+					}
+					
+					puntuacion += GamePreferences.SCORE_LOSE_LIFE;
+	
+					if (!personaje.isAlive())
+					{					
+						personaje.reposo();
+						return TEventoGame.FinJuegoDerrota;
+					}
+					
+					return TEventoGame.VidaPerdida;
+				default:
+				break;
+			}
 		}
 		
 		// Cambio de puntuación de obstáculos y misiles

@@ -196,7 +196,7 @@ public class GamePreferences
 	
 	public static final int NUM_ITERATION_BACKGROUND()
 	{
-		return Math.round(MAX_NUM_CICLOS() * DIST_MOVIMIENTO_BACKGROUND() / WIDTH_SCREEN);
+		return Math.round(MAX_NUM_CICLOS() * DIST_MOVIMIENTO_BACKGROUND() / WIDTH_SCREEN) + 1;
 	}
 	
 	public static final int TIME_INTERVAL_ANIMATION()
