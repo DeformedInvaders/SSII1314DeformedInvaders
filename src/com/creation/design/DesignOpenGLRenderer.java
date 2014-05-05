@@ -190,6 +190,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			vertices = triangulator.getVertices();
 			triangulos = triangulator.getTriangulos();
 			contorno = triangulator.getContorno();
+			
+			triangulos.sortCounterClockwise(vertices);
 
 			if (poligonoSimple)
 			{
