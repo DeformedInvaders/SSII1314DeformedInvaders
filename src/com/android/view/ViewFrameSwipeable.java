@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implements ActionBar.TabListener
 {
+	private ViewFrameFragment frameFragment;
 	private ActionBar actionBar;
 	private FragmentManager layoutManager;
 	
@@ -39,8 +40,9 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 
 	/* Métodos Publicos */
 	
-	public void setAdapter(FragmentManager manager, ActionBar bar)
+	public void setAdapter(final ViewFrameFragment fragment, FragmentManager manager, ActionBar bar)
 	{
+		frameFragment = fragment;
 		actionBar = bar;
 		layoutManager = manager;
 
@@ -78,6 +80,8 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction)
 	{		
+		frameFragment.onPageSelected(tab.getPosition());
+		
 		FragmentTransaction transaction = layoutManager.beginTransaction();
 		transaction.replace(getId(), listaFragmentos.get(tab.getPosition()));
 		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);

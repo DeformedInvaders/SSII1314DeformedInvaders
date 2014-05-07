@@ -231,6 +231,11 @@ public class DesignFragment extends OpenGLFragment
 			canvas.seleccionarTriangular();
 			reiniciarInterfaz();
 			actualizarInterfaz();
+			
+			if (!canvas.isPoligonoSimple())
+			{					
+				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GameResources.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
+			}
 		}
 	}
 }

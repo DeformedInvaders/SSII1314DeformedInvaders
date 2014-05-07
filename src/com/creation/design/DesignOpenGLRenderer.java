@@ -191,10 +191,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			triangulos = triangulator.getTriangulos();
 			contorno = triangulator.getContorno();
 			
-			triangulos.sortCounterClockwise(vertices);
-
 			if (poligonoSimple)
 			{
+				triangulos.sortCounterClockwise(vertices);
 				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
 				bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 			}

@@ -67,7 +67,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		botonReady.setOnClickListener(new OnReadyClickListener());
 		
 		frameLayout = (ViewFrameSwipeable) rootView.findViewById(R.id.frameViewAnimation1);
-		frameLayout.setAdapter(getActivity().getSupportFragmentManager(), getActivity().getActionBar());		
+		frameLayout.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());		
 		
 		TTipoMovimiento[] movimientos = TTipoMovimiento.values();
 		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)

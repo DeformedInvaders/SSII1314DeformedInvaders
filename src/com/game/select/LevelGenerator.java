@@ -28,7 +28,7 @@ public class LevelGenerator
 	private List<List<Entidad>> listaEnemigos;
 	private List<Background> listaFondos;
 	
-	AssetsStorageManager manager;
+	private AssetsStorageManager manager;
 
 	public LevelGenerator(Context context)
 	{
