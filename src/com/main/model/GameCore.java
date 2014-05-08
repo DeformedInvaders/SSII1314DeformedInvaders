@@ -52,6 +52,10 @@ public abstract class GameCore
 	
 	public GameCore(Context context, int widthScreen, int heightScreen)
 	{
+		GamePreferences.setScreenParameters(widthScreen, heightScreen);
+        GamePreferences.setMusicParameters(false);
+        GamePreferences.setTipParameters(false);
+		
 		mContext = context;
 		
 		nuevoPersonaje = null;
@@ -79,11 +83,6 @@ public abstract class GameCore
 		};
 		
 		audioRecorderManager = new AudioRecorderManager();
-		
-		GamePreferences.setScreenParameters(widthScreen, heightScreen);
-		
-        GamePreferences.setMusicParameters(false);
-        GamePreferences.setTipParameters(false);
 	}
 	
 	public boolean cargarDatos()

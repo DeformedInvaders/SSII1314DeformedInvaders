@@ -16,6 +16,9 @@ public class GameResources
 	private static final String DRAWABLE_MISSILE_ID = "missile_";
 	private static final String DRAWABLE_OBSTACLE_ID = "obstacle_";
 	private static final String DRAWABLE_ENEMY_ID = "enemy_";
+	
+	private static final String DRAWABLE_RATIO_LONG = "long_";
+	private static final String DRAWABLE_RATIO_NOLONG = "nolong_";
 		
 	private static final String DRAWABLE_EYES_ID = "eyes_";
 	private static final String DRAWABLE_MOUTH_ID = "mouth_";
@@ -155,18 +158,29 @@ public class GameResources
 	
 	public static final String GET_BACKGROUND(TTipoLevel nivel, int pos)
 	{
+		String ratio;
+		
+		if (GamePreferences.IS_LONG_RATIO())
+		{
+			ratio = DRAWABLE_RATIO_LONG;
+		}
+		else
+		{
+			ratio = DRAWABLE_RATIO_NOLONG;
+		}
+		
 		switch(nivel)
 		{
 			case Moon:
-				return DRAWABLE_BACKGROUND_ID + DRAWABLE_MOON_ID + (pos + 1);
+				return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_MOON_ID + (pos + 1);
 			case NewYork:
-				return DRAWABLE_BACKGROUND_ID + DRAWABLE_NEWYORK_ID + (pos + 1);
+				return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_NEWYORK_ID + (pos + 1);
 			case Rome:
-				return DRAWABLE_BACKGROUND_ID + DRAWABLE_ROME_ID + (pos + 1);
+				return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_ROME_ID + (pos + 1);
 			case Egypt:
-				return DRAWABLE_BACKGROUND_ID + DRAWABLE_EGYPT_ID + (pos + 1);
+				return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_EGYPT_ID + (pos + 1);
 			case Stonehenge:
-				return DRAWABLE_BACKGROUND_ID + DRAWABLE_STONEHENGE_ID + (pos + 1);
+				return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_STONEHENGE_ID + (pos + 1);
 			default:
 				return null;
 		}
