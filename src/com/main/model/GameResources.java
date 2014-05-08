@@ -18,7 +18,7 @@ public class GameResources
 	private static final String DRAWABLE_ENEMY_ID = "enemy_";
 	
 	private static final String DRAWABLE_RATIO_LONG = "long_";
-	private static final String DRAWABLE_RATIO_NOLONG = "nolong_";
+	private static final String DRAWABLE_RATIO_NOLONG = "notlong_";
 		
 	private static final String DRAWABLE_EYES_ID = "eyes_";
 	private static final String DRAWABLE_MOUTH_ID = "mouth_";

@@ -77,6 +77,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					break;
 					case FinFaseEnemigos:
 						mListener.onGameEnemiesFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
 					case FinFaseBoss:
 						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje());

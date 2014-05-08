@@ -559,7 +559,6 @@ public abstract class GameCore
 	
 	public boolean pararMusica()
 	{
-		musicaSeleccionada = 0;
 		return audioPlayerManager.stopPlaying();
 	}
 	
