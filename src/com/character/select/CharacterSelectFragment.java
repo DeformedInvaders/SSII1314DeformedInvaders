@@ -242,7 +242,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarRun();
+			canvas.seleccionarAnimacion(TTipoMovimiento.Run);
 		}
 	}
 
@@ -251,7 +251,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarJump();
+			canvas.seleccionarAnimacion(TTipoMovimiento.Jump);
 		}
 	}
 
@@ -260,7 +260,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarCrouch();
+			canvas.seleccionarAnimacion(TTipoMovimiento.Crouch);
 		}
 	}
 
@@ -269,7 +269,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAttack();
+			canvas.seleccionarAnimacion(TTipoMovimiento.Attack);
 		}
 	}
 	

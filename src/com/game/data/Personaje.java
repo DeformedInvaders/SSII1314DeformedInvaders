@@ -36,7 +36,7 @@ public class Personaje extends Malla
 		posicionX = 0.0f;
 		posicionY = 0.0f;
 		
-		vidas = GamePreferences.MAX_LIVES;
+		vidas = GamePreferences.MAX_CHARACTER_LIVES;
 		burbuja = false;		
 	}
 
@@ -157,48 +157,36 @@ public class Personaje extends Malla
 		
 		return super.animar();
 	}
+	
+	public void subir() 
+	{
+		if (movimientosReady)
+		{
+			posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+			moverArea(posicionX, posicionY);
+		}
+	}
+	
+	public void bajar() 
+	{
+		if (movimientosReady)
+		{
+			posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+			moverArea(posicionX, posicionY);
+		}
+	}
 
 	/* Métodos de Animación */
-
-	public void mover()
+	
+	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
 		if (movimientosReady)
 		{
-			tipoMovimiento = TTipoMovimiento.Run;
+			tipoMovimiento = movimiento;
 			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
 			
 			iniciar();
 		}
-	}
-
-	public void saltar()
-	{
-		if (movimientosReady)
-		{
-			tipoMovimiento = TTipoMovimiento.Jump;
-			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
-			
-			iniciar();
-		}
-	}
-
-	public void agachar()
-	{
-		if (movimientosReady)
-		{
-			tipoMovimiento = TTipoMovimiento.Crouch;
-			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
-			
-			iniciar();
-		}
-	}
-
-	public void atacar()
-	{
-		tipoMovimiento = TTipoMovimiento.Attack;
-		listaVerticesAnimacion = movimientos.get(tipoMovimiento);
-		
-		iniciar();
 	}
 
 	public TEstadoColision colision(Entidad entidad)
@@ -252,7 +240,7 @@ public class Personaje extends Malla
 	
 	public void reiniciarVidas()
 	{
-		vidas = GamePreferences.MAX_LIVES;
+		vidas = GamePreferences.MAX_CHARACTER_LIVES;
 	}
 	
 	public void quitarVida()
@@ -290,20 +278,5 @@ public class Personaje extends Malla
 	public String getNombre()
 	{
 		return nombre;
-	}
-
-	public float getY() 
-	{
-		return posicionY;
-	}
-
-	public void subir() 
-	{
-		posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-	}
-	
-	public void bajar() 
-	{
-		posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
 	}
 }

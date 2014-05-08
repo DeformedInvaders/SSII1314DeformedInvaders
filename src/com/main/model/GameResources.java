@@ -6,10 +6,7 @@ import com.game.game.TTipoEndgame;
 import com.game.select.TTipoLevel;
 
 public class GameResources
-{
-	// Widgets
-	public static final String VIEW_IMAGE_HEART = "imageViewGameHeart";
-	
+{	
 	// Resources
 	public static final String RESOURCE_DRAWABLE = "drawable";
 	public static final String RESOURCE_ID = "id";

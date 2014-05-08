@@ -80,23 +80,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		if (movimientoAleatorio && personajeCargado)
 		{
 			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_MOVIMIENTOS);
-
-			switch (animacion)
-			{
-				case 0:
-					seleccionarRun();
-				break;
-				case 1:
-					seleccionarJump();
-				break;
-				case 2:
-					seleccionarCrouch();
-				break;
-				case 3:
-					seleccionarAttack();
-				break;
-			}
-
+			seleccionarAnimacion(TTipoMovimiento.values()[animacion]);
 			return true;
 		}
 
@@ -105,52 +89,13 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarRun()
+	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
 		if (!threadActivo)
 		{
-			renderer.seleccionarRun();
+			renderer.seleccionarAnimacion(movimiento);
 			requestRender();
-			mListener.onDisplayPlaySound(TTipoMovimiento.Run);
-
-			task.run();
-			threadActivo = true;
-		}
-	}
-
-	public void seleccionarJump()
-	{
-		if (!threadActivo)
-		{
-			renderer.seleccionarJump();
-			requestRender();
-			mListener.onDisplayPlaySound(TTipoMovimiento.Jump);
-
-			task.run();
-			threadActivo = true;
-		}
-	}
-
-	public void seleccionarCrouch()
-	{
-		if (!threadActivo)
-		{
-			renderer.seleccionarCrouch();
-			requestRender();
-			mListener.onDisplayPlaySound(TTipoMovimiento.Crouch);
-
-			task.run();
-			threadActivo = true;
-		}
-	}
-
-	public void seleccionarAttack()
-	{
-		if (!threadActivo)
-		{
-			renderer.seleccionarAttack();
-			requestRender();
-			mListener.onDisplayPlaySound(TTipoMovimiento.Attack);
+			mListener.onDisplayPlaySound(movimiento);
 
 			task.run();
 			threadActivo = true;

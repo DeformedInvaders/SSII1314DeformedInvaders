@@ -99,10 +99,7 @@ public abstract class Malla extends Entidad
 	protected void iniciar()
 	{
 		if (movimientosReady)
-		{
-			posicionX = 0.0f;
-			posicionY = 0.0f;
-	
+		{	
 			posicionAnimacion = 0;
 			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 			bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
@@ -116,9 +113,14 @@ public abstract class Malla extends Entidad
 	{
 		if (movimientosReady)
 		{
+			posicionX = 0.0f;
+			posicionY = 0.0f;
+			
 			verticesAnimacion = vertices;
 			bufferTriangulosAnimacion = bufferTriangulos;
 			bufferContornoAnimacion = bufferContorno;
+			
+			moverArea(posicionX, posicionY);
 		}
 	}
 
@@ -133,6 +135,7 @@ public abstract class Malla extends Entidad
 	
 			return posicionAnimacion == listaVerticesAnimacion.size() - 1;
 		}
+		
 		return false;
 	}
 
@@ -206,5 +209,15 @@ public abstract class Malla extends Entidad
 	public Textura getTextura()
 	{
 		return textura;
+	}
+	
+	public float getPosicionX()
+	{
+		return posicionX;
+	}
+	
+	public float getPosicionY()
+	{
+		return posicionY;
 	}
 }

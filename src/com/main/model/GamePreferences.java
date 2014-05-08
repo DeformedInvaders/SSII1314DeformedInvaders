@@ -3,6 +3,7 @@ package com.main.model;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.TTipoSticker;
 import com.game.data.TTipoEntidad;
+import com.game.game.TEstadoGame;
 import com.game.game.TTipoEndgame;
 import com.game.select.TTipoLevel;
 
@@ -46,9 +47,11 @@ public class GamePreferences
 	public static final int TIME_DURATION_ANIMATION = 2000;
 
 	// Niveles
-	private static final int MAX_ENEMIES = 50;
+	/* FIXME Aumentar numero de Enemigos */
+	private static final int MAX_ENEMIES = 3;//50;
 	public static final int MAX_CHARACTERS = 10;
-	public static final int MAX_LIVES = 3;
+	public static final int MAX_CHARACTER_LIVES = 3;
+	public static final int MAX_BOSS_LIVES = 3;
 	
 	public static final int NUM_TYPE_LEVELS = TTipoLevel.values().length;
 	public static final int NUM_TYPE_MOVIMIENTOS = TTipoMovimiento.values().length;
@@ -204,27 +207,34 @@ public class GamePreferences
 		return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
 	}
 	
-	public static final int TIME_INTERVAL_ANIMATION(int ciclos)
+	public static final int TIME_INTERVAL_ANIMATION(TEstadoGame estado, int ciclos)
 	{
-		if(ciclos < MAX_NUM_CICLOS() / 6)
+		if (estado == TEstadoGame.FaseEnemies)
 		{
-			return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
-		}
-		else if(ciclos < 2 * MAX_NUM_CICLOS() / 6)
-		{
-			return TIME_INTERVAL_ANIMATION_SLOW;
-		}
-		else if(ciclos < 3 * MAX_NUM_CICLOS() / 6)
-		{
-			return TIME_INTERVAL_ANIMATION_MEDIUM;
-		}
-		else if(ciclos < 4 * MAX_NUM_CICLOS() / 6)
-		{
-			return TIME_INTERVAL_ANIMATION_FAST;
+			if(ciclos < MAX_NUM_CICLOS() / 6)
+			{
+				return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
+			}
+			else if(ciclos < 2 * MAX_NUM_CICLOS() / 6)
+			{
+				return TIME_INTERVAL_ANIMATION_SLOW;
+			}
+			else if(ciclos < 3 * MAX_NUM_CICLOS() / 6)
+			{
+				return TIME_INTERVAL_ANIMATION_MEDIUM;
+			}
+			else if(ciclos < 4 * MAX_NUM_CICLOS() / 6)
+			{
+				return TIME_INTERVAL_ANIMATION_FAST;
+			}
+			else
+			{
+				return TIME_INTERVAL_ANIMATION_SUPER_FAST;
+			}
 		}
 		else
 		{
-			return TIME_INTERVAL_ANIMATION_SUPER_FAST;
+			return TIME_INTERVAL_ANIMATION_MEDIUM;
 		}
 	}
 	

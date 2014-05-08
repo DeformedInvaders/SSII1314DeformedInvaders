@@ -9,6 +9,7 @@ import android.graphics.Color;
 
 import com.android.view.OpenGLRenderer;
 import com.creation.data.MapaBits;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.main.model.GamePreferences;
 
@@ -151,28 +152,10 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		personaje.reposo();
 	}
 
-	public void seleccionarRun()
+	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
-		estado = TEstadoDisplay.Run;
-		personaje.mover();
-	}
-
-	public void seleccionarJump()
-	{
-		estado = TEstadoDisplay.Jump;
-		personaje.saltar();
-	}
-
-	public void seleccionarCrouch()
-	{
-		estado = TEstadoDisplay.Crouch;
-		personaje.agachar();
-	}
-
-	public void seleccionarAttack()
-	{
-		estado = TEstadoDisplay.Attack;
-		personaje.atacar();
+		estado = TEstadoDisplay.Animacion;
+		personaje.seleccionarAnimacion(movimiento);
 	}
 
 	/* Métodos de Obtención de Información */

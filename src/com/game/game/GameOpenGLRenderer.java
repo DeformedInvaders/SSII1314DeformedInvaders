@@ -13,6 +13,7 @@ import android.graphics.Color;
 import com.android.view.BackgroundDataSaved;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Handle;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Background;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
@@ -31,16 +32,16 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	// Protagonista
 	private Personaje personaje;
-
+	
+	// Boss
+	private Entidad jefe;
+	
 	// Enemigos
 	private List<Entidad> tipoEnemigos;
 	private List<InstanciaEntidad> listaEnemigos;
 	private int posEnemigoActual;
 	private Handle handleEnemigoActual;
-	
-	//Boss
-	private Entidad jefe;
-	
+
 	// Puntuancion
 	private int puntuacion;
 	private boolean puntuacionModificada;
@@ -174,15 +175,17 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private void onDrawBossPhase(GL10 gl)
 	{
 		// TODO GAME: Dibujar elementos de la escena.
+		
+		// Dibujar protagonista
 		gl.glPushMatrix();
 
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
-					
-			// Dibujar protagonista
+			
 			personaje.dibujar(gl, this);	
 			
 		gl.glPopMatrix();
 		
+		// Dibujar jefe
 		gl.glPushMatrix();
 			
 			gl.glTranslatef(this.getScreenWidth() - GamePreferences.DISTANCE_GAME_RIGHT() - jefe.getWidth(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
@@ -194,43 +197,38 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	public boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		
-		if(personaje.getY() > screenWidth - pixelY) //bajar
+		if(personaje.getPosicionY() > getScreenHeight() - pixelY)
 		{
-			if(personaje.getY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > GamePreferences.DISTANCE_GAME_BOTTOM())
-			{
-				personaje.subir();
-			}
-		}
-		else //
-		{
-			if(personaje.getY() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			if(personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
 				personaje.bajar();
+				return true;
 			}
 		}
-		return true;
+		else if (personaje.getPosicionY() + personaje.getHeight() < getScreenHeight() - pixelY)
+		{
+			if(personaje.getPosicionY() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - 2*GamePreferences.DISTANCE_GAME_BOTTOM())
+			{
+				personaje.subir();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	/* Métodos de Modificación de Estado */
-
-	public void seleccionarRun()
+	
+	public void seleccionarReposo()
 	{
-		personaje.mover();
+		if (estado == TEstadoGame.FaseEnemies)
+		{
+			personaje.reposo();
+		}
 	}
 
-	public void seleccionarJump()
+	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
-		personaje.saltar();
-	}
-
-	public void seleccionarCrouch()
-	{
-		personaje.agachar();
-	}
-
-	public void seleccionarAttack()
-	{
-		personaje.atacar();
+		personaje.seleccionarAnimacion(movimiento);
 	}
 	
 	public boolean playAnimation()
@@ -297,7 +295,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private boolean playAnimationBossPhase()
 	{
 		// TODO GAME: Reproducir animación nueva
-		return false;
+		return personaje.animar();
 	}
 
 	/* Métodos de Obtención de Información */
@@ -384,19 +382,23 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return TEventoGame.Nada;
 	}
 	
+	public TEstadoGame getEstado()
+	{
+		return estado;
+	}
+	
 	public int getPuntuacion()
 	{
 		return puntuacion;
 	}
 	
-	public int getVidas()
+	public int getVidasPersonaje()
 	{
 		return personaje.getVidas();
 	}
 	
 	public int getVidasBoss() 
 	{
-		// TODO Auto-generated method stub
 		return 2;
 	}
 

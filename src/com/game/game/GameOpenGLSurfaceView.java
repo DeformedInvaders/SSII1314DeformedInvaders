@@ -48,7 +48,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 		renderer = new GameOpenGLRenderer(getContext(), Color.argb(0, 0, 0, 0), personaje, nivel);
 		setRenderer(renderer);
-		gameDetector.set(TEstadoGame.FaseEnemies);
 		
 		handler = new Handler();
 
@@ -58,7 +57,8 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				if (renderer.playAnimation())
 				{
-					renderer.seleccionarRun();
+					renderer.seleccionarReposo();
+					renderer.seleccionarAnimacion(TTipoMovimiento.Run);
 					animacionFinalizada = true;
 				}
 
@@ -67,27 +67,25 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				switch (renderer.isGameEnded())
 				{
 					case VidaPerdida:
-						mListener.onGameLivesChanged(renderer.getVidas());
+						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
 					case CambioPuntuacion:
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
-					break;
-					case Nada:
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
-					break;
-					case FinJuegoVictoria:
-						mListener.onGameFinished(renderer.getPuntuacion(), renderer.getVidas());
-					break;
-					case FinJuegoDerrota:	
-						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidas());
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
 					case FinFaseEnemigos:
-						mListener.onGameLivesChanged(renderer.getVidas(), renderer.getVidasBoss());
-						gameDetector.set(TEstadoGame.FaseBoss);
-						//TODO Cambiar listner
+						mListener.onGameEnemiesFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
+					break;
+					case FinFaseBoss:
+						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje());
+					break;
+					case FinJuegoDerrota:	
+						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidasPersonaje());
+					break;
+					default:
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
 				}
 				
@@ -96,7 +94,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			}
 		};
 
-		renderer.seleccionarRun();
+		renderer.seleccionarAnimacion(TTipoMovimiento.Run);
 		animacionFinalizada = true;
 		threadActivo = false;
 	}
@@ -104,14 +102,20 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	public void setEstado(TEstadoDetector e)
 	{
-		gameDetector = new GameDetector();
+		super.setEstado(e);
+		
+		if (gameDetector == null)
+		{
+			gameDetector = new GameDetector();
+		}
 	}
 	
+	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
 		if (event != null)
 		{
-			gameDetector.onTouchEvent(event, this);
+			gameDetector.onTouchEvent(event, renderer.getEstado(), this);
 			requestRender();
 	
 			return true;
@@ -121,53 +125,22 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	}
 	
-	public boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
-	{
-		
-		return renderer.onTouchMove(pixelX, pixelY, getWidth(), getHeight(), pointer);
-	}
-	
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarJump()
+	public boolean seleccionarPosicion(float pixelX, float pixelY)
 	{
-		if (threadActivo)
-		{
-			if (animacionFinalizada)
-			{
-				renderer.seleccionarJump();
-				requestRender();
-				mListener.onGamePlaySound(TTipoMovimiento.Jump);
-
-				animacionFinalizada = false;
-			}
-		}
+		return renderer.onTouchMove(pixelX, pixelY, getWidth(), getHeight(), 0);
 	}
 
-	public void seleccionarCrouch()
+	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
 		if (threadActivo)
 		{
 			if (animacionFinalizada)
 			{
-				renderer.seleccionarCrouch();
+				renderer.seleccionarAnimacion(movimiento);
 				requestRender();
-				mListener.onGamePlaySound(TTipoMovimiento.Crouch);
-
-				animacionFinalizada = false;
-			}
-		}
-	}
-
-	public void seleccionarAttack()
-	{
-		if (threadActivo)
-		{
-			if (animacionFinalizada)
-			{
-				renderer.seleccionarAttack();
-				requestRender();
-				mListener.onGamePlaySound(TTipoMovimiento.Attack);
+				mListener.onGamePlaySound(movimiento);
 
 				animacionFinalizada = false;
 			}

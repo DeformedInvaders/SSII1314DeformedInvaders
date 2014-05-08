@@ -10,28 +10,15 @@
     <com.game.game.GameOpenGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/gameGLSurfaceViewGame1" />
     
-	<LinearLayout style="@style/Layout_Top_Left_FragmentButton_Style" >
+	<LinearLayout style="@style/Layout_Top_Left_FragmentButton_Style" 
+	    android:id="@+id/linearLayoutGame1"
+	    android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/imageButtonGame1"
             style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_main_game"
             android:contentDescription="@string/desc_game_play" />
-	        
-		<ImageView style="@style/Button_Fragment_Style"
-			android:id="@+id/imageViewGameHeart1"
-			android:background="@drawable/lives_character_heart"
-			android:contentDescription="@string/desc_game_heart" />
-		
-		<ImageView style="@style/Button_Fragment_Style"
-			android:id="@+id/imageViewGameHeart2"
-			android:background="@drawable/lives_character_heart"
-			android:contentDescription="@string/desc_game_heart" />
-		
-		<ImageView style="@style/Button_Fragment_Style"
-			android:id="@+id/imageViewGameHeart3"
-			android:background="@drawable/lives_character_heart"
-			android:contentDescription="@string/desc_game_heart" />
 	
 	</LinearLayout>
 	
@@ -45,23 +32,8 @@
         android:textColor="#EEEEEE"
         android:textSize="30sp" />
     
-    <LinearLayout style="@style/Layout_Top_Right_FragmentButton_Style" >
-	        
-		<ImageView style="@style/Button_Fragment_Style"
-			android:id="@+id/imageViewGameHeart4"
-			android:background="@drawable/lives_boss_heart"
-			android:contentDescription="@string/desc_game_heart" />
-		
-		<ImageView style="@style/Button_Fragment_Style"
-			android:id="@+id/imageViewGameHeart5"
-			android:background="@drawable/lives_boss_heart"
-			android:contentDescription="@string/desc_game_heart" />
-		
-		<ImageView style="@style/Button_Fragment_Style"
-			android:id="@+id/imageViewGameHeart6"
-			android:background="@drawable/lives_boss_heart"
-			android:contentDescription="@string/desc_game_heart" />
-	
-	</LinearLayout>
+    <LinearLayout style="@style/Layout_Top_Right_FragmentButton_Style"
+	    android:id="@+id/linearLayoutGame2"
+        android:orientation="horizontal"/>
     
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
+import com.creation.data.TTipoMovimiento;
 import com.game.game.GameOpenGLSurfaceView;
 import com.game.game.TEstadoGame;
 import com.main.model.GamePreferences;
@@ -11,28 +12,22 @@ public class GameDetector
 	private float lastPixelY;
 	private long lastTap;
 	
-	private TEstadoGame estado;
 	private boolean bloqueado;
-
-	public void set(TEstadoGame e)
-	{
-		estado = e;
-	}
 	
-	public boolean onTouchEvent(MotionEvent event, GameOpenGLSurfaceView renderer)
+	public boolean onTouchEvent(MotionEvent event, TEstadoGame estado, GameOpenGLSurfaceView renderer)
 	{
 		int action = event.getActionMasked();
 
 		long time = System.currentTimeMillis();
-			
-		if(estado == TEstadoGame.FaseEnemies)
+		float pixelX = event.getX();
+		float pixelY = event.getY();
+		
+		if (estado == TEstadoGame.FaseEnemies)
 		{
-			float pixelY = event.getY();
-	
 			switch (action)
 			{
 				case MotionEvent.ACTION_DOWN:
-					onGameEnemiesDown(time, pixelY, renderer);
+					onGameEnemiesDown(time, pixelY);
 				break;
 				case MotionEvent.ACTION_UP:
 					onGameEnemiesUp(time, pixelY, renderer);
@@ -41,50 +36,30 @@ public class GameDetector
 	
 			return true;
 		}
-		else
-		{			
-			if (event.getPointerCount() == 1)
+		else if (estado == TEstadoGame.FaseBoss)
+		{
+			switch (action)
 			{
-				float pixelX = event.getX(0);
-				float pixelY = event.getY(0);
-				
-				switch (action)
-				{
-					case MotionEvent.ACTION_DOWN:
-						onGameBossDown(time, renderer);
-					break;
-					case MotionEvent.ACTION_UP:
-						onGameBossUp(time, renderer);
-					break;
-					case MotionEvent.ACTION_MOVE:
-						onGameBossMove(time, pixelX, pixelY, renderer);
-					break;
-				}
-			}
-			else if(event.getPointerCount() > 1)
-			{
-				float pixelX1 = event.getX(0);
-				float pixelY1 = event.getY(0);
-				
-				switch (action)
-				{
-					case MotionEvent.ACTION_POINTER_DOWN:
-						onGameBossDown(time, renderer);
-					break;
-					case MotionEvent.ACTION_POINTER_UP:
-						onGameBossUp(time, renderer);
-					break;
-					case MotionEvent.ACTION_MOVE:
-						onGameBossMove(time, pixelX1, pixelY1, renderer);
-					break;
-				}
+				case MotionEvent.ACTION_DOWN:
+				case MotionEvent.ACTION_POINTER_DOWN:
+					onGameBossDown(time);
+				break;
+				case MotionEvent.ACTION_MOVE:
+					onGameBossMove(time, pixelX, pixelY, renderer);
+				break;
+				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_POINTER_UP:
+					onGameBossUp(time, renderer);
+				break;
 			}
 			
 			return true;
 		}
+		
+		return false; 
 	}
 
-	private void onGameEnemiesDown(long time, float pixelY, GameOpenGLSurfaceView renderer)
+	private void onGameEnemiesDown(long time, float pixelY)
 	{
 		lastPixelY = pixelY;
 		lastTap = time;
@@ -94,20 +69,19 @@ public class GameDetector
 	{
 		if (pixelY - lastPixelY > GamePreferences.MAX_DISTANCE_DRAG)
 		{
-			surface.seleccionarCrouch();
+			surface.seleccionarAnimacion(TTipoMovimiento.Crouch);
 		}
 		else if (lastPixelY - pixelY > GamePreferences.MAX_DISTANCE_DRAG)
 		{
-			surface.seleccionarJump();
+			surface.seleccionarAnimacion(TTipoMovimiento.Jump);
 		}
 		else if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
 		{
-			surface.seleccionarAttack();
+			surface.seleccionarAnimacion(TTipoMovimiento.Attack);
 		}
 	}
 	
-	//Eventos boss
-	private void onGameBossDown(long time, GameOpenGLSurfaceView surface)
+	private void onGameBossDown(long time)
 	{
 		lastTap = time;
 		bloqueado = true;
@@ -117,26 +91,21 @@ public class GameDetector
 	{
 		if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
 		{
-			surface.seleccionarAttack();
+			surface.seleccionarAnimacion(TTipoMovimiento.Attack);
 			bloqueado = false;
 		}
 	}
 	
 	private void onGameBossMove(long time, float pixelX, float pixelY, GameOpenGLSurfaceView surface)
 	{
-		if(bloqueado)
+		if (bloqueado && Math.abs(lastTap - time) >= GamePreferences.MAX_DURATION_TAP)
 		{
-			if (Math.abs(lastTap - time) >= GamePreferences.MAX_DURATION_TAP)
-			{
-				bloqueado = false;
-			}
+			bloqueado = false;
 		}
-		if(!bloqueado)
+		
+		if (!bloqueado)
 		{
-			surface.onTouchMove(pixelX, pixelY, 0, 0, 0);
+			surface.seleccionarPosicion(pixelX, pixelY);
 		}
 	}
-	
-	
-
 }
