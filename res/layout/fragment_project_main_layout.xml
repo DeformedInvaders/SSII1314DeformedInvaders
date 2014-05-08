@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     
    	<ImageView style="@style/ImageView_Background_Style"
-		android:contentDescription="@string/desc_select_background"
-		android:background="@drawable/background_main" />
+   	    android:id="@+id/imageViewMain1"
+		android:contentDescription="@string/desc_select_background" />
     
     <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewMain1" />

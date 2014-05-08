@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
@@ -72,6 +73,16 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		else
 		{
 			canvas.setParameters();
+		}
+		
+		ImageView fondo = (ImageView) rootView.findViewById(R.id.imageViewMain1);
+		if (GamePreferences.IS_LONG_RATIO())
+		{
+			fondo.setBackgroundResource(R.drawable.background_long_main);
+		}
+		else
+		{
+			fondo.setBackgroundResource(R.drawable.background_notlong_main);
 		}
 
 		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);

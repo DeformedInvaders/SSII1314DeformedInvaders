@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
+import com.main.model.GamePreferences;
 import com.project.main.R;
 
 public class CharacterSelectionFragment extends ViewPagerFragment implements OnCharacterListener
@@ -67,6 +69,16 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		// Instanciar Elementos de la GUI
 		viewPager = (ViewPagerSwipeable) rootView.findViewById(R.id.pagerViewCharacterSelection1);
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
+		
+		ImageView fondo = (ImageView) rootView.findViewById(R.id.imageViewCharacterSelection1);
+		if (GamePreferences.IS_LONG_RATIO())
+		{
+			fondo.setBackgroundResource(R.drawable.background_long_display);
+		}
+		else
+		{
+			fondo.setBackgroundResource(R.drawable.background_notlong_display);
+		}
 
 		Iterator<Personaje> it = listaPersonajes.iterator();
 		while (it.hasNext())

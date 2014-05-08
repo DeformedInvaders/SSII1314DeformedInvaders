@@ -149,6 +149,11 @@ public class GamePreferences
 		return CHARACTER_GAME;
 	}
 	
+	public static final boolean IS_LONG_RATIO()
+	{
+		return WIDTH_SCREEN/HEIGHT_SCREEN > 1.5f;
+	}
+	
 	// Distancias Escenario
 	
 	public static final float DISTANCE_CHARACTER_WIDTH()

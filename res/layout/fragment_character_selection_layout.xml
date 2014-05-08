@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     
 	<ImageView style="@style/ImageView_Background_Style"
-		android:contentDescription="@string/desc_select_background"
-		android:background="@drawable/background_display" />
+	    android:id="@+id/imageViewCharacterSelection1"
+		android:contentDescription="@string/desc_select_background" />
     
    <com.android.view.ViewPagerSwipeable style="@style/ViewPager_Style"
 	    android:id="@+id/pagerViewCharacterSelection1"/>

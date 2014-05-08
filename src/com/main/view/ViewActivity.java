@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -80,6 +81,17 @@ public class ViewActivity extends FragmentActivity
         controller = new GameController(this, this, core);
         
         controller.onActivityStarted();
+        
+        // TODO Comprobar cualificador de pantalla
+        int screenLayout = getResources().getConfiguration().screenLayout;
+        if ((screenLayout & Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_YES)
+            android.util.Log.d("TEST", "Screen size is Long W "+metrics.widthPixels+" H "+metrics.heightPixels);
+        
+        if ((screenLayout & Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_NO)
+            android.util.Log.d("TEST", "Screen size is no Long W "+metrics.widthPixels+" H "+metrics.heightPixels);
+        
+        if ((screenLayout & Configuration.SCREENLAYOUT_LONG_MASK) == Configuration.SCREENLAYOUT_LONG_UNDEFINED)
+            android.util.Log.d("TEST", "Screen size is undefined W "+metrics.widthPixels+" H "+metrics.heightPixels);
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package com.game.select;
 
 import android.graphics.Color;
 
+import com.main.model.GamePreferences;
 import com.project.main.R;
 
 public enum TTipoLevel
@@ -86,39 +87,81 @@ public enum TTipoLevel
 	
 	public int getFondoSol()
 	{
-		switch(this)
+		if (GamePreferences.IS_LONG_RATIO())
 		{
-			case Moon:
-				return R.drawable.background_moon_sun;
-			case NewYork:
-				return R.drawable.background_newyork_sun;
-			case Rome:
-				return R.drawable.background_rome_sun;
-			case Egypt:
-				return R.drawable.background_egypt_sun;
-			case Stonehenge:
-				return R.drawable.background_stonehenge_sun;
-			default:
-				return -1;
-		}		
+			switch(this)
+			{
+				case Moon:
+					return R.drawable.background_long_moon_sun;
+				case NewYork:
+					return R.drawable.background_long_newyork_sun;
+				case Rome:
+					return R.drawable.background_long_rome_sun;
+				case Egypt:
+					return R.drawable.background_long_egypt_sun;
+				case Stonehenge:
+					return R.drawable.background_long_stonehenge_sun;
+				default:
+					return -1;
+			}
+		}
+		else
+		{
+			switch(this)
+			{
+				case Moon:
+					return R.drawable.background_notlong_moon_sun;
+				case NewYork:
+					return R.drawable.background_notlong_newyork_sun;
+				case Rome:
+					return R.drawable.background_notlong_rome_sun;
+				case Egypt:
+					return R.drawable.background_notlong_egypt_sun;
+				case Stonehenge:
+					return R.drawable.background_notlong_stonehenge_sun;
+				default:
+					return -1;
+			}
+		}
 	}
 	
 	public int getFondoDisplay()
 	{
-		switch(this)
+		if(GamePreferences.IS_LONG_RATIO())
 		{
-			case Moon:
-				return R.drawable.background_moon_display;
-			case NewYork:
-				return R.drawable.background_newyork_display;
-			case Rome:
-				return R.drawable.background_rome_display;
-			case Egypt:
-				return R.drawable.background_egypt_display;
-			case Stonehenge:
-				return R.drawable.background_stonehenge_display;
-			default:
-				return -1;
-		}		
+			switch(this)
+			{
+				case Moon:
+					return R.drawable.background_long_moon_display;
+				case NewYork:
+					return R.drawable.background_long_newyork_display;
+				case Rome:
+					return R.drawable.background_long_rome_display;
+				case Egypt:
+					return R.drawable.background_long_egypt_display;
+				case Stonehenge:
+					return R.drawable.background_long_stonehenge_display;
+				default:
+					return -1;
+			}	
+		}
+		else
+		{
+			switch(this)
+			{
+				case Moon:
+					return R.drawable.background_notlong_moon_display;
+				case NewYork:
+					return R.drawable.background_notlong_newyork_display;
+				case Rome:
+					return R.drawable.background_notlong_rome_display;
+				case Egypt:
+					return R.drawable.background_notlong_egypt_display;
+				case Stonehenge:
+					return R.drawable.background_notlong_stonehenge_display;
+				default:
+					return -1;
+			}				
+		}
 	}
 }
