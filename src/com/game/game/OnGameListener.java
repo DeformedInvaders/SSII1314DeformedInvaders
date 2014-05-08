@@ -8,6 +8,7 @@ public interface OnGameListener
 	public void onGameFailed(int score, int lives);
 	public void onGameScoreChanged(int score);
 	public void onGameLivesChanged(int lives);
+	public void onGameLivesChanged(int lives, int boss_lives);
 	
 	public void onGamePlaySound(TTipoMovimiento tipo);
 }

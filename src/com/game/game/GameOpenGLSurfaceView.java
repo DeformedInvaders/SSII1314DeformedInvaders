@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 
+import com.android.touch.GameDetector;
 import com.android.touch.TEstadoDetector;
 import com.android.view.BackgroundDataSaved;
 import com.android.view.OpenGLSurfaceView;
@@ -26,12 +29,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	private Runnable task;
 
 	private boolean threadActivo;
+	
+	private GameDetector gameDetector;
 
 	/* Constructora */
 
 	public GameOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.GameDetectors, true);
+		super(context, attrs, true);
 
 		animacionFinalizada = true;
 		contadorCiclos = 0;
@@ -43,7 +48,8 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 		renderer = new GameOpenGLRenderer(getContext(), Color.argb(0, 0, 0, 0), personaje, nivel);
 		setRenderer(renderer);
-
+		gameDetector.set(TEstadoGame.FaseEnemies);
+		
 		handler = new Handler();
 
 		task = new Runnable() {
@@ -78,6 +84,11 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					case FinJuegoDerrota:	
 						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidas());
 					break;
+					case FinFaseEnemigos:
+						mListener.onGameLivesChanged(renderer.getVidas(), renderer.getVidasBoss());
+						gameDetector.set(TEstadoGame.FaseBoss);
+						//TODO Cambiar listner
+					break;
 				}
 				
 				contadorCiclos++;
@@ -90,6 +101,32 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
+	@Override
+	public void setEstado(TEstadoDetector e)
+	{
+		gameDetector = new GameDetector();
+	}
+	
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		if (event != null)
+		{
+			gameDetector.onTouchEvent(event, this);
+			requestRender();
+	
+			return true;
+		}
+	
+		return false;
+
+	}
+	
+	public boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		
+		return renderer.onTouchMove(pixelX, pixelY, getWidth(), getHeight(), pointer);
+	}
+	
 	/* Métodos de Selección de Estado */
 
 	public void seleccionarJump()

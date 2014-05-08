@@ -38,6 +38,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private int posEnemigoActual;
 	private Handle handleEnemigoActual;
 	
+	//Boss
+	private Entidad jefe;
+	
 	// Puntuancion
 	private int puntuacion;
 	private boolean puntuacionModificada;
@@ -55,11 +58,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		personaje = p;
 		background = l.getFondoNivel();
-
+		
 		tipoEnemigos = l.getTipoEnemigos();
 		listaEnemigos = l.getListaEnemigos();
 		posEnemigoActual = 0;
 		handleEnemigoActual = new Handle(50, 20, Color.YELLOW);
+		
+		jefe = tipoEnemigos.get(tipoEnemigos.size()-1);
 		
 		personaje.reiniciarVidas();
 		personaje.activarBurbuja();
@@ -169,8 +174,43 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private void onDrawBossPhase(GL10 gl)
 	{
 		// TODO GAME: Dibujar elementos de la escena.
+		gl.glPushMatrix();
+
+			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
+					
+			// Dibujar protagonista
+			personaje.dibujar(gl, this);	
+			
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+			
+			gl.glTranslatef(this.getScreenWidth() - GamePreferences.DISTANCE_GAME_RIGHT() - jefe.getWidth(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
+			
+			jefe.dibujar(gl, this);
+			
+		gl.glPopMatrix();
 	}
 
+	public boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
+	{
+		
+		if(personaje.getY() > screenWidth - pixelY) //bajar
+		{
+			if(personaje.getY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > GamePreferences.DISTANCE_GAME_BOTTOM())
+			{
+				personaje.subir();
+			}
+		}
+		else //
+		{
+			if(personaje.getY() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			{
+				personaje.bajar();
+			}
+		}
+		return true;
+	}
 	/* Métodos de Modificación de Estado */
 
 	public void seleccionarRun()
@@ -284,8 +324,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			estado = TEstadoGame.FaseBoss;
 			
 			// TODO GAME: Cambiar fin de juego.
-			personaje.reposo();
-			return TEventoGame.FinJuegoVictoria;
+			personaje.reposo();		
+			return TEventoGame.FinFaseEnemigos;
 		}
 		
 		// Colision con enemigo actual
@@ -352,6 +392,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public int getVidas()
 	{
 		return personaje.getVidas();
+	}
+	
+	public int getVidasBoss() 
+	{
+		// TODO Auto-generated method stub
+		return 2;
 	}
 
 	/* Métodos de Guardado de Información */

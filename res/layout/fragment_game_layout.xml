@@ -17,24 +17,20 @@
             style="@style/Button_Fragment_Style"
             android:background="@drawable/icon_main_game"
             android:contentDescription="@string/desc_game_play" />
-
-	</LinearLayout>
-	
-	<LinearLayout style="@style/Layout_Top_Right_FragmentButton_Style" >
 	        
 		<ImageView style="@style/Button_Fragment_Style"
 			android:id="@+id/imageViewGameHeart1"
-			android:background="@drawable/lives_heart"
+			android:background="@drawable/lives_character_heart"
 			android:contentDescription="@string/desc_game_heart" />
 		
 		<ImageView style="@style/Button_Fragment_Style"
 			android:id="@+id/imageViewGameHeart2"
-			android:background="@drawable/lives_heart"
+			android:background="@drawable/lives_character_heart"
 			android:contentDescription="@string/desc_game_heart" />
 		
 		<ImageView style="@style/Button_Fragment_Style"
 			android:id="@+id/imageViewGameHeart3"
-			android:background="@drawable/lives_heart"
+			android:background="@drawable/lives_character_heart"
 			android:contentDescription="@string/desc_game_heart" />
 	
 	</LinearLayout>
@@ -48,5 +44,24 @@
         android:layout_marginTop="20dp"
         android:textColor="#EEEEEE"
         android:textSize="30sp" />
+    
+    <LinearLayout style="@style/Layout_Top_Right_FragmentButton_Style" >
+	        
+		<ImageView style="@style/Button_Fragment_Style"
+			android:id="@+id/imageViewGameHeart4"
+			android:background="@drawable/lives_boss_heart"
+			android:contentDescription="@string/desc_game_heart" />
+		
+		<ImageView style="@style/Button_Fragment_Style"
+			android:id="@+id/imageViewGameHeart5"
+			android:background="@drawable/lives_boss_heart"
+			android:contentDescription="@string/desc_game_heart" />
+		
+		<ImageView style="@style/Button_Fragment_Style"
+			android:id="@+id/imageViewGameHeart6"
+			android:background="@drawable/lives_boss_heart"
+			android:contentDescription="@string/desc_game_heart" />
+	
+	</LinearLayout>
     
 </RelativeLayout>

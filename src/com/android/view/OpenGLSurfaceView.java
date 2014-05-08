@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.android.touch.DoubleTapDetector;
-import com.android.touch.GameDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
@@ -26,10 +25,13 @@ public class OpenGLSurfaceView extends GLSurfaceView
 	private ScaleDetector scaleDetector;
 	private MoveDetector moveDetector;
 	private RotateDetector rotateDetector;
-	private GameDetector gameDetector;
 	private DoubleTapDetector doubleTapDetector;
 
 	/* Constructora */
+	public OpenGLSurfaceView(Context context, AttributeSet attrs, boolean transparente)
+	{
+		this(context, attrs, TEstadoDetector.Nada, transparente);
+	}
 	
 	public OpenGLSurfaceView(Context context, AttributeSet attrs, TEstadoDetector estado, boolean transparente)
 	{
@@ -135,10 +137,6 @@ public class OpenGLSurfaceView extends GLSurfaceView
 			rotateDetector.setEstado(modoCamara);
 			doubleTapDetector.setEstado(modoCamara);
 		}
-		else if (estado == TEstadoDetector.GameDetectors)
-		{
-			gameDetector = new GameDetector();
-		}
 	}
 
 	/* Métodos Listener onTouch */
@@ -155,11 +153,9 @@ public class OpenGLSurfaceView extends GLSurfaceView
 				return onDetectorsTouch(v, event);
 			case CoordDetectors:
 				return onDetectorsTouch(v, event);
-			case GameDetectors:
-				return onGameDetectors(v, event);
+			default:
+				return false;
 		}
-
-		return false;
 	}
 
 	private boolean onSingleTouch(View v, MotionEvent event)
@@ -282,19 +278,6 @@ public class OpenGLSurfaceView extends GLSurfaceView
 			}
 
 			requestRender();
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean onGameDetectors(View v, MotionEvent event)
-	{
-		if (event != null)
-		{
-			gameDetector.onTouchEvent(event, this);
-			requestRender();
-
 			return true;
 		}
 

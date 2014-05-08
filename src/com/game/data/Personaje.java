@@ -291,4 +291,19 @@ public class Personaje extends Malla
 	{
 		return nombre;
 	}
+
+	public float getY() 
+	{
+		return posicionY;
+	}
+
+	public void subir() 
+	{
+		posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+	}
+	
+	public void bajar() 
+	{
+		posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+	}
 }

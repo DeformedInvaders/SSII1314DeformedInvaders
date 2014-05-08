@@ -69,7 +69,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		View rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
 		
-		imagenVidas = new ImageView[GamePreferences.MAX_LIVES];
+		imagenVidas = new ImageView[2*GamePreferences.MAX_LIVES];
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewGame1);
@@ -83,13 +83,18 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonPlay.setOnClickListener(new onPlayGameClickListener());
 		
-		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
+		for(int i = 0; i < 2*GamePreferences.MAX_LIVES; i++)
 		{
 			int id = getActivity().getResources().getIdentifier(GameResources.VIEW_IMAGE_HEART + (i + 1), GameResources.RESOURCE_ID, getActivity().getPackageName());
 			
 			imagenVidas[i] = (ImageView) rootView.findViewById(id);
 		}
 
+		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
+		{
+			imagenVidas[i+GamePreferences.MAX_LIVES].setVisibility(View.INVISIBLE);
+		}
+		
 		setCanvasListener(canvas);
 
 		reiniciarInterfaz();
@@ -241,14 +246,32 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	public void onGameLivesChanged(int lives)
 	{
+		
 		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
 		{
-			imagenVidas[i].setBackgroundResource(R.drawable.lives_heart_broken);
+			imagenVidas[i].setBackgroundResource(R.drawable.lives_character_heart_broken);
 		}
 		
 		for(int i = 0; i < lives; i++)
 		{
-			imagenVidas[i].setBackgroundResource(R.drawable.lives_heart);
+			imagenVidas[i].setBackgroundResource(R.drawable.lives_character_heart);
+		}
+	}
+	
+	@Override
+	public void onGameLivesChanged(int lives, int boss_lives)
+	{
+		onGameLivesChanged(lives);
+		
+		for(int i = 0; i < GamePreferences.MAX_LIVES; i++)
+		{
+			imagenVidas[i+GamePreferences.MAX_LIVES].setVisibility(View.VISIBLE);
+			imagenVidas[i+GamePreferences.MAX_LIVES].setBackgroundResource(R.drawable.lives_boss_heart_broken);
+		}
+		
+		for(int i = 0; i < boss_lives; i++)
+		{
+			imagenVidas[i+GamePreferences.MAX_LIVES].setBackgroundResource(R.drawable.lives_boss_heart);
 		}
 	}
 
