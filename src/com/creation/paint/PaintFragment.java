@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.android.dialog.ColorDialog;
 import com.android.dialog.SizeDialog;
 import com.android.dialog.StickerDialog;
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoSticker;
 import com.creation.data.Textura;
@@ -30,7 +30,7 @@ public class PaintFragment extends OpenGLFragment
 	private StickerDialog stickerDialog;
 
 	private PaintGLSurfaceView canvas;
-	private ImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
+	private IconImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
 
 	private Personaje personaje;
 	private int personajeIndice;
@@ -89,16 +89,16 @@ public class PaintFragment extends OpenGLFragment
 		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
 		canvas.setParameters(personaje);
 		
-		botonPincel = (ImageButton) rootView.findViewById(R.id.imageButtonPaint1);
-		botonCubo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint2);
-		botonColor = (ImageButton) rootView.findViewById(R.id.imageButtonPaint3);
-		botonSize = (ImageButton) rootView.findViewById(R.id.imageButtonPaint4);
-		botonPegatina = (ImageButton) rootView.findViewById(R.id.imageButtonPaint5);
-		botonMano = (ImageButton) rootView.findViewById(R.id.imageButtonPaint6);
-		botonPrev = (ImageButton) rootView.findViewById(R.id.imageButtonPaint7);
-		botonNext = (ImageButton) rootView.findViewById(R.id.imageButtonPaint8);
-		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonPaint9);
-		botonListo = (ImageButton) rootView.findViewById(R.id.imageButtonPaint10);
+		botonPincel = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint1);
+		botonCubo = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint2);
+		botonColor = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint3);
+		botonSize = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint4);
+		botonPegatina = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint5);
+		botonMano = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint6);
+		botonPrev = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint7);
+		botonNext = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint8);
+		botonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint9);
+		botonListo = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint10);
 
 		botonPincel.setOnClickListener(new OnPincelClickListener());
 		botonCubo.setOnClickListener(new OnCuboClickListener());

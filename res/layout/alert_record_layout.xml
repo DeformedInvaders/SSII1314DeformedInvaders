@@ -15,7 +15,7 @@
 		android:orientation="horizontal"
 		android:gravity="center_horizontal">
 		
-     	<ImageButton style="@style/Button_Fragment_Style"
+     	<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonRecordAlert1"
             android:contentDescription="@string/desc_recordalert_record"
             android:background="@drawable/icon_media_record" />

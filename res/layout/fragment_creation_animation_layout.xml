@@ -11,7 +11,7 @@
 
     <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonAnimation1"
             android:background="@drawable/icon_tool_ready"
             android:contentDescription="@string/desc_animation_ready" />

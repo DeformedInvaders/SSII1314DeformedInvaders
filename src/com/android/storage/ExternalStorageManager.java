@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StreamCorruptedException;
 
 import android.content.Context;
@@ -27,6 +28,7 @@ public class ExternalStorageManager
 	
 	private static final String ROOT_DIRECTORY = "/DEFORMEDINVADERS";
 	private static final String TEMP_FILE = "/FILE.png";
+	private static final String LOG_FILE = "/LOG.txt";
 
 	private Context mContext;
 	
@@ -41,7 +43,7 @@ public class ExternalStorageManager
 
 	/* Métodos Dirección de Ficheros y Directorios */
 
-	private String getDirectorioRaiz()
+	private static String getDirectorioRaiz()
 	{
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + ROOT_DIRECTORY;
 	}
@@ -51,6 +53,11 @@ public class ExternalStorageManager
 		return getDirectorioRaiz() + TEMP_FILE;
 	}
 	
+	private static String getFicheroLog()
+	{
+		return getDirectorioRaiz() + LOG_FILE;
+	}
+	
 	private String getDirectorioExterno(String nombre)
 	{
 		return getDirectorioRaiz() + "/" + nombre + ".di";
@@ -58,7 +65,7 @@ public class ExternalStorageManager
 
 	/* Métodos Comprobación existencia y creación de Directorios */
 
-	private boolean comprobarDirectorio(String file)
+	private static boolean comprobarDirectorio(String file)
 	{
 		File dir = new File(file);
 		if (!dir.exists())
@@ -68,6 +75,31 @@ public class ExternalStorageManager
 		}
 
 		return dir.isDirectory();
+	}
+	
+	/* Métodos Escritura Logcat */
+	
+	public static boolean writeLogcat(String tag, String text)
+	{
+		comprobarDirectorio(getDirectorioRaiz());
+		
+		try
+		{
+			FileOutputStream file = new FileOutputStream(new File(getFicheroLog()), true);
+	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
+	        outputStreamWriter.write(tag + " :: "+text+"\n");
+	        outputStreamWriter.close();
+	        
+	        Log.d(tag, text);
+
+			return true;
+		}
+		catch (IOException e)
+		{
+			
+		}
+		
+		return false;
 	}
 
 	/* Métodos Lectura y Escritura Temporal */
@@ -84,7 +116,7 @@ public class ExternalStorageManager
 		comprobarDirectorio(getDirectorioRaiz());
 		
 		File file = new File(getFicheroTemp());
-		Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage deleted");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage deleted");
 		
 		return file.delete();
 	}
@@ -109,21 +141,21 @@ public class ExternalStorageManager
 			data.flush();
 			data.close();
 			
-			Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage saved");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage saved");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage file not found");
 			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage ioexception");
 			e.printStackTrace();
 		}
 
-		Log.d(EXTERNAL_STORAGE_TAG, "File SaveImage not saved");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage not saved");
 		return false;
 	}
 	
@@ -155,27 +187,27 @@ public class ExternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " imported");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " imported");
 			return personaje;
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " class not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " class not found");
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " sream corrupted");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " ioexception");
 		}
 
-		Log.d(EXTERNAL_STORAGE_TAG, "Character " + nombre + " not imported");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " not imported");
 		return null;
 	}
 	
@@ -197,23 +229,23 @@ public class ExternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " exported");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " exported");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " sream corrupted");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " ioexception");
 		}
 
-		Log.d(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " not exported");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " not exported");
 		return false;
 	}
 	
@@ -234,23 +266,23 @@ public class ExternalStorageManager
 			data.close();
 			file.close();
 
-			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " exported");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " exported");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " sream corrupted");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " ioexception");
 		}
 
-		Log.d(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " not exported");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " not exported");
 		return false;
 	}
 }

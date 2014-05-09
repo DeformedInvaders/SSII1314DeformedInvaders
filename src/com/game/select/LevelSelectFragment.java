@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.game.data.Nivel;
 import com.main.model.GameStatistics;
@@ -21,7 +21,7 @@ public class LevelSelectFragment extends OpenGLFragment
 	private GameStatistics estadisticas;
 	private Nivel nivel;
 
-	private ImageButton botonNivel;
+	private IconImageButton botonNivel;
 
 	/* Constructora */
 
@@ -69,7 +69,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		textBackground.setTextColor(nivel.getColorTextoNivel());
 		textBackground.setTypeface(nivel.getFuenteNivel());
 
-		botonNivel = (ImageButton) rootView.findViewById(R.id.imageButtonLevel1);
+		botonNivel = (IconImageButton) rootView.findViewById(R.id.imageButtonLevel1);
 		botonNivel.setOnClickListener(new OnLevelClickListener());
 
 		reiniciarInterfaz();

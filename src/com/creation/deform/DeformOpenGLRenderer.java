@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 
+import com.android.storage.ExternalStorageManager;
 import com.android.view.OpenGLRenderer;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
@@ -509,10 +510,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		//TODO Comprobar comportamiento del algoritmo.
 		if (GamePreferences.IS_DEBUG_ENABLED())
 		{
-			android.util.Log.d("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
-			android.util.Log.d("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
-			android.util.Log.d("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
-			android.util.Log.d("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
+			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
+			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
+			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
+			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
 		}
 		
 		mListener.onAnimationFinished();

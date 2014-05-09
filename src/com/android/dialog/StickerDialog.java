@@ -69,7 +69,7 @@ public abstract class StickerDialog extends WindowDialog
 
 	private void cargarPegatina(LinearLayout layout, int idImagen, int tagImagen, OnClickListener listener)
 	{
-		ImageView image = new ImageView(mContext, null, R.style.Button_Fragment_Style);
+		ImageView image = new ImageView(mContext);
 		image.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
 		image.setBackgroundResource(idImagen);
 		image.setOnClickListener(listener);

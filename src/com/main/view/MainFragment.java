@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
 import com.character.display.OnDisplayListener;
@@ -22,7 +22,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	private MainFragmentListener mCallback;
 
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar;
+	private IconImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar;
 
 	private Personaje personaje;
 	private int numeroPersonajes;
@@ -85,10 +85,10 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 			fondo.setBackgroundResource(R.drawable.background_notlong_main);
 		}
 
-		botonCrear = (ImageButton) rootView.findViewById(R.id.imageButtonMain1);
-		botonSeleccionar = (ImageButton) rootView.findViewById(R.id.imageButtonMain3);
-		botonJugar = (ImageButton) rootView.findViewById(R.id.imageButtonMain2);
-		botonImportar = (ImageButton) rootView.findViewById(R.id.imageButtonMain4);
+		botonCrear = (IconImageButton) rootView.findViewById(R.id.imageButtonMain1);
+		botonSeleccionar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain3);
+		botonJugar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain2);
+		botonImportar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain4);
 		
 		botonCrear.setOnClickListener(new OnAddClickListener());
 		botonSeleccionar.setOnClickListener(new OnViewClickListener());

@@ -8,7 +8,6 @@ import java.io.StreamCorruptedException;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.creation.data.Esqueleto;
 import com.creation.data.Textura;
@@ -46,27 +45,27 @@ public class AssetsStorageManager
 			data.close();
 			file.close();
 
-			Log.d(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " imported");
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " imported");
 			return enemigo;
 		}
 		catch (ClassNotFoundException e)
 		{
-			Log.d(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " class not found");
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " class not found");
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.d(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " file not found");
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " file not found");
 		}
 		catch (StreamCorruptedException e)
 		{
-			Log.d(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " sream corrupted");
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " sream corrupted");
 		}
 		catch (IOException e)
 		{
-			Log.d(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " ioexception");
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " ioexception");
 		}
 
-		Log.d(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " not imported");
+		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Character " + idEnemigo + " Level " + nivel.toString() + " not imported");
 		return null;
 	}
 }

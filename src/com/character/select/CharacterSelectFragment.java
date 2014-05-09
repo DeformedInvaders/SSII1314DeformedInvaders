@@ -8,10 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.alert.TextInputAlert;
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayGLSurfaceView;
 import com.character.display.OnDisplayListener;
@@ -25,7 +25,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	private OnCharacterListener mListener;
 	
 	private DisplayGLSurfaceView canvas;
-	private ImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete, botonRename, botonExport;
+	private IconImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete, botonRename, botonExport;
 
 	private Personaje personaje;
 	
@@ -62,16 +62,16 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		textBackground.setTextColor(Color.BLACK);
 		textBackground.setTypeface(textFont);
 
-		botonCamara = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
-		botonRun = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect2);
-		botonJump = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect3);
-		botonCrouch = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect4);
-		botonAttack = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
-		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
-		botonRepaint = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
-		botonRename = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect9);
-		botonDelete = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
-		botonExport = (ImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect10);
+		botonCamara = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
+		botonRun = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect2);
+		botonJump = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect3);
+		botonCrouch = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect4);
+		botonAttack = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
+		botonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
+		botonRepaint = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
+		botonRename = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect9);
+		botonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
+		botonExport = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect10);
 		
 		botonCamara.setOnClickListener(new OnCamaraClickListener());
 		botonRun.setOnClickListener(new OnRunClickListener());

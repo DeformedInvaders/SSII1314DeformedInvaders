@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.android.alert.RecordAlert;
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.game.data.Personaje;
 import com.lib.buffer.VertexArray;
@@ -22,7 +22,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	private Personaje personaje;
 
 	private DeformGLSurfaceView canvas;
-	private ImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
+	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
 
 	private DeformDataSaved dataSaved;
 	
@@ -53,13 +53,13 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		canvas.setParameters(this, personaje);
 		setCanvasListener(canvas);
 		
-		botonAnyadir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform1);
-		botonEliminar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform2);
-		botonDeformar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform3);
-		botonReiniciar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform4);
-		botonGrabar = (ImageButton) rootView.findViewById(R.id.imageButtonDeform5);
-		botonAudio = (ImageButton) rootView.findViewById(R.id.imageButtonDeform6);
-		botonReproducir = (ImageButton) rootView.findViewById(R.id.imageButtonDeform7);
+		botonAnyadir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform1);
+		botonEliminar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform2);
+		botonDeformar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform3);
+		botonReiniciar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform4);
+		botonGrabar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform5);
+		botonAudio = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
+		botonReproducir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform7);
 
 		botonAnyadir.setOnClickListener(new OnAddClickListener());
 		botonEliminar.setOnClickListener(new OnRemoveClickListener());

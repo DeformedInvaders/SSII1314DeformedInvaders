@@ -9,15 +9,15 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.VideoView;
 
+import com.android.view.IconImageButton;
 import com.project.main.R;
 
 public class VideoListAlert extends WindowAlert
 {
 	private VideoView video;
-	private ImageButton botonNext, botonPrev;
+	private IconImageButton botonNext, botonPrev;
 	private int pos, posMax;
 	
 	private List<Integer> listMessage;
@@ -46,8 +46,8 @@ public class VideoListAlert extends WindowAlert
 		});
 		
 		
-		botonPrev = (ImageButton) findViewById(R.id.imageButtonVideoAlert1);
-		botonNext = (ImageButton) findViewById(R.id.imageButtonVideoAlert2);
+		botonPrev = (IconImageButton) findViewById(R.id.imageButtonVideoAlert1);
+		botonNext = (IconImageButton) findViewById(R.id.imageButtonVideoAlert2);
 		
 		botonNext.setOnClickListener(new OnNextVideoClickListener());
 		botonPrev.setOnClickListener(new OnPrevVideoClickListener());

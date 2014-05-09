@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import com.android.view.IconImageButton;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -16,7 +16,7 @@ public abstract class RecordAlert extends WindowAlert
 	private static final String TIME_FORMAT = "%02d:%03d";
 	
 	private ProgressBar progressBar;
-	private ImageButton botonRecAudio;
+	private IconImageButton botonRecAudio;
 
 	private CountDownTimer timer;
 
@@ -32,7 +32,7 @@ public abstract class RecordAlert extends WindowAlert
 		
 		progressBar = (ProgressBar) findViewById(R.id.progressBarRecordAlert1);
 		
-		botonRecAudio = (ImageButton) findViewById(R.id.imageButtonRecordAlert1);
+		botonRecAudio = (IconImageButton) findViewById(R.id.imageButtonRecordAlert1);
 		botonRecAudio.setOnClickListener(new OnRecAudioClickListener());
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {

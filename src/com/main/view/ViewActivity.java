@@ -1,5 +1,7 @@
 package com.main.view;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.android.storage.ExternalStorageManager;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.deform.DeformationFragment;
@@ -80,6 +83,8 @@ public class ViewActivity extends FragmentActivity
         controller = new GameController(this, this, core);
         
         controller.onActivityStarted();
+        
+        ExternalStorageManager.writeLogcat("ACTIVITY", DateFormat.getDateTimeInstance().format(new Date()));
 	}
 	
 	@Override

@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.view.BackgroundDataSaved;
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
@@ -32,7 +32,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	private GameOpenGLSurfaceView canvas;
 	private TextView textoPuntuacion;
-	private ImageButton botonPlay;
+	private IconImageButton botonPlay;
 	private ImageView[] imagenCharacterVidas, imagenBossVidas;
 
 	private boolean gamePaused;
@@ -82,7 +82,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		textoPuntuacion = (TextView) rootView.findViewById(R.id.textViewGame1);
 		
-		botonPlay = (ImageButton) rootView.findViewById(R.id.imageButtonGame1);
+		botonPlay = (IconImageButton) rootView.findViewById(R.id.imageButtonGame1);
 		botonPlay.setOnClickListener(new onPlayGameClickListener());
 		
 		LinearLayout layoutCharacter = (LinearLayout) rootView.findViewById(R.id.linearLayoutGame1);

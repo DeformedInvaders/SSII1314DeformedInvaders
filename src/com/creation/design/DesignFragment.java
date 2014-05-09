@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.android.touch.TEstadoDetector;
+import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.creation.data.Esqueleto;
 import com.main.model.GameResources;
@@ -21,7 +21,7 @@ public class DesignFragment extends OpenGLFragment
 	private DesignFragmentListener mCallback;
 
 	private DesignGLSurfaceView canvas;
-	private ImageButton botonReset, botonTriangular, botonListo;
+	private IconImageButton botonReset, botonTriangular, botonListo;
 
 	private DesignDataSaved dataSaved;
 
@@ -63,9 +63,9 @@ public class DesignFragment extends OpenGLFragment
 		// Instanciar Elementos de la GUI
 		canvas = (DesignGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
 
-		botonListo = (ImageButton) rootView.findViewById(R.id.imageButtonDesign1);
-		botonReset = (ImageButton) rootView.findViewById(R.id.imageButtonDesign2);
-		botonTriangular = (ImageButton) rootView.findViewById(R.id.imageButtonDesign3);
+		botonListo = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign1);
+		botonReset = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign2);
+		botonTriangular = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign3);
 
 		botonListo.setOnClickListener(new OnReadyClickListener());
 		botonReset.setOnClickListener(new onResetClickListener());

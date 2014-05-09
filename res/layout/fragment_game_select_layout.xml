@@ -36,7 +36,7 @@
     
    	<LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style">
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonLevel1"
             android:contentDescription="@string/desc_magic"
             android:background="@drawable/icon_level_locked" />

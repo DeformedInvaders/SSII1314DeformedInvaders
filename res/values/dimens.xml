@@ -22,8 +22,8 @@
     <dimen name="ColorButton_LayoutWidth_Dimen">60dp</dimen>
     
     <!-- Boton Fragment dimensions -->
-    <dimen name="FragmentButton_LayoutHeight_Dimen">30dp</dimen>
-    <dimen name="FragmentButton_LayoutWidth_Dimen">30dp</dimen>
+    <dimen name="FragmentButton_LayoutHeight_Dimen">20dp</dimen>
+    <dimen name="FragmentButton_LayoutWidth_Dimen">20dp</dimen>
     
     <!-- ProgressBar dimensions -->
     <dimen name="ProgressBar_LayoutWidth_Dimen">300dp</dimen>

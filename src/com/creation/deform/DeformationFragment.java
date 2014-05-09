@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
+import com.android.view.IconImageButton;
 import com.android.view.ViewFrameFragment;
 import com.android.view.ViewFrameSwipeable;
 import com.creation.data.Movimientos;
@@ -24,7 +24,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 {
 	private AnimationFragmentListener mCallback;
 
-	private ImageButton botonReady;
+	private IconImageButton botonReady;
 	
 	private Personaje personaje;
 	private Movimientos movimientos;
@@ -63,7 +63,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		View rootView = inflater.inflate(R.layout.fragment_creation_animation_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		botonReady = (ImageButton) rootView.findViewById(R.id.imageButtonAnimation1);
+		botonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonAnimation1);
 		botonReady.setOnClickListener(new OnReadyClickListener());
 		
 		frameLayout = (ViewFrameSwipeable) rootView.findViewById(R.id.frameViewAnimation1);

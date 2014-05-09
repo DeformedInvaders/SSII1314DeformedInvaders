@@ -12,17 +12,17 @@
 
     <LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style">
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain1"
             android:contentDescription="@string/desc_main_new"
             android:background="@drawable/icon_main_creation" />
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain2"
             android:contentDescription="@string/desc_main_play"
             android:background="@drawable/icon_main_game" />
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain3"
             android:contentDescription="@string/desc_main_select"
             android:background="@drawable/icon_main_selection" />
@@ -30,7 +30,7 @@
 	
 	<LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
     
-   		<ImageButton style="@style/Button_Fragment_Style"
+   		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonMain4"
             android:contentDescription="@string/desc_main_import"
             android:background="@drawable/icon_main_import" />

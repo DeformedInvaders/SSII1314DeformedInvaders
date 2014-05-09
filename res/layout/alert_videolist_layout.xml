@@ -15,12 +15,12 @@
 		android:orientation="horizontal"
 		android:gravity="center_horizontal">
 		
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonVideoAlert1"
             android:contentDescription="@string/desc_videolistalert_prev"
             android:background="@drawable/icon_tool_prev" />
                 
-     	<ImageButton style="@style/Button_Fragment_Style"
+     	<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonVideoAlert2"
             android:contentDescription="@string/desc_videolistalert_next"
             android:background="@drawable/icon_tool_next" />

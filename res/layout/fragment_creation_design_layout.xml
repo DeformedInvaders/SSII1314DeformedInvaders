@@ -8,7 +8,7 @@
 
     <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style">
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign3"
             android:contentDescription="@string/desc_design_triangle"
             android:background="@drawable/icon_tool_triangulate" />
@@ -17,12 +17,12 @@
 
     <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style" >
 
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign2"
             android:contentDescription="@string/desc_design_reset"
             android:background="@drawable/icon_tool_reset" />
                 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDesign1"
             android:contentDescription="@string/desc_design_ready"
             android:background="@drawable/icon_tool_ready" />

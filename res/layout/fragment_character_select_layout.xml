@@ -16,22 +16,22 @@
 	
     <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style" >
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect2"
             android:background="@drawable/icon_game_run"
             android:contentDescription="@string/desc_select_run" />
         
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect3"
             android:background="@drawable/icon_game_jump"
             android:contentDescription="@string/desc_select_jump" />
         
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect4"
             android:background="@drawable/icon_game_crouch"
             android:contentDescription="@string/desc_select_crouch" />
         
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect5"
             android:background="@drawable/icon_game_attack"
             android:contentDescription="@string/desc_select_attack" />
@@ -40,32 +40,32 @@
 	
 	<LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonCharacterSelect10"
 	        android:contentDescription="@string/desc_select_export"
 	        android:background="@drawable/icon_tool_export" />
 	    
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonCharacterSelect1"
             android:background="@drawable/icon_share_picture"
             android:contentDescription="@string/desc_select_camera" />
 		
-	    <ImageButton style="@style/Button_Fragment_Style"
+	    <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonCharacterSelect8"
 	        android:contentDescription="@string/desc_select_repaint"
 	        android:background="@drawable/icon_tool_repaint" />
 	    
-   	    <ImageButton style="@style/Button_Fragment_Style"
+   	    <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonCharacterSelect9"
 	        android:contentDescription="@string/desc_select_rename"
 	        android:background="@drawable/icon_tool_rename" />
 	            
-	    <ImageButton style="@style/Button_Fragment_Style"
+	    <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonCharacterSelect6"
 	        android:contentDescription="@string/desc_select_select"
 	        android:background="@drawable/icon_tool_ready" />
 	
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 		    android:id="@+id/imageButtonCharacterSelect7"
 		    android:contentDescription="@string/desc_select_delete"
 		    android:background="@drawable/icon_tool_reset" />

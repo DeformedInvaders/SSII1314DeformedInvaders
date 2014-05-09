@@ -8,32 +8,32 @@
 
     <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style">
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint1"
             android:contentDescription="@string/desc_paint_pencil"
             android:background="@drawable/icon_tool_pencil" />
 
-        <ImageButton style="@style/Button_Fragment_Style"
+        <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint2"
             android:contentDescription="@string/desc_paint_bucket"
             android:background="@drawable/icon_tool_bucket" />
         
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint3"
             android:contentDescription="@string/desc_paint_color"
             android:background="@drawable/icon_tool_color" />
         
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint4"
             android:contentDescription="@string/desc_paint_size"
             android:background="@drawable/icon_tool_size" />
         
-   		<ImageButton style="@style/Button_Fragment_Style"
+   		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint5"
             android:contentDescription="@string/desc_paint_sticker"
             android:background="@drawable/icon_tool_sticker" />
     		    
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint6"
             android:contentDescription="@string/desc_paint_zoom"
             android:background="@drawable/icon_tool_zoom" />
@@ -42,12 +42,12 @@
   
     <LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style">
                 
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint7"
             android:contentDescription="@string/desc_paint_prev"
             android:background="@drawable/icon_tool_prev" />
                 
-		<ImageButton style="@style/Button_Fragment_Style"
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint8"
             android:contentDescription="@string/desc_paint_next"
             android:background="@drawable/icon_tool_next" />
@@ -56,12 +56,12 @@
     
     <LinearLayout style="@style/Layout_Bottom_Right_FragmentButton_Style">
 
-     	<ImageButton style="@style/Button_Fragment_Style"
+     	<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 		    android:id="@+id/imageButtonPaint9"
 		    android:contentDescription="@string/desc_paint_reset"
 		    android:background="@drawable/icon_tool_reset" />
         		
-	   	<ImageButton style="@style/Button_Fragment_Style"
+	   	<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 	   	    android:id="@+id/imageButtonPaint10"
 	   	    android:contentDescription="@string/desc_paint_ready"
 	   	    android:background="@drawable/icon_tool_ready" />
