@@ -83,8 +83,8 @@ public class LevelGenerator
 			listaEnemigos.add(manager.importarEnemigo(nivel, id, i));
 		}
 		
-		int[] fondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS];
-		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS; i++)
+		int[] fondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL];
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL; i++)
 		{
 			fondos[i] = obtenerID(GameResources.GET_BACKGROUND(nivel, i));
 		}

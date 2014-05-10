@@ -5,7 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
 import com.creation.data.Handle;
 import com.creation.data.TTipoSticker;
 import com.lib.buffer.Dimensiones;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
 import com.lib.buffer.VertexArray;
 import com.main.model.GamePreferences;
 

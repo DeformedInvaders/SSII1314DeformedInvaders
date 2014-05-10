@@ -1,15 +1,14 @@
 package com.game.game;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.opengl.BackgroundDataSaved;
 import com.android.touch.GameDetector;
 import com.android.touch.TEstadoDetector;
-import com.android.view.BackgroundDataSaved;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
@@ -46,7 +45,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		mListener = listener;
 
-		renderer = new GameOpenGLRenderer(getContext(), Color.argb(0, 0, 0, 0), personaje, nivel);
+		renderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
 		setRenderer(renderer);
 		
 		handler = new Handler();
@@ -85,7 +84,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					case FinJuegoDerrota:	
 						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidasPersonaje());
 					break;
-					default:
+					case Nada:
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
 				}

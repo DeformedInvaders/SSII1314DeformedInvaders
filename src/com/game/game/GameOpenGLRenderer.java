@@ -10,8 +10,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.android.view.BackgroundDataSaved;
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.BackgroundDataSaved;
+import com.android.opengl.OpenGLRenderer;
+import com.android.opengl.TTipoFondoRenderer;
+import com.android.opengl.TTipoTexturasRenderer;
 import com.creation.data.Handle;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Background;
@@ -51,9 +53,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructura */
 
-	public GameOpenGLRenderer(Context context, int color, Personaje p, InstanciaNivel l)
+	public GameOpenGLRenderer(Context context, Personaje p, InstanciaNivel l)
 	{
-		super(context, color);
+		super(context, TTipoFondoRenderer.Desplazable, TTipoTexturasRenderer.Juego);
 
 		estado = TEstadoGame.FaseEnemies;
 		
@@ -247,7 +249,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private boolean playAnimationEnemiesPhase()
 	{
 		// Background
-		desplazarTexturaFondo();
+		animarFondo();
 		
 		// Avanzar cola de enemigos
 		for (int i = posEnemigoActual; i < listaEnemigos.size(); i++)
@@ -316,7 +318,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private TEventoGame isGameEndedEnemiesPhase()
 	{
 		// Final del juego
-		if (fondoFinalFijado)
+		if (isFondoFinal())
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
 			estado = TEstadoGame.FaseBoss;

@@ -11,8 +11,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 
+import com.android.opengl.OpenGLRenderer;
+import com.android.opengl.TTipoFondoRenderer;
+import com.android.opengl.TTipoTexturasRenderer;
 import com.android.storage.ExternalStorageManager;
-import com.android.view.OpenGLRenderer;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
@@ -88,7 +90,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public DeformOpenGLRenderer(Context context, int color, OnDeformListener listener, Personaje personaje)
 	{
-		super(context, color);
+		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje, color);
 		
 		mListener = listener;
 		estado = TEstadoDeform.Nada;

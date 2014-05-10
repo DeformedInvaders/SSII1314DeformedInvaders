@@ -11,7 +11,9 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
+import com.android.opengl.TTipoFondoRenderer;
+import com.android.opengl.TTipoTexturasRenderer;
 import com.character.display.TEstadoCaptura;
 import com.creation.data.MapaBits;
 import com.creation.data.Pegatinas;
@@ -77,7 +79,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	public PaintOpenGLRenderer(Context context, int color, Personaje personaje)
 	{
-		super(context, color);
+		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje, color);
 
 		estado = TEstadoPaint.Nada;
 

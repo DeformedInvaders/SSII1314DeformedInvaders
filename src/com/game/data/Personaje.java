@@ -4,7 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.TTipoSticker;
@@ -63,7 +63,7 @@ public class Personaje extends Malla
 		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 		{
-			renderer.cargarTexturaRectangulo(gl, GamePreferences.DISTANCE_CHARACTER_WIDTH(), GamePreferences.DISTANCE_CHARACTER_WIDTH(), indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
+			renderer.cargarTexturaRectangulo(gl, getHeight(), getWidth(), indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
 		}
 	}
 	
@@ -102,7 +102,6 @@ public class Personaje extends Malla
 			gl.glPushMatrix();
 			
 				gl.glTranslatef(posicionX, posicionY, 0.0f);
-				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
 				
 				renderer.dibujarTexturaRectangulo(gl, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
 			

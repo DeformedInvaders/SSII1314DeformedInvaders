@@ -11,6 +11,12 @@ import com.lib.buffer.VertexArray;
 public class BufferManager
 {
 	/* Métodos de Construcción de Buffer de Pintura */
+	
+	public static FloatBuffer construirBufferTextura()
+	{
+		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
+		return construirBufferListaPuntos(texture);
+	}
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP

@@ -2,7 +2,7 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
 import com.lib.math.Intersector;
 import com.lib.math.Vector2;
 import com.main.model.GamePreferences;

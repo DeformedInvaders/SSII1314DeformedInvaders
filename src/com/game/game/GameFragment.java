@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.view.BackgroundDataSaved;
+import com.android.opengl.BackgroundDataSaved;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoMovimiento;

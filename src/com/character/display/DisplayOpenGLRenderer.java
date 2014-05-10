@@ -7,7 +7,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
+import com.android.opengl.TTipoFondoRenderer;
+import com.android.opengl.TTipoTexturasRenderer;
 import com.creation.data.MapaBits;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
@@ -27,9 +29,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructura */
 
-	public DisplayOpenGLRenderer(Context context, int color)
+	public DisplayOpenGLRenderer(Context context)
 	{
-		super(context, color);
+		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje);
 
 		personajeCargado = false;
 
@@ -37,9 +39,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		estadoCaptura = TEstadoCaptura.Nada;
 	}
 
-	public DisplayOpenGLRenderer(Context context, int color, Personaje p)
+	public DisplayOpenGLRenderer(Context context, Personaje p)
 	{
-		super(context, color);
+		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje);
 
 		personajeCargado = true;
 		personaje = p;

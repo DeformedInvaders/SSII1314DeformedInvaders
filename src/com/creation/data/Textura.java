@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
 import com.game.data.TTipoEntidad;
 import com.lib.buffer.VertexArray;
 

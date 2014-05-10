@@ -2,7 +2,6 @@ package com.character.display;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
 
@@ -59,7 +58,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		movimientoAleatorio = random;
 		personajeCargado = true;
 
-		renderer = new DisplayOpenGLRenderer(getContext(), Color.argb(0, 0, 0, 0), personaje);
+		renderer = new DisplayOpenGLRenderer(getContext(), personaje);
 		setRenderer(renderer);
 	}
 
@@ -68,7 +67,7 @@ public class DisplayGLSurfaceView extends OpenGLSurfaceView
 		movimientoAleatorio = false;
 		personajeCargado = false;
 
-		renderer = new DisplayOpenGLRenderer(getContext(), Color.argb(0, 0, 0, 0));
+		renderer = new DisplayOpenGLRenderer(getContext());
 		setRenderer(renderer);
 	}
 

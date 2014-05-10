@@ -2,7 +2,7 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
-import com.android.view.OpenGLRenderer;
+import com.android.opengl.OpenGLRenderer;
 import com.main.model.GamePreferences;
 
 public class DoubleTapDetector

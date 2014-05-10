@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.opengl.OpenGLRenderer;
 import com.android.touch.DoubleTapDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
