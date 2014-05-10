@@ -861,13 +861,13 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private void animarTexturaFondoIntercambiable()
 	{
-		if (fondoActual < numFondos -1)
+		if (fondoActual < numFondos - 1)
 		{
 			dibujarTexturaFondo[fondoActual] = false;
 			
 			fondoActual ++;
 			dibujarTexturaFondo[fondoActual] = true;
-			fondoFinalFijado = fondoActual == numFondos;
+			fondoFinalFijado = fondoActual == numFondos - 1;
 		}
 	}
 

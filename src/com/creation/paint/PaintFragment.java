@@ -29,7 +29,7 @@ public class PaintFragment extends OpenGLFragment
 	private SizeDialog sizeDialog;
 	private StickerDialog stickerDialog;
 
-	private PaintGLSurfaceView canvas;
+	private PaintOpenGLSurfaceView canvas;
 	private IconImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
 
 	private Personaje personaje;
@@ -86,7 +86,7 @@ public class PaintFragment extends OpenGLFragment
 		View rootView = inflater.inflate(R.layout.fragment_creation_paint_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (PaintGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
+		canvas = (PaintOpenGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
 		canvas.setParameters(personaje);
 		
 		botonPincel = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint1);

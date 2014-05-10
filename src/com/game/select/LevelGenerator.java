@@ -18,11 +18,13 @@ import com.game.data.TTipoEntidad;
 import com.game.game.TTipoEndgame;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
+import com.video.data.Video;
 
 public class LevelGenerator
 {
 	private Context mContext;
 
+	private Video video;
 	private List<Nivel> listaNiveles;
 	private List<String> listaNombres;
 	private List<List<Entidad>> listaEnemigos;
@@ -51,6 +53,14 @@ public class LevelGenerator
 
 			crearNivel(niveles[i], listaNiveles, listaEnemigos.get(i), listaNombres, listaFondos);
 		}
+		
+		int[] idFondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_VIDEO];
+		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS_VIDEO; i++)
+		{
+			idFondos[i] = obtenerID(GameResources.GET_VIDEO(i));
+		}
+		
+		video = new Video(idFondos);
 	}
 
 	private int obtenerID(String id)
@@ -134,5 +144,10 @@ public class LevelGenerator
 	public List<Nivel> getListaNiveles()
 	{
 		return listaNiveles;
+	}
+	
+	public Video getVideo()
+	{
+		return video;
 	}
 }

@@ -7,9 +7,18 @@
    	    android:id="@+id/imageViewMain1"
 		android:contentDescription="@string/desc_select_background" />
     
-    <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
+    <com.character.display.DisplayOpenGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewMain1" />
 
+    <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style">
+    
+   		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
+            android:id="@+id/imageButtonMain5"
+            android:contentDescription="@string/desc_main_import"
+            android:background="@drawable/icon_main_movie" />
+    
+    </LinearLayout>
+    
     <LinearLayout style="@style/Layout_Bottom_Center_FragmentButton_Style">
 
         <com.android.view.IconImageButton style="@style/Button_Fragment_Style"

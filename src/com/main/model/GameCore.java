@@ -22,6 +22,7 @@ import com.game.data.Personaje;
 import com.game.select.LevelGenerator;
 import com.game.select.TTipoLevel;
 import com.project.main.R;
+import com.video.data.Video;
 
 public abstract class GameCore
 {
@@ -132,6 +133,11 @@ public abstract class GameCore
 		musicaSeleccionada = levelGenerator.getLevel(nivel).getMusicaNivel();
 		
 		return levelGenerator.getInstanciaLevel(nivel);
+	}
+	
+	public Video getVideo()
+	{
+		return levelGenerator.getVideo();
 	}
 	
 	public boolean isNivelPerfecto(TTipoLevel nivel)

@@ -62,6 +62,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		personaje = p;
 		background = l.getFondoNivel();
 		
+		// BackGround
+		seleccionarTexturaFondo(background.getIdTexturaFondos());
+		
 		tipoEnemigos = l.getTipoEnemigos();
 		listaEnemigos = l.getListaEnemigos();
 		posEnemigoActual = 0;
@@ -99,7 +102,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// BackGround
-		seleccionarTexturaFondo(background.getIdTexturaFondos());
+		//seleccionarTexturaFondo(background.getIdTexturaFondos());
 
 		// Protagonista
 		personaje.cargarTextura(gl, this, mContext);

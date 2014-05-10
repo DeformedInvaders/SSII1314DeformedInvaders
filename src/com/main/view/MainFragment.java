@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.character.display.DisplayGLSurfaceView;
+import com.character.display.DisplayOpenGLSurfaceView;
 import com.character.display.OnDisplayListener;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
@@ -21,8 +21,8 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 {
 	private MainFragmentListener mCallback;
 
-	private DisplayGLSurfaceView canvas;
-	private IconImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar;
+	private DisplayOpenGLSurfaceView canvas;
+	private IconImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar, botonVideo;
 
 	private Personaje personaje;
 	private int numeroPersonajes;
@@ -50,6 +50,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		public void onMainSelectCharacter();
 		public void onMainPlayGame();
 		public void onMainPlaySound(final TTipoMovimiento tipo);
+		public void onMainPlayVideo();
 	}
 
 	/* Métodos Fragment */
@@ -64,7 +65,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		actionBar.removeAllTabs();
 
 		// Instanciar Elementos de la GUI
-		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
+		canvas = (DisplayOpenGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
 		
 		if (personaje != null)
 		{
@@ -89,11 +90,13 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		botonSeleccionar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain3);
 		botonJugar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain2);
 		botonImportar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain4);
+		botonVideo = (IconImageButton) rootView.findViewById(R.id.imageButtonMain5);
 		
 		botonCrear.setOnClickListener(new OnAddClickListener());
 		botonSeleccionar.setOnClickListener(new OnViewClickListener());
 		botonJugar.setOnClickListener(new OnGameClickListener());
 		botonImportar.setOnClickListener(new OnImportClickListener());
+		botonVideo.setOnClickListener(new OnVideoClickListener());
 
 		setCanvasListener(canvas);
 
@@ -196,6 +199,15 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		public void onClick(View v)
 		{
 			mCallback.onMainImportCharacter();
+		}
+	}
+	
+	private class OnVideoClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			mCallback.onMainPlayVideo();
 		}
 	}
 	

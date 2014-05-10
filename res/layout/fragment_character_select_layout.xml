@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.character.display.DisplayGLSurfaceView style="@style/GLSurfaceView_Style"
+    <com.character.display.DisplayOpenGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/displayGLSurfaceViewCharacterSelect1" />
     
     <TextView

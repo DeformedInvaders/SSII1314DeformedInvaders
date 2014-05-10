@@ -35,6 +35,8 @@ import com.main.model.GameCore;
 import com.main.model.GamePreferences;
 import com.main.model.GameStatistics;
 import com.project.main.R;
+import com.video.data.Video;
+import com.video.video.VideoFragment;
 
 public class ViewActivity extends FragmentActivity
 {
@@ -324,6 +326,12 @@ public class ViewActivity extends FragmentActivity
 	public void insertarGameFragmento(Personaje personajeSeleccionado, InstanciaNivel nivel, int title)
 	{
 		insertarFragmento(GameFragment.newInstance(controller, personajeSeleccionado, nivel));
+		cambiarTituloActionBar(title);
+	}
+	
+	public void insertarVideoFragmento(Video video, int title)
+	{
+		insertarFragmento(VideoFragment.newInstance(controller, video));
 		cambiarTituloActionBar(title);
 	}
 }

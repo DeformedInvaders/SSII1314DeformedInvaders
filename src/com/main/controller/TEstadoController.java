@@ -4,7 +4,7 @@ import com.project.main.R;
 
 public enum TEstadoController
 {
-	Main, Design, Paint, Repaint, Deformation, CharacterSelection, LevelSelection, Game;
+	Main, Design, Paint, Repaint, Deformation, CharacterSelection, LevelSelection, Game, Video;
 	
 	public int getTitle()
 	{

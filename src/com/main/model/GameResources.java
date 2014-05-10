@@ -31,6 +31,7 @@ public class GameResources
 	private static final String DRAWABLE_ROME_ID = "rome_";
 	private static final String DRAWABLE_EGYPT_ID = "egypt_";
 	private static final String DRAWABLE_STONEHENGE_ID = "stonehenge_";
+	private static final String DRAWABLE_VIDEO_ID = "video_";
 	
 	private static final String DRAWABLE_BACKGROUND_ID = "background_";
 	private static final String DRAWABLE_POLAROID_ID = "polaroid_";
@@ -185,6 +186,24 @@ public class GameResources
 				return null;
 		}
 	}
+	
+	public static final String GET_VIDEO(int pos)
+	{
+		String ratio;
+		
+		if (GamePreferences.IS_LONG_RATIO())
+		{
+			ratio = DRAWABLE_RATIO_LONG;
+		}
+		else
+		{
+			ratio = DRAWABLE_RATIO_NOLONG;
+		}
+		
+		return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_VIDEO_ID + (pos + 1);
+	}
+	
+	//background_long_video_3
 	
 	public static final String GET_POLAROID(TTipoLevel nivel, TTipoEndgame juego)
 	{

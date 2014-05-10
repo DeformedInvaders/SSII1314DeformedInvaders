@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.android.alert.TextInputAlert;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.character.display.DisplayGLSurfaceView;
+import com.character.display.DisplayOpenGLSurfaceView;
 import com.character.display.OnDisplayListener;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
@@ -24,7 +24,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 {	
 	private OnCharacterListener mListener;
 	
-	private DisplayGLSurfaceView canvas;
+	private DisplayOpenGLSurfaceView canvas;
 	private IconImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete, botonRename, botonExport;
 
 	private Personaje personaje;
@@ -52,7 +52,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		View rootView = inflater.inflate(R.layout.fragment_character_select_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (DisplayGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
+		canvas = (DisplayOpenGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
 		canvas.setParameters(this, personaje, false);
 		
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GameResources.FONT_LOGO_PATH);

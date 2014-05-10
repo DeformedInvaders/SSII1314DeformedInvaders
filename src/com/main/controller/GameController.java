@@ -36,8 +36,10 @@ import com.main.model.GameStatistics;
 import com.main.view.MainFragment;
 import com.main.view.ViewActivity;
 import com.project.main.R;
+import com.video.data.Video;
+import com.video.video.VideoFragment;
 
-public class GameController implements ViewActivity.ActivityFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener
+public class GameController implements ViewActivity.ActivityFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener, VideoFragment.VideoFragmentListener
 {	
 	private Context mContext;
 	private GameCore core;
@@ -137,6 +139,12 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	public void onMainPlayGame()
 	{
 		cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles());
+	}
+	
+	@Override
+	public void onMainPlayVideo()
+	{
+		cambiarEstadoVideo(core.getVideo());
 	}
 	
 	@Override
@@ -415,6 +423,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		core.reproducirSonido(tipo);
 	}
+	
+	// Métodos VideoFragment
+	
+	@Override
+	public void onVideoFinished()
+	{
+		cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+	}
 
 
 	/* Métodos de Modificación de la Vista */
@@ -504,9 +520,15 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		actualizarMusica();
 	}
 	
+	private void cambiarEstadoVideo(Video video)
+	{
+		estado = TEstadoController.Video;
+		view.insertarVideoFragmento(video, estado.getTitle());
+	}
+	
 	public boolean isEstadoDesapilador()
 	{
-		return estado != TEstadoController.Main && estado != TEstadoController.Game;
+		return estado != TEstadoController.Main && estado != TEstadoController.Game && estado != TEstadoController.Video;
 	}
 
 	public void desapilarEstado()

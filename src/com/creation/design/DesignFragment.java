@@ -20,7 +20,7 @@ public class DesignFragment extends OpenGLFragment
 {
 	private DesignFragmentListener mCallback;
 
-	private DesignGLSurfaceView canvas;
+	private DesignOpenGLSurfaceView canvas;
 	private IconImageButton botonReset, botonTriangular, botonListo;
 
 	private DesignDataSaved dataSaved;
@@ -61,7 +61,7 @@ public class DesignFragment extends OpenGLFragment
 		View rootView = inflater.inflate(R.layout.fragment_creation_design_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (DesignGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
+		canvas = (DesignOpenGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
 
 		botonListo = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign1);
 		botonReset = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign2);

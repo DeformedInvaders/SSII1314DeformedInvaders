@@ -204,6 +204,7 @@
 		    <string name="desc_main_import">Import a created character.</string>
 		    <string name="desc_main_select">Select a character.</string>
 		    <string name="desc_main_play">Select a level.</string>
+		    <string name="desc_main_video">Play cinematic video.</string>
 		    
 		<!-- Design Fragment -->
 		    <string name="desc_design_ready">Ready to define the texture.</string>
