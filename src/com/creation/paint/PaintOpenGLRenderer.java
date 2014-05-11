@@ -515,6 +515,11 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		guardarPolilinea();
 		
+		if (buscador == null)
+		{
+			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, marcoAnchuraInterior, marcoAnchuraInterior);
+		}
+		
 		if (pegatinas.isCargada(tipo))
 		{
 			tipoPegatinaActual = tipo;

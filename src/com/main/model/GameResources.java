@@ -43,7 +43,7 @@ public class GameResources
 	
 	// Enemies Files
 	private static final String ENEMIES_PATH = "enemies/enemy_";
-	private static final String ENEMIES_EXTENSION = ".di";
+	private static final String ENEMIES_EXTENSION = ".edi";
 	
 	// Raw Video
 	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";

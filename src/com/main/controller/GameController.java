@@ -528,7 +528,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	
 	public boolean isEstadoDesapilador()
 	{
-		return estado != TEstadoController.Main && estado != TEstadoController.Game && estado != TEstadoController.Video;
+		return estado != TEstadoController.Main;
 	}
 
 	public void desapilarEstado()

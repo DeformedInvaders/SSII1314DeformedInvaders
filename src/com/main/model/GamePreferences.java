@@ -72,9 +72,9 @@ public class GamePreferences
 	
 	private static final int NUM_TYPE_STICKERS_EYES = 12;
 	private static final int NUM_TYPE_STICKERS_MOUTH = 12;
-	private static final int NUM_TYPE_STICKERS_WEAPON = 16;
-	private static final int NUM_TYPE_STICKERS_TRINKET = 16;
-	private static final int NUM_TYPE_STICKERS_HELMET = 16;
+	private static final int NUM_TYPE_STICKERS_WEAPON = 18;
+	private static final int NUM_TYPE_STICKERS_TRINKET = 18;
+	private static final int NUM_TYPE_STICKERS_HELMET = 18;
 	
 	// Puntuaciones
 	public static final int SCORE_LEVEL_COMPLETED = 100;

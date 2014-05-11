@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.game.data.Nivel;
+import com.main.model.GamePreferences;
 import com.main.model.GameStatistics;
 import com.project.main.R;
 
@@ -106,7 +107,7 @@ public class LevelSelectFragment extends OpenGLFragment
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (estadisticas.isUnlocked())
+		if (GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked())
 		{
 			botonNivel.setBackgroundResource(R.drawable.icon_level_unlocked);
 		}
@@ -119,7 +120,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if (estadisticas.isUnlocked())
+			if (GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked())
 			{
 				mListener.onLevelSelected(nivel.getTipoNivel());
 			}

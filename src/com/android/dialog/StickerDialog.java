@@ -44,18 +44,18 @@ public abstract class StickerDialog extends WindowDialog
 		LinearLayout typeLayout = new LinearLayout(mContext);
 		typeLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		typeLayout.setOrientation(LinearLayout.VERTICAL);
+		typeLayout.setPadding(10, 0, 10, 0);
 		
 			TextView titulo = new TextView(mContext);
 			titulo.setText(tipo.getTitle());
 			titulo.setTextAppearance(mContext, R.style.Text_Section_Dialog_Style);
 			
 			ScrollView scroll = new ScrollView(mContext);
-			scroll.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 3 * imageHeight));
+			scroll.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, 3 * imageHeight));
 			
 				LinearLayout layout = new LinearLayout(mContext);
-				layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 				layout.setOrientation(LinearLayout.VERTICAL);
-				layout.setPadding(10, 0, 10, 0);
 			
 			scroll.addView(layout);
 			
@@ -86,11 +86,22 @@ public abstract class StickerDialog extends WindowDialog
 	
 	private void construirPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTipoSticker tipo, OnClickListener listener)
 	{
+		boolean juegoTerminado = true;
 		boolean pegatinaAnyiadida = false;
+		
+		for (int i = 0; i < estadisticas.length; i++)
+		{
+			juegoTerminado &= estadisticas[i].isPerfected();
+		}
 		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS(tipo); i++)
 		{
-			if (tipo == TTipoSticker.Eyes || tipo == TTipoSticker.Mouth)
+			if (GamePreferences.IS_DEBUG_ENABLED())
+			{
+				cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+				pegatinaAnyiadida = true;
+			}
+			else if (tipo == TTipoSticker.Eyes || tipo == TTipoSticker.Mouth)
 			{
 				if (i < GamePreferences.NUM_TYPE_STICKERS(tipo) - 4)
 				{
@@ -107,10 +118,19 @@ public abstract class StickerDialog extends WindowDialog
 			}
 			else
 			{
-				// Pegatinas Resto Niveles
-				int pos = (i / (GamePreferences.NUM_TYPE_LEVELS - 1)) + 1;
-				if (estadisticas[pos].isPerfected())
+				if (i < GamePreferences.NUM_TYPE_STICKERS(tipo) - 2)
 				{
+					// Pegatinas Resto Niveles
+					int pos = (i / (GamePreferences.NUM_TYPE_LEVELS - 1)) + 1;
+					if (estadisticas[pos].isPerfected())
+					{
+						cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+						pegatinaAnyiadida = true;
+					}
+				}
+				else if (juegoTerminado)
+				{
+					// Pegatinas Personajes Video
 					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
 					pegatinaAnyiadida = true;
 				}

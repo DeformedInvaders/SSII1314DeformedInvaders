@@ -58,10 +58,10 @@ public class ExternalStorageManager
 		return getDirectorioRaiz() + LOG_FILE;
 	}
 	
-	private String getDirectorioExterno(String nombre)
+	/*private String getDirectorioExterno(String nombre)
 	{
 		return getDirectorioRaiz() + "/" + nombre + ".di";
-	}
+	}*/
 
 	/* Métodos Comprobación existencia y creación de Directorios */
 
@@ -217,7 +217,7 @@ public class ExternalStorageManager
 		
 		try
 		{
-			FileOutputStream file = new FileOutputStream(new File(getDirectorioExterno(personaje.getNombre())));
+			FileOutputStream file = new FileOutputStream(new File(getDirectorioRaiz() + "/" + personaje.getNombre() + ".cdi"));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			data.writeObject(personaje.getEsqueleto());
@@ -255,7 +255,7 @@ public class ExternalStorageManager
 		
 		try
 		{
-			FileOutputStream file = new FileOutputStream(new File(getDirectorioExterno(personaje.getNombre())));
+			FileOutputStream file = new FileOutputStream(new File(getDirectorioRaiz() + "/" + personaje.getNombre() + ".edi"));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
 			data.writeObject(personaje.getEsqueleto());

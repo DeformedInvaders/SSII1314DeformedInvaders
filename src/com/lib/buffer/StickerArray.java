@@ -78,6 +78,8 @@ public class StickerArray extends FloatArray
 		set(SIZE_STICKER * sticker + ANGLE_BETA_STICKER, beta);
 		set(SIZE_STICKER * sticker + ANGLE_GAMMA_STICKER, gamma);
 		set(SIZE_STICKER * sticker + ANGLE_IOTA_STICKER, -iota);
+		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, NULL_ROTATE);
+		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, NULL_SCALE);
 	}
 	
 	public void setCoords(TTipoSticker tipo, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
@@ -225,7 +227,7 @@ public class StickerArray extends FloatArray
 	{
 		short sticker = (short) tipo.ordinal();
 		
-		set(SIZE_STICKER * sticker + ANGLE_IOTA_STICKER, NULL_ROTATE);
+		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, NULL_ROTATE);
 		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, NULL_SCALE);
 	}
 	
