@@ -435,7 +435,7 @@ public abstract class GameCore
 		int posNivel = nivel.ordinal();
 		
 		// Sonido Victoria
-		audioPlayerManager.startPlaying(R.raw.effect_level_complete, false);
+		audioPlayerManager.startPlaying(R.raw.effect_level_complete, false, false);
 		
 		// Aumentar número de Victorias
 		estadisticasNiveles[posNivel].increaseVictories();	
@@ -471,7 +471,7 @@ public abstract class GameCore
 	public boolean actualizarEstadisticas(TTipoLevel nivel)
 	{
 		// Sonido Derrota
-		audioPlayerManager.startPlaying(R.raw.effect_game_over, false);
+		audioPlayerManager.startPlaying(R.raw.effect_game_over, false, false);
 		
 		// Aumentar número de Derrotas
 		estadisticasNiveles[nivel.ordinal()].increaseNumDeaths();
@@ -560,12 +560,12 @@ public abstract class GameCore
 	
 	public boolean reproducirSonido(int sonido)
 	{
-		return soundPlayerManager.startPlaying(sonido, false);
+		return soundPlayerManager.startPlaying(sonido, false, true);
 	}
 	
 	public boolean reproducirMusica(boolean loop)
 	{
-		return audioPlayerManager.startPlaying(musicaSeleccionada, loop);
+		return audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
 	}
 	
 	public boolean reproducirMusica(int musica, boolean loop)
@@ -573,7 +573,7 @@ public abstract class GameCore
 		if (musicaSeleccionada != musica)
 		{
 			musicaSeleccionada = musica;
-			return audioPlayerManager.startPlaying(musicaSeleccionada, loop);
+			return audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
 		}
 		
 		return false;

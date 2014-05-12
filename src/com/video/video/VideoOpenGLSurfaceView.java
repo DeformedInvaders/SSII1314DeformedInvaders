@@ -74,7 +74,6 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 						if (duration != -1)
 						{
 							contadorCiclos = duration / GamePreferences.TIME_INTERVAL_ANIMATION();
-							android.util.Log.d("TEST", "Ciclos "+contadorCiclos);
 						}
 						else
 						{
@@ -128,6 +127,8 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		requestRender();
 	}
 	
+	/* Métodos Abstráctos OpenGLSurfaceView */
+	
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
@@ -135,9 +136,20 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		{
 			task.run();
 			threadActivo = true;
+			return true;
 		}
 		
-		return true;
+		if (estado == TEstadoVideo.Brief)
+		{ 
+			if (renderer.onTouchUp(x, y, width, height, pos))
+			{
+				mListener.onPlaySoundEffect(renderer.isEstadoSonido().getSound());
+				renderer.desactivarEstadoSonido();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/* Métodos de Guardado de Información */

@@ -17,6 +17,39 @@ public class Handle
 	private FloatBuffer bufferRelleno, bufferContorno;
 
 	/* Constructora */
+	
+	public Handle(float x, float y, float width, float height, int color)
+	{
+		colorHandle = color;
+		
+		int longArray = 4 * 2;
+		
+		float[] vertices = new float[longArray];
+		
+		vertices[0] = x;
+		vertices[1] = y;
+		
+		vertices[2] = x;
+		vertices[3] = y + height;
+		
+		vertices[4] = x + width;
+		vertices[5] = y + height;
+		
+		vertices[6] = x + width;
+		vertices[7] = y;
+		
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		bufferRelleno = byteBuf.asFloatBuffer();
+		bufferRelleno.put(vertices);
+		bufferRelleno.position(0);
+		
+		byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		bufferContorno = byteBuf.asFloatBuffer();
+		bufferContorno.put(vertices);
+		bufferContorno.position(0);
+	}
 
 	public Handle(int numIter, float radio, int color)
 	{

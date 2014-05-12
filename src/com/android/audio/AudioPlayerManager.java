@@ -58,8 +58,13 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		return false;
 	}
 	
-	public boolean startPlaying(int path, boolean loop)
+	public boolean startPlaying(int path, boolean loop, boolean block)
 	{
+		if (block && estado != TEstadoPlay.Libre)
+		{
+			return false;
+		}
+		
 		if (estado != TEstadoPlay.Libre)
 		{
 			releasePlayer();
