@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
 import com.android.social.SocialConnector;
+import com.android.storage.AssetsStorageManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
 import com.creation.data.Esqueleto;
@@ -23,6 +24,7 @@ import com.game.select.LevelGenerator;
 import com.game.select.TTipoLevel;
 import com.project.main.R;
 import com.video.data.Video;
+import com.video.video.VideoGenerator;
 
 public abstract class GameCore
 {
@@ -32,6 +34,9 @@ public abstract class GameCore
 	/* Estructura de Datos */
 	private List<Personaje> listaPersonajes;
 	private Personaje nuevoPersonaje;
+	
+	/* Video */
+	private VideoGenerator videoGenerator;
 	
 	/* Niveles */
 	private LevelGenerator levelGenerator;
@@ -45,6 +50,7 @@ public abstract class GameCore
 	/* Almacenamiento */
 	private InternalStorageManager internalManager;
 	private ExternalStorageManager externalManager;
+	private AssetsStorageManager assetsManager;
 
 	/* Conector Social */
 	private SocialConnector socialConnector;
@@ -59,11 +65,9 @@ public abstract class GameCore
 		
 		mContext = context;
 		
-		nuevoPersonaje = null;
-		levelGenerator = new LevelGenerator(mContext);
-		
 		internalManager = new InternalStorageManager(mContext);
 		externalManager = new ExternalStorageManager(mContext);
+		assetsManager = new AssetsStorageManager(mContext);
 		
 		socialConnector = new SocialConnector(mContext) {
 			@Override
@@ -84,10 +88,17 @@ public abstract class GameCore
 		};
 		
 		audioRecorderManager = new AudioRecorderManager();
+		
+		videoGenerator = new VideoGenerator(mContext, assetsManager);
+		
+		nuevoPersonaje = null;
+		levelGenerator = new LevelGenerator(mContext, assetsManager);
 	}
 	
 	public boolean cargarDatos()
 	{
+		videoGenerator.cargarVideo();
+		
 		levelGenerator.cargarEnemigos();
 		internalManager.cargarPreferencias();
 		
@@ -137,7 +148,7 @@ public abstract class GameCore
 	
 	public Video getVideo()
 	{
-		return levelGenerator.getVideo();
+		return videoGenerator.getVideo();
 	}
 	
 	public boolean isNivelPerfecto(TTipoLevel nivel)
@@ -545,6 +556,11 @@ public abstract class GameCore
 			}
 		}
 		return false;
+	}
+	
+	public boolean reproducirSonido(int sonido)
+	{
+		return soundPlayerManager.startPlaying(sonido, false);
 	}
 	
 	public boolean reproducirMusica(boolean loop)

@@ -432,6 +432,17 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
 	}
 
+	@Override
+	public void onVideoPlayMusic(int music)
+	{
+		core.reproducirMusica(music, false);
+	}
+
+	@Override
+	public void onVideoPlaySoundEffect(int sound)
+	{
+		core.reproducirSonido(sound);
+	}
 
 	/* Métodos de Modificación de la Vista */
 

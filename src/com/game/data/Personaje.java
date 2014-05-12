@@ -26,11 +26,16 @@ public class Personaje extends Malla
 	private boolean burbuja;
 
 	/* Constructora */
-
+	
 	public Personaje()
 	{
+		this(0);
+	}
+
+	public Personaje(int id)
+	{
 		tipoEntidad = TTipoEntidad.Personaje;
-		idEntidad = 0;
+		idEntidad = id;
 		texturaEntidad = -1;
 		
 		posicionX = 0.0f;

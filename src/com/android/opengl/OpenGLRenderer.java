@@ -741,16 +741,15 @@ public abstract class OpenGLRenderer implements Renderer
 				}	
 				else
 				{
-					int i = 0;
-					while(i < numFondos - 1)
+					if (numFondos > indiceTexturas.length)
 					{
-						indiceTexturaFondo[i] = indiceTexturas[i % (indiceTexturas.length - 1)];
-						dibujarTexturaFondo[i] = true;		
-						i++;
+						numFondos = indiceTexturas.length;
 					}
 					
-					indiceTexturaFondo[i] = indiceTexturas[indiceTexturas.length - 1];
-					dibujarTexturaFondo[i] = false;
+					for (int i = 0; i < indiceTexturas.length; i++)
+					{
+						indiceTexturaFondo[i] = indiceTexturas[i];
+					}
 				}
 			}
 		}
@@ -761,9 +760,11 @@ public abstract class OpenGLRenderer implements Renderer
 		for (int i = 0; i < numFondos - 1; i++)
 		{
 			posicionTexturaFondo[i] = i * screenWidth;
+			dibujarTexturaFondo[i] = true;	
 		}
 
 		posicionTexturaFondo[numFondos - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
+		dibujarTexturaFondo[numFondos - 1] = false;
 	}
 	
 	private void posicionarTexturaFondoIntercambiable()
@@ -863,9 +864,12 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		if (fondoActual < numFondos - 1)
 		{
-			dibujarTexturaFondo[fondoActual] = false;
+			for (int i = 0; i < numFondos; i++)
+			{
+				dibujarTexturaFondo[i] = false;
+			}
 			
-			fondoActual ++;
+			fondoActual++;
 			dibujarTexturaFondo[fondoActual] = true;
 			fondoFinalFijado = fondoActual == numFondos - 1;
 		}
@@ -949,5 +953,6 @@ public abstract class OpenGLRenderer implements Renderer
 		indiceTexturaFondo = data.getIndiceTexturaFondo();
 		posicionTexturaFondo = data.getPosFondo();
 		dibujarTexturaFondo = data.getDibujarFondo();
+		fondosCargados = true;
 	}
 }

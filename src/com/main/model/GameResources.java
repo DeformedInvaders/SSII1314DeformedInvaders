@@ -4,6 +4,7 @@ import com.creation.data.TTipoSticker;
 import com.game.data.TTipoEntidad;
 import com.game.game.TTipoEndgame;
 import com.game.select.TTipoLevel;
+import com.video.data.TTipoActores;
 
 public class GameResources
 {	
@@ -33,6 +34,9 @@ public class GameResources
 	private static final String DRAWABLE_STONEHENGE_ID = "stonehenge_";
 	private static final String DRAWABLE_VIDEO_ID = "video_";
 	
+	private static final String DRAWABLE_GUITARRIST_ID = "guitarrist";
+	private static final String DRAWABLE_SCIENTIFIC_ID = "scientific";
+	
 	private static final String DRAWABLE_BACKGROUND_ID = "background_";
 	private static final String DRAWABLE_POLAROID_ID = "polaroid_";
 	private static final String DRAWABLE_ACHIEVEMENT_ID = "achievement_";
@@ -44,6 +48,10 @@ public class GameResources
 	// Enemies Files
 	private static final String ENEMIES_PATH = "enemies/enemy_";
 	private static final String ENEMIES_EXTENSION = ".edi";
+	
+	// Actors Files
+	private static final String ACTORS_PATH = "actors/actor_";
+	private static final String ACTORS_EXTENSION = ".cdi";
 	
 	// Raw Video
 	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";
@@ -133,6 +141,19 @@ public class GameResources
 				return ENEMIES_PATH + DRAWABLE_EGYPT_ID + (pos + 1) + ENEMIES_EXTENSION;
 			case Stonehenge:
 				return ENEMIES_PATH + DRAWABLE_STONEHENGE_ID + (pos + 1) + ENEMIES_EXTENSION;
+			default:
+				return null;
+		}
+	}
+	
+	public static final String GET_ACTORS_FILES(TTipoActores actor)
+	{
+		switch(actor)
+		{
+			case Guitarrista:
+				return ACTORS_PATH + DRAWABLE_GUITARRIST_ID + ACTORS_EXTENSION;
+			case Cientifico:
+				return ACTORS_PATH + DRAWABLE_SCIENTIFIC_ID + ACTORS_EXTENSION;
 			default:
 				return null;
 		}

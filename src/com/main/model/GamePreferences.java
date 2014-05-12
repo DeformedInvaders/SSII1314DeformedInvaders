@@ -60,7 +60,7 @@ public class GamePreferences
 	
 	public static final int NUM_TYPE_BACKGROUNDS_FIJO = 1;
 	public static final int NUM_TYPE_BACKGROUNDS_LEVEL = 5;
-	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 4;
+	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 5;
 	public static final int NUM_TYPE_CHARACTER_DESIGN = 1;
 	public static final int NUM_TYPE_CHARACTER_VIDEO = 2;
 	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;

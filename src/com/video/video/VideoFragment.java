@@ -35,6 +35,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	public interface VideoFragmentListener
 	{
 		public void onVideoFinished();
+		public void onVideoPlayMusic(int music);
+		public void onVideoPlaySoundEffect(int sound);
 	}
 
 	/* Métodos Fragment */
@@ -96,5 +98,23 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	public void onVideoFinished()
 	{
 		mCallback.onVideoFinished();
+	}
+
+	@Override
+	public void onPlayMusic(int music)
+	{
+		mCallback.onVideoPlayMusic(music);
+	}
+
+	@Override
+	public void onPlaySoundEffect(int sound)
+	{
+		mCallback.onVideoPlaySoundEffect(sound);
+	}
+	
+	@Override
+	public void onChangeDialog(int text)
+	{
+		
 	}
 }

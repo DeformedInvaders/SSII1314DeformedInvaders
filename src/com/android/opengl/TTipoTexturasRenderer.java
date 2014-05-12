@@ -23,16 +23,14 @@ public enum TTipoTexturasRenderer
 	
 	public int getNumTextures()
 	{
-		int numTexturasPersonaje = GamePreferences.NUM_TYPE_CHARACTER_DESIGN + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_DESIGN) + GamePreferences.NUM_TYPE_BUBBLES;
-		
 		switch(this)
 		{
 			case Personaje:
-				return numTexturasPersonaje;
+				return GamePreferences.NUM_TYPE_CHARACTER_DESIGN + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_DESIGN) + GamePreferences.NUM_TYPE_BUBBLES;
 			case Video:
-				return numTexturasPersonaje;
+				return GamePreferences.NUM_TYPE_CHARACTER_VIDEO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_VIDEO) + GamePreferences.NUM_TYPE_BUBBLES;
 			case Juego:
-				return numTexturasPersonaje + GamePreferences.NUM_TYPE_OPPONENTS + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES);
+				return GamePreferences.NUM_TYPE_CHARACTER_JUEGO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_JUEGO) + GamePreferences.NUM_TYPE_BUBBLES + GamePreferences.NUM_TYPE_OPPONENTS + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES);
 			default:
 				return 0;
 		}
