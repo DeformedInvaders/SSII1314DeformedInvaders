@@ -80,7 +80,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	@Override
 	public void onPause()
 	{
-		super.onPause();		
+		super.onPause();
+		canvas.saveData();
 		canvas.onPause();
 	}
 

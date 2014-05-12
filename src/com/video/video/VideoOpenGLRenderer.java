@@ -8,7 +8,9 @@ import android.content.Context;
 import com.android.opengl.OpenGLRenderer;
 import com.android.opengl.TTipoFondoRenderer;
 import com.android.opengl.TTipoTexturasRenderer;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
+import com.video.data.TTipoActores;
 import com.video.data.Video;
 
 public class VideoOpenGLRenderer extends OpenGLRenderer
@@ -27,6 +29,9 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		
 		dibujarGuitarrista = false;
 		dibujarCientifico = false;
+		
+		guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
+		cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
 	}
 	
 	@Override
@@ -60,12 +65,55 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		centrarPersonajeEnMarcoFinal(gl);
 	}
 	
-	public boolean avanzarEscena(TEstadoVideo estado)
+	public void acercarEscena()
 	{
-		dibujarGuitarrista = estado == TEstadoVideo.Rock;
-		dibujarCientifico = estado == TEstadoVideo.Brief;		
+		camaraZoom(0.9f);
+	}
+	
+	public void recuperarEscena()
+	{
+		camaraRestore();
+	}
+	
+	public void animarEscena()
+	{
+		if (cientifico.animar(false))
+		{
+			cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
+		}
+		
+		if (guitarrista.animar(false))
+		{
+			guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
+		}
+	}
+	
+	public boolean avanzarEscena()
+	{
+		cientifico.reposo();
+		guitarrista.reposo();
 		
 		animarFondo();
 		return isFondoFinal();
+	}
+	
+	public void activarActor(TTipoActores actor, boolean activar)
+	{
+		if (actor == TTipoActores.Guitarrista)
+		{
+			dibujarGuitarrista = activar;
+		}
+		else
+		{
+			dibujarCientifico = activar;
+		}
+	}
+	
+	/* Métodos de Guardado de Información */
+
+	public void saveData()
+	{
+		cientifico.descargarTextura(this);
+		guitarrista.descargarTextura(this);
 	}
 }

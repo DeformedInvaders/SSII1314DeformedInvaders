@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
+import com.main.model.GamePreferences;
+import com.video.data.TTipoActores;
 import com.video.data.Video;
 
 public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
@@ -20,6 +22,8 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	private boolean threadActivo;
 	private Handler handler;
 	private Runnable task;
+	
+	private int contadorCiclos;
 
 	/* Constructora */
 
@@ -34,6 +38,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		
 		estado = TEstadoVideo.Nada;
 		threadActivo = false;
+		contadorCiclos = 0;
 		
 		// Asignar Renderer al GLSurfaceView
 		renderer = new VideoOpenGLRenderer(getContext(), video);
@@ -47,31 +52,80 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				if (estado != null)
 				{	
-					estado = estado.getNext();				
-					renderer.avanzarEscena(estado);
-					requestRender();
-					
-					int duration = estado.getDuration();
-					int music = estado.getMusic();
-					int sound = estado.getSound();
-
-					if (music != -1)
+					if (contadorCiclos == 0)
 					{
-						mListener.onPlayMusic(music);
+						estado = estado.getNext();	
+						animarCambioEscena();
+						
+						int duration = estado.getDuration();
+						int music = estado.getMusic();
+						int sound = estado.getSound();
+	
+						if (music != -1)
+						{
+							mListener.onPlayMusic(music);
+						}
+						
+						if (sound != -1)
+						{
+							mListener.onPlaySoundEffect(sound);
+						}
+						
+						if (duration != -1)
+						{
+							contadorCiclos = duration / GamePreferences.TIME_INTERVAL_ANIMATION();
+							android.util.Log.d("TEST", "Ciclos "+contadorCiclos);
+						}
+						else
+						{
+							contadorCiclos = -1;
+						}
 					}
 					
-					if (sound != -1)
-					{
-						mListener.onPlaySoundEffect(sound);
-					}
+					animarCicloEscena();
+					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
 					
-					if (duration != -1)
+					if (contadorCiclos != -1)
 					{
-						handler.postDelayed(this, duration);
+						contadorCiclos--;
 					}
 				}
 			}
 		};
+	}
+	
+	private void animarCicloEscena()
+	{
+		if (estado == TEstadoVideo.Door)
+		{
+			if (contadorCiclos % 250 == 0)
+			{
+				renderer.acercarEscena();
+			}
+		}
+		
+		renderer.animarEscena();
+		requestRender();
+	}
+	
+	private void animarCambioEscena()
+	{
+		if (estado == TEstadoVideo.Rock)
+		{
+			renderer.recuperarEscena();
+			renderer.activarActor(TTipoActores.Guitarrista, true);
+		}
+		else if (estado == TEstadoVideo.Noise)
+		{
+			renderer.activarActor(TTipoActores.Guitarrista, false);			
+		}
+		else if (estado == TEstadoVideo.Brief)
+		{
+			renderer.activarActor(TTipoActores.Cientifico, true);
+		}
+		
+		renderer.avanzarEscena();
+		requestRender();
 	}
 	
 	@Override
@@ -84,5 +138,12 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		}
 		
 		return true;
+	}
+	
+	/* Métodos de Guardado de Información */
+
+	public void saveData()
+	{
+		renderer.saveData();
 	}
 }

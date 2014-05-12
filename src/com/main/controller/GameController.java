@@ -435,7 +435,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onVideoPlayMusic(int music)
 	{
-		core.reproducirMusica(music, false);
+		core.reproducirMusica(music, true);
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public enum TEstadoVideo
 		switch(this)
 		{
 			case Door:
-				return 30 * 1000;
+				return 20 * 1000;
 			case Rock:
 				return 30 * 1000;
 			case Noise:
@@ -45,11 +45,13 @@ public enum TEstadoVideo
 		switch(this)
 		{
 			case Door:
-				return R.raw.music_video_intro;
+				return R.raw.music_video_door;
 			case Noise:
 				return R.raw.music_video_noise;
 			case Rock:
 				return R.raw.music_video_rock;
+			case Brief:
+				return R.raw.music_video_brief;
 			default:
 				return -1;
 		}

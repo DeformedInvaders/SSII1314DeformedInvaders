@@ -285,7 +285,7 @@ public abstract class OpenGLRenderer implements Renderer
 		yBottom = yCentro - newAlto / 2.0f;
 
 		actualizarMarcos();
-		actualizarTexturaFondo();
+		//actualizarTexturaFondo();
 	}
 
 	private void camaraDrag(float dWorldX, float dWorldY)
@@ -299,7 +299,7 @@ public abstract class OpenGLRenderer implements Renderer
 		yCentro = (yTop + yBottom) / 2.0f;
 
 		actualizarMarcos();
-		actualizarTexturaFondo();
+		//actualizarTexturaFondo();
 	}
 
 	public void camaraDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
@@ -327,7 +327,7 @@ public abstract class OpenGLRenderer implements Renderer
 		yCentro = (yTop + yBottom) / 2.0f;
 
 		actualizarMarcos();
-		actualizarTexturaFondo();
+		//actualizarTexturaFondo();
 	}
 
 	/* Métodos de modificación de puntos */
