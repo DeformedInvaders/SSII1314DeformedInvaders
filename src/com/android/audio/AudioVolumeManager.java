@@ -1,6 +1,5 @@
 package com.android.audio;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 
@@ -10,11 +9,9 @@ public class AudioVolumeManager
 
 	/* Constructora */
 
-	public AudioVolumeManager(Activity activity)
+	public AudioVolumeManager(Context context)
 	{
-		audio = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-
-		activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
 
 	/* Métodos de Selección de Estado */

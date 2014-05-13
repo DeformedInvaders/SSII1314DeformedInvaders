@@ -186,9 +186,15 @@
 	</style>
 	
 	<style name="ImageView_Arrow_Dialog_Style">
-	    <item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:src">@drawable/image_dialog_arrow</item>	
+	    <item name="android:layout_width">40dp</item>
+		<item name="android:layout_height">20dp</item>
+		<item name="android:src">@drawable/image_dialog_arrow_1</item>	
+	</style>
+	
+	<style name="ImageView_Arrow_Dialog_Comic_Style">
+	    <item name="android:layout_width">40dp</item>
+		<item name="android:layout_height">20dp</item>
+		<item name="android:src">@drawable/image_dialog_arrow_2</item>	
 	</style>
 	
 </resources>

@@ -15,15 +15,17 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	private OnVideoListener mListener;
 	
 	private TEstadoVideo estado;
+	private Video video;
 	
-	// Renderer
 	private VideoOpenGLRenderer renderer;
 	
 	private boolean threadActivo;
 	private Handler handler;
 	private Runnable task;
 	
-	private int contadorCiclos;
+	private int ciclos;
+	private int[] mensajes;
+	private int posMensaje;
 
 	/* Constructora */
 
@@ -32,62 +34,63 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TEstadoDetector.SimpleTouch, false);
 	}
 
-	public void setParameters(OnVideoListener listener, Video video)
+	public void setParameters(OnVideoListener listener, Video v)
 	{		
 		mListener = listener;
 		
+		video = v;
 		estado = TEstadoVideo.Nada;
 		threadActivo = false;
-		contadorCiclos = 0;
+		ciclos = 0;
+		posMensaje = 0;
 		
 		// Asignar Renderer al GLSurfaceView
 		renderer = new VideoOpenGLRenderer(getContext(), video);
 		setRenderer(renderer);
-		
+
 		handler = new Handler();
 
 		task = new Runnable() {
 			@Override
 			public void run()
 			{
-				if (estado != null)
-				{	
-					if (contadorCiclos == 0)
+				if (threadActivo)
+				{
+					if (ciclos == 0)
 					{
-						estado = estado.getNext();	
+						estado = estado.getNext();							
+						mensajes = video.getMensaje(estado);
+						
 						animarCambioEscena();
 						
 						int duration = estado.getDuration();
 						int music = estado.getMusic();
 						int sound = estado.getSound();
-	
-						if (music != -1)
-						{
-							mListener.onPlayMusic(music);
-						}
 						
 						if (sound != -1)
 						{
 							mListener.onPlaySoundEffect(sound);
 						}
 						
+						if (music != -1)
+						{
+							mListener.onPlayMusic(music);
+						}
+						
 						if (duration != -1)
 						{
-							contadorCiclos = duration / GamePreferences.TIME_INTERVAL_ANIMATION();
-						}
-						else
-						{
-							contadorCiclos = -1;
+							ciclos = duration / GamePreferences.TIME_INTERVAL_ANIMATION();
 						}
 					}
 					
 					animarCicloEscena();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
-					
-					if (contadorCiclos != -1)
-					{
-						contadorCiclos--;
-					}
+					ciclos--;
+				}
+				else
+				{
+					mListener.onDismissDialog();
+					mListener.onVideoFinished();
 				}
 			}
 		};
@@ -97,10 +100,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (estado == TEstadoVideo.Door)
 		{
-			if (contadorCiclos % 250 == 0)
-			{
-				renderer.acercarEscena();
-			}
+			renderer.acercarEscena();
 		}
 		
 		renderer.animarEscena();
@@ -109,6 +109,8 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	private void animarCambioEscena()
 	{
+		mListener.onDismissDialog();
+		
 		if (estado == TEstadoVideo.Rock)
 		{
 			renderer.recuperarEscena();
@@ -116,29 +118,36 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		}
 		else if (estado == TEstadoVideo.Noise)
 		{
-			renderer.activarActor(TTipoActores.Guitarrista, false);			
+			renderer.activarActor(TTipoActores.Guitarrista, false);	
+			mListener.onChangeDialog(mensajes[posMensaje]);
 		}
 		else if (estado == TEstadoVideo.Brief)
 		{
 			renderer.activarActor(TTipoActores.Cientifico, true);
+			mListener.onChangeDialog(mensajes[posMensaje]);
+			posMensaje++;
+			threadActivo = posMensaje != mensajes.length;
 		}
 		
 		renderer.avanzarEscena();
 		requestRender();
 	}
 	
+	public void iniciarVideo()
+	{
+		if (!threadActivo)
+		{
+			renderer.desactivarSombra();
+			threadActivo = true;
+			task.run();
+		}
+	}
+	
 	/* Métodos Abstráctos OpenGLSurfaceView */
 	
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
-	{
-		if (!threadActivo)
-		{
-			task.run();
-			threadActivo = true;
-			return true;
-		}
-		
+	{	
 		if (estado == TEstadoVideo.Brief)
 		{ 
 			if (renderer.onTouchUp(x, y, width, height, pos))

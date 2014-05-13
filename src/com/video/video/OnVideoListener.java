@@ -6,4 +6,5 @@ public interface OnVideoListener
 	public void onPlayMusic(int music);
 	public void onPlaySoundEffect(int sound);
 	public void onChangeDialog(int text);
+	public void onDismissDialog();
 }

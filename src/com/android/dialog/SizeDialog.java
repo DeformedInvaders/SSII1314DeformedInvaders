@@ -1,7 +1,6 @@
 package com.android.dialog;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,7 +19,7 @@ public abstract class SizeDialog extends WindowDialog
 
 	public SizeDialog(Context context)
 	{
-		super(context, R.layout.dialog_size_layout);
+		super(context, R.layout.dialog_size_layout, true);
 
 		size = TTipoSize.Small;
 
@@ -38,11 +37,6 @@ public abstract class SizeDialog extends WindowDialog
 	/* Métodos Abstractos */
 
 	public abstract void onSizeSelected(TTipoSize size);
-
-	/* Métodos Abstractos WindowDialog */
-
-	@Override
-	protected void onTouchOutsidePopUp(View v, MotionEvent event) { }
 
 	/* Métodos Privados */
 

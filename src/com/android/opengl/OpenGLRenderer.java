@@ -373,10 +373,10 @@ public abstract class OpenGLRenderer implements Renderer
 	{
 		float camaraHeight = yTop - yBottom;
 		float camaraWidth = xRight - xLeft;
-
-		marcoAlturaLateral = 0.1f * camaraHeight;
-		marcoAnchuraInterior = camaraHeight - 2 * marcoAlturaLateral;
-		marcoAnchuraLateral = (camaraWidth - marcoAnchuraInterior) / 2;
+		
+		marcoAlturaLateral = GamePreferences.MARCO_ALTURA_LATERAL(camaraWidth, camaraHeight);
+		marcoAnchuraInterior = GamePreferences.MARCO_ANCHURA_INTERIOR(camaraWidth, camaraHeight);
+		marcoAnchuraLateral = GamePreferences.MARCO_ANCHURA_LATERAL(camaraWidth, camaraHeight);
 
 		float[] recA = { 0, 0, 0, marcoAnchuraInterior, marcoAnchuraLateral, 0, marcoAnchuraLateral, marcoAnchuraInterior };
 		recMarcoLateral = BufferManager.construirBufferListaPuntos(recA);

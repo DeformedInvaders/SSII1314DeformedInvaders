@@ -4,14 +4,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
+import com.android.dialog.TextDialog;
 import com.android.view.OpenGLFragment;
+import com.main.model.GamePreferences;
 import com.project.main.R;
 import com.video.data.Video;
 
 public class VideoFragment extends OpenGLFragment implements OnVideoListener
 {
 	private VideoFragmentListener mCallback;
+	
+	private TextDialog textDialog;
+	private ImageView imagenPlay;
 	
 	private Video video;
 	
@@ -47,9 +54,11 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 		View rootView = inflater.inflate(R.layout.fragment_video_layout, container, false);
 
 		canvas = (VideoOpenGLSurfaceView) rootView.findViewById(R.id.videoGLSurfaceViewVideo1);
-		canvas.setParameters(this, video);
-		
+		canvas.setParameters(this, video);		
 		setCanvasListener(canvas);
+		
+		imagenPlay = (ImageView) rootView.findViewById(R.id.imageViewVideo1);
+		imagenPlay.setOnClickListener(new OnPlayVideoClickListener());
 	
 		return rootView;
 	}
@@ -93,6 +102,18 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	@Override
 	protected void actualizarInterfaz() { }
 
+	/* Métodos Listener onClick */
+
+	private class OnPlayVideoClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			imagenPlay.setVisibility(View.INVISIBLE);
+			canvas.iniciarVideo();
+		}
+	}
+	
 	/* Métodos interfaz OnVideoListener */
 	
 	@Override
@@ -114,8 +135,32 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	}
 	
 	@Override
-	public void onChangeDialog(int text)
+	public void onChangeDialog(final int text)
 	{
+		if (textDialog == null)
+		{
+			textDialog = new TextDialog(getActivity());
+		}
 		
+		getActivity().runOnUiThread(new Runnable() {
+	        @Override
+	        public void run()
+	        {
+	        	int posX = (int) (GamePreferences.MARCO_ANCHURA_LATERAL() + GamePreferences.MARCO_ANCHURA_INTERIOR());
+	        	int posY = (int) (GamePreferences.MARCO_ANCHURA_INTERIOR() / 3.0f);
+	    		
+	        	textDialog.setText(text);
+	    		textDialog.show(canvas, posX, posY);
+	        }
+	    });
+	}
+	
+	@Override
+	public void onDismissDialog()
+	{
+		if (textDialog != null)
+		{
+			textDialog.dismiss();
+		}
 	}
 }

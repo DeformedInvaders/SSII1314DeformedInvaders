@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.android.audio.AudioPlayerManager;
 import com.android.audio.AudioRecorderManager;
+import com.android.audio.AudioVolumeManager;
 import com.android.social.SocialConnector;
 import com.android.storage.AssetsStorageManager;
 import com.android.storage.ExternalStorageManager;
@@ -45,6 +46,7 @@ public abstract class GameCore
 	/* Musica */
 	private AudioPlayerManager audioPlayerManager, soundPlayerManager;
 	private AudioRecorderManager audioRecorderManager;
+	private AudioVolumeManager audioVolumeManager;
 	private int musicaSeleccionada;
 
 	/* Almacenamiento */
@@ -88,6 +90,7 @@ public abstract class GameCore
 		};
 		
 		audioRecorderManager = new AudioRecorderManager();
+		audioVolumeManager = new AudioVolumeManager(mContext);
 		
 		videoGenerator = new VideoGenerator(mContext, assetsManager);
 		
@@ -526,6 +529,18 @@ public abstract class GameCore
 
 	/* Métodos de modificación del AudioManager */
 	
+	public void actualizarVolumen()
+	{
+		if (GamePreferences.IS_MUSIC_ENABLED())
+		{
+			audioVolumeManager.unmuteVolume();
+		}
+		else
+		{
+			audioVolumeManager.muteVolume();
+		}
+	}
+	
 	public boolean reproducirSonidoTemp(TTipoMovimiento tipo)
 	{
 		if (internalManager.comprobarAudioTemp(tipo))
@@ -577,11 +592,6 @@ public abstract class GameCore
 		}
 		
 		return false;
-	}
-	
-	public boolean pararMusica()
-	{
-		return audioPlayerManager.stopPlaying();
 	}
 	
 	public boolean pausarMusica()

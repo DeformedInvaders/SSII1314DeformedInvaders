@@ -330,4 +330,35 @@ public class GamePreferences
 		return 1500.0f * SCREEN_SCALE_FACTOR();
 	}
 	
+	/* MARCOS */
+	
+	public static final float MARCO_ALTURA_LATERAL()
+	{
+		return MARCO_ALTURA_LATERAL(WIDTH_SCREEN, HEIGHT_SCREEN);
+	}
+	
+	public static final float MARCO_ALTURA_LATERAL(float width, float height)
+	{
+		return 0.1f * height;
+	}
+	
+	public static final float MARCO_ANCHURA_INTERIOR()
+	{
+		return MARCO_ANCHURA_INTERIOR(WIDTH_SCREEN, HEIGHT_SCREEN);
+	}
+	
+	public static final float MARCO_ANCHURA_INTERIOR(float width, float height)
+	{
+		return height - 2 * MARCO_ALTURA_LATERAL(width, height);
+	}
+	
+	public static final float MARCO_ANCHURA_LATERAL()
+	{
+		return MARCO_ANCHURA_LATERAL(WIDTH_SCREEN, HEIGHT_SCREEN);
+	}
+	
+	public static final float MARCO_ANCHURA_LATERAL(float width, float height)
+	{
+		return (width - MARCO_ANCHURA_INTERIOR(width, height)) / 2.0f;
+	}
 }

@@ -3,17 +3,17 @@ package com.android.dialog;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 
-public abstract class WindowDialog implements OnTouchListener
+public class WindowDialog
 {
 	protected Context mContext;
 	private PopupWindow popupWindow;
@@ -23,25 +23,19 @@ public abstract class WindowDialog implements OnTouchListener
 
 	/* Constructora */
 
-	public WindowDialog(Context context, int id)
+	public WindowDialog(Context context, int layoutId, boolean cancelable)
 	{
 		mContext = context;
 
 		layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		rootView = layoutInflater.inflate(id, null);
-		popupWindow = new PopupWindow(rootView, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		rootView = layoutInflater.inflate(layoutId, null);
+		popupWindow = new PopupWindow(rootView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 		popupWindow.setBackgroundDrawable(new BitmapDrawable());
-		popupWindow.setOutsideTouchable(true);
-		popupWindow.setTouchInterceptor(this);
-		popupWindow.setFocusable(true);
+		popupWindow.setOutsideTouchable(cancelable);
+		popupWindow.setFocusable(cancelable);
 	}
-
-	/* Métodos Abstractos */
-
-	protected abstract void onTouchOutsidePopUp(View v, MotionEvent event);
-
 	/* Métodos Protegidos */
 
 	protected View findViewById(int id)
@@ -69,11 +63,6 @@ public abstract class WindowDialog implements OnTouchListener
 		rootView.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
 	}
 
-	protected void dismiss()
-	{
-		popupWindow.dismiss();
-	}
-
 	protected void showKeyBoard(Activity activity, EditText editText)
 	{
 		InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -90,28 +79,21 @@ public abstract class WindowDialog implements OnTouchListener
 
 	public void show(View view)
 	{
-		rootView.measure(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		rootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 		int posX = view.getWidth() / 4;
 		int posY = rootView.getMeasuredHeight() + view.getHeight();
 
 		popupWindow.showAsDropDown(view, posX, -posY);
 	}
-
-	/* Métodos Listener onTouch */
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event)
+	
+	public void show(View view, int posX, int posY)
 	{
-		int action = event.getAction();
-
-		if (action == MotionEvent.ACTION_OUTSIDE)
-		{
-			onTouchOutsidePopUp(v, event);
-			dismiss();
-			return true;
-		}
-
-		return false;
+		popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, posX, posY);
+	}
+	
+	public void dismiss()
+	{
+		popupWindow.dismiss();
 	}
 }

@@ -27,7 +27,7 @@ public abstract class ColorDialog extends WindowDialog
 
 	public ColorDialog(Context context)
 	{
-		super(context, R.layout.dialog_color_layout);
+		super(context, R.layout.dialog_color_layout, true);
 
 		botonAceptar = (Button) findViewById(R.id.imageButtonColor1);
 		botonCancelar = (Button) findViewById(R.id.imageButtonColor2);
@@ -66,11 +66,6 @@ public abstract class ColorDialog extends WindowDialog
 	/* Métodos Abstractos */
 
 	public abstract void onColorSelected(int color);
-
-	/* Métodos Abstractos WindowDialog */
-
-	@Override
-	protected void onTouchOutsidePopUp(View v, MotionEvent event) { }
 
 	/* Métodos Listener onClick */
 

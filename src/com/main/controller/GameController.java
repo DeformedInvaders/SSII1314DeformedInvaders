@@ -31,7 +31,6 @@ import com.game.game.GameFragment;
 import com.game.select.LevelSelectionFragment;
 import com.game.select.TTipoLevel;
 import com.main.model.GameCore;
-import com.main.model.GamePreferences;
 import com.main.model.GameStatistics;
 import com.main.view.MainFragment;
 import com.main.view.ViewActivity;
@@ -535,6 +534,8 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		estado = TEstadoController.Video;
 		view.insertarVideoFragmento(video, estado.getTitle());
+		core.pausarMusica();
+		actualizarMusica();
 	}
 	
 	public boolean isEstadoDesapilador()
@@ -570,24 +571,19 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 
 	public void actualizarMusica()
 	{
-		if (GamePreferences.IS_MUSIC_ENABLED())
+		core.actualizarVolumen();
+		
+		if (estado == TEstadoController.Game)
 		{
-			if (estado == TEstadoController.Game)
-			{
-				core.reproducirMusica(true);
-			}
-			else if (estado == TEstadoController.Design || estado == TEstadoController.Paint || estado == TEstadoController.Deformation || estado == TEstadoController.Repaint)
-			{
-				core.reproducirMusica(R.raw.music_creation, true);
-			}
-			else
-			{
-				core.reproducirMusica(R.raw.music_main, true);
-			}
+			core.reproducirMusica(true);
 		}
-		else
+		else if (estado == TEstadoController.Design || estado == TEstadoController.Paint || estado == TEstadoController.Deformation || estado == TEstadoController.Repaint)
 		{
-			core.pararMusica();
+			core.reproducirMusica(R.raw.music_creation, true);
+		}
+		else if (estado != TEstadoController.Video)
+		{
+			core.reproducirMusica(R.raw.music_main, true);
 		}
 	}
 }

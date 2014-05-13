@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Vertical_Content_Dialog_Style" >
+        
+  	    <TextView style="@style/Text_Section_Dialog_Style"
+  	        android:id="@+id/textViewDialog1" />
+		
+	</LinearLayout>
+	
+ 	<ImageView style="@style/ImageView_Arrow_Dialog_Comic_Style"
+ 	    android:contentDescription="@string/desc_dialog_arrow" />
+
+</LinearLayout>

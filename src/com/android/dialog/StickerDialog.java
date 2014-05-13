@@ -1,7 +1,6 @@
 package com.android.dialog;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -23,7 +22,7 @@ public abstract class StickerDialog extends WindowDialog
 	
 	public StickerDialog(Context context, GameStatistics[] estadisticas)
 	{
-		super(context, R.layout.dialog_sticker_layout);
+		super(context, R.layout.dialog_sticker_layout, true);
 		
 		imageWidth = (int) mContext.getResources().getDimension(R.dimen.StickerButton_LayoutWidth_Dimen);
 		imageHeight = (int) mContext.getResources().getDimension(R.dimen.StickerButton_LayoutHeight_Dimen);
@@ -150,11 +149,6 @@ public abstract class StickerDialog extends WindowDialog
 	public abstract void onAddSticker(int tag, TTipoSticker tipo);
 	public abstract void onDeleteSticker(TTipoSticker tipo);
 	public abstract void onEditSticker(TTipoSticker tipo);
-
-	/* Métodos Abstractos WindowDialog */
-
-	@Override
-	protected void onTouchOutsidePopUp(View v, MotionEvent event) { }
 
 	/* Métodos Listener onClick */
 	

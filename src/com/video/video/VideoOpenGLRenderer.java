@@ -19,6 +19,7 @@ import com.video.data.Video;
 
 public class VideoOpenGLRenderer extends OpenGLRenderer
 {
+	private boolean sombra;
 	private TEstadoSonido estado;
 	
 	private Personaje cientifico, guitarrista;
@@ -34,9 +35,10 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		seleccionarTexturaFondo(video.getIdTexturaFondos());
 		
 		estado = TEstadoSonido.Nada;
+		sombra = true;
 		
-		cientifico = video.getCientifico();
-		guitarrista = video.getGuitarrista();
+		cientifico = video.getPersonaje(TTipoActores.Cientifico);
+		guitarrista = video.getPersonaje(TTipoActores.Guitarrista);
 		
 		dibujarGuitarrista = false;
 		dibujarCientifico = false;
@@ -91,6 +93,11 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 			handleMonitores1.dibujar(gl);
 			handleMonitores2.dibujar(gl);
 		}
+		
+		if (sombra)
+		{
+			dibujarMarcoCompleto(gl, Color.argb(175, 0, 0, 0), GamePreferences.DEEP_OUTSIDE_FRAMES);
+		}
 	}
 	
 	@Override
@@ -131,7 +138,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	
 	public void acercarEscena()
 	{
-		camaraZoom(0.9f);
+		camaraZoom(0.999f);
 	}
 	
 	public void recuperarEscena()
@@ -176,6 +183,11 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	public void desactivarEstadoSonido()
 	{
 		estado = TEstadoSonido.Nada;
+	}
+	
+	public void desactivarSombra()
+	{
+		sombra = false;
 	}
 	
 	public TEstadoSonido isEstadoSonido()

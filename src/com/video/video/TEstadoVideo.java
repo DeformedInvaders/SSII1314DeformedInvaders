@@ -19,7 +19,7 @@ public enum TEstadoVideo
 			case Noise:
 				return TEstadoVideo.Brief;
 			case Brief:
-				return null;
+				return TEstadoVideo.Brief;
 			default:
 				return TEstadoVideo.Nada;
 		}
@@ -30,11 +30,13 @@ public enum TEstadoVideo
 		switch(this)
 		{
 			case Door:
-				return 20 * 1000;
+				return 18 * 1000;
 			case Rock:
-				return 30 * 1000;
+				return 28 * 1000;
 			case Noise:
-				return 6 * 1000;
+				return 5 * 1000;
+			case Brief:
+				return 10 * 1000;
 			default:
 				return -1;
 		}

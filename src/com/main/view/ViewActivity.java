@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -62,10 +63,15 @@ public class ViewActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_layout);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+		// ActionBar
+		
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+		// Permisos Internet
+		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
@@ -73,6 +79,8 @@ public class ViewActivity extends FragmentActivity
 		
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        
+        // Arquitectura
         
         core = new GameCore(this, metrics.widthPixels, metrics.heightPixels) {
 			@Override
