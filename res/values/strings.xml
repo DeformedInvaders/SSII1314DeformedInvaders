@@ -149,6 +149,9 @@
 			<string name="text_processing_level_title">Please wait&#x2026;</string>
 			<string name="text_processing_level_description">Loading level.</string>
 			
+			<string name="text_processing_video_title">Please wait&#x2026;</string>
+			<string name="text_processing_video_description">Loading video.</string>
+			
 			<string name="text_summary">Level\'s Summary.</string>
 			
 			<string name="text_button_yes">Yes</string>

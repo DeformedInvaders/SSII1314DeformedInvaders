@@ -16,7 +16,6 @@ import com.android.opengl.TTipoFondoRenderer;
 import com.android.opengl.TTipoTexturasRenderer;
 import com.creation.data.Handle;
 import com.creation.data.TTipoMovimiento;
-import com.game.data.Background;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
@@ -28,9 +27,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 {
 	// Estado
 	private TEstadoGame estado;
-	
-	// Background
-	private Background background;
 
 	// Protagonista
 	private Personaje personaje;
@@ -56,14 +52,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public GameOpenGLRenderer(Context context, Personaje p, InstanciaNivel l)
 	{
 		super(context, TTipoFondoRenderer.Desplazable, TTipoTexturasRenderer.Juego);
+		seleccionarTexturaFondo(l.getFondoNivel().getIdTexturaFondos());
 
 		estado = TEstadoGame.FaseEnemies;
 		
 		personaje = p;
-		background = l.getFondoNivel();
-		
-		// BackGround
-		seleccionarTexturaFondo(background.getIdTexturaFondos());
 		
 		tipoEnemigos = l.getTipoEnemigos();
 		listaEnemigos = l.getListaEnemigos();
@@ -101,9 +94,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceCreated(gl, config);
 
-		// BackGround
-		//seleccionarTexturaFondo(background.getIdTexturaFondos());
-
 		// Protagonista
 		personaje.cargarTextura(gl, this, mContext);
 
@@ -114,9 +104,15 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			it.next().cargarTextura(gl, this, mContext);
 		}
 		
-		texturasCargadas = true;
-		
 		// TODO GAME: Añadir cargado de texturas nuevas.
+	}
+	
+	@Override
+	public void onSurfaceChanged(GL10 gl, int width, int height)
+	{
+		super.onSurfaceChanged(gl, width, height);
+		
+		texturasCargadas = true;
 	}
 
 	@Override
@@ -202,7 +198,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	public boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if(personaje.getPosicionY() > getScreenHeight() - pixelY)
+		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
+
+		if(personaje.getPosicionY() + personaje.getHeight() / 2.0f > worldY)
 		{
 			if(personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
@@ -210,9 +208,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				return true;
 			}
 		}
-		else if (personaje.getPosicionY() + personaje.getHeight() < getScreenHeight() - pixelY)
+		else
 		{
-			if(personaje.getPosicionY() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - 2*GamePreferences.DISTANCE_GAME_BOTTOM())
+			if(personaje.getPosicionY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
 				personaje.subir();
 				return true;

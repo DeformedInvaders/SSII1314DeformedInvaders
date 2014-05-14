@@ -3,6 +3,7 @@ package com.video.video;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 
@@ -14,6 +15,7 @@ import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.lib.math.Rectangle;
 import com.main.model.GamePreferences;
+import com.project.main.R;
 import com.video.data.TTipoActores;
 import com.video.data.Video;
 
@@ -21,6 +23,8 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 {
 	private TEstadoVideo estadoVideo;
 	private TEstadoSonido estadoSonido;
+	
+	private boolean texturasCargadas;
 	
 	private Personaje cientifico, guitarrista;
 	
@@ -56,6 +60,22 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	
 		handleMicrofono = new Handle(areaMicrofono.getX(), areaMicrofono.getY(), areaMicrofono.getWidth(), areaMicrofono.getHeight(), Color.RED);
 		handleAltavoz = new Handle(areaAltavoz.getX(), areaAltavoz.getY(), areaAltavoz.getWidth(), areaAltavoz.getHeight(), Color.BLUE);
+	
+		texturasCargadas = false;
+		
+		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_video_title), mContext.getString(R.string.text_processing_video_description), true);
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run()
+			{
+				while(!texturasCargadas);
+				alert.dismiss();
+			}
+		});
+		
+		thread.start();
+	
 	}	
 	
 	@Override
@@ -65,6 +85,14 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 
 		cientifico.cargarTextura(gl, this, mContext);
 		guitarrista.cargarTextura(gl, this, mContext);
+	}
+	
+	@Override
+	public void onSurfaceChanged(GL10 gl, int width, int height)
+	{
+		super.onSurfaceChanged(gl, width, height);
+		
+		texturasCargadas = true;
 	}
 
 	@Override
