@@ -65,6 +65,7 @@ public class GamePreferences
 	public static final int NUM_TYPE_CHARACTER_VIDEO = 2;
 	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;
 	public static final int NUM_TYPE_BUBBLES = 3;
+	public static final int NUM_TYPE_PLATFORMS = 3;
 	public static final int NUM_TYPE_OBSTACLES = 2;
 	public static final int NUM_TYPE_MISSILES = 1;
 	public static final int NUM_TYPE_ENEMIES = 4;
@@ -243,7 +244,7 @@ public class GamePreferences
 		}
 		else
 		{
-			return TIME_INTERVAL_ANIMATION_MEDIUM;
+			return TIME_INTERVAL_ANIMATION_SLOW;
 		}
 	}
 	

@@ -45,8 +45,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		personajeCargado = true;
 		personaje = p;
-		personaje.desactivarBurbuja();
-		personaje.reiniciarVidas();
+		personaje.desactivarEscalado();
 
 		estado = TEstadoDisplay.Nada;
 		estadoCaptura = TEstadoCaptura.Nada;

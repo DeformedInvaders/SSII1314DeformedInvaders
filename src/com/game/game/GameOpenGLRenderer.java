@@ -16,10 +16,13 @@ import com.android.opengl.TTipoFondoRenderer;
 import com.android.opengl.TTipoTexturasRenderer;
 import com.creation.data.Handle;
 import com.creation.data.TTipoMovimiento;
+import com.game.data.Burbuja;
+import com.game.data.Enemigo;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
+import com.game.data.Plataforma;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -30,9 +33,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	// Protagonista
 	private Personaje personaje;
+	private Burbuja burbujaPersonaje;
+	private Plataforma plataformaPersonaje;
 	
 	// Boss
-	private Entidad jefe;
+	private Enemigo jefe;
+	private Burbuja burbujaJefe;
+	private Plataforma plataformaJefe;
 	
 	// Enemigos
 	private List<Entidad> tipoEnemigos;
@@ -57,16 +64,24 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		estado = TEstadoGame.FaseEnemies;
 		
 		personaje = p;
+		burbujaPersonaje = new Burbuja(personaje, GamePreferences.MAX_CHARACTER_LIVES);
+		plataformaPersonaje = new Plataforma(personaje);
+		
+		personaje.activarEscalado();
+		burbujaPersonaje.activarBurbuja();
+		plataformaPersonaje.desactivarPlataforma();
 		
 		tipoEnemigos = l.getTipoEnemigos();
 		listaEnemigos = l.getListaEnemigos();
 		posEnemigoActual = 0;
 		handleEnemigoActual = new Handle(50, 20, Color.YELLOW);
 		
-		jefe = tipoEnemigos.get(tipoEnemigos.size()-1);
+		jefe = (Enemigo) tipoEnemigos.get(tipoEnemigos.size() - 1);
+		burbujaJefe = new Burbuja(jefe, GamePreferences.MAX_BOSS_LIVES);
+		plataformaJefe = new Plataforma(jefe);
 		
-		personaje.reiniciarVidas();
-		personaje.activarBurbuja();
+		burbujaJefe.desactivarBurbuja();
+		plataformaJefe.desactivarPlataforma();
 		
 		puntuacion = 0;
 		puntuacionModificada = false;
@@ -96,6 +111,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		// Protagonista
 		personaje.cargarTextura(gl, this, mContext);
+		burbujaPersonaje.cargarTextura(gl, this, mContext);
+		plataformaPersonaje.cargarTextura(gl, this, mContext);
 
 		// Lista Enemigos
 		Iterator<Entidad> it = tipoEnemigos.iterator();
@@ -105,6 +122,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// TODO GAME: Añadir cargado de texturas nuevas.
+		// jefe.cargarTextura(gl, this, mContext);
+		burbujaJefe.cargarTextura(gl, this, mContext);
+		plataformaJefe.cargarTextura(gl, this, mContext);
 	}
 	
 	@Override
@@ -139,6 +159,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					
 			// Dibujar protagonista
 			personaje.dibujar(gl, this);
+			burbujaPersonaje.dibujar(gl, this);
 	
 			// Dibujar cola de enemigos
 			boolean activo = true;
@@ -181,8 +202,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		gl.glPushMatrix();
 
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
-			
-			personaje.dibujar(gl, this);	
+
+			plataformaPersonaje.dibujar(gl, this);
+			personaje.dibujar(gl, this);
+			burbujaPersonaje.dibujar(gl, this);
 			
 		gl.glPopMatrix();
 		
@@ -190,8 +213,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		gl.glPushMatrix();
 			
 			gl.glTranslatef(this.getScreenWidth() - GamePreferences.DISTANCE_GAME_RIGHT() - jefe.getWidth(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
-			
+
+			plataformaJefe.dibujar(gl, this);
 			jefe.dibujar(gl, this);
+			burbujaJefe.dibujar(gl, this);
 			
 		gl.glPopMatrix();
 	}
@@ -200,7 +225,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
 
-		if(personaje.getPosicionY() + personaje.getHeight() / 2.0f > worldY)
+		if (personaje.getPosicionY() + 3.0f * personaje.getHeight() / 4.0f > worldY)
 		{
 			if(personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
@@ -208,7 +233,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				return true;
 			}
 		}
-		else
+		else if (personaje.getPosicionY() + personaje.getHeight() / 4.0f < worldY)
 		{
 			if(personaje.getPosicionY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
@@ -298,6 +323,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private boolean playAnimationBossPhase()
 	{
 		// TODO GAME: Reproducir animación nueva
+		plataformaPersonaje.animar();
+		plataformaJefe.animar();
+		
 		return personaje.animar();
 	}
 
@@ -325,7 +353,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			estado = TEstadoGame.FaseBoss;
 			
 			// TODO GAME: Cambiar fin de juego.
-			personaje.reposo();		
+			personaje.reposo();
+			plataformaPersonaje.activarPlataforma();
+			
+			burbujaJefe.activarBurbuja();
+			plataformaJefe.activarPlataforma();
+			
 			return TEventoGame.FinFaseEnemigos;
 		}
 		
@@ -351,12 +384,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					
 					if (!GamePreferences.IS_DEBUG_ENABLED())
 					{
-						personaje.quitarVida();
+						burbujaPersonaje.quitarVida();
 					}
 					
 					puntuacion += GamePreferences.SCORE_LOSE_LIFE;
 	
-					if (!personaje.isAlive())
+					if (!burbujaPersonaje.isAlive())
 					{					
 						personaje.reposo();
 						return TEventoGame.FinJuegoDerrota;
@@ -369,7 +402,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Cambio de puntuación de obstáculos y misiles
-		if(puntuacionModificada)
+		if (puntuacionModificada)
 		{
 			puntuacionModificada = false;
 			
@@ -382,6 +415,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private TEventoGame isGameEndedBossPhase()
 	{
 		// TODO GAME: Comprobar final del juego.
+		if (!burbujaJefe.isAlive())
+		{
+			return TEventoGame.FinFaseBoss;
+		}
+		
 		return TEventoGame.Nada;
 	}
 	
@@ -397,12 +435,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	public int getVidasPersonaje()
 	{
-		return personaje.getVidas();
+		return burbujaPersonaje.getVidas();
 	}
 	
 	public int getVidasBoss() 
 	{
-		return 2;
+		return burbujaJefe.getVidas();
 	}
 
 	/* Métodos de Guardado de Información */

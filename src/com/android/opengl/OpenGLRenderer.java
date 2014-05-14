@@ -43,7 +43,8 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private int numFondos, numCharacters, numTexturas;
 	
-	private int POS_TEXTURE_CHARACTER_SKELETON, POS_TEXTURE_CHARACTER_STICKER, POS_TEXTURE_BUBBLE;
+	private int POS_TEXTURE_CHARACTER_SKELETON, POS_TEXTURE_CHARACTER_STICKER, POS_TEXTURE_CHARACTER_BUBBLE, POS_TEXTURE_CHARACTER_PLATFORM;
+	private int POS_TEXTURE_BOSS_BUBBLE, POS_TEXTURE_BOSS_PLATFORM;
 	private int POS_TEXTURE_MISSILE, POS_TEXTURE_OBSTACLE;
 	private int POS_TEXTURE_ENEMY_SKELETON, POS_TEXTURE_ENEMY_STICKER;
 
@@ -121,9 +122,13 @@ public abstract class OpenGLRenderer implements Renderer
 		
 		POS_TEXTURE_CHARACTER_SKELETON = 0;
 		POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + numCharacters;
-		POS_TEXTURE_BUBBLE = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
+		POS_TEXTURE_CHARACTER_BUBBLE = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
+		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
 		
-		POS_TEXTURE_MISSILE = POS_TEXTURE_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
+		POS_TEXTURE_BOSS_BUBBLE = POS_TEXTURE_CHARACTER_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
+		POS_TEXTURE_BOSS_PLATFORM = POS_TEXTURE_BOSS_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
+				
+		POS_TEXTURE_MISSILE = POS_TEXTURE_BOSS_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
 		POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.NUM_TYPE_MISSILES;
 		
 		POS_TEXTURE_ENEMY_SKELETON = POS_TEXTURE_OBSTACLE + GamePreferences.NUM_TYPE_OBSTACLES;
@@ -575,8 +580,14 @@ public abstract class OpenGLRenderer implements Renderer
 				return POS_TEXTURE_OBSTACLE + posEntidad;
 			case Misil:
 				return POS_TEXTURE_MISSILE + posEntidad;
-			case Burbuja:
-				return POS_TEXTURE_BUBBLE + posEntidad;
+			case BurbujaPersonaje:
+				return POS_TEXTURE_CHARACTER_BUBBLE + posEntidad;
+			case BurbujaBoss:
+				return POS_TEXTURE_BOSS_BUBBLE + posEntidad;
+			case PlataformaPersonaje:
+				return POS_TEXTURE_CHARACTER_PLATFORM + posEntidad;
+			case PlataformaBoss:
+				return POS_TEXTURE_BOSS_PLATFORM + posEntidad;
 			default:
 				return -1;
 		}

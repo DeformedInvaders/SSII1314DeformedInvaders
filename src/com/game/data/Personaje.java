@@ -2,16 +2,12 @@ package com.game.data;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
-
 import com.android.opengl.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
-import com.creation.data.TTipoSticker;
 import com.game.game.TEstadoColision;
 import com.lib.math.Intersector;
 import com.main.model.GamePreferences;
-import com.project.main.R;
 
 public class Personaje extends Malla
 {
@@ -22,8 +18,8 @@ public class Personaje extends Malla
 	private Movimientos movimientos;
 	private TTipoMovimiento tipoMovimiento;
 	
-	private int vidas;
-	private boolean burbuja;
+	// Escalado
+	private boolean escalado;
 
 	/* Constructora */
 	
@@ -39,50 +35,12 @@ public class Personaje extends Malla
 		texturaEntidad = -1;
 		
 		posicionX = 0.0f;
-		posicionY = 0.0f;
+		posicionY = 0.0f;	
 		
-		vidas = GamePreferences.MAX_CHARACTER_LIVES;
-		burbuja = false;		
+		escalado = false;
 	}
 
 	/* Métodos abstractos de Entidad */
-	
-	private int indiceBurbuja(int vidas)
-	{
-		switch (vidas)
-		{
-			case 0:
-				return R.drawable.lives_bubble_1;
-			case 1:
-				return R.drawable.lives_bubble_2;
-			default:
-				return R.drawable.lives_bubble_3;
-		}
-	}
-
-	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
-	{
-		super.cargarTextura(gl, renderer, context);
-		
-		// Burbuja
-		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
-		{
-			renderer.cargarTexturaRectangulo(gl, getHeight(), getWidth(), indiceBurbuja(i), TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
-		}
-	}
-	
-	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
-	{
-		super.descargarTextura(renderer);
-		
-		// Burbuja
-		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
-		{
-			renderer.descargarTexturaRectangulo(TTipoEntidad.Burbuja, i, TTipoSticker.Nada);
-		}
-	}
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
@@ -92,7 +50,7 @@ public class Personaje extends Malla
 	
 				gl.glTranslatef(posicionX, posicionY, 0.0f);
 				
-				if (burbuja)
+				if (escalado)
 				{
 					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(), GamePreferences.GAME_SCALE_FACTOR(), 1.0f);
 				}
@@ -101,29 +59,15 @@ public class Personaje extends Malla
 	
 			gl.glPopMatrix();
 		}
-
-		if (burbuja && vidas > 0)
-		{
-			gl.glPushMatrix();
-			
-				gl.glTranslatef(posicionX, posicionY, 0.0f);
-				
-				renderer.dibujarTexturaRectangulo(gl, TTipoEntidad.Burbuja, vidas - 1, TTipoSticker.Nada);
-			
-			gl.glPopMatrix();
-		}
 		
 		if (GamePreferences.IS_DEBUG_ENABLED())
 		{
-			if (burbuja)
-			{
-				gl.glPushMatrix();
-				
-					gl.glTranslatef(area.x, area.y, 0.0f);
-					handle.dibujar(gl);
+			gl.glPushMatrix();
 			
-				gl.glPopMatrix();
-			}
+				gl.glTranslatef(area.x, area.y, 0.0f);
+				handle.dibujar(gl);
+	
+			gl.glPopMatrix();
 		}
 	}
 
@@ -232,24 +176,14 @@ public class Personaje extends Malla
 		nombre = n;
 	}
 	
-	public void activarBurbuja()
+	public void activarEscalado()
 	{
-		burbuja = true;
+		escalado = true;
 	}
 	
-	public void desactivarBurbuja()
+	public void desactivarEscalado()
 	{
-		burbuja = false;
-	}
-	
-	public void reiniciarVidas()
-	{
-		vidas = GamePreferences.MAX_CHARACTER_LIVES;
-	}
-	
-	public void quitarVida()
-	{
-		vidas--;
+		escalado = false;
 	}
 
 	/* Métodos de Obtención de Información */
@@ -267,16 +201,6 @@ public class Personaje extends Malla
 	public float getHeight()
 	{
 		return height * GamePreferences.GAME_SCALE_FACTOR();
-	}
-	
-	public boolean isAlive()
-	{
-		return vidas > 0;
-	}
-	
-	public int getVidas()
-	{
-		return vidas;
 	}
 	
 	public String getNombre()
