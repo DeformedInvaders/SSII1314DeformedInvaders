@@ -167,6 +167,24 @@ public abstract class Malla extends Entidad
 		handle = new Handle(50, area.radius, Color.RED);
 	}
 
+	public void subir() 
+	{
+		if (movimientosReady)
+		{
+			posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+			moverArea(posicionX, posicionY);
+		}
+	}
+	
+	public void bajar() 
+	{
+		if (movimientosReady)
+		{
+			posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+			moverArea(posicionX, posicionY);
+		}
+	}
+	
 	/* Métodos de Obtención de Información */
 	
 	@Override

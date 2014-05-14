@@ -32,6 +32,8 @@ public class Enemigo extends Malla
 			
 			gl.glPushMatrix();
 			
+				gl.glTranslatef(posicionX, posicionY, 0.0f);
+			
 				gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
 				gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
 				gl.glScalef(factorEscala, factorEscala, 1.0f);
@@ -89,5 +91,4 @@ public class Enemigo extends Malla
 	{
 		return movimiento;
 	}
-	
 }

@@ -30,7 +30,7 @@ public enum TTipoTexturasRenderer
 			case Video:
 				return GamePreferences.NUM_TYPE_CHARACTER_VIDEO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_VIDEO);
 			case Juego:
-				return GamePreferences.NUM_TYPE_CHARACTER_JUEGO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_JUEGO) + 2 * GamePreferences.NUM_TYPE_BUBBLES + 2 * GamePreferences.NUM_TYPE_PLATFORMS + GamePreferences.NUM_TYPE_OPPONENTS + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES);
+				return GamePreferences.NUM_TYPE_CHARACTER_JUEGO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_JUEGO) + 2 * GamePreferences.NUM_TYPE_BUBBLES + 2 * GamePreferences.NUM_TYPE_PLATFORMS + GamePreferences.NUM_TYPE_OPPONENTS + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES) + 2*GamePreferences.NUM_TYPE_SHOTS;
 			default:
 				return 0;
 		}

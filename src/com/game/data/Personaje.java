@@ -105,24 +105,6 @@ public class Personaje extends Malla
 		
 		return super.animar();
 	}
-	
-	public void subir() 
-	{
-		if (movimientosReady)
-		{
-			posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-			moverArea(posicionX, posicionY);
-		}
-	}
-	
-	public void bajar() 
-	{
-		if (movimientosReady)
-		{
-			posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-			moverArea(posicionX, posicionY);
-		}
-	}
 
 	/* Métodos de Animación */
 	

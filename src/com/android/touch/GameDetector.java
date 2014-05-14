@@ -91,7 +91,7 @@ public class GameDetector
 	{
 		if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
 		{
-			surface.seleccionarAnimacion(TTipoMovimiento.Attack);
+			surface.seleccionarAtacar();
 			bloqueado = false;
 		}
 	}

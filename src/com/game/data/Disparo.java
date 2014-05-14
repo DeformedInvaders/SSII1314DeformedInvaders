@@ -9,57 +9,52 @@ import com.creation.data.TTipoSticker;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
-public class Plataforma extends Entidad
-{
+public class Disparo extends Entidad {
+
 	private Malla entidad;
-	
 	private boolean activado;
 	private int indiceAnimacion;
+	private float posicionX, posicionY;
 	
-	public Plataforma(Malla malla)
+	public Disparo(Malla malla)
 	{
 		entidad = malla;
+		
 		activado = false;
 		indiceAnimacion = 0;
+		posicionY = 0.0f;
 		
 		if (malla.getTipo() == TTipoEntidad.Personaje)
 		{
-			tipoEntidad = TTipoEntidad.PlataformaPersonaje;
+			tipoEntidad = TTipoEntidad.DisparoPersonaje;
+			posicionX = 0.0f;
 		}
 		else if (malla.getTipo() == TTipoEntidad.Enemigo)
 		{
-			tipoEntidad = TTipoEntidad.PlataformaBoss;
+			tipoEntidad = TTipoEntidad.DisparoBoss;
+			posicionX = 1000.0f;
 		}
 		else
 		{
 			tipoEntidad = TTipoEntidad.Nada;
 		}
 	}
-	
-	private int indicePlataforma(int indice)
+	private int indiceDisparo(int indice)
 	{
-		if (tipoEntidad == TTipoEntidad.PlataformaPersonaje)
+		if (tipoEntidad == TTipoEntidad.DisparoPersonaje)
 		{
 			switch (indice)
 			{
 				case 0:
-					return R.drawable.platform_character_1;
-				case 1:
-					return R.drawable.platform_character_2;
-				default:
-					return R.drawable.platform_character_3;
+					return R.drawable.shot_character;
 			}
 		}
-		else if (tipoEntidad == TTipoEntidad.PlataformaBoss)
+		else if (tipoEntidad == TTipoEntidad.DisparoBoss)
 		{
 			switch (indice)
 			{
 				case 0:
-					return R.drawable.platform_boss_1;
-				case 1:
-					return R.drawable.platform_boss_2;
-				default:
-					return R.drawable.platform_boss_3;
+					return R.drawable.shot_boss;
 			}
 		}
 		
@@ -72,9 +67,9 @@ public class Plataforma extends Entidad
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
 		// Burbuja
-		for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 		{
-			renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indicePlataforma(i), tipoEntidad, i, TTipoSticker.Nada);
+			renderer.cargarTexturaRectangulo(gl, indiceDisparo(i), tipoEntidad, i, TTipoSticker.Nada);
 		}
 		
 		width = entidad.getWidth();
@@ -85,7 +80,7 @@ public class Plataforma extends Entidad
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
 		// Burbuja
-		for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 		{
 			renderer.descargarTexturaRectangulo(tipoEntidad, i, TTipoSticker.Nada);
 		}
@@ -98,7 +93,7 @@ public class Plataforma extends Entidad
 		{
 			gl.glPushMatrix();
 			
-				gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - 2.0f * getWidth() / 3.0f, 0.0f);
+				gl.glTranslatef(posicionX, posicionY, 0.0f);
 				
 				renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacion, TTipoSticker.Nada);
 			
@@ -118,21 +113,55 @@ public class Plataforma extends Entidad
 		return height;
 	}
 	
+	public float getPosicionX() 
+	{
+		return posicionX;
+	}
+	
+	public float getPosicionY() 
+	{
+		return posicionY;
+	}
+	
+	public boolean isActivado() 
+	{
+		return activado;
+	}
+	
 	/* Métodos de modificación de Información */
 	
 	public boolean animar()
 	{
-		indiceAnimacion = (indiceAnimacion + 1) % GamePreferences.NUM_TYPE_PLATFORMS;
+		indiceAnimacion = (indiceAnimacion + 1) % GamePreferences.NUM_TYPE_SHOTS;
 		return true;
 	}
 	
-	public void activarPlataforma()
+	public void activarDisparo()
 	{
 		activado = true;
+		posicionY = entidad.getPosicionY() - getWidth() / 2.0f;
+		//posicionX = entidad.getPosicionX() + entidad.getWidth() / 2.0f;
+		
 	}
 	
-	public void desactivarPlataforma()
+	public void desactivarDisparo()
 	{
 		activado = false;
 	}
+	
+	public void mover() 
+	{
+		if(activado)
+		{
+			if(entidad.getTipo() == TTipoEntidad.DisparoBoss)
+			{
+				posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
+			}
+			else if(entidad.getTipo() == TTipoEntidad.DisparoPersonaje)
+			{
+				posicionX += GamePreferences.DIST_MOVIMIENTO_ENEMIES();
+			}
+		}
+	}
+	
 }

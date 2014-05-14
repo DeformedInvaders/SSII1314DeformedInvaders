@@ -24,11 +24,11 @@ public class Burbuja extends Entidad
 		
 		if (malla.getTipo() == TTipoEntidad.Personaje)
 		{
-			tipoEntidad = TTipoEntidad.PlataformaPersonaje;
+			tipoEntidad = TTipoEntidad.BurbujaPersonaje;
 		}
 		else if (malla.getTipo() == TTipoEntidad.Enemigo)
 		{
-			tipoEntidad = TTipoEntidad.PlataformaBoss;
+			tipoEntidad = TTipoEntidad.BurbujaBoss;
 		}
 		else
 		{
@@ -38,15 +38,32 @@ public class Burbuja extends Entidad
 	
 	private int indiceBurbuja(int vidas)
 	{
-		switch (vidas)
+		if (tipoEntidad == TTipoEntidad.BurbujaPersonaje)
 		{
-			case 0:
-				return R.drawable.lives_bubble_1;
-			case 1:
-				return R.drawable.lives_bubble_2;
-			default:
-				return R.drawable.lives_bubble_3;
+			switch (vidas)
+			{
+				case 0:
+					return R.drawable.bubble_character_1;
+				case 1:
+					return R.drawable.bubble_character_2;
+				default:
+					return R.drawable.bubble_character_3;
+			}
 		}
+		else if (tipoEntidad == TTipoEntidad.BurbujaBoss)
+		{
+			switch (vidas)
+			{
+				case 0:
+					return R.drawable.bubble_boss_1;
+				case 1:
+					return R.drawable.bubble_boss_2;
+				default:
+					return R.drawable.bubble_boss_3;
+			}
+		}
+		
+		return -1;
 	}
 	
 	/* Métodos abstractos de Entidad */
@@ -101,7 +118,7 @@ public class Burbuja extends Entidad
 		return height;
 	}
 	
-	/* Métodos de Modificación  */
+	/* Métodos de Modificación de Información */
 	
 	public void activarBurbuja()
 	{

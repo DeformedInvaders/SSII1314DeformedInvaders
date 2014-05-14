@@ -179,4 +179,9 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		renderer.restoreData(data);
 		requestRender();
 	}
+
+	public void seleccionarAtacar() 
+	{
+		renderer.selecionarAtacar();
+	}
 }

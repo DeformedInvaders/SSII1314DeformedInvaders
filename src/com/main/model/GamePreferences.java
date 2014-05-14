@@ -66,6 +66,7 @@ public class GamePreferences
 	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;
 	public static final int NUM_TYPE_BUBBLES = 3;
 	public static final int NUM_TYPE_PLATFORMS = 3;
+	public static final int NUM_TYPE_SHOTS = 1;
 	public static final int NUM_TYPE_OBSTACLES = 2;
 	public static final int NUM_TYPE_MISSILES = 1;
 	public static final int NUM_TYPE_ENEMIES = 4;
@@ -244,7 +245,7 @@ public class GamePreferences
 		}
 		else
 		{
-			return TIME_INTERVAL_ANIMATION_SLOW;
+			return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
 		}
 	}
 	
@@ -324,6 +325,13 @@ public class GamePreferences
 		final float CHARACTER_DISTANCE_BASE = 20.0f;
 		
 		return CHARACTER_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
+	}
+	
+	public static final float DIST_MOVIMIENTO_PLATAFORMA()
+	{
+		final float PLATAFORMA_DISTANCE_BASE = 10.0f;
+		
+		return PLATAFORMA_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
 	}
 	
 	public static final float MAX_AREA_TRIANGULATOR()
