@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.main.model.GamePreferences;
-import com.video.data.TTipoActores;
 import com.video.data.Video;
 
 public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
@@ -23,9 +22,10 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	private Handler handler;
 	private Runnable task;
 	
-	private int ciclos;
 	private int[] mensajes;
 	private int posMensaje;
+	
+	private long tiempoInicio, tiempoDuracion;
 
 	/* Constructora */
 
@@ -41,8 +41,11 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		video = v;
 		estado = TEstadoVideo.Nada;
 		threadActivo = false;
-		ciclos = 0;
+		
 		posMensaje = 0;
+		
+		tiempoInicio = System.currentTimeMillis();
+		tiempoDuracion = 0;
 		
 		// Asignar Renderer al GLSurfaceView
 		renderer = new VideoOpenGLRenderer(getContext(), video);
@@ -56,14 +59,16 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				if (threadActivo)
 				{
-					if (ciclos == 0)
+					long tiempoActual = System.currentTimeMillis();
+					
+					if (tiempoActual - tiempoInicio >= tiempoDuracion)
 					{
 						estado = estado.getNext();							
 						mensajes = video.getMensaje(estado);
 						
 						animarCambioEscena();
 						
-						int duration = estado.getDuration();
+						long duration = estado.getDuration();
 						int music = estado.getMusic();
 						int sound = estado.getSound();
 						
@@ -79,13 +84,13 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 						
 						if (duration != -1)
 						{
-							ciclos = duration / GamePreferences.TIME_INTERVAL_ANIMATION();
+							tiempoInicio = System.currentTimeMillis();
+							tiempoDuracion = duration;
 						}
 					}
 					
 					animarCicloEscena();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
-					ciclos--;
 				}
 				else
 				{
@@ -110,25 +115,24 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	private void animarCambioEscena()
 	{
 		mListener.onDismissDialog();
+		renderer.seleccionarEstado(estado);
 		
 		if (estado == TEstadoVideo.Rock)
 		{
 			renderer.recuperarEscena();
-			renderer.activarActor(TTipoActores.Guitarrista, true);
 		}
 		else if (estado == TEstadoVideo.Noise)
-		{
-			renderer.activarActor(TTipoActores.Guitarrista, false);	
+		{	
 			mListener.onChangeDialog(mensajes[posMensaje]);
 		}
 		else if (estado == TEstadoVideo.Brief)
 		{
-			renderer.activarActor(TTipoActores.Cientifico, true);
 			mListener.onChangeDialog(mensajes[posMensaje]);
 			posMensaje++;
 			threadActivo = posMensaje != mensajes.length;
 		}
 		
+		renderer.seleccionarEstado(estado);
 		renderer.avanzarEscena();
 		requestRender();
 	}
@@ -137,7 +141,6 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (!threadActivo)
 		{
-			renderer.desactivarSombra();
 			threadActivo = true;
 			task.run();
 		}
@@ -147,10 +150,11 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
-	{	
-		if (estado == TEstadoVideo.Brief)
-		{ 
-			if (renderer.onTouchUp(x, y, width, height, pos))
+	{
+		if (renderer.onTouchUp(x, y, width, height, pos))
+		{
+			int sonido = renderer.isEstadoSonido().getSound();
+			if (sonido != -1)
 			{
 				mListener.onPlaySoundEffect(renderer.isEstadoSonido().getSound());
 				renderer.desactivarEstadoSonido();

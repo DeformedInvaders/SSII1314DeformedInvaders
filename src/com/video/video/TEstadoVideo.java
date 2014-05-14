@@ -25,7 +25,7 @@ public enum TEstadoVideo
 		}
 	}
 	
-	public int getDuration()
+	public long getDuration()
 	{
 		switch(this)
 		{
@@ -64,7 +64,7 @@ public enum TEstadoVideo
 		switch(this)
 		{
 			case Rock:
-				return R.raw.effect_video_door;
+				return R.raw.effect_video_opendoor;
 			case Noise:
 				return R.raw.effect_video_stopplay;
 			default:

@@ -19,14 +19,13 @@ import com.video.data.Video;
 
 public class VideoOpenGLRenderer extends OpenGLRenderer
 {
-	private boolean sombra;
-	private TEstadoSonido estado;
+	private TEstadoVideo estadoVideo;
+	private TEstadoSonido estadoSonido;
 	
 	private Personaje cientifico, guitarrista;
-	private boolean dibujarCientifico, dibujarGuitarrista;
 	
-	private Rectangle areaAgua, areaElectricidad, areaMonitores;
-	private Handle handleAgua, handleElectricidad, handleMonitores1, handleMonitores2;
+	private Rectangle areaAgua, areaElectricidad, areaMonitores, areaMicrofono, areaAltavoz;
+	private Handle handleAgua, handleElectricidad, handleMonitores1, handleMonitores2, handleMicrofono, handleAltavoz;
 	
 	public VideoOpenGLRenderer(Context context, Video video)
 	{
@@ -34,14 +33,11 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		
 		seleccionarTexturaFondo(video.getIdTexturaFondos());
 		
-		estado = TEstadoSonido.Nada;
-		sombra = true;
+		estadoSonido = TEstadoSonido.Nada;
+		estadoVideo = TEstadoVideo.Nada;
 		
 		cientifico = video.getPersonaje(TTipoActores.Cientifico);
 		guitarrista = video.getPersonaje(TTipoActores.Guitarrista);
-		
-		dibujarGuitarrista = false;
-		dibujarCientifico = false;
 		
 		guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
 		cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
@@ -49,11 +45,17 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		areaAgua = new Rectangle(100, 20, 210, 560);
 		areaElectricidad = new Rectangle(1010, 20, 170, 325);
 		areaMonitores = new Rectangle(310, 210, 120, 80);
+		
+		areaMicrofono = new Rectangle(225, 20, 190, 290);
+		areaAltavoz = new Rectangle(800, 50, 350, 420);
 	
 		handleAgua = new Handle(areaAgua.getX(), areaAgua.getY(), areaAgua.getWidth(), areaAgua.getHeight(), Color.RED);
 		handleElectricidad = new Handle(areaElectricidad.getX(), areaElectricidad.getY(), areaElectricidad.getWidth(), areaElectricidad.getHeight(), Color.YELLOW);
 		handleMonitores1 = new Handle(areaMonitores.getX(), areaMonitores.getY(), areaMonitores.getWidth(), areaMonitores.getHeight(), Color.GREEN);
 		handleMonitores2 = new Handle(areaMonitores.getX() + 580, areaMonitores.getY(), areaMonitores.getWidth(), areaMonitores.getHeight(), Color.BLUE);
+	
+		handleMicrofono = new Handle(areaMicrofono.getX(), areaMicrofono.getY(), areaMicrofono.getWidth(), areaMicrofono.getHeight(), Color.RED);
+		handleAltavoz = new Handle(areaAltavoz.getX(), areaAltavoz.getY(), areaAltavoz.getWidth(), areaAltavoz.getHeight(), Color.BLUE);
 	}	
 	
 	@Override
@@ -73,12 +75,11 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		// Centrado de Marco
 		centrarPersonajeEnMarcoInicio(gl);
 
-		if (dibujarCientifico)
+		if (estadoVideo == TEstadoVideo.Brief)
 		{
 			cientifico.dibujar(gl, this);
 		}
-		
-		if (dibujarGuitarrista)
+		else if (estadoVideo == TEstadoVideo.Rock)
 		{
 			guitarrista.dibujar(gl, this);
 		}
@@ -87,14 +88,22 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		centrarPersonajeEnMarcoFinal(gl);
 		
 		if (GamePreferences.IS_DEBUG_ENABLED())
-		{			
-			handleAgua.dibujar(gl);
-			handleElectricidad.dibujar(gl);
-			handleMonitores1.dibujar(gl);
-			handleMonitores2.dibujar(gl);
+		{
+			if (estadoVideo == TEstadoVideo.Brief)
+			{
+				handleAgua.dibujar(gl);
+				handleElectricidad.dibujar(gl);
+				handleMonitores1.dibujar(gl);
+				handleMonitores2.dibujar(gl);
+			}
+			else if (estadoVideo == TEstadoVideo.Rock)
+			{
+				handleMicrofono.dibujar(gl);
+				handleAltavoz.dibujar(gl);
+			}
 		}
 		
-		if (sombra)
+		if (estadoVideo == TEstadoVideo.Nada)
 		{
 			dibujarMarcoCompleto(gl, Color.argb(175, 0, 0, 0), GamePreferences.DEEP_OUTSIDE_FRAMES);
 		}
@@ -106,21 +115,67 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		float worldX = convertPixelXToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
 
+		switch(estadoVideo)
+		{
+			case Door:
+				return comprobarAreaDoor(worldX, worldY);
+			case Rock:
+				return comprobarAreaRock(worldX, worldY);
+			case Noise:
+				return comprobarAreaNoise(worldX, worldY);
+			case Brief:
+				return comprobarAreaBrief(worldX, worldY);
+			default:
+				return false;
+		}
+	}  
+	
+	private boolean comprobarAreaDoor(float worldX, float worldY)
+	{
+		estadoSonido = TEstadoSonido.Puerta;
+		return true;
+	}
+	
+	private boolean comprobarAreaRock(float worldX, float worldY)
+	{
+		if (areaMicrofono.contains(worldX, worldY))
+		{
+			estadoSonido = TEstadoSonido.Microfono;
+			return true;
+		}
+		
+		if (areaAltavoz.contains(worldX, worldY))
+		{
+			estadoSonido = TEstadoSonido.Altavoz;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean comprobarAreaNoise(float worldX, float worldY)
+	{
+		estadoSonido = TEstadoSonido.Trastos;
+		return true;
+	}
+	
+	private boolean comprobarAreaBrief(float worldX, float worldY)
+	{
 		if (areaAgua.contains(worldX, worldY))
 		{
-			estado = TEstadoSonido.Agua;
+			estadoSonido = TEstadoSonido.Agua;
 			return true;
 		}
 		
 		if (areaElectricidad.contains(worldX, worldY))
 		{
-			estado = TEstadoSonido.Electricidad;
+			estadoSonido = TEstadoSonido.Electricidad;
 			return true;
 		}
 		
 		if (areaMonitores.contains(worldX, worldY))
 		{
-			estado = TEstadoSonido.Monitores;
+			estadoSonido = TEstadoSonido.Monitores;
 			return true;
 		}
 		
@@ -128,7 +183,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		if (areaMonitores.contains(worldX, worldY))
 		{
 			areaMonitores.setX(areaMonitores.getX() - 580);
-			estado = TEstadoSonido.Monitores;
+			estadoSonido = TEstadoSonido.Monitores;
 			return true;
 		}
 		
@@ -168,31 +223,19 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		return isFondoFinal();
 	}
 	
-	public void activarActor(TTipoActores actor, boolean activar)
+	public void seleccionarEstado(TEstadoVideo estado)
 	{
-		if (actor == TTipoActores.Guitarrista)
-		{
-			dibujarGuitarrista = activar;
-		}
-		else
-		{
-			dibujarCientifico = activar;
-		}
+		estadoVideo = estado;
 	}
 	
 	public void desactivarEstadoSonido()
 	{
-		estado = TEstadoSonido.Nada;
-	}
-	
-	public void desactivarSombra()
-	{
-		sombra = false;
+		estadoSonido = TEstadoSonido.Nada;
 	}
 	
 	public TEstadoSonido isEstadoSonido()
 	{
-		return estado;
+		return estadoSonido;
 	}
 	
 	/* Métodos de Guardado de Información */
