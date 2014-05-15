@@ -19,8 +19,8 @@
             android:id="@+id/imageButtonGame1"
             style="@style/Button_Fragment_Style"
             android:contentDescription="@string/desc_game_play"
-            android:background="@drawable/icon_main_game"
-            custom:background_pressed="@drawable/icon_main_pause"/>
+            android:background="@drawable/icon_game_play"
+            custom:background_pressed="@drawable/icon_game_pause"/>
 	
 	</LinearLayout>
 	
