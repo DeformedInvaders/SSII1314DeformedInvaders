@@ -12,7 +12,7 @@ import com.project.main.R;
 public abstract class SizeDialog extends WindowDialog
 {
 	private Button botonMas, botonMenos;
-	private ImageView botonPincel;
+	private ImageView imagenPincel;
 	private TTipoSize size;
 
 	/* Constructora */
@@ -25,11 +25,11 @@ public abstract class SizeDialog extends WindowDialog
 
 		botonMas = (Button) findViewById(R.id.imageButtonSize1);
 		botonMenos = (Button) findViewById(R.id.imageButtonSize2);
-		botonPincel = (ImageView) findViewById(R.id.imageButtonSize3);
+		imagenPincel = (ImageView) findViewById(R.id.imageButtonSize3);
 
 		botonMas.setOnClickListener(new OnMasClickListener());
 		botonMenos.setOnClickListener(new OnMenosClickListener());
-		botonPincel.setOnClickListener(new OnPincelClickListener());
+		imagenPincel.setOnClickListener(new OnPincelClickListener());
 
 		actualizarBotones();
 	}
@@ -60,7 +60,7 @@ public abstract class SizeDialog extends WindowDialog
 			botonMas.setEnabled(false);
 		}
 		
-		botonPincel.setBackgroundResource(size.getImage());
+		imagenPincel.setBackgroundResource(size.getImage());
 	}
 
 	/* Métodos Listener onClick */

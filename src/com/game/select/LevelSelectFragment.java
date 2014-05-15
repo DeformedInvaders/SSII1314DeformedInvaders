@@ -99,18 +99,12 @@ public class LevelSelectFragment extends OpenGLFragment
 	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz()
-	{
-		botonNivel.setBackgroundResource(R.drawable.icon_level_locked);
-	}
+	protected void reiniciarInterfaz() { }
 
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked())
-		{
-			botonNivel.setBackgroundResource(R.drawable.icon_level_unlocked);
-		}
+		botonNivel.setActivo(GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked());
 	}
 
 	/* Métodos Listener onClick */

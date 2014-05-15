@@ -31,9 +31,7 @@ public class Enemigo extends Malla
 			float factorEscala = GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
 			
 			gl.glPushMatrix();
-			
-				gl.glTranslatef(posicionX, posicionY, 0.0f);
-			
+						
 				gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
 				gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
 				gl.glScalef(factorEscala, factorEscala, 1.0f);
@@ -47,16 +45,6 @@ public class Enemigo extends Malla
 				gl.glCullFace(GL10.GL_BACK);
 
 			gl.glPopMatrix();
-			
-			if (GamePreferences.IS_DEBUG_ENABLED())
-			{
-				gl.glPushMatrix();
-				
-					gl.glTranslatef(area.x, area.y, 0.0f);
-					handle.dibujar(gl);
-				
-				gl.glPopMatrix();
-			}
 		}
 	}
 	

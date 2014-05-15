@@ -11,22 +11,22 @@ import com.project.main.R;
 
 public class Plataforma extends Entidad
 {
-	private Malla entidad;
+	private InstanciaEntidad entidad;
 	
 	private boolean activado;
 	private int indiceAnimacion;
 	
-	public Plataforma(Malla malla)
+	public Plataforma(InstanciaEntidad instancia)
 	{
-		entidad = malla;
+		entidad = instancia;
 		activado = false;
 		indiceAnimacion = 0;
 		
-		if (malla.getTipo() == TTipoEntidad.Personaje)
+		if (entidad.getTipoEntidad() == TTipoEntidad.Personaje)
 		{
 			tipoEntidad = TTipoEntidad.PlataformaPersonaje;
 		}
-		else if (malla.getTipo() == TTipoEntidad.Enemigo)
+		else if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
 		{
 			tipoEntidad = TTipoEntidad.PlataformaBoss;
 		}
@@ -71,7 +71,6 @@ public class Plataforma extends Entidad
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
 		{
 			renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indicePlataforma(i), tipoEntidad, i, TTipoSticker.Nada);
@@ -84,7 +83,6 @@ public class Plataforma extends Entidad
 	@Override
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
-		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
 		{
 			renderer.descargarTexturaRectangulo(tipoEntidad, i, TTipoSticker.Nada);

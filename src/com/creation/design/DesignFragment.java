@@ -139,8 +139,6 @@ public class DesignFragment extends OpenGLFragment
 		botonReset.setVisibility(View.INVISIBLE);
 		botonTriangular.setVisibility(View.INVISIBLE);
 		
-		botonTriangular.setBackgroundResource(R.drawable.icon_tool_triangulate);
-		
 		canvas.setEstado(TEstadoDetector.SimpleTouch);
 	}
 
@@ -154,10 +152,7 @@ public class DesignFragment extends OpenGLFragment
 			botonTriangular.setVisibility(View.VISIBLE);
 		}
 		
-		if (canvas.isEstadoTriangulando())
-		{
-			botonTriangular.setBackgroundResource(R.drawable.icon_tool_triangulate_selected);
-		}
+		botonTriangular.setActivo(canvas.isEstadoTriangulando());
 		
 		if (canvas.isEstadoRetocando())
 		{

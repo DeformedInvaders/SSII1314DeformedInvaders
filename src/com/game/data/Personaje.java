@@ -5,8 +5,6 @@ import javax.microedition.khronos.opengles.GL10;
 import com.android.opengl.OpenGLRenderer;
 import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
-import com.game.game.TEstadoColision;
-import com.lib.math.Intersector;
 import com.main.model.GamePreferences;
 
 public class Personaje extends Malla
@@ -18,7 +16,7 @@ public class Personaje extends Malla
 	private Movimientos movimientos;
 	private TTipoMovimiento tipoMovimiento;
 	
-	// Escalado
+	// Escalado de Juego
 	private boolean escalado;
 
 	/* Constructora */
@@ -34,9 +32,6 @@ public class Personaje extends Malla
 		idEntidad = id;
 		texturaEntidad = -1;
 		
-		posicionX = 0.0f;
-		posicionY = 0.0f;	
-		
 		escalado = false;
 	}
 
@@ -47,8 +42,6 @@ public class Personaje extends Malla
 		if (esqueletoReady && texturaReady && movimientosReady)
 		{
 			gl.glPushMatrix();
-	
-				gl.glTranslatef(posicionX, posicionY, 0.0f);
 				
 				if (escalado)
 				{
@@ -56,16 +49,6 @@ public class Personaje extends Malla
 				}
 				
 				super.dibujar(gl, renderer);			
-	
-			gl.glPopMatrix();
-		}
-		
-		if (GamePreferences.IS_DEBUG_ENABLED())
-		{
-			gl.glPushMatrix();
-			
-				gl.glTranslatef(area.x, area.y, 0.0f);
-				handle.dibujar(gl);
 	
 			gl.glPopMatrix();
 		}
@@ -78,7 +61,7 @@ public class Personaje extends Malla
 		
 		if (movimientosReady)
 		{
-			if (tipoMovimiento == TTipoMovimiento.Jump)
+			/*if (tipoMovimiento == TTipoMovimiento.Jump)
 			{
 				if (posicionAnimacion < 2 * listaVerticesAnimacion.size() / 6)
 				{
@@ -88,9 +71,7 @@ public class Personaje extends Malla
 				{
 					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
 				}
-				
-				moverArea(posicionX, posicionY);
-			}
+			}*/
 		}
 
 		return finAnimacion;
@@ -117,30 +98,6 @@ public class Personaje extends Malla
 			
 			iniciar();
 		}
-	}
-
-	public TEstadoColision colision(Entidad entidad)
-	{
-		// Hay colisión entre el personaje y el enemigo
-		if (Intersector.overlaps(area, entidad.getArea()))
-		{
-			entidad.restaurarArea();
-			
-			// Enemigo derrotado
-			if (entidad.getTipo() == TTipoEntidad.Enemigo && tipoMovimiento == TTipoMovimiento.Attack)
-			{
-				return TEstadoColision.EnemigoDerrotado;
-			}
-			
-			if (entidad.getTipo() == TTipoEntidad.Misil && tipoMovimiento == TTipoMovimiento.Crouch)
-			{
-				return TEstadoColision.Nada;
-			}
-
-			return TEstadoColision.Colision;
-		}
-
-		return TEstadoColision.Nada;
 	}
 
 	/* Métodos de Modificación de Información */
@@ -188,5 +145,10 @@ public class Personaje extends Malla
 	public String getNombre()
 	{
 		return nombre;
+	}
+	
+	public TTipoMovimiento getMovimientoActual()
+	{
+		return tipoMovimiento;
 	}
 }

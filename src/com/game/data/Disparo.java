@@ -6,33 +6,38 @@ import android.content.Context;
 
 import com.android.opengl.OpenGLRenderer;
 import com.creation.data.TTipoSticker;
+import com.lib.math.Rectangle;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
-public class Disparo extends Entidad {
-
-	private Malla entidad;
+public class Disparo extends Entidad
+{
+	private InstanciaEntidad entidad;
+	
 	private boolean activado;
 	private int indiceAnimacion;
+	
 	private float posicionX, posicionY;
 	
-	public Disparo(Malla malla)
+	private Rectangle area;
+	
+	public Disparo(InstanciaEntidad instancia)
 	{
-		entidad = malla;
+		entidad = instancia;
 		
 		activado = false;
 		indiceAnimacion = 0;
+		
+		posicionX = 0.0f;
 		posicionY = 0.0f;
 		
-		if (malla.getTipo() == TTipoEntidad.Personaje)
+		if (entidad.getTipoEntidad() == TTipoEntidad.Personaje)
 		{
 			tipoEntidad = TTipoEntidad.DisparoPersonaje;
-			posicionX = 0.0f;
 		}
-		else if (malla.getTipo() == TTipoEntidad.Enemigo)
+		else if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
 		{
 			tipoEntidad = TTipoEntidad.DisparoBoss;
-			posicionX = 1000.0f;
 		}
 		else
 		{
@@ -43,19 +48,11 @@ public class Disparo extends Entidad {
 	{
 		if (tipoEntidad == TTipoEntidad.DisparoPersonaje)
 		{
-			switch (indice)
-			{
-				case 0:
-					return R.drawable.shot_character;
-			}
+			return R.drawable.shot_character;
 		}
 		else if (tipoEntidad == TTipoEntidad.DisparoBoss)
 		{
-			switch (indice)
-			{
-				case 0:
-					return R.drawable.shot_boss;
-			}
+			return R.drawable.shot_boss;
 		}
 		
 		return -1;
@@ -66,7 +63,6 @@ public class Disparo extends Entidad {
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 		{
 			renderer.cargarTexturaRectangulo(gl, indiceDisparo(i), tipoEntidad, i, TTipoSticker.Nada);
@@ -74,12 +70,13 @@ public class Disparo extends Entidad {
 		
 		width = entidad.getWidth();
 		height = entidad.getHeight();
+		
+		area = new Rectangle(posicionX, posicionY, width, height);
 	}
 	
 	@Override
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
-		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 		{
 			renderer.descargarTexturaRectangulo(tipoEntidad, i, TTipoSticker.Nada);
@@ -128,20 +125,40 @@ public class Disparo extends Entidad {
 		return activado;
 	}
 	
+	public Rectangle getArea()
+	{
+		return area;
+	}
+	
+	private void moverArea(float x, float y)
+	{
+		area.setPosition(x, y);
+	}
+	
 	/* Métodos de modificación de Información */
 	
+	@Override
 	public boolean animar()
 	{
-		indiceAnimacion = (indiceAnimacion + 1) % GamePreferences.NUM_TYPE_SHOTS;
-		return true;
+		if (activado)
+		{
+			indiceAnimacion = (indiceAnimacion + 1) % GamePreferences.NUM_TYPE_SHOTS;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void activarDisparo()
 	{
-		activado = true;
-		posicionY = entidad.getPosicionY() - getWidth() / 2.0f;
-		//posicionX = entidad.getPosicionX() + entidad.getWidth() / 2.0f;
-		
+		if (!activado)
+		{
+			activado = true;
+			posicionX = entidad.getPosicionX() + entidad.getWidth() / 2.0f;
+			posicionY = entidad.getPosicionY() - entidad.getWidth() / 2.0f;
+			
+			moverArea(posicionX, posicionY);
+		}
 	}
 	
 	public void desactivarDisparo()
@@ -151,16 +168,18 @@ public class Disparo extends Entidad {
 	
 	public void mover() 
 	{
-		if(activado)
+		if (activado)
 		{
-			if(entidad.getTipo() == TTipoEntidad.DisparoBoss)
+			if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
 			{
 				posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 			}
-			else if(entidad.getTipo() == TTipoEntidad.DisparoPersonaje)
+			else if (entidad.getTipoEntidad() == TTipoEntidad.Personaje)
 			{
 				posicionX += GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 			}
+			
+			moverArea(posicionX, posicionY);
 		}
 	}
 	

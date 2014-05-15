@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout style="@style/Layout_Fragment_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res/com.project.main">
 
     <com.creation.deform.DeformOpenGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/deformGLSurfaceViewDeform1" />
@@ -11,17 +12,20 @@
         <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform1"
             android:contentDescription="@string/desc_deform_add"
-            android:background="@drawable/icon_tool_add" />
+            android:background="@drawable/icon_tool_add"
+            custom:background_pressed="@drawable/icon_tool_add_selected"/>
 
         <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform2"
             android:contentDescription="@string/desc_deform_remove"
-            android:background="@drawable/icon_tool_remove" />
+            android:background="@drawable/icon_tool_remove"
+            custom:background_pressed="@drawable/icon_tool_remove_selected"/>
 
         <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform3"
             android:contentDescription="@string/desc_deform_move"
-            android:background="@drawable/icon_tool_hand" />
+            android:background="@drawable/icon_tool_hand"
+            custom:background_pressed="@drawable/icon_tool_hand_selected"/>
 		
 	</LinearLayout>
   
@@ -30,17 +34,20 @@
 		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform5"
             android:contentDescription="@string/desc_deform_record"
-            android:background="@drawable/icon_media_videocamara" />
+            android:background="@drawable/icon_media_videocamara"
+            custom:background_pressed="@drawable/icon_media_videocamara_selected"/>
 		
 		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform6"
             android:contentDescription="@string/desc_deform_audio"
-            android:background="@drawable/icon_media_microphone" />
+            android:background="@drawable/icon_media_microphone"
+			custom:background_pressed="@drawable/icon_media_microphone_selected"/>
 		
 		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform7"
             android:contentDescription="@string/desc_deform_play"
-            android:background="@drawable/icon_media_play" />
+            android:background="@drawable/icon_media_play"
+            custom:background_pressed="@drawable/icon_media_play_selected"/>
 		
     </LinearLayout>
     

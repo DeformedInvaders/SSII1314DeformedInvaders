@@ -185,18 +185,12 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz()
-	{
-		botonPlay.setBackgroundResource(R.drawable.icon_game_pause);
-	}
+	protected void reiniciarInterfaz() { }
 
 	@Override
 	protected void actualizarInterfaz()
 	{
-		if (gamePaused)
-		{
-			botonPlay.setBackgroundResource(R.drawable.icon_game_play);
-		}
+		botonPlay.setActivo(!gamePaused);
 	}
 
 	/* Métodos Listener onClick */

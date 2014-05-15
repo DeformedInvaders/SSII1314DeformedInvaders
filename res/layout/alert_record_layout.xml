@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.project.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -18,7 +19,8 @@
      	<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonRecordAlert1"
             android:contentDescription="@string/desc_recordalert_record"
-            android:background="@drawable/icon_media_record" />
+            android:background="@drawable/icon_media_record" 
+            custom:background_pressed="@drawable/icon_media_record_selected"/>
         
     </LinearLayout>
 

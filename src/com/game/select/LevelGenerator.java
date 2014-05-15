@@ -100,22 +100,24 @@ public class LevelGenerator
 
 	private List<InstanciaEntidad> getColaEnemigos(int indice)
 	{
-		List<InstanciaEntidad> listaEnemigos = new ArrayList<InstanciaEntidad>();
-
+		List<InstanciaEntidad> lista = new ArrayList<InstanciaEntidad>();
+		List<Entidad> enemigos = listaEnemigos.get(indice);
+		
 		float posXActual = GamePreferences.POS_ENEMIES_INICIO();
 		while (posXActual < GamePreferences.POS_ENEMIES_FINAL())
 		{
 			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_OPPONENTS);
 			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMIES() / 2.0f);
 			float posYEnemigo = GamePreferences.DISTANCE_ENEMY_GROUND();
-			
-			if (tipoEnemigo == 0) posYEnemigo = GamePreferences.DISTANCE_ENEMY_AIR();
+			TTipoEntidad tipoEntidad = enemigos.get(tipoEnemigo).getTipo();
 					
-			listaEnemigos.add(new InstanciaEntidad(tipoEnemigo, posXEnemigo, posYEnemigo));
+			if (tipoEntidad == TTipoEntidad.Misil) posYEnemigo = GamePreferences.DISTANCE_ENEMY_AIR();
+					
+			lista.add(new InstanciaEntidad(tipoEnemigo, tipoEntidad, posXEnemigo, posYEnemigo));
 			posXActual = posXEnemigo + GamePreferences.DISTANCE_BETWEEN_ENEMIES();
 		}
 
-		return listaEnemigos;
+		return lista;
 	}
 
 	public InstanciaNivel getInstanciaLevel(TTipoLevel level)

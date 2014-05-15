@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout style="@style/Layout_Fragment_Style"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res/com.project.main">
 
     <com.creation.paint.PaintOpenGLSurfaceView style="@style/GLSurfaceView_Style"
         android:id="@+id/paintGLSurfaceViewPaint1" />
@@ -11,12 +12,14 @@
         <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint1"
             android:contentDescription="@string/desc_paint_pencil"
-            android:background="@drawable/icon_tool_pencil" />
+            android:background="@drawable/icon_tool_pencil"
+            custom:background_pressed="@drawable/icon_tool_pencil_selected"/>
 
         <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint2"
             android:contentDescription="@string/desc_paint_bucket"
-            android:background="@drawable/icon_tool_bucket" />
+            android:background="@drawable/icon_tool_bucket"
+            custom:background_pressed="@drawable/icon_tool_bucket_selected"/>
         
 		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint3"
@@ -31,12 +34,14 @@
    		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint5"
             android:contentDescription="@string/desc_paint_sticker"
-            android:background="@drawable/icon_tool_sticker" />
+            android:background="@drawable/icon_tool_sticker"
+            custom:background_pressed="@drawable/icon_tool_sticker_selected"/>
     		    
 		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonPaint6"
             android:contentDescription="@string/desc_paint_zoom"
-            android:background="@drawable/icon_tool_zoom" />
+            android:background="@drawable/icon_tool_zoom"
+            custom:background_pressed="@drawable/icon_tool_zoom_selected"/>
 		
 	</LinearLayout>
   

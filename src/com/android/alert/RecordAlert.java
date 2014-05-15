@@ -59,7 +59,7 @@ public abstract class RecordAlert extends WindowAlert
 			@Override
 			public void onFinish()
 			{
-				botonRecAudio.setBackgroundResource(R.drawable.icon_media_record);
+				botonRecAudio.setActivo(false);
 				onStopRecording();
 				
 				reiniciarContadores();
@@ -108,7 +108,7 @@ public abstract class RecordAlert extends WindowAlert
 		{
 			onStartRecording();
 			
-			botonRecAudio.setBackgroundResource(R.drawable.icon_media_record_selected);
+			botonRecAudio.setActivo(true);
 			timer.start();
 		}
 	}

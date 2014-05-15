@@ -153,30 +153,12 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 			}
 		}
 
-		if (canvas.isEstadoAnyadir())
-		{
-			botonAnyadir.setBackgroundResource(R.drawable.icon_tool_add_selected);
-		}
-		else if (canvas.isEstadoEliminar())
-		{
-			botonEliminar.setBackgroundResource(R.drawable.icon_tool_remove_selected);
-		}
-		else if (canvas.isEstadoGrabacion())
-		{
-			botonGrabar.setBackgroundResource(R.drawable.icon_media_videocamara_selected);
-		}
-		else if (canvas.isEstadoDeformar())
-		{
-			botonDeformar.setBackgroundResource(R.drawable.icon_tool_hand_selected);
-		}
-		else if (canvas.isEstadoAudio())
-		{
-			botonAudio.setBackgroundResource(R.drawable.icon_media_microphone_selected);
-		}
-		else if (canvas.isEstadoReproduccion())
-		{
-			botonReproducir.setBackgroundResource(R.drawable.icon_media_play_selected);
-		}
+		botonAnyadir.setActivo(canvas.isEstadoAnyadir());
+		botonEliminar.setActivo(canvas.isEstadoEliminar());
+		botonGrabar.setActivo(canvas.isEstadoGrabacion());
+		botonDeformar.setActivo(canvas.isEstadoDeformar());
+		botonAudio.setActivo(canvas.isEstadoAudio());
+		botonReproducir.setActivo(canvas.isEstadoReproduccion());
 	}
 
 	@Override
@@ -189,13 +171,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonGrabar.setVisibility(View.INVISIBLE);
 		botonReproducir.setVisibility(View.INVISIBLE);
 		botonAudio.setVisibility(View.INVISIBLE);
-
-		botonAnyadir.setBackgroundResource(R.drawable.icon_tool_add);
-		botonEliminar.setBackgroundResource(R.drawable.icon_tool_remove);
-		botonDeformar.setBackgroundResource(R.drawable.icon_tool_hand);
-		botonGrabar.setBackgroundResource(R.drawable.icon_media_videocamara);
-		botonAudio.setBackgroundResource(R.drawable.icon_media_microphone);
-		botonReproducir.setBackgroundResource(R.drawable.icon_media_play);
 	}
 
 	/* Métodos Listener onClick */

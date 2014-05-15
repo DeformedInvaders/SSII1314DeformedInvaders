@@ -10,13 +10,11 @@ import android.graphics.Color;
 
 import com.android.opengl.OpenGLRenderer;
 import com.creation.data.Esqueleto;
-import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
-import com.lib.math.Circle;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
 import com.main.model.GamePreferences;
@@ -47,7 +45,6 @@ public abstract class Malla extends Entidad
 	// Pegatinas
 	protected Pegatinas pegatinas;
 
-	protected float posicionX, posicionY;
 	protected boolean esqueletoReady, texturaReady, movimientosReady;
 	
 	/* Métodos abstractos de Entidad */
@@ -104,23 +101,16 @@ public abstract class Malla extends Entidad
 			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
 			bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
 			bufferContornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
-		
-			moverArea(posicionX, posicionY);
 		}
 	}
 
 	public void reposo()
 	{
 		if (movimientosReady)
-		{
-			posicionX = 0.0f;
-			posicionY = 0.0f;
-			
+		{			
 			verticesAnimacion = vertices;
 			bufferTriangulosAnimacion = bufferTriangulos;
 			bufferContornoAnimacion = bufferContorno;
-			
-			moverArea(posicionX, posicionY);
 		}
 	}
 
@@ -162,27 +152,6 @@ public abstract class Malla extends Entidad
 		
 		width = textura.getWidth();
 		height = textura.getHeight();
-		
-		area = new Circle(getWidth() / 2.0f, getHeight() / 2.0f, getWidth() / 2.5f);
-		handle = new Handle(50, area.radius, Color.RED);
-	}
-
-	public void subir() 
-	{
-		if (movimientosReady)
-		{
-			posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-			moverArea(posicionX, posicionY);
-		}
-	}
-	
-	public void bajar() 
-	{
-		if (movimientosReady)
-		{
-			posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-			moverArea(posicionX, posicionY);
-		}
 	}
 	
 	/* Métodos de Obtención de Información */
@@ -227,15 +196,5 @@ public abstract class Malla extends Entidad
 	public Textura getTextura()
 	{
 		return textura;
-	}
-	
-	public float getPosicionX()
-	{
-		return posicionX;
-	}
-	
-	public float getPosicionY()
-	{
-		return posicionY;
 	}
 }

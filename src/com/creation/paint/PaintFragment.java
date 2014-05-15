@@ -211,23 +211,11 @@ public class PaintFragment extends OpenGLFragment
 			botonPrev.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 		}
-
-		if (canvas.isEstadoPincel())
-		{
-			botonPincel.setBackgroundResource(R.drawable.icon_tool_pencil_selected);
-		}
-		else if (canvas.isEstadoCubo())
-		{
-			botonCubo.setBackgroundResource(R.drawable.icon_tool_bucket_selected);
-		}
-		else if (canvas.isEstadoMover())
-		{
-			botonMano.setBackgroundResource(R.drawable.icon_tool_zoom_selected);
-		}
-		else if (canvas.isEstadoPegatinas())
-		{
-			botonPegatina.setBackgroundResource(R.drawable.icon_tool_sticker_selected);
-		}
+		
+		botonPincel.setActivo(canvas.isEstadoPincel());
+		botonCubo.setActivo(canvas.isEstadoCubo());
+		botonMano.setActivo(canvas.isEstadoMover());
+		botonPegatina.setActivo(canvas.isEstadoPegatinas());
 	}
 
 	@Override
@@ -236,11 +224,6 @@ public class PaintFragment extends OpenGLFragment
 		botonNext.setVisibility(View.INVISIBLE);
 		botonPrev.setVisibility(View.INVISIBLE);
 		botonDelete.setVisibility(View.INVISIBLE);
-
-		botonPincel.setBackgroundResource(R.drawable.icon_tool_pencil);
-		botonCubo.setBackgroundResource(R.drawable.icon_tool_bucket);
-		botonMano.setBackgroundResource(R.drawable.icon_tool_zoom);
-		botonPegatina.setBackgroundResource(R.drawable.icon_tool_sticker);
 	}
 
 	/* Métodos Listener onClick */

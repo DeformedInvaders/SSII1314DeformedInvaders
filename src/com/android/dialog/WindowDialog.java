@@ -81,8 +81,8 @@ public class WindowDialog
 	{
 		rootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-		int posX = view.getWidth() / 4;
-		int posY = rootView.getMeasuredHeight() + view.getHeight();
+		int posX = 0;
+		int posY = (int) (rootView.getMeasuredHeight() + view.getHeight() / 2.0f);
 
 		popupWindow.showAsDropDown(view, posX, -posY);
 	}

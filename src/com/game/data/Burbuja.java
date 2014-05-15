@@ -11,22 +11,22 @@ import com.project.main.R;
 
 public class Burbuja extends Entidad
 {
-	private Malla entidad;
+	private InstanciaEntidad entidad;
 	
 	private boolean activado;
 	private int numVidas;
 	
-	public Burbuja(Malla malla, int vidas)
+	public Burbuja(InstanciaEntidad instancia, int vidas)
 	{
-		entidad = malla;
+		entidad = instancia;
 		activado = false;
 		numVidas = vidas;
 		
-		if (malla.getTipo() == TTipoEntidad.Personaje)
+		if (entidad.getTipoEntidad() == TTipoEntidad.Personaje)
 		{
 			tipoEntidad = TTipoEntidad.BurbujaPersonaje;
 		}
-		else if (malla.getTipo() == TTipoEntidad.Enemigo)
+		else if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
 		{
 			tipoEntidad = TTipoEntidad.BurbujaBoss;
 		}
@@ -71,7 +71,6 @@ public class Burbuja extends Entidad
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 		{
 			renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indiceBurbuja(i), tipoEntidad, i, TTipoSticker.Nada);
@@ -84,7 +83,6 @@ public class Burbuja extends Entidad
 	@Override
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
-		// Burbuja
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 		{
 			renderer.descargarTexturaRectangulo(tipoEntidad, i, TTipoSticker.Nada);
@@ -98,7 +96,7 @@ public class Burbuja extends Entidad
 		{
 			gl.glPushMatrix();
 			
-				gl.glTranslatef(entidad.getPosicionX(), entidad.posicionY, 0.0f);
+				gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY(), 0.0f);
 				
 				renderer.dibujarTexturaRectangulo(gl, tipoEntidad, numVidas - 1, TTipoSticker.Nada);
 			

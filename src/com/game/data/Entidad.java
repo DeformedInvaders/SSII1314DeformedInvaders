@@ -5,8 +5,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.opengl.OpenGLRenderer;
-import com.creation.data.Handle;
-import com.lib.math.Circle;
 
 public abstract class Entidad
 {
@@ -16,9 +14,6 @@ public abstract class Entidad
 
 	protected float width = 0.0f;
 	protected float height = 0.0f;
-	
-	protected Circle area;
-	protected Handle handle;
 
 	/* Métodos abstractos a implementar */
 
@@ -52,20 +47,5 @@ public abstract class Entidad
 	public int getIndiceTextura()
 	{
 		return texturaEntidad;
-	}
-	
-	public Circle getArea()
-	{
-		return area;
-	}
-	
-	public void moverArea(float x, float y)
-	{
-		area.setPosition(getWidth() / 2.0f + x, getHeight() / 2.0f + y);
-	}
-	
-	public void restaurarArea()
-	{
-		moverArea(0.0f, 0.0f);
 	}
 }
