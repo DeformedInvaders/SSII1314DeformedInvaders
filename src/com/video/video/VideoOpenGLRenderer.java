@@ -46,6 +46,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
 		cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
 	
+		// FIXME Calcular distancias en función de la pantalla.
 		areaAgua = new Rectangle(100, 20, 210, 560);
 		areaElectricidad = new Rectangle(1010, 20, 170, 325);
 		areaMonitores = new Rectangle(310, 210, 120, 80);

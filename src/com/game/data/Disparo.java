@@ -3,9 +3,12 @@ package com.game.data;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.android.opengl.OpenGLRenderer;
+import com.creation.data.Handle;
 import com.creation.data.TTipoSticker;
+import com.lib.buffer.Dimensiones;
 import com.lib.math.Rectangle;
 import com.main.model.GamePreferences;
 import com.project.main.R;
@@ -20,6 +23,8 @@ public class Disparo extends Entidad
 	private float posicionX, posicionY;
 	
 	private Rectangle area;
+	private Handle handle;
+	private boolean areaCargada;
 	
 	public Disparo(InstanciaEntidad instancia)
 	{
@@ -27,6 +32,7 @@ public class Disparo extends Entidad
 		
 		activado = false;
 		indiceAnimacion = 0;
+		areaCargada = false;
 		
 		posicionX = 0.0f;
 		posicionY = 0.0f;
@@ -62,16 +68,18 @@ public class Disparo extends Entidad
 
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
-	{
+	{		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 		{
-			renderer.cargarTexturaRectangulo(gl, indiceDisparo(i), tipoEntidad, i, TTipoSticker.Nada);
+			Dimensiones dim = renderer.cargarTexturaRectangulo(gl, indiceDisparo(i), tipoEntidad, i, TTipoSticker.Nada);
+			
+			width = dim.getWidth();
+			height = dim.getHeight();
 		}
 		
-		width = entidad.getWidth();
-		height = entidad.getHeight();
-		
 		area = new Rectangle(posicionX, posicionY, width, height);
+		handle = new Handle(area.getX(), area.getY(), area.getWidth(), area.getHeight(), Color.YELLOW);
+		areaCargada = true;
 	}
 	
 	@Override
@@ -93,6 +101,17 @@ public class Disparo extends Entidad
 				gl.glTranslatef(posicionX, posicionY, 0.0f);
 				
 				renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacion, TTipoSticker.Nada);
+			
+			gl.glPopMatrix();
+		}
+		
+		if (areaCargada && GamePreferences.IS_DEBUG_ENABLED())
+		{
+			gl.glPushMatrix();
+			
+				gl.glTranslatef(area.x, area.y, 0.0f);
+				
+				handle.dibujar(gl);
 			
 			gl.glPopMatrix();
 		}
@@ -153,9 +172,18 @@ public class Disparo extends Entidad
 	{
 		if (!activado)
 		{
-			activado = true;
-			posicionX = entidad.getPosicionX() + entidad.getWidth() / 2.0f;
-			posicionY = entidad.getPosicionY() - entidad.getWidth() / 2.0f;
+			if (tipoEntidad == TTipoEntidad.DisparoPersonaje)
+			{
+				activado = true;
+				posicionX = entidad.getPosicionX() + 3.0f * entidad.getWidth() / 4.0f;
+				posicionY = entidad.getPosicionY() - entidad.getWidth() / 4.0f;
+			}
+			else if (tipoEntidad == TTipoEntidad.DisparoBoss)
+			{
+				activado = true;
+				posicionX = entidad.getPosicionX() + entidad.getWidth() / 4.0f;
+				posicionY = entidad.getPosicionY() - entidad.getWidth() / 4.0f;
+			}
 			
 			moverArea(posicionX, posicionY);
 		}
@@ -170,11 +198,11 @@ public class Disparo extends Entidad
 	{
 		if (activado)
 		{
-			if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
+			if (tipoEntidad == TTipoEntidad.DisparoBoss)
 			{
 				posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 			}
-			else if (entidad.getTipoEntidad() == TTipoEntidad.Personaje)
+			else if (tipoEntidad == TTipoEntidad.DisparoPersonaje)
 			{
 				posicionX += GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 			}

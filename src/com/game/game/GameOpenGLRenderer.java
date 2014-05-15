@@ -234,7 +234,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			burbujaPersonaje.dibujar(gl, this);
 		
 			// Dibujar jefe
-			
 			plataformaJefe.dibujar(gl, this);
 			jefe.dibujar(gl, this, tipoEnemigos.get(jefe.getIdEntidad()));
 			burbujaJefe.dibujar(gl, this);
@@ -358,7 +357,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			{
 				int tipoMovimiento = (int) Math.floor(Math.random() * TEstadoJefe.values().length);
 				estadoJefe = TEstadoJefe.values()[tipoMovimiento];
-				numIteraciones = 5;
+				numIteraciones = (int) Math.floor(Math.random() * 9) + 1;
 				
 				if (estadoJefe == TEstadoJefe.Bajar && jefe.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() <= 0)
 				{
@@ -368,11 +367,19 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				{
 					estadoJefe = TEstadoJefe.Bajar;
 				}
-				else if (estadoJefe == TEstadoJefe.Atacar && disparoJefe.isActivado()) 
+				else if (estadoJefe == TEstadoJefe.Atacar)
 				{
-					estadoJefe = TEstadoJefe.Nada;
+					numIteraciones = 10;
+					
+					if (disparoJefe.isActivado())
+					{
+						numIteraciones = 0;
+						estadoJefe = TEstadoJefe.Nada;
+					}
+					
 				}
 				
+				tipoEnemigos.get(jefe.getIdEntidad()).animar();
 				return protagonista.animar();
 			}
 		}
@@ -409,6 +416,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			estadoJefe = TEstadoJefe.Nada;
 		}
 			
+		tipoEnemigos.get(jefe.getIdEntidad()).animar();
 		return protagonista.animar();
 	}
 
@@ -467,7 +475,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 						burbujaPersonaje.quitarVida();
 					}
 					
-					puntuacion += GamePreferences.SCORE_LOSE_LIFE;
+					puntuacion += GamePreferences.SCORE_CHARACTER_LOSE_LIFE;
 	
 					if (!burbujaPersonaje.isAlive())
 					{					
@@ -475,7 +483,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 						return TEventoGame.FinJuegoDerrota;
 					}
 					
-					return TEventoGame.VidaPerdida;
+					return TEventoGame.VidaPerdidaPersonaje;
 				default:
 				break;
 			}
@@ -506,24 +514,36 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		if (personaje.colision(disparoJefe) == TEstadoColision.Colision)
 		{
-			burbujaPersonaje.quitarVida();
+			if (!GamePreferences.IS_DEBUG_ENABLED())
+			{
+				burbujaPersonaje.quitarVida();
+			}
+			
 			disparoJefe.desactivarDisparo();
+			
+			puntuacion += GamePreferences.SCORE_CHARACTER_LOSE_LIFE;
+			
+			if (!burbujaPersonaje.isAlive())
+			{
+				return TEventoGame.FinJuegoDerrota;
+			}
+			
+			return TEventoGame.VidaPerdidaPersonaje;
 		}
 		
 		if (jefe.colision(disparoPersonaje) == TEstadoColision.Colision)
 		{
 			burbujaJefe.quitarVida();
 			disparoPersonaje.desactivarDisparo();
-		}
-		
-		if (!burbujaJefe.isAlive())
-		{
-			return TEventoGame.FinFaseBoss;
-		}
-		
-		if (!burbujaPersonaje.isAlive())
-		{
-			return TEventoGame.FinJuegoDerrota;
+			
+			puntuacion += GamePreferences.SCORE_BOSS_LOSE_LIFE;
+			
+			if (!burbujaJefe.isAlive())
+			{
+				return TEventoGame.FinFaseBoss;
+			}
+			
+			return TEventoGame.VidaPerdidaBoss;
 		}
 		
 		return TEventoGame.Nada;

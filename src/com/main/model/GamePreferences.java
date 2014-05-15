@@ -82,7 +82,8 @@ public class GamePreferences
 	public static final int SCORE_LEVEL_COMPLETED = 100;
 	public static final int SCORE_ACTION_RIGHT = 50;
 	public static final int SCORE_ACTION_WRONG = 10;
-	public static final int SCORE_LOSE_LIFE = -100;
+	public static final int SCORE_CHARACTER_LOSE_LIFE = -100;
+	public static final int SCORE_BOSS_LOSE_LIFE = 100;
 	
 	// Tamaño de Pantalla
 	private static float WIDTH_SCREEN;
@@ -300,6 +301,7 @@ public class GamePreferences
 		return HEIGHT_SCREEN / GAME_HEIGHT_BASE;
 	}
 	
+	// FIXME Reducir escalado en fase Boss
 	public static final float GAME_SCALE_FACTOR()
 	{
 		return 0.5f;

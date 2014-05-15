@@ -65,8 +65,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 				switch (renderer.isGameEnded())
 				{
-					case VidaPerdida:
+					case VidaPerdidaPersonaje:
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
+						mListener.onGameScoreChanged(renderer.getPuntuacion());
+						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+					break;
+					case VidaPerdidaBoss:
+						mListener.onGameLivesChanged(renderer.getVidasPersonaje(), renderer.getVidasBoss());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
@@ -79,7 +84,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
 					break;
 					case FinFaseBoss:
-						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje());
+						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
 					break;
 					case FinJuegoDerrota:	
 						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidasPersonaje());

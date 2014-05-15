@@ -280,10 +280,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	}
 
 	@Override
-	public void onGameBossFinished(int score, int characterLives)
+	public void onGameBossFinished(int score, int characterLives, int bossLives)
 	{
 		actualizarPuntuacion(score);
 		actualizarVidasPersonaje(characterLives);
+		actualizarVidasBoss(bossLives);
 		
 		if(characterLives == GamePreferences.MAX_CHARACTER_LIVES)
 		{
