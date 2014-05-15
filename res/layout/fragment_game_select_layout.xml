@@ -21,6 +21,10 @@
 		<ImageView style="@style/ImageView_Achievement_Style"
 	        android:id="@+id/imageViewLevelSelect3"
 	        android:contentDescription="@string/desc_select_perfected"/>
+		
+		<ImageView style="@style/ImageView_Achievement_Style"
+	        android:id="@+id/imageViewLevelSelect4"
+	        android:contentDescription="@string/desc_select_mastered"/>
 	
 	</LinearLayout>
 	

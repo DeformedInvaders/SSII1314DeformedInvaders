@@ -18,7 +18,6 @@ import com.android.view.OpenGLFragment;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
-import com.game.select.TTipoLevel;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.project.main.R;
@@ -29,6 +28,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	private InstanciaNivel level;
 	private Personaje personaje;
+	private int firstCharacterLives;
 
 	private GameOpenGLSurfaceView canvas;
 	private TextView textoPuntuacion;
@@ -58,8 +58,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	public interface GameFragmentListener
 	{
-		public void onGameFinished(final TTipoLevel nivel, final int score, final int idImage, final String nameLevel, final boolean perfecto);
-		public void onGameFailed(final TTipoLevel level, final int idImage);
+		public void onGameFinished(final InstanciaNivel nivel, final int score, TTipoEndgame endgame);
+		public void onGameFailed(final InstanciaNivel nivel, TTipoEndgame endgame);
 		public void onGamePlaySound(final TTipoMovimiento tipo);
 	}
 
@@ -272,6 +272,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	public void onGameEnemiesFinished(int score, int characterLives, int bossLives)
 	{
+		firstCharacterLives = characterLives;
+		
 		mostrarVidasBoss();
 		
 		actualizarPuntuacion(score);
@@ -286,14 +288,20 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		actualizarVidasPersonaje(characterLives);
 		actualizarVidasBoss(bossLives);
 		
-		if(characterLives == GamePreferences.MAX_CHARACTER_LIVES)
+		if (firstCharacterLives == GamePreferences.MAX_CHARACTER_LIVES)
 		{
-			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdPolaroid(TTipoEndgame.LevelPerfected), level.getNombreNivel(), true);
-
+			if (characterLives == GamePreferences.MAX_CHARACTER_LIVES)
+			{
+				mCallback.onGameFinished(level, score, TTipoEndgame.LevelMastered);
+			}
+			else
+			{
+				mCallback.onGameFinished(level, score, TTipoEndgame.LevelPerfected);
+			}
 		}
 		else
 		{
-			mCallback.onGameFinished(level.getTipoNivel(), score, level.getFondoNivel().getIdPolaroid(TTipoEndgame.LevelCompleted), level.getNombreNivel(), false);
+			mCallback.onGameFinished(level, score, TTipoEndgame.LevelCompleted);
 		}
 	}
 
@@ -303,7 +311,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		actualizarPuntuacion(score);
 		actualizarVidasPersonaje(characterLives);
 		
-		mCallback.onGameFailed(level.getTipoNivel(), level.getFondoNivel().getIdPolaroid(TTipoEndgame.GameOver));
+		mCallback.onGameFailed(level, TTipoEndgame.GameOver);
 	}
 	
 	@Override

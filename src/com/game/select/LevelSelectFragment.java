@@ -65,6 +65,13 @@ public class LevelSelectFragment extends OpenGLFragment
 			imagenPerfected.setVisibility(View.VISIBLE);
 		}
 		
+		ImageView imagenMastered = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect4);
+		if(estadisticas.isMastered())
+		{
+			imagenMastered.setBackgroundResource(nivel.getImagenMastered());
+			imagenMastered.setVisibility(View.VISIBLE);
+		}
+		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewLevelSelect1);
 		textBackground.setText(getString(nivel.getDescripcionNivel()));
 		textBackground.setTextColor(nivel.getColorTextoNivel());

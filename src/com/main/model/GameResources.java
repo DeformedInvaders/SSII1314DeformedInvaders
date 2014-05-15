@@ -44,6 +44,7 @@ public class GameResources
 	private static final String DRAWABLE_GAMEOVER_ID = "gameover";
 	private static final String DRAWABLE_PERFECTED_ID = "levelperfected";
 	private static final String DRAWABLE_COMPLETED_ID = "levelcompleted";
+	private static final String DRAWABLE_MASTERED_ID = "levelmastered";
 	
 	// Enemies Files
 	private static final String ENEMIES_PATH = "enemies/enemy_";
@@ -224,8 +225,6 @@ public class GameResources
 		return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_VIDEO_ID + (pos + 1);
 	}
 	
-	//background_long_video_3
-	
 	public static final String GET_POLAROID(TTipoLevel nivel, TTipoEndgame juego)
 	{
 		String tipoJuego;
@@ -240,6 +239,9 @@ public class GameResources
 				break;
 			case LevelPerfected:
 				tipoJuego = DRAWABLE_PERFECTED_ID;
+				break;
+			case LevelMastered:
+				tipoJuego = DRAWABLE_MASTERED_ID;
 				break;
 			default:
 				return null;
@@ -273,6 +275,9 @@ public class GameResources
 				break;
 			case LevelPerfected:
 				tipoJuego = DRAWABLE_PERFECTED_ID;
+				break;
+			case LevelMastered:
+				tipoJuego = DRAWABLE_MASTERED_ID;
 				break;
 			default:
 				return null;

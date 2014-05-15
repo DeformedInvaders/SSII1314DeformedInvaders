@@ -21,6 +21,7 @@ import com.creation.data.Textura;
 import com.game.data.InstanciaNivel;
 import com.game.data.Nivel;
 import com.game.data.Personaje;
+import com.game.game.TTipoEndgame;
 import com.game.select.LevelGenerator;
 import com.game.select.TTipoLevel;
 import com.project.main.R;
@@ -433,9 +434,9 @@ public abstract class GameCore
 
 	/* Métodos de modificación de la Estadisticas del Juego */
 
-	public boolean actualizarEstadisticas(TTipoLevel nivel, int score, int imagen, String nombre, boolean perfecto)
+	public boolean actualizarEstadisticas(InstanciaNivel nivel, int score, TTipoEndgame endgame)
 	{
-		int posNivel = nivel.ordinal();
+		int posNivel = nivel.getTipoNivel().ordinal();
 		
 		// Sonido Victoria
 		audioPlayerManager.startPlaying(R.raw.effect_level_complete, false, false);
@@ -443,12 +444,21 @@ public abstract class GameCore
 		// Aumentar número de Victorias
 		estadisticasNiveles[posNivel].increaseVictories();	
 		
-		// Actualizar logos
-		estadisticasNiveles[posNivel].setCompleted();
-		
-		if(perfecto)
+		// Actualizar logos		
+		if (endgame == TTipoEndgame.LevelMastered)
 		{
+			estadisticasNiveles[posNivel].setCompleted();
 			estadisticasNiveles[posNivel].setPerfected();
+			estadisticasNiveles[posNivel].setMastered();
+		}
+		else if (endgame == TTipoEndgame.LevelPerfected)
+		{
+			estadisticasNiveles[posNivel].setCompleted();
+			estadisticasNiveles[posNivel].setPerfected();
+		}
+		else if (endgame == TTipoEndgame.LevelCompleted)
+		{
+			estadisticasNiveles[posNivel].setCompleted();
 		}
 		
 		// Desbloquear Siguiente nivel
@@ -459,9 +469,9 @@ public abstract class GameCore
 		estadisticasNiveles[posNivel].setMaxScore(score);
 		
 		// Publiacación de Nivel Completo
-		if (externalManager.guardarImagenTemp(imagen))
+		if (externalManager.guardarImagenTemp(nivel.getFondoNivel().getIdPolaroid(endgame)))
 		{
-			String text = mContext.getString(R.string.text_social_level_completed_initial) + " " + nombre + " " + mContext.getString(R.string.text_social_level_completed_middle) + " " + score + " " + mContext.getString(R.string.text_social_level_completed_final);
+			String text = mContext.getString(R.string.text_social_level_completed_initial) + " " + nivel.getNombreNivel() + " " + mContext.getString(R.string.text_social_level_completed_middle) + " " + score + " " + mContext.getString(R.string.text_social_level_completed_final);
 			File foto = externalManager.cargarImagenTemp();
 			
 			socialConnector.publicar(text, foto);
@@ -471,13 +481,13 @@ public abstract class GameCore
 		return internalManager.guardarEstadisticas(estadisticasNiveles);
 	}
 
-	public boolean actualizarEstadisticas(TTipoLevel nivel)
+	public boolean actualizarEstadisticas(InstanciaNivel nivel, TTipoEndgame endgame)
 	{
 		// Sonido Derrota
 		audioPlayerManager.startPlaying(R.raw.effect_game_over, false, false);
 		
 		// Aumentar número de Derrotas
-		estadisticasNiveles[nivel.ordinal()].increaseNumDeaths();
+		estadisticasNiveles[nivel.getTipoNivel().ordinal()].increaseNumDeaths();
 		
 		return internalManager.guardarEstadisticas(estadisticasNiveles);
 	}

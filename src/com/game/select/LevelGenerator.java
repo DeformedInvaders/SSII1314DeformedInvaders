@@ -60,10 +60,11 @@ public class LevelGenerator
 	private void crearNivel(TTipoLevel nivel, List<Nivel> listaNiveles, List<Entidad> listaEnemigos, List<String> listaNombres, List<Background> listaBackground)
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GameResources.GET_FONT_PATH(nivel));
-		int logroCompletado = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelCompleted));
-		int logroPerfecto = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelPerfected));
+		int logroCompleted = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelCompleted));
+		int logroPerfected = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelPerfected));
+		int logroMastered = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTipoEndgame.LevelMastered));
 		
-		listaNiveles.add(new Nivel(nivel, nivel.getFondoDisplay(), logroCompletado, logroPerfecto, nivel.getTitle(), nivel.getDescription(), nivel.getColor(), textFont, nivel.getMusica()));
+		listaNiveles.add(new Nivel(nivel, nivel.getFondoDisplay(), logroCompleted, logroPerfected, logroMastered, nivel.getTitle(), nivel.getDescription(), nivel.getColor(), textFont, nivel.getMusica()));
 		listaNombres.add(mContext.getString(nivel.getTitle()));
 		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_MISSILES; i++)

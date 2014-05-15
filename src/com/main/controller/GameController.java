@@ -28,6 +28,7 @@ import com.game.data.InstanciaNivel;
 import com.game.data.Nivel;
 import com.game.data.Personaje;
 import com.game.game.GameFragment;
+import com.game.game.TTipoEndgame;
 import com.game.select.LevelSelectionFragment;
 import com.game.select.TTipoLevel;
 import com.main.model.GameCore;
@@ -366,27 +367,27 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Game Fragment
 
 	@Override
-	public void onGameFinished(final TTipoLevel level, final int score, final int idImagen, final String nameLevel, final boolean perfecto)
+	public void onGameFinished(final InstanciaNivel level, final int score, TTipoEndgame endgame)
 	{
-		if(!core.isNivelPerfecto(level))
+		if(!core.isNivelPerfecto(level.getTipoNivel()))
 		{
 			sendToastMessage(R.string.text_game_newstikers);
 		}
 		
-		if (core.actualizarEstadisticas(level, score, idImagen, nameLevel, perfecto))
+		if (core.actualizarEstadisticas(level, score, endgame))
 		{
 			// Seleccionar Siguiente Nivel
-			ImageAlert alert = new ImageAlert(mContext, mContext.getString(R.string.text_game_finish) + " " + score, R.string.text_button_replay, R.string.text_button_levels, idImagen) {
+			ImageAlert alert = new ImageAlert(mContext, mContext.getString(R.string.text_game_finish) + " " + score, R.string.text_button_replay, R.string.text_button_levels, level.getFondoNivel().getIdPolaroid(endgame)) {
 				@Override
 				public void onPossitiveButtonClick()
 				{
-					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level));
+					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getTipoNivel()));
 				}
 	
 				@Override
 				public void onNegativeButtonClick()
 				{
-					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level);
+					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getTipoNivel());
 				}
 			};
 	
@@ -395,21 +396,21 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 
 	@Override
-	public void onGameFailed(final TTipoLevel level, final int idImagen)
+	public void onGameFailed(final InstanciaNivel level, TTipoEndgame endgame)
 	{
-		if(core.actualizarEstadisticas(level))
+		if(core.actualizarEstadisticas(level, endgame))
 		{
-			ImageAlert alert = new ImageAlert(mContext, R.string.text_game_fail, R.string.text_button_replay, R.string.text_button_levels, idImagen) {
+			ImageAlert alert = new ImageAlert(mContext, R.string.text_game_fail, R.string.text_button_replay, R.string.text_button_levels, level.getFondoNivel().getIdPolaroid(endgame)) {
 				@Override
 				public void onPossitiveButtonClick()
 				{
-					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level));
+					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getTipoNivel()));
 				}
 	
 				@Override
 				public void onNegativeButtonClick()
 				{
-					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level);
+					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getTipoNivel());
 				}
 			};
 	

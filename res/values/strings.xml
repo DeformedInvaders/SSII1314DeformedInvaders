@@ -266,6 +266,7 @@
 	    	<string name="desc_select_background">Level Background.</string>
 	    	<string name="desc_select_completed">Completed Achievement.</string>
 	    	<string name="desc_select_perfected">Perfected Achievement.</string>
+	    	<string name="desc_select_mastered">Mastered Achievement.</string>
 	    	<string name="desc_magic">Play this level.</string>
 	    	
 	    <!-- Image Alert -->

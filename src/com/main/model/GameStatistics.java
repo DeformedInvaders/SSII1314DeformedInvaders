@@ -7,7 +7,7 @@ public class GameStatistics implements Serializable
 	private static final long serialVersionUID = 1L;
 	
 	private int maxScore, numDeaths, numVictories;
-	private boolean unlocked, completed, perfected;
+	private boolean unlocked, completed, perfected, mastered;
 	
 	public GameStatistics()
 	{
@@ -17,6 +17,7 @@ public class GameStatistics implements Serializable
 		unlocked = false;
 		completed = false;
 		perfected = false;
+		mastered = false;
 	}
 	
 	public int getMaxScore()
@@ -47,6 +48,11 @@ public class GameStatistics implements Serializable
 	public boolean isPerfected()
 	{
 		return perfected;
+	}
+	
+	public boolean isMastered()
+	{
+		return mastered;
 	}
 
 	public void setMaxScore(int score)
@@ -81,4 +87,9 @@ public class GameStatistics implements Serializable
 	{
 		perfected = true;
 	}	
+	
+	public void setMastered()
+	{
+		mastered = true;
+	}
 }
