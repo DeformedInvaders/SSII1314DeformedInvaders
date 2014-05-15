@@ -176,13 +176,13 @@ public class Disparo extends Entidad
 			{
 				activado = true;
 				posicionX = entidad.getPosicionX() + 3.0f * entidad.getWidth() / 4.0f;
-				posicionY = entidad.getPosicionY() - entidad.getWidth() / 4.0f;
+				posicionY = entidad.getPosicionY() + 2.0f * entidad.getHeight() / 8.0f;
 			}
 			else if (tipoEntidad == TTipoEntidad.DisparoBoss)
 			{
 				activado = true;
 				posicionX = entidad.getPosicionX() + entidad.getWidth() / 4.0f;
-				posicionY = entidad.getPosicionY() - entidad.getWidth() / 4.0f;
+				posicionY = entidad.getPosicionY() + 2.0f * entidad.getHeight() / 8.0f;
 			}
 			
 			moverArea(posicionX, posicionY);

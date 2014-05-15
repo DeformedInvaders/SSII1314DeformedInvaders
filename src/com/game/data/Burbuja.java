@@ -142,7 +142,7 @@ public class Burbuja extends Entidad
 	
 	public boolean isAlive()
 	{
-		return numVidas > 0;
+		return numVidas >= 0;
 	}
 	
 	public int getVidas()

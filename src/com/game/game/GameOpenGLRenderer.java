@@ -186,9 +186,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
 					
 			// Dibujar protagonista
-			personaje.dibujar(gl, this, protagonista);
-			burbujaPersonaje.dibujar(gl, this);
-	
+			if (burbujaPersonaje.isAlive())
+			{
+				personaje.dibujar(gl, this, protagonista);
+				burbujaPersonaje.dibujar(gl, this);
+			}
+			
 			// Dibujar cola de enemigos
 			boolean activo = true;
 			int i = posEnemigoActual;
@@ -230,14 +233,23 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			
 			// Dibujar protagonista
 			plataformaPersonaje.dibujar(gl, this);
-			personaje.dibujar(gl, this, protagonista);
-			burbujaPersonaje.dibujar(gl, this);
+			if (burbujaPersonaje.isAlive())
+			{
+				personaje.dibujar(gl, this, protagonista);
+				burbujaPersonaje.dibujar(gl, this);
+			}
+			plataformaPersonaje.dibujar(gl, this);
 		
 			// Dibujar jefe
 			plataformaJefe.dibujar(gl, this);
-			jefe.dibujar(gl, this, tipoEnemigos.get(jefe.getIdEntidad()));
-			burbujaJefe.dibujar(gl, this);
-		
+			if (burbujaJefe.isAlive())
+			{
+				jefe.dibujar(gl, this, tipoEnemigos.get(jefe.getIdEntidad()));
+				burbujaJefe.dibujar(gl, this);
+			}
+			plataformaJefe.dibujar(gl, this);
+			
+			// Dibujar disparos
 			disparoPersonaje.dibujar(gl, this);
 			disparoJefe.dibujar(gl, this);
 			
@@ -408,6 +420,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		else if (estadoJefe == TEstadoJefe.Atacar)
 		{
 			disparoJefe.activarDisparo();
+			plataformaJefe.activarDisparo();
 		}
 	
 		numIteraciones--;
@@ -600,6 +613,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	public void selecionarAtacar() 
 	{
-		disparoPersonaje.activarDisparo();
+		if (!disparoPersonaje.isActivado())
+		{
+			disparoPersonaje.activarDisparo();
+			plataformaPersonaje.activarDisparo();
+		}
 	}
 }

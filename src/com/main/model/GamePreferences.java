@@ -35,6 +35,7 @@ public class GamePreferences
 	private static final int TIME_INTERVAL_ANIMATION_SUPER_SLOW = 20;
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
+	public static final int NUM_FRAMES_DISPARO = 15;
 	
 	// Texturas
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;
@@ -66,6 +67,7 @@ public class GamePreferences
 	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;
 	public static final int NUM_TYPE_BUBBLES = 3;
 	public static final int NUM_TYPE_PLATFORMS = 3;
+	public static final int NUM_TYPE_WEAPONS = 4;
 	public static final int NUM_TYPE_SHOTS = 1;
 	public static final int NUM_TYPE_OBSTACLES = 2;
 	public static final int NUM_TYPE_MISSILES = 1;

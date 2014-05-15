@@ -48,6 +48,7 @@ public abstract class OpenGLRenderer implements Renderer
 	private int POS_TEXTURE_MISSILE, POS_TEXTURE_OBSTACLE;
 	private int POS_TEXTURE_ENEMY_SKELETON, POS_TEXTURE_ENEMY_STICKER;
 	private int POS_TEXTURE_CHARACTER_SHOT, POS_TEXTURE_BOSS_SHOT;
+	private int POS_TEXTURE_CHARACTER_WEAPON, POS_TEXTURE_BOSS_WEAPON;
 
 	// Entidades
 	private int[] nombreTexturaEntidades;
@@ -137,6 +138,10 @@ public abstract class OpenGLRenderer implements Renderer
 
 		POS_TEXTURE_CHARACTER_SHOT = POS_TEXTURE_ENEMY_STICKER + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES);
 		POS_TEXTURE_BOSS_SHOT = POS_TEXTURE_CHARACTER_SHOT + GamePreferences.NUM_TYPE_SHOTS;
+		
+		POS_TEXTURE_CHARACTER_WEAPON = POS_TEXTURE_BOSS_SHOT + GamePreferences.NUM_TYPE_SHOTS;
+		POS_TEXTURE_BOSS_WEAPON = POS_TEXTURE_CHARACTER_WEAPON + GamePreferences.NUM_TYPE_WEAPONS;
+		
 		// Se inicializan los parámetros de la cámara en el
 		// método onSurfaceChanged llamado automáticamente
 		// después de la constructora.
@@ -595,6 +600,10 @@ public abstract class OpenGLRenderer implements Renderer
 				return POS_TEXTURE_CHARACTER_SHOT + posEntidad;
 			case DisparoBoss:
 				return POS_TEXTURE_BOSS_SHOT + posEntidad;
+			case ArmaPersonaje:
+				return POS_TEXTURE_CHARACTER_WEAPON + posEntidad;
+			case ArmaBoss:
+				return POS_TEXTURE_BOSS_WEAPON + posEntidad;
 			default:
 				return -1;
 		}
