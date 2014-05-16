@@ -167,6 +167,16 @@ public abstract class Malla extends Entidad
 	{
 		return height * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
 	}
+	
+	public int getIndiceAnimacion()
+	{
+		if (listaVerticesAnimacion != null)
+		{
+			return listaVerticesAnimacion.size();
+		}
+		
+		return 0;
+	}
 
 	public boolean isEsqueletoReady()
 	{

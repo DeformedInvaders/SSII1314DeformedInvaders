@@ -35,7 +35,7 @@ public class GamePreferences
 	private static final int TIME_INTERVAL_ANIMATION_SUPER_SLOW = 20;
 	
 	public static final int NUM_FRAMES_ANIMATION = 50;
-	public static final int NUM_FRAMES_DISPARO = 15;
+	public static final int NUM_FRAMES_DISPARO = 10;
 	
 	// Texturas
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;
@@ -248,7 +248,17 @@ public class GamePreferences
 		}
 		else
 		{
-			return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
+			switch (ciclos)
+			{
+				case 0:
+					return TIME_INTERVAL_ANIMATION_SUPER_FAST;
+				case 1:
+					return TIME_INTERVAL_ANIMATION_FAST;
+				case 2:
+					return TIME_INTERVAL_ANIMATION_SLOW;
+				default:
+					return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
+			}
 		}
 	}
 	
@@ -333,7 +343,7 @@ public class GamePreferences
 	
 	public static final float DIST_MOVIMIENTO_PLATAFORMA()
 	{
-		final float PLATAFORMA_DISTANCE_BASE = 10.0f;
+		final float PLATAFORMA_DISTANCE_BASE = 20.0f;
 		
 		return PLATAFORMA_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
 	}

@@ -54,39 +54,6 @@ public class Personaje extends Malla
 		}
 	}
 
-	@Override
-	public boolean animar()
-	{
-		boolean finAnimacion = super.animar();
-		
-		if (movimientosReady)
-		{
-			/*if (tipoMovimiento == TTipoMovimiento.Jump)
-			{
-				if (posicionAnimacion < 2 * listaVerticesAnimacion.size() / 6)
-				{
-					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-				}
-				else if (posicionAnimacion >= 4 * listaVerticesAnimacion.size() / 6)
-				{
-					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-				}
-			}*/
-		}
-
-		return finAnimacion;
-	}
-	
-	public boolean animar(boolean desplazamiento)
-	{
-		if(desplazamiento)
-		{
-			return animar();
-		}
-		
-		return super.animar();
-	}
-
 	/* Métodos de Animación */
 	
 	public void seleccionarAnimacion(TTipoMovimiento movimiento)

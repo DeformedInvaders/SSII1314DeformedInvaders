@@ -140,7 +140,7 @@ public abstract class GameCore
 	
 	public String[] getListaFicheros()
 	{
-		return externalManager.listaFicheros();
+		return externalManager.listaFicheros(GameResources.CHARACTER_EXTENSION);
 	}
 
 	public InstanciaNivel getNivel(TTipoLevel nivel)

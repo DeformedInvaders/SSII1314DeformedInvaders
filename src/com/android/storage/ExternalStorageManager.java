@@ -9,6 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StreamCorruptedException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,14 +24,15 @@ import com.creation.data.Movimientos;
 import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
+import com.main.model.GameResources;
 
 public class ExternalStorageManager
 {
 	private static final String EXTERNAL_STORAGE_TAG = "EXTERNAL";
 	
 	private static final String ROOT_DIRECTORY = "/DEFORMEDINVADERS";
-	private static final String TEMP_FILE = "/FILE.png";
-	private static final String LOG_FILE = "/LOG.txt";
+	private static final String TEMP_FILE = "/FILE";
+	private static final String LOG_FILE = "/LOG";
 
 	private Context mContext;
 	
@@ -50,18 +54,13 @@ public class ExternalStorageManager
 	
 	private String getFicheroTemp()
 	{
-		return getDirectorioRaiz() + TEMP_FILE;
+		return getDirectorioRaiz() + TEMP_FILE + GameResources.EXTENSION_IMAGE_FILE;
 	}
 	
 	private static String getFicheroLog()
 	{
-		return getDirectorioRaiz() + LOG_FILE;
+		return getDirectorioRaiz() + LOG_FILE + GameResources.EXTENSION_TEXT_FILE;
 	}
-	
-	/*private String getDirectorioExterno(String nombre)
-	{
-		return getDirectorioRaiz() + "/" + nombre + ".di";
-	}*/
 
 	/* Métodos Comprobación existencia y creación de Directorios */
 
@@ -167,6 +166,39 @@ public class ExternalStorageManager
 		
 		File file = new File(getDirectorioRaiz());
 		return file.list();
+	}
+	
+	public String[] listaFicheros(String extension)
+	{
+		List<String> lista = new ArrayList<String>();
+		comprobarDirectorio(getDirectorioRaiz());
+		
+		File file = new File(getDirectorioRaiz());
+		String[] listFiles = file.list();
+		
+		for (int i = 0; i < listFiles.length; i++)
+		{
+			if (listFiles[i].endsWith(extension))
+			{
+				lista.add(listFiles[i]);
+			}
+		}
+		
+		if (lista.isEmpty())
+		{
+			return null;
+		}
+		
+		String[] listFilter = new String[lista.size()];
+		int i = 0;
+		Iterator<String> it = lista.iterator();
+		while (it.hasNext())
+		{
+			listFilter[i] = it.next();
+			i++;
+		}
+		
+		return listFilter;
 	}
 	
 	public Personaje importarPersonaje(String nombre)

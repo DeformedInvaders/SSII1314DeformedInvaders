@@ -48,11 +48,16 @@ public class GameResources
 	
 	// Enemies Files
 	private static final String ENEMIES_PATH = "enemies/enemy_";
-	private static final String ENEMIES_EXTENSION = ".edi";
+	public static final String ENEMIES_EXTENSION = ".edi";
 	
 	// Actors Files
 	private static final String ACTORS_PATH = "actors/actor_";
-	private static final String ACTORS_EXTENSION = ".cdi";
+	public static final String CHARACTER_EXTENSION = ".cdi";
+	
+	// Other Files
+	public static final String EXTENSION_IMAGE_FILE = ".png";
+	public static final String EXTENSION_AUDIO_FILE = ".3gp";
+	public static final String EXTENSION_TEXT_FILE = ".txt";
 	
 	// Raw Video
 	private static final String VIDEO_PATH = "android.resource://com.project.main/raw/";
@@ -152,9 +157,9 @@ public class GameResources
 		switch(actor)
 		{
 			case Guitarrista:
-				return ACTORS_PATH + DRAWABLE_GUITARRIST_ID + ACTORS_EXTENSION;
+				return ACTORS_PATH + DRAWABLE_GUITARRIST_ID + CHARACTER_EXTENSION;
 			case Cientifico:
-				return ACTORS_PATH + DRAWABLE_SCIENTIFIC_ID + ACTORS_EXTENSION;
+				return ACTORS_PATH + DRAWABLE_SCIENTIFIC_ID + CHARACTER_EXTENSION;
 			default:
 				return null;
 		}

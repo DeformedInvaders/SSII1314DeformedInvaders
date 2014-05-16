@@ -145,7 +145,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public boolean reproducirAnimacion()
 	{
-		return personaje.animar(false);
+		return personaje.animar();
 	}
 
 	public void seleccionarReposo()

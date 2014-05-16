@@ -280,18 +280,23 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 	/* Métodos de Modificación de Estado */
-	
-	public void seleccionarReposo()
-	{
-		if (estadoJuego == TEstadoGame.FaseEnemies)
-		{
-			protagonista.reposo();
-		}
-	}
 
 	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
 		protagonista.seleccionarAnimacion(movimiento);
+		
+		if (movimiento == TTipoMovimiento.Attack)
+		{
+			if (!disparoPersonaje.isActivado())
+			{
+				disparoPersonaje.activarDisparo();
+				plataformaPersonaje.activarDisparo();
+			}
+		}
+		else if (movimiento == TTipoMovimiento.Jump)
+		{
+			personaje.saltar(protagonista.getIndiceAnimacion());
+		}
 	}
 	
 	public boolean playAnimation()
@@ -311,6 +316,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		// Background
 		animarFondo();
+		
+		// Avanzar personaje
+		personaje.avanzar();
 		
 		// Avanzar cola de enemigos
 		for (int i = posEnemigoActual; i < listaEnemigos.size(); i++)
@@ -388,7 +396,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 						numIteraciones = 0;
 						estadoJefe = TEstadoJefe.Nada;
 					}
-					
 				}
 				
 				tipoEnemigos.get(jefe.getIdEntidad()).animar();
@@ -609,14 +616,5 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public void restoreData(BackgroundDataSaved data)
 	{
 		backgroundRestoreData(data);
-	}
-
-	public void selecionarAtacar() 
-	{
-		if (!disparoPersonaje.isActivado())
-		{
-			disparoPersonaje.activarDisparo();
-			plataformaPersonaje.activarDisparo();
-		}
 	}
 }

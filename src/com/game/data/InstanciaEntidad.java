@@ -23,6 +23,9 @@ public class InstanciaEntidad
 	private Circle area;
 	private Handle handle;
 	private boolean areaCargada;
+	
+	private int indiceSalto;
+	private int numSalto;
 
 	public InstanciaEntidad(int id, TTipoEntidad tipo)
 	{
@@ -38,6 +41,8 @@ public class InstanciaEntidad
 		
 		posicionX = posX;
 		posicionY = posY;
+		
+		indiceSalto = 0;
 	}
 	
 	public void setDimensions(float h, float w)
@@ -97,20 +102,57 @@ public class InstanciaEntidad
 	
 	public void avanzar()
 	{
-		posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
-		
-		moverArea(posicionX, posicionY);
+		if (tipoEntidad == TTipoEntidad.Personaje)
+		{
+			if (indiceSalto > 0)
+			{
+				if (indiceSalto < 2 * numSalto / 8)
+				{
+					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+					moverArea(posicionX, posicionY);
+				}
+				else if (indiceSalto >= 6 * numSalto / 8)
+				{
+					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+					moverArea(posicionX, posicionY);
+				}
+				
+				indiceSalto --;
+			}
+			else
+			{
+				restaurar();
+			}
+		}
+		else if (tipoEntidad == TTipoEntidad.Enemigo || tipoEntidad == TTipoEntidad.Misil || tipoEntidad == TTipoEntidad.Obstaculo)
+		{
+			posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
+			moverArea(posicionX, posicionY);
+		}
 	}
 	
 	public void subir() 
 	{
-		posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+		posicionY += GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
 		moverArea(posicionX, posicionY);
 	}
 	
 	public void bajar() 
 	{
-		posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+		posicionY -= GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
+		moverArea(posicionX, posicionY);
+	}
+	
+	public void saltar(int numFrames)
+	{
+		indiceSalto = numFrames;
+		numSalto = numFrames;
+	}
+	
+	public void restaurar()
+	{
+		posicionX = 0;
+		posicionY = 0;
 		moverArea(posicionX, posicionY);
 	}
 	

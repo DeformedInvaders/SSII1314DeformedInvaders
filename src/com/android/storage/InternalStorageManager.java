@@ -23,6 +23,7 @@ import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.main.model.GamePreferences;
+import com.main.model.GameResources;
 import com.main.model.GameStatistics;
 import com.project.main.R;
 
@@ -38,8 +39,6 @@ public class InternalStorageManager
 	private static final String AUDIO_FILE = "AUDIO";
 	private static final String PREFERENCES_FILE = "PREFERENCES";
 	private static final String LEVELS_FILE = "LEVELS";
-	
-	private static final String MUSIC_EXTENSION = ".3gp";
 
 	private Context mContext;
 
@@ -291,7 +290,7 @@ public class InternalStorageManager
 	
 	public String cargarAudioTemp(TTipoMovimiento tipo)
 	{
-		return obtenerDirectorio(TEMP_DIRECTORY).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + MUSIC_EXTENSION;
+		return obtenerDirectorio(TEMP_DIRECTORY).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + GameResources.EXTENSION_AUDIO_FILE;
 	}
 	
 	public String guardarAudioTemp(TTipoMovimiento tipo)
@@ -311,7 +310,7 @@ public class InternalStorageManager
 	
 	public String cargarAudio(String nombre, TTipoMovimiento tipo)
 	{
-		return obtenerDirectorio(CHARACTER_DIRECTORY, nombre).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + MUSIC_EXTENSION;
+		return obtenerDirectorio(CHARACTER_DIRECTORY, nombre).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + GameResources.EXTENSION_AUDIO_FILE;
 	}
 	
 	public boolean guardarAudio(String nombre, TTipoMovimiento tipo)

@@ -78,7 +78,7 @@ public class Plataforma extends Entidad
 	
 	private int indiceArma(int indice)
 	{
-		if (tipoEntidad == TTipoEntidad.PlataformaPersonaje)
+		if (tipoEntidadArma == TTipoEntidad.ArmaPersonaje)
 		{
 			switch (indice)
 			{
@@ -92,7 +92,7 @@ public class Plataforma extends Entidad
 					return R.drawable.weapon_character_4;
 			}
 		}
-		else if (tipoEntidad == TTipoEntidad.PlataformaBoss)
+		else if (tipoEntidadArma == TTipoEntidad.ArmaBoss)
 		{
 			switch (indice)
 			{
@@ -160,18 +160,10 @@ public class Plataforma extends Entidad
 	{
 		if (activado)
 		{
+			if (tipoEntidad == TTipoEntidad.PlataformaPersonaje) android.util.Log.d("TEST", "INDICEARMA: "+indiceArma+" INDICEDISPARO: "+indiceAnimacionDisparo+" INDICE: "+indiceArma(indiceAnimacionDisparo, indiceArma));
+			
 			if (indiceArma == 0)
-			{
-				// Arma Trasera
-				gl.glPushMatrix();
-					
-					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - getHeight() / 8.0f, 0.0f);
-					
-					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, 1), TTipoSticker.Nada);
-				
-				gl.glPopMatrix();
-				
-				
+			{		
 				// Plataforma	
 				gl.glPushMatrix();
 					
@@ -180,6 +172,15 @@ public class Plataforma extends Entidad
 					renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacionFuego, TTipoSticker.Nada);
 				
 				gl.glPopMatrix();	
+				
+				// Arma Trasera
+				gl.glPushMatrix();
+					
+					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - getHeight() / 8.0f, 0.0f);
+					
+					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, indiceArma), TTipoSticker.Nada);
+				
+				gl.glPopMatrix();
 			}
 			else
 			{
@@ -188,7 +189,7 @@ public class Plataforma extends Entidad
 					
 					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - getHeight() / 8.0f, 0.0f);
 					
-					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, 0), TTipoSticker.Nada);
+					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, indiceArma), TTipoSticker.Nada);
 					
 				gl.glPopMatrix();
 			}
@@ -218,6 +219,8 @@ public class Plataforma extends Entidad
 		if (indiceAnimacionDisparo > 0)
 		{
 			indiceAnimacionDisparo--;
+			
+			if (tipoEntidad == TTipoEntidad.PlataformaPersonaje) android.util.Log.d("TEST", "INDICE DISPARO: "+indiceAnimacionDisparo);
 		}
 		
 		return true;

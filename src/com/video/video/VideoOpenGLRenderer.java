@@ -232,12 +232,12 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	
 	public void animarEscena()
 	{
-		if (cientifico.animar(false))
+		if (cientifico.animar())
 		{
 			cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
 		}
 		
-		if (guitarrista.animar(false))
+		if (guitarrista.animar())
 		{
 			guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
 		}

@@ -56,7 +56,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				if (renderer.playAnimation())
 				{
-					renderer.seleccionarReposo();
 					renderer.seleccionarAnimacion(TTipoMovimiento.Run);
 					animacionFinalizada = true;
 				}
@@ -68,20 +67,20 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					case VidaPerdidaPersonaje:
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+						postDelayed(this);
 					break;
 					case VidaPerdidaBoss:
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje(), renderer.getVidasBoss());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+						postDelayed(this);
 					break;
 					case CambioPuntuacion:
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+						postDelayed(this);
 					break;
 					case FinFaseEnemigos:
 						mListener.onGameEnemiesFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+						postDelayed(this);
 					break;
 					case FinFaseBoss:
 						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
@@ -90,7 +89,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidasPersonaje());
 					break;
 					case Nada:
-						handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+						postDelayed(this);
 					break;
 				}
 				
@@ -102,6 +101,18 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		renderer.seleccionarAnimacion(TTipoMovimiento.Run);
 		animacionFinalizada = true;
 		threadActivo = false;
+	}
+	
+	private void postDelayed(Runnable r)
+	{
+		if (renderer.getEstado() == TEstadoGame.FaseEnemies)
+		{
+			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+		}
+		else
+		{
+			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), renderer.getVidasBoss()));
+		}
 	}
 
 	@Override
@@ -183,10 +194,5 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		renderer.restoreData(data);
 		requestRender();
-	}
-
-	public void seleccionarAtacar() 
-	{
-		renderer.selecionarAtacar();
 	}
 }
