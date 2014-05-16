@@ -99,7 +99,7 @@ public class ViewActivity extends FragmentActivity
         
         controller.onActivityStarted();
         
-        sensor = new SensorDetector(this);
+       // sensor = new SensorDetector(this);
                 
         ExternalStorageManager.writeLogcat("ACTIVITY", DateFormat.getDateTimeInstance().format(new Date()));
 	}
@@ -109,7 +109,7 @@ public class ViewActivity extends FragmentActivity
 	{
 		super.onResume();
 		core.continuarMusica();
-		sensor.onResume();
+		//sensor.onResume();
 	}
 	
 	@Override
@@ -117,7 +117,7 @@ public class ViewActivity extends FragmentActivity
 	{
 		super.onPause();
 		core.pausarMusica();
-		sensor.onPause();
+		//sensor.onPause();
 	}
 
 	@Override

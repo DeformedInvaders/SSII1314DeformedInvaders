@@ -392,7 +392,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TEstadoDeform.Deformar)
+		if (estado == TEstadoDeform.Deformar && punteros[pointer] != -1)
 		{
 			handles.setSelectedHandle(punteros[pointer], true);
 			
