@@ -160,15 +160,13 @@ public class Plataforma extends Entidad
 	{
 		if (activado)
 		{
-			if (tipoEntidad == TTipoEntidad.PlataformaPersonaje) android.util.Log.d("TEST", "INDICEARMA: "+indiceArma+" INDICEDISPARO: "+indiceAnimacionDisparo+" INDICE: "+indiceArma(indiceAnimacionDisparo, indiceArma));
-			
 			if (indiceArma == 0)
 			{		
 				// Plataforma	
 				gl.glPushMatrix();
 					
-					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - 5.0f * getHeight() / 8.0f, 0.0f);
-					
+					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - 5.0f * entidad.getHeight() / 8.0f, 0.0f);
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
 					renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacionFuego, TTipoSticker.Nada);
 				
 				gl.glPopMatrix();	
@@ -176,8 +174,8 @@ public class Plataforma extends Entidad
 				// Arma Trasera
 				gl.glPushMatrix();
 					
-					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - getHeight() / 8.0f, 0.0f);
-					
+					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - entidad.getHeight() / 8.0f, 0.0f);
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
 					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, indiceArma), TTipoSticker.Nada);
 				
 				gl.glPopMatrix();
@@ -187,8 +185,8 @@ public class Plataforma extends Entidad
 				// Arma Frontal
 				gl.glPushMatrix();
 					
-					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - getHeight() / 8.0f, 0.0f);
-					
+					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - entidad.getHeight() / 8.0f, 0.0f);
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
 					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, indiceArma), TTipoSticker.Nada);
 					
 				gl.glPopMatrix();
@@ -196,18 +194,6 @@ public class Plataforma extends Entidad
 			
 			indiceArma = (indiceArma + 1) % 2;
 		}
-	}
-
-	@Override
-	public float getWidth()
-	{
-		return width;
-	}
-
-	@Override
-	public float getHeight()
-	{
-		return height;
 	}
 	
 	/* Métodos de modificación de Información */
@@ -219,8 +205,6 @@ public class Plataforma extends Entidad
 		if (indiceAnimacionDisparo > 0)
 		{
 			indiceAnimacionDisparo--;
-			
-			if (tipoEntidad == TTipoEntidad.PlataformaPersonaje) android.util.Log.d("TEST", "INDICE DISPARO: "+indiceAnimacionDisparo);
 		}
 		
 		return true;

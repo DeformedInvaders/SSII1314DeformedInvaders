@@ -105,7 +105,7 @@ public class GameDetector
 		
 		if (!bloqueado)
 		{
-			surface.seleccionarPosicion(pixelX, pixelY);
+			//surface.seleccionarPosicion(pixelX, pixelY);
 		}
 	}
 }

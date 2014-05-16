@@ -17,7 +17,6 @@ import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
-import com.main.model.GamePreferences;
 
 public abstract class Malla extends Entidad
 {
@@ -154,20 +153,7 @@ public abstract class Malla extends Entidad
 		height = textura.getHeight();
 	}
 	
-	/* Métodos de Obtención de Información */
-	
-	@Override
-	public float getWidth()
-	{
-		return width * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
-	}
-	
-	@Override
-	public float getHeight()
-	{
-		return height * GamePreferences.SCREEN_SCALE_FACTOR() * GamePreferences.GAME_SCALE_FACTOR();
-	}
-	
+	/* Métodos de Obtención de Información */	
 	public int getIndiceAnimacion()
 	{
 		if (listaVerticesAnimacion != null)

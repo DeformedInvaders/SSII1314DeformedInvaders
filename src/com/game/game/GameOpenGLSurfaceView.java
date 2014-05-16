@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.android.opengl.BackgroundDataSaved;
 import com.android.touch.GameDetector;
+import com.android.touch.SensorDetector;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
@@ -30,6 +31,8 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	private boolean threadActivo;
 	
 	private GameDetector gameDetector;
+	
+	private SensorDetector sensorDetector;
 
 	/* Constructora */
 
@@ -48,8 +51,11 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		renderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
 		setRenderer(renderer);
 		
+		sensorDetector = new SensorDetector(getContext(), this);
+		
+		
 		handler = new Handler();
-
+		
 		task = new Runnable() {
 			@Override
 			public void run()
@@ -80,6 +86,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					break;
 					case FinFaseEnemigos:
 						mListener.onGameEnemiesFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
+						sensorDetector.onSensorCalibrated();
 						postDelayed(this);
 					break;
 					case FinFaseBoss:
@@ -105,13 +112,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	private void postDelayed(Runnable r)
 	{
-		if (renderer.getEstado() == TEstadoGame.FaseEnemies)
+		if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
 		{
-			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), contadorCiclos));
+			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 		}
 		else
 		{
-			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getEstado(), renderer.getVidasBoss()));
+			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getVidasBoss()));
 		}
 	}
 
@@ -131,7 +138,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (event != null)
 		{
-			gameDetector.onTouchEvent(event, renderer.getEstado(), this);
+			gameDetector.onTouchEvent(event, GamePreferences.GET_ESTADO_GAME(), this);
 			requestRender();
 	
 			return true;
@@ -143,11 +150,30 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	/* Métodos de Selección de Estado */
 
-	public boolean seleccionarPosicion(float pixelX, float pixelY)
+	/*public boolean seleccionarPosicion(float pixelX, float pixelY)
 	{
 		return renderer.onTouchMove(pixelX, pixelY, getWidth(), getHeight(), 0);
+	}*/
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		sensorDetector.onResume();
 	}
-
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		sensorDetector.onPause();
+	}
+	
+	public void seleccionarEstado(TEstadoPersonaje estado)
+	{
+		renderer.seleccionarEstado(estado);
+	}
+	
 	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
 		if (threadActivo)

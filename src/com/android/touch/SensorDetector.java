@@ -1,5 +1,8 @@
 package com.android.touch;
 
+import com.game.game.GameOpenGLSurfaceView;
+import com.game.game.TEstadoPersonaje;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -19,11 +22,15 @@ public class SensorDetector implements SensorEventListener
     private float[] mLastAccelerometer, mLastMagnetometer;
     private boolean mLastAccelerometerSet, mLastMagnetometerSet;
 
-    private float[] mRotationMatrix, mOrientation, mLastOrientation;
+    private float[] mRotationMatrix, mOrientation/*, mLastOrientation */, mOriginOrientation;
     private boolean[] mChangeOrientation;
-    private double mLastAngle;
+    private double mAngle, mOriginAngle;
     
-    public SensorDetector(Context context)
+    private boolean mSensorCalibrated;
+    
+    private GameOpenGLSurfaceView renderer;
+    
+    public SensorDetector(Context context, GameOpenGLSurfaceView r)
     {        
     	WindowManager mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     	mDisplay = mWindowManager.getDefaultDisplay();
@@ -39,10 +46,25 @@ public class SensorDetector implements SensorEventListener
 
         mRotationMatrix = new float[9];
         mOrientation = new float[3];
-        mLastOrientation = new float[3];
+        //mLastOrientation = new float[3];
+        mOriginOrientation = new float[3];
         mChangeOrientation = new boolean[3];
         
-        mLastAngle = 0;
+        mAngle = 0;
+        mOriginAngle = 0;
+        mSensorCalibrated = false;
+        
+        renderer = r;
+    }
+    
+    public void onSensorCalibrated()
+    {
+    	if(!mSensorCalibrated)
+    	{
+    		System.arraycopy(mOrientation, 0, mOriginOrientation, 0, mOrientation.length);
+    		mOriginAngle = mAngle;
+    		mSensorCalibrated = true;
+    	}
     }
     
 	@Override
@@ -79,17 +101,16 @@ public class SensorDetector implements SensorEventListener
                         
             for (int i = 0; i < mOrientation.length; i++)
             {
-            	if (Math.abs(mOrientation[i] - mLastOrientation[i]) > 0.1)
-            	{            		
-            		mLastOrientation[i] = mOrientation[i];
+            	//mLastOrientation[i] = mOrientation[i];
+            	
+            	if (Math.abs(mOrientation[i] - mOriginOrientation[i]) > 0.2)
+            	{     
             		mChangeOrientation[i] = true;
             	}
             }
             
             if (mChangeOrientation[1])
             {
-            	double mAngle = 0;
-            	
             	if (mDisplay.getRotation() == Surface.ROTATION_0)
             	{
             		if (mOrientation[0] > 0)
@@ -113,16 +134,23 @@ public class SensorDetector implements SensorEventListener
                 	}
             	}
             	
-            	if (mLastAngle > mAngle)
+            	if(mSensorCalibrated)
             	{
-            		android.util.Log.d("TEST", "Rotation Decrement: " + mAngle);
+	            	if (mOriginAngle > mAngle)
+	            	{
+	            		//android.util.Log.d("TEST", "Rotation Decrement: " + mAngle);
+	            		renderer.seleccionarEstado(TEstadoPersonaje.Bajar);
+	            	}
+	            	else 
+	            	{
+	            		//android.util.Log.d("TEST", "Rotation Increment: " + mAngle);
+	            		renderer.seleccionarEstado(TEstadoPersonaje.Subir);
+	            	}
             	}
-            	else 
-            	{
-            		android.util.Log.d("TEST", "Rotation Increment: " + mAngle);
-            	}
-            	
-            	mLastAngle = mAngle;
+            }
+            else
+            {
+            	renderer.seleccionarEstado(TEstadoPersonaje.Nada);
             }
             
             for (int i = 0; i < mOrientation.length; i++)
@@ -136,8 +164,8 @@ public class SensorDetector implements SensorEventListener
 	{
 		mLastAccelerometerSet = false;
 		mLastMagnetometerSet = false;
-		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-		mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+		mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_GAME);
 	}
 	 
 	public void onPause()

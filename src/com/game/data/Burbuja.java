@@ -97,23 +97,11 @@ public class Burbuja extends Entidad
 			gl.glPushMatrix();
 			
 				gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY(), 0.0f);
-				
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
 				renderer.dibujarTexturaRectangulo(gl, tipoEntidad, numVidas - 1, TTipoSticker.Nada);
 			
 			gl.glPopMatrix();
 		}
-	}
-
-	@Override
-	public float getWidth()
-	{
-		return width;
-	}
-
-	@Override
-	public float getHeight()
-	{
-		return height;
 	}
 	
 	/* Métodos de Modificación de Información */

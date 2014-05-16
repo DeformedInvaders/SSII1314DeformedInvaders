@@ -28,9 +28,6 @@ public abstract class Rectangulo extends Entidad
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
 		renderer.descargarTexturaRectangulo(tipoEntidad, idEntidad, TTipoSticker.Nada);
-
-		width = 0;
-		height = 0;
 	}
 
 	@Override
@@ -43,17 +40,5 @@ public abstract class Rectangulo extends Entidad
 			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTipoSticker.Nada);
 			
 		gl.glPopMatrix();
-	}
-	
-	@Override
-	public float getWidth()
-	{
-		return width * GamePreferences.SCREEN_SCALE_FACTOR();
-	}
-	
-	@Override
-	public float getHeight()
-	{
-		return height * GamePreferences.SCREEN_SCALE_FACTOR();
 	}
 }

@@ -99,7 +99,7 @@ public class Disparo extends Entidad
 			gl.glPushMatrix();
 			
 				gl.glTranslatef(posicionX, posicionY, 0.0f);
-				
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
 				renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacion, TTipoSticker.Nada);
 			
 			gl.glPopMatrix();
@@ -115,18 +115,6 @@ public class Disparo extends Entidad
 			
 			gl.glPopMatrix();
 		}
-	}
-
-	@Override
-	public float getWidth()
-	{
-		return width;
-	}
-
-	@Override
-	public float getHeight()
-	{
-		return height;
 	}
 	
 	public float getPosicionX() 

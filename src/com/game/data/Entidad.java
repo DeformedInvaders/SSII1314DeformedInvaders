@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.android.opengl.OpenGLRenderer;
+import com.main.model.GamePreferences;
 
 public abstract class Entidad
 {
@@ -22,10 +23,6 @@ public abstract class Entidad
 	public abstract void descargarTextura(OpenGLRenderer renderer);
 
 	public abstract void dibujar(GL10 gl, OpenGLRenderer renderer);
-	
-	public abstract float getWidth();
-	
-	public abstract float getHeight();
 
 	public boolean animar()
 	{ 
@@ -47,5 +44,15 @@ public abstract class Entidad
 	public int getIndiceTextura()
 	{
 		return texturaEntidad;
+	}
+	
+	public float getWidth()
+	{
+		return width * GamePreferences.GAME_SCALE_FACTOR(tipoEntidad);
+	}
+	
+	public float getHeight()
+	{
+		return height * GamePreferences.GAME_SCALE_FACTOR(tipoEntidad);
 	}
 }

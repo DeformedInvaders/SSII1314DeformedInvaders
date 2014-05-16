@@ -30,7 +30,6 @@ import com.project.main.R;
 public class GameOpenGLRenderer extends OpenGLRenderer
 {
 	// Estado
-	private TEstadoGame estadoJuego;
 	private TEstadoJefe estadoJefe;
 	private int numIteraciones;
 
@@ -60,6 +59,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	// Texturas
 	private boolean texturasCargadas;
+	
+	private TEstadoPersonaje estadoPersonaje;
 
 	/* Constructura */
 
@@ -68,7 +69,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super(context, TTipoFondoRenderer.Desplazable, TTipoTexturasRenderer.Juego);
 		seleccionarTexturaFondo(l.getFondoNivel().getIdTexturaFondos());
 
-		estadoJuego = TEstadoGame.FaseEnemies;
+		GamePreferences.setEstadoGame(TEstadoGame.FaseEnemies);
 		estadoJefe = TEstadoJefe.Nada;
 		
 		protagonista = p;
@@ -168,7 +169,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 
-		switch (estadoJuego)
+		switch (GamePreferences.GET_ESTADO_GAME())
 		{
 			case FaseEnemies:
 				onDrawEnemiesPhase(gl);
@@ -299,9 +300,14 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 	}
 	
+	public void seleccionarEstado(TEstadoPersonaje estado) 
+	{
+		estadoPersonaje = estado;
+	}
+	
 	public boolean playAnimation()
 	{
-		switch (estadoJuego)
+		switch (GamePreferences.GET_ESTADO_GAME())
 		{
 			case FaseEnemies:
 				return playAnimationEnemiesPhase();
@@ -370,6 +376,21 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		plataformaPersonaje.animar();
 		plataformaJefe.animar();
+		
+		if(estadoPersonaje == TEstadoPersonaje.Bajar)
+		{
+			if (personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
+			{
+				personaje.bajar();
+			}
+		}
+		else if (estadoPersonaje == TEstadoPersonaje.Subir)
+		{
+			if (personaje.getPosicionY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			{
+				personaje.subir();
+			}
+		}
 		
 		if(estadoJefe == TEstadoJefe.Nada)
 		{
@@ -444,7 +465,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	public TEventoGame isGameEnded()
 	{
-		switch (estadoJuego)
+		switch (GamePreferences.GET_ESTADO_GAME())
 		{
 			case FaseEnemies:
 				return isGameEndedEnemiesPhase();
@@ -461,10 +482,14 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		if (isFondoFinal())
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
-			estadoJuego = TEstadoGame.FaseBoss;
+			GamePreferences.setEstadoGame(TEstadoGame.FaseBoss);
 			
 			protagonista.reposo();
 			plataformaPersonaje.activarPlataforma();
+			
+			personaje.setDimensions(protagonista.getHeight(), protagonista.getWidth());
+			jefe.setDimensions(tipoEnemigos.get(jefe.getIdEntidad()).getHeight(), tipoEnemigos.get(jefe.getIdEntidad()).getWidth());
+		
 			
 			jefe.setPosicion(getScreenWidth() - 2*GamePreferences.DISTANCE_GAME_RIGHT() - jefe.getWidth(), 0.0f);
 			
@@ -567,11 +592,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		return TEventoGame.Nada;
-	}
-	
-	public TEstadoGame getEstado()
-	{
-		return estadoJuego;
 	}
 	
 	public int getPuntuacion()

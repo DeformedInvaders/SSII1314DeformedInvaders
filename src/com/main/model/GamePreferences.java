@@ -95,6 +95,8 @@ public class GamePreferences
 	private static int CHARACTER_GAME;
 	private static boolean TIPS_GAME, MUSIC_GAME, DEBUG_GAME;
 	
+	private static TEstadoGame ESTADO_GAME;
+	
 	public static void setScreenParameters(float width, float height)
 	{
 		WIDTH_SCREEN = width;
@@ -119,6 +121,11 @@ public class GamePreferences
 	public static void setCharacterParameters(int character)
 	{
 		CHARACTER_GAME = character;
+	}
+	
+	public static void setEstadoGame(TEstadoGame estado)
+	{
+		ESTADO_GAME = estado;
 	}
 	
 	public static void SWITCH_MUSIC_GAME()
@@ -156,6 +163,11 @@ public class GamePreferences
 	public static final int GET_CHARACTER_GAME()
 	{
 		return CHARACTER_GAME;
+	}
+	
+	public static final TEstadoGame GET_ESTADO_GAME() 
+	{
+		return ESTADO_GAME;
 	}
 	
 	public static final boolean IS_LONG_RATIO()
@@ -221,9 +233,9 @@ public class GamePreferences
 		return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
 	}
 	
-	public static final int TIME_INTERVAL_ANIMATION(TEstadoGame estado, int ciclos)
+	public static final int TIME_INTERVAL_ANIMATION(int ciclos)
 	{
-		if (estado == TEstadoGame.FaseEnemies)
+		if (ESTADO_GAME == TEstadoGame.FaseEnemies)
 		{
 			if(ciclos < MAX_NUM_CICLOS() / 6)
 			{
@@ -314,9 +326,51 @@ public class GamePreferences
 	}
 	
 	// FIXME Reducir escalado en fase Boss
-	public static final float GAME_SCALE_FACTOR()
+	private static final float GAME_SCALE_FACTOR_ENEMIES()
 	{
 		return 0.5f;
+	}
+	
+	private static final float GAME_SCALE_FACTOR_BOSS()
+	{
+		return 0.5f;
+	}
+	
+	public static final float GAME_SCALE_FACTOR(TTipoEntidad estado)
+	{
+		if(ESTADO_GAME == TEstadoGame.FaseEnemies)
+		{
+			switch(estado)
+			{
+				case Misil:
+					return SCREEN_SCALE_FACTOR();
+				case Obstaculo:
+					return SCREEN_SCALE_FACTOR();
+				case Enemigo:
+					return SCREEN_SCALE_FACTOR()*GAME_SCALE_FACTOR_ENEMIES();
+				case Personaje:
+					return GAME_SCALE_FACTOR_ENEMIES();
+				default:
+					return 1.0f;
+			}
+		}
+		else
+		{
+			switch(estado)
+			{
+				case Enemigo:
+					return SCREEN_SCALE_FACTOR()*GAME_SCALE_FACTOR_BOSS()*GAME_SCALE_FACTOR_ENEMIES();
+				case Personaje:
+					return GAME_SCALE_FACTOR_BOSS()*GAME_SCALE_FACTOR_ENEMIES();
+				case PlataformaPersonaje:
+				case PlataformaBoss:
+				case BurbujaPersonaje:
+				case BurbujaBoss:
+					return GAME_SCALE_FACTOR_BOSS();
+				default:
+					return 1.0f;
+			}
+		}
 	}
 	
 	// TODO Comprobar distancias en función del tamaño de pantalla
@@ -343,7 +397,7 @@ public class GamePreferences
 	
 	public static final float DIST_MOVIMIENTO_PLATAFORMA()
 	{
-		final float PLATAFORMA_DISTANCE_BASE = 20.0f;
+		final float PLATAFORMA_DISTANCE_BASE = 5.0f;
 		
 		return PLATAFORMA_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
 	}
