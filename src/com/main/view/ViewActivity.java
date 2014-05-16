@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.android.storage.ExternalStorageManager;
+import com.android.touch.SensorDetector;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.deform.DeformationFragment;
@@ -50,6 +51,8 @@ public class ViewActivity extends FragmentActivity
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
 	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, botonDebug;
+	
+	private SensorDetector sensor;
 	
 	/* Métodos Activity */
 	
@@ -95,6 +98,24 @@ public class ViewActivity extends FragmentActivity
         controller.onActivityStarted();
                 
         ExternalStorageManager.writeLogcat("ACTIVITY", DateFormat.getDateTimeInstance().format(new Date()));
+        
+        sensor = new SensorDetector(this) {
+
+			@Override
+			public void onIncreaseXAngle(double angle) {
+				android.util.Log.d("TEST", "Rotation Increment: " + angle);
+			}
+
+			@Override
+			public void onDecreaseXAngle(double angle) {
+				android.util.Log.d("TEST", "Rotation Decrement: " + angle);
+			}
+
+			@Override
+			public void onStabilizeXAngle(double angle) {
+				android.util.Log.d("TEST", "Rotation Stabilize: " + angle);
+			}}
+        ;
 	}
 	
 	@Override
@@ -102,7 +123,7 @@ public class ViewActivity extends FragmentActivity
 	{
 		super.onResume();
 		core.continuarMusica();
-		//sensor.onResume();
+		sensor.onResume();
 	}
 	
 	@Override
@@ -110,7 +131,7 @@ public class ViewActivity extends FragmentActivity
 	{
 		super.onPause();
 		core.pausarMusica();
-		//sensor.onPause();
+		sensor.onPause();
 	}
 
 	@Override

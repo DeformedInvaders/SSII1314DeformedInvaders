@@ -5,42 +5,25 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
 
-import com.android.opengl.OpenGLRenderer;
 import com.main.model.GamePreferences;
 
-public class ScaleDetector extends SimpleOnScaleGestureListener
+public abstract class ScaleDetector extends SimpleOnScaleGestureListener
 {
-	private OpenGLRenderer renderer;
 	private ScaleGestureDetector detector;
 
 	private float lastPixelX, lastPixelY;
-	private float screenWidth, screenHeight;
-
-	private boolean modoCamara;
 
 	/* Contructora */
 
-	public ScaleDetector(Context context, OpenGLRenderer renderer)
+	public ScaleDetector(Context context)
 	{
-		this.renderer = renderer;
-		this.detector = new ScaleGestureDetector(context, this);
-		this.modoCamara = true;
-	}
-
-	/* Métodos de Modificación de Estado */
-
-	public void setEstado(boolean camara)
-	{
-		this.modoCamara = camara;
+		detector = new ScaleGestureDetector(context, this);
 	}
 
 	/* Métodos Listener onTouch */
 
-	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight)
+	public boolean onTouchEvent(MotionEvent event)
 	{
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
-
 		return detector.onTouchEvent(event);
 	}
 
@@ -59,7 +42,9 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 	public boolean onScale(ScaleGestureDetector detector)
 	{
 		float factor = detector.getScaleFactor();
-
+		float pixelX = detector.getFocusX();
+		float pixelY = detector.getFocusY();
+		
 		if (factor >= GamePreferences.MAX_SCALE_FACTOR)
 		{
 			factor = GamePreferences.MAX_SCALE_FACTOR;
@@ -68,22 +53,13 @@ public class ScaleDetector extends SimpleOnScaleGestureListener
 		{
 			factor = GamePreferences.MIN_SCALE_FACTOR;
 		}
-
-		if (modoCamara)
-		{
-			factor = 2 * GamePreferences.NULL_SCALE_FACTOR - factor;
-
-			renderer.camaraZoom(factor);
-		}
-		else
-		{
-			float pixelX = detector.getFocusX();
-			float pixelY = detector.getFocusY();
-
-			renderer.pointsZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
-		}
+		
+		onScale(factor, pixelX, pixelY, lastPixelX, lastPixelY);
 
 		return true;
 	}
-
+	
+	/* Métodos Abstráctos */
+	
+	public abstract void onScale(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY);
 }

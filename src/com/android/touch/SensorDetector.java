@@ -1,8 +1,5 @@
 package com.android.touch;
 
-import com.game.game.GameOpenGLSurfaceView;
-import com.game.game.TEstadoPersonaje;
-
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,7 +9,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
 
-public class SensorDetector implements SensorEventListener
+public abstract class SensorDetector implements SensorEventListener
 {
 	private Display mDisplay;
     private SensorManager mSensorManager;
@@ -22,15 +19,13 @@ public class SensorDetector implements SensorEventListener
     private float[] mLastAccelerometer, mLastMagnetometer;
     private boolean mLastAccelerometerSet, mLastMagnetometerSet;
 
-    private float[] mRotationMatrix, mOrientation/*, mLastOrientation */, mOriginOrientation;
+    private float[] mRotationMatrix, mOrientation, mOriginOrientation;
     private boolean[] mChangeOrientation;
     private double mAngle, mOriginAngle;
     
     private boolean mSensorCalibrated;
     
-    private GameOpenGLSurfaceView renderer;
-    
-    public SensorDetector(Context context, GameOpenGLSurfaceView r)
+    public SensorDetector(Context context)
     {        
     	WindowManager mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     	mDisplay = mWindowManager.getDefaultDisplay();
@@ -46,15 +41,12 @@ public class SensorDetector implements SensorEventListener
 
         mRotationMatrix = new float[9];
         mOrientation = new float[3];
-        //mLastOrientation = new float[3];
         mOriginOrientation = new float[3];
         mChangeOrientation = new boolean[3];
         
         mAngle = 0;
         mOriginAngle = 0;
         mSensorCalibrated = false;
-        
-        renderer = r;
     }
     
     public void onSensorCalibrated()
@@ -68,17 +60,7 @@ public class SensorDetector implements SensorEventListener
     }
     
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy)
-	{
-		if (sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-		{
-			android.util.Log.d("TEST", "CHANGE ACCURACY ACCELEROMETER");
-        }
-		else if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-		{
-			android.util.Log.d("TEST", "CHANGE ACCURACY MAGNETOMETER");
-        }
-	}
+	public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 
 	@Override
 	public void onSensorChanged(SensorEvent event)
@@ -101,8 +83,6 @@ public class SensorDetector implements SensorEventListener
                         
             for (int i = 0; i < mOrientation.length; i++)
             {
-            	//mLastOrientation[i] = mOrientation[i];
-            	
             	if (Math.abs(mOrientation[i] - mOriginOrientation[i]) > 0.2)
             	{     
             		mChangeOrientation[i] = true;
@@ -138,19 +118,17 @@ public class SensorDetector implements SensorEventListener
             	{
 	            	if (mOriginAngle > mAngle)
 	            	{
-	            		//android.util.Log.d("TEST", "Rotation Decrement: " + mAngle);
-	            		renderer.seleccionarEstado(TEstadoPersonaje.Bajar);
+	            		onDecreaseXAngle(mAngle);
 	            	}
 	            	else 
 	            	{
-	            		//android.util.Log.d("TEST", "Rotation Increment: " + mAngle);
-	            		renderer.seleccionarEstado(TEstadoPersonaje.Subir);
+	            		onIncreaseXAngle(mAngle);
 	            	}
             	}
             }
             else
             {
-            	renderer.seleccionarEstado(TEstadoPersonaje.Nada);
+            	onStabilizeXAngle(mAngle);
             }
             
             for (int i = 0; i < mOrientation.length; i++)
@@ -172,4 +150,10 @@ public class SensorDetector implements SensorEventListener
 	{
 		mSensorManager.unregisterListener(this);
 	}
+	
+	/* Métodos Abstractos */
+	
+	public abstract void onIncreaseXAngle(double angle);
+	public abstract void onDecreaseXAngle(double angle);
+	public abstract void onStabilizeXAngle(double angle);
 }

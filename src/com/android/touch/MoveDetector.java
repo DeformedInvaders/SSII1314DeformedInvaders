@@ -2,48 +2,38 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
-import com.android.opengl.OpenGLRenderer;
-
-public class MoveDetector
+public abstract class MoveDetector
 {
-	private OpenGLRenderer renderer;
-
-	private boolean modoCamara;
 	private boolean bloqueado;
 
 	private float lastPixelX, lastPixelY;
 
 	/* Constructora */
 
-	public MoveDetector(OpenGLRenderer renderer)
+	public MoveDetector()
 	{
-		this.renderer = renderer;
-		this.bloqueado = false;
-		this.modoCamara = true;
+		bloqueado = false;
 	}
-
-	/* Métodos de Modificación de Estado */
-
-	public void setEstado(boolean camara)
-	{
-		this.modoCamara = camara;
-	}
-
+	
 	/* Métodos Listener onTouch */
 
-	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight)
+	public boolean onTouchEvent(MotionEvent event)
 	{
 		int action = event.getActionMasked();
 		
 		if (!bloqueado)
 		{
-			if(modoCamara)
+			float pixelX = event.getX();
+			float pixelY = event.getY();
+
+			switch (action) 
 			{
-				return onTouchEventCamara(event, screenWidth, screenHeight);
-			}
-			else
-			{
-				return onTouchEventPoints(event, screenWidth, screenHeight);
+				case MotionEvent.ACTION_DOWN:
+					onDragDown(pixelX, pixelY);
+				break;
+				case MotionEvent.ACTION_MOVE:
+					onDragMove(pixelX, pixelY);
+				break;
 			}
 		}
 		else
@@ -56,46 +46,6 @@ public class MoveDetector
 
 		return true;
 	}
-	
-	private boolean onTouchEventCamara(MotionEvent event, float screenWidth, float screenHeight)
-	{
-		int action = event.getActionMasked();
-
-		float pixelX = event.getX();
-		float pixelY = event.getY();
-
-		switch (action) 
-		{
-			case MotionEvent.ACTION_DOWN:
-				dragOnCamaraDown(pixelX, pixelY, screenWidth, screenHeight);
-			break;
-			case MotionEvent.ACTION_MOVE:
-				dragOnCamaraMove(pixelX, pixelY, screenWidth, screenHeight);
-			break;
-		}
-
-		return true;
-	}
-	
-	private boolean onTouchEventPoints(MotionEvent event, float screenWidth, float screenHeight)
-	{
-		int action = event.getActionMasked();
-
-		float pixelX = event.getX();
-		float pixelY = event.getY();
-
-		switch (action) 
-		{
-			case MotionEvent.ACTION_DOWN:
-				dragOnPointsDown(pixelX, pixelY, screenWidth, screenHeight);
-			break;
-			case MotionEvent.ACTION_MOVE:
-				dragOnPointsMove(pixelX, pixelY, screenWidth, screenHeight);
-			break;
-		}
-
-		return true;
-	}
 
 	public boolean onStopEvent()
 	{
@@ -103,31 +53,25 @@ public class MoveDetector
 		return true;
 	}
 
-	private void dragOnCamaraDown(float pixelX, float pixelY, float screenWith, float screenHeight)
+	private void onDragDown(float pixelX, float pixelY)
 	{
-		lastPixelX = pixelX;
-		lastPixelY = pixelY;
-
-		renderer.salvarCamara();
-	}
-
-	private void dragOnCamaraMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
-	{
-		renderer.recuperarCamara();
-		renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
-	}
-
-	private void dragOnPointsDown(float pixelX, float pixelY, float screenWith, float screenHeight)
-	{
+		onDragDown(pixelX, pixelY, lastPixelX, lastPixelY);
+		
 		lastPixelX = pixelX;
 		lastPixelY = pixelY;
 	}
 
-	private void dragOnPointsMove(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private void onDragMove(float pixelX, float pixelY)
 	{
-		renderer.pointsDrag(pixelX, pixelY, lastPixelX, lastPixelY, screenWidth, screenHeight);
+		onDragMove(pixelX, pixelY, lastPixelX, lastPixelY);
 
 		lastPixelX = pixelX;
 		lastPixelY = pixelY;
 	}
+	
+	/* Métodos Abstráctos */
+	
+	public abstract void onDragDown(float pixelX, float pixelY, float lastPixelX, float lastPixelY);
+	public abstract void onDragMove(float pixelX, float pixelY, float lastPixelX, float lastPixelY);
+
 }

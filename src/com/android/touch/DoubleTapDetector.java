@@ -2,37 +2,24 @@ package com.android.touch;
 
 import android.view.MotionEvent;
 
-import com.android.opengl.OpenGLRenderer;
 import com.main.model.GamePreferences;
 
-public class DoubleTapDetector
+public abstract class DoubleTapDetector
 {
-	private OpenGLRenderer renderer;
-
-	private boolean modoCamara;
 	private boolean bloqueado;
 	private long lastTap;
 
 	/* Constructora */
 
-	public DoubleTapDetector(OpenGLRenderer renderer)
+	public DoubleTapDetector()
 	{
-		this.renderer = renderer;
-		this.bloqueado = false;
-		this.lastTap = System.currentTimeMillis();
-		this.modoCamara = true;
+		bloqueado = false;
+		lastTap = System.currentTimeMillis();
 	}
-
-	/* Métodos de Modificación de Estado */
-
-	public void setEstado(boolean camara)
-	{
-		this.modoCamara = camara;
-	}
-
+	
 	/* Métodos Listener onTouch */
 
-	public boolean onTouchEvent(MotionEvent event, float screenWidth, float screenHeight)
+	public boolean onTouchEvent(MotionEvent event)
 	{
 		int action = event.getActionMasked();
 		
@@ -40,7 +27,7 @@ public class DoubleTapDetector
 		{
 			if (action == MotionEvent.ACTION_UP)
 			{
-				return tapOnTouchUp();
+				return onDoubleTapUp();
 			}
 		}
 		else
@@ -60,22 +47,13 @@ public class DoubleTapDetector
 		return true;
 	}
 
-	private boolean tapOnTouchUp()
+	private boolean onDoubleTapUp()
 	{
 		long time = System.currentTimeMillis();
 
 		if (Math.abs(lastTap - time) < GamePreferences.MAX_DURATION_TAP)
-		{
-			// Double Touch
-			if (modoCamara)
-			{
-				renderer.camaraRestore();
-			}
-			else
-			{
-				renderer.pointsRestore();
-			}
-			
+		{			
+			onDoubleTap();
 			return true;
 		}
 
@@ -83,4 +61,8 @@ public class DoubleTapDetector
 		
 		return false;
 	}
+	
+	/* Métodos Abstractos */
+	
+	public abstract void onDoubleTap();
 }

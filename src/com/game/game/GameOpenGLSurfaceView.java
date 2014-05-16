@@ -50,10 +50,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 		renderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
 		setRenderer(renderer);
-		
-		sensorDetector = new SensorDetector(getContext(), this);
-		
-		
+				
 		handler = new Handler();
 		
 		task = new Runnable() {
@@ -129,7 +126,58 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		
 		if (gameDetector == null)
 		{
-			gameDetector = new GameDetector();
+			gameDetector = new GameDetector() {
+
+				@Override
+				public void onDragUp()
+				{
+					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+					{
+						renderer.seleccionarAnimacion(TTipoMovimiento.Jump);
+					}
+				}
+
+				@Override
+				public void onDragDown()
+				{
+					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+					{
+						renderer.seleccionarAnimacion(TTipoMovimiento.Crouch);
+					}
+				}
+
+				@Override
+				public void onTap()
+				{
+					renderer.seleccionarAnimacion(TTipoMovimiento.Attack);
+				}
+				
+			};
+		}
+		
+		if (sensorDetector == null)
+		{
+			sensorDetector = new SensorDetector(getContext()) {
+				
+				@Override
+				public void onIncreaseXAngle(double angle)
+				{
+					renderer.seleccionarEstado(TEstadoPersonaje.Subir);
+				}
+
+				@Override
+				public void onDecreaseXAngle(double angle)
+				{
+					renderer.seleccionarEstado(TEstadoPersonaje.Bajar);
+				}
+
+				@Override
+				public void onStabilizeXAngle(double angle)
+				{
+					renderer.seleccionarEstado(TEstadoPersonaje.Nada);		
+				}
+				
+			};
 		}
 	}
 	
@@ -138,7 +186,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (event != null)
 		{
-			gameDetector.onTouchEvent(event, GamePreferences.GET_ESTADO_GAME(), this);
+			gameDetector.onTouchEvent(event);
 			requestRender();
 	
 			return true;

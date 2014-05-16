@@ -18,7 +18,7 @@ import com.main.model.GamePreferences;
 public class OpenGLSurfaceView extends GLSurfaceView
 {
 	private Context mContext;
-	private TEstadoDetector estado;
+	private TEstadoDetector estadoDetector;
 
 	private OpenGLRenderer renderer;
 
@@ -29,6 +29,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 	private DoubleTapDetector doubleTapDetector;
 
 	/* Constructora */
+	
 	public OpenGLSurfaceView(Context context, AttributeSet attrs, boolean transparente)
 	{
 		this(context, attrs, TEstadoDetector.Nada, transparente);
@@ -39,8 +40,8 @@ public class OpenGLSurfaceView extends GLSurfaceView
 		super(context, attrs);
 
 		// Tipo Multitouch
-		this.estado = estado;
-		this.mContext = context;
+		estadoDetector = estado;
+		mContext = context;
 
 		// Activar Formato Texturas transparentes
 		setEGLConfigChooser(8, 8, 8, 8, 0, 0);
@@ -102,41 +103,95 @@ public class OpenGLSurfaceView extends GLSurfaceView
 		super.setRenderer(renderer);
 		super.setRenderMode(RENDERMODE_WHEN_DIRTY);
 
-		setEstado(estado);
+		setEstado(estadoDetector);
 	}
 
 	public void setEstado(TEstadoDetector e)
 	{
-		estado = e;
+		estadoDetector = e;
 
-		if (estado == TEstadoDetector.CamaraDetectors || estado == TEstadoDetector.CoordDetectors)
+		if (estadoDetector == TEstadoDetector.CamaraDetectors || estadoDetector == TEstadoDetector.CoordDetectors)
 		{
 			if (scaleDetector == null)
 			{
-				scaleDetector = new ScaleDetector(mContext, renderer);
+				scaleDetector = new ScaleDetector(mContext) {
+
+					@Override
+					public void onScale(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY)
+					{
+						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						{
+							renderer.camaraZoom(factor);
+						}
+						else if (estadoDetector == TEstadoDetector.CoordDetectors)
+						{
+							renderer.pointsZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
+						}
+					}
+				};
 			}
 
 			if (moveDetector == null)
 			{
-				moveDetector = new MoveDetector(renderer);
+				moveDetector = new MoveDetector() {
+
+					@Override
+					public void onDragDown(float pixelX, float pixelY, float lastPixelX, float lastPixelY)
+					{
+						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						{
+							renderer.salvarCamara();
+						}
+					}
+
+					@Override
+					public void onDragMove(float pixelX, float pixelY, float lastPixelX, float lastPixelY)
+					{
+						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						{
+							renderer.recuperarCamara();
+							renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
+						}
+						else if (estadoDetector == TEstadoDetector.CoordDetectors)
+						{
+							renderer.pointsDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
+						}
+					}};
 			}
 
 			if (rotateDetector == null)
 			{
-				rotateDetector = new RotateDetector(renderer);
+				rotateDetector = new RotateDetector() {
+
+					@Override
+					public void onRotate(float ang, float pixelX, float pixelY)
+					{
+						if (estadoDetector == TEstadoDetector.CoordDetectors)
+						{
+							renderer.pointsRotate(ang, pixelX, pixelY, getWidth(), getHeight());
+						}
+					}
+				};
 			}
 			
 			if (doubleTapDetector == null)
 			{
-				doubleTapDetector = new DoubleTapDetector(renderer);
+				doubleTapDetector = new DoubleTapDetector() {
+
+					@Override
+					public void onDoubleTap()
+					{
+						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						{
+							renderer.camaraRestore();
+						}
+						else if (estadoDetector == TEstadoDetector.CoordDetectors)
+						{
+							renderer.pointsRestore();
+						}
+					}
+				};
 			}
-
-			boolean modoCamara = estado == TEstadoDetector.CamaraDetectors;
-
-			scaleDetector.setEstado(modoCamara);
-			moveDetector.setEstado(modoCamara);
-			rotateDetector.setEstado(modoCamara);
-			doubleTapDetector.setEstado(modoCamara);
 		}
 	}
 
@@ -144,7 +199,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 
 	public boolean onTouch(View v, MotionEvent event)
 	{
-		switch (estado)
+		switch (estadoDetector)
 		{
 			case SimpleTouch:
 				return onSingleTouch(v, event);
@@ -197,26 +252,23 @@ public class OpenGLSurfaceView extends GLSurfaceView
 	{
 		if (event != null)
 		{
-			float screenWidth = getWidth();
-			float screenHeight = getHeight();
-
 			if (event.getPointerCount() == 1)
 			{
-				if (!doubleTapDetector.onTouchEvent(event, screenWidth, screenHeight))
+				if (!doubleTapDetector.onTouchEvent(event))
 				{
-					moveDetector.onTouchEvent(event, screenWidth, screenHeight);
+					moveDetector.onTouchEvent(event);
 				}
 			}
 			else if (event.getPointerCount() == 2)
 			{
-				if (rotateDetector.onTouchEvent(event, screenWidth, screenHeight))
+				if (rotateDetector.onTouchEvent(event))
 				{
 					doubleTapDetector.onStopEvent();
 					moveDetector.onStopEvent();
 				}
 				else
 				{
-					scaleDetector.onTouchEvent(event, screenWidth, screenHeight);
+					scaleDetector.onTouchEvent(event);
 					moveDetector.onStopEvent();
 				}
 			}
