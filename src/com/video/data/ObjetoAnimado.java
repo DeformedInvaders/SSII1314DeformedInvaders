@@ -16,32 +16,43 @@ import com.video.video.TEstadoVideo;
 
 public class ObjetoAnimado extends ObjetoInanimado
 {
+	private TTipoAnimacion tipoAnimacion;
+	
 	private int[] texturasAnimadas;
-	private int indiceAnimacionTextura;
+	private int indiceAnimacionCiclica, indiceAnimacionPasos;
 	
 	private boolean activado;
 	
-	public ObjetoAnimado(int id, int[] texturas, float posX, float posY, TEstadoVideo estado, int sonido)
+	public ObjetoAnimado(int id, int[] texturas, float posX, float posY, TEstadoVideo estado, int sonido, TTipoAnimacion animacion)
 	{
 		super(id, -1, posX, posY, estado, sonido);
 		
 		tipoEntidad = TTipoEntidad.ObjetoAnimado;
+		tipoAnimacion = animacion;
 		
 		texturasAnimadas = texturas;
-		indiceAnimacionTextura = 0;
+		indiceAnimacionCiclica = 0;
+		indiceAnimacionPasos = 0;
 		
 		activado = false;
 	}
 	
 	private int indiceObjeto()
 	{
-		if (activado)
+		if (tipoAnimacion == TTipoAnimacion.Ciclico)
 		{
-			return indiceObjeto(indiceAnimacionTextura % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS);
+			if (activado)
+			{
+				return indiceObjeto(indiceAnimacionCiclica % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS);
+			}
+			else
+			{
+				return indiceObjeto(0);
+			}
 		}
 		else
 		{
-			return indiceObjeto(0);
+			return indiceObjeto(indiceAnimacionPasos);
 		}
 	}
 	
@@ -96,9 +107,9 @@ public class ObjetoAnimado extends ObjetoInanimado
 		
 		if (activado)
 		{
-			if (indiceAnimacionTextura > 0)
+			if (indiceAnimacionCiclica > 0)
 			{
-				indiceAnimacionTextura--;
+				indiceAnimacionCiclica--;
 			}
 			else
 			{
@@ -119,7 +130,13 @@ public class ObjetoAnimado extends ObjetoInanimado
 		if (area.contains(x, y))
 		{
 			activado = true;
-			indiceAnimacionTextura = 2 * GamePreferences.NUM_FRAMES_ANIMATION;
+			indiceAnimacionCiclica = 2 * GamePreferences.NUM_FRAMES_ANIMATION;
+		
+			if (indiceAnimacionPasos < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS - 1)
+			{
+				indiceAnimacionPasos++;
+			}
+			
 			return true;
 		}
 		

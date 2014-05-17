@@ -146,9 +146,9 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		return false;
 	} 
 	
-	public void acercarEscena()
+	public void acercarEscena(float factor)
 	{
-		camaraZoom(0.999f);
+		camaraZoom(factor);
 	}
 	
 	public void recuperarEscena()

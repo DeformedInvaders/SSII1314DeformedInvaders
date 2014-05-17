@@ -8,14 +8,15 @@ import com.video.video.TEstadoVideo;
 public class Video
 {
 	private int[] idFondos;
-	private int[] mensaje1, mensaje2;
+	private int[] mensaje1, mensaje2, mensaje3;
 	private List<Personaje> listaPersonajes;
 	private List<ObjetoInanimado> listaObjetos;
 	
-	public Video(int[] fondos, int[] m1, int[] m2, List<Personaje> personajes, List<ObjetoInanimado> objetos)
+	public Video(int[] fondos, int[] m1, int[] m2, int[] m3, List<Personaje> personajes, List<ObjetoInanimado> objetos)
 	{
 		mensaje1 = m1;
 		mensaje2 = m2;
+		mensaje3 = m3;
 		idFondos = fondos;
 		
 		listaPersonajes = personajes;
@@ -39,13 +40,17 @@ public class Video
 	
 	public int[] getMensaje(TEstadoVideo estado)
 	{
-		if (estado == TEstadoVideo.Noise)
+		if (estado == TEstadoVideo.Outside)
 		{
 			return mensaje1;
 		}
-		else if (estado == TEstadoVideo.Brief)
+		else if (estado == TEstadoVideo.Noise)
 		{
 			return mensaje2;
+		}
+		else if (estado == TEstadoVideo.Brief)
+		{
+			return mensaje3;
 		}
 		
 		return null;

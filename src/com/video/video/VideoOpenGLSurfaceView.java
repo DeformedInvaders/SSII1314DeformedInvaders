@@ -90,7 +90,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 					}
 					
 					animarCicloEscena();
-					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
+					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION_VIDEO());
 				}
 				else
 				{
@@ -103,9 +103,13 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	private void animarCicloEscena()
 	{
-		if (estado == TEstadoVideo.Door)
+		if (estado == TEstadoVideo.Outside)
 		{
-			renderer.acercarEscena();
+			renderer.acercarEscena(0.999f);
+		}
+		else if (estado == TEstadoVideo.Door)
+		{
+			renderer.acercarEscena(0.999f);
 		}
 		
 		renderer.animarEscena();
@@ -117,7 +121,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		mListener.onDismissDialog();
 		renderer.seleccionarEstado(estado);
 		
-		if (estado == TEstadoVideo.Rock)
+		if (estado == TEstadoVideo.Door || estado == TEstadoVideo.Rock)
 		{
 			renderer.recuperarEscena();
 		}
@@ -133,8 +137,12 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		}
 		
 		renderer.seleccionarEstado(estado);
-		renderer.avanzarEscena();
-		requestRender();
+		
+		if (estado != TEstadoVideo.Outside)
+		{
+			renderer.avanzarEscena();
+			requestRender();
+		}
 	}
 	
 	public void iniciarVideo()

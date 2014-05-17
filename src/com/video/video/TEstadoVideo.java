@@ -4,13 +4,15 @@ import com.project.main.R;
 
 public enum TEstadoVideo
 {
-	Nada, Door, Rock, Noise, Brief;
+	Nada, Outside, Door, Rock, Noise, Brief;
 	
 	public TEstadoVideo getNext()
 	{
 		switch(this)
 		{
 			case Nada:
+				return TEstadoVideo.Outside;
+			case Outside:
 				return TEstadoVideo.Door;
 			case Door:
 				return TEstadoVideo.Rock;
@@ -29,10 +31,12 @@ public enum TEstadoVideo
 	{
 		switch(this)
 		{
+			case Outside:
+				return 10 * 1000;
 			case Door:
-				return 18 * 1000;
+				return 10 * 1000;
 			case Rock:
-				return 28 * 1000;
+				return 18 * 1000;
 			case Noise:
 				return 5 * 1000;
 			case Brief:
@@ -46,8 +50,8 @@ public enum TEstadoVideo
 	{
 		switch(this)
 		{
-			case Door:
-				return R.raw.music_video_door;
+			case Outside:
+				return R.raw.music_video_outside;
 			case Noise:
 				return R.raw.music_video_noise;
 			case Rock:

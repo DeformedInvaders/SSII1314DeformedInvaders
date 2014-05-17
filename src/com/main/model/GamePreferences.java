@@ -34,15 +34,19 @@ public class GamePreferences
 	private static final int TIME_INTERVAL_ANIMATION_SLOW = 18;
 	private static final int TIME_INTERVAL_ANIMATION_SUPER_SLOW = 20;
 	
+	private static final int TIME_INTERVAL_ANIMATION_VIDEO = 40;
+	
 	public static final int NUM_FRAMES_ANIMATION = 50;
 	public static final int NUM_FRAMES_DISPARO = 10;
 	
 	// Texturas
+	public static final float DEEP_BACKGROUND = -0.99f;
 	public static final float DEEP_INSIDE_FRAMES = -0.1f;
 	public static final float DEEP_POLYLINES = 0.1f;
 	public static final float DEEP_STICKERS = 0.2f;
 	public static final float DEEP_HANDLE = 0.3f;
 	public static final float DEEP_OUTSIDE_FRAMES = 0.4f;
+	public static final float DEEP_OBJECTS = 0.99f;
 
 	// Niveles
 	private static final int MAX_ENEMIES = 50;
@@ -71,10 +75,10 @@ public class GamePreferences
 	public static final int NUM_TYPE_OPPONENTS = NUM_TYPE_OBSTACLES + NUM_TYPE_MISSILES + NUM_TYPE_ENEMIES;
 	
 	public static final int NUM_TYPE_TEXTURE_WEAPONS = 2;
-	public static final int NUM_TYPE_TEXTURE_ANIMATED_OBJECTS = 3;
+	public static final int NUM_TYPE_TEXTURE_ANIMATED_OBJECTS = 4;
 	
-	public static final int NUM_TYPE_ANIMATED_OBJECTS = 2;
-	public static final int NUM_TYPE_INANIMATED_OBJECTS = 3;
+	public static final int NUM_TYPE_ANIMATED_OBJECTS = 3;
+	public static final int NUM_TYPE_INANIMATED_OBJECTS = 2;
 	
 	private static final int NUM_TYPE_STICKERS_EYES = 12;
 	private static final int NUM_TYPE_STICKERS_MOUTH = 12;
@@ -232,6 +236,11 @@ public class GamePreferences
 	public static final int TIME_INTERVAL_ANIMATION()
 	{
 		return TIME_INTERVAL_ANIMATION_SUPER_SLOW;
+	}
+	
+	public static final int TIME_INTERVAL_ANIMATION_VIDEO()
+	{
+		return TIME_INTERVAL_ANIMATION_VIDEO;
 	}
 	
 	public static final int TIME_INTERVAL_ANIMATION(int ciclos)

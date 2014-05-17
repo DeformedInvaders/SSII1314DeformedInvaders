@@ -246,6 +246,7 @@ public abstract class OpenGLRenderer implements Renderer
 		yBottom = 0.0f;
 		xCentro = (xRight + xLeft) / 2.0f;
 		yCentro = (yTop + yBottom) / 2.0f;
+		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
@@ -870,7 +871,7 @@ public abstract class OpenGLRenderer implements Renderer
 					{
 						gl.glPushMatrix();
 			
-							gl.glTranslatef(posicionTexturaFondo[i], 0.0f, 0.0f);
+							gl.glTranslatef(posicionTexturaFondo[i], 0.0f, GamePreferences.DEEP_BACKGROUND);
 				
 							OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, verticesTexturaFondo[i], coordTexturaRectangulo, nombreTexturaFondo[i]);
 			

@@ -175,6 +175,7 @@
 		    <string name="text_button_import">Import</string>
 			
   		<!-- Video -->
+  			<string name="dialog_outside_1">Laboratory MX-45. \n Unknown location.</string>
 		    <string name="dialog_noise_1">Oh no!!! Wait a minute&#x2026;</string>
 		    <string name="dialog_brief_1">Dialog Brief 1</string>
 		    <string name="dialog_brief_2">Dialog Brief 2</string>
