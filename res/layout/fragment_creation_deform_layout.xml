@@ -39,12 +39,6 @@
 		
 		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
             android:id="@+id/imageButtonDeform6"
-            android:contentDescription="@string/desc_deform_audio"
-            android:background="@drawable/icon_media_microphone"
-			custom:background_pressed="@drawable/icon_media_microphone_selected"/>
-		
-		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
-            android:id="@+id/imageButtonDeform7"
             android:contentDescription="@string/desc_deform_play"
             android:background="@drawable/icon_media_play"
             custom:background_pressed="@drawable/icon_media_play_selected"/>

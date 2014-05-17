@@ -53,7 +53,7 @@ public class Pegatinas implements Serializable
 	
 	public void dibujar(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TriangleArray triangulos, TTipoEntidad tipo, int id)
 	{
-		float factorEscala = GamePreferences.SCREEN_SCALE_FACTOR();
+		float factorEscala = GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR();
 		
 		gl.glPushMatrix();
 		

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-import com.android.alert.RecordAlert;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.game.data.Personaje;
@@ -22,7 +21,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	private Personaje personaje;
 
 	private DeformOpenGLSurfaceView canvas;
-	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonAudio, botonReproducir;
+	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, /*botonAudio,*/ botonReproducir;
 
 	private DeformDataSaved dataSaved;
 	
@@ -58,15 +57,15 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonDeformar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonReiniciar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform4);
 		botonGrabar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform5);
-		botonAudio = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
-		botonReproducir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform7);
+		//botonAudio = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
+		botonReproducir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
 
 		botonAnyadir.setOnClickListener(new OnAddClickListener());
 		botonEliminar.setOnClickListener(new OnRemoveClickListener());
 		botonDeformar.setOnClickListener(new OnMoveClickListener());
 		botonReiniciar.setOnClickListener(new OnResetClickListener());
 		botonGrabar.setOnClickListener(new OnRecordClickListener());
-		botonAudio.setOnClickListener(new OnAudioClickListener());
+		//botonAudio.setOnClickListener(new OnAudioClickListener());
 		botonReproducir.setOnClickListener(new OnPlayClickListener());
 
 		reiniciarInterfaz();
@@ -87,7 +86,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonReiniciar = null;
 		botonGrabar = null;
 		botonReproducir = null;
-		botonAudio = null;
+		//botonAudio = null;
 	}
 
 	/*@Override
@@ -136,7 +135,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		else
 		{
 			botonGrabar.setVisibility(View.VISIBLE);
-			botonAudio.setVisibility(View.VISIBLE);
+			//botonAudio.setVisibility(View.VISIBLE);
 
 			if (!canvas.isEstadoGrabacion())
 			{
@@ -147,7 +146,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 
 				if (canvas.isGrabacionReady())
 				{
-					botonAudio.setVisibility(View.VISIBLE);
+					//botonAudio.setVisibility(View.VISIBLE);
 					botonReproducir.setVisibility(View.VISIBLE);
 				}
 			}
@@ -157,7 +156,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonEliminar.setActivo(canvas.isEstadoEliminar());
 		botonGrabar.setActivo(canvas.isEstadoGrabacion());
 		botonDeformar.setActivo(canvas.isEstadoDeformar());
-		botonAudio.setActivo(canvas.isEstadoAudio());
+		//botonAudio.setActivo(canvas.isEstadoAudio());
 		botonReproducir.setActivo(canvas.isEstadoReproduccion());
 	}
 
@@ -170,7 +169,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonReiniciar.setVisibility(View.INVISIBLE);
 		botonGrabar.setVisibility(View.INVISIBLE);
 		botonReproducir.setVisibility(View.INVISIBLE);
-		botonAudio.setVisibility(View.INVISIBLE);
+		//botonAudio.setVisibility(View.INVISIBLE);
 	}
 
 	/* Métodos Listener onClick */
@@ -235,7 +234,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		}
 	}
 
-	private class OnAudioClickListener implements OnClickListener
+	/*private class OnAudioClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
@@ -282,7 +281,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 
 			alert.show();
 		}
-	}
+	}*/
 
 	private class OnPlayClickListener implements OnClickListener
 	{

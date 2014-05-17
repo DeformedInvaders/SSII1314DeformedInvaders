@@ -158,11 +158,6 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 		}
 	}
 
-	public void seleccionarAudio()
-	{
-		renderer.seleccionarAudio();
-	}
-
 	public void seleccionarReposo()
 	{
 		renderer.seleccionarReposo();
@@ -198,11 +193,6 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 	public boolean isGrabacionReady()
 	{
 		return renderer.isGrabacionReady();
-	}
-
-	public boolean isEstadoAudio()
-	{
-		return renderer.isEstadoAudio();
 	}
 
 	public boolean isEstadoReproduccion()

@@ -121,7 +121,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					{
 						if (estadoDetector == TEstadoDetector.CamaraDetectors)
 						{
-							renderer.camaraZoom(factor);
+							renderer.camaraZoom(2 * GamePreferences.NULL_SCALE_FACTOR - factor);
 						}
 						else if (estadoDetector == TEstadoDetector.CoordDetectors)
 						{

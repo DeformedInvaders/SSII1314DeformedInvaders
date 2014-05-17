@@ -35,7 +35,7 @@ public abstract class Rectangulo extends Entidad
 	{
 		gl.glPushMatrix();
 		
-			gl.glScalef(GamePreferences.SCREEN_SCALE_FACTOR(), GamePreferences.SCREEN_SCALE_FACTOR(), 0.0f);
+			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 0.0f);
 			
 			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTipoSticker.Nada);
 			

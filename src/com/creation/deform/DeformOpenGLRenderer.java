@@ -14,7 +14,6 @@ import android.graphics.Color;
 import com.android.opengl.OpenGLRenderer;
 import com.android.opengl.TTipoFondoRenderer;
 import com.android.opengl.TTipoTexturasRenderer;
-import com.android.storage.ExternalStorageManager;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
 import com.creation.data.Textura;
@@ -509,15 +508,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			i = i + numFramesDescartar;
 		}
 		
-		//TODO Comprobar comportamiento del algoritmo.
-		if (GamePreferences.IS_DEBUG_ENABLED())
-		{
-			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES INICIAL " + listaHandlesAnimacion.size());
-			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES A DESCARTAR " + numFramesDescartar);
-			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES A REPETIR " + numFramesRepetir);
-			ExternalStorageManager.writeLogcat("TEST", "NUM FRAMES FINAL " + listaVerticesAnimacion.size());
-		}
-		
 		mListener.onAnimationFinished();
 	}
 	
@@ -578,11 +568,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		return posicionAnimacion == listaVerticesAnimacion.size();
 	}
 
-	public void seleccionarAudio()
-	{
-		estado = TEstadoDeform.Audio;
-	}
-
 	public void seleccionarReposo()
 	{
 		estado = TEstadoDeform.Nada;
@@ -613,11 +598,6 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public boolean isEstadoGrabacion()
 	{
 		return estado == TEstadoDeform.Deformar && modoGrabar;
-	}
-
-	public boolean isEstadoAudio()
-	{
-		return estado == TEstadoDeform.Audio;
 	}
 
 	public boolean isEstadoReproduccion()

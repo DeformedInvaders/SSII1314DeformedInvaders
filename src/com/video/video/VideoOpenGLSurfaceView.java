@@ -153,10 +153,10 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (renderer.onTouchUp(x, y, width, height, pos))
 		{
-			int sonido = renderer.isEstadoSonido().getSound();
+			int sonido = renderer.getSonidoActivado();
 			if (sonido != -1)
 			{
-				mListener.onPlaySoundEffect(renderer.isEstadoSonido().getSound());
+				mListener.onPlaySoundEffect(sonido);
 				renderer.desactivarEstadoSonido();
 				return true;
 			}

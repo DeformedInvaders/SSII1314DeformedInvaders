@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import com.android.audio.AudioPlayerManager;
-import com.android.audio.AudioRecorderManager;
 import com.android.audio.AudioVolumeManager;
 import com.android.social.SocialConnector;
 import com.android.storage.AssetsStorageManager;
@@ -46,7 +45,7 @@ public abstract class GameCore
 	
 	/* Musica */
 	private AudioPlayerManager audioPlayerManager, soundPlayerManager;
-	private AudioRecorderManager audioRecorderManager;
+	//private AudioRecorderManager audioRecorderManager;
 	private AudioVolumeManager audioVolumeManager;
 	private int musicaSeleccionada;
 
@@ -90,7 +89,7 @@ public abstract class GameCore
 			public void onPlayerCompletion() { }
 		};
 		
-		audioRecorderManager = new AudioRecorderManager();
+		//audioRecorderManager = new AudioRecorderManager();
 		audioVolumeManager = new AudioVolumeManager(mContext);
 		
 		videoGenerator = new VideoGenerator(mContext, assetsManager);
@@ -551,7 +550,7 @@ public abstract class GameCore
 		}
 	}
 	
-	public boolean reproducirSonidoTemp(TTipoMovimiento tipo)
+	/*public boolean reproducirSonidoTemp(TTipoMovimiento tipo)
 	{
 		if (internalManager.comprobarAudioTemp(tipo))
 		{
@@ -581,7 +580,7 @@ public abstract class GameCore
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	public boolean reproducirSonido(int sonido)
 	{
@@ -631,7 +630,7 @@ public abstract class GameCore
 	
 	/* Métodos de modificación del AudioRecorder */
 
-	public void startRecording(TTipoMovimiento movimiento)
+	/*public void startRecording(TTipoMovimiento movimiento)
 	{
 		audioRecorderManager.startRecording(internalManager.cargarAudioTemp(movimiento));
 	}
@@ -647,5 +646,5 @@ public abstract class GameCore
 		{
 			internalManager.eliminarAudioTemp(movimiento);
 		}
-	}	
+	}*/	
 }

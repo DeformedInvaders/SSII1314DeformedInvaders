@@ -43,7 +43,13 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private int numFondos, numCharacters, numTexturas;
 	
+	// Texturas Personaje
 	private int POS_TEXTURE_CHARACTER_SKELETON, POS_TEXTURE_CHARACTER_STICKER, POS_TEXTURE_CHARACTER_BUBBLE, POS_TEXTURE_CHARACTER_PLATFORM;
+	
+	// Texturas Video
+	private int POS_TEXTURE_ANIMATED_OBJECT, POS_TEXTURE_INANIMATED_OBJECT;
+	
+	// Texturas Juego
 	private int POS_TEXTURE_BOSS_BUBBLE, POS_TEXTURE_BOSS_PLATFORM;
 	private int POS_TEXTURE_MISSILE, POS_TEXTURE_OBSTACLE;
 	private int POS_TEXTURE_ENEMY_SKELETON, POS_TEXTURE_ENEMY_STICKER;
@@ -122,8 +128,15 @@ public abstract class OpenGLRenderer implements Renderer
 			coordTexturaRectangulo = BufferManager.construirBufferTextura();
 		}
 		
+		// Personaje
 		POS_TEXTURE_CHARACTER_SKELETON = 0;
 		POS_TEXTURE_CHARACTER_STICKER = POS_TEXTURE_CHARACTER_SKELETON + numCharacters;
+		
+		// Video
+		POS_TEXTURE_INANIMATED_OBJECT = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
+		POS_TEXTURE_ANIMATED_OBJECT = POS_TEXTURE_INANIMATED_OBJECT + GamePreferences.NUM_TYPE_INANIMATED_OBJECTS;
+		
+		// Juego
 		POS_TEXTURE_CHARACTER_BUBBLE = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
 		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
 		
@@ -220,7 +233,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
-	{
+	{		
 		// Cambio de Puerto de Vista
 		screenWidth = width;
 		screenHeight = height;
@@ -601,6 +614,10 @@ public abstract class OpenGLRenderer implements Renderer
 				return POS_TEXTURE_CHARACTER_WEAPON + posEntidad;
 			case ArmaBoss:
 				return POS_TEXTURE_BOSS_WEAPON + posEntidad;
+			case ObjetoInanimado:
+				return POS_TEXTURE_INANIMATED_OBJECT + posEntidad;
+			case ObjetoAnimado:
+				return POS_TEXTURE_ANIMATED_OBJECT + posEntidad;
 			default:
 				return -1;
 		}

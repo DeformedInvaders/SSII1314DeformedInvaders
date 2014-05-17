@@ -22,4 +22,19 @@ public enum TTipoMovimiento
 				return -1;
 		}
 	}
+	
+	public int getSound()
+	{
+		switch(this)
+		{
+			case Jump:
+				return R.raw.effect_game_jump;
+			case Crouch:
+				return R.raw.effect_game_crouch;
+			case Attack:
+				return R.raw.effect_game_attack;
+			default:
+				return -1;
+		}
+	}
 }

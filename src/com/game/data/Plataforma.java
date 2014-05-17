@@ -110,15 +110,15 @@ public class Plataforma extends Entidad
 		return -1;
 	}
 	
-	private int indiceArma(int indice, int arma)
+	private int indiceArma()
 	{
-		if (indice == 0)
+		if (indiceAnimacionDisparo == 0)
 		{
-			return arma;
+			return indiceArma;
 		}
 		else
 		{
-			return arma + 2;
+			return indiceArma + GamePreferences.NUM_TYPE_TEXTURE_WEAPONS;
 		}
 	}
 	
@@ -176,7 +176,7 @@ public class Plataforma extends Entidad
 					
 					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - entidad.getHeight() / 8.0f, 0.0f);
 					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, indiceArma), TTipoSticker.Nada);
+					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(), TTipoSticker.Nada);
 				
 				gl.glPopMatrix();
 			}
@@ -187,7 +187,7 @@ public class Plataforma extends Entidad
 					
 					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - entidad.getHeight() / 8.0f, 0.0f);
 					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(indiceAnimacionDisparo, indiceArma), TTipoSticker.Nada);
+					renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(), TTipoSticker.Nada);
 					
 				gl.glPopMatrix();
 			}

@@ -43,13 +43,9 @@ public class GamePreferences
 	public static final float DEEP_STICKERS = 0.2f;
 	public static final float DEEP_HANDLE = 0.3f;
 	public static final float DEEP_OUTSIDE_FRAMES = 0.4f;
-	
-	/* FIXME Reducir tiempo, menos de 1 segundo no graba nada */
-	public static final int TIME_DURATION_ANIMATION = 2000;
 
 	// Niveles
-	/* FIXME Aumentar numero de Enemigos */
-	private static final int MAX_ENEMIES = 3;//50;
+	private static final int MAX_ENEMIES = 50;
 	public static final int MAX_CHARACTERS = 10;
 	public static final int MAX_CHARACTER_LIVES = 3;
 	public static final int MAX_BOSS_LIVES = 3;
@@ -73,6 +69,12 @@ public class GamePreferences
 	public static final int NUM_TYPE_MISSILES = 1;
 	public static final int NUM_TYPE_ENEMIES = 4;
 	public static final int NUM_TYPE_OPPONENTS = NUM_TYPE_OBSTACLES + NUM_TYPE_MISSILES + NUM_TYPE_ENEMIES;
+	
+	public static final int NUM_TYPE_TEXTURE_WEAPONS = 2;
+	public static final int NUM_TYPE_TEXTURE_ANIMATED_OBJECTS = 3;
+	
+	public static final int NUM_TYPE_ANIMATED_OBJECTS = 2;
+	public static final int NUM_TYPE_INANIMATED_OBJECTS = 3;
 	
 	private static final int NUM_TYPE_STICKERS_EYES = 12;
 	private static final int NUM_TYPE_STICKERS_MOUTH = 12;
@@ -212,7 +214,6 @@ public class GamePreferences
 		return WIDTH_SCREEN;
 	}
 	
-	// TODO Comprobar comportamiento del algoritmo.
 	public static final float POS_ENEMIES_FINAL()
 	{
 		return POS_ENEMIES_INICIO() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMIES() * 1.5f;
@@ -317,15 +318,20 @@ public class GamePreferences
 	
 	/* DISTANCIAS Y FACTORES */
 	
-	// TODO Comprobar comportamiento del escalado de enemigos.
-	public static final float SCREEN_SCALE_FACTOR()
+	public static final float SCREEN_HEIGHT_SCALE_FACTOR()
 	{
 		final float GAME_HEIGHT_BASE = 800.0f;
 		
 		return HEIGHT_SCREEN / GAME_HEIGHT_BASE;
 	}
 	
-	// FIXME Reducir escalado en fase Boss
+	public static final float SCREEN_WIDTH_SCALE_FACTOR()
+	{
+		final float GAME_WIDTH_BASE = 1280.0f;
+		
+		return WIDTH_SCREEN / GAME_WIDTH_BASE;
+	}
+	
 	private static final float GAME_SCALE_FACTOR_ENEMIES()
 	{
 		return 0.5f;
@@ -336,18 +342,18 @@ public class GamePreferences
 		return 0.5f;
 	}
 	
-	public static final float GAME_SCALE_FACTOR(TTipoEntidad estado)
+	public static final float GAME_SCALE_FACTOR(TTipoEntidad entidad)
 	{
 		if(ESTADO_GAME == TEstadoGame.FaseEnemies)
 		{
-			switch(estado)
+			switch(entidad)
 			{
 				case Misil:
-					return SCREEN_SCALE_FACTOR();
+					return SCREEN_HEIGHT_SCALE_FACTOR();
 				case Obstaculo:
-					return SCREEN_SCALE_FACTOR();
+					return SCREEN_HEIGHT_SCALE_FACTOR();
 				case Enemigo:
-					return SCREEN_SCALE_FACTOR()*GAME_SCALE_FACTOR_ENEMIES();
+					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_ENEMIES();
 				case Personaje:
 					return GAME_SCALE_FACTOR_ENEMIES();
 				default:
@@ -356,12 +362,12 @@ public class GamePreferences
 		}
 		else
 		{
-			switch(estado)
+			switch(entidad)
 			{
 				case Enemigo:
-					return SCREEN_SCALE_FACTOR()*GAME_SCALE_FACTOR_BOSS()*GAME_SCALE_FACTOR_ENEMIES();
+					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
 				case Personaje:
-					return GAME_SCALE_FACTOR_BOSS()*GAME_SCALE_FACTOR_ENEMIES();
+					return GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
 				case PlataformaPersonaje:
 				case PlataformaBoss:
 				case BurbujaPersonaje:
@@ -373,7 +379,6 @@ public class GamePreferences
 		}
 	}
 	
-	// TODO Comprobar distancias en función del tamaño de pantalla
 	public static final float DIST_MOVIMIENTO_BACKGROUND()
 	{
 		final float BACKGROUND_DISTANCE_BASE = 4.0f;
@@ -385,26 +390,26 @@ public class GamePreferences
 	{
 		final float ENEMIES_DISTANCE_BASE = 12.0f;
 		
-		return ENEMIES_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
+		return ENEMIES_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}
 	
 	public static final float DIST_MOVIMIENTO_CHARACTER()
 	{
 		final float CHARACTER_DISTANCE_BASE = 20.0f;
 		
-		return CHARACTER_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
+		return CHARACTER_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}
 	
 	public static final float DIST_MOVIMIENTO_PLATAFORMA()
 	{
 		final float PLATAFORMA_DISTANCE_BASE = 5.0f;
 		
-		return PLATAFORMA_DISTANCE_BASE * SCREEN_SCALE_FACTOR();
+		return PLATAFORMA_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}
 	
 	public static final float MAX_AREA_TRIANGULATOR()
 	{
-		return 1500.0f * SCREEN_SCALE_FACTOR();
+		return 1500.0f * SCREEN_HEIGHT_SCALE_FACTOR();
 	}
 	
 	/* MARCOS */

@@ -1,5 +1,8 @@
 package com.video.video;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 
 import com.android.storage.AssetsStorageManager;
@@ -7,6 +10,8 @@ import com.game.data.Personaje;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.project.main.R;
+import com.video.data.ObjetoAnimado;
+import com.video.data.ObjetoInanimado;
 import com.video.data.TTipoActores;
 import com.video.data.Video;
 
@@ -35,10 +40,24 @@ public class VideoGenerator
 			idFondos[i] = obtenerID(GameResources.GET_VIDEO(i));
 		}
 
-		Personaje guitarrista = assetsManager.importarActor(TTipoActores.Guitarrista);
-		Personaje cientifico = assetsManager.importarActor(TTipoActores.Cientifico);
+		List<Personaje> listaPersonajes = new ArrayList<Personaje>();
 		
-		video = new Video(idFondos, mensajeNoise, mensajeBrief, guitarrista, cientifico);
+		listaPersonajes.add(assetsManager.importarActor(TTipoActores.Guitarrista));
+		listaPersonajes.add(assetsManager.importarActor(TTipoActores.Cientifico));
+		
+		List<ObjetoInanimado> listaObjetos = new ArrayList<ObjetoInanimado>();
+		
+		int[] texturasAgua = {R.drawable.video_water_1, R.drawable.video_water_2, R.drawable.video_water_3};
+		listaObjetos.add(new ObjetoAnimado(0, texturasAgua, 120.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_water));
+		
+		int[] texturasEletricidad = {R.drawable.video_electricity_1, R.drawable.video_electricity_2, R.drawable.video_electricity_3};
+		listaObjetos.add(new ObjetoAnimado(1, texturasEletricidad, 970.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_electricity));
+		
+		listaObjetos.add(new ObjetoInanimado(0, R.drawable.video_microphone_1, 250.0f, 20.0f, TEstadoVideo.Rock, R.raw.effect_video_microphone));
+		listaObjetos.add(new ObjetoInanimado(1, R.drawable.video_speaker_1, 870.0f, 20.0f, TEstadoVideo.Rock, R.raw.effect_video_speaker));
+		listaObjetos.add(new ObjetoInanimado(2, R.drawable.video_door_1, 498.0f, 110.0f, TEstadoVideo.Door, R.raw.effect_video_knockdoor));
+		
+		video = new Video(idFondos, mensajeNoise, mensajeBrief, listaPersonajes, listaObjetos);
 	}
 	
 	private int obtenerID(String id)

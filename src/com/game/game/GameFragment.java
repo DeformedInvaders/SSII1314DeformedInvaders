@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.android.opengl.BackgroundDataSaved;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.main.model.GamePreferences;
@@ -60,7 +59,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		public void onGameFinished(final InstanciaNivel nivel, final int score, TTipoEndgame endgame);
 		public void onGameFailed(final InstanciaNivel nivel, TTipoEndgame endgame);
-		public void onGamePlaySound(final TTipoMovimiento tipo);
+		public void onGamePlaySound(int sound);
 	}
 
 	/* Métodos Fragment */
@@ -334,8 +333,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	}
 
 	@Override
-	public void onGamePlaySound(TTipoMovimiento tipo)
+	public void onGamePlaySound(int sound)
 	{
-		mCallback.onGamePlaySound(tipo);
+		mCallback.onGamePlaySound(sound);
 	}
 }

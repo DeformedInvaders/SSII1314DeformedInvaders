@@ -48,10 +48,10 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	public interface AnimationFragmentListener
 	{
 		public void onAnimationReady(final Movimientos movimientos);
-		public void onAnimationStartRecording(final TTipoMovimiento movimiento);
+		/*public void onAnimationStartRecording(final TTipoMovimiento movimiento);
 		public void onAnimationStopRecording();
-		public void onAnimationDiscardRecording(final TTipoMovimiento movimiento);
-		public void onAnimationPlaySound(final TTipoMovimiento movimiento);
+		public void onAnimationDiscardRecording(final TTipoMovimiento movimiento);*/
+		public void onAnimationPlaySound(int sound);
 	}
 
 	/* Métodos Fragment */
@@ -145,7 +145,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	
 	/* Métodos Abstractos OnDeformListener */
 
-	@Override
+	/*@Override
 	public void onStartRecording()
 	{
 		mCallback.onAnimationStartRecording(TTipoMovimiento.values()[frameLayout.getPosition()]);
@@ -161,11 +161,15 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	public void onDiscardRecording()
 	{
 		mCallback.onAnimationDiscardRecording(TTipoMovimiento.values()[frameLayout.getPosition()]);	
-	}
+	}*/
 
 	@Override
 	public void onPlaySound()
 	{
-		mCallback.onAnimationPlaySound(TTipoMovimiento.values()[frameLayout.getPosition()]);
+		int sound = TTipoMovimiento.values()[frameLayout.getPosition()].getSound();
+		if (sound != -1)
+		{
+			mCallback.onAnimationPlaySound(sound);
+		}
 	}
 }

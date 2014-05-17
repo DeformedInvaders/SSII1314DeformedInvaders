@@ -15,6 +15,7 @@ import com.creation.data.TTipoMovimiento;
 import com.game.data.InstanciaNivel;
 import com.game.data.Personaje;
 import com.main.model.GamePreferences;
+import com.project.main.R;
 
 public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 {
@@ -68,11 +69,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				switch (renderer.isGameEnded())
 				{
 					case VidaPerdidaPersonaje:
+						mListener.onGamePlaySound(R.raw.effect_game_loselife);
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
 					break;
 					case VidaPerdidaBoss:
+						mListener.onGamePlaySound(R.raw.effect_game_loselife);
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje(), renderer.getVidasBoss());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
@@ -133,7 +136,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
 					{
-						renderer.seleccionarAnimacion(TTipoMovimiento.Jump);
+						seleccionarAnimacion(TTipoMovimiento.Jump);
 					}
 				}
 
@@ -142,14 +145,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
 					{
-						renderer.seleccionarAnimacion(TTipoMovimiento.Crouch);
+						seleccionarAnimacion(TTipoMovimiento.Crouch);
 					}
 				}
 
 				@Override
 				public void onTap()
 				{
-					renderer.seleccionarAnimacion(TTipoMovimiento.Attack);
+					seleccionarAnimacion(TTipoMovimiento.Attack);
 				}
 				
 			};
@@ -162,19 +165,19 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				@Override
 				public void onIncreaseXAngle(double angle)
 				{
-					renderer.seleccionarEstado(TEstadoPersonaje.Subir);
+					seleccionarEstado(TEstadoPersonaje.Subir);
 				}
 
 				@Override
 				public void onDecreaseXAngle(double angle)
 				{
-					renderer.seleccionarEstado(TEstadoPersonaje.Bajar);
+					seleccionarEstado(TEstadoPersonaje.Bajar);
 				}
 
 				@Override
 				public void onStabilizeXAngle(double angle)
 				{
-					renderer.seleccionarEstado(TEstadoPersonaje.Nada);		
+					seleccionarEstado(TEstadoPersonaje.Nada);		
 				}
 				
 			};
@@ -196,13 +199,6 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	}
 	
-	/* Métodos de Selección de Estado */
-
-	/*public boolean seleccionarPosicion(float pixelX, float pixelY)
-	{
-		return renderer.onTouchMove(pixelX, pixelY, getWidth(), getHeight(), 0);
-	}*/
-	
 	@Override
 	public void onResume()
 	{
@@ -217,9 +213,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		sensorDetector.onPause();
 	}
 	
+	/* Métodos de Selección de Estado */
+	
 	public void seleccionarEstado(TEstadoPersonaje estado)
 	{
-		renderer.seleccionarEstado(estado);
+		if (threadActivo)
+		{
+			renderer.seleccionarEstado(estado);
+		}
 	}
 	
 	public void seleccionarAnimacion(TTipoMovimiento movimiento)
@@ -230,8 +231,20 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				renderer.seleccionarAnimacion(movimiento);
 				requestRender();
-				mListener.onGamePlaySound(movimiento);
-
+				
+				if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+				{
+					int sound = movimiento.getSound();
+					if (sound != -1)
+					{
+						mListener.onGamePlaySound(sound);
+					}
+				}
+				else
+				{
+					mListener.onGamePlaySound(R.raw.effect_game_shot);
+				}
+				
 				animacionFinalizada = false;
 			}
 		}

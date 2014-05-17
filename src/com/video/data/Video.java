@@ -1,5 +1,7 @@
 package com.video.data;
 
+import java.util.List;
+
 import com.game.data.Personaje;
 import com.video.video.TEstadoVideo;
 
@@ -7,15 +9,17 @@ public class Video
 {
 	private int[] idFondos;
 	private int[] mensaje1, mensaje2;
-	private Personaje personaje1, personaje2;
+	private List<Personaje> listaPersonajes;
+	private List<ObjetoInanimado> listaObjetos;
 	
-	public Video(int[] fondos, int[] m1, int[] m2, Personaje p1, Personaje p2)
+	public Video(int[] fondos, int[] m1, int[] m2, List<Personaje> personajes, List<ObjetoInanimado> objetos)
 	{
 		mensaje1 = m1;
 		mensaje2 = m2;
 		idFondos = fondos;
-		personaje1 = p1;
-		personaje2 = p2;
+		
+		listaPersonajes = personajes;
+		listaObjetos = objetos;
 	}
 	
 	public int[] getIdTexturaFondos()
@@ -25,14 +29,12 @@ public class Video
 	
 	public Personaje getPersonaje(TTipoActores actor)
 	{
-		if (actor == TTipoActores.Guitarrista)
-		{
-			return personaje1;
-		}
-		else
-		{
-			return personaje2;
-		}
+		return listaPersonajes.get(actor.ordinal());
+	}
+	
+	public List<ObjetoInanimado> getListaObjetos()
+	{
+		return listaObjetos;
 	}
 	
 	public int[] getMensaje(TEstadoVideo estado)

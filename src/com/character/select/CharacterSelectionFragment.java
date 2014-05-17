@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
-import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.main.model.GamePreferences;
 import com.project.main.R;
@@ -55,7 +54,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		public void onCharacterSelectionRenameCharacter(final int indice);
 		public void onCharacterSelectionExportCharacter(final int indice);
 		public void onCharacterSelectionPostPublish(final String mensaje, final Bitmap bitmap);
-		public void onCharacterSelectionPlaySound(final TTipoMovimiento tipo, final int indice);
+		public void onCharacterSelectionPlaySound(int sound);
 	}
 
 	/* Métodos Fragment */
@@ -154,8 +153,8 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	}
 
 	@Override
-	public void onPlaySound(TTipoMovimiento tipo)
+	public void onPlaySound(int sound)
 	{
-		mCallback.onCharacterSelectionPlaySound(tipo, viewPager.getPosition());
+		mCallback.onCharacterSelectionPlaySound(sound);
 	}
 }

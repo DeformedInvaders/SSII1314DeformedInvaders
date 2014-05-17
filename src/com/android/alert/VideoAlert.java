@@ -20,9 +20,12 @@ public class VideoAlert extends WindowAlert
 		setMessage(message);
 		
 		setView(R.layout.alert_video_layout);
-		// FIXME Controlar el ancho y alto del video
 		
 		video = (VideoView) findViewById(R.id.videoViewVideoAlert1);
+		// TODO Comprobar el ancho y alto del video en pantallas pequeñas
+		//video.setScaleX(GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR());
+		//video.setScaleY(GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR());
+		
 		video.setVideoURI(videoPath);
 		video.setZOrderOnTop(true);
 		video.setOnPreparedListener(new OnPreparedListener() {                    

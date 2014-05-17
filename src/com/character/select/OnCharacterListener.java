@@ -1,7 +1,5 @@
 package com.character.select;
 
-import com.creation.data.TTipoMovimiento;
-
 import android.graphics.Bitmap;
 
 public interface OnCharacterListener
@@ -14,5 +12,5 @@ public interface OnCharacterListener
 	
 	public void onPostPublished(String text, Bitmap bitmap);
 	public void onSetSwipeable(boolean swipeable);
-	public void onPlaySound(TTipoMovimiento tipo);
+	public void onPlaySound(int sound);
 }

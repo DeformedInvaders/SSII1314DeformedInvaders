@@ -17,7 +17,6 @@ import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
-import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.creation.deform.DeformationFragment;
 import com.creation.design.DesignDataSaved;
@@ -148,9 +147,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onMainPlaySound(final TTipoMovimiento tipo)
+	public void onMainPlaySound(int sound)
 	{
-		core.reproducirSonido(tipo);
+		core.reproducirSonido(sound);
 	}
 
 	// Métodos Design Fragment
@@ -218,7 +217,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		}
 	}
 	
-	@Override
+	/*@Override
 	public void onAnimationStartRecording(final TTipoMovimiento movimiento)
 	{
 		core.startRecording(movimiento);
@@ -234,12 +233,12 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	public void onAnimationDiscardRecording(final TTipoMovimiento movimiento)
 	{
 		core.discardRecording(movimiento);
-	}
+	}*/
 	
 	@Override
-	public void onAnimationPlaySound(final TTipoMovimiento movimiento)
+	public void onAnimationPlaySound(int sound)
 	{
-		core.reproducirSonidoTemp(movimiento);
+		core.reproducirSonido(sound);
 	}
 
 	// Métodos Character Selection Fragment
@@ -344,9 +343,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onCharacterSelectionPlaySound(final TTipoMovimiento tipo, final int indice)
+	public void onCharacterSelectionPlaySound(int sound)
 	{
-		core.reproducirSonido(tipo, indice);
+		core.reproducirSonido(sound);
 	}
 
 	// Métodos Level Selection Fragment
@@ -419,9 +418,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onGamePlaySound(TTipoMovimiento tipo)
+	public void onGamePlaySound(int sound)
 	{
-		core.reproducirSonido(tipo);
+		core.reproducirSonido(sound);
 	}
 	
 	// Métodos VideoFragment

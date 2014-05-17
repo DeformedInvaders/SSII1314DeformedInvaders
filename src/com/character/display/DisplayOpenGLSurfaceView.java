@@ -94,8 +94,13 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 		{
 			renderer.seleccionarAnimacion(movimiento);
 			requestRender();
-			mListener.onDisplayPlaySound(movimiento);
-
+			
+			int sound = movimiento.getSound();
+			if (sound != -1)
+			{
+				mListener.onDisplayPlaySound(sound);
+			}
+			
 			task.run();
 			threadActivo = true;
 		}

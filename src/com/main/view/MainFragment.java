@@ -12,7 +12,6 @@ import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayOpenGLSurfaceView;
 import com.character.display.OnDisplayListener;
-import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.main.model.GamePreferences;
 import com.project.main.R;
@@ -49,7 +48,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		public void onMainCreateCharacter();
 		public void onMainSelectCharacter();
 		public void onMainPlayGame();
-		public void onMainPlaySound(final TTipoMovimiento tipo);
+		public void onMainPlaySound(int sound);
 		public void onMainPlayVideo();
 	}
 
@@ -214,8 +213,8 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	/* Métodos de la interfaz OnDisplayListener */
 
 	@Override
-	public void onDisplayPlaySound(TTipoMovimiento tipo)
+	public void onDisplayPlaySound(int sound)
 	{
-		mCallback.onMainPlaySound(tipo);
+		mCallback.onMainPlaySound(sound);
 	}
 }
