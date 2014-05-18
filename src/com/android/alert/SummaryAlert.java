@@ -1,7 +1,6 @@
 package com.android.alert;
 
 import java.util.Iterator;
-import java.util.List;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +11,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.game.data.Entidad;
+import com.game.data.InstanciaNivel;
+import com.game.data.Jefe;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.project.main.R;
@@ -21,7 +22,7 @@ public abstract class SummaryAlert extends WindowAlert
 	private static final int sizeText = 30;
 	private static final int sizeTextSmall = 20;
 	
-	public SummaryAlert(Context context, int title, int textYes, List<Entidad> listaEnemigos)
+	public SummaryAlert(Context context, int title, int textYes, InstanciaNivel nivel)
 	{
 		super(context, title, false);
 		
@@ -44,50 +45,63 @@ public abstract class SummaryAlert extends WindowAlert
 
 		LinearLayout layoutScroll = (LinearLayout) findViewById(R.id.linearLayoutSummaryAlert1);
 	
-		// Enemigos
-		LinearLayout layoutImagesEnemigos = new LinearLayout(context);
-		LinearLayout layoutEnemigos = construirLayoutSeccion(context, textFont, layoutImagesEnemigos, R.string.title_alert_enemies, R.string.title_alert_weaknesses_enemies);
+			// Enemigos
+			LinearLayout layoutImagesEnemigos = new LinearLayout(context);
+			LinearLayout layoutEnemigos = construirLayoutSeccion(context, textFont, layoutImagesEnemigos, R.string.title_alert_enemies, R.string.title_alert_weaknesses_enemies);
+				
+			// Obstaculos
 			
-		// Obstaculos
-		
-		LinearLayout layoutImagesObstaculos = new LinearLayout(context);
-		LinearLayout layoutObstaculos = construirLayoutSeccion(context, textFont, layoutImagesObstaculos, R.string.title_alert_obstacles, R.string.title_alert_weaknesses_obstacles);
+			LinearLayout layoutImagesObstaculos = new LinearLayout(context);
+			LinearLayout layoutObstaculos = construirLayoutSeccion(context, textFont, layoutImagesObstaculos, R.string.title_alert_obstacles, R.string.title_alert_weaknesses_obstacles);
+				
+			// Misiles
 			
-		// Misiles
-		
-		LinearLayout layoutImagesMisiles = new LinearLayout(context);
-		LinearLayout layoutMisiles = construirLayoutSeccion(context, textFont, layoutImagesMisiles, R.string.title_alert_missiles, R.string.title_alert_weaknesses_missiles);
-		
-		// Procesamiento
+			LinearLayout layoutImagesMisiles = new LinearLayout(context);
+			LinearLayout layoutMisiles = construirLayoutSeccion(context, textFont, layoutImagesMisiles, R.string.title_alert_missiles, R.string.title_alert_weaknesses_missiles);
+	
+			// Jefe
 			
-		Iterator<Entidad> it = listaEnemigos.iterator();
-		while(it.hasNext())
-		{
-			Entidad enemigo = it.next();
+			LinearLayout layoutImagesJefe = new LinearLayout(context);
+			LinearLayout layoutJefe = construirLayoutSeccion(context, textFont, layoutImagesJefe, R.string.title_alert_boss, R.string.title_alert_weaknesses_boss);
+	
+			// Procesamiento
+				
+			Iterator<Entidad> it = nivel.getTipoEnemigos().iterator();
+			while(it.hasNext())
+			{
+				Entidad enemigo = it.next();
+				
+				ImageView imageView = new ImageView(context);
+				imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));
+				imageView.setBackgroundResource(enemigo.getIndiceTextura());
+				
+				switch(enemigo.getTipo())
+				{
+					case Enemigo:
+						layoutImagesEnemigos.addView(imageView);
+					break;
+					case Obstaculo:
+						layoutImagesObstaculos.addView(imageView);
+					break;
+					case Misil:
+						imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH() / 2));
+						layoutImagesMisiles.addView(imageView);
+					default:
+					break;
+				}
+			}
+			
+			Jefe jefe = nivel.getBoss();
 			
 			ImageView imageView = new ImageView(context);
 			imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));
-			imageView.setBackgroundResource(enemigo.getIndiceTextura());
+			imageView.setBackgroundResource(jefe.getIndiceTextura());
+			layoutImagesJefe.addView(imageView);
 			
-			switch(enemigo.getTipo())
-			{
-				case Enemigo:
-					layoutImagesEnemigos.addView(imageView);
-				break;
-				case Obstaculo:
-					layoutImagesObstaculos.addView(imageView);
-				break;
-				case Misil:
-					imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH() / 2));
-					layoutImagesMisiles.addView(imageView);
-				default:
-				break;
-			}
-		}
-		
 		layoutScroll.addView(layoutEnemigos);
 		layoutScroll.addView(layoutObstaculos);
 		layoutScroll.addView(layoutMisiles);
+		layoutScroll.addView(layoutJefe);
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override

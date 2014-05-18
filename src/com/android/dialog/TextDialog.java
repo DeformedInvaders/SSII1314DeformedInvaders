@@ -9,10 +9,9 @@ public class TextDialog extends WindowDialog
 {
 	private TextView text;
 	
-	public TextDialog(Context context)
+	public TextDialog(Context context, int layout)
 	{
-		super(context, R.layout.dialog_text_layout, false);
-		
+		super(context, layout, false);
 		text = (TextView) findViewById(R.id.textViewDialog1);
 	}
 

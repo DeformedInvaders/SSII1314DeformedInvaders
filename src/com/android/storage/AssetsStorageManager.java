@@ -13,6 +13,7 @@ import com.creation.data.Esqueleto;
 import com.creation.data.Movimientos;
 import com.creation.data.Textura;
 import com.game.data.Enemigo;
+import com.game.data.Jefe;
 import com.game.data.Personaje;
 import com.game.select.TTipoLevel;
 import com.lib.buffer.VertexArray;
@@ -69,6 +70,46 @@ public class AssetsStorageManager
 		}
 
 		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " not imported");
+		return null;
+	}
+	
+	public Jefe importarJefe(TTipoLevel nivel, int indiceTextura, int idEnemigo)
+	{
+		try
+		{
+			InputStream file = mContext.getAssets().open(GameResources.GET_BOSS_FILES(nivel, idEnemigo));
+			ObjectInputStream data = new ObjectInputStream(file);
+
+			// Guardar Personajes
+			Jefe jefe = new Jefe(indiceTextura, idEnemigo);
+			jefe.setEsqueleto((Esqueleto) data.readObject());
+			jefe.setTextura((Textura) data.readObject());
+			jefe.setMovimientos((List<VertexArray>) data.readObject());
+
+			data.close();
+			file.close();
+
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " imported");
+			return jefe;
+		}
+		catch (ClassNotFoundException e)
+		{
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " class not found");
+		}
+		catch (FileNotFoundException e)
+		{
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " file not found");
+		}
+		catch (StreamCorruptedException e)
+		{
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " sream corrupted");
+		}
+		catch (IOException e)
+		{
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " ioexception");
+		}
+
+		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " not imported");
 		return null;
 	}
 	

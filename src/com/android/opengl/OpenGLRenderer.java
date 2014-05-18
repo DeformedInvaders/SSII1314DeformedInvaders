@@ -50,6 +50,7 @@ public abstract class OpenGLRenderer implements Renderer
 	private int POS_TEXTURE_ANIMATED_OBJECT, POS_TEXTURE_INANIMATED_OBJECT;
 	
 	// Texturas Juego
+	private int POS_TEXTURE_BOSS_SKELETON, POS_TEXTURE_BOSS_STICKER;
 	private int POS_TEXTURE_BOSS_BUBBLE, POS_TEXTURE_BOSS_PLATFORM;
 	private int POS_TEXTURE_MISSILE, POS_TEXTURE_OBSTACLE;
 	private int POS_TEXTURE_ENEMY_SKELETON, POS_TEXTURE_ENEMY_STICKER;
@@ -140,7 +141,10 @@ public abstract class OpenGLRenderer implements Renderer
 		POS_TEXTURE_CHARACTER_BUBBLE = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
 		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
 		
-		POS_TEXTURE_BOSS_BUBBLE = POS_TEXTURE_CHARACTER_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
+		POS_TEXTURE_BOSS_SKELETON = POS_TEXTURE_CHARACTER_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
+		POS_TEXTURE_BOSS_STICKER = POS_TEXTURE_BOSS_SKELETON + 1;
+		
+		POS_TEXTURE_BOSS_BUBBLE = POS_TEXTURE_BOSS_STICKER + GamePreferences.NUM_TYPE_STICKERS;
 		POS_TEXTURE_BOSS_PLATFORM = POS_TEXTURE_BOSS_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
 				
 		POS_TEXTURE_MISSILE = POS_TEXTURE_BOSS_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
@@ -582,6 +586,8 @@ public abstract class OpenGLRenderer implements Renderer
 				return POS_TEXTURE_CHARACTER_SKELETON + posEntidad;
 			case Enemigo:
 				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
+			case Jefe:
+				return POS_TEXTURE_BOSS_SKELETON;
 			default:
 				return -1;
 		}
@@ -593,6 +599,8 @@ public abstract class OpenGLRenderer implements Renderer
 		{
 			case Personaje:
 				return POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * posEntidad) + tipoPegatina.ordinal();
+			case Jefe:
+				return POS_TEXTURE_BOSS_STICKER + tipoPegatina.ordinal();
 			case Enemigo:
 				return POS_TEXTURE_ENEMY_STICKER + (GamePreferences.NUM_TYPE_STICKERS * posEntidad) + tipoPegatina.ordinal();
 			case Obstaculo:
@@ -696,7 +704,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 			VertexArray vertices = new VertexArray();
 			
-			if(tipoEntidad == TTipoEntidad.Personaje || tipoEntidad == TTipoEntidad.Enemigo)
+			if(tipoEntidad == TTipoEntidad.Personaje || tipoEntidad == TTipoEntidad.Enemigo || tipoEntidad == TTipoEntidad.Jefe)
 			{
 				vertices.addVertex(-textureWidth/2, -textureHeight/2);
 				vertices.addVertex(-textureWidth/2, textureHeight/2);
@@ -716,6 +724,7 @@ public abstract class OpenGLRenderer implements Renderer
 			return new Dimensiones(textureHeight, textureWidth);
 		}
 
+		android.util.Log.d("TEST", "NULL TEXTURE: "+tipoEntidad.toString()+" posTextura "+posTextura);
 		return null;
 	}
 

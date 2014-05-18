@@ -130,7 +130,7 @@ public class ObjetoAnimado extends ObjetoInanimado
 		if (area.contains(x, y))
 		{
 			activado = true;
-			indiceAnimacionCiclica = 2 * GamePreferences.NUM_FRAMES_ANIMATION;
+			indiceAnimacionCiclica = GamePreferences.NUM_FRAMES_ANIMATION;
 		
 			if (indiceAnimacionPasos < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS - 1)
 			{

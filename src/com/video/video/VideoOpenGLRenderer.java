@@ -151,11 +151,6 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		camaraZoom(factor);
 	}
 	
-	public void recuperarEscena()
-	{
-		camaraRestore();
-	}
-	
 	public void animarEscena()
 	{
 		if (cientifico.animar())
@@ -181,6 +176,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarEstado(TEstadoVideo estado)
 	{
 		estadoVideo = estado;
+		camaraRestore();
 	}
 	
 	public void desactivarEstadoSonido()

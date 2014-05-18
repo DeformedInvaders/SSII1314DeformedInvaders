@@ -166,23 +166,11 @@
 		<item name="android:orientation">vertical</item>
 	</style>
 	
-	<style name="Layout_Horizontal_Content_Dialog_Comic_Style" parent="Layout_Horizontal_Content_Dialog_Style">
-		<item name="android:background">#FFFFFF</item>
-	</style>
-	
-	<style name="Layout_Vertical_Content_Dialog_Comic_Style" parent="Layout_Horizontal_Content_Dialog_Comic_Style">
-		<item name="android:orientation">vertical</item>
-	</style>
-	
 	<style name="Text_Section_Dialog_Style">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:textColor">#FFFFFF</item>
 		<item name="android:textSize">20sp</item>   
-	</style>
-	
-		<style name="Text_Section_Dialog_Comic_Style" parent="Text_Section_Dialog_Style">
-		<item name="android:textColor">#000000</item>
 	</style>
 	
 	<style name="Layout_Horizontal_Section_Dialog_Style">
@@ -200,11 +188,7 @@
 	<style name="ImageView_Arrow_Dialog_Style">
 	    <item name="android:layout_width">40dp</item>
 		<item name="android:layout_height">20dp</item>
-		<item name="android:src">@drawable/image_dialog_arrow_1</item>	
-	</style>
-	
-	<style name="ImageView_Arrow_Dialog_Comic_Style" parent="ImageView_Arrow_Dialog_Style">
-		<item name="android:src">@drawable/image_dialog_arrow_2</item>	
+		<item name="android:background">@drawable/image_dialog_arrow_1</item>	
 	</style>
 	
 </resources>

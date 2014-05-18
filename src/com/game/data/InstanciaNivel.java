@@ -11,14 +11,16 @@ public class InstanciaNivel
 
 	private List<Entidad> tiposEnemigos;
 	private List<InstanciaEntidad> listaEnemigos;
+	private Jefe enemigoBoss;
 	private Background fondoNivel;
 
-	public InstanciaNivel(TTipoLevel tipo, String nombre, List<Entidad> tipos, List<InstanciaEntidad> lista, Background fondo)
+	public InstanciaNivel(TTipoLevel tipo, String nombre, List<Entidad> tipos, Jefe boss, List<InstanciaEntidad> lista, Background fondo)
 	{
 		tipoNivel = tipo;
 		nombreNivel = nombre;
 		tiposEnemigos = tipos;
 		listaEnemigos = lista;
+		enemigoBoss = boss;
 		fondoNivel = fondo;
 	}
 
@@ -35,6 +37,11 @@ public class InstanciaNivel
 	public List<Entidad> getTipoEnemigos()
 	{
 		return tiposEnemigos;
+	}
+	
+	public Jefe getBoss()
+	{
+		return enemigoBoss;
 	}
 
 	public List<InstanciaEntidad> getListaEnemigos()

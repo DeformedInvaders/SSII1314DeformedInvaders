@@ -21,9 +21,9 @@ import com.game.data.Disparo;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
+import com.game.data.Jefe;
 import com.game.data.Personaje;
 import com.game.data.Plataforma;
-import com.game.data.TTipoEntidad;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -42,6 +42,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	private Disparo disparoPersonaje;
 	
 	// Boss
+	private Jefe lider;
+	
 	private InstanciaEntidad jefe;
 	private Burbuja burbujaJefe;
 	private Plataforma plataformaJefe;
@@ -70,12 +72,14 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		seleccionarTexturaFondo(l.getFondoNivel().getIdTexturaFondos());
 
 		GamePreferences.setEstadoGame(TEstadoGame.FaseEnemies);
-		estadoJefe = TEstadoJefe.Nada;
 		
 		protagonista = p;
 		protagonista.activarEscalado();
 		
-		personaje = new InstanciaEntidad(0, TTipoEntidad.Personaje);
+		lider = l.getBoss();
+		estadoJefe = TEstadoJefe.Nada;
+		
+		personaje = new InstanciaEntidad(protagonista.getId(), protagonista.getTipo());
 		burbujaPersonaje = new Burbuja(personaje, GamePreferences.MAX_CHARACTER_LIVES);
 		plataformaPersonaje = new Plataforma(personaje);
 		disparoPersonaje = new Disparo(personaje);
@@ -89,7 +93,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		posEnemigoActual = 0;
 		handleEnemigoActual = new Handle(50, 20, Color.YELLOW);
 		
-		jefe = new InstanciaEntidad(tipoEnemigos.size() - 1, TTipoEntidad.Enemigo);
+		jefe = new InstanciaEntidad(lider.getId(), lider.getTipo());
 		burbujaJefe = new Burbuja(jefe, GamePreferences.MAX_BOSS_LIVES);
 		plataformaJefe = new Plataforma(jefe);
 		disparoJefe = new Disparo(jefe);
@@ -126,7 +130,12 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		// Protagonista
 		protagonista.cargarTextura(gl, this, mContext);
-
+		personaje.setDimensions(protagonista.getHeight(), protagonista.getWidth());
+		
+		// Jefe
+		lider.cargarTextura(gl, this, mContext);
+		jefe.setDimensions(lider.getHeight(), lider.getWidth());
+		
 		// Lista Enemigos
 		Iterator<Entidad> it = tipoEnemigos.iterator();
 		while (it.hasNext())
@@ -143,9 +152,6 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			instancia.setDimensions(entidad.getHeight(), entidad.getWidth());
 		}
 		
-		personaje.setDimensions(protagonista.getHeight(), protagonista.getWidth());
-		jefe.setDimensions(tipoEnemigos.get(jefe.getIdEntidad()).getHeight(), tipoEnemigos.get(jefe.getIdEntidad()).getWidth());
-	
 		// Otros Elementos
 		burbujaPersonaje.cargarTextura(gl, this, mContext);
 		plataformaPersonaje.cargarTextura(gl, this, mContext);
@@ -245,7 +251,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			plataformaJefe.dibujar(gl, this);
 			if (burbujaJefe.isAlive())
 			{
-				jefe.dibujar(gl, this, tipoEnemigos.get(jefe.getIdEntidad()));
+				jefe.dibujar(gl, this, lider);
 				burbujaJefe.dibujar(gl, this);
 			}
 			plataformaJefe.dibujar(gl, this);
@@ -419,7 +425,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					}
 				}
 				
-				tipoEnemigos.get(jefe.getIdEntidad()).animar();
+				lider.animar();
 				return protagonista.animar();
 			}
 		}
@@ -457,7 +463,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			estadoJefe = TEstadoJefe.Nada;
 		}
 			
-		tipoEnemigos.get(jefe.getIdEntidad()).animar();
+		lider.animar();
 		return protagonista.animar();
 	}
 
@@ -488,9 +494,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			plataformaPersonaje.activarPlataforma();
 			
 			personaje.setDimensions(protagonista.getHeight(), protagonista.getWidth());
-			jefe.setDimensions(tipoEnemigos.get(jefe.getIdEntidad()).getHeight(), tipoEnemigos.get(jefe.getIdEntidad()).getWidth());
+			jefe.setDimensions(lider.getHeight(), lider.getWidth());
 		
-			
 			jefe.setPosicion(getScreenWidth() - 2*GamePreferences.DISTANCE_GAME_RIGHT() - jefe.getWidth(), 0.0f);
 			
 			burbujaJefe.activarBurbuja();
@@ -619,6 +624,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		burbujaPersonaje.descargarTextura(this);
 		disparoPersonaje.descargarTextura(this);
 
+		lider.descargarTextura(this);
 		plataformaJefe.descargarTextura(this);
 		burbujaJefe.descargarTextura(this);
 		disparoJefe.descargarTextura(this);

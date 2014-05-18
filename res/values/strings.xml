@@ -48,12 +48,14 @@
 			<string name="title_alert_enemies">Enemies:</string>
 			<string name="title_alert_obstacles">Obstacles:</string>
 			<string name="title_alert_missiles">Missiles:</string>
+			<string name="title_alert_boss">Boss:</string>
 			<string name="title_alert_initial">Intelligence Report.\n</string>
 			<string name="title_alert_final">\nGood luck.</string>
 			
 			<string name="title_alert_weaknesses_enemies">How to proceed: Attack, Jump.</string>
 			<string name="title_alert_weaknesses_obstacles">How to proceed: Jump.</string>
 			<string name="title_alert_weaknesses_missiles">How to proceed: Crouch.</string>
+			<string name="title_alert_weaknesses_boss">How to proceed: Shoot.</string>
 				
 		<!-- Dialogs -->
 		
@@ -175,14 +177,16 @@
 		    <string name="text_button_import">Import</string>
 			
   		<!-- Video -->
-  			<string name="dialog_outside_1">Laboratory MX-45. \n Unknown location.</string>
-		    <string name="dialog_noise_1">Oh no!!! Wait a minute&#x2026;</string>
-		    <string name="dialog_brief_1">Dialog Brief 1</string>
-		    <string name="dialog_brief_2">Dialog Brief 2</string>
-		    <string name="dialog_brief_3">Dialog Brief 3</string>
-		    <string name="dialog_brief_4">Dialog Brief 4</string>
-		    <string name="dialog_brief_5">Dialog Brief 5</string>
-		    
+  			<string name="dialog_outside_1">Laboratory MX-45.\nClassified location.</string>
+  			<string name="dialog_door_1">5 hours ago I received a message from Doctor Chus asking me to come here. It seem urgent.</string>
+		    <string name="dialog_rock_1">Doctor Chus? What in the world&#x2026;</string>
+		    <string name="dialog_noise_1">Oh no!! It\'s that time already? Just give a second&#x2026;</string>
+		    <string name="dialog_brief_1">Here we go! Welcome to my facility, agent. I\'ve asked you to come here because we have&#x2026; a kind of situation&#x2026;</string>
+		    <string name="dialog_brief_2">Two moons ago, a group of insugents broke into this building and stole some of my newest inventions.</string>
+		    <string name="dialog_brief_3">This two devices allows them to transform themselves into any creature known and travel throw time and space.</string>
+		    <string name="dialog_brief_4">Our informers tell us that they already invade a primitive planet called "Earth". They are infiltrating among the natives in order to slave them and use them against us in the incoming war.</string>
+		    <string name="dialog_brief_5">Take the same devices with you and use them wisely. Good luck, agent. I\'ll give further information of your targets when you arrive. By now you only need to know they are calling themselves The&#x2026;</string>
+	    
 		<!-- Errors -->
 			<string name="error_design">Something wrong happened with the skeleton.</string>
 			<string name="error_triangle">The polygon is not simple.</string>

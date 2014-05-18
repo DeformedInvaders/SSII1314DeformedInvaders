@@ -352,7 +352,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 
 	public void onLevelSelectionSelectLevel(final TTipoLevel level)
 	{	
-		SummaryAlert alert = new SummaryAlert(mContext, R.string.text_summary, R.string.text_button_ready, core.getNivel(level).getTipoEnemigos()) {
+		SummaryAlert alert = new SummaryAlert(mContext, R.string.text_summary, R.string.text_button_ready, core.getNivel(level)) {
 			@Override
 			public void onPossitiveButtonClick()
 			{
@@ -540,7 +540,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	
 	public boolean isEstadoDesapilador()
 	{
-		return estado != TEstadoController.Main;
+		return estado != TEstadoController.Main || estado != TEstadoController.Game || estado != TEstadoController.Video;
 	}
 
 	public void desapilarEstado()

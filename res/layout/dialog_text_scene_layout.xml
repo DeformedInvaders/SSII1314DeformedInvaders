@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/Layout_Dialog_Style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  	<LinearLayout style="@style/Layout_Horizontal_Content_Dialog_Style"
+  	    android:background="#FFFF00">
+  	    
+  	    <TextView style="@style/Text_Section_Dialog_Style"
+  	        android:id="@+id/textViewDialog1" 
+  	        android:textColor="#000000" />
+		
+	</LinearLayout>
+
+</LinearLayout>

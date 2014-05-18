@@ -56,7 +56,7 @@ public class InstanciaEntidad
 			handle = new Handle(50, area.radius, Color.BLACK);
 			areaCargada = true;
 		}
-		else if (tipoEntidad == TTipoEntidad.Personaje || tipoEntidad == TTipoEntidad.Enemigo)
+		else if (tipoEntidad == TTipoEntidad.Personaje || tipoEntidad == TTipoEntidad.Enemigo || tipoEntidad == TTipoEntidad.Jefe)
 		{
 			area = new Circle(getWidth() / 2.0f, getHeight() / 2.0f, getWidth() / 2.5f);
 			handle = new Handle(50, area.radius, Color.RED);

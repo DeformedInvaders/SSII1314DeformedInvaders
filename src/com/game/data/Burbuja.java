@@ -26,7 +26,7 @@ public class Burbuja extends Entidad
 		{
 			tipoEntidad = TTipoEntidad.BurbujaPersonaje;
 		}
-		else if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
+		else if (entidad.getTipoEntidad() == TTipoEntidad.Jefe)
 		{
 			tipoEntidad = TTipoEntidad.BurbujaBoss;
 		}
@@ -71,36 +71,45 @@ public class Burbuja extends Entidad
 	@Override
 	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
+		if (tipoEntidad != TTipoEntidad.Nada)
 		{
-			renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indiceBurbuja(i), tipoEntidad, i, TTipoSticker.Nada);
+			for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
+			{
+				renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indiceBurbuja(i), tipoEntidad, i, TTipoSticker.Nada);
+			}
+			
+			width = entidad.getWidth();
+			height = entidad.getHeight();
 		}
-		
-		width = entidad.getWidth();
-		height = entidad.getHeight();
 	}
 	
 	@Override
 	public void descargarTextura(OpenGLRenderer renderer)
 	{
-		for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
+		if (tipoEntidad != TTipoEntidad.Nada)
 		{
-			renderer.descargarTexturaRectangulo(tipoEntidad, i, TTipoSticker.Nada);
+			for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
+			{
+				renderer.descargarTexturaRectangulo(tipoEntidad, i, TTipoSticker.Nada);
+			}
 		}
 	}
 
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (activado && numVidas > 0)
+		if (tipoEntidad != TTipoEntidad.Nada)
 		{
-			gl.glPushMatrix();
-			
-				gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY(), 0.0f);
-				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-				renderer.dibujarTexturaRectangulo(gl, tipoEntidad, numVidas - 1, TTipoSticker.Nada);
-			
-			gl.glPopMatrix();
+			if (activado && numVidas > 0)
+			{
+				gl.glPushMatrix();
+				
+					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY(), 0.0f);
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
+					renderer.dibujarTexturaRectangulo(gl, tipoEntidad, numVidas - 1, TTipoSticker.Nada);
+				
+				gl.glPopMatrix();
+			}
 		}
 	}
 	

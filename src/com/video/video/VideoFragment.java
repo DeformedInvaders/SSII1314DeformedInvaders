@@ -17,7 +17,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 {
 	private VideoFragmentListener mCallback;
 	
-	private TextDialog textDialog;
+	private TEstadoDialogo estadoDialogo;
+	private TextDialog dialogoEscena, dialogoPersonaje, dialogoActor;
 	private ImageView imagenPlay;
 	
 	private Video video;
@@ -135,22 +136,68 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	}
 	
 	@Override
-	public void onChangeDialog(final int text)
+	public void onChangeDialog(final int text, TEstadoVideo estado)
 	{
-		if (textDialog == null)
+		if (estado == TEstadoVideo.Outside || estado == TEstadoVideo.Door)
 		{
-			textDialog = new TextDialog(getActivity());
+			estadoDialogo = TEstadoDialogo.Escena;
+		}
+		else if (estado == TEstadoVideo.Rock)
+		{
+			estadoDialogo = TEstadoDialogo.Personaje;
+		}
+		else if (estado == TEstadoVideo.Noise || estado == TEstadoVideo.Brief)
+		{
+			estadoDialogo = TEstadoDialogo.Actor;
+		}
+		else
+		{
+			estadoDialogo = TEstadoDialogo.Nada;
 		}
 		
 		getActivity().runOnUiThread(new Runnable() {
 	        @Override
 	        public void run()
 	        {
-	        	int posX = (int) (GamePreferences.MARCO_ANCHURA_LATERAL() + GamePreferences.MARCO_ANCHURA_INTERIOR());
-	        	int posY = (int) (GamePreferences.MARCO_ANCHURA_INTERIOR() / 3.0f);
-	    		
-	        	textDialog.setText(text);
-	    		textDialog.show(canvas, posX, posY);
+	        	if (estadoDialogo == TEstadoDialogo.Escena)
+	        	{
+	        		if (dialogoEscena == null)
+	        		{
+	        			dialogoEscena = new TextDialog(getActivity(), R.layout.dialog_text_scene_layout);
+	        		}
+	        		
+	        		int posX = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
+		        	int posY = (int) (canvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
+		        	
+		        	dialogoEscena.setText(text);
+		        	dialogoEscena.show(canvas, posX, posY);
+	        	}
+	        	else if (estadoDialogo == TEstadoDialogo.Personaje)
+	        	{
+	        		if (dialogoPersonaje == null)
+	        		{
+	        			dialogoPersonaje = new TextDialog(getActivity(), R.layout.dialog_text_character_layout);
+	        		}
+	        		
+	        		int posX = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
+		        	int posY = (int) (canvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
+		        	
+		        	dialogoPersonaje.setText(text);
+		        	dialogoPersonaje.show(canvas, posX, posY);
+	        	}
+	        	else if (estadoDialogo == TEstadoDialogo.Actor)
+	        	{
+	        		if (dialogoActor == null)
+	        		{
+	        			dialogoActor = new TextDialog(getActivity(), R.layout.dialog_text_actor_layout);
+	        		}
+	        		
+	        		int posX = (int) (GamePreferences.MARCO_ANCHURA_LATERAL() + GamePreferences.MARCO_ANCHURA_INTERIOR());
+		        	int posY = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
+		        	
+		        	dialogoActor.setText(text);
+		        	dialogoActor.show(canvas, posX, posY);
+	        	}
 	        }
 	    });
 	}
@@ -158,9 +205,17 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	@Override
 	public void onDismissDialog()
 	{
-		if (textDialog != null)
+		if (estadoDialogo == TEstadoDialogo.Escena)
 		{
-			textDialog.dismiss();
+			dialogoEscena.dismiss();
+		}
+		else if (estadoDialogo == TEstadoDialogo.Personaje)
+		{
+			dialogoPersonaje.dismiss();
+		}
+		else if (estadoDialogo == TEstadoDialogo.Actor)
+		{
+			dialogoActor.dismiss();
 		}
 	}
 }

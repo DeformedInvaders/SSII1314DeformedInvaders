@@ -11,6 +11,7 @@ import com.game.data.Background;
 import com.game.data.Entidad;
 import com.game.data.InstanciaEntidad;
 import com.game.data.InstanciaNivel;
+import com.game.data.Jefe;
 import com.game.data.Misil;
 import com.game.data.Nivel;
 import com.game.data.Obstaculo;
@@ -26,6 +27,7 @@ public class LevelGenerator
 	private List<Nivel> listaNiveles;
 	private List<String> listaNombres;
 	private List<List<Entidad>> listaEnemigos;
+	private List<Jefe> listaJefes;
 	private List<Background> listaFondos;
 	
 	private AssetsStorageManager assetsManager;
@@ -41,6 +43,7 @@ public class LevelGenerator
 		listaNiveles = new ArrayList<Nivel>();
 		listaNombres = new ArrayList<String>();
 		listaEnemigos = new ArrayList<List<Entidad>>();
+		listaJefes = new ArrayList<Jefe>();
 		listaFondos = new ArrayList<Background>();
 
 		TTipoLevel[] niveles = TTipoLevel.values();
@@ -83,6 +86,9 @@ public class LevelGenerator
 			listaEnemigos.add(assetsManager.importarEnemigo(nivel, id, i));
 		}
 		
+		int id = obtenerID(GameResources.GET_ENEMIES(TTipoEntidad.Jefe, nivel, 0));
+		listaJefes.add(assetsManager.importarJefe(nivel, id, 0));
+		
 		int[] fondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL];
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL; i++)
 		{
@@ -124,7 +130,7 @@ public class LevelGenerator
 	public InstanciaNivel getInstanciaLevel(TTipoLevel level)
 	{
 		int indice = level.ordinal();
-		return new InstanciaNivel(level, listaNombres.get(indice), listaEnemigos.get(indice), getColaEnemigos(indice), listaFondos.get(indice));
+		return new InstanciaNivel(level, listaNombres.get(indice), listaEnemigos.get(indice), listaJefes.get(indice), getColaEnemigos(indice), listaFondos.get(indice));
 	}
 	
 	public Nivel getLevel(TTipoLevel level)

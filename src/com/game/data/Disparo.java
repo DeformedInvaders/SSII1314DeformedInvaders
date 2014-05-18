@@ -41,7 +41,7 @@ public class Disparo extends Entidad
 		{
 			tipoEntidad = TTipoEntidad.DisparoPersonaje;
 		}
-		else if (entidad.getTipoEntidad() == TTipoEntidad.Enemigo)
+		else if (entidad.getTipoEntidad() == TTipoEntidad.Jefe)
 		{
 			tipoEntidad = TTipoEntidad.DisparoBoss;
 		}
@@ -72,9 +72,11 @@ public class Disparo extends Entidad
 		for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 		{
 			Dimensiones dim = renderer.cargarTexturaRectangulo(gl, indiceDisparo(i), tipoEntidad, i, TTipoSticker.Nada);
-			
-			width = dim.getWidth();
-			height = dim.getHeight();
+			if (dim != null)
+			{
+				width = dim.getWidth();
+				height = dim.getHeight();
+			}
 		}
 		
 		area = new Rectangle(posicionX, posicionY, width, height);

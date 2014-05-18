@@ -49,7 +49,7 @@ public class GamePreferences
 	public static final float DEEP_OBJECTS = 0.99f;
 
 	// Niveles
-	private static final int MAX_ENEMIES = 50;
+	private static final int MAX_ENEMIES = 3;//50;
 	public static final int MAX_CHARACTERS = 10;
 	public static final int MAX_CHARACTER_LIVES = 3;
 	public static final int MAX_BOSS_LIVES = 3;
@@ -61,7 +61,7 @@ public class GamePreferences
 	
 	public static final int NUM_TYPE_BACKGROUNDS_FIJO = 1;
 	public static final int NUM_TYPE_BACKGROUNDS_LEVEL = 5;
-	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 5;
+	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 6;
 	public static final int NUM_TYPE_CHARACTER_DESIGN = 1;
 	public static final int NUM_TYPE_CHARACTER_VIDEO = 2;
 	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;
@@ -71,7 +71,8 @@ public class GamePreferences
 	public static final int NUM_TYPE_SHOTS = 1;
 	public static final int NUM_TYPE_OBSTACLES = 2;
 	public static final int NUM_TYPE_MISSILES = 1;
-	public static final int NUM_TYPE_ENEMIES = 4;
+	public static final int NUM_TYPE_ENEMIES = 3;
+	public static final int NUM_TYPE_BOSS = 1;
 	public static final int NUM_TYPE_OPPONENTS = NUM_TYPE_OBSTACLES + NUM_TYPE_MISSILES + NUM_TYPE_ENEMIES;
 	
 	public static final int NUM_TYPE_TEXTURE_WEAPONS = 2;
@@ -348,7 +349,7 @@ public class GamePreferences
 	
 	private static final float GAME_SCALE_FACTOR_BOSS()
 	{
-		return 0.5f;
+		return 0.3f;
 	}
 	
 	public static final float GAME_SCALE_FACTOR(TTipoEntidad entidad)
@@ -357,14 +358,15 @@ public class GamePreferences
 		{
 			switch(entidad)
 			{
+				case Personaje:
+					return GAME_SCALE_FACTOR_ENEMIES();
 				case Misil:
 					return SCREEN_HEIGHT_SCALE_FACTOR();
 				case Obstaculo:
 					return SCREEN_HEIGHT_SCALE_FACTOR();
 				case Enemigo:
+				case Jefe:
 					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_ENEMIES();
-				case Personaje:
-					return GAME_SCALE_FACTOR_ENEMIES();
 				default:
 					return 1.0f;
 			}
@@ -373,10 +375,11 @@ public class GamePreferences
 		{
 			switch(entidad)
 			{
-				case Enemigo:
-					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
 				case Personaje:
 					return GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
+				case Enemigo:
+				case Jefe:
+					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
 				case PlataformaPersonaje:
 				case PlataformaBoss:
 				case BurbujaPersonaje:

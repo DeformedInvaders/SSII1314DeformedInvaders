@@ -61,88 +61,76 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					long tiempoActual = System.currentTimeMillis();
 					
+					// Fin de Ciclo de Escena
 					if (tiempoActual - tiempoInicio >= tiempoDuracion)
 					{
-						estado = estado.getNext();							
-						mensajes = video.getMensaje(estado);
-						
-						animarCambioEscena();
-						
-						long duration = estado.getDuration();
-						int music = estado.getMusic();
-						int sound = estado.getSound();
-						
-						if (sound != -1)
+						// Fin de Video
+						if (estado == TEstadoVideo.Logo)
 						{
-							mListener.onPlaySoundEffect(sound);
+							threadActivo = false;
+							
+							mListener.onDismissDialog();
+							mListener.onVideoFinished();
 						}
 						
-						if (music != -1)
+						// Fin de Escena
+						if (mensajes == null || posMensaje >= mensajes.length)
 						{
-							mListener.onPlayMusic(music);
+							estado = estado.getNext();
+							
+							mListener.onDismissDialog();
+							mensajes = video.getMensaje(estado);
+							posMensaje = 0;
+							
+							renderer.seleccionarEstado(estado);
+							
+							if (estado != TEstadoVideo.Outside)
+							{
+								renderer.avanzarEscena();
+								requestRender();
+							}
+							
+							long duration = estado.getDuration();
+							int music = estado.getMusic();
+							int sound = estado.getSound();
+							
+							if (sound != -1)
+							{
+								mListener.onPlaySoundEffect(sound);
+							}
+							
+							if (music != -1)
+							{
+								mListener.onPlayMusic(music);
+							}
+							
+							if (duration != -1)
+							{
+								tiempoInicio = tiempoActual;
+								tiempoDuracion = duration;
+							}
 						}
 						
-						if (duration != -1)
+						if (mensajes != null)
 						{
-							tiempoInicio = System.currentTimeMillis();
-							tiempoDuracion = duration;
-						}
+							mListener.onChangeDialog(mensajes[posMensaje], estado);
+							tiempoInicio = tiempoActual;
+							posMensaje++;
+						}		
 					}
 					
-					animarCicloEscena();
+					// Cambio de Ciclo de Escena
+					if (estado == TEstadoVideo.Door)
+					{
+						renderer.acercarEscena(0.999f);
+					}
+					
+					renderer.animarEscena();
+					requestRender();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION_VIDEO());
-				}
-				else
-				{
-					mListener.onDismissDialog();
-					mListener.onVideoFinished();
 				}
 			}
 		};
-	}
-	
-	private void animarCicloEscena()
-	{
-		if (estado == TEstadoVideo.Outside)
-		{
-			renderer.acercarEscena(0.999f);
-		}
-		else if (estado == TEstadoVideo.Door)
-		{
-			renderer.acercarEscena(0.999f);
-		}
-		
-		renderer.animarEscena();
-		requestRender();
-	}
-	
-	private void animarCambioEscena()
-	{
-		mListener.onDismissDialog();
-		renderer.seleccionarEstado(estado);
-		
-		if (estado == TEstadoVideo.Door || estado == TEstadoVideo.Rock)
-		{
-			renderer.recuperarEscena();
-		}
-		else if (estado == TEstadoVideo.Noise)
-		{	
-			mListener.onChangeDialog(mensajes[posMensaje]);
-		}
-		else if (estado == TEstadoVideo.Brief)
-		{
-			mListener.onChangeDialog(mensajes[posMensaje]);
-			posMensaje++;
-			threadActivo = posMensaje != mensajes.length;
-		}
-		
-		renderer.seleccionarEstado(estado);
-		
-		if (estado != TEstadoVideo.Outside)
-		{
-			renderer.avanzarEscena();
-			requestRender();
-		}
 	}
 	
 	public void iniciarVideo()

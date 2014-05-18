@@ -17,6 +17,7 @@ public class GameResources
 	private static final String DRAWABLE_MISSILE_ID = "missile_";
 	private static final String DRAWABLE_OBSTACLE_ID = "obstacle_";
 	private static final String DRAWABLE_ENEMY_ID = "enemy_";
+	private static final String DRAWABLE_BOSS_ID = "boss_";
 	
 	private static final String DRAWABLE_RATIO_LONG = "long_";
 	private static final String DRAWABLE_RATIO_NOLONG = "notlong_";
@@ -48,6 +49,7 @@ public class GameResources
 	
 	// Enemies Files
 	private static final String ENEMIES_PATH = "enemies/enemy_";
+	private static final String BOSS_PATH = "enemies/boss_";
 	public static final String ENEMIES_EXTENSION = ".edi";
 	
 	// Actors Files
@@ -112,6 +114,9 @@ public class GameResources
 			case Misil:
 				tipoEntidad = DRAWABLE_MISSILE_ID;
 			break;
+			case Jefe:
+				tipoEntidad = DRAWABLE_BOSS_ID;
+			break;
 			default:
 				return null;
 		}
@@ -147,6 +152,25 @@ public class GameResources
 				return ENEMIES_PATH + DRAWABLE_EGYPT_ID + (pos + 1) + ENEMIES_EXTENSION;
 			case Stonehenge:
 				return ENEMIES_PATH + DRAWABLE_STONEHENGE_ID + (pos + 1) + ENEMIES_EXTENSION;
+			default:
+				return null;
+		}
+	}
+	
+	public static final String GET_BOSS_FILES(TTipoLevel nivel, int pos)
+	{
+		switch(nivel)
+		{
+			case Moon:
+				return BOSS_PATH + DRAWABLE_MOON_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case NewYork:
+				return BOSS_PATH + DRAWABLE_NEWYORK_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case Rome:
+				return BOSS_PATH + DRAWABLE_ROME_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case Egypt:
+				return BOSS_PATH + DRAWABLE_EGYPT_ID + (pos + 1) + ENEMIES_EXTENSION;
+			case Stonehenge:
+				return BOSS_PATH + DRAWABLE_STONEHENGE_ID + (pos + 1) + ENEMIES_EXTENSION;
 			default:
 				return null;
 		}

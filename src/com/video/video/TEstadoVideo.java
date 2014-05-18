@@ -4,7 +4,7 @@ import com.project.main.R;
 
 public enum TEstadoVideo
 {
-	Nada, Outside, Door, Rock, Noise, Brief;
+	Nada, Outside, Door, Rock, Noise, Brief, Logo;
 	
 	public TEstadoVideo getNext()
 	{
@@ -21,7 +21,7 @@ public enum TEstadoVideo
 			case Noise:
 				return TEstadoVideo.Brief;
 			case Brief:
-				return TEstadoVideo.Brief;
+				return TEstadoVideo.Logo;
 			default:
 				return TEstadoVideo.Nada;
 		}
@@ -31,18 +31,12 @@ public enum TEstadoVideo
 	{
 		switch(this)
 		{
-			case Outside:
-				return 10 * 1000;
-			case Door:
-				return 10 * 1000;
 			case Rock:
 				return 18 * 1000;
 			case Noise:
 				return 5 * 1000;
-			case Brief:
-				return 10 * 1000;
 			default:
-				return -1;
+				return 10 * 1000;
 		}
 	}
 	
