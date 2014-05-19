@@ -387,12 +387,12 @@ public class GamePreferences
 	
 	private static final float GAME_SCALE_FACTOR_BOSS()
 	{
-		return 0.3f;
+		return 0.5f;
 	}
 	
 	public static final float GAME_SCALE_FACTOR(TTipoEntidad entidad)
 	{
-		if(ESTADO_GAME == TEstadoGame.FaseEnemies)
+		if (ESTADO_GAME == TEstadoGame.FaseEnemies)
 		{
 			switch(entidad)
 			{

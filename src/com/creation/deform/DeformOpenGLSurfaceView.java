@@ -152,7 +152,7 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 			renderer.selecionarPlay();
 			requestRender();
 
-			mListener.onPlaySound();
+			mListener.onPlaySoundEffect();
 			task.run();
 			threadActivo = true;
 		}

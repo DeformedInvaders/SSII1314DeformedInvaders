@@ -98,7 +98,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 			int sound = movimiento.getSound();
 			if (sound != -1)
 			{
-				mListener.onDisplayPlaySound(sound);
+				mListener.onDisplayPlaySoundEffect(sound);
 			}
 			
 			task.run();

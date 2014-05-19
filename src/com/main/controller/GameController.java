@@ -147,9 +147,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onMainPlaySound(int sound)
+	public void onMainPlaySoundEffect(int sound)
 	{
-		core.reproducirSonido(sound);
+		core.reproducirSonido(sound, false);
 	}
 
 	// Métodos Design Fragment
@@ -188,7 +188,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Animation Fragment
 
 	@Override
-	public void onAnimationReady(final Movimientos movimientos)
+	public void onDeformationReady(final Movimientos movimientos)
 	{
 		if (core.actualizarNuevoPersonaje(movimientos))
 		{
@@ -217,28 +217,10 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		}
 	}
 	
-	/*@Override
-	public void onAnimationStartRecording(final TTipoMovimiento movimiento)
-	{
-		core.startRecording(movimiento);
-	}
-
 	@Override
-	public void onAnimationStopRecording()
+	public void onDeformationPlaySoundEffect(int sound)
 	{
-		core.stopRecording();
-	}
-
-	@Override
-	public void onAnimationDiscardRecording(final TTipoMovimiento movimiento)
-	{
-		core.discardRecording(movimiento);
-	}*/
-	
-	@Override
-	public void onAnimationPlaySound(int sound)
-	{
-		core.reproducirSonido(sound);
+		core.reproducirSonido(sound, false);
 	}
 
 	// Métodos Character Selection Fragment
@@ -343,9 +325,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onCharacterSelectionPlaySound(int sound)
+	public void onCharacterSelectionPlaySoundEffect(int sound)
 	{
-		core.reproducirSonido(sound);
+		core.reproducirSonido(sound, false);
 	}
 
 	// Métodos Level Selection Fragment
@@ -418,9 +400,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onGamePlaySound(int sound)
+	public void onGamePlaySoundEffect(int sound, boolean blockable)
 	{
-		core.reproducirSonido(sound);
+		core.reproducirSonido(sound, blockable);
 	}
 	
 	// Métodos VideoFragment
@@ -438,9 +420,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 
 	@Override
-	public void onVideoPlaySoundEffect(int sound)
+	public void onVideoPlaySoundEffect(int sound, boolean blockable)
 	{
-		core.reproducirSonido(sound);
+		core.reproducirSonido(sound, blockable);
 	}
 
 	/* Métodos de Modificación de la Vista */

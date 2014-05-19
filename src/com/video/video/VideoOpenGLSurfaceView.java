@@ -96,7 +96,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 							
 							if (sound != -1)
 							{
-								mListener.onPlaySoundEffect(sound);
+								mListener.onPlaySoundEffect(sound, false);
 							}
 							
 							if (music != -1)
@@ -152,7 +152,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 			int sonido = renderer.getSonidoActivado();
 			if (sonido != -1)
 			{
-				mListener.onPlaySoundEffect(sonido);
+				mListener.onPlaySoundEffect(sonido, true);
 				renderer.desactivarEstadoSonido();
 				return true;
 			}

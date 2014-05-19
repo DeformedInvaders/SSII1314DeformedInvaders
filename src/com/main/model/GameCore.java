@@ -45,7 +45,6 @@ public abstract class GameCore
 	
 	/* Musica */
 	private AudioPlayerManager audioPlayerManager, soundPlayerManager;
-	//private AudioRecorderManager audioRecorderManager;
 	private AudioVolumeManager audioVolumeManager;
 	private int musicaSeleccionada;
 
@@ -90,7 +89,6 @@ public abstract class GameCore
 			public void onPlayerCompletion() { }
 		};
 		
-		//audioRecorderManager = new AudioRecorderManager();
 		audioVolumeManager = new AudioVolumeManager(mContext);
 		
 		videoGenerator = new VideoGenerator(mContext, assetsManager);
@@ -551,57 +549,47 @@ public abstract class GameCore
 		}
 	}
 	
-	/*public boolean reproducirSonidoTemp(TTipoMovimiento tipo)
+	public void reproducirSonido(final int sonido, final boolean block)
 	{
-		if (internalManager.comprobarAudioTemp(tipo))
-		{
-			return soundPlayerManager.startPlaying(internalManager.cargarAudioTemp(tipo));
-		}
-		
-		return false;
+		 Thread thread = new Thread(new Runnable() {
+			 @Override
+			 public void run()
+			 {
+			 	soundPlayerManager.startPlaying(sonido, false, block);
+			 }
+	    });
+		 
+		thread.start();
 	}
 	
-	public boolean reproducirSonido(TTipoMovimiento tipo)
+	public void reproducirMusica(final boolean loop)
 	{
-		if (internalManager.comprobarAudio(getPersonajeSeleccionado().getNombre(), tipo))
-		{
-			return soundPlayerManager.startPlaying(internalManager.cargarAudio(getPersonajeSeleccionado().getNombre(), tipo));
-		}
-		
-		return false;
+		Thread thread = new Thread(new Runnable() {
+			 @Override
+			 public void run()
+			 {
+				 audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
+			 }
+	    });
+		 
+		thread.start();
 	}
 	
-	public boolean reproducirSonido(TTipoMovimiento tipo, int indice)
+	public void reproducirMusica(final int musica, final boolean loop)
 	{
-		if (indice >= 0 && indice < listaPersonajes.size())
-		{
-			if (internalManager.comprobarAudio(listaPersonajes.get(indice).getNombre(), tipo))
-			{
-				return soundPlayerManager.startPlaying(internalManager.cargarAudio(listaPersonajes.get(indice).getNombre(), tipo));
-			}
-		}
-		return false;
-	}*/
-	
-	public boolean reproducirSonido(int sonido)
-	{
-		return soundPlayerManager.startPlaying(sonido, false, true);
-	}
-	
-	public boolean reproducirMusica(boolean loop)
-	{
-		return audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
-	}
-	
-	public boolean reproducirMusica(int musica, boolean loop)
-	{
-		if (musicaSeleccionada != musica)
-		{
-			musicaSeleccionada = musica;
-			return audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
-		}
-		
-		return false;
+		Thread thread = new Thread(new Runnable() {
+			 @Override
+			 public void run()
+			 {
+				 if (musicaSeleccionada != musica)
+				 {
+					 musicaSeleccionada = musica;
+					 audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
+				 }
+			 }
+	    });
+		 
+		thread.start();
 	}
 	
 	public boolean pausarMusica()
@@ -628,24 +616,4 @@ public abstract class GameCore
 		sendToastMessage(R.string.error_picture_character);
 		return false;
 	}
-	
-	/* Métodos de modificación del AudioRecorder */
-
-	/*public void startRecording(TTipoMovimiento movimiento)
-	{
-		audioRecorderManager.startRecording(internalManager.cargarAudioTemp(movimiento));
-	}
-
-	public void stopRecording()
-	{
-		audioRecorderManager.stopRecording();
-	}
-
-	public void discardRecording(TTipoMovimiento movimiento)
-	{
-		if (audioRecorderManager.stopRecording())
-		{
-			internalManager.eliminarAudioTemp(movimiento);
-		}
-	}*/	
 }

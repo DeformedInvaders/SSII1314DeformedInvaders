@@ -3,7 +3,7 @@ package com.android.audio;
 import java.io.IOException;
 
 import android.content.Context;
-import android.media.AudioManager;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
@@ -32,55 +32,81 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	/* Métodos de Selección de Estado */
 	
-	public boolean startPlaying(String path)
+	public boolean startPlaying(String path, boolean loop, boolean blockable)
 	{
-		if (estado == TEstadoPlay.Libre)
-		{
-			try
-			{
-				// Idle
-				player.setDataSource(path);
-				// Initialized
-				player.prepare();
-				// Prepared
-				player.start();
-				// Started
-	
-				estado = TEstadoPlay.Reproduciendo;
-				return true;
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		return false;
-	}
-	
-	public boolean startPlaying(int path, boolean loop, boolean block)
-	{
-		if (block && estado != TEstadoPlay.Libre)
+		if (blockable && estado != TEstadoPlay.Libre)
 		{
 			return false;
 		}
 		
 		if (estado != TEstadoPlay.Libre)
 		{
-			releasePlayer();
+			resetPlaying();
 		}
 		
-		player = MediaPlayer.create(mContext, path);
-		player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		player.setLooping(loop);
-		player.setOnCompletionListener(this);
-		
-		// Prepared
-		player.start();
-		// Started
+		try
+		{
+			// Idle
+			player.setDataSource(path);
+			// Initialized
+			player.prepare();
+			// Prepared
+			player.start();
+			// Started
 
-		estado = TEstadoPlay.Reproduciendo;
-		return true;
+			estado = TEstadoPlay.Reproduciendo;
+			return true;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public boolean startPlaying(int path, boolean loop, boolean blockable)
+	{
+		if (blockable && estado != TEstadoPlay.Libre)
+		{
+			return false;
+		}
+		
+		if (estado != TEstadoPlay.Libre)
+		{
+			resetPlaying();
+		}
+		
+		AssetFileDescriptor file = mContext.getResources().openRawResourceFd(path);
+		try
+		{
+			// Idle
+			player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getDeclaredLength());
+			player.setLooping(loop);
+			// Initialized
+			player.prepare();
+			// Prepared
+			player.start();
+			// Started
+
+			file.close();
+			estado = TEstadoPlay.Reproduciendo;
+			return true;
+		}
+		catch (IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalStateException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 	public boolean pausePlaying()

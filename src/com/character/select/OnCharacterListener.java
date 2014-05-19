@@ -12,5 +12,5 @@ public interface OnCharacterListener
 	
 	public void onPostPublished(String text, Bitmap bitmap);
 	public void onSetSwipeable(boolean swipeable);
-	public void onPlaySound(int sound);
+	public void onPlaySoundEffect(int sound);
 }

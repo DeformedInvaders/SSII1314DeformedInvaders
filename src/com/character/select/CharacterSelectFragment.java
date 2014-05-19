@@ -319,8 +319,8 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	}
 
 	@Override
-	public void onDisplayPlaySound(int sound)
+	public void onDisplayPlaySoundEffect(int sound)
 	{
-		mListener.onPlaySound(sound);
+		mListener.onPlaySoundEffect(sound);
 	}
 }

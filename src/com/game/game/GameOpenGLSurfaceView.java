@@ -69,13 +69,13 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				switch (renderer.isGameEnded())
 				{
 					case VidaPerdidaPersonaje:
-						mListener.onGamePlaySound(R.raw.effect_game_loselife);
+						mListener.onGamePlaySoundEffect(R.raw.effect_game_loselife, false);
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
 					break;
 					case VidaPerdidaBoss:
-						mListener.onGamePlaySound(R.raw.effect_game_loselife);
+						mListener.onGamePlaySoundEffect(R.raw.effect_game_loselife, false);
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje(), renderer.getVidasBoss());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
@@ -263,12 +263,12 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 					int sound = movimiento.getSound();
 					if (sound != -1)
 					{
-						mListener.onGamePlaySound(sound);
+						mListener.onGamePlaySoundEffect(sound, true);
 					}
 				}
 				else
 				{
-					mListener.onGamePlaySound(R.raw.effect_game_shot);
+					mListener.onGamePlaySoundEffect(R.raw.effect_game_shot, false);
 				}
 				
 				animacionFinalizada = false;

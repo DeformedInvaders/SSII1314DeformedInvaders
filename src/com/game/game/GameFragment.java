@@ -59,7 +59,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		public void onGameFinished(final InstanciaNivel nivel, final int score, TTipoEndgame endgame);
 		public void onGameFailed(final InstanciaNivel nivel, TTipoEndgame endgame);
-		public void onGamePlaySound(int sound);
+		public void onGamePlaySoundEffect(int sound, boolean blockable);
 	}
 
 	/* Métodos Fragment */
@@ -333,8 +333,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	}
 
 	@Override
-	public void onGamePlaySound(int sound)
+	public void onGamePlaySoundEffect(int sound, boolean blockable)
 	{
-		mCallback.onGamePlaySound(sound);
+		mCallback.onGamePlaySoundEffect(sound, blockable);
 	}
 }

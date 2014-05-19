@@ -48,7 +48,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		public void onMainCreateCharacter();
 		public void onMainSelectCharacter();
 		public void onMainPlayGame();
-		public void onMainPlaySound(int sound);
+		public void onMainPlaySoundEffect(int sound);
 		public void onMainPlayVideo();
 	}
 
@@ -213,8 +213,8 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	/* Métodos de la interfaz OnDisplayListener */
 
 	@Override
-	public void onDisplayPlaySound(int sound)
+	public void onDisplayPlaySoundEffect(int sound)
 	{
-		mCallback.onMainPlaySound(sound);
+		mCallback.onMainPlaySoundEffect(sound);
 	}
 }

@@ -9,5 +9,5 @@ public interface OnGameListener
 	public void onGameLivesChanged(int characterLives);
 	public void onGameLivesChanged(int characterLives, int bossLives);
 	
-	public void onGamePlaySound(int sound);
+	public void onGamePlaySoundEffect(int sound, boolean blockable);
 }

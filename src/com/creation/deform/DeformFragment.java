@@ -21,7 +21,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	private Personaje personaje;
 
 	private DeformOpenGLSurfaceView canvas;
-	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, /*botonAudio,*/ botonReproducir;
+	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonReproducir;
 
 	private DeformDataSaved dataSaved;
 	
@@ -57,7 +57,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonDeformar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform3);
 		botonReiniciar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform4);
 		botonGrabar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform5);
-		//botonAudio = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
 		botonReproducir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
 
 		botonAnyadir.setOnClickListener(new OnAddClickListener());
@@ -65,7 +64,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonDeformar.setOnClickListener(new OnMoveClickListener());
 		botonReiniciar.setOnClickListener(new OnResetClickListener());
 		botonGrabar.setOnClickListener(new OnRecordClickListener());
-		//botonAudio.setOnClickListener(new OnAudioClickListener());
 		botonReproducir.setOnClickListener(new OnPlayClickListener());
 
 		reiniciarInterfaz();
@@ -86,18 +84,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonReiniciar = null;
 		botonGrabar = null;
 		botonReproducir = null;
-		//botonAudio = null;
 	}
-
-	/*@Override
-	public void onDetach()
-	{
-		super.onDetach();
-
-		mListener = null;
-		personaje = null;
-		dataSaved = null;
-	}*/
 
 	@Override
 	public void onResume()
@@ -135,7 +122,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		else
 		{
 			botonGrabar.setVisibility(View.VISIBLE);
-			//botonAudio.setVisibility(View.VISIBLE);
 
 			if (!canvas.isEstadoGrabacion())
 			{
@@ -146,7 +132,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 
 				if (canvas.isGrabacionReady())
 				{
-					//botonAudio.setVisibility(View.VISIBLE);
 					botonReproducir.setVisibility(View.VISIBLE);
 				}
 			}
@@ -156,7 +141,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonEliminar.setActivo(canvas.isEstadoEliminar());
 		botonGrabar.setActivo(canvas.isEstadoGrabacion());
 		botonDeformar.setActivo(canvas.isEstadoDeformar());
-		//botonAudio.setActivo(canvas.isEstadoAudio());
 		botonReproducir.setActivo(canvas.isEstadoReproduccion());
 	}
 
@@ -169,7 +153,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonReiniciar.setVisibility(View.INVISIBLE);
 		botonGrabar.setVisibility(View.INVISIBLE);
 		botonReproducir.setVisibility(View.INVISIBLE);
-		//botonAudio.setVisibility(View.INVISIBLE);
 	}
 
 	/* Métodos Listener onClick */
@@ -234,55 +217,6 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		}
 	}
 
-	/*private class OnAudioClickListener implements OnClickListener
-	{
-		@Override
-		public void onClick(View v)
-		{
-			canvas.seleccionarAudio();
-
-			reiniciarInterfaz();
-			actualizarInterfaz();
-
-			RecordAlert alert = new RecordAlert(getActivity(), R.string.text_audio_record_title, R.string.text_audio_record_description, R.string.text_button_yes, R.string.text_button_no)
-			{
-				@Override
-				public void onPossitiveButtonClick()
-				{
-					canvas.seleccionarReposo();
-
-					sendToastMessage(R.string.text_audio_record_confirmation);
-
-					reiniciarInterfaz();
-					actualizarInterfaz();
-				}
-
-				@Override
-				public void onNegativeButtonClick()
-				{
-					canvas.seleccionarReposo();
-
-					reiniciarInterfaz();
-					actualizarInterfaz();
-				}
-
-				@Override
-				public void onStartRecording()
-				{
-					mListener.onStartRecording();
-				}
-
-				@Override
-				public void onStopRecording()
-				{
-					mListener.onStopRecording();
-				}
-			};
-
-			alert.show();
-		}
-	}*/
-
 	private class OnPlayClickListener implements OnClickListener
 	{
 		@Override
@@ -310,9 +244,9 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	/* Métodos abstractos de OnDeformListener */
 
 	@Override
-	public void onPlaySound()
+	public void onPlaySoundEffect()
 	{
-		mListener.onPlaySound();
+		mListener.onPlaySoundEffect();
 	}
 
 	@Override

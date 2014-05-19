@@ -54,7 +54,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		public void onCharacterSelectionRenameCharacter(final int indice);
 		public void onCharacterSelectionExportCharacter(final int indice);
 		public void onCharacterSelectionPostPublish(final String mensaje, final Bitmap bitmap);
-		public void onCharacterSelectionPlaySound(int sound);
+		public void onCharacterSelectionPlaySoundEffect(int sound);
 	}
 
 	/* Métodos Fragment */
@@ -153,8 +153,8 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	}
 
 	@Override
-	public void onPlaySound(int sound)
+	public void onPlaySoundEffect(int sound)
 	{
-		mCallback.onCharacterSelectionPlaySound(sound);
+		mCallback.onCharacterSelectionPlaySoundEffect(sound);
 	}
 }
