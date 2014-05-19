@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -21,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.android.storage.ExternalStorageManager;
+import com.android.touch.SensorDetector;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.deform.DeformationFragment;
@@ -85,14 +83,11 @@ public class ViewActivity extends FragmentActivity
         
         // Parámetros de los sensores.
         
-        SensorManager mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
-        boolean accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null;
-        boolean magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
+        boolean sensorAvailable = SensorDetector.isSensorAvailable(this);
         
         // Arquitectura
         
-        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels, accelerometer && magnetometer) {
+        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels, sensorAvailable) {
 			@Override
 			public void onSocialConectionStatusChanged()
 			{

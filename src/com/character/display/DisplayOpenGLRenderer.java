@@ -125,7 +125,6 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarRetoque(float height, float width)
 	{
-		// Construir rectangulos
 		estado = TEstadoDisplay.Captura;
 		estadoCaptura = TEstadoCaptura.Retocando;
 	}
@@ -155,12 +154,17 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarReposo()
 	{
 		personaje.reposo();
+		
+		estado = TEstadoDisplay.Nada;
+		estadoCaptura = TEstadoCaptura.Nada;
 	}
 
 	public void seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
-		estado = TEstadoDisplay.Animacion;
 		personaje.seleccionarAnimacion(movimiento);
+		
+		estado = TEstadoDisplay.Animacion;
+		estadoCaptura = TEstadoCaptura.Nada;
 	}
 
 	/* Métodos de Obtención de Información */

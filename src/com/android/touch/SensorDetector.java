@@ -1,5 +1,8 @@
 package com.android.touch;
 
+import java.util.Iterator;
+import java.util.List;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -57,6 +60,32 @@ public abstract class SensorDetector implements SensorEventListener
     		mOriginAngle = mAngle;
     		mSensorCalibrated = true;
     	}
+    }
+    
+    public static final boolean isSensorAvailable(Context context)
+    {
+    	boolean availableAccelerometer = false;
+    	boolean availableMagnetometer = false;
+    	
+    	SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+    	List<Sensor> listSensor = sensorManager.getSensorList(Sensor.TYPE_ALL);
+
+    	Iterator<Sensor> it = listSensor.iterator();
+    	while (it.hasNext())
+    	{
+    		int typeSensor = it.next().getType();
+    		
+    		if (typeSensor == Sensor.TYPE_ACCELEROMETER)
+    		{
+    			availableAccelerometer = true;
+    		}
+    		else if (typeSensor == Sensor.TYPE_MAGNETIC_FIELD)
+    		{
+    			availableMagnetometer = true;
+    		}
+    	}
+    	
+    	return availableAccelerometer && availableMagnetometer;
     }
     
 	@Override
