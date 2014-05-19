@@ -34,6 +34,7 @@
 			<string name="title_menu_music">Music</string>
 			<string name="title_menu_tips">Tips</string>
 			<string name="title_menu_debug">Debug</string>
+			<string name="title_menu_sensor">Sensor</string>
 		
 		<!-- Dialog Section Titles -->	
 			<string name="title_dialog_size">Size:</string>

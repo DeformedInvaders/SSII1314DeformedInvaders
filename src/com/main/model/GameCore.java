@@ -59,11 +59,12 @@ public abstract class GameCore
 	
 	/* Constructora */
 	
-	public GameCore(Context context, int widthScreen, int heightScreen)
+	public GameCore(Context context, int widthScreen, int heightScreen, boolean sensor)
 	{
-		GamePreferences.setScreenParameters(widthScreen, heightScreen);
-        GamePreferences.setMusicParameters(false);
-        GamePreferences.setTipParameters(false);
+		GamePreferences.SET_SCREEN_PARAMETERS(widthScreen, heightScreen);
+		GamePreferences.SET_ACCELEROMETER_PARAMETERS(sensor);
+        GamePreferences.SET_MUSIC_PARAMETERS(false);
+        GamePreferences.SET_TIP_PARAMETERS(false);
 		
 		mContext = context;
 		
@@ -356,7 +357,7 @@ public abstract class GameCore
 	{
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
-			GamePreferences.setCharacterParameters(indice);
+			GamePreferences.SET_CHARACTER_PARAMETERS(indice);
 			if (internalManager.guardarPreferencias())
 			{
 				sendToastMessage(R.string.text_select_character_confirmation);
@@ -381,12 +382,12 @@ public abstract class GameCore
 				{
 					if (indice < seleccionado)
 					{
-						GamePreferences.setCharacterParameters(seleccionado - 1);
+						GamePreferences.SET_CHARACTER_PARAMETERS(seleccionado - 1);
 						internalManager.guardarPreferencias();
 					}
 					else if (indice == seleccionado)
 					{
-						GamePreferences.setCharacterParameters(-1);
+						GamePreferences.SET_CHARACTER_PARAMETERS(-1);
 						internalManager.guardarPreferencias();
 					}
 				}

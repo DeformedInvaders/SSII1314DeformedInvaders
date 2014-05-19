@@ -71,10 +71,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super(context, TTipoFondoRenderer.Desplazable, TTipoTexturasRenderer.Juego);
 		seleccionarTexturaFondo(l.getFondoNivel().getIdTexturaFondos());
 
-		GamePreferences.setEstadoGame(TEstadoGame.FaseEnemies);
+		GamePreferences.SET_GAME_PARAMETERS(TEstadoGame.FaseEnemies);
 		
 		protagonista = p;
-		protagonista.activarEscalado();
 		
 		lider = l.getBoss();
 		estadoJefe = TEstadoJefe.Nada;
@@ -183,6 +182,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			case FaseBoss:
 				onDrawBossPhase(gl);
 			break;
+			default:
+			break;
 		}
 	}
 	
@@ -262,30 +263,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			
 		gl.glPopMatrix();
 	}
-
-	public boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
-	{
-		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
-			
-		if (personaje.getPosicionY() + 3.0f * personaje.getHeight() / 4.0f > worldY)
-		{
-			if (personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
-			{
-				personaje.bajar();
-				return true;
-			}
-		}
-		else if (personaje.getPosicionY() + personaje.getHeight() / 4.0f < worldY)
-		{
-			if (personaje.getPosicionY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
-			{
-				personaje.subir();
-				return true;
-			}
-		}
-		
-		return false;
-	}
+	
 	/* Métodos de Modificación de Estado */
 
 	public void seleccionarAnimacion(TTipoMovimiento movimiento)
@@ -311,6 +289,26 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		estadoPersonaje = estado;
 	}
 	
+	public void seleccionarPosicion(float pixelY, float screenWidth, float screenHeight)
+	{
+		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
+			
+		if (personaje.getPosicionY() + 3.0f * personaje.getHeight() / 4.0f > worldY)
+		{
+			if (personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
+			{
+				personaje.bajar();
+			}
+		}
+		else if (personaje.getPosicionY() + personaje.getHeight() / 4.0f < worldY)
+		{
+			if (personaje.getPosicionY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			{
+				personaje.subir();
+			}
+		}
+	}
+	
 	public boolean playAnimation()
 	{
 		switch (GamePreferences.GET_ESTADO_GAME())
@@ -319,6 +317,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				return playAnimationEnemiesPhase();
 			case FaseBoss:
 				return playAnimationBossPhase();
+			default:
+			break;
 		}
 		
 		return false;
@@ -477,6 +477,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				return isGameEndedEnemiesPhase();
 			case FaseBoss:
 				return isGameEndedBossPhase();
+			default:
+			break;
 		}
 		
 		return TEventoGame.Nada;
@@ -488,7 +490,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		if (isFondoFinal())
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
-			GamePreferences.setEstadoGame(TEstadoGame.FaseBoss);
+			GamePreferences.SET_GAME_PARAMETERS(TEstadoGame.FaseBoss);
 			
 			protagonista.reposo();
 			plataformaPersonaje.activarPlataforma();

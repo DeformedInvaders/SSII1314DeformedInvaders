@@ -13,6 +13,7 @@ import com.android.opengl.TTipoTexturasRenderer;
 import com.creation.data.MapaBits;
 import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
+import com.game.game.TEstadoGame;
 import com.main.model.GamePreferences;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer 
@@ -33,6 +34,8 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje);
 
+		GamePreferences.SET_GAME_PARAMETERS(TEstadoGame.Nada);
+		
 		personajeCargado = false;
 
 		estado = TEstadoDisplay.Nada;
@@ -42,10 +45,11 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	public DisplayOpenGLRenderer(Context context, Personaje p)
 	{
 		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje);
-
+		
+		GamePreferences.SET_GAME_PARAMETERS(TEstadoGame.Nada);
+		
 		personajeCargado = true;
 		personaje = p;
-		personaje.desactivarEscalado();
 
 		estado = TEstadoDisplay.Nada;
 		estadoCaptura = TEstadoCaptura.Nada;

@@ -15,9 +15,6 @@ public class Personaje extends Malla
 	// Movimientos
 	private Movimientos movimientos;
 	private TTipoMovimiento tipoMovimiento;
-	
-	// Escalado de Juego
-	private boolean escalado;
 
 	/* Constructora */
 	
@@ -31,8 +28,6 @@ public class Personaje extends Malla
 		tipoEntidad = TTipoEntidad.Personaje;
 		idEntidad = id;
 		texturaEntidad = -1;
-		
-		escalado = false;
 	}
 
 	/* Métodos abstractos de Entidad */
@@ -43,11 +38,7 @@ public class Personaje extends Malla
 		{
 			gl.glPushMatrix();
 				
-				if (escalado)
-				{
-					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-				}
-				
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
 				super.dibujar(gl, renderer);			
 	
 			gl.glPopMatrix();
@@ -80,16 +71,6 @@ public class Personaje extends Malla
 	public void setNombre(String n)
 	{
 		nombre = n;
-	}
-	
-	public void activarEscalado()
-	{
-		escalado = true;
-	}
-	
-	public void desactivarEscalado()
-	{
-		escalado = false;
 	}
 
 	/* Métodos de Obtención de Información */

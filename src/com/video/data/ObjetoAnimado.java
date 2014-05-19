@@ -19,7 +19,7 @@ public class ObjetoAnimado extends ObjetoInanimado
 	private TTipoAnimacion tipoAnimacion;
 	
 	private int[] texturasAnimadas;
-	private int indiceAnimacionCiclica, indiceAnimacionPasos;
+	private int indiceAnimacionPulsada, indiceAnimacionPasos, indiceAnimacionCiclica;
 	
 	private boolean activado;
 	
@@ -31,24 +31,29 @@ public class ObjetoAnimado extends ObjetoInanimado
 		tipoAnimacion = animacion;
 		
 		texturasAnimadas = texturas;
-		indiceAnimacionCiclica = 0;
+		indiceAnimacionPulsada = 0;
 		indiceAnimacionPasos = 0;
+		indiceAnimacionCiclica = 0;
 		
 		activado = false;
 	}
 	
 	private int indiceObjeto()
 	{
-		if (tipoAnimacion == TTipoAnimacion.Ciclico)
+		if (tipoAnimacion == TTipoAnimacion.Pulsado)
 		{
 			if (activado)
 			{
-				return indiceObjeto(indiceAnimacionCiclica % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS);
+				return indiceObjeto(indiceAnimacionPulsada % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS);
 			}
 			else
 			{
 				return indiceObjeto(0);
 			}
+		}
+		if (tipoAnimacion == TTipoAnimacion.Ciclico)
+		{
+			return indiceObjeto(indiceAnimacionCiclica);
 		}
 		else
 		{
@@ -107,15 +112,17 @@ public class ObjetoAnimado extends ObjetoInanimado
 		
 		if (activado)
 		{
-			if (indiceAnimacionCiclica > 0)
+			if (indiceAnimacionPulsada > 0)
 			{
-				indiceAnimacionCiclica--;
+				indiceAnimacionPulsada--;
 			}
 			else
 			{
 				activado = false;
 			}
 		}
+		
+		indiceAnimacionCiclica = (indiceAnimacionCiclica + 1) % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS;
 	}
 	
 	/* Métodos Públicos */
@@ -130,7 +137,7 @@ public class ObjetoAnimado extends ObjetoInanimado
 		if (area.contains(x, y))
 		{
 			activado = true;
-			indiceAnimacionCiclica = GamePreferences.NUM_FRAMES_ANIMATION;
+			indiceAnimacionPulsada = GamePreferences.NUM_FRAMES_ANIMATION;
 		
 			if (indiceAnimacionPasos < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS - 1)
 			{

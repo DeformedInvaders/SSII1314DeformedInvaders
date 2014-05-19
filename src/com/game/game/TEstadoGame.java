@@ -2,5 +2,5 @@ package com.game.game;
 
 public enum TEstadoGame
 {
-	FaseEnemies, FaseBoss
+	FaseEnemies, FaseBoss, Nada
 }

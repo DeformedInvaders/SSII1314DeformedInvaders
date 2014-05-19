@@ -78,7 +78,7 @@ public class GamePreferences
 	public static final int NUM_TYPE_TEXTURE_WEAPONS = 2;
 	public static final int NUM_TYPE_TEXTURE_ANIMATED_OBJECTS = 4;
 	
-	public static final int NUM_TYPE_ANIMATED_OBJECTS = 3;
+	public static final int NUM_TYPE_ANIMATED_OBJECTS = 4;
 	public static final int NUM_TYPE_INANIMATED_OBJECTS = 2;
 	
 	private static final int NUM_TYPE_STICKERS_EYES = 12;
@@ -100,39 +100,60 @@ public class GamePreferences
 	
 	// Opciones del Juego
 	private static int CHARACTER_GAME;
-	private static boolean TIPS_GAME, MUSIC_GAME, DEBUG_GAME;
+	private static boolean TIPS_GAME, MUSIC_GAME, DEBUG_GAME, SENSOR_GAME;
 	
+	// Opciones del Dispositivo
+	private static boolean ACCELEROMETER_AVAILABLE;
+	
+	// Estado del Juego
 	private static TEstadoGame ESTADO_GAME;
 	
-	public static void setScreenParameters(float width, float height)
+	public static void SET_SCREEN_PARAMETERS(float width, float height)
 	{
 		WIDTH_SCREEN = width;
 		HEIGHT_SCREEN = height;
 	}
 	
-	public static void setTipParameters(boolean tips)
+	public static void SET_ACCELEROMETER_PARAMETERS(boolean available)
 	{
-		TIPS_GAME = tips;
+		ACCELEROMETER_AVAILABLE = available;
 	}
 	
-	public static void setMusicParameters(boolean music)
+	public static void SET_TIP_PARAMETERS(boolean active)
 	{
-		MUSIC_GAME = music;
+		TIPS_GAME = active;
 	}
 	
-	public static void setDebugParameters(boolean debug)
+	public static void SET_MUSIC_PARAMETERS(boolean active)
 	{
-		DEBUG_GAME = debug;
+		MUSIC_GAME = active;
 	}
 	
-	public static void setCharacterParameters(int character)
+	public static void SET_DEBUG_PARAMETERS(boolean active)
 	{
-		CHARACTER_GAME = character;
+		DEBUG_GAME = active;
 	}
 	
-	public static void setEstadoGame(TEstadoGame estado)
+	public static void SET_CHARACTER_PARAMETERS(int pos)
+	{
+		CHARACTER_GAME = pos;
+	}
+	
+	public static void SET_GAME_PARAMETERS(TEstadoGame estado)
 	{
 		ESTADO_GAME = estado;
+	}
+	
+	public static void SET_SENSOR_PARAMETERS(boolean active)
+	{
+		if (ACCELEROMETER_AVAILABLE)
+		{
+			SENSOR_GAME = active;
+		}
+		else
+		{
+			SENSOR_GAME = false;
+		}
 	}
 	
 	public static void SWITCH_MUSIC_GAME()
@@ -148,6 +169,18 @@ public class GamePreferences
 	public static void SWITCH_DEBUG_GAME()
 	{
 		DEBUG_GAME = !DEBUG_GAME;
+	}
+	
+	public static void SWITCH_SENSOR_GAME()
+	{
+		if (ACCELEROMETER_AVAILABLE)
+		{
+			SENSOR_GAME = !SENSOR_GAME;
+		}
+		else
+		{
+			SENSOR_GAME = false;
+		}
 	}
 	
 	// Parametros Juego
@@ -175,6 +208,11 @@ public class GamePreferences
 	public static final TEstadoGame GET_ESTADO_GAME() 
 	{
 		return ESTADO_GAME;
+	}
+	
+	public static final boolean IS_SENSOR_ENABLED()
+	{
+		return SENSOR_GAME;
 	}
 	
 	public static final boolean IS_LONG_RATIO()
@@ -371,7 +409,7 @@ public class GamePreferences
 					return 1.0f;
 			}
 		}
-		else
+		else if (ESTADO_GAME == TEstadoGame.FaseBoss)
 		{
 			switch(entidad)
 			{
@@ -388,6 +426,10 @@ public class GamePreferences
 				default:
 					return 1.0f;
 			}
+		}
+		else
+		{
+			return 1.0f;
 		}
 	}
 	

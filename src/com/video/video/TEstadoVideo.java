@@ -35,6 +35,8 @@ public enum TEstadoVideo
 				return 18 * 1000;
 			case Noise:
 				return 5 * 1000;
+			case Logo:
+				return 15 * 1000;
 			default:
 				return 10 * 1000;
 		}
@@ -52,6 +54,8 @@ public enum TEstadoVideo
 				return R.raw.music_video_rock;
 			case Brief:
 				return R.raw.music_video_brief;
+			case Logo:
+				return R.raw.music_video_logo;
 			default:
 				return -1;
 		}

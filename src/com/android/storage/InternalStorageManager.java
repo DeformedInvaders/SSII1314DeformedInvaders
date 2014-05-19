@@ -422,10 +422,11 @@ public class InternalStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Personaje Seleccionado			
-			GamePreferences.setCharacterParameters(data.readInt());
-			GamePreferences.setMusicParameters(data.readBoolean());
-			GamePreferences.setTipParameters(data.readBoolean());
-			GamePreferences.setDebugParameters(data.readBoolean());
+			GamePreferences.SET_CHARACTER_PARAMETERS(data.readInt());
+			GamePreferences.SET_MUSIC_PARAMETERS(data.readBoolean());
+			GamePreferences.SET_TIP_PARAMETERS(data.readBoolean());
+			GamePreferences.SET_DEBUG_PARAMETERS(data.readBoolean());
+			GamePreferences.SET_SENSOR_PARAMETERS(data.readBoolean());
 
 			data.close();
 			file.close();
@@ -448,10 +449,11 @@ public class InternalStorageManager
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences not loadead");
 		
-		GamePreferences.setCharacterParameters(-1);
-		GamePreferences.setMusicParameters(true);
-		GamePreferences.setTipParameters(true);
-		GamePreferences.setDebugParameters(true);
+		GamePreferences.SET_CHARACTER_PARAMETERS(-1);
+		GamePreferences.SET_MUSIC_PARAMETERS(true);
+		GamePreferences.SET_TIP_PARAMETERS(true);
+		GamePreferences.SET_DEBUG_PARAMETERS(true);
+		GamePreferences.SET_SENSOR_PARAMETERS(true);
 		return false;
 	}
 
@@ -467,6 +469,7 @@ public class InternalStorageManager
 			data.writeBoolean(GamePreferences.IS_MUSIC_ENABLED());
 			data.writeBoolean(GamePreferences.IS_TIPS_ENABLED());
 			data.writeBoolean(GamePreferences.IS_DEBUG_ENABLED());
+			data.writeBoolean(GamePreferences.IS_SENSOR_ENABLED());
 			
 			data.flush();
 			data.close();

@@ -148,6 +148,15 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 						seleccionarAnimacion(TTipoMovimiento.Crouch);
 					}
 				}
+				
+				@Override
+				public void onTouchMove(float pixelY)
+				{
+					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseBoss && !GamePreferences.IS_SENSOR_ENABLED())
+					{
+						seleccionarPosicion(pixelY);
+					}
+				}
 
 				@Override
 				public void onTap()
@@ -165,19 +174,28 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				@Override
 				public void onIncreaseXAngle(double angle)
 				{
-					seleccionarEstado(TEstadoPersonaje.Subir);
+					if (GamePreferences.IS_SENSOR_ENABLED())
+					{
+						seleccionarEstado(TEstadoPersonaje.Subir);
+					}
 				}
 
 				@Override
 				public void onDecreaseXAngle(double angle)
 				{
-					seleccionarEstado(TEstadoPersonaje.Bajar);
+					if (GamePreferences.IS_SENSOR_ENABLED())
+					{
+						seleccionarEstado(TEstadoPersonaje.Bajar);
+					}
 				}
 
 				@Override
 				public void onStabilizeXAngle(double angle)
 				{
-					seleccionarEstado(TEstadoPersonaje.Nada);		
+					if (GamePreferences.IS_SENSOR_ENABLED())
+					{
+						seleccionarEstado(TEstadoPersonaje.Nada);
+					}
 				}
 				
 			};
@@ -220,6 +238,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		if (threadActivo)
 		{
 			renderer.seleccionarEstado(estado);
+		}
+	}
+	
+	public void seleccionarPosicion(float pixelY)
+	{
+		if (threadActivo)
+		{
+			renderer.seleccionarPosicion(pixelY, getWidth(), getHeight());
 		}
 	}
 	

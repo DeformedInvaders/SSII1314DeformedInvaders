@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -49,7 +52,7 @@ public class ViewActivity extends FragmentActivity
 	
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
-	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, botonDebug;
+	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, botonDebug, botonSensor;
 	
 	/* Métodos Activity */
 	
@@ -75,14 +78,21 @@ public class ViewActivity extends FragmentActivity
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
-		// Parámetros globales del juego.
+		// Parámetros globales de la pantalla.
 		
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         
+        // Parámetros de los sensores.
+        
+        SensorManager mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        boolean accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null;
+        boolean magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
+        
         // Arquitectura
         
-        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels) {
+        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels, accelerometer && magnetometer) {
 			@Override
 			public void onSocialConectionStatusChanged()
 			{
@@ -125,10 +135,11 @@ public class ViewActivity extends FragmentActivity
 		inflater.inflate(R.menu.menu, menu);
 		
 		botonConsejos = menu.getItem(0);
-		botonMusica = menu.getItem(1);
-		botonTwitter = menu.getItem(2);
-		botonFacebook = menu.getItem(3);
-		botonDebug = menu.getItem(4);
+		botonSensor = menu.getItem(1);
+		botonMusica = menu.getItem(2);
+		botonTwitter = menu.getItem(3);
+		botonFacebook = menu.getItem(4);
+		botonDebug = menu.getItem(5);
 		
 		actualizarActionBar();
 
@@ -143,12 +154,14 @@ public class ViewActivity extends FragmentActivity
 			case R.id.menuIcon1:
 				return onMenuTipsButtonClicked();
 			case R.id.menuIcon2:
-				return onMenuMusicButtonClicked();
+				return onMenuSensorButtonClicked();
 			case R.id.menuIcon3:
-				return onMenuTwitterButtonClicked();
+				return onMenuMusicButtonClicked();
 			case R.id.menuIcon4:
-				return onMenuFacebookButtonClicked();
+				return onMenuTwitterButtonClicked();
 			case R.id.menuIcon5:
+				return onMenuFacebookButtonClicked();
+			case R.id.menuIcon6:
 				return onMenuDebugButtonClicked();
 			default:
 				return super.onOptionsItemSelected(item);
@@ -180,6 +193,15 @@ public class ViewActivity extends FragmentActivity
 	public boolean onMenuTipsButtonClicked()
 	{
 		GamePreferences.SWITCH_TIPS_GAME();
+		core.actualizarPreferencias();
+		
+		actualizarActionBar();
+		return true;
+	}
+	
+	public boolean onMenuSensorButtonClicked()
+	{
+		GamePreferences.SWITCH_SENSOR_GAME();
 		core.actualizarPreferencias();
 		
 		actualizarActionBar();
@@ -240,6 +262,15 @@ public class ViewActivity extends FragmentActivity
 		else
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_disabled);
+		}
+		
+		if (GamePreferences.IS_SENSOR_ENABLED())
+		{
+			botonSensor.setIcon(R.drawable.icon_tool_sensor_enabled);
+		}
+		else
+		{
+			botonSensor.setIcon(R.drawable.icon_tool_sensor_disabled);
 		}
 	}
 

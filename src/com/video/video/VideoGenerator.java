@@ -73,16 +73,19 @@ public class VideoGenerator
 		List<ObjetoInanimado> listaObjetos = new ArrayList<ObjetoInanimado>();
 		
 		int[] texturasAgua = {R.drawable.video_water_1, R.drawable.video_water_2, R.drawable.video_water_3, R.drawable.video_water_4};
-		listaObjetos.add(new ObjetoAnimado(0, texturasAgua, 120.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_water, TTipoAnimacion.Ciclico));
+		listaObjetos.add(new ObjetoAnimado(0, texturasAgua, 120.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_water, TTipoAnimacion.Pulsado));
 		
 		int[] texturasEletricidad = {R.drawable.video_electricity_1, R.drawable.video_electricity_2, R.drawable.video_electricity_3, R.drawable.video_electricity_4};
-		listaObjetos.add(new ObjetoAnimado(1, texturasEletricidad, 970.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_electricity, TTipoAnimacion.Ciclico));
+		listaObjetos.add(new ObjetoAnimado(1, texturasEletricidad, 970.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_electricity, TTipoAnimacion.Pulsado));
 		
 		listaObjetos.add(new ObjetoInanimado(0, R.drawable.video_microphone_1, 250.0f, 20.0f, TEstadoVideo.Rock, R.raw.effect_video_microphone));
 		listaObjetos.add(new ObjetoInanimado(1, R.drawable.video_speaker_1, 870.0f, 20.0f, TEstadoVideo.Rock, R.raw.effect_video_speaker));
 		
 		int[] texturasPuerta = {R.drawable.video_door_1, R.drawable.video_door_2, R.drawable.video_door_3, R.drawable.video_door_4};
 		listaObjetos.add(new ObjetoAnimado(2, texturasPuerta, 498.0f, 110.0f, TEstadoVideo.Door, R.raw.effect_video_knockdoor, TTipoAnimacion.Pasos));
+		
+		int [] texturasPolvo = {R.drawable.video_dust_1, R.drawable.video_dust_2, R.drawable.video_dust_3, R.drawable.video_dust_4};
+		listaObjetos.add(new ObjetoAnimado(3, texturasPolvo, 390.0f, 0.0f, TEstadoVideo.Noise, -1, TTipoAnimacion.Ciclico));
 		
 		video = new Video(idFondos, listaMensajes, listaPersonajes, listaObjetos);
 	}

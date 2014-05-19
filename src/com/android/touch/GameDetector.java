@@ -19,9 +19,13 @@ public abstract class GameDetector
 		switch (action)
 		{
 			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_POINTER_DOWN:
 				onGameDown(time, pixelY);
 			break;
+			case MotionEvent.ACTION_MOVE:
+				onGameMove(time, pixelY);
 			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
 				onGameUp(time, pixelY);
 			break;
 		}
@@ -33,6 +37,14 @@ public abstract class GameDetector
 	{
 		lastPixelY = pixelY;
 		lastTap = time;
+	}
+	
+	private void onGameMove(long time, float pixelY)
+	{
+		if (Math.abs(lastTap - time) >= GamePreferences.MAX_DURATION_TAP)
+		{
+			onTouchMove(pixelY);
+		}
 	}
 
 	private void onGameUp(long time, float pixelY)
@@ -54,6 +66,7 @@ public abstract class GameDetector
 	/* Métodos abstractos */
 	
 	public abstract void onDragUp();
+	public abstract void onTouchMove(float pixelY);
 	public abstract void onDragDown();
 	public abstract void onTap();
 }

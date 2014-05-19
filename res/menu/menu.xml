@@ -5,29 +5,35 @@
 	    android:id="@+id/menuIcon1"
 		android:icon="@drawable/icon_tool_tips_enabled"
 		android:title="@string/title_menu_tips"
-		android:showAsAction="ifRoom"/>
+		android:showAsAction="always"/>
+     
+	<item
+	    android:id="@+id/menuIcon2"
+		android:icon="@drawable/icon_tool_sensor_enabled"
+		android:title="@string/title_menu_sensor"
+		android:showAsAction="always"/>
        	
    	<item
-	    android:id="@+id/menuIcon2"
+	    android:id="@+id/menuIcon3"
 		android:icon="@drawable/icon_media_music_enabled"
 		android:title="@string/title_menu_music"
-		android:showAsAction="ifRoom"/>
+		android:showAsAction="always"/>
     
 	<item 
-		android:id="@+id/menuIcon3"
+		android:id="@+id/menuIcon4"
 		android:icon="@drawable/icon_social_twitter_disconnected"
 		android:title="@string/title_menu_twitter"
-		android:showAsAction="ifRoom"/>
-	
-	<item
-	    android:id="@+id/menuIcon4"
-		android:icon="@drawable/icon_social_facebook_disconnected"
-		android:title="@string/title_menu_facebook"
-		android:showAsAction="ifRoom"/>
+		android:showAsAction="always"/>
 	
 	<item
 	    android:id="@+id/menuIcon5"
+		android:icon="@drawable/icon_social_facebook_disconnected"
+		android:title="@string/title_menu_facebook"
+		android:showAsAction="always"/>
+	
+	<item
+	    android:id="@+id/menuIcon6"
 		android:icon="@drawable/icon_tool_debug_enabled"
 		android:title="@string/title_menu_debug"
-		android:showAsAction="ifRoom"/>
+		android:showAsAction="always"/>
 </menu>
