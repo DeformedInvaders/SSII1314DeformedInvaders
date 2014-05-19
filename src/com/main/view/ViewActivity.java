@@ -17,8 +17,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.android.sensor.OrientationDetector;
 import com.android.storage.ExternalStorageManager;
-import com.android.touch.SensorDetector;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
 import com.creation.deform.DeformationFragment;
@@ -83,7 +83,7 @@ public class ViewActivity extends FragmentActivity
         
         // Parámetros de los sensores.
         
-        boolean sensorAvailable = SensorDetector.isSensorAvailable(this);
+        boolean sensorAvailable = OrientationDetector.isSensorAvailable(this);
         
         // Arquitectura
         

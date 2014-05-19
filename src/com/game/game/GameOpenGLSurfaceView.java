@@ -7,8 +7,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.android.opengl.BackgroundDataSaved;
+import com.android.sensor.OrientationDetector;
 import com.android.touch.GameDetector;
-import com.android.touch.SensorDetector;
 import com.android.touch.TEstadoDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.creation.data.TTipoMovimiento;
@@ -33,7 +33,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	private GameDetector gameDetector;
 	
-	private SensorDetector sensorDetector;
+	private OrientationDetector sensorDetector;
 
 	/* Constructora */
 
@@ -169,7 +169,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		
 		if (sensorDetector == null)
 		{
-			sensorDetector = new SensorDetector(getContext()) {
+			sensorDetector = new OrientationDetector(getContext()) {
 				
 				@Override
 				public void onIncreaseXAngle(double angle)

@@ -1,4 +1,4 @@
-package com.android.touch;
+package com.android.sensor;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +12,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
 
-public abstract class SensorDetector implements SensorEventListener
+public abstract class OrientationDetector implements SensorEventListener
 {
 	private Display mDisplay;
     private SensorManager mSensorManager;
@@ -28,7 +28,7 @@ public abstract class SensorDetector implements SensorEventListener
     
     private boolean mSensorCalibrated;
     
-    public SensorDetector(Context context)
+    public OrientationDetector(Context context)
     {        
     	WindowManager mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     	mDisplay = mWindowManager.getDefaultDisplay();

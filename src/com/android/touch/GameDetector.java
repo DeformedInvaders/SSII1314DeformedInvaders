@@ -24,6 +24,7 @@ public abstract class GameDetector
 			break;
 			case MotionEvent.ACTION_MOVE:
 				onGameMove(time, pixelY);
+			break;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
 				onGameUp(time, pixelY);
