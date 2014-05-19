@@ -437,7 +437,7 @@ public abstract class GameCore
 		int posNivel = nivel.getTipoNivel().ordinal();
 		
 		// Sonido Victoria
-		audioPlayerManager.startPlaying(R.raw.effect_level_complete, false, false);
+		audioPlayerManager.startPlaying(R.raw.effect_game_completed, false, false);
 		
 		// Aumentar número de Victorias
 		estadisticasNiveles[posNivel].increaseVictories();	

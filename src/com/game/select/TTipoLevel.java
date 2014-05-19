@@ -71,15 +71,15 @@ public enum TTipoLevel
 		switch(this)
 		{
 			case Moon:
-				return R.raw.music_moon;
+				return R.raw.music_game_moon;
 			case NewYork:
-				return R.raw.music_newyork;
+				return R.raw.music_game_newyork;
 			case Rome:
-				return R.raw.music_rome;
+				return R.raw.music_game_rome;
 			case Egypt:
-				return R.raw.music_egypt;
+				return R.raw.music_game_egypt;
 			case Stonehenge:
-				return R.raw.music_stonehenge;
+				return R.raw.music_game_stonehenge;
 			default:
 				return -1;
 		}		

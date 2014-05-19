@@ -198,6 +198,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				triangulos.sortCounterClockwise(vertices);
 				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
 				bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
+				
+				estado = TEstadoDesign.Retocando;
 			}
 
 			return true;
