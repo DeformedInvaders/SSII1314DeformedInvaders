@@ -266,7 +266,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Modificación de Estado */
 
-	public void seleccionarAnimacion(TTipoMovimiento movimiento)
+	public boolean seleccionarAnimacion(TTipoMovimiento movimiento)
 	{
 		protagonista.seleccionarAnimacion(movimiento);
 		
@@ -276,12 +276,18 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			{
 				disparoPersonaje.activarDisparo();
 				plataformaPersonaje.activarDisparo();
+				return true;
 			}
+			
+			return false;
 		}
 		else if (movimiento == TTipoMovimiento.Jump)
 		{
 			personaje.saltar(protagonista.getIndiceAnimacion());
+			return true;
 		}
+		
+		return true;
 	}
 	
 	public void seleccionarEstado(TEstadoPersonaje estado) 

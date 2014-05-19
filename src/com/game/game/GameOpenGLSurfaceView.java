@@ -255,21 +255,23 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		{
 			if (animacionFinalizada)
 			{
-				renderer.seleccionarAnimacion(movimiento);
-				requestRender();
-				
-				if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+				if (renderer.seleccionarAnimacion(movimiento))
 				{
-					int sound = movimiento.getSound();
-					if (sound != -1)
+					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
 					{
-						mListener.onGamePlaySoundEffect(sound, true);
+						int sound = movimiento.getSound();
+						if (sound != -1)
+						{
+							mListener.onGamePlaySoundEffect(sound, true);
+						}
+					}
+					else
+					{
+						mListener.onGamePlaySoundEffect(R.raw.effect_game_shot, false);
 					}
 				}
-				else
-				{
-					mListener.onGamePlaySoundEffect(R.raw.effect_game_shot, false);
-				}
+				
+				requestRender();
 				
 				animacionFinalizada = false;
 			}
