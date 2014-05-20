@@ -36,7 +36,8 @@ public class GamePreferences
 	
 	private static final int TIME_INTERVAL_ANIMATION_VIDEO = 40;
 	
-	public static final int NUM_FRAMES_ANIMATION = 50;
+	public static final int NUM_FRAMES_ANIMATION = 10;
+	public static final int NUM_FRAMES_CYCLE = 5;
 	public static final int NUM_FRAMES_DISPARO = 10;
 	
 	// Texturas
@@ -61,7 +62,7 @@ public class GamePreferences
 	
 	public static final int NUM_TYPE_BACKGROUNDS_FIJO = 1;
 	public static final int NUM_TYPE_BACKGROUNDS_LEVEL = 5;
-	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 6;
+	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 7;
 	public static final int NUM_TYPE_CHARACTER_DESIGN = 1;
 	public static final int NUM_TYPE_CHARACTER_VIDEO = 2;
 	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;
@@ -78,7 +79,7 @@ public class GamePreferences
 	public static final int NUM_TYPE_TEXTURE_WEAPONS = 2;
 	public static final int NUM_TYPE_TEXTURE_ANIMATED_OBJECTS = 4;
 	
-	public static final int NUM_TYPE_ANIMATED_OBJECTS = 4;
+	public static final int NUM_TYPE_ANIMATED_OBJECTS = 5;
 	public static final int NUM_TYPE_INANIMATED_OBJECTS = 2;
 	
 	private static final int NUM_TYPE_STICKERS_EYES = 12;
@@ -457,6 +458,13 @@ public class GamePreferences
 	public static final float DIST_MOVIMIENTO_PLATAFORMA()
 	{
 		final float PLATAFORMA_DISTANCE_BASE = 5.0f;
+		
+		return PLATAFORMA_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
+	}
+	
+	public static final float DIST_MOVIMIENTO_SPACESHIP()
+	{
+		final float PLATAFORMA_DISTANCE_BASE = 3.5f;
 		
 		return PLATAFORMA_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}

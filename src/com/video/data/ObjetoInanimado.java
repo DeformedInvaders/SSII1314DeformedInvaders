@@ -20,7 +20,7 @@ public class ObjetoInanimado extends Entidad
 	protected TEstadoVideo estadoActivo;
 	protected int sonidoActivo;
 	
-	protected float posicionX, posicionY;
+	protected float posicionX, posicionY, factor;
 	
 	protected Rectangle area;
 	protected Handle handle;
@@ -33,9 +33,16 @@ public class ObjetoInanimado extends Entidad
 		
 		posicionX = posX * GamePreferences.SCREEN_WIDTH_SCALE_FACTOR();
 		posicionY = posY * GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR();
+		
+		factor = 1.0f;
 
 		estadoActivo = estado;
 		sonidoActivo = sonido;
+	}
+	
+	protected int indiceObjeto()
+	{
+		return idEntidad;
 	}
 	
 	/* Métodos Abstráctos de Entidad */
@@ -67,7 +74,8 @@ public class ObjetoInanimado extends Entidad
 		
 			gl.glTranslatef(posicionX, posicionY, 0.0f);
 			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 0.0f);
-			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTipoSticker.Nada);
+			gl.glScalef(factor, factor, 1.0f);
+			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceObjeto(), TTipoSticker.Nada);
 		
 		gl.glPopMatrix();
 		
@@ -109,5 +117,10 @@ public class ObjetoInanimado extends Entidad
 	public int getSonidoActivo()
 	{
 		return sonidoActivo;
+	}
+	
+	public void reposo()
+	{
+		
 	}
 }

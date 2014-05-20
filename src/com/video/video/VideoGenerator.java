@@ -1,6 +1,7 @@
 package com.video.video;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -12,17 +13,21 @@ import com.main.model.GameResources;
 import com.project.main.R;
 import com.video.data.ObjetoAnimado;
 import com.video.data.ObjetoInanimado;
+import com.video.data.ObjetoMovil;
 import com.video.data.TTipoActores;
 import com.video.data.TTipoAnimacion;
 import com.video.data.Video;
 
 public class VideoGenerator
 {
-	private Context mContext;
-
-	private Video video;
-	
+	private Context mContext;	
 	private AssetsStorageManager assetsManager;
+	
+	private int[] listaFondos;
+	private List<int[]> listaMensajes;
+	private List<Personaje> listaPersonajes;
+	private List<ObjetoInanimado> listaObjetos;
+	
 	
 	public VideoGenerator(Context context, AssetsStorageManager manager)
 	{
@@ -34,7 +39,7 @@ public class VideoGenerator
 	{
 		// Mensajes
 		
-		List<int[]> listaMensajes = new ArrayList<int[]>();
+		listaMensajes = new ArrayList<int[]>();
 		
 		listaMensajes.add(null);
 		
@@ -55,22 +60,22 @@ public class VideoGenerator
 		
 		// Fondos
 		
-		int[] idFondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_VIDEO];
+		listaFondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_VIDEO];
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS_VIDEO; i++)
 		{
-			idFondos[i] = obtenerID(GameResources.GET_VIDEO(i));
+			listaFondos[i] = obtenerID(GameResources.GET_VIDEO(i));
 		}
 		
 		// Actores
 
-		List<Personaje> listaPersonajes = new ArrayList<Personaje>();
+		listaPersonajes = new ArrayList<Personaje>();
 		
 		listaPersonajes.add(assetsManager.importarActor(TTipoActores.Guitarrista));
 		listaPersonajes.add(assetsManager.importarActor(TTipoActores.Cientifico));
 		
 		// Objetos
 		
-		List<ObjetoInanimado> listaObjetos = new ArrayList<ObjetoInanimado>();
+		listaObjetos = new ArrayList<ObjetoInanimado>();
 		
 		int[] texturasAgua = {R.drawable.video_water_1, R.drawable.video_water_2, R.drawable.video_water_3, R.drawable.video_water_4};
 		listaObjetos.add(new ObjetoAnimado(0, texturasAgua, 120.0f, 20.0f, TEstadoVideo.Brief, R.raw.effect_video_water, TTipoAnimacion.Pulsado));
@@ -87,7 +92,8 @@ public class VideoGenerator
 		int [] texturasPolvo = {R.drawable.video_dust_1, R.drawable.video_dust_2, R.drawable.video_dust_3, R.drawable.video_dust_4};
 		listaObjetos.add(new ObjetoAnimado(3, texturasPolvo, 390.0f, 0.0f, TEstadoVideo.Noise, -1, TTipoAnimacion.Ciclico));
 		
-		video = new Video(idFondos, listaMensajes, listaPersonajes, listaObjetos);
+		int [] texturasNave = {R.drawable.video_spaceship_1, R.drawable.video_spaceship_2, R.drawable.video_spaceship_3, R.drawable.video_spaceship_4};
+		listaObjetos.add(new ObjetoMovil(4, texturasNave, 500.0f, -500.0f, TEstadoVideo.Spaceship, -1, TTipoAnimacion.Ciclico));
 	}
 	
 	private int obtenerID(String id)
@@ -97,6 +103,12 @@ public class VideoGenerator
 	
 	public Video getVideo()
 	{
-		return video;
+		Iterator<ObjetoInanimado> it = listaObjetos.iterator();
+		while(it.hasNext())
+		{
+			it.next().reposo();
+		}
+		
+		return new Video(listaFondos, listaMensajes, listaPersonajes, listaObjetos);
 	}
 }

@@ -20,6 +20,9 @@ public class ObjetoAnimado extends ObjetoInanimado
 	
 	private int[] texturasAnimadas;
 	private int indiceAnimacionPulsada, indiceAnimacionPasos, indiceAnimacionCiclica;
+	private int ciclosAnimacion;
+	
+	protected int numeroCiclosEspera, numeroCiclosAnimacion;
 	
 	private boolean activado;
 	
@@ -35,10 +38,16 @@ public class ObjetoAnimado extends ObjetoInanimado
 		indiceAnimacionPasos = 0;
 		indiceAnimacionCiclica = 0;
 		
+		ciclosAnimacion = 0;
+		
+		numeroCiclosEspera = GamePreferences.NUM_FRAMES_CYCLE;
+		numeroCiclosAnimacion = GamePreferences.NUM_FRAMES_ANIMATION;
+		
 		activado = false;
 	}
 	
-	private int indiceObjeto()
+	@Override
+	protected int indiceObjeto()
 	{
 		if (tipoAnimacion == TTipoAnimacion.Pulsado)
 		{
@@ -97,36 +106,33 @@ public class ObjetoAnimado extends ObjetoInanimado
 	@Override
 	public void dibujar(GL10 gl, OpenGLRenderer renderer)
 	{
-		gl.glPushMatrix();
+		super.dibujar(gl, renderer);
 		
-			gl.glTranslatef(posicionX, posicionY, 0.0f);
-			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 0.0f);
-			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceObjeto(), TTipoSticker.Nada);
+		ciclosAnimacion--;
 		
-		gl.glPopMatrix();
-		
-		if (GamePreferences.IS_DEBUG_ENABLED())
+		if (ciclosAnimacion == 0)
 		{
-			handle.dibujar(gl);
-		}
-		
-		if (activado)
-		{
-			if (indiceAnimacionPulsada > 0)
+			ciclosAnimacion = numeroCiclosEspera;
+			
+			if (activado)
 			{
-				indiceAnimacionPulsada--;
+				if (indiceAnimacionPulsada > 0)
+				{
+					indiceAnimacionPulsada--;
+				}
+				else
+				{
+					activado = false;
+				}
 			}
-			else
-			{
-				activado = false;
-			}
+			
+			indiceAnimacionCiclica = (indiceAnimacionCiclica + 1) % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS;
 		}
-		
-		indiceAnimacionCiclica = (indiceAnimacionCiclica + 1) % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS;
 	}
 	
 	/* Métodos Públicos */
 	
+	@Override
 	public boolean contains(float x, float y)
 	{
 		if (area == null)
@@ -136,8 +142,12 @@ public class ObjetoAnimado extends ObjetoInanimado
 		
 		if (area.contains(x, y))
 		{
-			activado = true;
-			indiceAnimacionPulsada = GamePreferences.NUM_FRAMES_ANIMATION;
+			if (!activado)
+			{
+				activado = true;
+				ciclosAnimacion = numeroCiclosEspera;
+				indiceAnimacionPulsada = numeroCiclosAnimacion;
+			}
 		
 			if (indiceAnimacionPasos < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS - 1)
 			{
@@ -148,5 +158,17 @@ public class ObjetoAnimado extends ObjetoInanimado
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public void reposo()
+	{
+		super.reposo();
+		
+		indiceAnimacionPulsada = 0;
+		indiceAnimacionPasos = 0;
+		indiceAnimacionCiclica = 0;
+		ciclosAnimacion = 0;
+		activado = false;
 	}
 }

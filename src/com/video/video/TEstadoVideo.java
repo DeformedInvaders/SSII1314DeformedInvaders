@@ -4,7 +4,7 @@ import com.project.main.R;
 
 public enum TEstadoVideo
 {
-	Nada, Outside, Door, Rock, Noise, Brief, Logo;
+	Nada, Outside, Door, Rock, Noise, Brief, Spaceship, Logo;
 	
 	public TEstadoVideo getNext()
 	{
@@ -21,6 +21,8 @@ public enum TEstadoVideo
 			case Noise:
 				return TEstadoVideo.Brief;
 			case Brief:
+				return TEstadoVideo.Spaceship;
+			case Spaceship:
 				return TEstadoVideo.Logo;
 			default:
 				return TEstadoVideo.Nada;
@@ -36,7 +38,8 @@ public enum TEstadoVideo
 			case Noise:
 				return 5 * 1000;
 			case Logo:
-				return 15 * 1000;
+			case Spaceship:
+				return 7 * 1000;
 			default:
 				return 10 * 1000;
 		}
@@ -54,7 +57,7 @@ public enum TEstadoVideo
 				return R.raw.music_video_rock;
 			case Brief:
 				return R.raw.music_video_brief;
-			case Logo:
+			case Spaceship:
 				return R.raw.music_video_logo;
 			default:
 				return -1;
