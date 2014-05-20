@@ -69,6 +69,8 @@ public enum TEstadoVideo
 				return R.raw.effect_video_opendoor;
 			case Noise:
 				return R.raw.effect_video_stopplay;
+			case Brief:
+				return R.raw.effect_video_brief;
 			default:
 				return -1;
 		}

@@ -78,7 +78,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 				        public void run()
 				        {
 				        	view.actualizarActionBar();
-				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 				        }
 				    });
 				}	
@@ -113,7 +113,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 				{
 					if (core.importarPersonaje(selected))
 					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 					}
 				}
 	
@@ -155,7 +155,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Design Fragment
 
 	@Override
-	public void onDesignReady(final Esqueleto esqueleto, final DesignDataSaved datosSalvados)
+	public void onDesignReady(Esqueleto esqueleto, DesignDataSaved datosSalvados)
 	{
 		if (core.actualizarNuevoPersonaje(esqueleto))
 		{
@@ -198,17 +198,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 				{
 					if (core.actualizarNuevoPersonaje(text))
 					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 					}
 				}
 
 				@Override
 				public void onNegativeButtonClick(String text)
 				{
-					if (core.descartarNuevoPersonaje())
-					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
-					}
+					cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 				}
 
 			};
@@ -230,7 +227,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		if (core.seleccionarPersonaje(indice))
 		{
-			cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+			cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 		}
 	}
 
@@ -245,7 +242,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 				{
 					if (core.getNumeroPersonajes() == 0)
 					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 					}
 					else
 					{
@@ -410,7 +407,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onVideoFinished()
 	{
-		cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+		cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 	}
 
 	@Override
@@ -424,13 +421,25 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		core.reproducirSonido(sound, blockable);
 	}
+	
+	@Override
+	public void onVideoPlayVoice(int voice)
+	{
+		core.reproducirVoz(voice, false);
+	}
+	
+	@Override
+	public void onVideoResumeMusic()
+	{
+		core.continuarMusica();
+	}
 
 	/* Métodos de Modificación de la Vista */
 
-	private void cambiarEstadoMain(Personaje personaje, int numeroPersonajes)
+	private void cambiarEstadoMain(Personaje personaje, int numeroPersonajes, int numeroFicheros)
 	{
 		estado = TEstadoController.Main;
-		view.insertarMainFragmento(personaje, numeroPersonajes, estado.getTitle());
+		view.insertarMainFragmento(personaje, numeroPersonajes, numeroFicheros, estado.getTitle());
 		
 		actualizarMusica();
 		
@@ -534,7 +543,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 			switch(cima.getEstadoSalvado())
 			{
 				case Main:
-					cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes());
+					cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
 				break;
 				case Design:
 					cambiarEstadoDesign((DesignDataSaved) cima.getDatosSalvados());
@@ -566,6 +575,19 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		else if (estado != TEstadoController.Video)
 		{
 			core.reproducirMusica(R.raw.music_main, true);
+		}
+	}
+	
+	public void pausarMusica()
+	{
+		core.pausarMusica();
+	}
+	
+	public void continuarMusica()
+	{
+		if (estado != TEstadoController.Video)
+		{
+			core.continuarMusica();
 		}
 	}
 }

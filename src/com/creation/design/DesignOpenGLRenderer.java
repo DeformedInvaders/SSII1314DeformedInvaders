@@ -114,7 +114,6 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	protected boolean reiniciar()
 	{
 		estado = TEstadoDesign.Dibujando;
-
 		puntos.clear();
 
 		vertices = null;

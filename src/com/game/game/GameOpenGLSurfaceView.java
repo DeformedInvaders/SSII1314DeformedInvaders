@@ -229,6 +229,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		super.onPause();
 		sensorDetector.onPause();
+		seleccionarPause();
 	}
 	
 	/* Métodos de Selección de Estado */

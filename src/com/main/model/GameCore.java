@@ -44,7 +44,7 @@ public abstract class GameCore
 	private GameStatistics[] estadisticasNiveles;
 	
 	/* Musica */
-	private AudioPlayerManager audioPlayerManager, soundPlayerManager;
+	private AudioPlayerManager audioPlayerManager, soundPlayerManager, voicePlayerManager;
 	private AudioVolumeManager audioVolumeManager;
 	private int musicaSeleccionada;
 
@@ -85,6 +85,11 @@ public abstract class GameCore
 		};
 		
 		soundPlayerManager = new AudioPlayerManager(mContext) {
+			@Override
+			public void onPlayerCompletion() { }
+		};
+		
+		voicePlayerManager = new AudioPlayerManager(mContext) {
 			@Override
 			public void onPlayerCompletion() { }
 		};
@@ -140,6 +145,16 @@ public abstract class GameCore
 	{
 		return externalManager.listaFicheros(GameResources.CHARACTER_EXTENSION);
 	}
+	
+	public int getNumeroFicheros()
+	{
+		String[] ficheros = getListaFicheros();
+		if (ficheros == null)
+		{
+			return 0;
+		}
+		return ficheros.length;
+	}
 
 	public InstanciaNivel getNivel(TTipoLevel nivel)
 	{
@@ -192,15 +207,7 @@ public abstract class GameCore
 	
 	public boolean crearNuevoPersonaje()
 	{
-		if (nuevoPersonaje == null)
-		{
-			nuevoPersonaje = new Personaje();
-		}
-		else
-		{
-			descartarNuevoPersonaje();
-		}
-		
+		nuevoPersonaje = new Personaje();	
 		return true;
 	}
 	
@@ -208,11 +215,8 @@ public abstract class GameCore
 	{
 		if (esqueleto != null)
 		{
-			if (nuevoPersonaje != null)
-			{
-				nuevoPersonaje.setEsqueleto(esqueleto);
-				return true;
-			}
+			nuevoPersonaje.setEsqueleto(esqueleto);
+			return true;
 		}
 		else
 		{
@@ -287,23 +291,16 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean descartarNuevoPersonaje()
+	/*public boolean descartarNuevoPersonaje()
 	{
 		if (nuevoPersonaje != null)
 		{
-			nuevoPersonaje = null;
-			
-			TTipoMovimiento[] movimientos = TTipoMovimiento.values();
-			for (int i = 0; i < movimientos.length; i++)
-			{
-				internalManager.eliminarAudioTemp(movimientos[i]);
-			}
-			
+			nuevoPersonaje = new Personaje();			
 			return true;
 		}
 		
 		return false;
-	}
+	}*/
 
 	/* Métodos de modificación de la Lista de Personajes */
 	
@@ -562,6 +559,19 @@ public abstract class GameCore
 		thread.start();
 	}
 	
+	public void reproducirVoz(final int voz, final boolean block)
+	{
+		Thread thread = new Thread(new Runnable() {
+			 @Override
+			 public void run()
+			 {
+			 	voicePlayerManager.startPlaying(voz, false, false);
+			 }
+	    });
+		 
+		thread.start();
+	}
+	
 	public void reproducirMusica(final boolean loop)
 	{
 		Thread thread = new Thread(new Runnable() {
@@ -594,11 +604,15 @@ public abstract class GameCore
 	
 	public boolean pausarMusica()
 	{
+		voicePlayerManager.pausePlaying();
+		soundPlayerManager.pausePlaying();
 		return audioPlayerManager.pausePlaying();
 	}
 	
 	public boolean continuarMusica()
 	{
+		voicePlayerManager.resumePlaying();
+		soundPlayerManager.resumePlaying();
 		return audioPlayerManager.resumePlaying();
 	}
 	

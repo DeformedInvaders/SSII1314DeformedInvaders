@@ -724,7 +724,6 @@ public abstract class OpenGLRenderer implements Renderer
 			return new Dimensiones(textureHeight, textureWidth);
 		}
 
-		android.util.Log.d("TEST", "NULL TEXTURE: "+tipoEntidad.toString()+" posTextura "+posTextura);
 		return null;
 	}
 

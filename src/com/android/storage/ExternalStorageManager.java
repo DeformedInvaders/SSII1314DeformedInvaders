@@ -145,12 +145,12 @@ public class ExternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage file not found. "+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage ioexception. "+e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -224,22 +224,22 @@ public class ExternalStorageManager
 		}
 		catch (ClassNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " class not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " class not found. "+e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " sream corrupted");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " ioexception. "+e.getMessage());
 		}
 
-		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " not imported");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " not imported.");
 		return null;
 	}
 	
@@ -266,15 +266,15 @@ public class ExternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " sream corrupted");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " not exported");
@@ -303,15 +303,15 @@ public class ExternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " file not found");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " sream corrupted");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " ioexception");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " not exported");

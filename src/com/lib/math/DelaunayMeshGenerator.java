@@ -6,12 +6,14 @@ import com.lib.buffer.VertexArray;
 import com.lib.utils.FloatArray;
 import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
-import com.main.model.GamePreferences;
 
 public class DelaunayMeshGenerator
 {
 	public Mesh computeMesh(FloatArray vertices)
 	{	
+		Polygon poligonoBSpline = new Polygon(vertices.items);
+		float areaPoligonoBSpline = Math.abs(poligonoBSpline.area());
+		
 ExternalStorageManager.writeLogcat("TEST", "New Delaunay Mesh Generator.");
 		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();
 		
@@ -46,7 +48,7 @@ ExternalStorageManager.writeLogcat("TEST", "Mesh has change.");
 				
 				poligono.setVertices(vert);
 				
-				if (Math.abs(poligono.area()) > GamePreferences.MAX_AREA_TRIANGULATOR())
+				if (Math.abs(poligono.area()) > areaPoligonoBSpline / 10)
 				{
 					Vector2 centroGravedad = GeometryUtils.triangleCentroid(vert[0], vert[1], vert[2], vert[3], vert[4], vert[5], new Vector2());
 					

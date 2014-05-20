@@ -461,11 +461,6 @@ public class GamePreferences
 		return PLATAFORMA_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}
 	
-	public static final float MAX_AREA_TRIANGULATOR()
-	{
-		return 1500.0f * SCREEN_HEIGHT_SCALE_FACTOR();
-	}
-	
 	/* MARCOS */
 	
 	public static final float MARCO_ALTURA_LATERAL()

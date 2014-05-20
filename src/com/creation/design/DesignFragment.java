@@ -49,7 +49,7 @@ public class DesignFragment extends OpenGLFragment
 
 	public interface DesignFragmentListener
 	{
-		public void onDesignReady(final Esqueleto esqueleto, final DesignDataSaved datosSalvados);
+		public void onDesignReady(Esqueleto esqueleto, DesignDataSaved datosSalvados);
 	}
 
 	/* Métodos Fragment */

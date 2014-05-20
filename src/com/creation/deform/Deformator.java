@@ -1,5 +1,6 @@
 package com.creation.deform;
 
+import com.android.storage.ExternalStorageManager;
 import com.lib.buffer.EdgeArray;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.TriangleArray;
@@ -131,41 +132,48 @@ public class Deformator
 	// Modificación de Posición de Handles
 	public void moverHandles(HandleArray handles, VertexArray verticesModificados)
 	{
-		// Actualizar MatrizB
-		calcularMatrizB1(handles, matrizB1);
-
-		// Cálculo de Ajuste de Traslación y Rotación
-		//
-		// A1t * A1 * X = A1t * B1
-
-		matrizA1t.times(matrizB1, matrizA1tB1);
-
-		Matrix m1 = matrizA1tA1.solve(matrizA1tB1);
-
-		// Actualizar Valores de los Vertices después del Ajuste de Traslación y
-		// Rotación
-		VertexArray verticesTrasRot = vertices.clone();
-		for (short i = 0; i < numVertices; i++)
+		try
 		{
-			verticesTrasRot.setVertex(i, (float) m1.get(2 * i, 0), (float) m1.get(2 * i + 1, 0));
+			// Actualizar MatrizB
+			calcularMatrizB1(handles, matrizB1);
+
+			// Cálculo de Ajuste de Traslación y Rotación
+			//
+			// A1t * A1 * X = A1t * B1
+
+			matrizA1t.times(matrizB1, matrizA1tB1);
+			
+			Matrix m1 = matrizA1tA1.solve(matrizA1tB1);
+	
+			// Actualizar Valores de los Vertices después del Ajuste de Traslación y
+			// Rotación
+			VertexArray verticesTrasRot = vertices.clone();
+			for (short i = 0; i < numVertices; i++)
+			{
+				verticesTrasRot.setVertex(i, (float) m1.get(2 * i, 0), (float) m1.get(2 * i + 1, 0));
+			}
+	
+			// Cálculo de Ajuste de Escalación
+			//
+			// A2t * A2 * X = A2t * B2
+	
+			calcularMatrizB2(vertices, verticesTrasRot, handles, matrizB2x, matrizB2y);
+	
+			matrizA2t.times(matrizB2x, matrizA2tB2x);
+			matrizA2t.times(matrizB2y, matrizA2tB2y);
+	
+			Matrix m2x = matrizA2tA2.solve(matrizA2tB2x);
+			Matrix m2y = matrizA2tA2.solve(matrizA2tB2y);
+	
+			// Actualizar Valores de los Vertices después del Ajuste de Escala
+			for (short i = 0; i < numVertices; i++)
+			{
+				verticesModificados.setVertex(i, (float) m2x.get(i, 0), (float) m2y.get(i, 0));
+			}
 		}
-
-		// Cálculo de Ajuste de Escalación
-		//
-		// A2t * A2 * X = A2t * B2
-
-		calcularMatrizB2(vertices, verticesTrasRot, handles, matrizB2x, matrizB2y);
-
-		matrizA2t.times(matrizB2x, matrizA2tB2x);
-		matrizA2t.times(matrizB2y, matrizA2tB2y);
-
-		Matrix m2x = matrizA2tA2.solve(matrizA2tB2x);
-		Matrix m2y = matrizA2tA2.solve(matrizA2tB2y);
-
-		// Actualizar Valores de los Vertices después del Ajuste de Escala
-		for (short i = 0; i < numVertices; i++)
+		catch(RuntimeException e)
 		{
-			verticesModificados.setVertex(i, (float) m2x.get(i, 0), (float) m2y.get(i, 0));
+			ExternalStorageManager.writeLogcat("TEST", "RuntimeException: "+e.getMessage());
 		}
 	}
 

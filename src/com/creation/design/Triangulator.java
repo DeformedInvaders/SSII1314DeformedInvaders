@@ -51,7 +51,10 @@ ExternalStorageManager.writeLogcat("TEST", "Polygon is simple.");
 					contorno.addVertex(i);
 				}
 			}
+			else
+			{
 ExternalStorageManager.writeLogcat("TEST", "Polygon is complex.");
+			}
 		}
 	}
 	

@@ -284,7 +284,8 @@ public class LUDecomposition implements java.io.Serializable {
 					"Matrix row dimensions must agree.");
 		}
 		if (!this.isNonsingular()) {
-			throw new RuntimeException("Matrix is singular.");
+			Matrix m = new Matrix(LU);
+			throw new RuntimeException("Matrix is singular. \n Matrix: "+LU.toString()+" \n M: "+m+" N: "+n);
 		}
 
 		// Copy right hand side with pivoting

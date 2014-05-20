@@ -24,22 +24,23 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	private IconImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar, botonVideo;
 
 	private Personaje personaje;
-	private int numeroPersonajes;
+	private int numeroPersonajes, numeroFicheros;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(MainFragmentListener c, Personaje p, int n)
+	public static final MainFragment newInstance(MainFragmentListener callback, Personaje personaje, int numPersonajes, int numFicheros)
 	{
 		MainFragment fragment = new MainFragment();
-		fragment.setParameters(c, p, n);
+		fragment.setParameters(callback, personaje, numPersonajes, numFicheros);
 		return fragment;
 	}
 
-	private void setParameters(MainFragmentListener c, Personaje p, int n)
+	private void setParameters(MainFragmentListener c, Personaje p, int numPersonajes, int numFicheros)
 	{
 		mCallback = c;
 		personaje = p;
-		numeroPersonajes = n;
+		numeroPersonajes = numPersonajes;
+		numeroFicheros = numFicheros;
 	}
 
 	public interface MainFragmentListener
@@ -147,6 +148,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	{
 		botonSeleccionar.setVisibility(View.INVISIBLE);
 		botonJugar.setVisibility(View.INVISIBLE);
+		botonImportar.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -160,6 +162,11 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 			{
 				botonJugar.setVisibility(View.VISIBLE);
 			}
+		}
+		
+		if (numeroFicheros > 0)
+		{
+			botonImportar.setVisibility(View.VISIBLE);
 		}
 	}
 

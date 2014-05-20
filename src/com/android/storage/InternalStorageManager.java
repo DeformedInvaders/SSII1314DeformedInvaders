@@ -179,19 +179,19 @@ public class InternalStorageManager
 		}
 		catch (ClassNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character class not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character class not found. "+e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character file not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character sream corrupted");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character ioexception");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character not loadead");
@@ -247,15 +247,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character file not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character sream corrupted");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character ioexception");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Character not saved");
@@ -351,19 +351,19 @@ public class InternalStorageManager
 		}
 		catch (ClassNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels class not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels class not found. "+e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels file not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels sream corrupted");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels ioexception");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels not loadead");
@@ -399,15 +399,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels file not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels sream corrupted");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels ioexception");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Levels not saved");
@@ -436,15 +436,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences file not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences sream corrupted");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences ioexception");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences not loadead");
@@ -480,15 +480,15 @@ public class InternalStorageManager
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences file not found");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences sream corrupted");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences ioexception");
+			ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences ioexception. "+e.getMessage());
 		}
 
 		ExternalStorageManager.writeLogcat(INTERNAL_STORAGE_TAG, "Preferences not saved");

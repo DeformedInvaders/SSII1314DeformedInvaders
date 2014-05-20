@@ -96,7 +96,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 							
 							if (sound != -1)
 							{
-								mListener.onPlaySoundEffect(sound, false);
+								mListener.onPlayVoice(sound);
 							}
 							
 							if (music != -1)
@@ -116,6 +116,13 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 							mListener.onChangeDialog(mensajes[posMensaje], estado);
 							tiempoInicio = tiempoActual;
 							posMensaje++;
+							
+							int sound = estado.getSound();
+							
+							if (sound != -1)
+							{
+								mListener.onPlayVoice(sound);
+							}
 						}		
 					}
 					
@@ -133,12 +140,21 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		};
 	}
 	
-	public void iniciarVideo()
+	public void seleccionarResume()
 	{
 		if (!threadActivo)
 		{
 			threadActivo = true;
 			task.run();
+		}
+	}
+
+	public void seleccionarPause()
+	{
+		if (threadActivo)
+		{
+			threadActivo = false;
+			handler.removeCallbacks(task);
 		}
 	}
 	

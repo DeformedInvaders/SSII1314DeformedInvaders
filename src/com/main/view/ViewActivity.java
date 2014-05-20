@@ -106,14 +106,14 @@ public class ViewActivity extends FragmentActivity
 	public void onResume()
 	{
 		super.onResume();
-		core.continuarMusica();
+		controller.continuarMusica();
 	}
 	
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		core.pausarMusica();
+		controller.pausarMusica();
 	}
 
 	@Override
@@ -291,9 +291,9 @@ public class ViewActivity extends FragmentActivity
 		transaction.commit();
 	}
 
-	public void insertarMainFragmento(Personaje personaje, int numeroPersonajes, int title)
+	public void insertarMainFragmento(Personaje personaje, int numeroPersonajes, int numeroFicheros, int title)
 	{
-		insertarFragmento(MainFragment.newInstance(controller, personaje, numeroPersonajes));
+		insertarFragmento(MainFragment.newInstance(controller, personaje, numeroPersonajes, numeroFicheros));
 		cambiarTituloActionBar(title);
 	}
 

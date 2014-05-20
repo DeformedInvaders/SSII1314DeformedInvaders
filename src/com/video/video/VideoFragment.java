@@ -45,6 +45,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 		public void onVideoFinished();
 		public void onVideoPlayMusic(int music);
 		public void onVideoPlaySoundEffect(int sound, boolean blockable);
+		public void onVideoPlayVoice(int voice);
+		public void onVideoResumeMusic();
 	}
 
 	/* Métodos Fragment */
@@ -90,9 +92,12 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	@Override
 	public void onPause()
 	{
-		super.onPause();
+		super.onPause();		
 		canvas.saveData();
+		canvas.seleccionarPause();
 		canvas.onPause();
+		
+		imagenPlay.setVisibility(View.VISIBLE);
 	}
 
 	/* Métodos abstractos de OpenGLFragment */
@@ -110,8 +115,9 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 		@Override
 		public void onClick(View v)
 		{
+			canvas.seleccionarResume();
 			imagenPlay.setVisibility(View.INVISIBLE);
-			canvas.iniciarVideo();
+			mCallback.onVideoResumeMusic();
 		}
 	}
 	
@@ -133,6 +139,12 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	public void onPlaySoundEffect(int sound, boolean blockable)
 	{
 		mCallback.onVideoPlaySoundEffect(sound, blockable);
+	}
+	
+	@Override
+	public void onPlayVoice(int voice)
+	{
+		mCallback.onVideoPlayVoice(voice);
 	}
 	
 	@Override
