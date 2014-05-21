@@ -464,7 +464,7 @@ public class GamePreferences
 	
 	public static final float DIST_MOVIMIENTO_SPACESHIP()
 	{
-		final float PLATAFORMA_DISTANCE_BASE = 3.5f;
+		final float PLATAFORMA_DISTANCE_BASE = 10.0f;
 		
 		return PLATAFORMA_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}

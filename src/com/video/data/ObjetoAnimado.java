@@ -37,11 +37,11 @@ public class ObjetoAnimado extends ObjetoInanimado
 		indiceAnimacionPulsada = 0;
 		indiceAnimacionPasos = 0;
 		indiceAnimacionCiclica = 0;
-		
-		ciclosAnimacion = 0;
-		
+				
 		numeroCiclosEspera = GamePreferences.NUM_FRAMES_CYCLE;
 		numeroCiclosAnimacion = GamePreferences.NUM_FRAMES_ANIMATION;
+		
+		ciclosAnimacion = numeroCiclosEspera;
 		
 		activado = false;
 	}
@@ -60,7 +60,7 @@ public class ObjetoAnimado extends ObjetoInanimado
 				return indiceObjeto(0);
 			}
 		}
-		if (tipoAnimacion == TTipoAnimacion.Ciclico)
+		else if (tipoAnimacion == TTipoAnimacion.Ciclico)
 		{
 			return indiceObjeto(indiceAnimacionCiclica);
 		}
@@ -168,7 +168,7 @@ public class ObjetoAnimado extends ObjetoInanimado
 		indiceAnimacionPulsada = 0;
 		indiceAnimacionPasos = 0;
 		indiceAnimacionCiclica = 0;
-		ciclosAnimacion = 0;
+		ciclosAnimacion = numeroCiclosEspera;;
 		activado = false;
 	}
 }
