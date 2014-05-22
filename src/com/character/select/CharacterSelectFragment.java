@@ -1,7 +1,6 @@
 package com.character.select;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	private OnCharacterListener mListener;
 	
 	private DisplayOpenGLSurfaceView canvas;
-	private IconImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonDelete, botonRename, botonExport;
+	private IconImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonRedeform, botonDelete, botonRename, botonExport;
 
 	private Personaje personaje;
 	
@@ -59,7 +58,6 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewCharacterSelect1);
 		textBackground.setText(personaje.getNombre());
-		textBackground.setTextColor(Color.BLACK);
 		textBackground.setTypeface(textFont);
 
 		botonCamara = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
@@ -69,6 +67,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonAttack = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
 		botonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
 		botonRepaint = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
+		botonRedeform = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect11);
 		botonRename = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect9);
 		botonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
 		botonExport = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect10);
@@ -80,6 +79,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonAttack.setOnClickListener(new OnAttackClickListener());
 		botonReady.setOnClickListener(new OnReadyClickListener());
 		botonRepaint.setOnClickListener(new OnRepaintClickListener());
+		botonRedeform.setOnClickListener(new OnRedeformClickListener());
 		botonDelete.setOnClickListener(new OnDeleteClickListener());
 		botonRename.setOnClickListener(new OnRenameClickListener());
 		botonExport.setOnClickListener(new OnExportClickListener());
@@ -105,6 +105,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonCrouch = null;
 		botonAttack = null;
 		botonRepaint = null;
+		botonRedeform = null;
 		botonRename = null;
 		botonExport = null;
 	}
@@ -146,6 +147,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonReady.setVisibility(View.INVISIBLE);
 		botonDelete.setVisibility(View.INVISIBLE);
 		botonRepaint.setVisibility(View.INVISIBLE);
+		botonRedeform.setVisibility(View.INVISIBLE);
 		botonRename.setVisibility(View.INVISIBLE);
 		botonExport.setVisibility(View.INVISIBLE);
 
@@ -169,6 +171,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 			botonReady.setVisibility(View.VISIBLE);
 			botonDelete.setVisibility(View.VISIBLE);
 			botonRepaint.setVisibility(View.VISIBLE);
+			botonRedeform.setVisibility(View.VISIBLE);
 			botonRename.setVisibility(View.VISIBLE);
 			botonExport.setVisibility(View.VISIBLE);
 		}
@@ -288,6 +291,15 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		public void onClick(View v)
 		{
 			mListener.onCharacterRepainted();
+		}
+	}
+	
+	private class OnRedeformClickListener implements OnClickListener
+	{
+		@Override
+		public void onClick(View v)
+		{
+			mListener.onCharacterRedeformed();
 		}
 	}
 

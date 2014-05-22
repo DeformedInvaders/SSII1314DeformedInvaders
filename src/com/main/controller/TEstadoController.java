@@ -4,7 +4,7 @@ import com.project.main.R;
 
 public enum TEstadoController
 {
-	Main, Design, Paint, Repaint, Deformation, CharacterSelection, LevelSelection, Game, Video;
+	Main, Design, Paint, Repaint, Deformation, Redeformation, CharacterSelection, LevelSelection, Game, Video;
 	
 	public int getTitle()
 	{
@@ -16,6 +16,7 @@ public enum TEstadoController
 			case Repaint:
 				return R.string.title_paint_phase;
 			case Deformation:
+			case Redeformation:
 				return R.string.title_deformation_phase;
 			case CharacterSelection:
 				return R.string.title_character_selection_phase;

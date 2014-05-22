@@ -332,6 +332,12 @@ public class ViewActivity extends FragmentActivity
 		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje));
 		cambiarTituloActionBar(title);
 	}
+	
+	public void insertarDeformationFragmento(Personaje nuevoPersonaje, int indice, int title)
+	{
+		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje, indice));
+		cambiarTituloActionBar(title);
+	}
 
 	public void insertarCharacterSelectionFragmento(List<Personaje> listaPersonajes, int title)
 	{

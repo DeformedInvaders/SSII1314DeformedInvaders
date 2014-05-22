@@ -16,6 +16,7 @@ import com.android.opengl.TTipoFondoRenderer;
 import com.android.opengl.TTipoTexturasRenderer;
 import com.creation.data.Handle;
 import com.creation.data.Pegatinas;
+import com.creation.data.TTipoMovimiento;
 import com.creation.data.Textura;
 import com.game.data.Personaje;
 import com.game.data.TTipoEntidad;
@@ -87,7 +88,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	/* Constructora */
 
-	public DeformOpenGLRenderer(Context context, int color, OnDeformListener listener, Personaje personaje)
+	public DeformOpenGLRenderer(Context context, int color, OnDeformListener listener, Personaje personaje, TTipoMovimiento movimiento)
 	{
 		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje, color);
 		
@@ -96,7 +97,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		modoGrabar = false;
 		
 		listaHandlesAnimacion = new ArrayList<HandleArray>();
-		listaVerticesAnimacion = new ArrayList<VertexArray>();
+		
+		if (personaje.isMovimientosReady())
+		{
+			listaVerticesAnimacion = personaje.getMovimientos().get(movimiento);
+		}
+		else
+		{
+			listaVerticesAnimacion = new ArrayList<VertexArray>();
+		}
 
 		// Esqueleto
 		contorno = personaje.getEsqueleto().getContorno();
@@ -471,7 +480,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	}
 
 	private void construirListadeMovimientos()
-	{		
+	{
 		int numFramesDescartar = 1;
 		int numFramesRepetir = 1;
 

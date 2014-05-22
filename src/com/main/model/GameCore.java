@@ -348,6 +348,26 @@ public abstract class GameCore
 		return false;
 	}
 	
+	public boolean redeformarPersonaje(int indice, Movimientos movimientos)
+	{
+		if (movimientos != null)
+		{
+			if (indice >= 0 && indice < listaPersonajes.size())
+			{
+				Personaje personaje = listaPersonajes.get(indice);
+				personaje.setMovimientos(movimientos);
+				internalManager.actualizarPersonaje(personaje);
+				return true;
+			}
+		}
+		else
+		{
+			sendToastMessage(R.string.error_deform);
+		}		
+		
+		return false;
+	}
+	
 	public boolean seleccionarPersonaje(int indice)
 	{
 		if (indice >= 0 && indice < listaPersonajes.size())

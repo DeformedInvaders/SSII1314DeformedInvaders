@@ -11,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:textSize="45sp" />
+        android:layout_alignParentTop="true"
+        android:textSize="45sp"
+        android:textColor="#FFFFFF"/>
 	
     <LinearLayout style="@style/Layout_Bottom_Left_FragmentButton_Style" >
 
@@ -54,6 +55,11 @@
 	        android:id="@+id/imageButtonCharacterSelect8"
 	        android:contentDescription="@string/desc_select_repaint"
 	        android:background="@drawable/icon_tool_repaint" />
+	    
+		<com.android.view.IconImageButton style="@style/Button_Fragment_Style"
+	        android:id="@+id/imageButtonCharacterSelect11"
+	        android:contentDescription="@string/desc_select_redeform"
+	        android:background="@drawable/icon_tool_redeform" />
 	    
    	    <com.android.view.IconImageButton style="@style/Button_Fragment_Style"
 	        android:id="@+id/imageButtonCharacterSelect9"

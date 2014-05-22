@@ -51,6 +51,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		public void onCharacterSelectionSelectCharacter(final int indice);
 		public void onCharacterSelectionDeleteCharacter(final int indice);
 		public void onCharacterSelectionRepaintCharacter(final int indice, final CharacterSelectionDataSaved datosSalvados);
+		public void onCharacterSelectionRedeformCharacter(final int indice, final CharacterSelectionDataSaved datosSalvados);
 		public void onCharacterSelectionRenameCharacter(final int indice);
 		public void onCharacterSelectionExportCharacter(final int indice);
 		public void onCharacterSelectionPostPublish(final String mensaje, final Bitmap bitmap);
@@ -126,6 +127,12 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 	public void onCharacterRepainted()
 	{
 		mCallback.onCharacterSelectionRepaintCharacter(viewPager.getPosition(), new CharacterSelectionDataSaved(viewPager.getPosition()));
+	}
+	
+	@Override
+	public void onCharacterRedeformed()
+	{
+		mCallback.onCharacterSelectionRedeformCharacter(viewPager.getPosition(), new CharacterSelectionDataSaved(viewPager.getPosition()));
 	}
 	
 	@Override

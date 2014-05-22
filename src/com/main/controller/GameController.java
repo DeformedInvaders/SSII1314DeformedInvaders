@@ -215,6 +215,15 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
+	public void onRedeformationReady(final Movimientos movimientos, final int indice)
+	{
+    	if (core.redeformarPersonaje(indice, movimientos))
+		{
+			cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
+		}
+	}
+	
+	@Override
 	public void onDeformationPlaySoundEffect(int sound)
 	{
 		core.reproducirSonido(sound, false);
@@ -287,6 +296,13 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		pila.push(new Estado(estado, datosSalvados));
 		cambiarEstadoRepaint(core.getPersonaje(indice), indice, core.getEstadisticasNiveles());
+	}
+	
+	@Override
+	public void onCharacterSelectionRedeformCharacter(final int indice,final CharacterSelectionDataSaved datosSalvados)
+	{
+		pila.push(new Estado(estado, datosSalvados));
+		cambiarEstadoRedeformation(core.getPersonaje(indice), indice);
 	}
 	
 	@Override
@@ -485,6 +501,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{		
 		estado = TEstadoController.Deformation;
 		view.insertarDeformationFragmento(nuevoPersonaje, estado.getTitle());
+	}
+	
+	private void cambiarEstadoRedeformation(Personaje personaje, int indice)
+	{		
+		estado = TEstadoController.Redeformation;
+		view.insertarDeformationFragmento(personaje, indice, estado.getTitle());
+		
+		actualizarMusica();
 	}
 
 	private void cambiarEstadoCharacterSelection(List<Personaje> listaPersonajes)

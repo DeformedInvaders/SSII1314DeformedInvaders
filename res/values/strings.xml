@@ -257,7 +257,8 @@
 	    	<string name="desc_select_delete">Delete this character.</string>
 	    	<string name="desc_select_camera">Save a picture of this character.</string>
 	    	<string name="desc_select_rename">Rename this character.</string>
-	    	<string name="desc_select_repaint">Repaint this character.</string>
+	    	<string name="desc_select_repaint">Change this character design.</string>
+	    	<string name="desc_select_redeform">Change this character animations.</string>
 	    	<string name="desc_select_export">Export this character.</string>
 	    	<string name="desc_select_run">Play run animation.</string>
 	    	<string name="desc_select_jump">Play jump animation.</string>

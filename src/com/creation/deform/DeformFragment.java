@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
+import com.creation.data.TTipoMovimiento;
 import com.game.data.Personaje;
 import com.lib.buffer.VertexArray;
 import com.project.main.R;
@@ -19,7 +20,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	private OnDeformationListener mListener;
 	
 	private Personaje personaje;
-
+	private TTipoMovimiento movimiento;
+	
 	private DeformOpenGLSurfaceView canvas;
 	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonReproducir;
 
@@ -27,17 +29,18 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	
 	/* Constructora */
 
-	public static final DeformFragment newInstance(OnDeformationListener l, Personaje p)
+	public static final DeformFragment newInstance(OnDeformationListener l, Personaje p, TTipoMovimiento m)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(l, p);
+		fragment.setParameters(l, p, m);
 		return fragment;
 	}
 
-	private void setParameters(OnDeformationListener l, Personaje p)
+	private void setParameters(OnDeformationListener l, Personaje p, TTipoMovimiento m)
 	{
 		mListener = l;
 		personaje = p;
+		movimiento = m;
 	}
 
 	/* Métodos Fragment */
@@ -49,7 +52,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 
 		// Instanciar Elementos de la GUI
 		canvas = (DeformOpenGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(this, personaje);
+		canvas.setParameters(this, personaje, movimiento);
 		setCanvasListener(canvas);
 		
 		botonAnyadir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform1);
@@ -129,12 +132,12 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 				botonEliminar.setVisibility(View.VISIBLE);
 				botonDeformar.setVisibility(View.VISIBLE);
 				botonReiniciar.setVisibility(View.VISIBLE);
-
-				if (canvas.isGrabacionReady())
-				{
-					botonReproducir.setVisibility(View.VISIBLE);
-				}
 			}
+		}
+		
+		if (canvas.isGrabacionReady())
+		{
+			botonReproducir.setVisibility(View.VISIBLE);
 		}
 
 		botonAnyadir.setActivo(canvas.isEstadoAnyadir());

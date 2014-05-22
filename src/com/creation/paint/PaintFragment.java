@@ -391,13 +391,13 @@ public class PaintFragment extends OpenGLFragment
 			reiniciarInterfaz();
 			actualizarInterfaz();
 			
-			if(personajeIndice != -1)
+			if(personajeIndice == -1)
 			{
-				mCallback.onRepaintReady(canvas.getTextura(), personajeIndice);
+				mCallback.onPaintReady(canvas.getTextura(), canvas.saveData());
 			}
 			else
 			{
-				mCallback.onPaintReady(canvas.getTextura(), canvas.saveData());
+				mCallback.onRepaintReady(canvas.getTextura(), personajeIndice);
 			}	
 		}
 	}

@@ -90,7 +90,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 		
-		if (personaje.getTextura() != null)
+		if (personaje.isTexturaReady())
 		{
 			pegatinas = personaje.getTextura().getPegatinas();
 		}
@@ -211,6 +211,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
 		pegatinas.eliminarPegatinas();
+		
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
 
@@ -317,7 +318,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 			anteriores.push(new AccionPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, pegatinas.getFactor(tipoPegatinaActual), pegatinas.getTheta(tipoPegatinaActual)));
 			siguientes.clear();
-
+			
+			estado = TEstadoPaint.Nada;
 			return true;
 		}
 

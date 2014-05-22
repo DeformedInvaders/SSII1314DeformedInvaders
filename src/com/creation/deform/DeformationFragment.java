@@ -28,26 +28,44 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	
 	private Personaje personaje;
 	private Movimientos movimientos;
+	private int personajeIndice;
 
 	/* Constructora */
 
 	public static final DeformationFragment newInstance(AnimationFragmentListener c, Personaje p)
 	{
 		DeformationFragment fragment = new DeformationFragment();
-		fragment.setParameters(c, p);
+		fragment.setParameters(c, p, -1);
+		return fragment;
+	}
+	
+	public static final DeformationFragment newInstance(AnimationFragmentListener c, Personaje p, int n)
+	{
+		DeformationFragment fragment = new DeformationFragment();
+		fragment.setParameters(c, p, n);
 		return fragment;
 	}
 
-	private void setParameters(AnimationFragmentListener c, Personaje p)
+	private void setParameters(AnimationFragmentListener c, Personaje p, int n)
 	{
 		mCallback = c;
 		personaje = p;
-		movimientos = new Movimientos();
+		personajeIndice = n;
+		
+		if (personajeIndice == -1)
+		{
+			movimientos = new Movimientos();
+		}
+		else
+		{
+			movimientos = personaje.getMovimientos();
+		}
 	}
 
 	public interface AnimationFragmentListener
 	{
 		public void onDeformationReady(final Movimientos movimientos);
+		public void onRedeformationReady(final Movimientos movimientos, int indice);
 		public void onDeformationPlaySoundEffect(int sound);
 	}
 
@@ -69,7 +87,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		TTipoMovimiento[] movimientos = TTipoMovimiento.values();
 		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
 		{
-			frameLayout.addView(DeformFragment.newInstance(this, personaje), getString(movimientos[i].getTitle()));
+			frameLayout.addView(DeformFragment.newInstance(this, personaje, movimientos[i]), getString(movimientos[i].getTitle()));
 		}
 
 		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GameResources.VIDEO_DEFORM_HANDLES_PATH);
@@ -127,7 +145,14 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 			}
 			else
 			{
-				mCallback.onDeformationReady(movimientos);
+				if (personajeIndice == -1)
+				{
+					mCallback.onDeformationReady(movimientos);
+				}
+				else
+				{
+					mCallback.onRedeformationReady(movimientos, personajeIndice);
+				}
 			}
 		}
 	}
