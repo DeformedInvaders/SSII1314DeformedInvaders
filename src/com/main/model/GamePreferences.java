@@ -34,9 +34,9 @@ public class GamePreferences
 	private static final int TIME_INTERVAL_ANIMATION_SLOW = 18;
 	private static final int TIME_INTERVAL_ANIMATION_SUPER_SLOW = 20;
 	
-	private static final int TIME_INTERVAL_ANIMATION_VIDEO = 40;
+	private static final int TIME_INTERVAL_ANIMATION_VIDEO = 20;
 	
-	public static final int NUM_FRAMES_ANIMATION = 10;
+	public static final int NUM_FRAMES_ANIMATION = 20;
 	public static final int NUM_FRAMES_CYCLE = 5;
 	public static final int NUM_FRAMES_DISPARO = 10;
 	
@@ -369,7 +369,7 @@ public class GamePreferences
 	
 	public static final float SCREEN_HEIGHT_SCALE_FACTOR()
 	{
-		final float GAME_HEIGHT_BASE = 800.0f;
+		final float GAME_HEIGHT_BASE = 752.0f;
 		
 		return HEIGHT_SCREEN / GAME_HEIGHT_BASE;
 	}
@@ -464,7 +464,7 @@ public class GamePreferences
 	
 	public static final float DIST_MOVIMIENTO_SPACESHIP()
 	{
-		final float PLATAFORMA_DISTANCE_BASE = 10.0f;
+		final float PLATAFORMA_DISTANCE_BASE = 5.0f;
 		
 		return PLATAFORMA_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}

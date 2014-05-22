@@ -73,7 +73,7 @@ public class ObjetoInanimado extends Entidad
 		gl.glPushMatrix();
 		
 			gl.glTranslatef(posicionX, posicionY, 0.0f);
-			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 0.0f);
+			gl.glScalef(GamePreferences.SCREEN_WIDTH_SCALE_FACTOR(), GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR(), 1.0f);
 			gl.glScalef(factor, factor, 1.0f);
 			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceObjeto(), TTipoSticker.Nada);
 		
