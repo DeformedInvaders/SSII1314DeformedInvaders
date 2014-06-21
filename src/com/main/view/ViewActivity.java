@@ -43,14 +43,14 @@ import com.video.video.VideoFragment;
 public class ViewActivity extends FragmentActivity
 {
 	/* Controlador */
-	private GameController controller;
+	private GameController mController;
 	
 	/* Modelo */
-	private GameCore core;
+	private GameCore mCore;
 	
 	/* Elementos de la Interafaz */
-	private ActionBar actionBar;
-	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, /*botonDebug,*/ botonSensor;
+	private ActionBar mActionBar;
+	private MenuItem botonTwitter, botonFacebook, buttonMusic, buttonTips, /*botonDebug,*/ botonSensor;
 	
 	/* Métodos Activity */
 	
@@ -68,8 +68,8 @@ public class ViewActivity extends FragmentActivity
 
 		// ActionBar
 		
-		actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		mActionBar = getActionBar();
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Permisos Internet
 		
@@ -87,17 +87,17 @@ public class ViewActivity extends FragmentActivity
         
         // Arquitectura
         
-        core = new GameCore(this, metrics.widthPixels, metrics.heightPixels, sensorAvailable) {
+        mCore = new GameCore(this, metrics.widthPixels, metrics.heightPixels, sensorAvailable) {
 			@Override
 			public void onSocialConectionStatusChanged()
 			{
-				actualizarActionBar();	
+				updateActionBar();	
 			}
         };
         
-        controller = new GameController(this, this, core);
+        mController = new GameController(this, this, mCore);
         
-        controller.onActivityStarted();
+        mController.onActivityStarted();
                 
         ExternalStorageManager.writeLogcat("ACTIVITY", DateFormat.getDateTimeInstance().format(new Date()));
 	}
@@ -106,21 +106,21 @@ public class ViewActivity extends FragmentActivity
 	public void onResume()
 	{
 		super.onResume();
-		controller.continuarMusica();
+		mController.resumeMusic();
 	}
 	
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		controller.pausarMusica();
+		mController.pauseMusic();
 	}
 
 	@Override
 	public void onBackPressed()
 	{
-		limpiarActionBar();
-		controller.desapilarEstado();
+		clearActionBar();
+		mController.popState();
 	}
 
 	@Override
@@ -129,14 +129,14 @@ public class ViewActivity extends FragmentActivity
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
 		
-		botonConsejos = menu.getItem(0);
+		buttonTips = menu.getItem(0);
 		botonSensor = menu.getItem(1);
-		botonMusica = menu.getItem(2);
+		buttonMusic = menu.getItem(2);
 		botonTwitter = menu.getItem(3);
 		botonFacebook = menu.getItem(4);
 		//botonDebug = menu.getItem(5);
 		
-		actualizarActionBar();
+		updateActionBar();
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -167,54 +167,54 @@ public class ViewActivity extends FragmentActivity
 
 	public boolean onMenuTwitterButtonClicked()
 	{
-		return core.modificarConexionTwitter();
+		return mCore.modificarConexionTwitter();
 	}
 
 	public boolean onMenuFacebookButtonClicked()
 	{
-		return core.modificarConexionFacebook();
+		return mCore.modificarConexionFacebook();
 	}
 	
 	public boolean onMenuMusicButtonClicked()
 	{
 		GamePreferences.SWITCH_MUSIC_GAME();
-		core.actualizarPreferencias();
+		mCore.updatePreferences();
 		
-		controller.actualizarMusica();
-		actualizarActionBar();
+		mController.updateMusic();
+		updateActionBar();
 		return true;
 	}
 	
 	public boolean onMenuTipsButtonClicked()
 	{
 		GamePreferences.SWITCH_TIPS_GAME();
-		core.actualizarPreferencias();
+		mCore.updatePreferences();
 		
-		actualizarActionBar();
+		updateActionBar();
 		return true;
 	}
 	
 	public boolean onMenuSensorButtonClicked()
 	{
 		GamePreferences.SWITCH_SENSOR_GAME();
-		core.actualizarPreferencias();
+		mCore.updatePreferences();
 		
-		actualizarActionBar();
+		updateActionBar();
 		return true;
 	}
 	
 	public boolean onMenuDebugButtonClicked()
 	{
 		GamePreferences.SWITCH_DEBUG_GAME();
-		core.actualizarPreferencias();
+		mCore.updatePreferences();
 		
-		actualizarActionBar();
+		updateActionBar();
 		return true;
 	}
 
-	public void actualizarActionBar()
+	public void updateActionBar()
 	{
-		if (core.isTwitterConectado())
+		if (mCore.isTwitterConnected())
 		{
 			botonTwitter.setIcon(R.drawable.icon_social_twitter_connected);
 		}
@@ -223,7 +223,7 @@ public class ViewActivity extends FragmentActivity
 			botonTwitter.setIcon(R.drawable.icon_social_twitter_disconnected);
 		}
 
-		if (core.isFacebookConectado())
+		if (mCore.isFacebookConnected())
 		{
 			botonFacebook.setIcon(R.drawable.icon_social_facebook_connected);
 		}
@@ -234,20 +234,20 @@ public class ViewActivity extends FragmentActivity
 		
 		if (GamePreferences.IS_MUSIC_ENABLED())
 		{
-			botonMusica.setIcon(R.drawable.icon_media_music_enabled);
+			buttonMusic.setIcon(R.drawable.icon_media_music_enabled);
 		}
 		else
 		{
-			botonMusica.setIcon(R.drawable.icon_media_music_disabled);
+			buttonMusic.setIcon(R.drawable.icon_media_music_disabled);
 		}
 		
 		if (GamePreferences.IS_TIPS_ENABLED())
 		{
-			botonConsejos.setIcon(R.drawable.icon_tool_tips_enabled);
+			buttonTips.setIcon(R.drawable.icon_tool_tips_enabled);
 		}
 		else
 		{
-			botonConsejos.setIcon(R.drawable.icon_tool_tips_disabled);
+			buttonTips.setIcon(R.drawable.icon_tool_tips_disabled);
 		}
 		
 		/*if (GamePreferences.IS_DEBUG_ENABLED())
@@ -269,21 +269,21 @@ public class ViewActivity extends FragmentActivity
 		}
 	}
 
-	private void limpiarActionBar()
+	private void clearActionBar()
 	{
-		actionBar.removeAllTabs();
+		mActionBar.removeAllTabs();
 	}
 	
-	private void cambiarTituloActionBar(int texto)
+	private void updateTitleActionBar(int texto)
 	{
 		setTitle(getString(texto).toUpperCase(Locale.getDefault()));
 	}
 
 	/* Métodos de Modificación del FrameLayout */
 
-	private void insertarFragmento(Fragment fragmento)
+	private void addFragment(Fragment fragmento)
 	{
-		limpiarActionBar();
+		clearActionBar();
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.frameLayoutMain1, fragmento);
@@ -291,87 +291,87 @@ public class ViewActivity extends FragmentActivity
 		transaction.commit();
 	}
 
-	public void insertarMainFragmento(Character personaje, int numeroPersonajes, int numeroFicheros, int title)
+	public void addMainFragment(Character personaje, int numeroPersonajes, int numeroFicheros, int title)
 	{
-		insertarFragmento(MainFragment.newInstance(controller, personaje, numeroPersonajes, numeroFicheros));
-		cambiarTituloActionBar(title);
+		addFragment(MainFragment.newInstance(mController, personaje, numeroPersonajes, numeroFicheros));
+		updateTitleActionBar(title);
 	}
 
-	public void insertarDesignFragmento(int title)
+	public void addDesignFragment(int title)
 	{
-		insertarFragmento(DesignFragment.newInstance(controller));
-		cambiarTituloActionBar(title);
+		addFragment(DesignFragment.newInstance(mController));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarDesignFragmento(DesignDataSaved datosSalvados, int title)
+	public void addDesignFragment(DesignDataSaved datosSalvados, int title)
 	{
-		insertarFragmento(DesignFragment.newInstance(controller, datosSalvados));
-		cambiarTituloActionBar(title);
+		addFragment(DesignFragment.newInstance(mController, datosSalvados));
+		updateTitleActionBar(title);
 	}
 
-	public void insertarPaintFragmento(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, int title)
+	public void addPaintFragment(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, int title)
 	{
-		insertarFragmento(PaintFragment.newInstance(controller, nuevoPersonaje, estadisticasNiveles));
-		cambiarTituloActionBar(title);
+		addFragment(PaintFragment.newInstance(mController, nuevoPersonaje, estadisticasNiveles));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarPaintFragmento(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados, int title)
+	public void addPaintFragment(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados, int title)
 	{
-		insertarFragmento(PaintFragment.newInstance(controller, nuevoPersonaje, estadisticasNiveles, datosSalvados));
-		cambiarTituloActionBar(title);
+		addFragment(PaintFragment.newInstance(mController, nuevoPersonaje, estadisticasNiveles, datosSalvados));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarPaintFragmento(Character personaje, int indice, GameStatistics[] estadisticasNiveles, int title)
+	public void addPaintFragment(Character personaje, int indice, GameStatistics[] estadisticasNiveles, int title)
 	{
-		insertarFragmento(PaintFragment.newInstance(controller, personaje, indice, estadisticasNiveles));
-		cambiarTituloActionBar(title);
+		addFragment(PaintFragment.newInstance(mController, personaje, indice, estadisticasNiveles));
+		updateTitleActionBar(title);
 	}
 
-	public void insertarDeformationFragmento(Character nuevoPersonaje, int title)
+	public void addDeformationFragment(Character nuevoPersonaje, int title)
 	{
-		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje));
-		cambiarTituloActionBar(title);
+		addFragment(DeformationFragment.newInstance(mController, nuevoPersonaje));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarDeformationFragmento(Character nuevoPersonaje, int indice, int title)
+	public void addDeformationFragment(Character nuevoPersonaje, int indice, int title)
 	{
-		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje, indice));
-		cambiarTituloActionBar(title);
+		addFragment(DeformationFragment.newInstance(mController, nuevoPersonaje, indice));
+		updateTitleActionBar(title);
 	}
 
-	public void insertarCharacterSelectionFragmento(List<Character> listaPersonajes, int title)
+	public void addCharacterSelectionFragment(List<Character> listaPersonajes, int title)
 	{
-		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes));
-		cambiarTituloActionBar(title);
+		addFragment(CharacterSelectionFragment.newInstance(mController, listaPersonajes));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarCharacterSelectionFragmento(List<Character> listaPersonajes, CharacterSelectionDataSaved datosSalvados, int title)
+	public void addCharacterSelectionFragment(List<Character> listaPersonajes, CharacterSelectionDataSaved datosSalvados, int title)
 	{
-		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes, datosSalvados));
-		cambiarTituloActionBar(title);
+		addFragment(CharacterSelectionFragment.newInstance(mController, listaPersonajes, datosSalvados));
+		updateTitleActionBar(title);
 	}
 
-	public void insertarLevelSelectionFragmento(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, int title)
+	public void addLevelSelectionFragment(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, int title)
 	{
-		insertarFragmento(LevelSelectionFragment.newInstance(controller, listaNiveles, estadisticasNiveles));
-		cambiarTituloActionBar(title);
+		addFragment(LevelSelectionFragment.newInstance(mController, listaNiveles, estadisticasNiveles));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarLevelSelectionFragmento(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, TTypeLevel nivel, int title)
+	public void addLevelSelectionFragment(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, TTypeLevel nivel, int title)
 	{
-		insertarFragmento(LevelSelectionFragment.newInstance(controller, listaNiveles, estadisticasNiveles, nivel));
-		cambiarTituloActionBar(title);
+		addFragment(LevelSelectionFragment.newInstance(mController, listaNiveles, estadisticasNiveles, nivel));
+		updateTitleActionBar(title);
 	}
 
-	public void insertarGameFragmento(Character personajeSeleccionado, InstanceLevel nivel, int title)
+	public void addGameFragment(Character personajeSeleccionado, InstanceLevel nivel, int title)
 	{
-		insertarFragmento(GameFragment.newInstance(controller, personajeSeleccionado, nivel));
-		cambiarTituloActionBar(title);
+		addFragment(GameFragment.newInstance(mController, personajeSeleccionado, nivel));
+		updateTitleActionBar(title);
 	}
 	
-	public void insertarVideoFragmento(Video video, int title)
+	public void addVideoFragment(Video video, int title)
 	{
-		insertarFragmento(VideoFragment.newInstance(controller, video));
-		cambiarTituloActionBar(title);
+		addFragment(VideoFragment.newInstance(mController, video));
+		updateTitleActionBar(title);
 	}
 }

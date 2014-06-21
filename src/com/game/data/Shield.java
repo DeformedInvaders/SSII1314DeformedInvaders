@@ -73,7 +73,7 @@ public class Shield extends Entity
 	{
 		if (typeEntity != TTypeEntity.Nothing)
 		{
-			for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
+			for (int i = 0; i < GamePreferences.NUM_TYPE_SHIELD; i++)
 			{
 				renderer.loadTextureRectangle(gl, instanceEntity.getHeight(), instanceEntity.getWidth(), indiceBurbuja(i), typeEntity, i, TTypeSticker.Nothing);
 			}
@@ -88,7 +88,7 @@ public class Shield extends Entity
 	{
 		if (typeEntity != TTypeEntity.Nothing)
 		{
-			for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
+			for (int i = 0; i < GamePreferences.NUM_TYPE_SHIELD; i++)
 			{
 				renderer.deleteTextureRectangle(typeEntity, i, TTypeSticker.Nothing);
 			}

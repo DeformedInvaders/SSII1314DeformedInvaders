@@ -2,28 +2,28 @@ package com.main.controller;
 
 public class SavedState
 {
-	private DataSaved datosSalvados;
-	private TStateController estadoSalvado;
+	private DataSaved dataSaved;
+	private TStateController stateSaved;
 	
-	public SavedState(TStateController estado)
+	public SavedState(TStateController state)
 	{
-		estadoSalvado = estado;
+		stateSaved = state;
 	}
 	
-	public SavedState(TStateController estado, DataSaved datos)
+	public SavedState(TStateController state, DataSaved data)
 	{
-		datosSalvados = datos;
-		estadoSalvado = estado;
+		dataSaved = data;
+		stateSaved = state;
 	}
 
-	public DataSaved getDatosSalvados()
+	public DataSaved getDataSaved()
 	{
-		return datosSalvados;
+		return dataSaved;
 	}
 
-	public TStateController getEstadoSalvado()
+	public TStateController getStateSaved()
 	{
-		return estadoSalvado;
+		return stateSaved;
 	}
 	
 }

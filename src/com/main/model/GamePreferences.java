@@ -38,7 +38,7 @@ public class GamePreferences
 	
 	public static final int NUM_FRAMES_ANIMATION = 20;
 	public static final int NUM_FRAMES_CYCLE = 5;
-	public static final int NUM_FRAMES_DISPARO = 10;
+	public static final int NUM_FRAMES_SHOT = 10;
 	
 	// Texturas
 	public static final float DEEP_BACKGROUND = -0.99f;
@@ -56,7 +56,7 @@ public class GamePreferences
 	public static final int MAX_BOSS_LIVES = 3;
 	
 	public static final int NUM_TYPE_LEVELS = TTypeLevel.values().length;
-	public static final int NUM_TYPE_MOVIMIENTOS = TTypeMovement.values().length;
+	public static final int NUM_TYPE_MOVEMENTS = TTypeMovement.values().length;
 	public static final int NUM_TYPE_STICKERS = TTypeSticker.values().length - 1;
 	public static final int NUM_TYPE_ENDGAME = TTypeEndgame.values().length;
 	
@@ -65,8 +65,8 @@ public class GamePreferences
 	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 7;
 	public static final int NUM_TYPE_CHARACTER_DESIGN = 1;
 	public static final int NUM_TYPE_CHARACTER_VIDEO = 2;
-	public static final int NUM_TYPE_CHARACTER_JUEGO = 1;
-	public static final int NUM_TYPE_BUBBLES = 3;
+	public static final int NUM_TYPE_CHARACTER_GAME = 1;
+	public static final int NUM_TYPE_SHIELD = 3;
 	public static final int NUM_TYPE_PLATFORMS = 3;
 	public static final int NUM_TYPE_WEAPONS = 4;
 	public static final int NUM_TYPE_SHOTS = 1;
@@ -253,19 +253,19 @@ public class GamePreferences
 		return WIDTH_SCREEN / 1.8f;
 	}
 	
-	public static final float POS_ENEMIES_INICIO()
+	public static final float POS_ENEMIES_BEGIN()
 	{
 		return WIDTH_SCREEN;
 	}
 	
-	public static final float POS_ENEMIES_FINAL()
+	public static final float POS_ENEMIES_END()
 	{
-		return POS_ENEMIES_INICIO() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMIES() * 1.5f;
+		return POS_ENEMIES_BEGIN() + MAX_ENEMIES * DISTANCE_BETWEEN_ENEMIES() * 1.5f;
 	}
 	
 	private static final float MAX_NUM_CICLOS()
 	{
-		return Math.round(POS_ENEMIES_FINAL() / DIST_MOVIMIENTO_ENEMIES());
+		return Math.round(POS_ENEMIES_END() / DIST_MOVIMIENTO_ENEMIES());
 	}
 	
 	public static final int NUM_ITERATION_BACKGROUND()
@@ -455,7 +455,7 @@ public class GamePreferences
 		return CHARACTER_DISTANCE_BASE * SCREEN_HEIGHT_SCALE_FACTOR();
 	}
 	
-	public static final float DIST_MOVIMIENTO_PLATAFORMA()
+	public static final float DIST_MOVIMIENTO_PLATFORM()
 	{
 		final float PLATAFORMA_DISTANCE_BASE = 5.0f;
 		
@@ -471,33 +471,33 @@ public class GamePreferences
 	
 	/* MARCOS */
 	
-	public static final float MARCO_ALTURA_LATERAL()
+	public static final float FRAME_HEIGHT_SIDE()
 	{
-		return MARCO_ALTURA_LATERAL(WIDTH_SCREEN, HEIGHT_SCREEN);
+		return FRAME_HEIGHT_SIDE(WIDTH_SCREEN, HEIGHT_SCREEN);
 	}
 	
-	public static final float MARCO_ALTURA_LATERAL(float width, float height)
+	public static final float FRAME_HEIGHT_SIDE(float width, float height)
 	{
 		return 0.1f * height;
 	}
 	
-	public static final float MARCO_ANCHURA_INTERIOR()
+	public static final float FRAME_WIDTH_MIDDLE()
 	{
-		return MARCO_ANCHURA_INTERIOR(WIDTH_SCREEN, HEIGHT_SCREEN);
+		return FRAME_WIDTH_MIDDLE(WIDTH_SCREEN, HEIGHT_SCREEN);
 	}
 	
-	public static final float MARCO_ANCHURA_INTERIOR(float width, float height)
+	public static final float FRAME_WIDTH_MIDDLE(float width, float height)
 	{
-		return height - 2 * MARCO_ALTURA_LATERAL(width, height);
+		return height - 2 * FRAME_HEIGHT_SIDE(width, height);
 	}
 	
-	public static final float MARCO_ANCHURA_LATERAL()
+	public static final float FRAME_WIDTH_SIDE()
 	{
-		return MARCO_ANCHURA_LATERAL(WIDTH_SCREEN, HEIGHT_SCREEN);
+		return FRAME_WIDTH_SIDE(WIDTH_SCREEN, HEIGHT_SCREEN);
 	}
 	
-	public static final float MARCO_ANCHURA_LATERAL(float width, float height)
+	public static final float FRAME_WIDTH_SIDE(float width, float height)
 	{
-		return (width - MARCO_ANCHURA_INTERIOR(width, height)) / 2.0f;
+		return (width - FRAME_WIDTH_MIDDLE(width, height)) / 2.0f;
 	}
 }

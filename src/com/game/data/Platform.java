@@ -221,7 +221,7 @@ public class Platform extends Entity
 	
 	public void shoot()
 	{
-		animationPositionShot = GamePreferences.NUM_FRAMES_DISPARO;
+		animationPositionShot = GamePreferences.NUM_FRAMES_SHOT;
 	}
 	
 	public void activate()

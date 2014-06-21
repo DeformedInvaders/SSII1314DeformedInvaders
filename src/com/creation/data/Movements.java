@@ -16,7 +16,7 @@ public class Movements implements Serializable
 
 	public Movements()
 	{
-		movementsList = new List[GamePreferences.NUM_TYPE_MOVIMIENTOS];
+		movementsList = new List[GamePreferences.NUM_TYPE_MOVEMENTS];
 	}
 
 	/* Métodos de Modificación de Información */
@@ -35,7 +35,7 @@ public class Movements implements Serializable
 
 	public boolean isReady()
 	{
-		for (int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
+		for (int i = 0; i < GamePreferences.NUM_TYPE_MOVEMENTS; i++)
 		{
 			if (movementsList[i] == null)
 			{

@@ -78,7 +78,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (randomAnimation && characterLoaded)
 		{
-			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_MOVIMIENTOS);
+			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_MOVEMENTS);
 			startAnimation(TTypeMovement.values()[animacion]);
 			return true;
 		}

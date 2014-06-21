@@ -135,13 +135,13 @@ public class InstanceEntity
 	
 	public void up() 
 	{
-		coordY += GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
+		coordY += GamePreferences.DIST_MOVIMIENTO_PLATFORM();
 		moveArea(coordX, coordY);
 	}
 	
 	public void down() 
 	{
-		coordY -= GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
+		coordY -= GamePreferences.DIST_MOVIMIENTO_PLATFORM();
 		moveArea(coordX, coordY);
 	}
 	

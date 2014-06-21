@@ -85,7 +85,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		frameLayout.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());		
 		
 		TTypeMovement[] typeMovements = TTypeMovement.values();
-		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
+		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVEMENTS; i++)
 		{
 			frameLayout.addView(DeformFragment.newInstance(this, mCharacter, typeMovements[i]), getString(typeMovements[i].getTitle()));
 		}

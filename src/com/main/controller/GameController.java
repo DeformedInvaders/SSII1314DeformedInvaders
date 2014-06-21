@@ -41,18 +41,18 @@ import com.video.video.VideoFragment;
 public class GameController implements ViewActivity.ActivityFragmentListener, MainFragment.MainFragmentListener, DesignFragment.DesignFragmentListener, PaintFragment.PaintFragmentListener, DeformationFragment.AnimationFragmentListener, CharacterSelectionFragment.CharacterSelectionFragmentListener, LevelSelectionFragment.LevelSelectionFragmentListener, GameFragment.GameFragmentListener, VideoFragment.VideoFragmentListener
 {	
 	private Context mContext;
-	private GameCore core;
-	private ViewActivity view;
+	private GameCore mCore;
+	private ViewActivity mView;
 	
-	private Stack<SavedState> pila;
-	private TStateController estado;
+	private Stack<SavedState> mBackStack;
+	private TStateController mState;
 	
 	public GameController(Context context, ViewActivity activity, GameCore gameCore)
 	{
 		mContext = context;
-		core = gameCore;
-		view = activity;
-		pila = new Stack<SavedState>();
+		mCore = gameCore;
+		mView = activity;
+		mBackStack = new Stack<SavedState>();
 	}
 	
 	private void sendToastMessage(int message)
@@ -71,14 +71,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 			@Override
 			public void run()
 			{
-				if (core.cargarDatos())
+				if (mCore.loadingData())
 				{					
-					view.runOnUiThread(new Runnable() {
+					mView.runOnUiThread(new Runnable() {
 				        @Override
 				        public void run()
 				        {
-				        	view.actualizarActionBar();
-				        	cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+				        	mView.updateActionBar();
+				        	changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 				        }
 				    });
 				}	
@@ -95,25 +95,25 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onMainCreateCharacter()
 	{
-		if (core.crearNuevoPersonaje())
+		if (mCore.createNewCharacter())
 		{
-			cambiarEstadoDesign();
+			changeStateDesign();
 		}
 	}
 	
 	@Override
 	public void onMainImportCharacter()
 	{
-		String[] listaFicheros = core.getListaFicheros();
+		String[] listaFicheros = mCore.getFileList();
 		if (listaFicheros != null)
 		{
 			ChooseAlert alert = new ChooseAlert(mContext, R.string.text_import_character_title, R.string.text_button_import, R.string.text_button_cancel, listaFicheros) {
 				@Override
 				public void onSelectedPossitiveButtonClick(String selected)
 				{
-					if (core.importarPersonaje(selected))
+					if (mCore.importCharacter(selected))
 					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+						changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 					}
 				}
 	
@@ -131,25 +131,25 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onMainSelectCharacter()
 	{
-		cambiarEstadoCharacterSelection(core.getListaPersonajes());
+		changeStateCharacterSelection(mCore.getCharacterList());
 	}
 
 	@Override
 	public void onMainPlayGame()
 	{
-		cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles());
+		changeStateLevelSelection(mCore.getLevelList(), mCore.getStatistics());
 	}
 	
 	@Override
 	public void onMainPlayVideo()
 	{
-		cambiarEstadoVideo(core.getVideo());
+		changeStateVideo(mCore.getVideo());
 	}
 	
 	@Override
 	public void onMainPlaySoundEffect(int sound)
 	{
-		core.reproducirSonido(sound, false);
+		mCore.playSound(sound, false);
 	}
 
 	// Métodos Design Fragment
@@ -157,10 +157,10 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onDesignReady(Skeleton esqueleto, DesignDataSaved datosSalvados)
 	{
-		if (core.actualizarNuevoPersonaje(esqueleto))
+		if (mCore.updateNewCharacter(esqueleto))
 		{
-			pila.push(new SavedState(estado, datosSalvados));
-			cambiarEstadoPaint(core.getNuevoPersonaje(), core.getEstadisticasNiveles());
+			mBackStack.push(new SavedState(mState, datosSalvados));
+			changeStatePaint(mCore.getNewCharacter(), mCore.getStatistics());
 		}
 	}
 
@@ -169,19 +169,19 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onPaintReady(final Texture textura, final PaintDataSaved datosSalvados)
 	{
-		if (core.actualizarNuevoPersonaje(textura))
+		if (mCore.updateNewCharacter(textura))
 		{
-			pila.push(new SavedState(estado, datosSalvados));
-			cambiarEstadoDeformation(core.getNuevoPersonaje());
+			mBackStack.push(new SavedState(mState, datosSalvados));
+			changeStateDeformation(mCore.getNewCharacter());
 		}
 	}
 	
 	@Override
 	public void onRepaintReady(final Texture textura, final int indice)
 	{
-    	if (core.repintarPersonaje(indice, textura))
+    	if (mCore.repaintCharacter(indice, textura))
 		{
-			cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
+			changeStateCharacterSelection(mCore.getCharacterList(), new CharacterSelectionDataSaved(indice));
 		}
 	}
 
@@ -190,22 +190,22 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onDeformationReady(final Movements movimientos)
 	{
-		if (core.actualizarNuevoPersonaje(movimientos))
+		if (mCore.updateNewCharacter(movimientos))
 		{
 			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_save_character_title, R.string.text_save_character_description, R.string.text_button_yes, R.string.text_button_no, true) {
 				@Override
 				public void onPossitiveButtonClick(String text)
 				{
-					if (core.actualizarNuevoPersonaje(text))
+					if (mCore.updateNewCharacter(text))
 					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+						changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 					}
 				}
 
 				@Override
 				public void onNegativeButtonClick(String text)
 				{
-					cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+					changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 				}
 
 			};
@@ -217,16 +217,16 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onRedeformationReady(final Movements movimientos, final int indice)
 	{
-    	if (core.redeformarPersonaje(indice, movimientos))
+    	if (mCore.redeformCharacter(indice, movimientos))
 		{
-			cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
+			changeStateCharacterSelection(mCore.getCharacterList(), new CharacterSelectionDataSaved(indice));
 		}
 	}
 	
 	@Override
 	public void onDeformationPlaySoundEffect(int sound)
 	{
-		core.reproducirSonido(sound, false);
+		mCore.playSound(sound, false);
 	}
 
 	// Métodos Character Selection Fragment
@@ -234,9 +234,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onCharacterSelectionSelectCharacter(final int indice)
 	{
-		if (core.seleccionarPersonaje(indice))
+		if (mCore.selectCharacter(indice))
 		{
-			cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+			changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 		}
 	}
 
@@ -247,15 +247,15 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				if(core.eliminarPersonaje(indice))
+				if(mCore.deleteCharacter(indice))
 				{
-					if (core.getNumeroPersonajes() == 0)
+					if (mCore.getNumCharacters() == 0)
 					{
-						cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+						changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 					}
 					else
 					{
-						cambiarEstadoCharacterSelection(core.getListaPersonajes());
+						changeStateCharacterSelection(mCore.getCharacterList());
 					}
 				}
 			}
@@ -270,16 +270,16 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onCharacterSelectionRenameCharacter(final int indice)
 	{
-		Character personaje = core.getPersonaje(indice);
+		Character personaje = mCore.getCharacter(indice);
 		if (personaje != null)
 		{
 			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, personaje.getName(), R.string.text_button_rename, R.string.text_button_cancel, true) {
 				@Override
 				public void onPossitiveButtonClick(String text)
 				{
-					if (core.renombrarPersonaje(indice, text))
+					if (mCore.renameCharacter(indice, text))
 					{
-						cambiarEstadoCharacterSelection(core.getListaPersonajes(), new CharacterSelectionDataSaved(indice));
+						changeStateCharacterSelection(mCore.getCharacterList(), new CharacterSelectionDataSaved(indice));
 					}
 				}
 	
@@ -294,15 +294,15 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onCharacterSelectionRepaintCharacter(final int indice, final CharacterSelectionDataSaved datosSalvados)
 	{
-		pila.push(new SavedState(estado, datosSalvados));
-		cambiarEstadoRepaint(core.getPersonaje(indice), indice, core.getEstadisticasNiveles());
+		mBackStack.push(new SavedState(mState, datosSalvados));
+		changeStateRepaint(mCore.getCharacter(indice), indice, mCore.getStatistics());
 	}
 	
 	@Override
 	public void onCharacterSelectionRedeformCharacter(final int indice,final CharacterSelectionDataSaved datosSalvados)
 	{
-		pila.push(new SavedState(estado, datosSalvados));
-		cambiarEstadoRedeformation(core.getPersonaje(indice), indice);
+		mBackStack.push(new SavedState(mState, datosSalvados));
+		changeStateRedeformation(mCore.getCharacter(indice), indice);
 	}
 	
 	@Override
@@ -314,9 +314,9 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 			@Override
 			public void run()
 			{
-				if (core.exportarPersonaje(indice))
+				if (mCore.exportCharacter(indice))
 				{
-					view.runOnUiThread(new Runnable() {
+					mView.runOnUiThread(new Runnable() {
 				        @Override
 				        public void run()
 				        {
@@ -334,24 +334,24 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onCharacterSelectionPostPublish(final String mensaje, final Bitmap bitmap)
 	{
-		core.publicarPost(mensaje, bitmap);		
+		mCore.sendPost(mensaje, bitmap);		
 	}
 	
 	@Override
 	public void onCharacterSelectionPlaySoundEffect(int sound)
 	{
-		core.reproducirSonido(sound, false);
+		mCore.playSound(sound, false);
 	}
 
 	// Métodos Level Selection Fragment
 
 	public void onLevelSelectionSelectLevel(final TTypeLevel level)
 	{	
-		SummaryAlert alert = new SummaryAlert(mContext, R.string.text_summary, R.string.text_button_ready, core.getNivel(level)) {
+		SummaryAlert alert = new SummaryAlert(mContext, R.string.text_summary, R.string.text_button_ready, mCore.getLevel(level)) {
 			@Override
 			public void onPossitiveButtonClick()
 			{
-				cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level));
+				changeStateGame(mCore.getCharacterSelected(), mCore.getLevel(level));
 			}
 		};
 		
@@ -363,25 +363,25 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onGameFinished(final InstanceLevel level, final int score, TTypeEndgame endgame)
 	{
-		if(!core.isNivelPerfecto(level.getLevelType()))
+		if(!mCore.isLevelPerfected(level.getLevelType()))
 		{
 			sendToastMessage(R.string.text_game_newstikers);
 		}
 		
-		if (core.actualizarEstadisticas(level, score, endgame))
+		if (mCore.updateStatistics(level, score, endgame))
 		{
 			// Seleccionar Siguiente Nivel
 			ImageAlert alert = new ImageAlert(mContext, mContext.getString(R.string.text_game_finish) + " " + score, R.string.text_button_replay, R.string.text_button_levels, level.getBackground().getIdPolaroid(endgame)) {
 				@Override
 				public void onPossitiveButtonClick()
 				{
-					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getLevelType()));
+					changeStateGame(mCore.getCharacterSelected(), mCore.getLevel(level.getLevelType()));
 				}
 	
 				@Override
 				public void onNegativeButtonClick()
 				{
-					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getLevelType());
+					changeStateLevelSelection(mCore.getLevelList(), mCore.getStatistics(), level.getLevelType());
 				}
 			};
 	
@@ -392,19 +392,19 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onGameFailed(final InstanceLevel level, TTypeEndgame endgame)
 	{
-		if(core.actualizarEstadisticas(level, endgame))
+		if(mCore.updateStatistics(level, endgame))
 		{
 			ImageAlert alert = new ImageAlert(mContext, R.string.text_game_fail, R.string.text_button_replay, R.string.text_button_levels, level.getBackground().getIdPolaroid(endgame)) {
 				@Override
 				public void onPossitiveButtonClick()
 				{
-					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getLevelType()));
+					changeStateGame(mCore.getCharacterSelected(), mCore.getLevel(level.getLevelType()));
 				}
 	
 				@Override
 				public void onNegativeButtonClick()
 				{
-					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getLevelType());
+					changeStateLevelSelection(mCore.getLevelList(), mCore.getStatistics(), level.getLevelType());
 				}
 			};
 	
@@ -415,7 +415,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onGamePlaySoundEffect(int sound, boolean blockable)
 	{
-		core.reproducirSonido(sound, blockable);
+		mCore.playSound(sound, blockable);
 	}
 	
 	// Métodos VideoFragment
@@ -423,160 +423,160 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onVideoFinished()
 	{
-		cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+		changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 	}
 
 	@Override
 	public void onVideoPlayMusic(int music)
 	{
-		core.reproducirMusica(music, true);
+		mCore.playMusic(music, true);
 	}
 
 	@Override
 	public void onVideoPlaySoundEffect(int sound, boolean blockable)
 	{
-		core.reproducirSonido(sound, blockable);
+		mCore.playSound(sound, blockable);
 	}
 	
 	@Override
 	public void onVideoPlayVoice(int voice)
 	{
-		core.reproducirVoz(voice, false);
+		mCore.playVoice(voice, false);
 	}
 	
 	@Override
 	public void onVideoResumeMusic()
 	{
-		core.continuarMusica();
+		mCore.resumeMusic();
 	}
 
 	/* Métodos de Modificación de la Vista */
 
-	private void cambiarEstadoMain(Character personaje, int numeroPersonajes, int numeroFicheros)
+	private void changeStateMain(Character personaje, int numeroPersonajes, int numeroFicheros)
 	{
-		estado = TStateController.Main;
-		view.insertarMainFragmento(personaje, numeroPersonajes, numeroFicheros, estado.getTitle());
+		mState = TStateController.Main;
+		mView.addMainFragment(personaje, numeroPersonajes, numeroFicheros, mState.getTitle());
 		
-		actualizarMusica();
+		updateMusic();
 		
-		pila.clear();
-		pila.push(new SavedState(estado));
+		mBackStack.clear();
+		mBackStack.push(new SavedState(mState));
 	}
 
-	private void cambiarEstadoDesign()
+	private void changeStateDesign()
 	{
-		estado = TStateController.Design;
-		view.insertarDesignFragmento(estado.getTitle());
+		mState = TStateController.Design;
+		mView.addDesignFragment(mState.getTitle());
 		
-		actualizarMusica();
+		updateMusic();
 	}
 	
-	private void cambiarEstadoDesign(DesignDataSaved datosSalvados)
+	private void changeStateDesign(DesignDataSaved datosSalvados)
 	{
-		estado = TStateController.Design;
-		view.insertarDesignFragmento(datosSalvados, estado.getTitle());
+		mState = TStateController.Design;
+		mView.addDesignFragment(datosSalvados, mState.getTitle());
 	}
 
-	private void cambiarEstadoPaint(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles)
+	private void changeStatePaint(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles)
 	{		
-		estado = TStateController.Paint;
-		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, estado.getTitle());
+		mState = TStateController.Paint;
+		mView.addPaintFragment(nuevoPersonaje, estadisticasNiveles, mState.getTitle());
 	}
 	
-	private void cambiarEstadoPaint(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados)
+	private void changeStatePaint(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados)
 	{		
-		estado = TStateController.Paint;
-		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, datosSalvados, estado.getTitle());
+		mState = TStateController.Paint;
+		mView.addPaintFragment(nuevoPersonaje, estadisticasNiveles, datosSalvados, mState.getTitle());
 	}
 	
-	private void cambiarEstadoRepaint(Character personaje, int indice, GameStatistics[] estadisticasNiveles)
+	private void changeStateRepaint(Character personaje, int indice, GameStatistics[] estadisticasNiveles)
 	{		
-		estado = TStateController.Repaint;
-		view.insertarPaintFragmento(personaje, indice, estadisticasNiveles, estado.getTitle());
+		mState = TStateController.Repaint;
+		mView.addPaintFragment(personaje, indice, estadisticasNiveles, mState.getTitle());
 		
-		actualizarMusica();
+		updateMusic();
 	}
 
-	private void cambiarEstadoDeformation(Character nuevoPersonaje)
+	private void changeStateDeformation(Character nuevoPersonaje)
 	{		
-		estado = TStateController.Deformation;
-		view.insertarDeformationFragmento(nuevoPersonaje, estado.getTitle());
+		mState = TStateController.Deformation;
+		mView.addDeformationFragment(nuevoPersonaje, mState.getTitle());
 	}
 	
-	private void cambiarEstadoRedeformation(Character personaje, int indice)
+	private void changeStateRedeformation(Character personaje, int indice)
 	{		
-		estado = TStateController.Redeformation;
-		view.insertarDeformationFragmento(personaje, indice, estado.getTitle());
+		mState = TStateController.Redeformation;
+		mView.addDeformationFragment(personaje, indice, mState.getTitle());
 		
-		actualizarMusica();
+		updateMusic();
 	}
 
-	private void cambiarEstadoCharacterSelection(List<Character> listaPersonajes)
+	private void changeStateCharacterSelection(List<Character> listaPersonajes)
 	{
-		estado = TStateController.CharacterSelection;
-		view.insertarCharacterSelectionFragmento(listaPersonajes, estado.getTitle());
+		mState = TStateController.CharacterSelection;
+		mView.addCharacterSelectionFragment(listaPersonajes, mState.getTitle());
 	}
 	
-	private void cambiarEstadoCharacterSelection(List<Character> listaPersonajes, CharacterSelectionDataSaved datosSalvados)
+	private void changeStateCharacterSelection(List<Character> listaPersonajes, CharacterSelectionDataSaved datosSalvados)
 	{
-		estado = TStateController.CharacterSelection;
-		view.insertarCharacterSelectionFragmento(listaPersonajes, datosSalvados, estado.getTitle());
+		mState = TStateController.CharacterSelection;
+		mView.addCharacterSelectionFragment(listaPersonajes, datosSalvados, mState.getTitle());
 		
-		actualizarMusica();
+		updateMusic();
 	}
 
-	private void cambiarEstadoLevelSelection(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles)
+	private void changeStateLevelSelection(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles)
 	{
-		estado = TStateController.LevelSelection;
-		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, estado.getTitle());
+		mState = TStateController.LevelSelection;
+		mView.addLevelSelectionFragment(listaNiveles, estadisticasNiveles, mState.getTitle());
 	}
 	
-	private void cambiarEstadoLevelSelection(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, TTypeLevel nivel)
+	private void changeStateLevelSelection(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, TTypeLevel nivel)
 	{
-		estado = TStateController.LevelSelection;
-		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, nivel, estado.getTitle());
+		mState = TStateController.LevelSelection;
+		mView.addLevelSelectionFragment(listaNiveles, estadisticasNiveles, nivel, mState.getTitle());
 	}
 
-	private void cambiarEstadoGame(Character personajeSeleccionado, InstanceLevel nivel)
+	private void changeStateGame(Character personajeSeleccionado, InstanceLevel nivel)
 	{		
-		estado = TStateController.Game;
-		view.insertarGameFragmento(personajeSeleccionado, nivel, nivel.getLevelType().getDescription());
+		mState = TStateController.Game;
+		mView.addGameFragment(personajeSeleccionado, nivel, nivel.getLevelType().getDescription());
 		
-		actualizarMusica();
+		updateMusic();
 	}
 	
-	private void cambiarEstadoVideo(Video video)
+	private void changeStateVideo(Video video)
 	{
-		estado = TStateController.Video;
-		view.insertarVideoFragmento(video, estado.getTitle());
-		core.pausarMusica();
-		actualizarMusica();
+		mState = TStateController.Video;
+		mView.addVideoFragment(video, mState.getTitle());
+		mCore.pauseMusic();
+		updateMusic();
 	}
 	
-	public boolean isEstadoDesapilador()
+	public boolean isPopState()
 	{
-		return estado != TStateController.Main && estado != TStateController.Game && estado != TStateController.Video;
+		return mState != TStateController.Main && mState != TStateController.Game && mState != TStateController.Video;
 	}
 
-	public void desapilarEstado()
+	public void popState()
 	{
-		if (!pila.isEmpty() && isEstadoDesapilador())
+		if (!mBackStack.isEmpty() && isPopState())
 		{
-			SavedState cima = pila.pop();
+			SavedState cima = mBackStack.pop();
 
-			switch(cima.getEstadoSalvado())
+			switch(cima.getStateSaved())
 			{
 				case Main:
-					cambiarEstadoMain(core.getPersonajeSeleccionado(), core.getNumeroPersonajes(), core.getNumeroFicheros());
+					changeStateMain(mCore.getCharacterSelected(), mCore.getNumCharacters(), mCore.getNumFiles());
 				break;
 				case Design:
-					cambiarEstadoDesign((DesignDataSaved) cima.getDatosSalvados());
+					changeStateDesign((DesignDataSaved) cima.getDataSaved());
 				break;
 				case Paint:
-					cambiarEstadoPaint(core.getNuevoPersonaje(), core.getEstadisticasNiveles(), (PaintDataSaved) cima.getDatosSalvados());
+					changeStatePaint(mCore.getNewCharacter(), mCore.getStatistics(), (PaintDataSaved) cima.getDataSaved());
 				break;
 				case CharacterSelection:
-					cambiarEstadoCharacterSelection(core.getListaPersonajes(), (CharacterSelectionDataSaved) cima.getDatosSalvados());
+					changeStateCharacterSelection(mCore.getCharacterList(), (CharacterSelectionDataSaved) cima.getDataSaved());
 				break;
 				default:
 				break;
@@ -584,34 +584,34 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		}
 	}
 
-	public void actualizarMusica()
+	public void updateMusic()
 	{
-		core.actualizarVolumen();
+		mCore.updateVolume();
 		
-		if (estado == TStateController.Game)
+		if (mState == TStateController.Game)
 		{
-			core.reproducirMusica(true);
+			mCore.playMusic(true);
 		}
-		else if (estado == TStateController.Design || estado == TStateController.Paint || estado == TStateController.Deformation || estado == TStateController.Repaint)
+		else if (mState == TStateController.Design || mState == TStateController.Paint || mState == TStateController.Deformation || mState == TStateController.Repaint)
 		{
-			core.reproducirMusica(R.raw.music_creation, true);
+			mCore.playMusic(R.raw.music_creation, true);
 		}
-		else if (estado != TStateController.Video)
+		else if (mState != TStateController.Video)
 		{
-			core.reproducirMusica(R.raw.music_main, true);
+			mCore.playMusic(R.raw.music_main, true);
 		}
 	}
 	
-	public void pausarMusica()
+	public void pauseMusic()
 	{
-		core.pausarMusica();
+		mCore.pauseMusic();
 	}
 	
-	public void continuarMusica()
+	public void resumeMusic()
 	{
-		if (estado != TStateController.Video)
+		if (mState != TStateController.Video)
 		{
-			core.continuarMusica();
+			mCore.resumeMusic();
 		}
 	}
 }

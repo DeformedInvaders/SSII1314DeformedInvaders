@@ -32,20 +32,20 @@ public abstract class GameCore
 	private Context mContext;
 	
 	/* Estructura de Datos */
-	private List<Character> listaPersonajes;
-	private Character nuevoPersonaje;
+	private List<Character> characterList;
+	private Character newCharacter;
 	
 	/* Video */
 	private VideoGenerator videoGenerator;
 	
 	/* Niveles */
 	private LevelGenerator levelGenerator;
-	private GameStatistics[] estadisticasNiveles;
+	private GameStatistics[] statistics;
 	
 	/* Musica */
 	private AudioPlayerManager audioPlayerManager, soundPlayerManager, voicePlayerManager;
 	private AudioVolumeManager audioVolumeManager;
-	private int musicaSeleccionada;
+	private int musicSelected;
 
 	/* Almacenamiento */
 	private InternalStorageManager internalManager;
@@ -97,19 +97,19 @@ public abstract class GameCore
 		
 		videoGenerator = new VideoGenerator(mContext, assetsManager);
 		
-		nuevoPersonaje = null;
+		newCharacter = null;
 		levelGenerator = new LevelGenerator(mContext, assetsManager);
 	}
 	
-	public boolean cargarDatos()
+	public boolean loadingData()
 	{
 		videoGenerator.cargarVideo();
 		
 		levelGenerator.loadLevels();
 		internalManager.loadPreferences();
 		
-		estadisticasNiveles = internalManager.loadStatistics();			
-		listaPersonajes = internalManager.loadCharacterList();
+		statistics = internalManager.loadStatistics();			
+		characterList = internalManager.loadCharacterList();
 		
 		return true;
 	}
@@ -125,29 +125,29 @@ public abstract class GameCore
 	
 	/* Métodos de obtención de datos */
 	
-	public List<Character> getListaPersonajes()
+	public List<Character> getCharacterList()
 	{
-		return listaPersonajes;
+		return characterList;
 	}
 	
-	public GameStatistics[] getEstadisticasNiveles()
+	public GameStatistics[] getStatistics()
 	{
-		return estadisticasNiveles;
+		return statistics;
 	}
 
-	public List<Level> getListaNiveles()
+	public List<Level> getLevelList()
 	{
 		return levelGenerator.getLevelList();
 	}
 	
-	public String[] getListaFicheros()
+	public String[] getFileList()
 	{
 		return externalManager.getFileList(GameResources.CHARACTER_EXTENSION);
 	}
 	
-	public int getNumeroFicheros()
+	public int getNumFiles()
 	{
-		String[] ficheros = getListaFicheros();
+		String[] ficheros = getFileList();
 		if (ficheros == null)
 		{
 			return 0;
@@ -155,9 +155,9 @@ public abstract class GameCore
 		return ficheros.length;
 	}
 
-	public InstanceLevel getNivel(TTypeLevel nivel)
+	public InstanceLevel getLevel(TTypeLevel nivel)
 	{
-		musicaSeleccionada = levelGenerator.getLevel(nivel).getLevelMusic();
+		musicSelected = levelGenerator.getLevel(nivel).getLevelMusic();
 		
 		return levelGenerator.getLevelInstance(nivel);
 	}
@@ -167,54 +167,54 @@ public abstract class GameCore
 		return videoGenerator.getVideo();
 	}
 	
-	public boolean isNivelPerfecto(TTypeLevel nivel)
+	public boolean isLevelPerfected(TTypeLevel nivel)
 	{
-		return estadisticasNiveles[nivel.ordinal()].isPerfected();
+		return statistics[nivel.ordinal()].isPerfected();
 	}
 	
-	public Character getNuevoPersonaje()
+	public Character getNewCharacter()
 	{
-		return nuevoPersonaje;
+		return newCharacter;
 	}
 	
-	public Character getPersonaje(int indice)
+	public Character getCharacter(int indice)
 	{
-		if (indice >= 0 && indice < listaPersonajes.size())
+		if (indice >= 0 && indice < characterList.size())
 		{
-			return listaPersonajes.get(indice);
+			return characterList.get(indice);
 		}
 		
 		return null;
 	}
 	
-	public Character getPersonajeSeleccionado()
+	public Character getCharacterSelected()
 	{
 		if (GamePreferences.GET_CHARACTER_GAME() != -1)
 		{
-			return getPersonaje(GamePreferences.GET_CHARACTER_GAME());
+			return getCharacter(GamePreferences.GET_CHARACTER_GAME());
 		}
 		
 		return null;
 	}
 	
-	public int getNumeroPersonajes()
+	public int getNumCharacters()
 	{
-		return listaPersonajes.size();
+		return characterList.size();
 	}
 	
 	/* Métodos de modificación del Personaje Actual */
 	
-	public boolean crearNuevoPersonaje()
+	public boolean createNewCharacter()
 	{
-		nuevoPersonaje = new Character();	
+		newCharacter = new Character();	
 		return true;
 	}
 	
-	public boolean actualizarNuevoPersonaje(Skeleton esqueleto)
+	public boolean updateNewCharacter(Skeleton esqueleto)
 	{
 		if (esqueleto != null)
 		{
-			nuevoPersonaje.setSkeleton(esqueleto);
+			newCharacter.setSkeleton(esqueleto);
 			return true;
 		}
 		else
@@ -225,13 +225,13 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean actualizarNuevoPersonaje(Texture textura)
+	public boolean updateNewCharacter(Texture textura)
 	{
 		if (textura != null)
 		{
-			if (nuevoPersonaje != null)
+			if (newCharacter != null)
 			{
-				nuevoPersonaje.setTexture(textura);
+				newCharacter.setTexture(textura);
 				return true;
 			}
 		}
@@ -243,13 +243,13 @@ public abstract class GameCore
 		return false;
 	}
 		
-	public boolean actualizarNuevoPersonaje(Movements movimientos)
+	public boolean updateNewCharacter(Movements movimientos)
 	{
 		if (movimientos != null)
 		{
-			if (nuevoPersonaje != null)
+			if (newCharacter != null)
 			{
-				nuevoPersonaje.setMovements(movimientos);
+				newCharacter.setMovements(movimientos);
 				return true;
 			}
 		}
@@ -261,16 +261,16 @@ public abstract class GameCore
 		return false;		
 	}
 	
-	public boolean actualizarNuevoPersonaje(String name)
+	public boolean updateNewCharacter(String name)
 	{
-		if (nuevoPersonaje != null)
+		if (newCharacter != null)
 		{
-			nuevoPersonaje.setName(name);
+			newCharacter.setName(name);
 			
-			if (internalManager.saveCharacter(nuevoPersonaje))
+			if (internalManager.saveCharacter(newCharacter))
 			{				
-				listaPersonajes.add(nuevoPersonaje);
-				nuevoPersonaje = null;
+				characterList.add(newCharacter);
+				newCharacter = null;
 
 				sendToastMessage(R.string.text_save_character_confirmation);
 				return true;
@@ -297,14 +297,14 @@ public abstract class GameCore
 
 	/* Métodos de modificación de la Lista de Personajes */
 	
-	public boolean importarPersonaje(String nombre)
+	public boolean importCharacter(String nombre)
 	{
 		Character personaje = externalManager.importCharacter(nombre);
 		if (personaje != null)
 		{
 			if (internalManager.saveCharacter(personaje))
 			{
-				listaPersonajes.add(personaje);
+				characterList.add(personaje);
 				sendToastMessage(R.string.text_import_character_confirmation);
 				return true;
 			}
@@ -321,13 +321,13 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean repintarPersonaje(int indice, Texture textura)
+	public boolean repaintCharacter(int indice, Texture textura)
 	{
 		if (textura != null)
 		{
-			if (indice >= 0 && indice < listaPersonajes.size())
+			if (indice >= 0 && indice < characterList.size())
 			{
-				Character personaje = listaPersonajes.get(indice);
+				Character personaje = characterList.get(indice);
 				personaje.setTexture(textura);
 				internalManager.updateCharacter(personaje);
 				return true;
@@ -341,13 +341,13 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean redeformarPersonaje(int indice, Movements movimientos)
+	public boolean redeformCharacter(int indice, Movements movimientos)
 	{
 		if (movimientos != null)
 		{
-			if (indice >= 0 && indice < listaPersonajes.size())
+			if (indice >= 0 && indice < characterList.size())
 			{
-				Character personaje = listaPersonajes.get(indice);
+				Character personaje = characterList.get(indice);
 				personaje.setMovements(movimientos);
 				internalManager.updateCharacter(personaje);
 				return true;
@@ -361,9 +361,9 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean seleccionarPersonaje(int indice)
+	public boolean selectCharacter(int indice)
 	{
-		if (indice >= 0 && indice < listaPersonajes.size())
+		if (indice >= 0 && indice < characterList.size())
 		{
 			GamePreferences.SET_CHARACTER_PARAMETERS(indice);
 			if (internalManager.savePreferences())
@@ -376,13 +376,13 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean eliminarPersonaje(int indice)
+	public boolean deleteCharacter(int indice)
 	{
-		if (indice >= 0 && indice < listaPersonajes.size())
+		if (indice >= 0 && indice < characterList.size())
 		{
-			if (internalManager.deleteCharacter(listaPersonajes.get(indice)))
+			if (internalManager.deleteCharacter(characterList.get(indice)))
 			{
-				listaPersonajes.remove(indice);
+				characterList.remove(indice);
 				
 				int seleccionado = GamePreferences.GET_CHARACTER_GAME();
 	
@@ -409,11 +409,11 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean renombrarPersonaje(int indice, String nombre)
+	public boolean renameCharacter(int indice, String nombre)
 	{
-		if (indice >= 0 && indice < listaPersonajes.size())
+		if (indice >= 0 && indice < characterList.size())
 		{
-			if (internalManager.renameCharacter(listaPersonajes.get(indice), nombre))
+			if (internalManager.renameCharacter(characterList.get(indice), nombre))
 			{
 				sendToastMessage(R.string.text_rename_character_confirmation);
 				return true;
@@ -423,17 +423,17 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean exportarPersonaje(final int indice)
+	public boolean exportCharacter(final int indice)
 	{	
-		if (indice >= 0 && indice < listaPersonajes.size())
+		if (indice >= 0 && indice < characterList.size())
 		{
 			if (GamePreferences.IS_DEBUG_ENABLED())
 			{
-				return externalManager.exportEnemy(listaPersonajes.get(indice));
+				return externalManager.exportEnemy(characterList.get(indice));
 			}
 			else
 			{
-				return externalManager.exportCharacter(listaPersonajes.get(indice));
+				return externalManager.exportCharacter(characterList.get(indice));
 			}
 		}
 		
@@ -442,7 +442,7 @@ public abstract class GameCore
 
 	/* Métodos de modificación de la Estadisticas del Juego */
 
-	public boolean actualizarEstadisticas(InstanceLevel nivel, int score, TTypeEndgame endgame)
+	public boolean updateStatistics(InstanceLevel nivel, int score, TTypeEndgame endgame)
 	{
 		int posNivel = nivel.getLevelType().ordinal();
 		
@@ -450,31 +450,31 @@ public abstract class GameCore
 		audioPlayerManager.startPlaying(R.raw.effect_game_completed, false, false);
 		
 		// Aumentar número de Victorias
-		estadisticasNiveles[posNivel].increaseVictories();	
+		statistics[posNivel].increaseVictories();	
 		
 		// Actualizar logos		
 		if (endgame == TTypeEndgame.LevelMastered)
 		{
-			estadisticasNiveles[posNivel].setCompleted();
-			estadisticasNiveles[posNivel].setPerfected();
-			estadisticasNiveles[posNivel].setMastered();
+			statistics[posNivel].setCompleted();
+			statistics[posNivel].setPerfected();
+			statistics[posNivel].setMastered();
 		}
 		else if (endgame == TTypeEndgame.LevelPerfected)
 		{
-			estadisticasNiveles[posNivel].setCompleted();
-			estadisticasNiveles[posNivel].setPerfected();
+			statistics[posNivel].setCompleted();
+			statistics[posNivel].setPerfected();
 		}
 		else if (endgame == TTypeEndgame.LevelCompleted)
 		{
-			estadisticasNiveles[posNivel].setCompleted();
+			statistics[posNivel].setCompleted();
 		}
 		
 		// Desbloquear Siguiente nivel
-		int nextLevel = (posNivel + 1) % estadisticasNiveles.length;
-		estadisticasNiveles[nextLevel].setUnlocked();
+		int nextLevel = (posNivel + 1) % statistics.length;
+		statistics[nextLevel].setUnlocked();
 		
 		// Actualizar Puntuacion máxima
-		estadisticasNiveles[posNivel].setMaxScore(score);
+		statistics[posNivel].setMaxScore(score);
 		
 		// Publiacación de Nivel Completo
 		if (externalManager.saveTempImage(nivel.getBackground().getIdPolaroid(endgame)))
@@ -486,21 +486,21 @@ public abstract class GameCore
 			externalManager.deleteTempImage();
 		}
 		
-		return internalManager.saveStatistics(estadisticasNiveles);
+		return internalManager.saveStatistics(statistics);
 	}
 
-	public boolean actualizarEstadisticas(InstanceLevel nivel, TTypeEndgame endgame)
+	public boolean updateStatistics(InstanceLevel nivel, TTypeEndgame endgame)
 	{
 		// Sonido Derrota
 		audioPlayerManager.startPlaying(R.raw.effect_game_over, false, false);
 		
 		// Aumentar número de Derrotas
-		estadisticasNiveles[nivel.getLevelType().ordinal()].increaseNumDeaths();
+		statistics[nivel.getLevelType().ordinal()].increaseNumDeaths();
 		
-		return internalManager.saveStatistics(estadisticasNiveles);
+		return internalManager.saveStatistics(statistics);
 	}
 	
-	public boolean actualizarPreferencias()
+	public boolean updatePreferences()
 	{
 		return internalManager.savePreferences();
 	}
@@ -535,19 +535,19 @@ public abstract class GameCore
 		return true;
 	}
 	
-	public boolean isTwitterConectado()
+	public boolean isTwitterConnected()
 	{
 		return socialConnector.isTwitterConnected();
 	}
 	
-	public boolean isFacebookConectado()
+	public boolean isFacebookConnected()
 	{
 		return socialConnector.isFacebookConnected();
 	}
 
 	/* Métodos de modificación del AudioManager */
 	
-	public void actualizarVolumen()
+	public void updateVolume()
 	{
 		if (GamePreferences.IS_MUSIC_ENABLED())
 		{
@@ -559,7 +559,7 @@ public abstract class GameCore
 		}
 	}
 	
-	public void reproducirSonido(final int sonido, final boolean block)
+	public void playSound(final int sonido, final boolean block)
 	{
 		 Thread thread = new Thread(new Runnable() {
 			 @Override
@@ -572,7 +572,7 @@ public abstract class GameCore
 		thread.start();
 	}
 	
-	public void reproducirVoz(final int voz, final boolean block)
+	public void playVoice(final int voz, final boolean block)
 	{
 		Thread thread = new Thread(new Runnable() {
 			 @Override
@@ -585,29 +585,29 @@ public abstract class GameCore
 		thread.start();
 	}
 	
-	public void reproducirMusica(final boolean loop)
+	public void playMusic(final boolean loop)
 	{
 		Thread thread = new Thread(new Runnable() {
 			 @Override
 			 public void run()
 			 {
-				 audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
+				 audioPlayerManager.startPlaying(musicSelected, loop, false);
 			 }
 	    });
 		 
 		thread.start();
 	}
 	
-	public void reproducirMusica(final int musica, final boolean loop)
+	public void playMusic(final int musica, final boolean loop)
 	{
 		Thread thread = new Thread(new Runnable() {
 			 @Override
 			 public void run()
 			 {
-				 if (musicaSeleccionada != musica)
+				 if (musicSelected != musica)
 				 {
-					 musicaSeleccionada = musica;
-					 audioPlayerManager.startPlaying(musicaSeleccionada, loop, false);
+					 musicSelected = musica;
+					 audioPlayerManager.startPlaying(musicSelected, loop, false);
 				 }
 			 }
 	    });
@@ -615,14 +615,14 @@ public abstract class GameCore
 		thread.start();
 	}
 	
-	public boolean pausarMusica()
+	public boolean pauseMusic()
 	{
 		voicePlayerManager.pausePlaying();
 		soundPlayerManager.pausePlaying();
 		return audioPlayerManager.pausePlaying();
 	}
 	
-	public boolean continuarMusica()
+	public boolean resumeMusic()
 	{
 		voicePlayerManager.resumePlaying();
 		soundPlayerManager.resumePlaying();
@@ -631,7 +631,7 @@ public abstract class GameCore
 	
 	/* Métodos de modificación del SocialConnector */
 
-	public boolean publicarPost(String text, Bitmap bitmap)
+	public boolean sendPost(String text, Bitmap bitmap)
 	{
 		if (externalManager.saveTempImage(bitmap))
 		{

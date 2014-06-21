@@ -178,8 +178,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	        			sceneDialog = new TextDialog(getActivity(), R.layout.dialog_text_scene_layout);
 	        		}
 	        		
-	        		int posX = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
-		        	int posY = (int) (mCanvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
+	        		int posX = (int) (GamePreferences.FRAME_HEIGHT_SIDE());
+		        	int posY = (int) (mCanvas.getHeight() - GamePreferences.FRAME_HEIGHT_SIDE());
 		        	
 		        	sceneDialog.setText(text);
 		        	sceneDialog.show(mCanvas, posX, posY);
@@ -191,8 +191,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	        			characterDialog = new TextDialog(getActivity(), R.layout.dialog_text_character_layout);
 	        		}
 	        		
-	        		int posX = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
-		        	int posY = (int) (mCanvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
+	        		int posX = (int) (GamePreferences.FRAME_HEIGHT_SIDE());
+		        	int posY = (int) (mCanvas.getHeight() - GamePreferences.FRAME_HEIGHT_SIDE());
 		        	
 		        	characterDialog.setText(text);
 		        	characterDialog.show(mCanvas, posX, posY);
@@ -204,8 +204,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	        			actorDialog = new TextDialog(getActivity(), R.layout.dialog_text_actor_layout);
 	        		}
 	        		
-	        		int posX = (int) (GamePreferences.MARCO_ANCHURA_LATERAL() + GamePreferences.MARCO_ANCHURA_INTERIOR());
-		        	int posY = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
+	        		int posX = (int) (GamePreferences.FRAME_WIDTH_SIDE() + GamePreferences.FRAME_WIDTH_MIDDLE());
+		        	int posY = (int) (GamePreferences.FRAME_HEIGHT_SIDE());
 		        	
 		        	actorDialog.setText(text);
 		        	actorDialog.show(mCanvas, posX, posY);

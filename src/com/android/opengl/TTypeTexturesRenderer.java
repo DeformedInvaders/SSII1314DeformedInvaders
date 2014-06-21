@@ -15,7 +15,7 @@ public enum TTypeTexturesRenderer
 			case Video:
 				return GamePreferences.NUM_TYPE_CHARACTER_VIDEO;
 			case Game:
-				return GamePreferences.NUM_TYPE_CHARACTER_JUEGO;
+				return GamePreferences.NUM_TYPE_CHARACTER_GAME;
 			default:
 				return 0;
 		}
@@ -30,7 +30,7 @@ public enum TTypeTexturesRenderer
 			case Video:
 				return GamePreferences.NUM_TYPE_CHARACTER_VIDEO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_VIDEO) + GamePreferences.NUM_TYPE_ANIMATED_OBJECTS * GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS + GamePreferences.NUM_TYPE_INANIMATED_OBJECTS;
 			case Game:
-				return GamePreferences.NUM_TYPE_CHARACTER_JUEGO + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_JUEGO) + 2 * GamePreferences.NUM_TYPE_BUBBLES + 2 * GamePreferences.NUM_TYPE_PLATFORMS + 2 * GamePreferences.NUM_TYPE_WEAPONS + GamePreferences.NUM_TYPE_BOSS + (GamePreferences.NUM_TYPE_BOSS * GamePreferences.NUM_TYPE_STICKERS) + GamePreferences.NUM_TYPE_OPPONENTS + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES) + 2 * GamePreferences.NUM_TYPE_SHOTS;
+				return GamePreferences.NUM_TYPE_CHARACTER_GAME + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_CHARACTER_GAME) + 2 * GamePreferences.NUM_TYPE_SHIELD + 2 * GamePreferences.NUM_TYPE_PLATFORMS + 2 * GamePreferences.NUM_TYPE_WEAPONS + GamePreferences.NUM_TYPE_BOSS + (GamePreferences.NUM_TYPE_BOSS * GamePreferences.NUM_TYPE_STICKERS) + GamePreferences.NUM_TYPE_OPPONENTS + (GamePreferences.NUM_TYPE_STICKERS * GamePreferences.NUM_TYPE_ENEMIES) + 2 * GamePreferences.NUM_TYPE_SHOTS;
 			default:
 				return 0;
 		}

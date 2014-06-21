@@ -139,13 +139,13 @@ public abstract class OpenGLRenderer implements Renderer
 		
 		// Juego
 		POS_TEXTURE_CHARACTER_SHIELD = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
-		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_SHIELD + GamePreferences.NUM_TYPE_BUBBLES;
+		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_SHIELD + GamePreferences.NUM_TYPE_SHIELD;
 		
 		POS_TEXTURE_BOSS_SKELETON = POS_TEXTURE_CHARACTER_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
 		POS_TEXTURE_BOSS_STICKER = POS_TEXTURE_BOSS_SKELETON + 1;
 		
 		POS_TEXTURE_BOSS_SHIELD = POS_TEXTURE_BOSS_STICKER + GamePreferences.NUM_TYPE_STICKERS;
-		POS_TEXTURE_BOSS_PLATFORM = POS_TEXTURE_BOSS_SHIELD + GamePreferences.NUM_TYPE_BUBBLES;
+		POS_TEXTURE_BOSS_PLATFORM = POS_TEXTURE_BOSS_SHIELD + GamePreferences.NUM_TYPE_SHIELD;
 				
 		POS_TEXTURE_MISSILE = POS_TEXTURE_BOSS_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
 		POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.NUM_TYPE_MISSILES;
@@ -402,9 +402,9 @@ public abstract class OpenGLRenderer implements Renderer
 		float camaraHeight = yTop - yBottom;
 		float camaraWidth = xRight - xLeft;
 		
-		frameHeightSide = GamePreferences.MARCO_ALTURA_LATERAL(camaraWidth, camaraHeight);
-		frameWidthMiddle = GamePreferences.MARCO_ANCHURA_INTERIOR(camaraWidth, camaraHeight);
-		frameWidthSide = GamePreferences.MARCO_ANCHURA_LATERAL(camaraWidth, camaraHeight);
+		frameHeightSide = GamePreferences.FRAME_HEIGHT_SIDE(camaraWidth, camaraHeight);
+		frameWidthMiddle = GamePreferences.FRAME_WIDTH_MIDDLE(camaraWidth, camaraHeight);
+		frameWidthSide = GamePreferences.FRAME_WIDTH_SIDE(camaraWidth, camaraHeight);
 
 		float[] recA = { 0, 0, 0, frameWidthMiddle, frameWidthSide, 0, frameWidthSide, frameWidthMiddle };
 		recFrameSide = BufferManager.construirBufferListaPuntos(recA);

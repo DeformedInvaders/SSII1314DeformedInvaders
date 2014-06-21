@@ -110,8 +110,8 @@ public class LevelGenerator
 		List<InstanceEntity> lista = new ArrayList<InstanceEntity>();
 		List<Entity> enemigos = enemiesList.get(index);
 		
-		float posXActual = GamePreferences.POS_ENEMIES_INICIO();
-		while (posXActual < GamePreferences.POS_ENEMIES_FINAL())
+		float posXActual = GamePreferences.POS_ENEMIES_BEGIN();
+		while (posXActual < GamePreferences.POS_ENEMIES_END())
 		{
 			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_OPPONENTS);
 			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMIES() / 2.0f);
