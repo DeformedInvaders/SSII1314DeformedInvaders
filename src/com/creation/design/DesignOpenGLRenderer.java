@@ -22,19 +22,19 @@ import com.main.model.GamePreferences;
 public class DesignOpenGLRenderer extends OpenGLRenderer
 {
 	// Estructura de Datos de la Escena
-	private TSatateDesign estado;
+	private TSatateDesign mState;
 	private Triangulator triangulator;
 
-	private VertexArray puntos;
-	private FloatBuffer bufferPoligono;
+	private VertexArray points;
+	private FloatBuffer bufferPoints;
 	
 	private VertexArray vertices;
-	private TriangleArray triangulos;
-	private FloatBuffer bufferMalla;
-	private HullArray contorno;
-	private FloatBuffer bufferContorno;
+	private TriangleArray triangles;
+	private FloatBuffer bufferTriangles;
+	private HullArray hull;
+	private FloatBuffer bufferHull;
 
-	private boolean poligonoSimple, poligonoTriangulado;
+	private boolean simplex, triangulate;
 
 	/* Constructora */
 
@@ -42,12 +42,12 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		super(context, TTypeBackgroundRenderer.Blank, TTypeTexturesRenderer.Character, color);
 
-		estado = TSatateDesign.Drawing;
+		mState = TSatateDesign.Drawing;
 
-		puntos = new VertexArray();
+		points = new VertexArray();
 		
-		poligonoSimple = false;
-		poligonoTriangulado = false;
+		simplex = false;
+		triangulate = false;
 	}
 
 	/* Métodos Renderer */
@@ -57,30 +57,30 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 				
-			if (estado == TSatateDesign.Drawing)
+			if (mState == TSatateDesign.Drawing)
 			{
-				if (puntos.getNumVertices() > 0)
+				if (points.getNumVertices() > 0)
 				{
 					// Centrado de Marco
 					drawInsideFrameBegin(gl);
 	
-					if (puntos.getNumVertices() > 1)
+					if (points.getNumVertices() > 1)
 					{
-						if (poligonoSimple)
+						if (simplex)
 						{
-							if (poligonoTriangulado)
+							if (triangulate)
 							{
-								OpenGLManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferMalla);
+								OpenGLManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferTriangles);
 							}
 							else
 							{
-								OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
+								OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
 							}
 						}
 						else
 						{
-							OpenGLManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoligono);
-							OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoligono);
+							OpenGLManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoints);
+							OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoints);
 						}
 					}
 					
@@ -95,13 +95,13 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				// Centrado de Marco
 				drawInsideFrameBegin(gl);
 				
-				if (poligonoTriangulado)
+				if (triangulate)
 				{
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferMalla);
+					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferTriangles);
 				}
 				else
 				{
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
+					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
 				}
 				// Centrado de Marco
 				drawInsideFrameEnd(gl);
@@ -113,15 +113,15 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onReset()
 	{
-		estado = TSatateDesign.Drawing;
-		puntos.clear();
+		mState = TSatateDesign.Drawing;
+		points.clear();
 
 		vertices = null;
-		triangulos = null;
-		contorno = null;
+		triangles = null;
+		hull = null;
 		
-		poligonoSimple = false;
-		poligonoTriangulado = false;
+		simplex = false;
+		triangulate = false;
 
 		return true;
 	}
@@ -129,37 +129,37 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TSatateDesign.Drawing)
+		if (mState == TSatateDesign.Drawing)
 		{
-			return anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
+			return addPoint(pixelX, pixelY, screenWidth, screenHeight);
 		}
 
 		return false;
 	}
 
-	private boolean anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean addPoint(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		boolean anyadir = true;
+		boolean addPoint = true;
 
-		if (puntos.getNumVertices() > 0)
+		if (points.getNumVertices() > 0)
 		{
-			float lastFrameX = puntos.getLastXVertex();
-			float lastFrameY = puntos.getLastYVertex();
+			float lastFrameX = points.getLastXVertex();
+			float lastFrameY = points.getLastYVertex();
 
 			float lastPixelX = convertFrameXToPixelXCoordinate(lastFrameX, screenWidth);
 			float lastPixelY = convertFrameYToPixelYCoordinate(lastFrameY, screenHeight);
 
-			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
+			addPoint = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
 		}
 
-		if (anyadir)
+		if (addPoint)
 		{
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			puntos.addVertex(frameX, frameY);
+			points.addVertex(frameX, frameY);
 
-			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
+			bufferPoints = BufferManager.construirBufferListaPuntos(points);
 
 			return true;
 		}
@@ -170,7 +170,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TSatateDesign.Drawing)
+		if (mState == TSatateDesign.Drawing)
 		{
 			return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
@@ -181,24 +181,24 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TSatateDesign.Drawing)
+		if (mState == TSatateDesign.Drawing)
 		{
 			onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 
-			triangulator = new Triangulator(puntos);
+			triangulator = new Triangulator(points);
 
-			poligonoSimple = triangulator.getPoligonSimple();
+			simplex = triangulator.getSimplex();
 			vertices = triangulator.getVertices();
-			triangulos = triangulator.getTriangulos();
-			contorno = triangulator.getContorno();
+			triangles = triangulator.getTriangles();
+			hull = triangulator.getHull();
 			
-			if (poligonoSimple)
+			if (simplex)
 			{
-				triangulos.sortCounterClockwise(vertices);
-				bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
-				bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
+				triangles.sortCounterClockwise(vertices);
+				bufferTriangles = BufferManager.construirBufferListaTriangulos(triangles, vertices);
+				bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
 				
-				estado = TSatateDesign.Preparing;
+				mState = TSatateDesign.Preparing;
 			}
 
 			return true;
@@ -210,7 +210,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void pointsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TSatateDesign.Preparing)
+		if (mState == TSatateDesign.Preparing)
 		{
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
@@ -222,15 +222,15 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float cFrameY = (frameY + lastFrameY) / 2.0f;
 
 			BufferManager.escalarVertices(factor, factor, cFrameX, cFrameY, vertices);
-			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
+			BufferManager.actualizarBufferListaTriangulos(bufferTriangles, triangles, vertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, vertices);
 		}
 	}
 
 	@Override
 	public void pointsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TSatateDesign.Preparing)
+		if (mState == TSatateDesign.Preparing)
 		{
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
@@ -242,80 +242,80 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float dWorldY = frameY - lastFrameY;
 
 			BufferManager.trasladarVertices(dWorldX, dWorldY, vertices);
-			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
+			BufferManager.actualizarBufferListaTriangulos(bufferTriangles, triangles, vertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, vertices);
 		}
 	}
 
 	@Override
 	public void pointsRotate(float angRad, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TSatateDesign.Preparing)
+		if (mState == TSatateDesign.Preparing)
 		{
 			float cFrameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float cFrameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
 			BufferManager.rotarVertices(angRad, cFrameX, cFrameY, vertices);
-			BufferManager.actualizarBufferListaTriangulos(bufferMalla, triangulos, vertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferContorno, contorno, vertices);
+			BufferManager.actualizarBufferListaTriangulos(bufferTriangles, triangles, vertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, vertices);
 		}
 	}
 
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarTriangular()
+	public void selectTriangulate()
 	{
-		poligonoTriangulado = !poligonoTriangulado;
+		triangulate = !triangulate;
 	}
 
-	public void seleccionarRetoque()
+	public void selectPreparing()
 	{
-		estado = TSatateDesign.Preparing;
+		mState = TSatateDesign.Preparing;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public Skeleton getEsqueleto()
+	public Skeleton getSkeleton()
 	{
-		if (estado == TSatateDesign.Finished)
+		if (mState == TSatateDesign.Finished)
 		{
-			estado = TSatateDesign.Preparing;
-			return new Skeleton(contorno, vertices, triangulos);
+			mState = TSatateDesign.Preparing;
+			return new Skeleton(hull, vertices, triangles);
 		}
 
 		return null;
 	}
 
-	public boolean isEstadoDibujando()
+	public boolean isStateDrawing()
 	{
-		return estado == TSatateDesign.Drawing;
+		return mState == TSatateDesign.Drawing;
 	}
 
-	public boolean isEstadoTriangulando()
+	public boolean isStateTriangulate()
 	{
-		return poligonoTriangulado;
+		return triangulate;
 	}
 
-	public boolean isEstadoRetocando()
+	public boolean isStatePreparing()
 	{
-		return estado == TSatateDesign.Preparing;
+		return mState == TSatateDesign.Preparing;
 	}
 
-	public boolean isPoligonoCompleto()
+	public boolean isPolygonComplete()
 	{
-		return puntos.getNumVertices() >= 3;
+		return points.getNumVertices() >= 3;
 	}
 	
-	public boolean isPoligonoSimple()
+	public boolean isPolygonSimplex()
 	{
-		return poligonoSimple;
+		return simplex;
 	}
 
-	public boolean isPoligonoDentroMarco()
+	public boolean isPolygonReady()
 	{
-		for (short i = 0; i < contorno.getNumVertices(); i++)
+		for (short i = 0; i < hull.getNumVertices(); i++)
 		{
-			short a = contorno.get(i);
+			short a = hull.get(i);
 			
 			float frameX = vertices.getXVertex(a);
 			float frameY = vertices.getYVertex(a);
@@ -326,7 +326,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			}
 		}
 		
-		estado = TSatateDesign.Finished;
+		mState = TSatateDesign.Finished;
 		return true;
 	}
 
@@ -334,23 +334,23 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public DesignDataSaved saveData()
 	{
-		return new DesignDataSaved(puntos, vertices, triangulos, contorno, estado, poligonoSimple);
+		return new DesignDataSaved(points, vertices, triangles, hull, mState, simplex);
 	}
 
 	public void restoreData(DesignDataSaved data)
 	{
-		estado = data.getEstado();
-		puntos = data.getPuntos();
+		mState = data.getState();
+		points = data.getPoints();
 		vertices = data.getVertices();
-		triangulos = data.getTriangulos();
-		contorno = data.getContorno();
-		poligonoSimple = data.getPoligonoSimple();
+		triangles = data.getTriangles();
+		hull = data.getHull();
+		simplex = data.getSimplex();
 
-		if (poligonoSimple)
+		if (simplex)
 		{
-			bufferPoligono = BufferManager.construirBufferListaPuntos(puntos);
-			bufferMalla = BufferManager.construirBufferListaTriangulos(triangulos, vertices);
-			bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
+			bufferPoints = BufferManager.construirBufferListaPuntos(points);
+			bufferTriangles = BufferManager.construirBufferListaTriangulos(triangles, vertices);
+			bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
 		}
 	}
 }

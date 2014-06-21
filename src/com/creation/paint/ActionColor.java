@@ -3,19 +3,19 @@ package com.creation.paint;
 
 public class ActionColor extends Action
 {
-	private int colorFondo;
+	private int backgroundColor;
 	
 	public ActionColor(int color)
 	{
-		tipoAccion = TTypeAction.Color;
+		typeAction = TTypeAction.Color;
 		
-		colorFondo = color;
+		backgroundColor = color;
 	}
 
 	/* Métodos de Obtención de Información */
 	
-	public int getColorFondo()
+	public int getBackgroundColor()
 	{
-		return colorFondo;
+		return backgroundColor;
 	}
 }

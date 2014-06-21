@@ -105,7 +105,7 @@ public abstract class GameCore
 	{
 		videoGenerator.cargarVideo();
 		
-		levelGenerator.cargarEnemigos();
+		levelGenerator.loadLevels();
 		internalManager.loadPreferences();
 		
 		estadisticasNiveles = internalManager.loadStatistics();			
@@ -137,7 +137,7 @@ public abstract class GameCore
 
 	public List<Level> getListaNiveles()
 	{
-		return levelGenerator.getListaNiveles();
+		return levelGenerator.getLevelList();
 	}
 	
 	public String[] getListaFicheros()
@@ -159,7 +159,7 @@ public abstract class GameCore
 	{
 		musicaSeleccionada = levelGenerator.getLevel(nivel).getLevelMusic();
 		
-		return levelGenerator.getInstanciaLevel(nivel);
+		return levelGenerator.getLevelInstance(nivel);
 	}
 	
 	public Video getVideo()

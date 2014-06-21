@@ -4,15 +4,15 @@ import com.main.controller.DataSaved;
 
 public class CharacterSelectionDataSaved extends DataSaved
 {
-	private int indice;
+	private int index;
 	
 	public CharacterSelectionDataSaved(int page)
 	{
-		indice = page;
+		index = page;
 	}
 	
-	public int getIndice()
+	public int getIndex()
 	{
-		return indice;
+		return index;
 	}
 }

@@ -20,16 +20,16 @@ import com.project.main.R;
 public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
-	private GameOpenGLRenderer renderer;
+	private GameOpenGLRenderer mRenderer;
 	private OnGameListener mListener;
 
-	private boolean animacionFinalizada;
-	private int contadorCiclos;
+	private boolean animationEnded;
+	private int numFrames;
 
 	private Handler handler;
 	private Runnable task;
 
-	private boolean threadActivo;
+	private boolean threadActive;
 	
 	private GameDetector gameDetector;
 	
@@ -41,16 +41,16 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		super(context, attrs, true);
 
-		animacionFinalizada = true;
-		contadorCiclos = 0;
+		animationEnded = true;
+		numFrames = 0;
 	}
 
 	public void setParameters(OnGameListener listener, Character personaje, InstanceLevel nivel)
 	{
 		mListener = listener;
 
-		renderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
-		setRenderer(renderer);
+		mRenderer = new GameOpenGLRenderer(getContext(), personaje, nivel);
+		setRenderer(mRenderer);
 				
 		handler = new Handler();
 		
@@ -58,67 +58,67 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void run()
 			{
-				if (renderer.playAnimation())
+				if (mRenderer.playAnimation())
 				{
-					renderer.seleccionarAnimacion(TTypeMovement.Run);
-					animacionFinalizada = true;
+					mRenderer.startAnimation(TTypeMovement.Run);
+					animationEnded = true;
 				}
 
 				requestRender();
 
-				switch (renderer.isGameEnded())
+				switch (mRenderer.isGameEnded())
 				{
 					case CharacterLifeLost:
 						mListener.onGamePlaySoundEffect(R.raw.effect_game_loselife, false);
-						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
-						mListener.onGameScoreChanged(renderer.getPuntuacion());
+						mListener.onGameLivesChanged(mRenderer.getCharacterLives());
+						mListener.onGameScoreChanged(mRenderer.getScore());
 						postDelayed(this);
 					break;
 					case BossLifeLost:
 						mListener.onGamePlaySoundEffect(R.raw.effect_game_loselife, false);
-						mListener.onGameLivesChanged(renderer.getVidasPersonaje(), renderer.getVidasBoss());
-						mListener.onGameScoreChanged(renderer.getPuntuacion());
+						mListener.onGameLivesChanged(mRenderer.getCharacterLives(), mRenderer.getBossLives());
+						mListener.onGameScoreChanged(mRenderer.getScore());
 						postDelayed(this);
 					break;
 					case ScoreChanged:
-						mListener.onGameScoreChanged(renderer.getPuntuacion());
+						mListener.onGameScoreChanged(mRenderer.getScore());
 						postDelayed(this);
 					break;
 					case EnemiesPhaseEnded:
-						mListener.onGameEnemiesFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
+						mListener.onGameEnemiesFinished(mRenderer.getScore(), mRenderer.getCharacterLives(), mRenderer.getBossLives());
 						sensorDetector.onSensorCalibrated();
 						postDelayed(this);
 					break;
 					case BossPhaseEnded:
-						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
+						mListener.onGameBossFinished(mRenderer.getScore(), mRenderer.getCharacterLives(), mRenderer.getBossLives());
 					break;
 					case GameOver:	
-						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidasPersonaje());
+						mListener.onGameFailed(mRenderer.getScore(), mRenderer.getCharacterLives());
 					break;
 					case Nothing:
 						postDelayed(this);
 					break;
 				}
 				
-				contadorCiclos++;
+				numFrames++;
 				requestRender();
 			}
 		};
 
-		renderer.seleccionarAnimacion(TTypeMovement.Run);
-		animacionFinalizada = true;
-		threadActivo = false;
+		mRenderer.startAnimation(TTypeMovement.Run);
+		animationEnded = true;
+		threadActive = false;
 	}
 	
 	private void postDelayed(Runnable r)
 	{
 		if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 		{
-			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
+			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(numFrames));
 		}
 		else
 		{
-			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(renderer.getVidasBoss()));
+			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(mRenderer.getBossLives()));
 		}
 	}
 
@@ -136,7 +136,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 					{
-						seleccionarAnimacion(TTypeMovement.Jump);
+						playAnimation(TTypeMovement.Jump);
 					}
 				}
 
@@ -145,7 +145,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 					{
-						seleccionarAnimacion(TTypeMovement.Crouch);
+						playAnimation(TTypeMovement.Crouch);
 					}
 				}
 				
@@ -154,14 +154,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.BossPhase && !GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarPosicion(pixelY);
+						moveCharacter(pixelY);
 					}
 				}
 
 				@Override
 				public void onTap()
 				{
-					seleccionarAnimacion(TTypeMovement.Attack);
+					playAnimation(TTypeMovement.Attack);
 				}
 				
 			};
@@ -176,7 +176,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarEstado(TStateCharacter.Up);
+						moveCharacter(TStateCharacter.Up);
 					}
 				}
 
@@ -185,7 +185,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarEstado(TStateCharacter.Down);
+						moveCharacter(TStateCharacter.Down);
 					}
 				}
 
@@ -194,7 +194,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarEstado(TStateCharacter.Nothing);
+						moveCharacter(TStateCharacter.Nothing);
 					}
 				}
 				
@@ -229,34 +229,34 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		super.onPause();
 		sensorDetector.onPause();
-		seleccionarPause();
+		selectPause();
 	}
 	
 	/* Métodos de Selección de Estado */
 	
-	public void seleccionarEstado(TStateCharacter estado)
+	public void moveCharacter(TStateCharacter estado)
 	{
-		if (threadActivo)
+		if (threadActive)
 		{
-			renderer.seleccionarEstado(estado);
+			mRenderer.moveCharacter(estado);
 		}
 	}
 	
-	public void seleccionarPosicion(float pixelY)
+	public void moveCharacter(float pixelY)
 	{
-		if (threadActivo)
+		if (threadActive)
 		{
-			renderer.seleccionarPosicion(pixelY, getWidth(), getHeight());
+			mRenderer.moveCharacter(pixelY, getWidth(), getHeight());
 		}
 	}
 	
-	public void seleccionarAnimacion(TTypeMovement movimiento)
+	public void playAnimation(TTypeMovement movimiento)
 	{
-		if (threadActivo)
+		if (threadActive)
 		{
-			if (animacionFinalizada)
+			if (animationEnded)
 			{
-				if (renderer.seleccionarAnimacion(movimiento))
+				if (mRenderer.startAnimation(movimiento))
 				{
 					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 					{
@@ -274,28 +274,28 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				
 				requestRender();
 				
-				animacionFinalizada = false;
+				animationEnded = false;
 			}
 		}
 	}
 
-	public void seleccionarResume()
+	public void selectResume()
 	{
-		if (!threadActivo)
+		if (!threadActive)
 		{
 			task.run();
-			threadActivo = true;
+			threadActive = true;
 			
-			mListener.onGameScoreChanged(renderer.getPuntuacion());
+			mListener.onGameScoreChanged(mRenderer.getScore());
 		}
 	}
 
-	public void seleccionarPause()
+	public void selectPause()
 	{
-		if (threadActivo)
+		if (threadActive)
 		{
 			handler.removeCallbacks(task);
-			threadActivo = false;
+			threadActive = false;
 		}
 	}
 	
@@ -303,12 +303,12 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public BackgroundDataSaved saveData()
 	{
-		return renderer.saveData();
+		return mRenderer.saveData();
 	}
 	
 	public void restoreData(BackgroundDataSaved data)
 	{
-		renderer.restoreData(data);
+		mRenderer.restoreData(data);
 		requestRender();
 	}
 }

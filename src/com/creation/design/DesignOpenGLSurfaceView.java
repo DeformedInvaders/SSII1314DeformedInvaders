@@ -11,7 +11,7 @@ import com.creation.data.Skeleton;
 public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
-	private DesignOpenGLRenderer renderer;
+	private DesignOpenGLRenderer mRenderer;
 
 	/* Constructora */
 
@@ -20,8 +20,8 @@ public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TStateDetector.SimpleTouch, false);
 
 		// Asignar Renderer al GLSurfaceView
-		renderer = new DesignOpenGLRenderer(getContext(), Color.WHITE);
-		setRenderer(renderer);
+		mRenderer = new DesignOpenGLRenderer(getContext(), Color.WHITE);
+		setRenderer(mRenderer);
 	}
 
 	/* Métodos Abstráctos OpenGLSurfaceView */
@@ -29,87 +29,87 @@ public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchDown(x, y, width, height, pos);
+		return mRenderer.onTouchDown(x, y, width, height, pos);
 	}
 
 	@Override
 	protected boolean onTouchMove(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchMove(x, y, width, height, pos);
+		return mRenderer.onTouchMove(x, y, width, height, pos);
 	}
 
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchUp(x, y, width, height, pos);
+		return mRenderer.onTouchUp(x, y, width, height, pos);
 	}
 
 	protected void reiniciar()
 	{
-		renderer.onReset();
+		mRenderer.onReset();
 		requestRender();
 	}
 
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarTriangular()
+	public void selectTriangulate()
 	{
-		renderer.seleccionarTriangular();
+		mRenderer.selectTriangulate();
 		requestRender();
 	}
 
-	public void seleccionarRetoque()
+	public void selectPreparing()
 	{
-		renderer.seleccionarRetoque();
+		mRenderer.selectPreparing();
 		requestRender();
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isEstadoDibujando()
+	public boolean isStateDrawing()
 	{
-		return renderer.isEstadoDibujando();
+		return mRenderer.isStateDrawing();
 	}
 
-	public boolean isEstadoTriangulando()
+	public boolean isStateTriangulate()
 	{
-		return renderer.isEstadoTriangulando();
+		return mRenderer.isStateTriangulate();
 	}
 
-	public boolean isEstadoRetocando()
+	public boolean isStatePreparing()
 	{
-		return renderer.isEstadoRetocando();
+		return mRenderer.isStatePreparing();
 	}
 
-	public Skeleton getEsqueleto()
+	public Skeleton getSkeleton()
 	{
-		return renderer.getEsqueleto();
+		return mRenderer.getSkeleton();
 	}
 
-	public boolean isPoligonoCompleto()
+	public boolean isPolygonComplete()
 	{
-		return renderer.isPoligonoCompleto();
+		return mRenderer.isPolygonComplete();
 	}
 	
-	public boolean isPoligonoSimple()
+	public boolean isPolygonSimplex()
 	{
-		return renderer.isPoligonoSimple();
+		return mRenderer.isPolygonSimplex();
 	}
 
-	public boolean isPoligonoDentroMarco()
+	public boolean isPolygonReady()
 	{
-		return renderer.isPoligonoDentroMarco();
+		return mRenderer.isPolygonReady();
 	}
 
 	/* Métodos de Guardado de Información */
 
 	public DesignDataSaved saveData()
 	{
-		return renderer.saveData();
+		return mRenderer.saveData();
 	}
 
 	public void restoreData(DesignDataSaved data)
 	{
-		renderer.restoreData(data);
+		mRenderer.restoreData(data);
 	}
 }

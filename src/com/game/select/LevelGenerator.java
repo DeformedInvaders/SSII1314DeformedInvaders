@@ -24,11 +24,11 @@ public class LevelGenerator
 {
 	private Context mContext;
 
-	private List<Level> listaNiveles;
-	private List<String> listaNombres;
-	private List<List<Entity>> listaEnemigos;
-	private List<Boss> listaJefes;
-	private List<Background> listaFondos;
+	private List<Level> levelList;
+	private List<String> nameList;
+	private List<List<Entity>> enemiesList;
+	private List<Boss> bossList;
+	private List<Background> backgroundList;
 	
 	private AssetsStorageManager assetsManager;
 
@@ -38,77 +38,77 @@ public class LevelGenerator
 		assetsManager = manager;
 	}
 	
-	public void cargarEnemigos()
+	public void loadLevels()
 	{
-		listaNiveles = new ArrayList<Level>();
-		listaNombres = new ArrayList<String>();
-		listaEnemigos = new ArrayList<List<Entity>>();
-		listaJefes = new ArrayList<Boss>();
-		listaFondos = new ArrayList<Background>();
+		levelList = new ArrayList<Level>();
+		nameList = new ArrayList<String>();
+		enemiesList = new ArrayList<List<Entity>>();
+		bossList = new ArrayList<Boss>();
+		backgroundList = new ArrayList<Background>();
 
 		TTypeLevel[] niveles = TTypeLevel.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_LEVELS; i++)
 		{
-			listaEnemigos.add(new ArrayList<Entity>());
+			enemiesList.add(new ArrayList<Entity>());
 
-			crearNivel(niveles[i], listaNiveles, listaEnemigos.get(i), listaNombres, listaFondos);
+			loadLevel(niveles[i], levelList, enemiesList.get(i), nameList, backgroundList);
 		}
 	}
 
-	private int obtenerID(String id)
+	private int getResourceId(String id)
 	{
 		return mContext.getResources().getIdentifier(id, GameResources.RESOURCE_DRAWABLE, mContext.getPackageName());
 	}
 	
-	private void crearNivel(TTypeLevel nivel, List<Level> listaNiveles, List<Entity> listaEnemigos, List<String> listaNombres, List<Background> listaBackground)
+	private void loadLevel(TTypeLevel nivel, List<Level> levelList, List<Entity> enemiesList, List<String> nameList, List<Background> backgroundList)
 	{
 		Typeface textFont = Typeface.createFromAsset(mContext.getAssets(), GameResources.GET_FONT_PATH(nivel));
-		int logroCompleted = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTypeEndgame.LevelCompleted));
-		int logroPerfected = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTypeEndgame.LevelPerfected));
-		int logroMastered = obtenerID(GameResources.GET_ACHIEVEMENTS(nivel, TTypeEndgame.LevelMastered));
+		int achievementCompleted = getResourceId(GameResources.GET_ACHIEVEMENTS(nivel, TTypeEndgame.LevelCompleted));
+		int achievementPerfected = getResourceId(GameResources.GET_ACHIEVEMENTS(nivel, TTypeEndgame.LevelPerfected));
+		int achievementMastered = getResourceId(GameResources.GET_ACHIEVEMENTS(nivel, TTypeEndgame.LevelMastered));
 		
-		listaNiveles.add(new Level(nivel, nivel.getFondoDisplay(), logroCompleted, logroPerfected, logroMastered, nivel.getTitle(), nivel.getDescription(), nivel.getColor(), textFont, nivel.getMusica()));
-		listaNombres.add(mContext.getString(nivel.getTitle()));
+		levelList.add(new Level(nivel, nivel.getDisplayBackground(), achievementCompleted, achievementPerfected, achievementMastered, nivel.getTitle(), nivel.getDescription(), nivel.getColor(), textFont, nivel.getMusic()));
+		nameList.add(mContext.getString(nivel.getTitle()));
 		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_MISSILES; i++)
 		{
-			listaEnemigos.add(new Missil(obtenerID(GameResources.GET_ENEMIES(TTypeEntity.Missil, nivel, i)), i));
+			enemiesList.add(new Missil(getResourceId(GameResources.GET_ENEMIES(TTypeEntity.Missil, nivel, i)), i));
 		}
 		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_OBSTACLES; i++)
 		{
-			listaEnemigos.add(new Obstacle(obtenerID(GameResources.GET_ENEMIES(TTypeEntity.Obstacle, nivel, i)), i));
+			enemiesList.add(new Obstacle(getResourceId(GameResources.GET_ENEMIES(TTypeEntity.Obstacle, nivel, i)), i));
 		}
 		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_ENEMIES; i++)
 		{
-			int id = obtenerID(GameResources.GET_ENEMIES(TTypeEntity.Enemy, nivel, i));
-			listaEnemigos.add(assetsManager.importEnemy(nivel, id, i));
+			int id = getResourceId(GameResources.GET_ENEMIES(TTypeEntity.Enemy, nivel, i));
+			enemiesList.add(assetsManager.importEnemy(nivel, id, i));
 		}
 		
-		int id = obtenerID(GameResources.GET_ENEMIES(TTypeEntity.Boss, nivel, 0));
-		listaJefes.add(assetsManager.importBoss(nivel, id, 0));
+		int id = getResourceId(GameResources.GET_ENEMIES(TTypeEntity.Boss, nivel, 0));
+		bossList.add(assetsManager.importBoss(nivel, id, 0));
 		
-		int[] fondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL];
+		int[] background = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL];
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL; i++)
 		{
-			fondos[i] = obtenerID(GameResources.GET_BACKGROUND(nivel, i));
+			background[i] = getResourceId(GameResources.GET_BACKGROUND(nivel, i));
 		}
 		
 		int[] polaroids = new int[GamePreferences.NUM_TYPE_ENDGAME];
-		TTypeEndgame[] finJuegos = TTypeEndgame.values();
+		TTypeEndgame[] typeEndgame = TTypeEndgame.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_ENDGAME; i++)
 		{
-			polaroids[i] = obtenerID(GameResources.GET_POLAROID(nivel, finJuegos[i]));
+			polaroids[i] = getResourceId(GameResources.GET_POLAROID(nivel, typeEndgame[i]));
 		}
 		
-		listaBackground.add(new Background(nivel.getFondoSol(), fondos, polaroids));
+		backgroundList.add(new Background(nivel.getSunBackground(), background, polaroids));
 	}
 
-	private List<InstanceEntity> getColaEnemigos(int indice)
+	private List<InstanceEntity> buildEnemiesList(int index)
 	{
 		List<InstanceEntity> lista = new ArrayList<InstanceEntity>();
-		List<Entity> enemigos = listaEnemigos.get(indice);
+		List<Entity> enemigos = enemiesList.get(index);
 		
 		float posXActual = GamePreferences.POS_ENEMIES_INICIO();
 		while (posXActual < GamePreferences.POS_ENEMIES_FINAL())
@@ -127,20 +127,20 @@ public class LevelGenerator
 		return lista;
 	}
 
-	public InstanceLevel getInstanciaLevel(TTypeLevel level)
+	public InstanceLevel getLevelInstance(TTypeLevel level)
 	{
-		int indice = level.ordinal();
-		return new InstanceLevel(level, listaNombres.get(indice), listaEnemigos.get(indice), listaJefes.get(indice), getColaEnemigos(indice), listaFondos.get(indice));
+		int index = level.ordinal();
+		return new InstanceLevel(level, nameList.get(index), enemiesList.get(index), bossList.get(index), buildEnemiesList(index), backgroundList.get(index));
 	}
 	
 	public Level getLevel(TTypeLevel level)
 	{
-		int indice = level.ordinal();
-		return listaNiveles.get(indice);
+		int index = level.ordinal();
+		return levelList.get(index);
 	}
 
-	public List<Level> getListaNiveles()
+	public List<Level> getLevelList()
 	{
-		return listaNiveles;
+		return levelList;
 	}
 }

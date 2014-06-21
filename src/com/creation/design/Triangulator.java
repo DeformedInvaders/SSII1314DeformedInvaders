@@ -19,36 +19,36 @@ public class Triangulator
 {
 	private final static int NUM_BSPLINE_VERTICES = 60;
 	
-	private VertexArray vertices;
-	private TriangleArray triangulos;
-	private HullArray contorno;
-	private boolean poligonoSimple;
+	private VertexArray mVertices;
+	private TriangleArray mTriangles;
+	private HullArray mHull;
+	private boolean simplex;
 	
 	/* Constructora */
 	
-	public Triangulator(VertexArray puntos)
+	public Triangulator(VertexArray vertices)
 	{
 ExternalStorageManager.writeLogcat("TEST", "New Triangulator Object.");
-		poligonoSimple = false;
+		simplex = false;
 		
-		if(puntos.getNumVertices() > 2)
+		if(vertices.getNumVertices() > 2)
 		{
 ExternalStorageManager.writeLogcat("TEST", "Polygon with more of 2 vertices.");
-			FloatArray bsplineVertices = calcularBSpline(puntos, 3, NUM_BSPLINE_VERTICES);
+			FloatArray bsplineVertices = calcularBSpline(vertices, 3, NUM_BSPLINE_VERTICES);
 			
-			poligonoSimple = calcularPoligonoSimple(bsplineVertices, false).size == 0;
-			if(poligonoSimple)
+			simplex = calcularPoligonoSimple(bsplineVertices, false).size == 0;
+			if(simplex)
 			{
 ExternalStorageManager.writeLogcat("TEST", "Polygon is simple.");
 				DelaunayMesh m = calcularMeshGenerator(bsplineVertices);
-				vertices = m.getVertices();
-				triangulos = m.getTriangulos();
+				mVertices = m.getVertices();
+				mTriangles = m.getTriangles();
 				
-				contorno = new HullArray(NUM_BSPLINE_VERTICES);
+				mHull = new HullArray(NUM_BSPLINE_VERTICES);
 				
 				for(short i = 0; i < NUM_BSPLINE_VERTICES; i++)
 				{
-					contorno.addVertex(i);
+					mHull.addVertex(i);
 				}
 			}
 			else
@@ -60,24 +60,24 @@ ExternalStorageManager.writeLogcat("TEST", "Polygon is complex.");
 	
 	/* Métodos de Obtención de Información */
 	
-	public boolean getPoligonSimple()
+	public boolean getSimplex()
 	{
-		return poligonoSimple;
+		return simplex;
 	}
 	
 	public VertexArray getVertices()
 	{
-		return vertices;
+		return mVertices;
 	}
 	
-	public TriangleArray getTriangulos()
+	public TriangleArray getTriangles()
 	{
-		return triangulos;
+		return mTriangles;
 	}
 	
-	public HullArray getContorno()
+	public HullArray getHull()
 	{
-		return contorno;
+		return mHull;
 	}
 	
 	/* Métodos Públicos Estáticos */

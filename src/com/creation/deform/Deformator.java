@@ -11,11 +11,11 @@ public class Deformator
 {
 	private static final float w = 1000;
 	
-	private VertexArray vertices;
-	private TriangleArray triangulos;
-	private EdgeArray aristas;
+	private VertexArray mVertices;
+	private TriangleArray mTriangles;
+	private EdgeArray mEdges;
 
-	private int numVertices, numAristas, numHandles;
+	private int numVertices, numEdges, numHandles;
 	
 	// Cálculo de Matrices A1 y B1
 
@@ -41,14 +41,14 @@ public class Deformator
 
 	public Deformator(VertexArray mesh, TriangleArray triangles, HandleArray handles)
 	{
-		vertices = mesh;
-		triangulos = triangles;
-		aristas = new EdgeArray();
+		mVertices = mesh;
+		mTriangles = triangles;
+		mEdges = new EdgeArray();
 		
-		construirAristas(triangulos);
+		buildEdges(mTriangles);
 
-		numVertices = vertices.getNumVertices();
-		numAristas = aristas.getNumEdges();
+		numVertices = mVertices.getNumVertices();
+		numEdges = mEdges.getNumEdges();
 
 		// Calcular Matriz G
 		matrizG = new Matrix(8, 2);
@@ -97,30 +97,30 @@ public class Deformator
 		numHandles = handles.getNumHandles();
 
 		// Calcular MatrizA1
-		matrizA1 = new Matrix(2 * numAristas + 2 * numHandles, 2 * numVertices);
-		calcularMatrizA1(vertices, handles, matrizA1);
+		matrizA1 = new Matrix(2 * numEdges + 2 * numHandles, 2 * numVertices);
+		calcularMatrizA1(mVertices, handles, matrizA1);
 
-		matrizA1t = new Matrix(2 * numVertices, 2 * numAristas + 2 * numHandles);
+		matrizA1t = new Matrix(2 * numVertices, 2 * numEdges + 2 * numHandles);
 		matrizA1.transpose(matrizA1t);
 
 		matrizA1t.times(matrizA1, matrizA1tA1);
 
 		// Calcular MatrizB1
-		matrizB1 = new Matrix(2 * numAristas + 2 * numHandles, 1);
+		matrizB1 = new Matrix(2 * numEdges + 2 * numHandles, 1);
 		calcularMatrizB1(handles, matrizB1);
 
 		// Calcular MatrizA2
-		matrizA2 = new Matrix(numAristas + numHandles, numVertices);
+		matrizA2 = new Matrix(numEdges + numHandles, numVertices);
 		calcularMatrizA2(handles, matrizA2);
 
-		matrizA2t = new Matrix(numVertices, numAristas + numHandles);
+		matrizA2t = new Matrix(numVertices, numEdges + numHandles);
 		matrizA2.transpose(matrizA2t);
 
 		matrizA2t.times(matrizA2, matrizA2tA2);
 
 		// Calcular Matriz B2
-		matrizB2x = new Matrix(numAristas + numHandles, 1);
-		matrizB2y = new Matrix(numAristas + numHandles, 1);
+		matrizB2x = new Matrix(numEdges + numHandles, 1);
+		matrizB2y = new Matrix(numEdges + numHandles, 1);
 	}
 
 	// Borrar Handles
@@ -130,7 +130,7 @@ public class Deformator
 	}
 
 	// Modificación de Posición de Handles
-	public void moverHandles(HandleArray handles, VertexArray verticesModificados)
+	public void moverHandles(HandleArray handles, VertexArray verticesModified)
 	{
 		try
 		{
@@ -147,7 +147,7 @@ public class Deformator
 	
 			// Actualizar Valores de los Vertices después del Ajuste de Traslación y
 			// Rotación
-			VertexArray verticesTrasRot = vertices.clone();
+			VertexArray verticesTrasRot = mVertices.clone();
 			for (short i = 0; i < numVertices; i++)
 			{
 				verticesTrasRot.setVertex(i, (float) m1.get(2 * i, 0), (float) m1.get(2 * i + 1, 0));
@@ -157,7 +157,7 @@ public class Deformator
 			//
 			// A2t * A2 * X = A2t * B2
 	
-			calcularMatrizB2(vertices, verticesTrasRot, handles, matrizB2x, matrizB2y);
+			calcularMatrizB2(mVertices, verticesTrasRot, handles, matrizB2x, matrizB2y);
 	
 			matrizA2t.times(matrizB2x, matrizA2tB2x);
 			matrizA2t.times(matrizB2y, matrizA2tB2y);
@@ -168,7 +168,7 @@ public class Deformator
 			// Actualizar Valores de los Vertices después del Ajuste de Escala
 			for (short i = 0; i < numVertices; i++)
 			{
-				verticesModificados.setVertex(i, (float) m2x.get(i, 0), (float) m2y.get(i, 0));
+				verticesModified.setVertex(i, (float) m2x.get(i, 0), (float) m2y.get(i, 0));
 			}
 		}
 		catch(RuntimeException e)
@@ -267,12 +267,12 @@ public class Deformator
 	private void calcularMatrizA1(VertexArray vertices, HandleArray handles, Matrix m)
 	{
 		int j = 0;
-		for (short i = 0; i < numAristas; i++)
+		for (short i = 0; i < numEdges; i++)
 		{
-			short a = aristas.getAVertex(i);
-			short b = aristas.getBVertex(i);
-			short c = aristas.getLVertex(i);
-			short d = aristas.getRVertex(i);
+			short a = mEdges.getAVertex(i);
+			short b = mEdges.getBVertex(i);
+			short c = mEdges.getLVertex(i);
+			short d = mEdges.getRVertex(i);
 
 			calcularMatrizH(a, b, c, d, vertices, matrizH);
 
@@ -307,16 +307,16 @@ public class Deformator
 
 		for (short k = 0; k < numHandles; k++)
 		{
-			int pos = 2 * numAristas + 2 * k;
+			int pos = 2 * numEdges + 2 * k;
 			
-			short triangulo = handles.getIndexHandle(k);
+			short triangle = handles.getIndexHandle(k);
 			float alfa = handles.getAlfaHandle(k);
 			float beta = handles.getBetaHandle(k);
 			float gamma = handles.getGammaHandle(k);
 			
-			short a = triangulos.getAVertex(triangulo);
-			short b = triangulos.getBVertex(triangulo);
-			short c = triangulos.getCVertex(triangulo);
+			short a = mTriangles.getAVertex(triangle);
+			short b = mTriangles.getBVertex(triangle);
+			short c = mTriangles.getCVertex(triangle);
 
 			m.set(pos, 2 * a, w * alfa);
 			m.set(pos + 1, 2 * a + 1, w * alfa);
@@ -334,7 +334,7 @@ public class Deformator
 	{
 		for (short i = 0; i < numHandles; i++)
 		{
-			int pos = 2 * numAristas + 2 * i;
+			int pos = 2 * numEdges + 2 * i;
 			
 			float x = handles.getXCoordHandle(i);
 			float y = handles.getYCoordHandle(i);
@@ -350,10 +350,10 @@ public class Deformator
 	private void calcularMatrizA2(HandleArray handles, Matrix m)
 	{
 		int j = 0;
-		for (short i = 0; i < numAristas; i++)
+		for (short i = 0; i < numEdges; i++)
 		{
-			int a = aristas.getAVertex(i);
-			int b = aristas.getBVertex(i);
+			int a = mEdges.getAVertex(i);
+			int b = mEdges.getBVertex(i);
 
 			m.set(j, a, 1);
 			m.set(j, b, -1);
@@ -363,16 +363,16 @@ public class Deformator
 
 		for (short k = 0; k < numHandles; k++)
 		{
-			int pos = numAristas + k;
+			int pos = numEdges + k;
 			
-			short triangulo = handles.getIndexHandle(k);
+			short triangle = handles.getIndexHandle(k);
 			float alfa = handles.getAlfaHandle(k);
 			float beta = handles.getBetaHandle(k);
 			float gamma = handles.getGammaHandle(k);
 			
-			short a = triangulos.getAVertex(triangulo);
-			short b = triangulos.getBVertex(triangulo);
-			short c = triangulos.getCVertex(triangulo);
+			short a = mTriangles.getAVertex(triangle);
+			short b = mTriangles.getBVertex(triangle);
+			short c = mTriangles.getCVertex(triangle);
 
 			m.set(pos, a, w * alfa);
 			m.set(pos, b, w * beta);
@@ -450,17 +450,17 @@ public class Deformator
 	}
 
 	// Cálculo Matriz B2
-	private void calcularMatrizB2(VertexArray vertices, VertexArray verticesTrasRot, HandleArray handles, Matrix m, Matrix n)
+	private void calcularMatrizB2(VertexArray vertices, VertexArray verticesRotation, HandleArray handles, Matrix m, Matrix n)
 	{
 		int j = 0;
-		for (short i = 0; i < numAristas; i++)
+		for (short i = 0; i < numEdges; i++)
 		{
-			short a = aristas.getAVertex(i);
-			short b = aristas.getBVertex(i);
-			short c = aristas.getLVertex(i);
-			short d = aristas.getRVertex(i);
+			short a = mEdges.getAVertex(i);
+			short b = mEdges.getBVertex(i);
+			short c = mEdges.getLVertex(i);
+			short d = mEdges.getRVertex(i);
 
-			calcularMatrizT(a, b, c, d, verticesTrasRot, matrizT);
+			calcularMatrizT(a, b, c, d, verticesRotation, matrizT);
 
 			float vix = vertices.getXVertex(a);
 			float viy = vertices.getYVertex(a);
@@ -481,7 +481,7 @@ public class Deformator
 
 		for (short k = 0; k < numHandles; k++)
 		{
-			int pos = numAristas + k;
+			int pos = numEdges + k;
 			
 			float x = handles.getXCoordHandle(k);
 			float y = handles.getYCoordHandle(k);
@@ -493,17 +493,17 @@ public class Deformator
 
 	/* Cálculo de Vecinos */
 
-	private void construirAristas(TriangleArray triangulos)
+	private void buildEdges(TriangleArray triangles)
 	{
-		for (short i = 0; i < triangulos.getNumTriangles(); i++)
+		for (short i = 0; i < triangles.getNumTriangles(); i++)
 		{
-			short a = triangulos.getAVertex(i);
-			short b = triangulos.getBVertex(i);
-			short c = triangulos.getCVertex(i);
+			short a = triangles.getAVertex(i);
+			short b = triangles.getBVertex(i);
+			short c = triangles.getCVertex(i);
 			
-			aristas.addEdge(a, b, c, vertices);
-			aristas.addEdge(b, c, a, vertices);
-			aristas.addEdge(c, a, b, vertices);		
+			mEdges.addEdge(a, b, c, mVertices);
+			mEdges.addEdge(b, c, a, mVertices);
+			mEdges.addEdge(c, a, b, mVertices);		
 		}
 	}
 }

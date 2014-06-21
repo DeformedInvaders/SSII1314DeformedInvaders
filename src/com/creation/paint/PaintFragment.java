@@ -29,46 +29,46 @@ public class PaintFragment extends OpenGLFragment
 	private SizeDialog sizeDialog;
 	private StickerDialog stickerDialog;
 
-	private PaintOpenGLSurfaceView canvas;
-	private IconImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
+	private PaintOpenGLSurfaceView mCanvas;
+	private IconImageButton buttonPencil, buttonBucket, buttonHand, buttonNext, buttonPrev, buttonDelete, buttonReady, buttonColor, buttonSize, buttonSticker;
 
-	private Character personaje;
-	private int personajeIndice;
+	private Character mCharacter;
+	private int mCharacterIndex;
 	
-	private GameStatistics[] estadoNiveles;
+	private GameStatistics[] mStatistics;
 	
 	private PaintDataSaved dataSaved;
 
 	/* Constructora */
 
-	public static final PaintFragment newInstance(PaintFragmentListener c, Character p, GameStatistics[] e)
+	public static final PaintFragment newInstance(PaintFragmentListener callback, Character character, GameStatistics[] statistics)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(c, p, -1, e, null);
+		fragment.setParameters(callback, character, -1, statistics, null);
 		return fragment;
 	}
 	
-	public static final PaintFragment newInstance(PaintFragmentListener c, Character p, int n, GameStatistics[] e)
+	public static final PaintFragment newInstance(PaintFragmentListener callback, Character character, int index, GameStatistics[] statistics)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(c, p, n, e, null);
+		fragment.setParameters(callback, character, index, statistics, null);
 		return fragment;
 	}
 	
-	public static final PaintFragment newInstance(PaintFragmentListener c, Character p, GameStatistics[] e, PaintDataSaved s)
+	public static final PaintFragment newInstance(PaintFragmentListener callback, Character character, GameStatistics[] statistics, PaintDataSaved data)
 	{
 		PaintFragment fragment = new PaintFragment();
-		fragment.setParameters(c, p, -1, e, s);
+		fragment.setParameters(callback, character, -1, statistics, data);
 		return fragment;
 	}
 	
-	private void setParameters(PaintFragmentListener c, Character p, int n, GameStatistics[] e, PaintDataSaved s)
+	private void setParameters(PaintFragmentListener callback, Character character, int index, GameStatistics[] statistics, PaintDataSaved data)
 	{
-		mCallback = c;
-		personaje = p;
-		personajeIndice = n;
-		estadoNiveles = e;
-		dataSaved = s;
+		mCallback = callback;
+		mCharacter = character;
+		mCharacterIndex = index;
+		mStatistics = statistics;
+		dataSaved = data;
 	}
 
 	public interface PaintFragmentListener
@@ -86,36 +86,36 @@ public class PaintFragment extends OpenGLFragment
 		View rootView = inflater.inflate(R.layout.fragment_creation_paint_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (PaintOpenGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
-		canvas.setParameters(personaje);
+		mCanvas = (PaintOpenGLSurfaceView) rootView.findViewById(R.id.paintGLSurfaceViewPaint1);
+		mCanvas.setParameters(mCharacter);
 		
-		botonPincel = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint1);
-		botonCubo = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint2);
-		botonColor = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint3);
-		botonSize = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint4);
-		botonPegatina = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint5);
-		botonMano = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint6);
-		botonPrev = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint7);
-		botonNext = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint8);
-		botonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint9);
-		botonListo = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint10);
+		buttonPencil = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint1);
+		buttonBucket = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint2);
+		buttonColor = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint3);
+		buttonSize = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint4);
+		buttonSticker = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint5);
+		buttonHand = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint6);
+		buttonPrev = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint7);
+		buttonNext = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint8);
+		buttonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint9);
+		buttonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonPaint10);
 
-		botonPincel.setOnClickListener(new OnPincelClickListener());
-		botonCubo.setOnClickListener(new OnCuboClickListener());
-		botonColor.setOnClickListener(new OnColorClickListener());
-		botonSize.setOnClickListener(new OnSizeClickListener());
-		botonPegatina.setOnClickListener(new OnPegatinaClickListener());
-		botonMano.setOnClickListener(new OnManoClickListener());
-		botonNext.setOnClickListener(new OnNextClickListener());
-		botonPrev.setOnClickListener(new OnPrevClickListener());
-		botonDelete.setOnClickListener(new OnDeleteClickListener());
-		botonListo.setOnClickListener(new OnReadyClickListener());
+		buttonPencil.setOnClickListener(new OnPencilClickListener());
+		buttonBucket.setOnClickListener(new OnBucketClickListener());
+		buttonColor.setOnClickListener(new OnColorClickListener());
+		buttonSize.setOnClickListener(new OnSizeClickListener());
+		buttonSticker.setOnClickListener(new OnStickerClickListener());
+		buttonHand.setOnClickListener(new OnHandClickListener());
+		buttonNext.setOnClickListener(new OnNextClickListener());
+		buttonPrev.setOnClickListener(new OnPrevClickListener());
+		buttonDelete.setOnClickListener(new OnDeleteClickListener());
+		buttonReady.setOnClickListener(new OnReadyClickListener());
 
-		setCanvasListener(canvas);
+		setCanvasListener(mCanvas);
 		
 		if (dataSaved != null)
 		{
-			canvas.restoreData(dataSaved);
+			mCanvas.restoreData(dataSaved);
 		}
 
 		resetInterface();
@@ -144,20 +144,20 @@ public class PaintFragment extends OpenGLFragment
 	{
 		super.onDestroyView();
 
-		canvas = null;
+		mCanvas = null;
 		colorDialog = null;
 		sizeDialog = null;
 		stickerDialog = null;
-		botonPincel = null;
-		botonCubo = null;
-		botonMano = null;
-		botonNext = null;
-		botonPrev = null;
-		botonDelete = null;
-		botonListo = null;
-		botonColor = null;
-		botonSize = null;
-		botonPegatina = null;
+		buttonPencil = null;
+		buttonBucket = null;
+		buttonHand = null;
+		buttonNext = null;
+		buttonPrev = null;
+		buttonDelete = null;
+		buttonReady = null;
+		buttonColor = null;
+		buttonSize = null;
+		buttonSticker = null;
 	}
 	
 	@Override
@@ -166,8 +166,8 @@ public class PaintFragment extends OpenGLFragment
 		super.onDetach();
 		
 		mCallback = null;
-		personaje = null;
-		estadoNiveles = null;
+		mCharacter = null;
+		mStatistics = null;
 		dataSaved = null;
 	}
 
@@ -178,22 +178,22 @@ public class PaintFragment extends OpenGLFragment
 		
 		if (dataSaved != null)
 		{
-			canvas.restoreData(dataSaved);
+			mCanvas.restoreData(dataSaved);
 
 			resetInterface();
 			updateInterface();
 		}
 		
-		canvas.onResume();
+		mCanvas.onResume();
 	}
 
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		canvas.onPause();
+		mCanvas.onPause();
 
-		dataSaved = canvas.saveData();
+		dataSaved = mCanvas.saveData();
 	}
 
 	/* Métodos Abstráctos OpenGLFragment */
@@ -201,51 +201,51 @@ public class PaintFragment extends OpenGLFragment
 	@Override
 	protected void updateInterface()
 	{
-		if (!canvas.isBufferSiguienteVacio())
+		if (!mCanvas.isNextBufferEmpty())
 		{
-			botonNext.setVisibility(View.VISIBLE);
+			buttonNext.setVisibility(View.VISIBLE);
 		}
 
-		if (!canvas.isBufferAnteriorVacio())
+		if (!mCanvas.isPrevBufferEmpty())
 		{
-			botonPrev.setVisibility(View.VISIBLE);
-			botonDelete.setVisibility(View.VISIBLE);
+			buttonPrev.setVisibility(View.VISIBLE);
+			buttonDelete.setVisibility(View.VISIBLE);
 		}
 		
-		botonPincel.setActivo(canvas.isEstadoPincel());
-		botonCubo.setActivo(canvas.isEstadoCubo());
-		botonMano.setActivo(canvas.isEstadoMover());
-		botonPegatina.setActivo(canvas.isEstadoPegatinas());
+		buttonPencil.setActivo(mCanvas.isStatePencil());
+		buttonBucket.setActivo(mCanvas.isStateBucket());
+		buttonHand.setActivo(mCanvas.isStateHand());
+		buttonSticker.setActivo(mCanvas.isStateSticker());
 	}
 
 	@Override
 	protected void resetInterface()
 	{
-		botonNext.setVisibility(View.INVISIBLE);
-		botonPrev.setVisibility(View.INVISIBLE);
-		botonDelete.setVisibility(View.INVISIBLE);
+		buttonNext.setVisibility(View.INVISIBLE);
+		buttonPrev.setVisibility(View.INVISIBLE);
+		buttonDelete.setVisibility(View.INVISIBLE);
 	}
 
 	/* Métodos Listener onClick */
 
-	private class OnPincelClickListener implements OnClickListener
+	private class OnPencilClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarPincel();
+			mCanvas.selectPencil();
 
 			resetInterface();
 			updateInterface();
 		}
 	}
 
-	private class OnCuboClickListener implements OnClickListener
+	private class OnBucketClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarCubo();
+			mCanvas.selectBucket();
 
 			resetInterface();
 			updateInterface();
@@ -263,7 +263,7 @@ public class PaintFragment extends OpenGLFragment
 					@Override
 					public void onColorSelected(int color)
 					{
-						canvas.seleccionarColor(color);
+						mCanvas.selectColor(color);
 					}
 				};
 			}
@@ -282,7 +282,7 @@ public class PaintFragment extends OpenGLFragment
 					@Override
 					public void onSizeSelected(TTypeSize size)
 					{
-						canvas.seleccionarSize(size);
+						mCanvas.selectSize(size);
 					}
 				};
 			}
@@ -290,36 +290,36 @@ public class PaintFragment extends OpenGLFragment
 		}
 	}
 
-	private class OnPegatinaClickListener implements OnClickListener
+	private class OnStickerClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
 			if (stickerDialog == null)
 			{
-				stickerDialog = new StickerDialog(getActivity(), estadoNiveles) {
+				stickerDialog = new StickerDialog(getActivity(), mStatistics) {
 					@Override
-					public void onAddSticker(int tag, TTypeSticker tipo)
+					public void onAddSticker(int tag, TTypeSticker type)
 					{
-						canvas.anyadirPegatina(tag, tipo);
+						mCanvas.addSticker(tag, type);
 
 						resetInterface();
 						updateInterface();
 					}
 					
 					@Override
-					public void onDeleteSticker(TTypeSticker tipo)
+					public void onDeleteSticker(TTypeSticker type)
 					{
-						canvas.eliminarPegatina(tipo);
+						mCanvas.deleteSticker(type);
 						
 						resetInterface();
 						updateInterface();
 					}
 					
 					@Override
-					public void onEditSticker(TTypeSticker tipo)
+					public void onEditSticker(TTypeSticker type)
 					{
-						canvas.editarPegatina(tipo);
+						mCanvas.editSticker(type);
 						
 						resetInterface();
 						updateInterface();
@@ -328,19 +328,19 @@ public class PaintFragment extends OpenGLFragment
 			}
 			
 			stickerDialog.show(v);
-			canvas.seleccionarNada();
+			mCanvas.selectNothing();
 			
 			resetInterface();
 			updateInterface();
 		}
 	}
 
-	private class OnManoClickListener implements OnClickListener
+	private class OnHandClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarMano();
+			mCanvas.selectHand();
 
 			resetInterface();
 			updateInterface();
@@ -352,7 +352,7 @@ public class PaintFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.anteriorAccion();
+			mCanvas.prevAction();
 
 			resetInterface();
 			updateInterface();
@@ -364,7 +364,7 @@ public class PaintFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.siguienteAccion();
+			mCanvas.nextAction();
 
 			resetInterface();
 			updateInterface();
@@ -376,7 +376,7 @@ public class PaintFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.reiniciar();
+			mCanvas.selectReset();
 
 			resetInterface();
 			updateInterface();
@@ -391,13 +391,13 @@ public class PaintFragment extends OpenGLFragment
 			resetInterface();
 			updateInterface();
 			
-			if(personajeIndice == -1)
+			if(mCharacterIndex == -1)
 			{
-				mCallback.onPaintReady(canvas.getTextura(), canvas.saveData());
+				mCallback.onPaintReady(mCanvas.getTexture(), mCanvas.saveData());
 			}
 			else
 			{
-				mCallback.onRepaintReady(canvas.getTextura(), personajeIndice);
+				mCallback.onRepaintReady(mCanvas.getTexture(), mCharacterIndex);
 			}	
 		}
 	}

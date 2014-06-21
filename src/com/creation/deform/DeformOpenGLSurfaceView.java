@@ -18,12 +18,12 @@ import com.main.model.GamePreferences;
 public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	private OnDeformListener mListener;
-	private DeformOpenGLRenderer renderer;
+	private DeformOpenGLRenderer mRenderer;
 
 	private Handler handler;
 	private Runnable task;
 
-	private boolean threadActivo;
+	private boolean threadActive;
 
 	/* Constructora */
 
@@ -36,8 +36,8 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		mListener = listener;
 		
-		renderer = new DeformOpenGLRenderer(getContext(), Color.WHITE, mListener, personaje, movimiento);
-		setRenderer(renderer);
+		mRenderer = new DeformOpenGLRenderer(getContext(), Color.WHITE, mListener, personaje, movimiento);
+		setRenderer(mRenderer);
 
 		handler = new Handler();
 
@@ -45,7 +45,7 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void run()
 			{
-				if (!renderer.reproducirAnimacion())
+				if (!mRenderer.playAnimation())
 				{
 					requestRender();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
@@ -53,14 +53,14 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 				}
 				else
 				{
-					renderer.seleccionarReposo();
+					mRenderer.stopAnimation();
 					mListener.onAnimationFinished();
-					threadActivo = false;
+					threadActive = false;
 				}
 			}
 		};
 
-		threadActivo = false;
+		threadActive = false;
 	}
 
 	/* Métodos Abstractos OpenGLSurfaceView */
@@ -68,31 +68,31 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchDown(x, y, width, height, pos);
+		return mRenderer.onTouchDown(x, y, width, height, pos);
 	}
 	
 	@Override
 	protected boolean onTouchPointerDown(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchDown(x, y, width, height, pos);
+		return mRenderer.onTouchDown(x, y, width, height, pos);
 	}
 
 	@Override
 	protected boolean onTouchMove(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchMove(x, y, width, height, pos);
+		return mRenderer.onTouchMove(x, y, width, height, pos);
 	}
 
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchUp(x, y, width, height, pos);
+		return mRenderer.onTouchUp(x, y, width, height, pos);
 	}
 	
 	@Override
 	protected boolean onTouchPointerUp(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchPointerUp(x, y, width, height, pos);
+		return mRenderer.onTouchPointerUp(x, y, width, height, pos);
 	}
 	
 	@Override
@@ -100,7 +100,7 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE)
 		{
-			return renderer.onMultiTouchPreAction(countPounter);
+			return mRenderer.onMultiTouchPreAction(countPounter);
 		}
 		
 		return false;
@@ -111,7 +111,7 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		if (action == MotionEvent.ACTION_MOVE)
 		{
-			return renderer.onMultiTouchPostAction();
+			return mRenderer.onMultiTouchPostAction();
 		}
 		
 		return false;
@@ -119,102 +119,97 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de modifiación del Renderer */
 
-	public void seleccionarAnyadir()
+	public void selectAdding()
 	{
-		renderer.seleccionarAnyadir();
+		mRenderer.selectAdding();
 	}
 
-	public void seleccionarEliminar()
+	public void selectDeleting()
 	{
-		renderer.seleccionarEliminar();
+		mRenderer.selectDeleting();
 	}
 
-	public void seleccionarMover()
+	public void selectMoving()
 	{
-		renderer.seleccionarMover();
+		mRenderer.selectMoving();
 	}
 
-	public void reiniciar()
+	public void selectReset()
 	{
-		renderer.onReset();
+		mRenderer.onReset();
 		requestRender();
 	}
 
-	public void seleccionarGrabado()
+	public void selectRecording()
 	{
-		renderer.seleccionarGrabado();
+		mRenderer.selectRecording();
 		requestRender();
 	}
 
-	public void seleccionarPlay()
+	public void selectPlaying()
 	{
-		if (!threadActivo)
+		if (!threadActive)
 		{
-			renderer.selecionarPlay();
+			mRenderer.selectPlaying();
 			requestRender();
 
 			mListener.onPlaySoundEffect();
 			task.run();
-			threadActivo = true;
+			threadActive = true;
 		}
-	}
-
-	public void seleccionarReposo()
-	{
-		renderer.seleccionarReposo();
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isHandlesVacio()
+	public boolean isHandlesEmpty()
 	{
-		return renderer.isHandlesVacio();
+		return mRenderer.isHandlesEmpty();
 	}
 
-	public boolean isEstadoAnyadir()
+	public boolean isStateAdding()
 	{
-		return renderer.isEstadoAnyadir();
+		return mRenderer.isStateAdding();
 	}
 
-	public boolean isEstadoEliminar()
+	public boolean isStateDeleting()
 	{
-		return renderer.isEstadoEliminar();
+		return mRenderer.isStateDeleting();
 	}
 
-	public boolean isEstadoDeformar()
+	public boolean isStateMoving()
 	{
-		return renderer.isEstadoDeformar();
+		return mRenderer.isStateMoving();
 	}
 
-	public boolean isEstadoGrabacion()
+	public boolean isStateRecording()
 	{
-		return renderer.isEstadoGrabacion();
+		return mRenderer.isStateRecording();
 	}
 
-	public boolean isGrabacionReady()
+	public boolean isAnimationReady()
 	{
-		return renderer.isGrabacionReady();
+		return mRenderer.isAnimationReady();
 	}
 
-	public boolean isEstadoReproduccion()
+	public boolean isStatePlaying()
 	{
-		return renderer.isEstadoReproduccion();
+		return mRenderer.isStatePlaying();
 	}
 
-	public List<VertexArray> getMovimientos()
+	public List<VertexArray> getMovement()
 	{
-		return renderer.getMovimientos();
+		return mRenderer.getAnimation();
 	}
 
 	/* Métodos de Guardado de Información */
 
 	public DeformDataSaved saveData()
 	{
-		return renderer.saveData();
+		return mRenderer.saveData();
 	}
 
 	public void restoreData(DeformDataSaved data)
 	{
-		renderer.restoreData(data);
+		mRenderer.restoreData(data);
 	}
 }

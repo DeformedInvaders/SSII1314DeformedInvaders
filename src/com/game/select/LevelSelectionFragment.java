@@ -18,32 +18,32 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 {
 	private LevelSelectionFragmentListener mCallback;
 
-	private List<Level> listaNiveles;
-	private GameStatistics[] estadoNiveles;
-	private int posicionInicial;
+	private List<Level> mLevelList;
+	private GameStatistics[] mStatistics;
+	private int originalIndex;
 
 	/* Constructora */
 
-	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Level> lista, GameStatistics[] estado)
+	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener callback, List<Level> levelList, GameStatistics[] statistics)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
-		fragment.setParameters(c, lista, estado, -1);
+		fragment.setParameters(callback, levelList, statistics, -1);
 		return fragment;
 	}
 	
-	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Level> lista, GameStatistics[] estado, TTypeLevel nivel)
+	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener callback, List<Level> levelList, GameStatistics[] statistics, TTypeLevel level)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
-		fragment.setParameters(c, lista, estado, nivel.ordinal());
+		fragment.setParameters(callback, levelList, statistics, level.ordinal());
 		return fragment;
 	}
 
-	private void setParameters(LevelSelectionFragmentListener c, List<Level> lista, GameStatistics[] estado, int nivel)
+	private void setParameters(LevelSelectionFragmentListener callback, List<Level> levelList, GameStatistics[] statistics, int index)
 	{
-		mCallback = c;
-		listaNiveles = lista;
-		estadoNiveles = estado;
-		posicionInicial = nivel;
+		mCallback = callback;
+		mLevelList = levelList;
+		mStatistics = statistics;
+		originalIndex = index;
 	}
 
 	public interface LevelSelectionFragmentListener
@@ -63,18 +63,18 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 
 		int i = 0;
-		Iterator<Level> it = listaNiveles.iterator();
+		Iterator<Level> it = mLevelList.iterator();
 		while (it.hasNext())
 		{
 			Level nivel = it.next();
-			viewPager.addView(LevelSelectFragment.newInstance(this, nivel, estadoNiveles[i]), getString(nivel.getLevelName()));
+			viewPager.addView(LevelSelectFragment.newInstance(this, nivel, mStatistics[i]), getString(nivel.getLevelName()));
 
 			i++;
 		}
 		
-		if (posicionInicial != -1)
+		if (originalIndex != -1)
 		{
-			viewPager.selectView(posicionInicial);
+			viewPager.selectView(originalIndex);
 		}
 		
 		return rootView;
@@ -86,8 +86,8 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		super.onDetach();
 		
 		mCallback = null;
-		listaNiveles = null;
-		estadoNiveles = null;
+		mLevelList = null;
+		mStatistics = null;
 	}
 
 	/* Métodos abstractos de ViewPagerFragment */

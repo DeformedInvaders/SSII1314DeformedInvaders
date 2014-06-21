@@ -15,14 +15,14 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	// Renderer
 	private OnDisplayListener mListener;
-	private DisplayOpenGLRenderer renderer;
+	private DisplayOpenGLRenderer mRenderer;
 
-	private boolean personajeCargado, movimientoAleatorio;
+	private boolean characterLoaded, randomAnimation;
 
 	private Handler handler;
 	private Runnable task;
 
-	private boolean threadActivo;
+	private boolean threadActive;
 
 	/* Constructora */
 
@@ -36,39 +36,39 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void run()
 			{
-				if (!renderer.reproducirAnimacion())
+				if (!mRenderer.playAnimation())
 				{
 					requestRender();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION());
 				}
 				else
 				{
-					renderer.seleccionarReposo();
-					threadActivo = false;
+					mRenderer.stopAnimation();
+					threadActive = false;
 				}
 			}
 		};
 
-		threadActivo = false;
+		threadActive = false;
 	}
 
 	public void setParameters(OnDisplayListener listener, Character personaje, boolean random)
 	{
 		mListener = listener;
-		movimientoAleatorio = random;
-		personajeCargado = true;
+		randomAnimation = random;
+		characterLoaded = true;
 
-		renderer = new DisplayOpenGLRenderer(getContext(), personaje);
-		setRenderer(renderer);
+		mRenderer = new DisplayOpenGLRenderer(getContext(), personaje);
+		setRenderer(mRenderer);
 	}
 
 	public void setParameters()
 	{
-		movimientoAleatorio = false;
-		personajeCargado = false;
+		randomAnimation = false;
+		characterLoaded = false;
 
-		renderer = new DisplayOpenGLRenderer(getContext());
-		setRenderer(renderer);
+		mRenderer = new DisplayOpenGLRenderer(getContext());
+		setRenderer(mRenderer);
 	}
 
 	/* Métodos abstractos OpenGLSurfaceView */
@@ -76,10 +76,10 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (movimientoAleatorio && personajeCargado)
+		if (randomAnimation && characterLoaded)
 		{
 			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_MOVIMIENTOS);
-			seleccionarAnimacion(TTypeMovement.values()[animacion]);
+			startAnimation(TTypeMovement.values()[animacion]);
 			return true;
 		}
 
@@ -88,73 +88,73 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarAnimacion(TTypeMovement movimiento)
+	public void startAnimation(TTypeMovement movement)
 	{
-		if (!threadActivo)
+		if (!threadActive)
 		{
-			renderer.seleccionarAnimacion(movimiento);
+			mRenderer.startAnimation(movement);
 			requestRender();
 			
-			int sound = movimiento.getSound();
+			int sound = movement.getSound();
 			if (sound != -1)
 			{
 				mListener.onDisplayPlaySoundEffect(sound);
 			}
 			
 			task.run();
-			threadActivo = true;
+			threadActive = true;
 		}
 	}
 
-	public void seleccionarRetoque()
+	public void selectPreparing()
 	{
-		renderer.seleccionarRetoque(getHeight(), getWidth());
+		mRenderer.selectPreparing(getHeight(), getWidth());
 		setDetectorState(TStateDetector.CamaraDetectors);
 
 		requestRender();
 	}
 
-	public void seleccionarTerminado()
+	public void selectFinished()
 	{
-		renderer.seleccionarTerminado();
+		mRenderer.selectFinished();
 		requestRender();
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isEstadoReposo()
+	public boolean isStateNothing()
 	{
-		return renderer.isEstadoReposo();
+		return mRenderer.isStateNothing();
 	}
 
-	public boolean isEstadoRetoque()
+	public boolean isStatePreparing()
 	{
-		return renderer.isEstadoRetoque();
+		return mRenderer.isStatePreparing();
 	}
 
-	public boolean isEstadoTerminado()
+	public boolean isStateFinished()
 	{
-		return renderer.isEstadoTerminado();
+		return mRenderer.isStateFinished();
 	}
 
-	public boolean isEstadoAnimacion()
+	public boolean isStateAnimation()
 	{
-		return renderer.isEstadoAnimacion();
+		return mRenderer.isStateAnimation();
 	}
 
-	public Bitmap getCapturaPantalla()
+	public Bitmap getScreenshot()
 	{
-		renderer.seleccionarCaptura();
+		mRenderer.selectCapturing();
 		setDetectorState(TStateDetector.SimpleTouch);
 
 		requestRender();
-		return renderer.getCapturaPantalla();
+		return mRenderer.getScreenshot();
 	}
 
 	/* Métodos de Guardado de Información */
 
 	public void saveData()
 	{
-		renderer.saveData();
+		mRenderer.saveData();
 	}
 }

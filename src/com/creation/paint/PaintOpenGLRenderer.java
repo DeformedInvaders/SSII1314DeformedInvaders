@@ -35,85 +35,85 @@ import com.main.model.GamePreferences;
 public class PaintOpenGLRenderer extends OpenGLRenderer
 {	
 	// Estructura de Datos
-	private TStatePaint estado;
+	private TStatePaint mState;
 
-	private int colorPaleta;
-	private TTypeSize sizeLinea;
-	private int pegatinaActual;
-	private TTypeSticker tipoPegatinaActual;
+	private int paletteColor;
+	private TTypeSize polylineSize;
+	private int stickerActual;
+	private TTypeSticker stickerActualType;
 
 	// Detalles
-	private List<Polyline> listaLineas;
-	private VertexArray lineaActual;
-	private FloatBuffer bufferLineaActual;
+	private List<Polyline> polylineList;
+	private VertexArray polylineActual;
+	private FloatBuffer bufferPolyline;
 
 	// Pegatinas
-	private Stickers pegatinas;
-	private boolean pegatinaAnyadida;
+	private Stickers stickers;
+	private boolean stickerAdded;
 
 	// Esqueleto
-	private HullArray contorno;
-	private FloatBuffer bufferContorno;
+	private HullArray hull;
+	private FloatBuffer bufferHull;
 
 	private VertexArray vertices;
 	private FloatBuffer bufferVertices;
 
-	private TriangleArray triangulos;
+	private TriangleArray triangles;
 
-	private int colorPintura;
+	private int backgroundColor;
 	
 	// Buscador de Triángulos
-	private TriangleQuadTreeSearcher buscador;
+	private TriangleQuadTreeSearcher searcher;
 
 	// Texturas
-	private TStateScreenshot estadoCaptura;
+	private TStateScreenshot mScreenshotState;
 
-	private BitmapImage textura;
-	private VertexArray coordsTextura;
+	private BitmapImage texture;
+	private VertexArray textureCoords;
 
 	// Anterior Siguiente Buffers
-	private Stack<Action> anteriores;
-	private Stack<Action> siguientes;
+	private Stack<Action> prevBuffer;
+	private Stack<Action> nextBuffer;
 
 	/* Constructora */
 	
-	public PaintOpenGLRenderer(Context context, int color, Character personaje)
+	public PaintOpenGLRenderer(Context context, int color, Character character)
 	{
 		super(context, TTypeBackgroundRenderer.Blank, TTypeTexturesRenderer.Character, color);
 
-		estado = TStatePaint.Nothing;
+		mState = TStatePaint.Nothing;
 
-		contorno = personaje.getSkeleton().getHull();
-		vertices = personaje.getSkeleton().getVertices();
-		triangulos = personaje.getSkeleton().getTriangles();
+		hull = character.getSkeleton().getHull();
+		vertices = character.getSkeleton().getVertices();
+		triangles = character.getSkeleton().getTriangles();
 
-		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
-		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
+		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangles, vertices);
+		bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
 		
-		if (personaje.isTextureReady())
+		if (character.isTextureReady())
 		{
-			pegatinas = personaje.getTexture().getStickers();
+			stickers = character.getTexture().getStickers();
 		}
 		else
 		{
-			pegatinas = new Stickers();
+			stickers = new Stickers();
 		}
 		
-		pegatinaActual = 0;
-		pegatinaAnyadida = false;
+		stickerActual = 0;
+		stickerAdded = false;
 		
-		listaLineas = new ArrayList<Polyline>();
-		lineaActual = null;
+		polylineList = new ArrayList<Polyline>();
+		polylineActual = null;
 
-		colorPintura = Color.WHITE;
+		backgroundColor = Color.WHITE;
 
-		colorPaleta = Color.RED;
-		sizeLinea = TTypeSize.Small;
+		paletteColor = Color.RED;
+		polylineSize = TTypeSize.Small;
 
-		anteriores = new Stack<Action>();
-		siguientes = new Stack<Action>();
+		prevBuffer = new Stack<Action>();
+		nextBuffer = new Stack<Action>();
 
-		estadoCaptura = TStateScreenshot.Nothing;
+		mScreenshotState = TStateScreenshot.Nothing;
 	}
 
 	/* Métodos Renderer */
@@ -121,7 +121,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		if (estado == TStatePaint.Screenshot && estadoCaptura == TStateScreenshot.Capturing)
+		if (mState == TStatePaint.Screenshot && mScreenshotState == TStateScreenshot.Capturing)
 		{
 			// Guardar posición actual de la Cámara
 			saveCamera();
@@ -129,31 +129,31 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			// Restaurar Cámara posición inicial
 			camaraRestore();
 
-			dibujarEsqueleto(gl);
+			drawSkeleton(gl);
 
 			// Capturar Pantalla
-			textura = getScreenshot(gl);
+			texture = getScreenshot(gl);
 
 			// Construir Textura
-			coordsTextura = buildTexture(vertices, textura.getWidth(), textura.getHeight());
+			textureCoords = buildTexture(vertices, texture.getWidth(), texture.getHeight());
 
 			// Restaurar posición anterior de la Cámara
 			restoreCamera();
 		}
 
 		// Cargar Pegatinas
-		pegatinas.loadTexture(gl, this, mContext, TTypeEntity.Character, 0);
+		stickers.loadTexture(gl, this, mContext, TTypeEntity.Character, 0);
 
-		dibujarEsqueleto(gl);
+		drawSkeleton(gl);
 		
-		if (estado == TStatePaint.Screenshot && estadoCaptura == TStateScreenshot.Capturing)
+		if (mState == TStatePaint.Screenshot && mScreenshotState == TStateScreenshot.Capturing)
 		{
 			// Desactivar Modo Captura
-			estadoCaptura = TStateScreenshot.Finished;
+			mScreenshotState = TStateScreenshot.Finished;
 		}
 	}
 
-	private void dibujarEsqueleto(GL10 gl)
+	private void drawSkeleton(GL10 gl)
 	{
 		super.onDrawFrame(gl);
 
@@ -161,24 +161,24 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		drawInsideFrameBegin(gl);
 
 		// Esqueleto
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, colorPintura, bufferVertices);
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, backgroundColor, bufferVertices);
 
 		gl.glPushMatrix();
 		
 			gl.glTranslatef(0.0f, 0.0f, GamePreferences.DEEP_POLYLINES);
 			
 			// Detalles
-			if (lineaActual != null)
+			if (polylineActual != null)
 			{
-				synchronized (lineaActual)
+				synchronized (polylineActual)
 				{
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, sizeLinea.getSize(), colorPaleta, bufferLineaActual);
+					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polylineSize.getSize(), paletteColor, bufferPolyline);
 				}
 			}
 			
-			synchronized (listaLineas)
+			synchronized (polylineList)
 			{
-				Iterator<Polyline> it = listaLineas.iterator();
+				Iterator<Polyline> it = polylineList.iterator();
 				while (it.hasNext())
 				{
 					Polyline polilinea = it.next();
@@ -188,13 +188,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		gl.glPopMatrix();
 			
-		if (estado != TStatePaint.Screenshot)
+		if (mState != TStatePaint.Screenshot)
 		{
 			// Contorno
-			OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
+			OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
 
 			// Dibujar Pegatinas
-			pegatinas.drawTexture(gl, this, vertices, triangulos, TTypeEntity.Character, 0);
+			stickers.drawTexture(gl, this, vertices, triangles, TTypeEntity.Character, 0);
 		}
 
 		// Centrado de Marco
@@ -206,21 +206,21 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onReset()
 	{
-		lineaActual = null;
-		listaLineas.clear();
+		polylineActual = null;
+		polylineList.clear();
 
-		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
-		pegatinas.resetSticker();
+		stickers.deleteTexture(this, TTypeEntity.Character, 0);
+		stickers.resetSticker();
 		
-		pegatinaActual = 0;
-		pegatinaAnyadida = false;
+		stickerActual = 0;
+		stickerAdded = false;
 
-		anteriores.clear();
-		siguientes.clear();
+		prevBuffer.clear();
+		nextBuffer.clear();
 
-		estado = TStatePaint.Nothing;
-		colorPintura = Color.WHITE;
-		sizeLinea = TTypeSize.Small;
+		mState = TStatePaint.Nothing;
+		backgroundColor = Color.WHITE;
+		polylineSize = TTypeSize.Small;
 
 		return true;
 	}
@@ -228,52 +228,52 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TStatePaint.Pencil)
+		if (mState == TStatePaint.Pencil)
 		{
-			return anyadirPunto(pixelX, pixelY, screenWidth, screenHeight);
+			return addPoint(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TStatePaint.Bucket)
+		else if (mState == TStatePaint.Bucket)
 		{
-			return pintarEsqueleto(pixelX, pixelY, screenWidth, screenHeight);
+			return changeBackgroundColor(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TStatePaint.AddSticker)
+		else if (mState == TStatePaint.AddSticker)
 		{
-			return anyadirPegatina(pixelX, pixelY, screenWidth, screenHeight);
+			return addSticker(pixelX, pixelY, screenWidth, screenHeight);
 		}
 
 		return false;
 	}
 
-	private boolean anyadirPunto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean addPoint(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		if (lineaActual == null)
+		if (polylineActual == null)
 		{
-			lineaActual = new VertexArray();
+			polylineActual = new VertexArray();
 		}
 
-		boolean anyadir = true;
+		boolean addPoint = true;
 
-		if (lineaActual.getNumVertices() > 0)
+		if (polylineActual.getNumVertices() > 0)
 		{
-			float lastFrameX = lineaActual.getLastXVertex();
-			float lastFrameY = lineaActual.getLastYVertex();
+			float lastFrameX = polylineActual.getLastXVertex();
+			float lastFrameY = polylineActual.getLastYVertex();
 
 			float lastPixelX = convertFrameXToPixelXCoordinate(lastFrameX, screenWidth);
 			float lastPixelY = convertFrameYToPixelYCoordinate(lastFrameY, screenHeight);
 
-			anyadir = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
+			addPoint = Math.abs(Intersector.distancePoints(pixelX, pixelY, lastPixelX, lastPixelY)) > GamePreferences.MAX_DISTANCE_PIXELS;
 		}
 
-		if (anyadir)
+		if (addPoint)
 		{
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
-			synchronized (lineaActual)
+			synchronized (polylineActual)
 			{
-				lineaActual.addVertex(frameX, frameY);
+				polylineActual.addVertex(frameX, frameY);
 	
-				bufferLineaActual = BufferManager.construirBufferListaPuntos(lineaActual);
+				bufferPolyline = BufferManager.construirBufferListaPuntos(polylineActual);
 			}
 			
 			return true;
@@ -282,19 +282,19 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	private boolean pintarEsqueleto(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean changeBackgroundColor(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 
-		if (GeometryUtils.isPointInsideMesh(contorno, vertices, frameX, frameY))
+		if (GeometryUtils.isPointInsideMesh(hull, vertices, frameX, frameY))
 		{
-			if (colorPaleta != colorPintura)
+			if (paletteColor != backgroundColor)
 			{
-				colorPintura = colorPaleta;
+				backgroundColor = paletteColor;
 
-				anteriores.push(new ActionColor(colorPaleta));
-				siguientes.clear();
+				prevBuffer.push(new ActionColor(paletteColor));
+				nextBuffer.clear();
 
 				return true;
 			}
@@ -303,23 +303,23 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	private boolean anyadirPegatina(float pixelX, float pixelY, float screenWidth, float screenHeight)
+	private boolean addSticker(float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
 		float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 		float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 		
-		short triangle = buscador.searchTriangle(frameX, frameY);
+		short triangle = searcher.searchTriangle(frameX, frameY);
 		if (triangle != -1)
 		{			
-			pegatinas.addSticker(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
+			stickers.addSticker(stickerActualType, stickerActual, frameX, frameY, triangle, vertices, triangles);
 
-			deleteTextureRectangle(TTypeEntity.Character, 0, tipoPegatinaActual);
-			pegatinaAnyadida = true;
+			deleteTextureRectangle(TTypeEntity.Character, 0, stickerActualType);
+			stickerAdded = true;
 
-			anteriores.push(new ActionSticker(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, pegatinas.getFactor(tipoPegatinaActual), pegatinas.getTheta(tipoPegatinaActual)));
-			siguientes.clear();
+			prevBuffer.push(new ActionSticker(stickerActualType, stickerActual, frameX, frameY, triangle, stickers.getFactor(stickerActualType), stickers.getTheta(stickerActualType)));
+			nextBuffer.clear();
 			
-			estado = TStatePaint.Nothing;
+			mState = TStatePaint.Nothing;
 			return true;
 		}
 
@@ -329,7 +329,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TStatePaint.Pencil)
+		if (mState == TStatePaint.Pencil)
 		{
 			return onTouchDown(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
@@ -340,9 +340,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TStatePaint.Pencil)
+		if (mState == TStatePaint.Pencil)
 		{
-			return guardarPolilinea();
+			return savePolyline();
 		}
 
 		return false;
@@ -351,16 +351,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void pointsZoom(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TStatePaint.EditSticker)
+		if (mState == TStatePaint.EditSticker)
 		{
-			pegatinas.zoomSticker(tipoPegatinaActual, factor);
+			stickers.zoomSticker(stickerActualType, factor);
 		}
 	}
 
 	@Override
 	public void pointsDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TStatePaint.EditSticker)
+		if (mState == TStatePaint.EditSticker)
 		{
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
@@ -373,13 +373,13 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 			if (Math.abs(Intersector.distancePoints(0.0f, 0.0f, dWorldX, dWorldY)) > GamePreferences.MAX_DISTANCE_PIXELS)
 			{
-				float newStickerFrameX = pegatinas.getXCoords(tipoPegatinaActual, vertices, triangulos) + dWorldX;
-				float newtStickerFrameY = pegatinas.getYCoords(tipoPegatinaActual, vertices, triangulos) + dWorldY;
+				float newStickerFrameX = stickers.getXCoords(stickerActualType, vertices, triangles) + dWorldX;
+				float newtStickerFrameY = stickers.getYCoords(stickerActualType, vertices, triangles) + dWorldY;
 				
-				short triangle = buscador.searchTriangle(newStickerFrameX, newtStickerFrameY);
+				short triangle = searcher.searchTriangle(newStickerFrameX, newtStickerFrameY);
 				if (triangle != -1)
 				{			
-					pegatinas.moveSticker(tipoPegatinaActual, newStickerFrameX, newtStickerFrameY, triangle, vertices, triangulos);
+					stickers.moveSticker(stickerActualType, newStickerFrameX, newtStickerFrameY, triangle, vertices, triangles);
 				}
 			}
 		}
@@ -388,33 +388,33 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	@Override
 	public void pointsRotate(float angRad, float pixelX, float pixelY, float screenWidth, float screenHeight)
 	{
-		if (estado == TStatePaint.EditSticker)
+		if (mState == TStatePaint.EditSticker)
 		{
-			pegatinas.rotateSticker(tipoPegatinaActual, (float) Math.toDegrees(angRad));
+			stickers.rotateSticker(stickerActualType, (float) Math.toDegrees(angRad));
 		}
 	}
 	
 	@Override
 	public void pointsRestore()
 	{
-		if (estado == TStatePaint.EditSticker)
+		if (mState == TStatePaint.EditSticker)
 		{
-			pegatinas.restoreSticker(tipoPegatinaActual);
+			stickers.restoreSticker(stickerActualType);
 		}
 	}
 
-	private boolean guardarPolilinea()
+	private boolean savePolyline()
 	{
-		if (lineaActual != null)
+		if (polylineActual != null)
 		{
-			synchronized (listaLineas)
+			synchronized (polylineList)
 			{
-				Polyline polilinea = new Polyline(colorPaleta, sizeLinea, lineaActual, bufferLineaActual);
+				Polyline polilinea = new Polyline(paletteColor, polylineSize, polylineActual, bufferPolyline);
 	
-				listaLineas.add(polilinea);
-				anteriores.push(new ActionPolyline(polilinea));
-				siguientes.clear();
-				lineaActual = null;
+				polylineList.add(polilinea);
+				prevBuffer.push(new ActionPolyline(polilinea));
+				nextBuffer.clear();
+				polylineActual = null;
 			}
 
 			return true;
@@ -423,19 +423,19 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 	
-	private boolean guardarPegatina()
+	private boolean saveSticker()
 	{
-		if (estado == TStatePaint.EditSticker)
+		if (mState == TStatePaint.EditSticker)
 		{
-			int id = pegatinas.getId(tipoPegatinaActual);
-			float x = pegatinas.getXCoords(tipoPegatinaActual, vertices, triangulos);
-			float y = pegatinas.getYCoords(tipoPegatinaActual, vertices, triangulos);
-			short indice = pegatinas.getIndex(tipoPegatinaActual);
-			float factor = pegatinas.getFactor(tipoPegatinaActual);
-			float angulo = pegatinas.getTheta(tipoPegatinaActual);
+			int id = stickers.getId(stickerActualType);
+			float x = stickers.getXCoords(stickerActualType, vertices, triangles);
+			float y = stickers.getYCoords(stickerActualType, vertices, triangles);
+			short indice = stickers.getIndex(stickerActualType);
+			float factor = stickers.getFactor(stickerActualType);
+			float angulo = stickers.getTheta(stickerActualType);
 
-			anteriores.push(new ActionSticker(tipoPegatinaActual, id, x, y, indice, factor, angulo));
-			siguientes.clear();
+			prevBuffer.push(new ActionSticker(stickerActualType, id, x, y, indice, factor, angulo));
+			nextBuffer.clear();
 			
 			return true;
 		}
@@ -445,189 +445,189 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarNada()
+	public void selectNothing()
 	{
-		guardarPolilinea();
-		guardarPegatina();
-		estado = TStatePaint.Nothing;
+		savePolyline();
+		saveSticker();
+		mState = TStatePaint.Nothing;
 	}
 	
-	public void seleccionarMano()
+	public void selectHand()
 	{
-		guardarPolilinea();
-		guardarPegatina();
-		estado = TStatePaint.Hand;
+		savePolyline();
+		saveSticker();
+		mState = TStatePaint.Hand;
 	}
 
-	public void seleccionarPincel()
+	public void selectPencil()
 	{
-		guardarPolilinea();
-		guardarPegatina();
-		estado = TStatePaint.Pencil;
+		savePolyline();
+		saveSticker();
+		mState = TStatePaint.Pencil;
 	}
 
-	public void seleccionarCubo()
+	public void selectBucket()
 	{
-		guardarPolilinea();
-		guardarPegatina();
-		estado = TStatePaint.Bucket;
+		savePolyline();
+		saveSticker();
+		mState = TStatePaint.Bucket;
 	}
 
-	public void seleccionarColor(int color)
+	public void selectColor(int color)
 	{
-		colorPaleta = color;
+		paletteColor = color;
 	}
 
-	public void seleccionarSize(TTypeSize size)
+	public void selectSize(TTypeSize size)
 	{
-		sizeLinea = size;
+		polylineSize = size;
 	}
 
-	public void seleccionarPegatina(int pegatina, TTypeSticker tipo)
+	public void addSticker(int sticker, TTypeSticker tipo)
 	{
-		guardarPolilinea();
+		savePolyline();
 
-		pegatinaActual = pegatina;
-		tipoPegatinaActual = tipo;
-		estado = TStatePaint.AddSticker;
+		stickerActual = sticker;
+		stickerActualType = tipo;
+		mState = TStatePaint.AddSticker;
 		
-		if (buscador == null)
+		if (searcher == null)
 		{
-			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
+			searcher = new TriangleQuadTreeSearcher(triangles, vertices, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
 		}
 	}
 	
-	public void eliminarPegatina(TTypeSticker tipo)
+	public void deleteSticker(TTypeSticker tipo)
 	{
-		guardarPolilinea();
+		savePolyline();
 		
-		if (pegatinas.isStickerLoaded(tipo))
+		if (stickers.isStickerLoaded(tipo))
 		{
 			deleteTextureRectangle(TTypeEntity.Character, 0, tipo);
-			pegatinas.deleteSticker(tipo);
+			stickers.deleteSticker(tipo);
 			
-			anteriores.push(new ActionSticker(tipo));
-			siguientes.clear();
+			prevBuffer.push(new ActionSticker(tipo));
+			nextBuffer.clear();
 		}
 		
-		estado = TStatePaint.Nothing;
+		mState = TStatePaint.Nothing;
 	}
 	
-	public void editarPegatina(TTypeSticker tipo)
+	public void editSticker(TTypeSticker tipo)
 	{
-		guardarPolilinea();
+		savePolyline();
 		
-		if (buscador == null)
+		if (searcher == null)
 		{
-			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
+			searcher = new TriangleQuadTreeSearcher(triangles, vertices, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
 		}
 		
-		if (pegatinas.isStickerLoaded(tipo))
+		if (stickers.isStickerLoaded(tipo))
 		{
-			tipoPegatinaActual = tipo;
-			estado = TStatePaint.EditSticker;
+			stickerActualType = tipo;
+			mState = TStatePaint.EditSticker;
 		}
 		else
 		{
-			estado = TStatePaint.Nothing;
+			mState = TStatePaint.Nothing;
 		}
 	}
 
 	public void seleccionarCaptura() 
 	{
-		guardarPolilinea();
+		savePolyline();
 
-		estado = TStatePaint.Screenshot;
-		estadoCaptura = TStateScreenshot.Capturing;
+		mState = TStatePaint.Screenshot;
+		mScreenshotState = TStateScreenshot.Capturing;
 	}
 
 	/* Métodos de modificación de Buffers de estado */
 
-	public void anteriorAccion()
+	public void prevAction()
 	{
-		guardarPolilinea();
+		savePolyline();
 
-		if (!anteriores.isEmpty())
+		if (!prevBuffer.isEmpty())
 		{
-			Action accion = anteriores.pop();
-			siguientes.add(accion);
-			actualizarEstado(anteriores);
+			Action accion = prevBuffer.pop();
+			nextBuffer.add(accion);
+			updateState(prevBuffer);
 		}
 	}
 
-	public void siguienteAccion()
+	public void nextAction()
 	{
-		guardarPolilinea();
+		savePolyline();
 
-		if (!siguientes.isEmpty())
+		if (!nextBuffer.isEmpty())
 		{
-			Action accion = siguientes.lastElement();
-			siguientes.remove(siguientes.size() - 1);
-			anteriores.push(accion);
-			actualizarEstado(anteriores);
+			Action accion = nextBuffer.lastElement();
+			nextBuffer.remove(nextBuffer.size() - 1);
+			prevBuffer.push(accion);
+			updateState(prevBuffer);
 		}
 	}
 
-	private void actualizarEstado(Stack<Action> pila)
+	private void updateState(Stack<Action> pila)
 	{
-		colorPintura = Color.WHITE;
-		listaLineas = new ArrayList<Polyline>();
+		backgroundColor = Color.WHITE;
+		polylineList = new ArrayList<Polyline>();
 		
-		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
-		pegatinas.resetSticker();
+		stickers.deleteTexture(this, TTypeEntity.Character, 0);
+		stickers.resetSticker();
 
 		Iterator<Action> it = pila.iterator();
 		while (it.hasNext())
 		{
 			Action accion = it.next();
-			if (accion.isTipoColor())
+			if (accion.isTypeColor())
 			{
-				actualizarEstado((ActionColor) accion);
+				updateState((ActionColor) accion);
 			}
-			else if (accion.isTipoPolilinea())
+			else if (accion.isTypePolyline())
 			{
-				actualizarEstado((ActionPolyline) accion);
+				updateState((ActionPolyline) accion);
 			}
-			else if (accion.isTipoPegatina())
+			else if (accion.isTypeSticker())
 			{
-				actualizarEstado((ActionSticker) accion);
+				updateState((ActionSticker) accion);
 			}
 		}
 	}
 	
-	private void actualizarEstado(ActionColor accion)
+	private void updateState(ActionColor accion)
 	{
-		colorPintura = accion.getColorFondo();
+		backgroundColor = accion.getBackgroundColor();
 	}
 	
-	private void actualizarEstado(ActionPolyline accion)
+	private void updateState(ActionPolyline accion)
 	{
-		listaLineas.add(accion.getPolilinea());
+		polylineList.add(accion.getPolyline());
 	}
 	
-	private void actualizarEstado(ActionSticker accion)
+	private void updateState(ActionSticker accion)
 	{
-		pegatinas.addSticker(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), accion.getFactorEscala(), accion.getAnguloRotacion(), vertices, triangulos);
+		stickers.addSticker(accion.getStickerType(), accion.getStickerId(), accion.getStickerCoordX(), accion.getStickerCoordY(), accion.getStickerIndex(), accion.getStickerFactor(), accion.getStickerRotation(), vertices, triangles);
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isBufferSiguienteVacio()
+	public boolean isNextBufferEmpty()
 	{
-		return siguientes.isEmpty();
+		return nextBuffer.isEmpty();
 	}
 
-	public boolean isBufferAnteriorVacio()
+	public boolean isPrevBufferEmpty()
 	{
-		return anteriores.isEmpty();
+		return prevBuffer.isEmpty();
 	}
 
-	public boolean isPegatinaAnyadida()
+	public boolean isStickerAdded()
 	{
-		if (pegatinaAnyadida)
+		if (stickerAdded)
 		{
-			pegatinaAnyadida = false;
-			estado = TStatePaint.Nothing;
+			stickerAdded = false;
+			mState = TStatePaint.Nothing;
 
 			return true;
 		}
@@ -635,36 +635,36 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		return false;
 	}
 
-	public boolean isEstadoPincel()
+	public boolean isStatePencil()
 	{
-		return estado == TStatePaint.Pencil;
+		return mState == TStatePaint.Pencil;
 	}
 
-	public boolean isEstadoCubo()
+	public boolean isStateBucket()
 	{
-		return estado == TStatePaint.Bucket;
+		return mState == TStatePaint.Bucket;
 	}
 
-	public boolean isEstadoMover()
+	public boolean isStateHand()
 	{
-		return estado == TStatePaint.Hand;
+		return mState == TStatePaint.Hand;
 	}
 
-	public boolean isEstadoPegatinas()
+	public boolean isStateSticker()
 	{
-		return estado == TStatePaint.AddSticker || estado == TStatePaint.EditSticker;
+		return mState == TStatePaint.AddSticker || mState == TStatePaint.EditSticker;
 	}
 	
-	public Texture getTextura()
+	public Texture getTexture()
 	{
-		if (estado == TStatePaint.Screenshot && estadoCaptura == TStateScreenshot.Capturing)
+		if (mState == TStatePaint.Screenshot && mScreenshotState == TStateScreenshot.Capturing)
 		{
-			while (estadoCaptura != TStateScreenshot.Finished);
+			while (mScreenshotState != TStateScreenshot.Finished);
 
-			estado = TStatePaint.Nothing;
-			estadoCaptura = TStateScreenshot.Nothing;
+			mState = TStatePaint.Nothing;
+			mScreenshotState = TStateScreenshot.Nothing;
 			
-			return new Texture(textura, coordsTextura, pegatinas);
+			return new Texture(texture, textureCoords, stickers);
 		}
 		
 		return null;
@@ -675,17 +675,17 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public PaintDataSaved saveData()
 	{
 		// Pegatinas
-		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
+		stickers.deleteTexture(this, TTypeEntity.Character, 0);
 				
-		return new PaintDataSaved(anteriores, siguientes, estado);
+		return new PaintDataSaved(prevBuffer, nextBuffer, mState);
 	}
 
 	public void restoreData(PaintDataSaved data)
 	{
-		estado = data.getEstado();
-		anteriores = data.getAnteriores();
-		siguientes = data.getSiguientes();
+		mState = data.getState();
+		prevBuffer = data.getPrevBuffer();
+		nextBuffer = data.getNextBuffer();
 
-		actualizarEstado(anteriores);
+		updateState(prevBuffer);
 	}
 }

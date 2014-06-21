@@ -7,31 +7,31 @@ import com.main.controller.DataSaved;
 
 public class DesignDataSaved extends DataSaved
 {
-	private VertexArray puntos;
+	private VertexArray points;
 	private VertexArray vertices;
-	private TriangleArray triangulos;
-	private HullArray contorno;
+	private TriangleArray triangles;
+	private HullArray hull;
 
-	private TSatateDesign estado;
-	private boolean poligonoSimple;
+	private TSatateDesign state;
+	private boolean simplex;
 
 	/* Constructora */
 
-	public DesignDataSaved(VertexArray puntos, VertexArray vertices, TriangleArray triangulos, HullArray contorno, TSatateDesign estado, boolean poligonoSimple)
+	public DesignDataSaved(VertexArray points, VertexArray vertices, TriangleArray triangles, HullArray hull, TSatateDesign state, boolean simplex)
 	{
-		this.puntos = puntos;
+		this.points = points;
 		this.vertices = vertices;
-		this.triangulos = triangulos;
-		this.contorno = contorno;
-		this.estado = estado;
-		this.poligonoSimple = poligonoSimple;
+		this.triangles = triangles;
+		this.hull = hull;
+		this.state = state;
+		this.simplex = simplex;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public VertexArray getPuntos()
+	public VertexArray getPoints()
 	{
-		return puntos;
+		return points;
 	}
 
 	public VertexArray getVertices()
@@ -39,23 +39,23 @@ public class DesignDataSaved extends DataSaved
 		return vertices;
 	}
 
-	public TriangleArray getTriangulos()
+	public TriangleArray getTriangles()
 	{
-		return triangulos;
+		return triangles;
 	}
 
-	public HullArray getContorno()
+	public HullArray getHull()
 	{
-		return contorno;
+		return hull;
 	}
 
-	public TSatateDesign getEstado()
+	public TSatateDesign getState()
 	{
-		return estado;
+		return state;
 	}
 
-	public boolean getPoligonoSimple()
+	public boolean getSimplex()
 	{
-		return poligonoSimple;
+		return simplex;
 	}
 }

@@ -4,19 +4,19 @@ import com.creation.data.Polyline;
 
 public class ActionPolyline extends Action
 {
-	private Polyline polilinea;
+	private Polyline polyline;
 	
-	public ActionPolyline(Polyline linea)
+	public ActionPolyline(Polyline line)
 	{
-		tipoAccion = TTypeAction.Polyline;
+		typeAction = TTypeAction.Polyline;
 		
-		polilinea = linea;
+		polyline = line;
 	}
 	
 	/* Métodos de Obtención de Información */
 	
-	public Polyline getPolilinea()
+	public Polyline getPolyline()
 	{
-		return polilinea;
+		return polyline;
 	}
 }

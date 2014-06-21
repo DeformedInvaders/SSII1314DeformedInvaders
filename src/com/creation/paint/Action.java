@@ -1,24 +1,23 @@
 package com.creation.paint;
 
-
 public abstract class Action
 {
-	protected TTypeAction tipoAccion;
+	protected TTypeAction typeAction;
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isTipoColor()
+	public boolean isTypeColor()
 	{
-		return tipoAccion == TTypeAction.Color;
+		return typeAction == TTypeAction.Color;
 	}
 
-	public boolean isTipoPolilinea()
+	public boolean isTypePolyline()
 	{
-		return tipoAccion == TTypeAction.Polyline;
+		return typeAction == TTypeAction.Polyline;
 	}
 
-	public boolean isTipoPegatina()
+	public boolean isTypeSticker()
 	{
-		return tipoAccion == TTypeAction.Sticker;
+		return typeAction == TTypeAction.Sticker;
 	}
 }

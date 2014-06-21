@@ -9,18 +9,18 @@ import com.main.controller.DataSaved;
 public class DeformDataSaved extends DataSaved
 {
 	private HandleArray handles;
-	private VertexArray verticesModificados;
-	private List<VertexArray> listaVertices;
-	private TStateDeform estado;
+	private VertexArray vertices;
+	private List<VertexArray> animationVertices;
+	private TStateDeform state;
 
 	/* Constructora */
 
-	public DeformDataSaved(HandleArray handles, VertexArray verticesModificados, TStateDeform estado, List<VertexArray> listaVertices)
+	public DeformDataSaved(HandleArray handles, VertexArray vertices, TStateDeform state, List<VertexArray> animationVertices)
 	{
 		this.handles = handles;
-		this.verticesModificados = verticesModificados;
-		this.estado = estado;
-		this.listaVertices = listaVertices;
+		this.vertices = vertices;
+		this.state = state;
+		this.animationVertices = animationVertices;
 	}
 
 	/* Métodos Obtención de Información */
@@ -30,18 +30,18 @@ public class DeformDataSaved extends DataSaved
 		return handles;
 	}
 
-	public VertexArray getVerticesModificados()
+	public VertexArray getVertices()
 	{
-		return verticesModificados;
+		return vertices;
 	}
 
-	public List<VertexArray> getListaVertices()
+	public List<VertexArray> getAnimationVertices()
 	{
-		return listaVertices;
+		return animationVertices;
 	}
 
-	public TStateDeform getEstado()
+	public TStateDeform getState()
 	{
-		return estado;
+		return state;
 	}
 }

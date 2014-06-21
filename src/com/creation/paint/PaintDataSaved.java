@@ -7,35 +7,35 @@ import com.main.controller.DataSaved;
 public class PaintDataSaved extends DataSaved
 {
 	// Estructura de Datos
-	private TStatePaint estado;
+	private TStatePaint state;
 
 	// Anterior Siguiente Buffers
-	private Stack<Action> anteriores;
-	private Stack<Action> siguientes;
+	private Stack<Action> prevBuffer;
+	private Stack<Action> nextBuffer;
 
 	/* Constructora */
 
-	public PaintDataSaved(Stack<Action> anteriores, Stack<Action> siguientes, TStatePaint estado)
+	public PaintDataSaved(Stack<Action> prevBuffer, Stack<Action> nextBuffer, TStatePaint state)
 	{
-		this.anteriores = anteriores;
-		this.siguientes = siguientes;
-		this.estado = estado;
+		this.prevBuffer = prevBuffer;
+		this.nextBuffer = nextBuffer;
+		this.state = state;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public TStatePaint getEstado()
+	public TStatePaint getState()
 	{
-		return estado;
+		return state;
 	}
 
-	public Stack<Action> getAnteriores()
+	public Stack<Action> getPrevBuffer()
 	{
-		return anteriores;
+		return prevBuffer;
 	}
 
-	public Stack<Action> getSiguientes()
+	public Stack<Action> getNextBuffer()
 	{
-		return siguientes;
+		return nextBuffer;
 	}
 }

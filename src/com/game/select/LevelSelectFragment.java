@@ -19,25 +19,25 @@ public class LevelSelectFragment extends OpenGLFragment
 {
 	private OnLevelListener mListener;
 
-	private GameStatistics estadisticas;
-	private Level nivel;
+	private GameStatistics mStatistics;
+	private Level mLevel;
 
-	private IconImageButton botonNivel;
+	private IconImageButton buttonLevel;
 
 	/* Constructora */
 
-	public static final LevelSelectFragment newInstance(OnLevelListener l, Level n, GameStatistics e)
+	public static final LevelSelectFragment newInstance(OnLevelListener listener, Level level, GameStatistics statistics)
 	{
 		LevelSelectFragment fragment = new LevelSelectFragment();
-		fragment.setParameters(l, n, e);
+		fragment.setParameters(listener, level, statistics);
 		return fragment;
 	}
 
-	private void setParameters(OnLevelListener l, Level n, GameStatistics e)
+	private void setParameters(OnLevelListener listener, Level level, GameStatistics statistics)
 	{
-		mListener = l;
-		nivel = n;
-		estadisticas = e;
+		mListener = listener;
+		mLevel = level;
+		mStatistics = statistics;
 	}
 
 	/* Métodos Fragment */
@@ -49,36 +49,36 @@ public class LevelSelectFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect1);
-		imageBackground.setBackgroundResource(nivel.getLevelBackground());
+		imageBackground.setBackgroundResource(mLevel.getLevelBackground());
 		
 		ImageView imagenCompleted = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect2);
-		if(estadisticas.isCompleted())
+		if(mStatistics.isCompleted())
 		{
-			imagenCompleted.setBackgroundResource(nivel.getLevelImageCompleted());
+			imagenCompleted.setBackgroundResource(mLevel.getLevelImageCompleted());
 			imagenCompleted.setVisibility(View.VISIBLE);
 		}
 		
 		ImageView imagenPerfected = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect3);
-		if(estadisticas.isPerfected())
+		if(mStatistics.isPerfected())
 		{
-			imagenPerfected.setBackgroundResource(nivel.getLevelImagePerfected());
+			imagenPerfected.setBackgroundResource(mLevel.getLevelImagePerfected());
 			imagenPerfected.setVisibility(View.VISIBLE);
 		}
 		
 		ImageView imagenMastered = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect4);
-		if(estadisticas.isMastered())
+		if(mStatistics.isMastered())
 		{
-			imagenMastered.setBackgroundResource(nivel.getLevelImageMastered());
+			imagenMastered.setBackgroundResource(mLevel.getLevelImageMastered());
 			imagenMastered.setVisibility(View.VISIBLE);
 		}
 		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewLevelSelect1);
-		textBackground.setText(getString(nivel.getLevelDescription()));
-		textBackground.setTextColor(nivel.getLevelColor());
-		textBackground.setTypeface(nivel.getLevelFont());
+		textBackground.setText(getString(mLevel.getLevelDescription()));
+		textBackground.setTextColor(mLevel.getLevelColor());
+		textBackground.setTypeface(mLevel.getLevelFont());
 
-		botonNivel = (IconImageButton) rootView.findViewById(R.id.imageButtonLevel1);
-		botonNivel.setOnClickListener(new OnLevelClickListener());
+		buttonLevel = (IconImageButton) rootView.findViewById(R.id.imageButtonLevel1);
+		buttonLevel.setOnClickListener(new OnLevelClickListener());
 
 		resetInterface();
 		updateInterface();
@@ -90,7 +90,7 @@ public class LevelSelectFragment extends OpenGLFragment
 	{
 		super.onDestroyView();
 
-		botonNivel = null;
+		buttonLevel = null;
 	}
 
 	/* Métodos abstractos de OpenGLFragment */
@@ -101,7 +101,7 @@ public class LevelSelectFragment extends OpenGLFragment
 	@Override
 	protected void updateInterface()
 	{
-		botonNivel.setActivo(GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked());
+		buttonLevel.setActivo(GamePreferences.IS_DEBUG_ENABLED() || mStatistics.isUnlocked());
 	}
 
 	/* Métodos Listener onClick */
@@ -111,9 +111,9 @@ public class LevelSelectFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if (GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked())
+			if (GamePreferences.IS_DEBUG_ENABLED() || mStatistics.isUnlocked())
 			{
-				mListener.onLevelSelected(nivel.getLevelType());
+				mListener.onLevelSelected(mLevel.getLevelType());
 			}
 			else
 			{

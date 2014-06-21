@@ -25,14 +25,14 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 {
 	private GameFragmentListener mCallback;
 
-	private InstanceLevel level;
-	private Character personaje;
-	private int firstCharacterLives;
+	private InstanceLevel mLevel;
+	private Character mCharacter;
+	private int characterLivesEnemiesPhase;
 
-	private GameOpenGLSurfaceView canvas;
-	private TextView textoPuntuacion;
-	private IconImageButton botonPlay;
-	private ImageView[] imagenCharacterVidas, imagenBossVidas;
+	private GameOpenGLSurfaceView mCanvas;
+	private TextView textScore;
+	private IconImageButton buttonPlay;
+	private ImageView[] imageCharacterLives, imageBossLives;
 
 	private boolean gamePaused;
 	
@@ -40,18 +40,18 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* Constructora */
 
-	public static final GameFragment newInstance(GameFragmentListener c, Character p, InstanceLevel l)
+	public static final GameFragment newInstance(GameFragmentListener callback, Character character, InstanceLevel level)
 	{
 		GameFragment fragment = new GameFragment();
-		fragment.setParameters(c, p, l);
+		fragment.setParameters(callback, character, level);
 		return fragment;
 	}
 
-	private void setParameters(GameFragmentListener c, Character p, InstanceLevel l)
+	private void setParameters(GameFragmentListener callback, Character character, InstanceLevel level)
 	{
-		mCallback = c;
-		personaje = p;
-		level = l;
+		mCallback = callback;
+		mCharacter = character;
+		mLevel = level;
 		gamePaused = true;
 	}
 
@@ -69,20 +69,20 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		View rootView = inflater.inflate(R.layout.fragment_game_layout, container, false);
 		
-		imagenCharacterVidas = new ImageView[GamePreferences.MAX_CHARACTER_LIVES];
-		imagenBossVidas = new ImageView[GamePreferences.MAX_BOSS_LIVES];
+		imageCharacterLives = new ImageView[GamePreferences.MAX_CHARACTER_LIVES];
+		imageBossLives = new ImageView[GamePreferences.MAX_BOSS_LIVES];
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewGame1);
-		imageBackground.setBackgroundResource(level.getBackground().getIdSun());
+		imageBackground.setBackgroundResource(mLevel.getBackground().getIdSun());
 
-		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
-		canvas.setParameters(this, personaje, level);
+		mCanvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
+		mCanvas.setParameters(this, mCharacter, mLevel);
 		
-		textoPuntuacion = (TextView) rootView.findViewById(R.id.textViewGame1);
+		textScore = (TextView) rootView.findViewById(R.id.textViewGame1);
 		
-		botonPlay = (IconImageButton) rootView.findViewById(R.id.imageButtonGame1);
-		botonPlay.setOnClickListener(new onPlayGameClickListener());
+		buttonPlay = (IconImageButton) rootView.findViewById(R.id.imageButtonGame1);
+		buttonPlay.setOnClickListener(new onPlayGameClickListener());
 		
 		LinearLayout layoutCharacter = (LinearLayout) rootView.findViewById(R.id.linearLayoutGame1);
 		LinearLayout layoutBoss = (LinearLayout) rootView.findViewById(R.id.linearLayoutGame2);
@@ -92,23 +92,23 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		for(int i = 0; i < GamePreferences.MAX_CHARACTER_LIVES; i++)
 		{
-			imagenCharacterVidas[i] = new ImageView(getActivity());
-			imagenCharacterVidas[i].setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
-			imagenCharacterVidas[i].setBackgroundResource(R.drawable.lives_character_heart);
-			layoutCharacter.addView(imagenCharacterVidas[i]);
+			imageCharacterLives[i] = new ImageView(getActivity());
+			imageCharacterLives[i].setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
+			imageCharacterLives[i].setBackgroundResource(R.drawable.lives_character_heart);
+			layoutCharacter.addView(imageCharacterLives[i]);
 		}
 		
 		for(int i = 0; i < GamePreferences.MAX_BOSS_LIVES; i++)
 		{
-			imagenBossVidas[i] = new ImageView(getActivity());
-			imagenBossVidas[i].setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
-			imagenBossVidas[i].setBackgroundResource(R.drawable.lives_boss_heart);
-			layoutBoss.addView(imagenBossVidas[i]);
+			imageBossLives[i] = new ImageView(getActivity());
+			imageBossLives[i].setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
+			imageBossLives[i].setBackgroundResource(R.drawable.lives_boss_heart);
+			layoutBoss.addView(imageBossLives[i]);
 		}
 		
-		ocultarVidasBoss();
+		hideBossLives();
 		
-		setCanvasListener(canvas);
+		setCanvasListener(mCanvas);
 
 		resetInterface();
 		updateInterface();
@@ -136,11 +136,11 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	{
 		super.onDestroyView();
 
-		canvas = null;
-		textoPuntuacion = null;
-		botonPlay = null;
-		imagenCharacterVidas = null;
-		imagenBossVidas = null;
+		mCanvas = null;
+		textScore = null;
+		buttonPlay = null;
+		imageCharacterLives = null;
+		imageBossLives = null;
 	}
 	
 	@Override
@@ -149,8 +149,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		super.onDetach();
 		
 		mCallback = null;
-		level = null;
-		personaje = null;
+		mLevel = null;
+		mCharacter = null;
 		dataSaved = null;
 	}
 
@@ -161,10 +161,10 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		if (dataSaved != null)
 		{
-			canvas.restoreData(dataSaved);
+			mCanvas.restoreData(dataSaved);
 		}
 		
-		canvas.onResume();
+		mCanvas.onResume();
 		
 		resetInterface();
 		updateInterface();
@@ -174,10 +174,10 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	public void onPause()
 	{
 		super.onPause();		
-		canvas.onPause();
-		dataSaved = canvas.saveData();
+		mCanvas.onPause();
+		dataSaved = mCanvas.saveData();
 		
-		canvas.seleccionarPause();
+		mCanvas.selectPause();
 		gamePaused = true;
 	}
 
@@ -189,7 +189,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	protected void updateInterface()
 	{
-		botonPlay.setActivo(!gamePaused);
+		buttonPlay.setActivo(!gamePaused);
 	}
 
 	/* Métodos Listener onClick */
@@ -203,13 +203,13 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 			if (gamePaused)
 			{
-				canvas.seleccionarPause();
+				mCanvas.selectPause();
 
 				sendToastMessage(R.string.text_game_paused);
 			}
 			else
 			{
-				canvas.seleccionarResume();
+				mCanvas.selectResume();
 			}
 
 			resetInterface();
@@ -219,51 +219,51 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* Métodos privados */
 	
-	private void actualizarVidasPersonaje(int lives)
+	private void updateCharacterLives(int lives)
 	{
 		for(int i = 0; i < GamePreferences.MAX_CHARACTER_LIVES; i++)
 		{
-			imagenCharacterVidas[i].setBackgroundResource(R.drawable.lives_character_heart_broken);
+			imageCharacterLives[i].setBackgroundResource(R.drawable.lives_character_heart_broken);
 		}
 		
 		for(int i = 0; i < lives; i++)
 		{
-			imagenCharacterVidas[i].setBackgroundResource(R.drawable.lives_character_heart);
+			imageCharacterLives[i].setBackgroundResource(R.drawable.lives_character_heart);
 		}
 	}
 	
-	private void actualizarVidasBoss(int lives)
+	private void updateBossLives(int lives)
 	{
 		for(int i = 0; i < GamePreferences.MAX_BOSS_LIVES; i++)
 		{
-			imagenBossVidas[i].setBackgroundResource(R.drawable.lives_boss_heart_broken);
+			imageBossLives[i].setBackgroundResource(R.drawable.lives_boss_heart_broken);
 		}
 		
 		for(int i = 0; i < lives; i++)
 		{
-			imagenBossVidas[i].setBackgroundResource(R.drawable.lives_boss_heart);
+			imageBossLives[i].setBackgroundResource(R.drawable.lives_boss_heart);
 		}
 	}
 	
-	private void ocultarVidasBoss()
+	private void hideBossLives()
 	{
 		for(int i = 0; i < GamePreferences.MAX_BOSS_LIVES; i++)
 		{
-			imagenBossVidas[i].setVisibility(View.INVISIBLE);
+			imageBossLives[i].setVisibility(View.INVISIBLE);
 		}		
 	}
 	
-	private void mostrarVidasBoss()
+	private void showBossLives()
 	{
 		for(int i = 0; i < GamePreferences.MAX_BOSS_LIVES; i++)
 		{
-			imagenBossVidas[i].setVisibility(View.VISIBLE);
+			imageBossLives[i].setVisibility(View.VISIBLE);
 		}
 	}
 	
-	private void actualizarPuntuacion(int score)
+	private void updateScore(int score)
 	{
-		textoPuntuacion.setText(getActivity().getString(R.string.text_game_score)+" "+score);
+		textScore.setText(getActivity().getString(R.string.text_game_score)+" "+score);
 	}
 	
 	/* Métodos de OnGameListener */
@@ -271,65 +271,65 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	@Override
 	public void onGameEnemiesFinished(int score, int characterLives, int bossLives)
 	{
-		firstCharacterLives = characterLives;
+		characterLivesEnemiesPhase = characterLives;
 		
-		mostrarVidasBoss();
+		showBossLives();
 		
-		actualizarPuntuacion(score);
-		actualizarVidasPersonaje(characterLives);
-		actualizarVidasBoss(bossLives);
+		updateScore(score);
+		updateCharacterLives(characterLives);
+		updateBossLives(bossLives);
 	}
 
 	@Override
 	public void onGameBossFinished(int score, int characterLives, int bossLives)
 	{
-		actualizarPuntuacion(score);
-		actualizarVidasPersonaje(characterLives);
-		actualizarVidasBoss(bossLives);
+		updateScore(score);
+		updateCharacterLives(characterLives);
+		updateBossLives(bossLives);
 		
-		if (firstCharacterLives == GamePreferences.MAX_CHARACTER_LIVES)
+		if (characterLivesEnemiesPhase == GamePreferences.MAX_CHARACTER_LIVES)
 		{
 			if (characterLives == GamePreferences.MAX_CHARACTER_LIVES)
 			{
-				mCallback.onGameFinished(level, score, TTypeEndgame.LevelMastered);
+				mCallback.onGameFinished(mLevel, score, TTypeEndgame.LevelMastered);
 			}
 			else
 			{
-				mCallback.onGameFinished(level, score, TTypeEndgame.LevelPerfected);
+				mCallback.onGameFinished(mLevel, score, TTypeEndgame.LevelPerfected);
 			}
 		}
 		else
 		{
-			mCallback.onGameFinished(level, score, TTypeEndgame.LevelCompleted);
+			mCallback.onGameFinished(mLevel, score, TTypeEndgame.LevelCompleted);
 		}
 	}
 
 	@Override
 	public void onGameFailed(int score, int characterLives)
 	{
-		actualizarPuntuacion(score);
-		actualizarVidasPersonaje(characterLives);
+		updateScore(score);
+		updateCharacterLives(characterLives);
 		
-		mCallback.onGameFailed(level, TTypeEndgame.GameOver);
+		mCallback.onGameFailed(mLevel, TTypeEndgame.GameOver);
 	}
 	
 	@Override
 	public void onGameScoreChanged(int score)
 	{
-		actualizarPuntuacion(score);
+		updateScore(score);
 	}
 	
 	@Override
 	public void onGameLivesChanged(int characterLives)
 	{
-		actualizarVidasPersonaje(characterLives);
+		updateCharacterLives(characterLives);
 	}
 	
 	@Override
 	public void onGameLivesChanged(int characterLives, int bossLives)
 	{
-		actualizarVidasPersonaje(characterLives);
-		actualizarVidasBoss(bossLives);
+		updateCharacterLives(characterLives);
+		updateBossLives(bossLives);
 	}
 
 	@Override

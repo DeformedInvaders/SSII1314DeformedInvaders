@@ -17,27 +17,27 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 {
 	private VideoFragmentListener mCallback;
 	
-	private TStateDialog estadoDialogo;
-	private TextDialog dialogoEscena, dialogoPersonaje, dialogoActor;
-	private ImageView imagenPlay;
+	private TStateDialog mState;
+	private TextDialog sceneDialog, characterDialog, actorDialog;
+	private ImageView imagePlay;
 	
-	private Video video;
+	private Video mVideo;
 	
-	private VideoOpenGLSurfaceView canvas;
+	private VideoOpenGLSurfaceView mCanvas;
 	
 	/* Constructora */
 
-	public static final VideoFragment newInstance(VideoFragmentListener c, Video v)
+	public static final VideoFragment newInstance(VideoFragmentListener callback, Video video)
 	{
 		VideoFragment fragment = new VideoFragment();
-		fragment.setParameters(c, v);
+		fragment.setParameters(callback, video);
 		return fragment;
 	}
 
-	private void setParameters(VideoFragmentListener c, Video v)
+	private void setParameters(VideoFragmentListener callback, Video video)
 	{
-		mCallback = c;
-		video = v;
+		mCallback = callback;
+		mVideo = video;
 	}
 
 	public interface VideoFragmentListener
@@ -56,12 +56,12 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	{
 		View rootView = inflater.inflate(R.layout.fragment_video_layout, container, false);
 
-		canvas = (VideoOpenGLSurfaceView) rootView.findViewById(R.id.videoGLSurfaceViewVideo1);
-		canvas.setParameters(this, video);		
-		setCanvasListener(canvas);
+		mCanvas = (VideoOpenGLSurfaceView) rootView.findViewById(R.id.videoGLSurfaceViewVideo1);
+		mCanvas.setParameters(this, mVideo);		
+		setCanvasListener(mCanvas);
 		
-		imagenPlay = (ImageView) rootView.findViewById(R.id.imageViewVideo1);
-		imagenPlay.setOnClickListener(new OnPlayVideoClickListener());
+		imagePlay = (ImageView) rootView.findViewById(R.id.imageViewVideo1);
+		imagePlay.setOnClickListener(new OnPlayVideoClickListener());
 	
 		return rootView;
 	}
@@ -71,7 +71,7 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	{
 		super.onDestroyView();
 
-		canvas = null;
+		mCanvas = null;
 	}
 	
 	@Override
@@ -86,18 +86,18 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	public void onResume()
 	{
 		super.onResume();		
-		canvas.onResume();
+		mCanvas.onResume();
 	}
 
 	@Override
 	public void onPause()
 	{
 		super.onPause();		
-		canvas.saveData();
-		canvas.seleccionarPause();
-		canvas.onPause();
+		mCanvas.saveData();
+		mCanvas.seleccionarPause();
+		mCanvas.onPause();
 		
-		imagenPlay.setVisibility(View.VISIBLE);
+		imagePlay.setVisibility(View.VISIBLE);
 	}
 
 	/* Métodos abstractos de OpenGLFragment */
@@ -115,8 +115,8 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarResume();
-			imagenPlay.setVisibility(View.INVISIBLE);
+			mCanvas.seleccionarResume();
+			imagePlay.setVisibility(View.INVISIBLE);
 			mCallback.onVideoResumeMusic();
 		}
 	}
@@ -152,63 +152,63 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	{
 		if (estado == TStateVideo.Outside || estado == TStateVideo.Door)
 		{
-			estadoDialogo = TStateDialog.Scene;
+			mState = TStateDialog.Scene;
 		}
 		else if (estado == TStateVideo.Rock)
 		{
-			estadoDialogo = TStateDialog.Character;
+			mState = TStateDialog.Character;
 		}
 		else if (estado == TStateVideo.Noise || estado == TStateVideo.Brief)
 		{
-			estadoDialogo = TStateDialog.Actor;
+			mState = TStateDialog.Actor;
 		}
 		else
 		{
-			estadoDialogo = TStateDialog.Nothing;
+			mState = TStateDialog.Nothing;
 		}
 		
 		getActivity().runOnUiThread(new Runnable() {
 	        @Override
 	        public void run()
 	        {
-	        	if (estadoDialogo == TStateDialog.Scene)
+	        	if (mState == TStateDialog.Scene)
 	        	{
-	        		if (dialogoEscena == null)
+	        		if (sceneDialog == null)
 	        		{
-	        			dialogoEscena = new TextDialog(getActivity(), R.layout.dialog_text_scene_layout);
+	        			sceneDialog = new TextDialog(getActivity(), R.layout.dialog_text_scene_layout);
 	        		}
 	        		
 	        		int posX = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
-		        	int posY = (int) (canvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
+		        	int posY = (int) (mCanvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
 		        	
-		        	dialogoEscena.setText(text);
-		        	dialogoEscena.show(canvas, posX, posY);
+		        	sceneDialog.setText(text);
+		        	sceneDialog.show(mCanvas, posX, posY);
 	        	}
-	        	else if (estadoDialogo == TStateDialog.Character)
+	        	else if (mState == TStateDialog.Character)
 	        	{
-	        		if (dialogoPersonaje == null)
+	        		if (characterDialog == null)
 	        		{
-	        			dialogoPersonaje = new TextDialog(getActivity(), R.layout.dialog_text_character_layout);
+	        			characterDialog = new TextDialog(getActivity(), R.layout.dialog_text_character_layout);
 	        		}
 	        		
 	        		int posX = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
-		        	int posY = (int) (canvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
+		        	int posY = (int) (mCanvas.getHeight() - GamePreferences.MARCO_ALTURA_LATERAL());
 		        	
-		        	dialogoPersonaje.setText(text);
-		        	dialogoPersonaje.show(canvas, posX, posY);
+		        	characterDialog.setText(text);
+		        	characterDialog.show(mCanvas, posX, posY);
 	        	}
-	        	else if (estadoDialogo == TStateDialog.Actor)
+	        	else if (mState == TStateDialog.Actor)
 	        	{
-	        		if (dialogoActor == null)
+	        		if (actorDialog == null)
 	        		{
-	        			dialogoActor = new TextDialog(getActivity(), R.layout.dialog_text_actor_layout);
+	        			actorDialog = new TextDialog(getActivity(), R.layout.dialog_text_actor_layout);
 	        		}
 	        		
 	        		int posX = (int) (GamePreferences.MARCO_ANCHURA_LATERAL() + GamePreferences.MARCO_ANCHURA_INTERIOR());
 		        	int posY = (int) (GamePreferences.MARCO_ALTURA_LATERAL());
 		        	
-		        	dialogoActor.setText(text);
-		        	dialogoActor.show(canvas, posX, posY);
+		        	actorDialog.setText(text);
+		        	actorDialog.show(mCanvas, posX, posY);
 	        	}
 	        }
 	    });
@@ -217,17 +217,17 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	@Override
 	public void onDismissDialog()
 	{
-		if (estadoDialogo == TStateDialog.Scene)
+		if (mState == TStateDialog.Scene)
 		{
-			dialogoEscena.dismiss();
+			sceneDialog.dismiss();
 		}
-		else if (estadoDialogo == TStateDialog.Character)
+		else if (mState == TStateDialog.Character)
 		{
-			dialogoPersonaje.dismiss();
+			characterDialog.dismiss();
 		}
-		else if (estadoDialogo == TStateDialog.Actor)
+		else if (mState == TStateDialog.Actor)
 		{
-			dialogoActor.dismiss();
+			actorDialog.dismiss();
 		}
 	}
 }

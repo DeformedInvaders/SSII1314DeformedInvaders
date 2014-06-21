@@ -20,27 +20,27 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 {
 	private MainFragmentListener mCallback;
 
-	private DisplayOpenGLSurfaceView canvas;
-	private IconImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar, botonVideo;
+	private DisplayOpenGLSurfaceView mCanvas;
+	private IconImageButton buttonCreation, buttonImport, buttonPlay, buttonSelect, buttonVideo;
 
-	private Character personaje;
-	private int numeroPersonajes, numeroFicheros;
+	private Character mCharacter;
+	private int mNumCharacters, mNumFiles;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(MainFragmentListener callback, Character personaje, int numPersonajes, int numFicheros)
+	public static final MainFragment newInstance(MainFragmentListener callback, Character character, int numCharacters, int numFiles)
 	{
 		MainFragment fragment = new MainFragment();
-		fragment.setParameters(callback, personaje, numPersonajes, numFicheros);
+		fragment.setParameters(callback, character, numCharacters, numFiles);
 		return fragment;
 	}
 
-	private void setParameters(MainFragmentListener c, Character p, int numPersonajes, int numFicheros)
+	private void setParameters(MainFragmentListener callback, Character character, int numCharacters, int numFiles)
 	{
-		mCallback = c;
-		personaje = p;
-		numeroPersonajes = numPersonajes;
-		numeroFicheros = numFicheros;
+		mCallback = callback;
+		mCharacter = character;
+		mNumCharacters = numCharacters;
+		mNumFiles = numFiles;
 	}
 
 	public interface MainFragmentListener
@@ -65,15 +65,15 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		actionBar.removeAllTabs();
 
 		// Instanciar Elementos de la GUI
-		canvas = (DisplayOpenGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
+		mCanvas = (DisplayOpenGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewMain1);
 		
-		if (personaje != null)
+		if (mCharacter != null)
 		{
-			canvas.setParameters(this, personaje, true);
+			mCanvas.setParameters(this, mCharacter, true);
 		}
 		else
 		{
-			canvas.setParameters();
+			mCanvas.setParameters();
 		}
 		
 		ImageView fondo = (ImageView) rootView.findViewById(R.id.imageViewMain1);
@@ -86,19 +86,19 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 			fondo.setBackgroundResource(R.drawable.background_notlong_main);
 		}
 
-		botonCrear = (IconImageButton) rootView.findViewById(R.id.imageButtonMain1);
-		botonSeleccionar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain3);
-		botonJugar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain2);
-		botonImportar = (IconImageButton) rootView.findViewById(R.id.imageButtonMain4);
-		botonVideo = (IconImageButton) rootView.findViewById(R.id.imageButtonMain5);
+		buttonCreation = (IconImageButton) rootView.findViewById(R.id.imageButtonMain1);
+		buttonSelect = (IconImageButton) rootView.findViewById(R.id.imageButtonMain3);
+		buttonPlay = (IconImageButton) rootView.findViewById(R.id.imageButtonMain2);
+		buttonImport = (IconImageButton) rootView.findViewById(R.id.imageButtonMain4);
+		buttonVideo = (IconImageButton) rootView.findViewById(R.id.imageButtonMain5);
 		
-		botonCrear.setOnClickListener(new OnAddClickListener());
-		botonSeleccionar.setOnClickListener(new OnViewClickListener());
-		botonJugar.setOnClickListener(new OnGameClickListener());
-		botonImportar.setOnClickListener(new OnImportClickListener());
-		botonVideo.setOnClickListener(new OnVideoClickListener());
+		buttonCreation.setOnClickListener(new OnAddClickListener());
+		buttonSelect.setOnClickListener(new OnViewClickListener());
+		buttonPlay.setOnClickListener(new OnGameClickListener());
+		buttonImport.setOnClickListener(new OnImportClickListener());
+		buttonVideo.setOnClickListener(new OnVideoClickListener());
 
-		setCanvasListener(canvas);
+		setCanvasListener(mCanvas);
 
 		resetInterface();
 		updateInterface();
@@ -110,11 +110,11 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	{
 		super.onDestroyView();
 
-		canvas = null;
-		botonCrear = null;
-		botonJugar = null;
-		botonSeleccionar = null;
-		botonImportar = null;
+		mCanvas = null;
+		buttonCreation = null;
+		buttonPlay = null;
+		buttonSelect = null;
+		buttonImport = null;
 	}
 	
 	@Override
@@ -123,22 +123,22 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 		super.onDetach();
 		
 		mCallback = null;
-		personaje = null;
+		mCharacter = null;
 	}
 
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		canvas.onResume();
+		mCanvas.onResume();
 	}
 
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		canvas.saveData();
-		canvas.onPause();
+		mCanvas.saveData();
+		mCanvas.onPause();
 	}
 
 	/* Métodos abstractos de OpenGLFragment */
@@ -146,27 +146,27 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	@Override
 	protected void resetInterface()
 	{
-		botonSeleccionar.setVisibility(View.INVISIBLE);
-		botonJugar.setVisibility(View.INVISIBLE);
-		botonImportar.setVisibility(View.INVISIBLE);
+		buttonSelect.setVisibility(View.INVISIBLE);
+		buttonPlay.setVisibility(View.INVISIBLE);
+		buttonImport.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
 	protected void updateInterface()
 	{
-		if (numeroPersonajes > 0 && numeroPersonajes <= GamePreferences.MAX_CHARACTERS)
+		if (mNumCharacters > 0 && mNumCharacters <= GamePreferences.MAX_CHARACTERS)
 		{
-			botonSeleccionar.setVisibility(View.VISIBLE);
+			buttonSelect.setVisibility(View.VISIBLE);
 			
-			if (personaje != null)
+			if (mCharacter != null)
 			{
-				botonJugar.setVisibility(View.VISIBLE);
+				buttonPlay.setVisibility(View.VISIBLE);
 			}
 		}
 		
-		if (numeroFicheros > 0)
+		if (mNumFiles > 0)
 		{
-			botonImportar.setVisibility(View.VISIBLE);
+			buttonImport.setVisibility(View.VISIBLE);
 		}
 	}
 

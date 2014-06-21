@@ -20,31 +20,31 @@ public class DesignFragment extends OpenGLFragment
 {
 	private DesignFragmentListener mCallback;
 
-	private DesignOpenGLSurfaceView canvas;
-	private IconImageButton botonReset, botonTriangular, botonListo;
+	private DesignOpenGLSurfaceView mCanvas;
+	private IconImageButton buttonReset, buttonTriangulate, buttonReady;
 
 	private DesignDataSaved dataSaved;
 
 	/* Constructora */
 
-	public static final DesignFragment newInstance(DesignFragmentListener c)
+	public static final DesignFragment newInstance(DesignFragmentListener callback)
 	{
 		DesignFragment fragment = new DesignFragment();
-		fragment.setParameters(c, null);
+		fragment.setParameters(callback, null);
 		return fragment;
 	}
 	
-	public static final DesignFragment newInstance(DesignFragmentListener c, DesignDataSaved s)
+	public static final DesignFragment newInstance(DesignFragmentListener callback, DesignDataSaved data)
 	{
 		DesignFragment fragment = new DesignFragment();
-		fragment.setParameters(c, s);
+		fragment.setParameters(callback, data);
 		return fragment;
 	}
 	
-	private void setParameters(DesignFragmentListener c, DesignDataSaved s)
+	private void setParameters(DesignFragmentListener callback, DesignDataSaved data)
 	{
-		mCallback = c;
-		dataSaved = s;
+		mCallback = callback;
+		dataSaved = data;
 	}
 
 	public interface DesignFragmentListener
@@ -61,21 +61,21 @@ public class DesignFragment extends OpenGLFragment
 		View rootView = inflater.inflate(R.layout.fragment_creation_design_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (DesignOpenGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
+		mCanvas = (DesignOpenGLSurfaceView) rootView.findViewById(R.id.designGLSurfaceViewDesign1);
 
-		botonListo = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign1);
-		botonReset = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign2);
-		botonTriangular = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign3);
+		buttonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign1);
+		buttonReset = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign2);
+		buttonTriangulate = (IconImageButton) rootView.findViewById(R.id.imageButtonDesign3);
 
-		botonListo.setOnClickListener(new OnReadyClickListener());
-		botonReset.setOnClickListener(new onResetClickListener());
-		botonTriangular.setOnClickListener(new onTriangularClickListener());
+		buttonReady.setOnClickListener(new OnReadyClickListener());
+		buttonReset.setOnClickListener(new onResetClickListener());
+		buttonTriangulate.setOnClickListener(new onTriangulateClickListener());
 
-		setCanvasListener(canvas);
+		setCanvasListener(mCanvas);
 		
 		if (dataSaved != null)
 		{
-			canvas.restoreData(dataSaved);
+			mCanvas.restoreData(dataSaved);
 		}
 
 		resetInterface();
@@ -91,10 +91,10 @@ public class DesignFragment extends OpenGLFragment
 	{
 		super.onDestroyView();
 
-		canvas = null;
-		botonListo = null;
-		botonReset = null;
-		botonTriangular = null;
+		mCanvas = null;
+		buttonReady = null;
+		buttonReset = null;
+		buttonTriangulate = null;
 	}
 	
 	@Override
@@ -110,11 +110,11 @@ public class DesignFragment extends OpenGLFragment
 	public void onResume()
 	{
 		super.onResume();
-		canvas.onResume();
+		mCanvas.onResume();
 
 		if (dataSaved != null)
 		{
-			canvas.restoreData(dataSaved);
+			mCanvas.restoreData(dataSaved);
 
 			resetInterface();
 			updateInterface();
@@ -125,9 +125,9 @@ public class DesignFragment extends OpenGLFragment
 	public void onPause()
 	{
 		super.onPause();
-		canvas.onPause();
+		mCanvas.onPause();
 
-		dataSaved = canvas.saveData();
+		dataSaved = mCanvas.saveData();
 	}
 
 	/* Métodos Abstractos OpenGLFragment */
@@ -135,28 +135,28 @@ public class DesignFragment extends OpenGLFragment
 	@Override
 	protected void resetInterface()
 	{
-		botonListo.setVisibility(View.INVISIBLE);
-		botonReset.setVisibility(View.INVISIBLE);
-		botonTriangular.setVisibility(View.INVISIBLE);
+		buttonReady.setVisibility(View.INVISIBLE);
+		buttonReset.setVisibility(View.INVISIBLE);
+		buttonTriangulate.setVisibility(View.INVISIBLE);
 		
-		canvas.setDetectorState(TStateDetector.SimpleTouch);
+		mCanvas.setDetectorState(TStateDetector.SimpleTouch);
 	}
 
 	@Override
 	protected void updateInterface()
 	{
-		if (canvas.isPoligonoCompleto())
+		if (mCanvas.isPolygonComplete())
 		{
-			botonListo.setVisibility(View.VISIBLE);
-			botonReset.setVisibility(View.VISIBLE);
-			botonTriangular.setVisibility(View.VISIBLE);
+			buttonReady.setVisibility(View.VISIBLE);
+			buttonReset.setVisibility(View.VISIBLE);
+			buttonTriangulate.setVisibility(View.VISIBLE);
 		}
 		
-		botonTriangular.setActivo(canvas.isEstadoTriangulando());
+		buttonTriangulate.setActivo(mCanvas.isStateTriangulate());
 		
-		if (canvas.isEstadoRetocando())
+		if (mCanvas.isStatePreparing())
 		{
-			canvas.setDetectorState(TStateDetector.CoordDetectors);
+			mCanvas.setDetectorState(TStateDetector.CoordDetectors);
 		}
 	}
 
@@ -167,9 +167,9 @@ public class DesignFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			if (canvas.isEstadoDibujando())
+			if (mCanvas.isStateDrawing())
 			{
-				if (canvas.isPoligonoSimple())
+				if (mCanvas.isPolygonSimplex())
 				{
 					List<Integer> listaMensajes = new ArrayList<Integer>();
 					listaMensajes.add(R.string.text_tip_design_drag_description);
@@ -182,18 +182,18 @@ public class DesignFragment extends OpenGLFragment
 					listaVideos.add(GameResources.VIDEO_DESIGN_ROTATE_PATH);
 					
 					sendAlertMessage(R.string.text_tip_design_touch_title, listaMensajes, listaVideos);
-					canvas.seleccionarRetoque();
+					mCanvas.selectPreparing();
 				}
 				else
 				{					
 					sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GameResources.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 				}
 			}
-			else if (canvas.isEstadoRetocando())
+			else if (mCanvas.isStatePreparing())
 			{
-				if (canvas.isPoligonoDentroMarco())
+				if (mCanvas.isPolygonReady())
 				{
-					mCallback.onDesignReady(canvas.getEsqueleto(), canvas.saveData());
+					mCallback.onDesignReady(mCanvas.getSkeleton(), mCanvas.saveData());
 				}
 				else
 				{
@@ -211,23 +211,23 @@ public class DesignFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			canvas.reiniciar();
+			mCanvas.reiniciar();
 
 			resetInterface();
 			updateInterface();
 		}
 	}
 
-	private class onTriangularClickListener implements OnClickListener
+	private class onTriangulateClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarTriangular();
+			mCanvas.selectTriangulate();
 			resetInterface();
 			updateInterface();
 			
-			if (!canvas.isPoligonoSimple())
+			if (!mCanvas.isPolygonSimplex())
 			{					
 				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_design_noregular_description, GameResources.VIDEO_DESIGN_NOREGULAR_PATH, R.string.error_triangle);
 			}

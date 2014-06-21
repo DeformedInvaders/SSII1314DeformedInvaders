@@ -19,28 +19,28 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 {
 	private OnDeformationListener mListener;
 	
-	private Character personaje;
-	private TTypeMovement movimiento;
+	private Character mCharacter;
+	private TTypeMovement mMovement;
 	
-	private DeformOpenGLSurfaceView canvas;
-	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonReproducir;
+	private DeformOpenGLSurfaceView mCanvas;
+	private IconImageButton buttonAdd, buttonDelete, buttonMove, buttonReset, buttonRecord, buttonPlay;
 
 	private DeformDataSaved dataSaved;
 	
 	/* Constructora */
 
-	public static final DeformFragment newInstance(OnDeformationListener l, Character p, TTypeMovement m)
+	public static final DeformFragment newInstance(OnDeformationListener listener, Character character, TTypeMovement movement)
 	{
 		DeformFragment fragment = new DeformFragment();
-		fragment.setParameters(l, p, m);
+		fragment.setParameters(listener, character, movement);
 		return fragment;
 	}
 
-	private void setParameters(OnDeformationListener l, Character p, TTypeMovement m)
+	private void setParameters(OnDeformationListener listener, Character character, TTypeMovement movement)
 	{
-		mListener = l;
-		personaje = p;
-		movimiento = m;
+		mListener = listener;
+		mCharacter = character;
+		mMovement = movement;
 	}
 
 	/* Métodos Fragment */
@@ -51,23 +51,23 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		View rootView = inflater.inflate(R.layout.fragment_creation_deform_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (DeformOpenGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
-		canvas.setParameters(this, personaje, movimiento);
-		setCanvasListener(canvas);
+		mCanvas = (DeformOpenGLSurfaceView) rootView.findViewById(R.id.deformGLSurfaceViewDeform1);
+		mCanvas.setParameters(this, mCharacter, mMovement);
+		setCanvasListener(mCanvas);
 		
-		botonAnyadir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform1);
-		botonEliminar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform2);
-		botonDeformar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform3);
-		botonReiniciar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform4);
-		botonGrabar = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform5);
-		botonReproducir = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
+		buttonAdd = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform1);
+		buttonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform2);
+		buttonMove = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform3);
+		buttonReset = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform4);
+		buttonRecord = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform5);
+		buttonPlay = (IconImageButton) rootView.findViewById(R.id.imageButtonDeform6);
 
-		botonAnyadir.setOnClickListener(new OnAddClickListener());
-		botonEliminar.setOnClickListener(new OnRemoveClickListener());
-		botonDeformar.setOnClickListener(new OnMoveClickListener());
-		botonReiniciar.setOnClickListener(new OnResetClickListener());
-		botonGrabar.setOnClickListener(new OnRecordClickListener());
-		botonReproducir.setOnClickListener(new OnPlayClickListener());
+		buttonAdd.setOnClickListener(new OnAddClickListener());
+		buttonDelete.setOnClickListener(new OnRemoveClickListener());
+		buttonMove.setOnClickListener(new OnMoveClickListener());
+		buttonReset.setOnClickListener(new OnResetClickListener());
+		buttonRecord.setOnClickListener(new OnRecordClickListener());
+		buttonPlay.setOnClickListener(new OnPlayClickListener());
 
 		resetInterface();
 		updateInterface();
@@ -79,25 +79,25 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	{
 		super.onDestroyView();
 
-		canvas = null;
+		mCanvas = null;
 		
-		botonAnyadir = null;
-		botonEliminar = null;
-		botonDeformar = null;
-		botonReiniciar = null;
-		botonGrabar = null;
-		botonReproducir = null;
+		buttonAdd = null;
+		buttonDelete = null;
+		buttonMove = null;
+		buttonReset = null;
+		buttonRecord = null;
+		buttonPlay = null;
 	}
 
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		canvas.onResume();
+		mCanvas.onResume();
 
 		if (dataSaved != null)
 		{
-			canvas.restoreData(dataSaved);
+			mCanvas.restoreData(dataSaved);
 
 			resetInterface();
 			updateInterface();
@@ -108,9 +108,9 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	public void onPause()
 	{
 		super.onPause();
-		canvas.onPause();
+		mCanvas.onPause();
 
-		dataSaved = canvas.saveData();
+		dataSaved = mCanvas.saveData();
 	}
 
 	/* Métodos Abstractos OpenGLFramgent */
@@ -118,44 +118,44 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	@Override
 	protected void updateInterface()
 	{
-		if (canvas.isHandlesVacio())
+		if (mCanvas.isHandlesEmpty())
 		{
-			botonAnyadir.setVisibility(View.VISIBLE);
+			buttonAdd.setVisibility(View.VISIBLE);
 		}
 		else
 		{
-			botonGrabar.setVisibility(View.VISIBLE);
+			buttonRecord.setVisibility(View.VISIBLE);
 
-			if (!canvas.isEstadoGrabacion())
+			if (!mCanvas.isStateRecording())
 			{
-				botonAnyadir.setVisibility(View.VISIBLE);
-				botonEliminar.setVisibility(View.VISIBLE);
-				botonDeformar.setVisibility(View.VISIBLE);
-				botonReiniciar.setVisibility(View.VISIBLE);
+				buttonAdd.setVisibility(View.VISIBLE);
+				buttonDelete.setVisibility(View.VISIBLE);
+				buttonMove.setVisibility(View.VISIBLE);
+				buttonReset.setVisibility(View.VISIBLE);
 			}
 		}
 		
-		if (canvas.isGrabacionReady())
+		if (mCanvas.isAnimationReady())
 		{
-			botonReproducir.setVisibility(View.VISIBLE);
+			buttonPlay.setVisibility(View.VISIBLE);
 		}
 
-		botonAnyadir.setActivo(canvas.isEstadoAnyadir());
-		botonEliminar.setActivo(canvas.isEstadoEliminar());
-		botonGrabar.setActivo(canvas.isEstadoGrabacion());
-		botonDeformar.setActivo(canvas.isEstadoDeformar());
-		botonReproducir.setActivo(canvas.isEstadoReproduccion());
+		buttonAdd.setActivo(mCanvas.isStateAdding());
+		buttonDelete.setActivo(mCanvas.isStateDeleting());
+		buttonRecord.setActivo(mCanvas.isStateRecording());
+		buttonMove.setActivo(mCanvas.isStateMoving());
+		buttonPlay.setActivo(mCanvas.isStatePlaying());
 	}
 
 	@Override
 	protected void resetInterface()
 	{
-		botonAnyadir.setVisibility(View.INVISIBLE);
-		botonEliminar.setVisibility(View.INVISIBLE);
-		botonDeformar.setVisibility(View.INVISIBLE);
-		botonReiniciar.setVisibility(View.INVISIBLE);
-		botonGrabar.setVisibility(View.INVISIBLE);
-		botonReproducir.setVisibility(View.INVISIBLE);
+		buttonAdd.setVisibility(View.INVISIBLE);
+		buttonDelete.setVisibility(View.INVISIBLE);
+		buttonMove.setVisibility(View.INVISIBLE);
+		buttonReset.setVisibility(View.INVISIBLE);
+		buttonRecord.setVisibility(View.INVISIBLE);
+		buttonPlay.setVisibility(View.INVISIBLE);
 	}
 
 	/* Métodos Listener onClick */
@@ -165,7 +165,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnyadir();
+			mCanvas.selectAdding();
 
 			resetInterface();
 			updateInterface();
@@ -177,7 +177,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarEliminar();
+			mCanvas.selectDeleting();
 
 			resetInterface();
 			updateInterface();
@@ -189,7 +189,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarMover();
+			mCanvas.selectMoving();
 
 			resetInterface();
 			updateInterface();
@@ -201,7 +201,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.reiniciar();
+			mCanvas.selectReset();
 
 			resetInterface();
 			updateInterface();
@@ -213,7 +213,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarGrabado();
+			mCanvas.selectRecording();
 
 			resetInterface();
 			updateInterface();
@@ -225,7 +225,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarPlay();
+			mCanvas.selectPlaying();
 
 			resetInterface();
 			updateInterface();
@@ -234,11 +234,11 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 
 	/* Métodos de Obtención de Información */
 
-	public List<VertexArray> getMovimientos()
+	public List<VertexArray> getMovements()
 	{
-		if (canvas != null)
+		if (mCanvas != null)
 		{
-			return canvas.getMovimientos();
+			return mCanvas.getMovement();
 		}
 
 		return null;

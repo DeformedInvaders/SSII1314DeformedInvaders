@@ -24,41 +24,41 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 {
 	private AnimationFragmentListener mCallback;
 
-	private IconImageButton botonReady;
+	private IconImageButton buttonReady;
 	
-	private Character personaje;
-	private Movements movimientos;
-	private int personajeIndice;
+	private Character mCharacter;
+	private Movements mMovements;
+	private int mCharacterIndex;
 
 	/* Constructora */
 
-	public static final DeformationFragment newInstance(AnimationFragmentListener c, Character p)
+	public static final DeformationFragment newInstance(AnimationFragmentListener callback, Character character)
 	{
 		DeformationFragment fragment = new DeformationFragment();
-		fragment.setParameters(c, p, -1);
+		fragment.setParameters(callback, character, -1);
 		return fragment;
 	}
 	
-	public static final DeformationFragment newInstance(AnimationFragmentListener c, Character p, int n)
+	public static final DeformationFragment newInstance(AnimationFragmentListener callback, Character character, int index)
 	{
 		DeformationFragment fragment = new DeformationFragment();
-		fragment.setParameters(c, p, n);
+		fragment.setParameters(callback, character, index);
 		return fragment;
 	}
 
-	private void setParameters(AnimationFragmentListener c, Character p, int n)
+	private void setParameters(AnimationFragmentListener callback, Character character, int index)
 	{
-		mCallback = c;
-		personaje = p;
-		personajeIndice = n;
+		mCallback = callback;
+		mCharacter = character;
+		mCharacterIndex = index;
 		
-		if (personajeIndice == -1)
+		if (mCharacterIndex == -1)
 		{
-			movimientos = new Movements();
+			mMovements = new Movements();
 		}
 		else
 		{
-			movimientos = personaje.getMovements();
+			mMovements = character.getMovements();
 		}
 	}
 
@@ -78,16 +78,16 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		View rootView = inflater.inflate(R.layout.fragment_creation_animation_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		botonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonAnimation1);
-		botonReady.setOnClickListener(new OnReadyClickListener());
+		buttonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonAnimation1);
+		buttonReady.setOnClickListener(new OnReadyClickListener());
 		
 		frameLayout = (ViewFrameSwipeable) rootView.findViewById(R.id.frameViewAnimation1);
 		frameLayout.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());		
 		
-		TTypeMovement[] movimientos = TTypeMovement.values();
+		TTypeMovement[] typeMovements = TTypeMovement.values();
 		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
 		{
-			frameLayout.addView(DeformFragment.newInstance(this, personaje, movimientos[i]), getString(movimientos[i].getTitle()));
+			frameLayout.addView(DeformFragment.newInstance(this, mCharacter, typeMovements[i]), getString(typeMovements[i].getTitle()));
 		}
 
 		sendAlertMessage(R.string.text_tip_deform_handles_title, R.string.text_tip_deform_handles_description, GameResources.VIDEO_DEFORM_HANDLES_PATH);
@@ -100,7 +100,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	{
 		super.onDestroyView();
 
-		botonReady = null;
+		buttonReady = null;
 	}
 	
 	@Override
@@ -109,23 +109,23 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		super.onDetach();
 		
 		mCallback = null;
-		personaje = null;
-		movimientos = null;
+		mCharacter = null;
+		mMovements = null;
 	}
 
 	/* Métodos Listener onClick */
 
-	private void actualizarMovimientos()
+	private void updateMovements()
 	{
 		int i = 0;
 		Iterator<DeformFragment> it = frameLayout.iterator();
 		while (it.hasNext())
 		{
-			List<VertexArray> movimiento = it.next().getMovimientos();
+			List<VertexArray> movement = it.next().getMovements();
 
-			if (movimiento != null && movimiento.size() > 0)
+			if (movement != null && movement.size() > 0)
 			{
-				movimientos.set(movimiento, TTypeMovement.values()[i]);
+				mMovements.set(movement, TTypeMovement.values()[i]);
 			}
 
 			i++;
@@ -137,21 +137,21 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		@Override
 		public void onClick(View v)
 		{
-			actualizarMovimientos();
+			updateMovements();
 
-			if (!movimientos.isReady())
+			if (!mMovements.isReady())
 			{
 				sendMessage(R.string.text_tip_problem_title, R.string.text_tip_deform_undefined_description, GameResources.VIDEO_DEFORM_UNDEFINED_PATH, R.string.error_deform);
 			}
 			else
 			{
-				if (personajeIndice == -1)
+				if (mCharacterIndex == -1)
 				{
-					mCallback.onDeformationReady(movimientos);
+					mCallback.onDeformationReady(mMovements);
 				}
 				else
 				{
-					mCallback.onRedeformationReady(movimientos, personajeIndice);
+					mCallback.onRedeformationReady(mMovements, mCharacterIndex);
 				}
 			}
 		}
@@ -162,7 +162,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	@Override
 	public void onPageSelected(int position)
 	{
-		actualizarMovimientos();
+		updateMovements();
 	}
 	
 	/* Métodos Abstractos OnDeformListener */

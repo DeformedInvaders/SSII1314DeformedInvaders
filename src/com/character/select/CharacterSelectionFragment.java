@@ -20,30 +20,30 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 {
 	private CharacterSelectionFragmentListener mCallback;
 	
-	private List<Character> listaPersonajes;
-	private int posicionInicial;
+	private List<Character> mCharacterList;
+	private int originalIndex;
 	
 	/* Constructora */
 
-	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Character> l)
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener callback, List<Character> characterList)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
-		fragment.setParameters(c, l, -1);
+		fragment.setParameters(callback, characterList, -1);
 		return fragment;
 	}
 	
-	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Character> l, CharacterSelectionDataSaved datosSalvados)
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener callback, List<Character> characterList, CharacterSelectionDataSaved dataSaved)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
-		fragment.setParameters(c, l, datosSalvados.getIndice());
+		fragment.setParameters(callback, characterList, dataSaved.getIndex());
 		return fragment;
 	}
 
-	private void setParameters(CharacterSelectionFragmentListener c, List<Character> l, int indice)
+	private void setParameters(CharacterSelectionFragmentListener callback, List<Character> characterList, int index)
 	{
-		mCallback = c;
-		listaPersonajes = l;
-		posicionInicial = indice;
+		mCallback = callback;
+		mCharacterList = characterList;
+		originalIndex = index;
 	}
 
 	public interface CharacterSelectionFragmentListener
@@ -80,16 +80,16 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 			fondo.setBackgroundResource(R.drawable.background_notlong_display);
 		}
 
-		Iterator<Character> it = listaPersonajes.iterator();
+		Iterator<Character> it = mCharacterList.iterator();
 		while (it.hasNext())
 		{
-			Character p = it.next();
-			viewPager.addView(CharacterSelectFragment.newInstance(this, p), p.getName());
+			Character character = it.next();
+			viewPager.addView(CharacterSelectFragment.newInstance(this, character), character.getName());
 		}
 		
-		if (posicionInicial != -1)
+		if (originalIndex != -1)
 		{
-			viewPager.selectView(posicionInicial);
+			viewPager.selectView(originalIndex);
 		}
 
 		return rootView;
@@ -101,7 +101,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		super.onDetach();
 		
 		mCallback = null;
-		listaPersonajes = null;
+		mCharacterList = null;
 	}
 
 	/* Métodos abstractos de ViewPagerFragment */

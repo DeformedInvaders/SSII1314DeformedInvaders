@@ -30,39 +30,39 @@ import com.project.main.R;
 public class GameOpenGLRenderer extends OpenGLRenderer
 {
 	// Estado
-	private TStateBoss estadoJefe;
-	private int numIteraciones;
+	private TStateBoss mBossState;
+	private int animationFrames;
 
 	// Protagonista
-	private Character protagonista;
+	private Character character;
 	
-	private InstanceEntity personaje;
-	private Shield burbujaPersonaje;
-	private Platform plataformaPersonaje;
-	private Shot disparoPersonaje;
+	private InstanceEntity characterInstance;
+	private Shield characterShield;
+	private Platform characterPlatform;
+	private Shot characterShot;
 	
 	// Boss
-	private Boss lider;
+	private Boss boss;
 	
-	private InstanceEntity jefe;
-	private Shield burbujaJefe;
-	private Platform plataformaJefe;
-	private Shot disparoJefe;
+	private InstanceEntity bossInstance;
+	private Shield bossShield;
+	private Platform bossPlatform;
+	private Shot bossShot;
 	
 	// Enemigos
-	private List<Entity> tipoEnemigos;
-	private List<InstanceEntity> listaEnemigos;
-	private int posEnemigoActual;
-	private Handle handleEnemigoActual;
+	private List<Entity> enemiesTypes;
+	private List<InstanceEntity> enemiesList;
+	private int enemyActual;
+	private Handle handleEnemy;
 
 	// Puntuancion
-	private int puntuacion;
-	private boolean puntuacionModificada;
+	private int score;
+	private boolean scoreModified;
 	
 	// Texturas
-	private boolean texturasCargadas;
+	private boolean textureLoaded;
 	
-	private TStateCharacter estadoPersonaje;
+	private TStateCharacter mStateCharacter;
 
 	/* Constructura */
 
@@ -73,38 +73,38 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		GamePreferences.SET_GAME_PARAMETERS(TStateGame.EnemiesPhase);
 		
-		protagonista = p;
+		character = p;
 		
-		lider = l.getBoss();
-		estadoJefe = TStateBoss.Nothing;
+		boss = l.getBoss();
+		mBossState = TStateBoss.Nothing;
 		
-		personaje = new InstanceEntity(protagonista.getId(), protagonista.getType());
-		burbujaPersonaje = new Shield(personaje, GamePreferences.MAX_CHARACTER_LIVES);
-		plataformaPersonaje = new Platform(personaje);
-		disparoPersonaje = new Shot(personaje);
+		characterInstance = new InstanceEntity(character.getId(), character.getType());
+		characterShield = new Shield(characterInstance, GamePreferences.MAX_CHARACTER_LIVES);
+		characterPlatform = new Platform(characterInstance);
+		characterShot = new Shot(characterInstance);
 		
-		burbujaPersonaje.activate();
-		plataformaPersonaje.deactivate();
-		disparoPersonaje.deactivate();
+		characterShield.activate();
+		characterPlatform.deactivate();
+		characterShot.deactivate();
 		
-		tipoEnemigos = l.getEnemyType();
-		listaEnemigos = l.getEnemyList();
-		posEnemigoActual = 0;
-		handleEnemigoActual = new Handle(50, 20, Color.YELLOW);
+		enemiesTypes = l.getEnemyType();
+		enemiesList = l.getEnemyList();
+		enemyActual = 0;
+		handleEnemy = new Handle(50, 20, Color.YELLOW);
 		
-		jefe = new InstanceEntity(lider.getId(), lider.getType());
-		burbujaJefe = new Shield(jefe, GamePreferences.MAX_BOSS_LIVES);
-		plataformaJefe = new Platform(jefe);
-		disparoJefe = new Shot(jefe);
+		bossInstance = new InstanceEntity(boss.getId(), boss.getType());
+		bossShield = new Shield(bossInstance, GamePreferences.MAX_BOSS_LIVES);
+		bossPlatform = new Platform(bossInstance);
+		bossShot = new Shot(bossInstance);
 		
-		burbujaJefe.deactivate();
-		plataformaJefe.deactivate();
-		disparoJefe.deactivate();
+		bossShield.deactivate();
+		bossPlatform.deactivate();
+		bossShot.deactivate();
 		
-		puntuacion = 0;
-		puntuacionModificada = false;
+		score = 0;
+		scoreModified = false;
 		
-		texturasCargadas = false;
+		textureLoaded = false;
 		
 		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_level_title), mContext.getString(R.string.text_processing_level_description), true);
 
@@ -112,7 +112,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			@Override
 			public void run()
 			{
-				while(!texturasCargadas);
+				while(!textureLoaded);
 				alert.dismiss();
 			}
 		});
@@ -128,37 +128,37 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// Protagonista
-		protagonista.loadTexture(gl, this, mContext);
-		personaje.setDimensions(protagonista.getHeight(), protagonista.getWidth());
+		character.loadTexture(gl, this, mContext);
+		characterInstance.setDimensions(character.getHeight(), character.getWidth());
 		
 		// Jefe
-		lider.loadTexture(gl, this, mContext);
-		jefe.setDimensions(lider.getHeight(), lider.getWidth());
+		boss.loadTexture(gl, this, mContext);
+		bossInstance.setDimensions(boss.getHeight(), boss.getWidth());
 		
 		// Lista Enemigos
-		Iterator<Entity> it = tipoEnemigos.iterator();
+		Iterator<Entity> it = enemiesTypes.iterator();
 		while (it.hasNext())
 		{
 			it.next().loadTexture(gl, this, mContext);
 		}
 		
 		// Actualización de Dimensiones
-		Iterator<InstanceEntity> ite = listaEnemigos.iterator();
+		Iterator<InstanceEntity> ite = enemiesList.iterator();
 		while (ite.hasNext())
 		{
 			InstanceEntity instancia = ite.next();
-			Entity entidad = tipoEnemigos.get(instancia.getIdEntity());
+			Entity entidad = enemiesTypes.get(instancia.getIdEntity());
 			instancia.setDimensions(entidad.getHeight(), entidad.getWidth());
 		}
 		
 		// Otros Elementos
-		burbujaPersonaje.loadTexture(gl, this, mContext);
-		plataformaPersonaje.loadTexture(gl, this, mContext);
-		disparoPersonaje.loadTexture(gl, this, mContext);
+		characterShield.loadTexture(gl, this, mContext);
+		characterPlatform.loadTexture(gl, this, mContext);
+		characterShot.loadTexture(gl, this, mContext);
 		
-		burbujaJefe.loadTexture(gl, this, mContext);
-		plataformaJefe.loadTexture(gl, this, mContext);
-		disparoJefe.loadTexture(gl, this, mContext);
+		bossShield.loadTexture(gl, this, mContext);
+		bossPlatform.loadTexture(gl, this, mContext);
+		bossShot.loadTexture(gl, this, mContext);
 	}
 	
 	@Override
@@ -166,7 +166,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceChanged(gl, width, height);
 		
-		texturasCargadas = true;
+		textureLoaded = true;
 	}
 
 	@Override
@@ -194,19 +194,19 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
 					
 			// Dibujar protagonista
-			if (burbujaPersonaje.isAlive())
+			if (characterShield.isAlive())
 			{
-				personaje.drawTexture(gl, this, protagonista);
-				burbujaPersonaje.drawTexture(gl, this);
+				characterInstance.drawTexture(gl, this, character);
+				characterShield.drawTexture(gl, this);
 			}
 			
 			// Dibujar cola de enemigos
 			boolean activo = true;
-			int i = posEnemigoActual;
-			while (activo && i < listaEnemigos.size())
+			int i = enemyActual;
+			while (activo && i < enemiesList.size())
 			{
-				InstanceEntity instancia = listaEnemigos.get(i);
-				Entity entidad = tipoEnemigos.get(instancia.getIdEntity());
+				InstanceEntity instancia = enemiesList.get(i);
+				Entity entidad = enemiesTypes.get(instancia.getIdEntity());
 				instancia.drawTexture(gl, this, entidad);
 				
 				activo = instancia.getCoordX() < getScreenWidth();
@@ -216,15 +216,15 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			// Dibujar enemigo actual
 			if (GamePreferences.IS_DEBUG_ENABLED())
 			{
-				if (posEnemigoActual < listaEnemigos.size())
+				if (enemyActual < enemiesList.size())
 				{
-					InstanceEntity instancia = listaEnemigos.get(posEnemigoActual);
-					Entity entidad = tipoEnemigos.get(instancia.getIdEntity());
+					InstanceEntity instancia = enemiesList.get(enemyActual);
+					Entity entidad = enemiesTypes.get(instancia.getIdEntity());
 					
 					gl.glPushMatrix();
 		
 						gl.glTranslatef(instancia.getCoordX() + entidad.getWidth() / 2.0f, instancia.getCoordY() + entidad.getHeight() / 2.0f, 0.0f);
-						handleEnemigoActual.dibujar(gl);
+						handleEnemy.dibujar(gl);
 			
 					gl.glPopMatrix();
 				}
@@ -240,42 +240,42 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			gl.glTranslatef(GamePreferences.DISTANCE_GAME_RIGHT(), GamePreferences.DISTANCE_GAME_BOTTOM(), 0.0f);
 			
 			// Dibujar protagonista
-			plataformaPersonaje.drawTexture(gl, this);
-			if (burbujaPersonaje.isAlive())
+			characterPlatform.drawTexture(gl, this);
+			if (characterShield.isAlive())
 			{
-				personaje.drawTexture(gl, this, protagonista);
-				burbujaPersonaje.drawTexture(gl, this);
+				characterInstance.drawTexture(gl, this, character);
+				characterShield.drawTexture(gl, this);
 			}
-			plataformaPersonaje.drawTexture(gl, this);
+			characterPlatform.drawTexture(gl, this);
 		
 			// Dibujar jefe
-			plataformaJefe.drawTexture(gl, this);
-			if (burbujaJefe.isAlive())
+			bossPlatform.drawTexture(gl, this);
+			if (bossShield.isAlive())
 			{
-				jefe.drawTexture(gl, this, lider);
-				burbujaJefe.drawTexture(gl, this);
+				bossInstance.drawTexture(gl, this, boss);
+				bossShield.drawTexture(gl, this);
 			}
-			plataformaJefe.drawTexture(gl, this);
+			bossPlatform.drawTexture(gl, this);
 			
 			// Dibujar disparos
-			disparoPersonaje.drawTexture(gl, this);
-			disparoJefe.drawTexture(gl, this);
+			characterShot.drawTexture(gl, this);
+			bossShot.drawTexture(gl, this);
 			
 		gl.glPopMatrix();
 	}
 	
 	/* Métodos de Modificación de Estado */
 
-	public boolean seleccionarAnimacion(TTypeMovement movimiento)
+	public boolean startAnimation(TTypeMovement movimiento)
 	{
-		protagonista.selectMovement(movimiento);
+		character.selectMovement(movimiento);
 		
 		if (movimiento == TTypeMovement.Attack)
 		{
-			if (!disparoPersonaje.isActive())
+			if (!characterShot.isActive())
 			{
-				disparoPersonaje.activate();
-				plataformaPersonaje.shoot();
+				characterShot.activate();
+				characterPlatform.shoot();
 				return true;
 			}
 			
@@ -283,34 +283,34 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		else if (movimiento == TTypeMovement.Jump)
 		{
-			personaje.jump(protagonista.getAnimationLength());
+			characterInstance.jump(character.getAnimationLength());
 			return true;
 		}
 		
 		return true;
 	}
 	
-	public void seleccionarEstado(TStateCharacter estado) 
+	public void moveCharacter(TStateCharacter estado) 
 	{
-		estadoPersonaje = estado;
+		mStateCharacter = estado;
 	}
 	
-	public void seleccionarPosicion(float pixelY, float screenWidth, float screenHeight)
+	public void moveCharacter(float pixelY, float screenWidth, float screenHeight)
 	{
 		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
 			
-		if (personaje.getCoordY() + 3.0f * personaje.getHeight() / 4.0f > worldY)
+		if (characterInstance.getCoordY() + 3.0f * characterInstance.getHeight() / 4.0f > worldY)
 		{
-			if (personaje.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
+			if (characterInstance.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
-				personaje.down();
+				characterInstance.down();
 			}
 		}
-		else if (personaje.getCoordY() + personaje.getHeight() / 4.0f < worldY)
+		else if (characterInstance.getCoordY() + characterInstance.getHeight() / 4.0f < worldY)
 		{
-			if (personaje.getCoordY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			if (characterInstance.getCoordY() + characterInstance.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
-				personaje.up();
+				characterInstance.up();
 			}
 		}
 	}
@@ -336,141 +336,141 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		moveBackground();
 		
 		// Avanzar personaje
-		personaje.move();
+		characterInstance.move();
 		
 		// Avanzar cola de enemigos
-		for (int i = posEnemigoActual; i < listaEnemigos.size(); i++)
+		for (int i = enemyActual; i < enemiesList.size(); i++)
 		{
-			listaEnemigos.get(i).move();
+			enemiesList.get(i).move();
 		}
 		
-		if (posEnemigoActual < listaEnemigos.size())
+		if (enemyActual < enemiesList.size())
 		{
-			InstanceEntity instancia = listaEnemigos.get(posEnemigoActual);
-			Entity entidad = tipoEnemigos.get(instancia.getIdEntity());
+			InstanceEntity instancia = enemiesList.get(enemyActual);
+			Entity entidad = enemiesTypes.get(instancia.getIdEntity());
 			if (instancia.getCoordX() < -entidad.getWidth())
 			{
 				switch (entidad.getType())
 				{
 					case Enemy:
-						puntuacion += GamePreferences.SCORE_ACTION_WRONG;
-						puntuacionModificada = true;
+						score += GamePreferences.SCORE_ACTION_WRONG;
+						scoreModified = true;
 					break;
 					case Obstacle:
-						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-						puntuacionModificada = true;
+						score += GamePreferences.SCORE_ACTION_RIGHT;
+						scoreModified = true;
 					break;
 					case Missil:
-						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-						puntuacionModificada = true;
+						score += GamePreferences.SCORE_ACTION_RIGHT;
+						scoreModified = true;
 					default:
 					break;
 				}
 				
-				posEnemigoActual++;
+				enemyActual++;
 			}
 		}
 
 		// Animar tipo de enemigos		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_OPPONENTS; i++)
 		{
-			tipoEnemigos.get(i).animateTexture();
+			enemiesTypes.get(i).animateTexture();
 		}
 		
 		// Animar personaje
-		return protagonista.animateTexture();
+		return character.animateTexture();
 	}
 	
 	private boolean playAnimationBossPhase()
 	{
-		disparoPersonaje.move();
-		disparoJefe.move();
+		characterShot.move();
+		bossShot.move();
 		
-		plataformaPersonaje.animateTexture();
-		plataformaJefe.animateTexture();
+		characterPlatform.animateTexture();
+		bossPlatform.animateTexture();
 		
-		if(estadoPersonaje == TStateCharacter.Down)
+		if(mStateCharacter == TStateCharacter.Down)
 		{
-			if (personaje.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
+			if (characterInstance.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
-				personaje.down();
+				characterInstance.down();
 			}
 		}
-		else if (estadoPersonaje == TStateCharacter.Up)
+		else if (mStateCharacter == TStateCharacter.Up)
 		{
-			if (personaje.getCoordY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			if (characterInstance.getCoordY() + characterInstance.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
-				personaje.up();
+				characterInstance.up();
 			}
 		}
 		
-		if(estadoJefe == TStateBoss.Nothing)
+		if(mBossState == TStateBoss.Nothing)
 		{
-			if(numIteraciones == 0)
+			if(animationFrames == 0)
 			{
 				int tipoMovimiento = (int) Math.floor(Math.random() * TStateBoss.values().length);
-				estadoJefe = TStateBoss.values()[tipoMovimiento];
-				numIteraciones = (int) Math.floor(Math.random() * 9) + 1;
+				mBossState = TStateBoss.values()[tipoMovimiento];
+				animationFrames = (int) Math.floor(Math.random() * 9) + 1;
 				
-				if (estadoJefe == TStateBoss.Down && jefe.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() <= 0)
+				if (mBossState == TStateBoss.Down && bossInstance.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() <= 0)
 				{
-					estadoJefe = TStateBoss.Up;
+					mBossState = TStateBoss.Up;
 				}	
-				else if (estadoJefe == TStateBoss.Up && jefe.getCoordY() + jefe.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() >= getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+				else if (mBossState == TStateBoss.Up && bossInstance.getCoordY() + bossInstance.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() >= getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 				{
-					estadoJefe = TStateBoss.Down;
+					mBossState = TStateBoss.Down;
 				}
-				else if (estadoJefe == TStateBoss.Attack)
+				else if (mBossState == TStateBoss.Attack)
 				{
-					numIteraciones = 10;
+					animationFrames = 10;
 					
-					if (disparoJefe.isActive())
+					if (bossShot.isActive())
 					{
-						numIteraciones = 0;
-						estadoJefe = TStateBoss.Nothing;
+						animationFrames = 0;
+						mBossState = TStateBoss.Nothing;
 					}
 				}
 				
-				lider.animateTexture();
-				return protagonista.animateTexture();
+				boss.animateTexture();
+				return character.animateTexture();
 			}
 		}
-		else if (estadoJefe == TStateBoss.Up)
+		else if (mBossState == TStateBoss.Up)
 		{	
-			if (jefe.getCoordY() + jefe.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+			if (bossInstance.getCoordY() + bossInstance.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
-				jefe.up();
+				bossInstance.up();
 			}
 			else
 			{
-				estadoJefe = TStateBoss.Nothing;
+				mBossState = TStateBoss.Nothing;
 			}
 		}
-		else if (estadoJefe == TStateBoss.Down)
+		else if (mBossState == TStateBoss.Down)
 		{
-			if (jefe.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
+			if (bossInstance.getCoordY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
-				jefe.down();
+				bossInstance.down();
 			}
 			else
 			{
-				estadoJefe = TStateBoss.Nothing;
+				mBossState = TStateBoss.Nothing;
 			}
 		}
-		else if (estadoJefe == TStateBoss.Attack)
+		else if (mBossState == TStateBoss.Attack)
 		{
-			disparoJefe.activate();
-			plataformaJefe.shoot();
+			bossShot.activate();
+			bossPlatform.shoot();
 		}
 	
-		numIteraciones--;
-		if (numIteraciones == 0)
+		animationFrames--;
+		if (animationFrames == 0)
 		{
-			estadoJefe = TStateBoss.Nothing;
+			mBossState = TStateBoss.Nothing;
 		}
 			
-		lider.animateTexture();
-		return protagonista.animateTexture();
+		boss.animateTexture();
+		return character.animateTexture();
 	}
 
 	/* Métodos de Obtención de Información */
@@ -495,49 +495,49 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		// Final del juego
 		if (isBackgroundEnded())
 		{
-			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
+			score += GamePreferences.SCORE_LEVEL_COMPLETED;
 			GamePreferences.SET_GAME_PARAMETERS(TStateGame.BossPhase);
 			
-			protagonista.stopAnimation();
-			plataformaPersonaje.activate();
+			character.stopAnimation();
+			characterPlatform.activate();
 			
-			personaje.setDimensions(protagonista.getHeight(), protagonista.getWidth());
-			jefe.setDimensions(lider.getHeight(), lider.getWidth());
+			characterInstance.setDimensions(character.getHeight(), character.getWidth());
+			bossInstance.setDimensions(boss.getHeight(), boss.getWidth());
 		
-			jefe.setPosicion(getScreenWidth() - 2*GamePreferences.DISTANCE_GAME_RIGHT() - jefe.getWidth(), 0.0f);
+			bossInstance.setPosicion(getScreenWidth() - 2*GamePreferences.DISTANCE_GAME_RIGHT() - bossInstance.getWidth(), 0.0f);
 			
-			burbujaJefe.activate();
-			plataformaJefe.activate();
+			bossShield.activate();
+			bossPlatform.activate();
 			
 			return TEventGame.EnemiesPhaseEnded;
 		}
 		
 		// Colision con enemigo actual
-		if (posEnemigoActual < listaEnemigos.size())
+		if (enemyActual < enemiesList.size())
 		{
-			InstanceEntity instancia = listaEnemigos.get(posEnemigoActual);			
-			TStateCollision colision = personaje.collision(instancia, protagonista.getMovementActual());
+			InstanceEntity instancia = enemiesList.get(enemyActual);			
+			TStateCollision colision = characterInstance.collision(instancia, character.getMovementActual());
 			
 			switch (colision)
 			{
 				case EnemyDefeated:
-					posEnemigoActual++;
+					enemyActual++;
 					
-					puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
+					score += GamePreferences.SCORE_ACTION_RIGHT;
 					return TEventGame.ScoreChanged;
 				case EnemyCollision:
-					posEnemigoActual++;
+					enemyActual++;
 					
 					if (!GamePreferences.IS_DEBUG_ENABLED())
 					{
-						burbujaPersonaje.loseLife();
+						characterShield.loseLife();
 					}
 					
-					puntuacion += GamePreferences.SCORE_CHARACTER_LOSE_LIFE;
+					score += GamePreferences.SCORE_CHARACTER_LOSE_LIFE;
 	
-					if (!burbujaPersonaje.isAlive())
+					if (!characterShield.isAlive())
 					{					
-						protagonista.stopAnimation();
+						character.stopAnimation();
 						return TEventGame.GameOver;
 					}
 					
@@ -548,9 +548,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		
 		// Cambio de puntuación de obstáculos y misiles
-		if (puntuacionModificada)
+		if (scoreModified)
 		{
-			puntuacionModificada = false;
+			scoreModified = false;
 			
 			return TEventGame.ScoreChanged;
 		}
@@ -560,28 +560,28 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	private TEventGame isGameEndedBossPhase()
 	{
-		if (disparoPersonaje.getCoordX() > getScreenWidth())
+		if (characterShot.getCoordX() > getScreenWidth())
 		{
-			disparoPersonaje.deactivate();
+			characterShot.deactivate();
 		}
 		
-		if (disparoJefe.getCoordX() < 0)
+		if (bossShot.getCoordX() < 0)
 		{
-			disparoJefe.deactivate();
+			bossShot.deactivate();
 		}
 		
-		if (personaje.collision(disparoJefe) == TStateCollision.EnemyCollision)
+		if (characterInstance.collision(bossShot) == TStateCollision.EnemyCollision)
 		{
 			if (!GamePreferences.IS_DEBUG_ENABLED())
 			{
-				burbujaPersonaje.loseLife();
+				characterShield.loseLife();
 			}
 			
-			disparoJefe.deactivate();
+			bossShot.deactivate();
 			
-			puntuacion += GamePreferences.SCORE_CHARACTER_LOSE_LIFE;
+			score += GamePreferences.SCORE_CHARACTER_LOSE_LIFE;
 			
-			if (!burbujaPersonaje.isAlive())
+			if (!characterShield.isAlive())
 			{
 				return TEventGame.GameOver;
 			}
@@ -589,14 +589,14 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			return TEventGame.CharacterLifeLost;
 		}
 		
-		if (jefe.collision(disparoPersonaje) == TStateCollision.EnemyCollision)
+		if (bossInstance.collision(characterShot) == TStateCollision.EnemyCollision)
 		{
-			burbujaJefe.loseLife();
-			disparoPersonaje.deactivate();
+			bossShield.loseLife();
+			characterShot.deactivate();
 			
-			puntuacion += GamePreferences.SCORE_BOSS_LOSE_LIFE;
+			score += GamePreferences.SCORE_BOSS_LOSE_LIFE;
 			
-			if (!burbujaJefe.isAlive())
+			if (!bossShield.isAlive())
 			{
 				return TEventGame.BossPhaseEnded;
 			}
@@ -607,19 +607,19 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return TEventGame.Nothing;
 	}
 	
-	public int getPuntuacion()
+	public int getScore()
 	{
-		return puntuacion;
+		return score;
 	}
 	
-	public int getVidasPersonaje()
+	public int getCharacterLives()
 	{
-		return burbujaPersonaje.getLives();
+		return characterShield.getLives();
 	}
 	
-	public int getVidasBoss() 
+	public int getBossLives() 
 	{
-		return burbujaJefe.getLives();
+		return bossShield.getLives();
 	}
 
 	/* Métodos de Guardado de Información */
@@ -627,18 +627,18 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	public BackgroundDataSaved saveData()
 	{
 		// Personaje
-		protagonista.deleteTexture(this);
-		plataformaPersonaje.deleteTexture(this);
-		burbujaPersonaje.deleteTexture(this);
-		disparoPersonaje.deleteTexture(this);
+		character.deleteTexture(this);
+		characterPlatform.deleteTexture(this);
+		characterShield.deleteTexture(this);
+		characterShot.deleteTexture(this);
 
-		lider.deleteTexture(this);
-		plataformaJefe.deleteTexture(this);
-		burbujaJefe.deleteTexture(this);
-		disparoJefe.deleteTexture(this);
+		boss.deleteTexture(this);
+		bossPlatform.deleteTexture(this);
+		bossShield.deleteTexture(this);
+		bossShot.deleteTexture(this);
 		
 		// Lista Enemigos
-		Iterator<Entity> it = tipoEnemigos.iterator();
+		Iterator<Entity> it = enemiesTypes.iterator();
 		while (it.hasNext())
 		{
 			it.next().deleteTexture(this);

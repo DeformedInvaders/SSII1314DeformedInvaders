@@ -18,15 +18,15 @@ import com.main.model.GamePreferences;
 
 public class DisplayOpenGLRenderer extends OpenGLRenderer 
 {
-	private TStateDisplay estado;
+	private TStateDisplay mState;
 
 	// Personaje
-	private Character personaje;
-	private boolean personajeCargado;
+	private Character character;
+	private boolean characterLoaded;
 
 	// Captura
-	private Bitmap captura;
-	private TStateScreenshot estadoCaptura;
+	private Bitmap screenshot;
+	private TStateScreenshot mStateScreenshot;
 
 	/* Constructura */
 
@@ -36,10 +36,10 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		GamePreferences.SET_GAME_PARAMETERS(TStateGame.Nothing);
 		
-		personajeCargado = false;
+		characterLoaded = false;
 
-		estado = TStateDisplay.Nothing;
-		estadoCaptura = TStateScreenshot.Nothing;
+		mState = TStateDisplay.Nothing;
+		mStateScreenshot = TStateScreenshot.Nothing;
 	}
 
 	public DisplayOpenGLRenderer(Context context, Character p)
@@ -48,11 +48,11 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 		
 		GamePreferences.SET_GAME_PARAMETERS(TStateGame.Nothing);
 		
-		personajeCargado = true;
-		personaje = p;
+		characterLoaded = true;
+		character = p;
 
-		estado = TStateDisplay.Nothing;
-		estadoCaptura = TStateScreenshot.Nothing;
+		mState = TStateDisplay.Nothing;
+		mStateScreenshot = TStateScreenshot.Nothing;
 	}
 
 	/* Métodos Renderer */
@@ -62,9 +62,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceCreated(gl, config);
 
-		if (personajeCargado)
+		if (characterLoaded)
 		{
-			personaje.loadTexture(gl, this, mContext);
+			character.loadTexture(gl, this, mContext);
 		}
 	}
 
@@ -73,9 +73,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 
-		if (personajeCargado)
+		if (characterLoaded)
 		{
-			if (estadoCaptura == TStateScreenshot.Preparing)
+			if (mStateScreenshot == TStateScreenshot.Preparing)
 			{
 				// Marco Oscuro
 				drawFrameInside(gl, Color.WHITE, GamePreferences.DEEP_INSIDE_FRAMES);
@@ -84,23 +84,23 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			// Centrado de Marco
 			drawInsideFrameBegin(gl);
 
-			personaje.drawTexture(gl, this);
+			character.drawTexture(gl, this);
 
 			// Centrado de Marco
 			drawInsideFrameEnd(gl);
 
-			if (estado == TStateDisplay.Nothing || estado == TStateDisplay.Screenshot)
+			if (mState == TStateDisplay.Nothing || mState == TStateDisplay.Screenshot)
 			{
-				if (estado == TStateDisplay.Screenshot)
+				if (mState == TStateDisplay.Screenshot)
 				{
-					if (estadoCaptura == TStateScreenshot.Capturing)
+					if (mStateScreenshot == TStateScreenshot.Capturing)
 					{
 						// Capturar Pantalla
 						BitmapImage textura = getScreenshot(gl);
-						captura = textura.getBitmap();
+						screenshot = textura.getBitmap();
 
 						// Desactivar Modo Captura
-						estadoCaptura = TStateScreenshot.Finished;
+						mStateScreenshot = TStateScreenshot.Finished;
 
 						// Restaurar posición anterior de la Cámara
 						camaraRestore();
@@ -111,7 +111,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						// Centrado de Marco
 						drawInsideFrameBegin(gl);
 
-						personaje.drawTexture(gl, this);
+						character.drawTexture(gl, this);
 
 						// Centrado de Marco
 						drawInsideFrameEnd(gl);
@@ -123,84 +123,84 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	/* Métodos de Modificación de Estado */
 
-	public void seleccionarRetoque(float height, float width)
+	public void selectPreparing(float height, float width)
 	{
-		estado = TStateDisplay.Screenshot;
-		estadoCaptura = TStateScreenshot.Preparing;
+		mState = TStateDisplay.Screenshot;
+		mStateScreenshot = TStateScreenshot.Preparing;
 	}
 
-	public void seleccionarCaptura()
+	public void selectCapturing()
 	{
-		if (estado == TStateDisplay.Screenshot)
+		if (mState == TStateDisplay.Screenshot)
 		{
-			estadoCaptura = TStateScreenshot.Capturing;
+			mStateScreenshot = TStateScreenshot.Capturing;
 		}
 	}
 
-	public void seleccionarTerminado()
+	public void selectFinished()
 	{
-		if (estado == TStateDisplay.Screenshot)
+		if (mState == TStateDisplay.Screenshot)
 		{
-			estado = TStateDisplay.Nothing;
-			estadoCaptura = TStateScreenshot.Nothing;
+			mState = TStateDisplay.Nothing;
+			mStateScreenshot = TStateScreenshot.Nothing;
 		}
 	}
 
-	public boolean reproducirAnimacion()
+	public boolean playAnimation()
 	{
-		return personaje.animateTexture();
+		return character.animateTexture();
 	}
 
-	public void seleccionarReposo()
+	public void stopAnimation()
 	{
-		personaje.stopAnimation();
+		character.stopAnimation();
 		
-		estado = TStateDisplay.Nothing;
-		estadoCaptura = TStateScreenshot.Nothing;
+		mState = TStateDisplay.Nothing;
+		mStateScreenshot = TStateScreenshot.Nothing;
 	}
 
-	public void seleccionarAnimacion(TTypeMovement movimiento)
+	public void startAnimation(TTypeMovement movimiento)
 	{
-		personaje.selectMovement(movimiento);
+		character.selectMovement(movimiento);
 		
-		estado = TStateDisplay.Animation;
-		estadoCaptura = TStateScreenshot.Nothing;
+		mState = TStateDisplay.Animation;
+		mStateScreenshot = TStateScreenshot.Nothing;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isEstadoReposo()
+	public boolean isStateNothing()
 	{
-		return estado == TStateDisplay.Nothing;
+		return mState == TStateDisplay.Nothing;
 	}
 
-	public boolean isEstadoRetoque()
+	public boolean isStatePreparing()
 	{
-		return estado == TStateDisplay.Screenshot && estadoCaptura == TStateScreenshot.Preparing;
+		return mState == TStateDisplay.Screenshot && mStateScreenshot == TStateScreenshot.Preparing;
 	}
 
-	public boolean isEstadoCapturando()
+	public boolean isStateCapturing()
 	{
-		return estado == TStateDisplay.Screenshot && estadoCaptura == TStateScreenshot.Capturing;
+		return mState == TStateDisplay.Screenshot && mStateScreenshot == TStateScreenshot.Capturing;
 	}
 
-	public boolean isEstadoTerminado()
+	public boolean isStateFinished()
 	{
-		return estado == TStateDisplay.Screenshot && estadoCaptura == TStateScreenshot.Finished;
+		return mState == TStateDisplay.Screenshot && mStateScreenshot == TStateScreenshot.Finished;
 	}
 
-	public boolean isEstadoAnimacion()
+	public boolean isStateAnimation()
 	{
-		return estado != TStateDisplay.Nothing && estado != TStateDisplay.Screenshot;
+		return mState != TStateDisplay.Nothing && mState != TStateDisplay.Screenshot;
 	}
 
-	public Bitmap getCapturaPantalla()
+	public Bitmap getScreenshot()
 	{
-		if (estadoCaptura == TStateScreenshot.Capturing)
+		if (mStateScreenshot == TStateScreenshot.Capturing)
 		{
-			while (estadoCaptura != TStateScreenshot.Finished);
+			while (mStateScreenshot != TStateScreenshot.Finished);
 
-			return captura;
+			return screenshot;
 		}
 
 		return null;
@@ -210,9 +210,9 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public void saveData()
 	{
-		if (personajeCargado)
+		if (characterLoaded)
 		{
-			personaje.deleteTexture(this);
+			character.deleteTexture(this);
 		}
 	}
 }

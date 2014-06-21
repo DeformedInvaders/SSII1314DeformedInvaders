@@ -13,7 +13,7 @@ import com.game.data.Character;
 public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 {	
 	// Renderer
-	private PaintOpenGLRenderer renderer;
+	private PaintOpenGLRenderer mRenderer;
 
 	/* Constructora */
 
@@ -25,8 +25,8 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 	public void setParameters(Character personaje)
 	{		
 		// Asignar Renderer al GLSurfaceView
-		renderer = new PaintOpenGLRenderer(getContext(), Color.WHITE, personaje);
-		setRenderer(renderer);
+		mRenderer = new PaintOpenGLRenderer(getContext(), Color.WHITE, personaje);
+		setRenderer(mRenderer);
 	}
 
 	/* Métodos Abstráctos OpenGLSurfaceView */
@@ -34,155 +34,155 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchDown(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchDown(x, y, width, height, pos);
+		return mRenderer.onTouchDown(x, y, width, height, pos);
 	}
 
 	@Override
 	protected boolean onTouchMove(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchMove(x, y, width, height, pos);
+		return mRenderer.onTouchMove(x, y, width, height, pos);
 	}
 
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
-		return renderer.onTouchUp(x, y, width, height, pos);
+		return mRenderer.onTouchUp(x, y, width, height, pos);
 	}
 
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarNada()
+	public void selectNothing()
 	{
-		renderer.seleccionarNada();
+		mRenderer.selectNothing();
 		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 	
-	public void seleccionarMano()
+	public void selectHand()
 	{
-		renderer.seleccionarMano();
+		mRenderer.selectHand();
 		setDetectorState(TStateDetector.CamaraDetectors);
 		requestRender();
 	}
 
-	public void seleccionarPincel()
+	public void selectPencil()
 	{
-		renderer.seleccionarPincel();
+		mRenderer.selectPencil();
 		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 
-	public void seleccionarCubo()
+	public void selectBucket()
 	{
-		renderer.seleccionarCubo();
+		mRenderer.selectBucket();
 		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 
-	public void seleccionarColor(int color)
+	public void selectColor(int color)
 	{
-		renderer.seleccionarColor(color);
+		mRenderer.selectColor(color);
 		setDetectorState(TStateDetector.SimpleTouch);
 	}
 
-	public void seleccionarSize(TTypeSize size)
+	public void selectSize(TTypeSize size)
 	{
-		renderer.seleccionarSize(size);
+		mRenderer.selectSize(size);
 	}
 
-	public void anyadirPegatina(int pegatina, TTypeSticker tipo)
+	public void addSticker(int sticker, TTypeSticker type)
 	{
-		renderer.seleccionarPegatina(pegatina, tipo);
+		mRenderer.addSticker(sticker, type);
 		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 	
-	public void eliminarPegatina(TTypeSticker tipo)
+	public void deleteSticker(TTypeSticker type)
 	{
-		renderer.eliminarPegatina(tipo);
+		mRenderer.deleteSticker(type);
 		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();		
 	}
 	
-	public void editarPegatina(TTypeSticker tipo)
+	public void editSticker(TTypeSticker type)
 	{
-		renderer.editarPegatina(tipo);
+		mRenderer.editSticker(type);
 		setDetectorState(TStateDetector.CoordDetectors);
 		requestRender();
 	}
 
-	public void anteriorAccion()
+	public void prevAction()
 	{
-		renderer.anteriorAccion();
+		mRenderer.prevAction();
 		requestRender();
 	}
 
-	public void siguienteAccion()
+	public void nextAction()
 	{
-		renderer.siguienteAccion();
+		mRenderer.nextAction();
 		requestRender();
 	}
 
-	public void reiniciar()
+	public void selectReset()
 	{
-		renderer.onReset();
+		mRenderer.onReset();
 		requestRender();
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public boolean isBufferSiguienteVacio()
+	public boolean isNextBufferEmpty()
 	{
-		return renderer.isBufferSiguienteVacio();
+		return mRenderer.isNextBufferEmpty();
 	}
 
-	public boolean isBufferAnteriorVacio()
+	public boolean isPrevBufferEmpty()
 	{
-		return renderer.isBufferAnteriorVacio();
+		return mRenderer.isPrevBufferEmpty();
 	}
 
-	public boolean isPegatinaAnyadida()
+	public boolean isStickerAdded()
 	{
-		return renderer.isPegatinaAnyadida();
+		return mRenderer.isStickerAdded();
 	}
 
-	public boolean isEstadoPincel()
+	public boolean isStatePencil()
 	{
-		return renderer.isEstadoPincel();
+		return mRenderer.isStatePencil();
 	}
 
-	public boolean isEstadoCubo()
+	public boolean isStateBucket()
 	{
-		return renderer.isEstadoCubo();
+		return mRenderer.isStateBucket();
 	}
 
-	public boolean isEstadoMover()
+	public boolean isStateHand()
 	{
-		return renderer.isEstadoMover();
+		return mRenderer.isStateHand();
 	}
 
-	public boolean isEstadoPegatinas()
+	public boolean isStateSticker()
 	{
-		return renderer.isEstadoPegatinas();
+		return mRenderer.isStateSticker();
 	}
 	
-	public Texture getTextura()
+	public Texture getTexture()
 	{
-		renderer.seleccionarCaptura();
+		mRenderer.seleccionarCaptura();
 		requestRender();
-		return renderer.getTextura();
+		return mRenderer.getTexture();
 	}
 
 	/* Métodos de Guardado de Información */
 
 	public PaintDataSaved saveData()
 	{
-		return renderer.saveData();
+		return mRenderer.saveData();
 	}
 
 	public void restoreData(PaintDataSaved data)
 	{
-		renderer.restoreData(data);
+		mRenderer.restoreData(data);
 		requestRender();
 	}
 }

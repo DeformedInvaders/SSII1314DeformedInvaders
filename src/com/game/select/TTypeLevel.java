@@ -66,7 +66,7 @@ public enum TTypeLevel
 		}		
 	}
 	
-	public int getMusica()
+	public int getMusic()
 	{
 		switch(this)
 		{
@@ -85,7 +85,7 @@ public enum TTypeLevel
 		}		
 	}
 	
-	public int getFondoSol()
+	public int getSunBackground()
 	{
 		if (GamePreferences.IS_LONG_RATIO())
 		{
@@ -125,7 +125,7 @@ public enum TTypeLevel
 		}
 	}
 	
-	public int getFondoDisplay()
+	public int getDisplayBackground()
 	{
 		if(GamePreferences.IS_LONG_RATIO())
 		{

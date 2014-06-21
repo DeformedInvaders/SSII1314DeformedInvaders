@@ -23,24 +23,24 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 {	
 	private OnCharacterListener mListener;
 	
-	private DisplayOpenGLSurfaceView canvas;
-	private IconImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonRedeform, botonDelete, botonRename, botonExport;
+	private DisplayOpenGLSurfaceView mCanvas;
+	private IconImageButton buttonCamera, buttonRun, buttonJump, buttonCrouch, buttonAttack, buttonReady, buttonRepaint, buttonRedeform, buttonDelete, buttonRename, buttonExport;
 
-	private Character personaje;
+	private Character mCharacter;
 	
 	/* Constructora */
 
-	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Character personaje)
+	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Character character)
 	{
 		CharacterSelectFragment fragment = new CharacterSelectFragment();
-		fragment.setParameters(listener, personaje);
+		fragment.setParameters(listener, character);
 		return fragment;
 	}
 
-	private void setParameters(OnCharacterListener l, Character p)
+	private void setParameters(OnCharacterListener listener, Character character)
 	{
-		mListener = l;
-		personaje = p;
+		mListener = listener;
+		mCharacter = character;
 	}
 
 	/* Métodos Fragment */
@@ -51,40 +51,40 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		View rootView = inflater.inflate(R.layout.fragment_character_select_layout, container, false);
 
 		// Instanciar Elementos de la GUI
-		canvas = (DisplayOpenGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
-		canvas.setParameters(this, personaje, false);
+		mCanvas = (DisplayOpenGLSurfaceView) rootView.findViewById(R.id.displayGLSurfaceViewCharacterSelect1);
+		mCanvas.setParameters(this, mCharacter, false);
 		
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GameResources.FONT_LOGO_PATH);
 		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewCharacterSelect1);
-		textBackground.setText(personaje.getName());
+		textBackground.setText(mCharacter.getName());
 		textBackground.setTypeface(textFont);
 
-		botonCamara = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
-		botonRun = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect2);
-		botonJump = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect3);
-		botonCrouch = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect4);
-		botonAttack = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
-		botonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
-		botonRepaint = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
-		botonRedeform = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect11);
-		botonRename = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect9);
-		botonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
-		botonExport = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect10);
+		buttonCamera = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
+		buttonRun = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect2);
+		buttonJump = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect3);
+		buttonCrouch = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect4);
+		buttonAttack = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect5);
+		buttonReady = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect6);
+		buttonRepaint = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect8);
+		buttonRedeform = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect11);
+		buttonRename = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect9);
+		buttonDelete = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect7);
+		buttonExport = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect10);
 		
-		botonCamara.setOnClickListener(new OnCamaraClickListener());
-		botonRun.setOnClickListener(new OnRunClickListener());
-		botonJump.setOnClickListener(new OnJumpClickListener());
-		botonCrouch.setOnClickListener(new OnCrouchClickListener());
-		botonAttack.setOnClickListener(new OnAttackClickListener());
-		botonReady.setOnClickListener(new OnReadyClickListener());
-		botonRepaint.setOnClickListener(new OnRepaintClickListener());
-		botonRedeform.setOnClickListener(new OnRedeformClickListener());
-		botonDelete.setOnClickListener(new OnDeleteClickListener());
-		botonRename.setOnClickListener(new OnRenameClickListener());
-		botonExport.setOnClickListener(new OnExportClickListener());
+		buttonCamera.setOnClickListener(new OnCameraClickListener());
+		buttonRun.setOnClickListener(new OnRunClickListener());
+		buttonJump.setOnClickListener(new OnJumpClickListener());
+		buttonCrouch.setOnClickListener(new OnCrouchClickListener());
+		buttonAttack.setOnClickListener(new OnAttackClickListener());
+		buttonReady.setOnClickListener(new OnReadyClickListener());
+		buttonRepaint.setOnClickListener(new OnRepaintClickListener());
+		buttonRedeform.setOnClickListener(new OnRedeformClickListener());
+		buttonDelete.setOnClickListener(new OnDeleteClickListener());
+		buttonRename.setOnClickListener(new OnRenameClickListener());
+		buttonExport.setOnClickListener(new OnExportClickListener());
 
-		setCanvasListener(canvas);
+		setCanvasListener(mCanvas);
 
 		resetInterface();
 		updateInterface();
@@ -96,33 +96,33 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	{
 		super.onDestroyView();
 		
-		canvas = null;
-		botonReady = null;
-		botonDelete = null;
-		botonCamara = null;
-		botonRun = null;
-		botonJump = null;
-		botonCrouch = null;
-		botonAttack = null;
-		botonRepaint = null;
-		botonRedeform = null;
-		botonRename = null;
-		botonExport = null;
+		mCanvas = null;
+		buttonReady = null;
+		buttonDelete = null;
+		buttonCamera = null;
+		buttonRun = null;
+		buttonJump = null;
+		buttonCrouch = null;
+		buttonAttack = null;
+		buttonRepaint = null;
+		buttonRedeform = null;
+		buttonRename = null;
+		buttonExport = null;
 	}
 
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		canvas.onResume();
+		mCanvas.onResume();
 	}
 
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		canvas.saveData();
-		canvas.onPause();
+		mCanvas.saveData();
+		mCanvas.onPause();
 	}
 
 	/* Métodos abstractos de OpenGLFragment */
@@ -130,69 +130,69 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	@Override
 	protected void resetInterface()
 	{
-		botonCamara.setVisibility(View.INVISIBLE);
-		botonRun.setVisibility(View.INVISIBLE);
-		botonJump.setVisibility(View.INVISIBLE);
-		botonCrouch.setVisibility(View.INVISIBLE);
-		botonAttack.setVisibility(View.INVISIBLE);
-		botonReady.setVisibility(View.INVISIBLE);
-		botonDelete.setVisibility(View.INVISIBLE);
-		botonRepaint.setVisibility(View.INVISIBLE);
-		botonRedeform.setVisibility(View.INVISIBLE);
-		botonRename.setVisibility(View.INVISIBLE);
-		botonExport.setVisibility(View.INVISIBLE);
+		buttonCamera.setVisibility(View.INVISIBLE);
+		buttonRun.setVisibility(View.INVISIBLE);
+		buttonJump.setVisibility(View.INVISIBLE);
+		buttonCrouch.setVisibility(View.INVISIBLE);
+		buttonAttack.setVisibility(View.INVISIBLE);
+		buttonReady.setVisibility(View.INVISIBLE);
+		buttonDelete.setVisibility(View.INVISIBLE);
+		buttonRepaint.setVisibility(View.INVISIBLE);
+		buttonRedeform.setVisibility(View.INVISIBLE);
+		buttonRename.setVisibility(View.INVISIBLE);
+		buttonExport.setVisibility(View.INVISIBLE);
 
-		botonCamara.setBackgroundResource(R.drawable.icon_share_picture);
+		buttonCamera.setBackgroundResource(R.drawable.icon_share_picture);
 	}
 
 	@Override
 	protected void updateInterface()
 	{
-		if (canvas.isEstadoReposo() || !canvas.isEstadoAnimacion())
+		if (mCanvas.isStateNothing() || !mCanvas.isStateAnimation())
 		{
-			botonCamara.setVisibility(View.VISIBLE);
+			buttonCamera.setVisibility(View.VISIBLE);
 		}
 
-		if (canvas.isEstadoReposo() || canvas.isEstadoAnimacion())
+		if (mCanvas.isStateNothing() || mCanvas.isStateAnimation())
 		{
-			botonRun.setVisibility(View.VISIBLE);
-			botonJump.setVisibility(View.VISIBLE);
-			botonCrouch.setVisibility(View.VISIBLE);
-			botonAttack.setVisibility(View.VISIBLE);
-			botonReady.setVisibility(View.VISIBLE);
-			botonDelete.setVisibility(View.VISIBLE);
-			botonRepaint.setVisibility(View.VISIBLE);
-			botonRedeform.setVisibility(View.VISIBLE);
-			botonRename.setVisibility(View.VISIBLE);
-			botonExport.setVisibility(View.VISIBLE);
+			buttonRun.setVisibility(View.VISIBLE);
+			buttonJump.setVisibility(View.VISIBLE);
+			buttonCrouch.setVisibility(View.VISIBLE);
+			buttonAttack.setVisibility(View.VISIBLE);
+			buttonReady.setVisibility(View.VISIBLE);
+			buttonDelete.setVisibility(View.VISIBLE);
+			buttonRepaint.setVisibility(View.VISIBLE);
+			buttonRedeform.setVisibility(View.VISIBLE);
+			buttonRename.setVisibility(View.VISIBLE);
+			buttonExport.setVisibility(View.VISIBLE);
 		}
 
-		if (canvas.isEstadoRetoque())
+		if (mCanvas.isStatePreparing())
 		{
-			botonCamara.setBackgroundResource(R.drawable.icon_share_camara);
+			buttonCamera.setBackgroundResource(R.drawable.icon_share_camara);
 		}
-		else if (canvas.isEstadoTerminado())
+		else if (mCanvas.isStateFinished())
 		{
-			botonCamara.setBackgroundResource(R.drawable.icon_share_post);
+			buttonCamera.setBackgroundResource(R.drawable.icon_share_post);
 		}
 	}
 
 	/* Métodos Listener onClick */
 
-	public class OnCamaraClickListener implements OnClickListener
+	public class OnCameraClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View v)
 		{
-			if (canvas.isEstadoReposo())
+			if (mCanvas.isStateNothing())
 			{
-				canvas.seleccionarRetoque();
+				mCanvas.selectPreparing();
 				mListener.onSetSwipeable(false);
 			}
-			else if (canvas.isEstadoRetoque())
+			else if (mCanvas.isStatePreparing())
 			{				
-				final Bitmap bitmap = canvas.getCapturaPantalla();
-				String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getName() + " " + getString(R.string.text_social_create_character_final);
+				final Bitmap bitmap = mCanvas.getScreenshot();
+				String text = getString(R.string.text_social_create_character_initial) + " " + mCharacter.getName() + " " + getString(R.string.text_social_create_character_final);
 
 				TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel, false) {
 					@Override
@@ -201,7 +201,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 						mListener.onPostPublished(text, bitmap);
 						mListener.onSetSwipeable(true);
 						
-						canvas.seleccionarTerminado();
+						mCanvas.selectFinished();
 
 						resetInterface();
 						updateInterface();
@@ -210,7 +210,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 					@Override
 					public void onNegativeButtonClick(String text)
 					{
-						canvas.seleccionarTerminado();
+						mCanvas.selectFinished();
 						mListener.onSetSwipeable(true);
 
 						resetInterface();
@@ -236,7 +236,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTypeMovement.Run);
+			mCanvas.startAnimation(TTypeMovement.Run);
 		}
 	}
 
@@ -245,7 +245,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTypeMovement.Jump);
+			mCanvas.startAnimation(TTypeMovement.Jump);
 		}
 	}
 
@@ -254,7 +254,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTypeMovement.Crouch);
+			mCanvas.startAnimation(TTypeMovement.Crouch);
 		}
 	}
 
@@ -263,7 +263,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTypeMovement.Attack);
+			mCanvas.startAnimation(TTypeMovement.Attack);
 		}
 	}
 	

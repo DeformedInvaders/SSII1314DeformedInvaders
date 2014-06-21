@@ -13,19 +13,19 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	private OnVideoListener mListener;
 	
-	private TStateVideo estado;
-	private Video video;
+	private TStateVideo mState;
+	private Video mVideo;
 	
-	private VideoOpenGLRenderer renderer;
+	private VideoOpenGLRenderer mRenderer;
 	
-	private boolean threadActivo;
+	private boolean threadActive;
 	private Handler handler;
 	private Runnable task;
 	
-	private int[] mensajes;
-	private int posMensaje;
+	private int[] mQuoteList;
+	private int quotePosition;
 	
-	private long tiempoInicio, tiempoDuracion;
+	private long timeStart, timeDuration;
 
 	/* Constructora */
 
@@ -34,22 +34,22 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		super(context, attrs, TStateDetector.SimpleTouch, false);
 	}
 
-	public void setParameters(OnVideoListener listener, Video v)
+	public void setParameters(OnVideoListener listener, Video video)
 	{		
 		mListener = listener;
 		
-		video = v;
-		estado = TStateVideo.Nothing;
-		threadActivo = false;
+		mVideo = video;
+		mState = TStateVideo.Nothing;
+		threadActive = false;
 		
-		posMensaje = 0;
+		quotePosition = 0;
 		
-		tiempoInicio = System.currentTimeMillis();
-		tiempoDuracion = 0;
+		timeStart = System.currentTimeMillis();
+		timeDuration = 0;
 		
 		// Asignar Renderer al GLSurfaceView
-		renderer = new VideoOpenGLRenderer(getContext(), video);
-		setRenderer(renderer);
+		mRenderer = new VideoOpenGLRenderer(getContext(), mVideo);
+		setRenderer(mRenderer);
 
 		handler = new Handler();
 
@@ -57,42 +57,42 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 			@Override
 			public void run()
 			{
-				if (threadActivo)
+				if (threadActive)
 				{
 					long tiempoActual = System.currentTimeMillis();
 					
 					// Fin de Ciclo de Escena
-					if (tiempoActual - tiempoInicio >= tiempoDuracion)
+					if (tiempoActual - timeStart >= timeDuration)
 					{
 						// Fin de Video
-						if (estado == TStateVideo.Space)
+						if (mState == TStateVideo.Space)
 						{
-							threadActivo = false;
+							threadActive = false;
 							
 							mListener.onDismissDialog();
 							mListener.onVideoFinished();
 						}
 						
 						// Fin de Escena
-						if (mensajes == null || posMensaje >= mensajes.length)
+						if (mQuoteList == null || quotePosition >= mQuoteList.length)
 						{
-							estado = estado.getNext();
+							mState = mState.getNext();
 							
 							mListener.onDismissDialog();
-							mensajes = video.getQuote(estado);
-							posMensaje = 0;
+							mQuoteList = mVideo.getQuote(mState);
+							quotePosition = 0;
 							
-							renderer.seleccionarEstado(estado);
+							mRenderer.selectScene(mState);
 							
-							if (estado != TStateVideo.Outside)
+							if (mState != TStateVideo.Outside)
 							{
-								renderer.avanzarEscena();
+								mRenderer.nextScene();
 								requestRender();
 							}
 							
-							long duration = estado.getDuration();
-							int music = estado.getMusic();
-							int sound = estado.getSound();
+							long duration = mState.getDuration();
+							int music = mState.getMusic();
+							int sound = mState.getSound();
 							
 							if (sound != -1)
 							{
@@ -106,18 +106,18 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 							
 							if (duration != -1)
 							{
-								tiempoInicio = tiempoActual;
-								tiempoDuracion = duration;
+								timeStart = tiempoActual;
+								timeDuration = duration;
 							}
 						}
 						
-						if (mensajes != null)
+						if (mQuoteList != null)
 						{
-							mListener.onChangeDialog(mensajes[posMensaje], estado);
-							tiempoInicio = tiempoActual;
-							posMensaje++;
+							mListener.onChangeDialog(mQuoteList[quotePosition], mState);
+							timeStart = tiempoActual;
+							quotePosition++;
 							
-							int sound = estado.getSound();
+							int sound = mState.getSound();
 							
 							if (sound != -1)
 							{
@@ -127,12 +127,12 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 					}
 					
 					// Cambio de Ciclo de Escena
-					if (estado == TStateVideo.Door)
+					if (mState == TStateVideo.Door)
 					{
-						renderer.acercarEscena(0.999f);
+						mRenderer.zoomScene(0.999f);
 					}
 					
-					renderer.animarEscena();
+					mRenderer.playAnimation();
 					requestRender();
 					handler.postDelayed(this, GamePreferences.TIME_INTERVAL_ANIMATION_VIDEO());
 				}
@@ -142,18 +142,18 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	public void seleccionarResume()
 	{
-		if (!threadActivo)
+		if (!threadActive)
 		{
-			threadActivo = true;
+			threadActive = true;
 			task.run();
 		}
 	}
 
 	public void seleccionarPause()
 	{
-		if (threadActivo)
+		if (threadActive)
 		{
-			threadActivo = false;
+			threadActive = false;
 			handler.removeCallbacks(task);
 		}
 	}
@@ -163,13 +163,13 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 	@Override
 	protected boolean onTouchUp(float x, float y, float width, float height, int pos)
 	{
-		if (renderer.onTouchUp(x, y, width, height, pos))
+		if (mRenderer.onTouchUp(x, y, width, height, pos))
 		{
-			int sonido = renderer.getSonidoActivado();
+			int sonido = mRenderer.getSoundActive();
 			if (sonido != -1)
 			{
 				mListener.onPlaySoundEffect(sonido, true);
-				renderer.desactivarEstadoSonido();
+				mRenderer.resetSoundActive();
 				return true;
 			}
 		}
@@ -181,6 +181,6 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public void saveData()
 	{
-		renderer.saveData();
+		mRenderer.saveData();
 	}
 }

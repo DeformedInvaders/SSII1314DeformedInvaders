@@ -6,18 +6,18 @@ import com.lib.buffer.VertexArray;
 public class DelaunayMesh
 {
 	private VertexArray vertices;
-	private TriangleArray triangulos;
+	private TriangleArray triangles;
 
 	public DelaunayMesh()
 	{
 		this.vertices = new VertexArray();
-		this.triangulos = new TriangleArray();
+		this.triangles = new TriangleArray();
 	}
 
-	public DelaunayMesh(VertexArray vertices, TriangleArray triangulos)
+	public DelaunayMesh(VertexArray vertices, TriangleArray triangles)
 	{
 		this.vertices = vertices;
-		this.triangulos = triangulos;
+		this.triangles = triangles;
 	}
 
 	public VertexArray getVertices()
@@ -30,14 +30,14 @@ public class DelaunayMesh
 		this.vertices = vertices;
 	}
 
-	public TriangleArray getTriangulos()
+	public TriangleArray getTriangles()
 	{
-		return triangulos;
+		return triangles;
 	}
 
-	public void setTriangulos(TriangleArray triangulos)
+	public void setTriangles(TriangleArray triangles)
 	{
-		this.triangulos = triangulos;
+		this.triangles = triangles;
 	}
 
 }

@@ -23,13 +23,13 @@ import com.video.data.Video;
 
 public class VideoOpenGLRenderer extends OpenGLRenderer
 {
-	private TStateVideo estadoVideo;
-	private int sonidoActivado;
+	private TStateVideo mState;
+	private int soundActive;
 	
-	private boolean texturasCargadas;
+	private boolean textureLoaded;
 	
-	private Character cientifico, guitarrista;
-	private List<InanimatedObject> listaObjetos;
+	private Character scientific, guitarist;
+	private List<InanimatedObject> objectList;
 
 	public VideoOpenGLRenderer(Context context, Video video)
 	{
@@ -37,18 +37,18 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		
 		selectBackground(video.getListBackgrounds());
 		
-		sonidoActivado = -1;
-		estadoVideo = TStateVideo.Nothing;
+		soundActive = -1;
+		mState = TStateVideo.Nothing;
 		
-		cientifico = video.getActor(TTypeActors.Scientific);
-		guitarrista = video.getActor(TTypeActors.Guitarist);
+		scientific = video.getActor(TTypeActors.Scientific);
+		guitarist = video.getActor(TTypeActors.Guitarist);
 		
-		guitarrista.selectMovement(TTypeMovement.Attack);
-		cientifico.selectMovement(TTypeMovement.Jump);
+		guitarist.selectMovement(TTypeMovement.Attack);
+		scientific.selectMovement(TTypeMovement.Jump);
 		
-		listaObjetos = video.getListObjects();
+		objectList = video.getListObjects();
 	
-		texturasCargadas = false;
+		textureLoaded = false;
 		
 		final ProgressDialog alert = ProgressDialog.show(mContext, mContext.getString(R.string.text_processing_video_title), mContext.getString(R.string.text_processing_video_description), true);
 
@@ -56,7 +56,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 			@Override
 			public void run()
 			{
-				while(!texturasCargadas);
+				while(!textureLoaded);
 				alert.dismiss();
 			}
 		});
@@ -70,10 +70,10 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceCreated(gl, config);
 
-		cientifico.loadTexture(gl, this, mContext);
-		guitarrista.loadTexture(gl, this, mContext);
+		scientific.loadTexture(gl, this, mContext);
+		guitarist.loadTexture(gl, this, mContext);
 		
-		Iterator<InanimatedObject> it = listaObjetos.iterator();
+		Iterator<InanimatedObject> it = objectList.iterator();
 		while(it.hasNext())
 		{
 			it.next().loadTexture(gl, this, mContext);
@@ -85,7 +85,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceChanged(gl, width, height);
 		
-		texturasCargadas = true;
+		textureLoaded = true;
 	}
 
 	@Override
@@ -95,11 +95,11 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		
 		// Lista Objetos
 		
-		for (int i = 0; i < listaObjetos.size(); i++)
+		for (int i = 0; i < objectList.size(); i++)
 		{
-			InanimatedObject objeto = listaObjetos.get(i);
+			InanimatedObject objeto = objectList.get(i);
 			
-			if (objeto.getStateActive() == estadoVideo)
+			if (objeto.getStateActive() == mState)
 			{
 				objeto.drawTexture(gl, this);
 			}
@@ -108,19 +108,19 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		// Centrado de Marco
 		drawInsideFrameBegin(gl);
 
-		if (estadoVideo == TStateVideo.Brief)
+		if (mState == TStateVideo.Brief)
 		{
-			cientifico.drawTexture(gl, this);
+			scientific.drawTexture(gl, this);
 		}
-		else if (estadoVideo == TStateVideo.Rock)
+		else if (mState == TStateVideo.Rock)
 		{
-			guitarrista.drawTexture(gl, this);
+			guitarist.drawTexture(gl, this);
 		}
 		
 		// Centrado de Marco
 		drawInsideFrameEnd(gl);
 		
-		if (estadoVideo == TStateVideo.Nothing)
+		if (mState == TStateVideo.Nothing)
 		{
 			drawFrameFill(gl, Color.argb(175, 0, 0, 0), GamePreferences.DEEP_OUTSIDE_FRAMES);
 		}
@@ -132,13 +132,13 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		float worldX = convertPixelXToWorldXCoordinate(pixelX, screenWidth);
 		float worldY = convertPixelYToWorldYCoordinate(pixelY, screenHeight);
 
-		for (int i = 0; i < listaObjetos.size(); i++)
+		for (int i = 0; i < objectList.size(); i++)
 		{
-			InanimatedObject objeto = listaObjetos.get(i);
+			InanimatedObject objeto = objectList.get(i);
 			
-			if (objeto.getStateActive() == estadoVideo && objeto.contains(worldX, worldY))
+			if (objeto.getStateActive() == mState && objeto.contains(worldX, worldY))
 			{
-				sonidoActivado = objeto.getSoundActive();
+				soundActive = objeto.getSoundActive();
 				return true;
 			}
 		}
@@ -146,57 +146,57 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		return false;
 	} 
 	
-	public void acercarEscena(float factor)
+	public void zoomScene(float factor)
 	{
 		camaraZoom(factor);
 	}
 	
-	public void animarEscena()
+	public void playAnimation()
 	{
-		if (cientifico.animateTexture())
+		if (scientific.animateTexture())
 		{
-			cientifico.selectMovement(TTypeMovement.Jump);
+			scientific.selectMovement(TTypeMovement.Jump);
 		}
 		
-		if (guitarrista.animateTexture())
+		if (guitarist.animateTexture())
 		{
-			guitarrista.selectMovement(TTypeMovement.Attack);
+			guitarist.selectMovement(TTypeMovement.Attack);
 		}
 	}
 	
-	public boolean avanzarEscena()
+	public boolean nextScene()
 	{
-		cientifico.stopAnimation();
-		guitarrista.stopAnimation();
+		scientific.stopAnimation();
+		guitarist.stopAnimation();
 		
 		moveBackground();
 		return isBackgroundEnded();
 	}
 	
-	public void seleccionarEstado(TStateVideo estado)
+	public void selectScene(TStateVideo state)
 	{
-		estadoVideo = estado;
+		mState = state;
 		camaraRestore();
 	}
 	
-	public void desactivarEstadoSonido()
+	public void resetSoundActive()
 	{
-		sonidoActivado = -1;
+		soundActive = -1;
 	}
 	
-	public int getSonidoActivado()
+	public int getSoundActive()
 	{
-		return sonidoActivado;
+		return soundActive;
 	}
 	
 	/* Métodos de Guardado de Información */
 
 	public void saveData()
 	{
-		cientifico.deleteTexture(this);
-		guitarrista.deleteTexture(this);
+		scientific.deleteTexture(this);
+		guitarist.deleteTexture(this);
 		
-		Iterator<InanimatedObject> it = listaObjetos.iterator();
+		Iterator<InanimatedObject> it = objectList.iterator();
 		while(it.hasNext())
 		{
 			it.next().deleteTexture(this);

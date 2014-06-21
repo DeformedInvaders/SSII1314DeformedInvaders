@@ -4,67 +4,67 @@ import com.creation.data.TTypeSticker;
 
 public class ActionSticker extends Action
 {
-	private TTypeSticker tipoPegatina;
-	private int idPegatina;
-	private float posXPegatina, posYPegatina;
-	private short indiceTriangulo;
-	private float factorEscala, anguloRotacion;
+	private TTypeSticker stickerType;
+	private int stickerId;
+	private float stickerCoordX, stickerCoordY;
+	private short stickerIndex;
+	private float stickerFactor, stickerRotation;
 	
 	public ActionSticker(TTypeSticker tipo)
 	{
-		tipoAccion = TTypeAction.Sticker;
+		typeAction = TTypeAction.Sticker;
 		
-		tipoPegatina = tipo;
-		idPegatina = -1;
+		stickerType = tipo;
+		stickerId = -1;
 	}
 	
-	public ActionSticker(TTypeSticker tipo, int id, float x, float y, short indice, float factor, float angulo)
+	public ActionSticker(TTypeSticker sticker, int id, float x, float y, short index, float factor, float angle)
 	{
-		tipoAccion = TTypeAction.Sticker;
+		typeAction = TTypeAction.Sticker;
 		
-		tipoPegatina = tipo;
-		idPegatina = id;
-		posXPegatina = x;
-		posYPegatina = y;
-		indiceTriangulo = indice;
-		factorEscala = factor;
-		anguloRotacion = angulo;
+		stickerType = sticker;
+		stickerId = id;
+		stickerCoordX = x;
+		stickerCoordY = y;
+		stickerIndex = index;
+		stickerFactor = factor;
+		stickerRotation = angle;
 	}
 	
 	/* Métodos de Obtención de Información */
 
-	public TTypeSticker getTipoPegatina()
+	public TTypeSticker getStickerType()
 	{
-		return tipoPegatina;
+		return stickerType;
 	}
 
-	public int getIdPegatina()
+	public int getStickerId()
 	{
-		return idPegatina;
+		return stickerId;
 	}
 
-	public short getIndiceTriangulo()
+	public short getStickerIndex()
 	{
-		return indiceTriangulo;
+		return stickerIndex;
 	}
 
-	public float getPosXPegatina()
+	public float getStickerCoordX()
 	{
-		return posXPegatina;
+		return stickerCoordX;
 	}
 
-	public float getPosYPegatina()
+	public float getStickerCoordY()
 	{
-		return posYPegatina;
+		return stickerCoordY;
 	}
 
-	public float getFactorEscala()
+	public float getStickerFactor()
 	{
-		return factorEscala;
+		return stickerFactor;
 	}
 
-	public float getAnguloRotacion()
+	public float getStickerRotation()
 	{
-		return anguloRotacion;
+		return stickerRotation;
 	}	
 }
