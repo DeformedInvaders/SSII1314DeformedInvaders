@@ -12,13 +12,13 @@ import com.android.touch.DoubleTapDetector;
 import com.android.touch.MoveDetector;
 import com.android.touch.RotateDetector;
 import com.android.touch.ScaleDetector;
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.main.model.GamePreferences;
 
 public class OpenGLSurfaceView extends GLSurfaceView
 {
 	private Context mContext;
-	private TEstadoDetector estadoDetector;
+	private TStateDetector estadoDetector;
 
 	private OpenGLRenderer renderer;
 
@@ -32,10 +32,10 @@ public class OpenGLSurfaceView extends GLSurfaceView
 	
 	public OpenGLSurfaceView(Context context, AttributeSet attrs, boolean transparente)
 	{
-		this(context, attrs, TEstadoDetector.Nada, transparente);
+		this(context, attrs, TStateDetector.Disable, transparente);
 	}
 	
-	public OpenGLSurfaceView(Context context, AttributeSet attrs, TEstadoDetector estado, boolean transparente)
+	public OpenGLSurfaceView(Context context, AttributeSet attrs, TStateDetector estado, boolean transparente)
 	{
 		super(context, attrs);
 
@@ -106,11 +106,11 @@ public class OpenGLSurfaceView extends GLSurfaceView
 		setEstado(estadoDetector);
 	}
 
-	public void setEstado(TEstadoDetector e)
+	public void setEstado(TStateDetector e)
 	{
 		estadoDetector = e;
 
-		if (estadoDetector == TEstadoDetector.CamaraDetectors || estadoDetector == TEstadoDetector.CoordDetectors)
+		if (estadoDetector == TStateDetector.CamaraDetectors || estadoDetector == TStateDetector.CoordDetectors)
 		{
 			if (scaleDetector == null)
 			{
@@ -119,11 +119,11 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onScale(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY)
 					{
-						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						if (estadoDetector == TStateDetector.CamaraDetectors)
 						{
 							renderer.camaraZoom(2 * GamePreferences.NULL_SCALE_FACTOR - factor);
 						}
-						else if (estadoDetector == TEstadoDetector.CoordDetectors)
+						else if (estadoDetector == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
@@ -138,7 +138,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onDragDown(float pixelX, float pixelY, float lastPixelX, float lastPixelY)
 					{
-						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						if (estadoDetector == TStateDetector.CamaraDetectors)
 						{
 							renderer.salvarCamara();
 						}
@@ -147,12 +147,12 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onDragMove(float pixelX, float pixelY, float lastPixelX, float lastPixelY)
 					{
-						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						if (estadoDetector == TStateDetector.CamaraDetectors)
 						{
 							renderer.recuperarCamara();
 							renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
-						else if (estadoDetector == TEstadoDetector.CoordDetectors)
+						else if (estadoDetector == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
@@ -166,7 +166,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onRotate(float ang, float pixelX, float pixelY)
 					{
-						if (estadoDetector == TEstadoDetector.CoordDetectors)
+						if (estadoDetector == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsRotate(ang, pixelX, pixelY, getWidth(), getHeight());
 						}
@@ -181,11 +181,11 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onDoubleTap()
 					{
-						if (estadoDetector == TEstadoDetector.CamaraDetectors)
+						if (estadoDetector == TStateDetector.CamaraDetectors)
 						{
 							renderer.camaraRestore();
 						}
-						else if (estadoDetector == TEstadoDetector.CoordDetectors)
+						else if (estadoDetector == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsRestore();
 						}

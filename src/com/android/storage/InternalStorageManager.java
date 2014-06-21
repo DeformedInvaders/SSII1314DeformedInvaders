@@ -17,11 +17,11 @@ import java.util.Locale;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.creation.data.Esqueleto;
-import com.creation.data.Movimientos;
-import com.creation.data.TTipoMovimiento;
-import com.creation.data.Textura;
-import com.game.data.Personaje;
+import com.creation.data.Skeleton;
+import com.creation.data.Movements;
+import com.creation.data.TTypeMovement;
+import com.creation.data.Texture;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.main.model.GameStatistics;
@@ -112,9 +112,9 @@ public class InternalStorageManager
 
 	/* Métodos Personajes */
 
-	public List<Personaje> cargarListaPersonajes()
+	public List<Character> cargarListaPersonajes()
 	{
-		List<Personaje> lista = new ArrayList<Personaje>();
+		List<Character> lista = new ArrayList<Character>();
 		
 		File file = obtenerDirectorio(CHARACTER_DIRECTORY);
 		if (file.exists() && file.isDirectory())
@@ -145,7 +145,7 @@ public class InternalStorageManager
 				
 				for (int i = 0; i < personajes.length; i++)
 				{					
-					Personaje p = cargarPersonaje(personajes[i].getName());
+					Character p = cargarPersonaje(personajes[i].getName());
 					if (p != null)
 					{
 						lista.add(p);
@@ -157,7 +157,7 @@ public class InternalStorageManager
 		return lista;
 	}
 
-	public Personaje cargarPersonaje(String nombre)
+	public Character cargarPersonaje(String nombre)
 	{
 		try
 		{
@@ -165,10 +165,10 @@ public class InternalStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Cargar Personajes
-			Personaje p = new Personaje();
-			p.setEsqueleto((Esqueleto) data.readObject());
-			p.setTextura((Textura) data.readObject());
-			p.setMovimientos((Movimientos) data.readObject());
+			Character p = new Character();
+			p.setEsqueleto((Skeleton) data.readObject());
+			p.setTextura((Texture) data.readObject());
+			p.setMovimientos((Movements) data.readObject());
 			p.setNombre((String) data.readObject());
 
 			data.close();
@@ -198,7 +198,7 @@ public class InternalStorageManager
 		return null;
 	}
 
-	public boolean guardarPersonaje(Personaje personaje)
+	public boolean guardarPersonaje(Character personaje)
 	{
 		// Comprobar Nombres de Personajes ya existentes
 		if (comprobarDirectorio(CHARACTER_DIRECTORY, personaje.getNombre()))
@@ -210,12 +210,12 @@ public class InternalStorageManager
 		return actualizarPersonaje(personaje, 0);
 	}
 	
-	public boolean actualizarPersonaje(Personaje personaje)
+	public boolean actualizarPersonaje(Character personaje)
 	{
 		return actualizarPersonaje(personaje, 0);
 	}
 	
-	private boolean actualizarPersonaje(Personaje personaje, long fileDate)
+	private boolean actualizarPersonaje(Character personaje, long fileDate)
 	{
 		try
 		{	
@@ -262,14 +262,14 @@ public class InternalStorageManager
 		return false;
 	}
 
-	public boolean eliminarPersonaje(Personaje personaje)
+	public boolean eliminarPersonaje(Character personaje)
 	{
 		File file = obtenerDirectorio(CHARACTER_DIRECTORY, personaje.getNombre());
 		
 		return eliminarDirectorio(file);
 	}
 
-	public boolean renombrarPersonaje(Personaje personaje, String nombre)
+	public boolean renombrarPersonaje(Character personaje, String nombre)
 	{
 		// Comprobar Nombres de Personajes ya existentes
 		if (comprobarDirectorio(CHARACTER_DIRECTORY, nombre))
@@ -288,38 +288,38 @@ public class InternalStorageManager
 	
 	/* Métodos Audio */
 	
-	public String cargarAudioTemp(TTipoMovimiento tipo)
+	public String cargarAudioTemp(TTypeMovement tipo)
 	{
 		return obtenerDirectorio(TEMP_DIRECTORY).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + GameResources.EXTENSION_AUDIO_FILE;
 	}
 	
-	public String guardarAudioTemp(TTipoMovimiento tipo)
+	public String guardarAudioTemp(TTypeMovement tipo)
 	{
 		return cargarAudioTemp(tipo);
 	}
 	
-	public boolean comprobarAudioTemp(TTipoMovimiento tipo)
+	public boolean comprobarAudioTemp(TTypeMovement tipo)
 	{
 		return comprobarFichero(cargarAudioTemp(tipo));
 	}
 	
-	public boolean eliminarAudioTemp(TTipoMovimiento tipo)
+	public boolean eliminarAudioTemp(TTypeMovement tipo)
 	{
 		return eliminarDirectorio(new File(cargarAudioTemp(tipo)));
 	}
 	
-	public String cargarAudio(String nombre, TTipoMovimiento tipo)
+	public String cargarAudio(String nombre, TTypeMovement tipo)
 	{
 		return obtenerDirectorio(CHARACTER_DIRECTORY, nombre).getAbsolutePath() + "/" + AUDIO_FILE + tipo.ordinal() + GameResources.EXTENSION_AUDIO_FILE;
 	}
 	
-	public boolean guardarAudio(String nombre, TTipoMovimiento tipo)
+	public boolean guardarAudio(String nombre, TTypeMovement tipo)
 	{
 		File file = new File(cargarAudioTemp(tipo));
 		return file.renameTo(new File(cargarAudio(nombre, tipo)));
 	}
 	
-	public boolean comprobarAudio(String nombre, TTipoMovimiento tipo)
+	public boolean comprobarAudio(String nombre, TTypeMovement tipo)
 	{
 		return comprobarFichero(cargarAudio(nombre, tipo));
 	}

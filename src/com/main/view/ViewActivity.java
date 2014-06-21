@@ -26,12 +26,12 @@ import com.creation.design.DesignDataSaved;
 import com.creation.design.DesignFragment;
 import com.creation.paint.PaintDataSaved;
 import com.creation.paint.PaintFragment;
-import com.game.data.InstanciaNivel;
-import com.game.data.Nivel;
-import com.game.data.Personaje;
+import com.game.data.InstanceLevel;
+import com.game.data.Level;
+import com.game.data.Character;
 import com.game.game.GameFragment;
 import com.game.select.LevelSelectionFragment;
-import com.game.select.TTipoLevel;
+import com.game.select.TTypeLevel;
 import com.main.controller.GameController;
 import com.main.model.GameCore;
 import com.main.model.GamePreferences;
@@ -50,7 +50,7 @@ public class ViewActivity extends FragmentActivity
 	
 	/* Elementos de la Interafaz */
 	private ActionBar actionBar;
-	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, botonDebug, botonSensor;
+	private MenuItem botonTwitter, botonFacebook, botonMusica, botonConsejos, /*botonDebug,*/ botonSensor;
 	
 	/* Métodos Activity */
 	
@@ -134,7 +134,7 @@ public class ViewActivity extends FragmentActivity
 		botonMusica = menu.getItem(2);
 		botonTwitter = menu.getItem(3);
 		botonFacebook = menu.getItem(4);
-		botonDebug = menu.getItem(5);
+		//botonDebug = menu.getItem(5);
 		
 		actualizarActionBar();
 
@@ -156,8 +156,8 @@ public class ViewActivity extends FragmentActivity
 				return onMenuTwitterButtonClicked();
 			case R.id.menuIcon5:
 				return onMenuFacebookButtonClicked();
-			case R.id.menuIcon6:
-				return onMenuDebugButtonClicked();
+			/*case R.id.menuIcon6:
+				return onMenuDebugButtonClicked();*/
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -250,14 +250,14 @@ public class ViewActivity extends FragmentActivity
 			botonConsejos.setIcon(R.drawable.icon_tool_tips_disabled);
 		}
 		
-		if (GamePreferences.IS_DEBUG_ENABLED())
+		/*if (GamePreferences.IS_DEBUG_ENABLED())
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_enabled);
 		}
 		else
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_disabled);
-		}
+		}*/
 		
 		if (GamePreferences.IS_SENSOR_ENABLED())
 		{
@@ -291,7 +291,7 @@ public class ViewActivity extends FragmentActivity
 		transaction.commit();
 	}
 
-	public void insertarMainFragmento(Personaje personaje, int numeroPersonajes, int numeroFicheros, int title)
+	public void insertarMainFragmento(Character personaje, int numeroPersonajes, int numeroFicheros, int title)
 	{
 		insertarFragmento(MainFragment.newInstance(controller, personaje, numeroPersonajes, numeroFicheros));
 		cambiarTituloActionBar(title);
@@ -309,61 +309,61 @@ public class ViewActivity extends FragmentActivity
 		cambiarTituloActionBar(title);
 	}
 
-	public void insertarPaintFragmento(Personaje nuevoPersonaje, GameStatistics[] estadisticasNiveles, int title)
+	public void insertarPaintFragmento(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, int title)
 	{
 		insertarFragmento(PaintFragment.newInstance(controller, nuevoPersonaje, estadisticasNiveles));
 		cambiarTituloActionBar(title);
 	}
 	
-	public void insertarPaintFragmento(Personaje nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados, int title)
+	public void insertarPaintFragmento(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados, int title)
 	{
 		insertarFragmento(PaintFragment.newInstance(controller, nuevoPersonaje, estadisticasNiveles, datosSalvados));
 		cambiarTituloActionBar(title);
 	}
 	
-	public void insertarPaintFragmento(Personaje personaje, int indice, GameStatistics[] estadisticasNiveles, int title)
+	public void insertarPaintFragmento(Character personaje, int indice, GameStatistics[] estadisticasNiveles, int title)
 	{
 		insertarFragmento(PaintFragment.newInstance(controller, personaje, indice, estadisticasNiveles));
 		cambiarTituloActionBar(title);
 	}
 
-	public void insertarDeformationFragmento(Personaje nuevoPersonaje, int title)
+	public void insertarDeformationFragmento(Character nuevoPersonaje, int title)
 	{
 		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje));
 		cambiarTituloActionBar(title);
 	}
 	
-	public void insertarDeformationFragmento(Personaje nuevoPersonaje, int indice, int title)
+	public void insertarDeformationFragmento(Character nuevoPersonaje, int indice, int title)
 	{
 		insertarFragmento(DeformationFragment.newInstance(controller, nuevoPersonaje, indice));
 		cambiarTituloActionBar(title);
 	}
 
-	public void insertarCharacterSelectionFragmento(List<Personaje> listaPersonajes, int title)
+	public void insertarCharacterSelectionFragmento(List<Character> listaPersonajes, int title)
 	{
 		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes));
 		cambiarTituloActionBar(title);
 	}
 	
-	public void insertarCharacterSelectionFragmento(List<Personaje> listaPersonajes, CharacterSelectionDataSaved datosSalvados, int title)
+	public void insertarCharacterSelectionFragmento(List<Character> listaPersonajes, CharacterSelectionDataSaved datosSalvados, int title)
 	{
 		insertarFragmento(CharacterSelectionFragment.newInstance(controller, listaPersonajes, datosSalvados));
 		cambiarTituloActionBar(title);
 	}
 
-	public void insertarLevelSelectionFragmento(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles, int title)
+	public void insertarLevelSelectionFragmento(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, int title)
 	{
 		insertarFragmento(LevelSelectionFragment.newInstance(controller, listaNiveles, estadisticasNiveles));
 		cambiarTituloActionBar(title);
 	}
 	
-	public void insertarLevelSelectionFragmento(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles, TTipoLevel nivel, int title)
+	public void insertarLevelSelectionFragmento(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, TTypeLevel nivel, int title)
 	{
 		insertarFragmento(LevelSelectionFragment.newInstance(controller, listaNiveles, estadisticasNiveles, nivel));
 		cambiarTituloActionBar(title);
 	}
 
-	public void insertarGameFragmento(Personaje personajeSeleccionado, InstanciaNivel nivel, int title)
+	public void insertarGameFragmento(Character personajeSeleccionado, InstanceLevel nivel, int title)
 	{
 		insertarFragmento(GameFragment.newInstance(controller, personajeSeleccionado, nivel));
 		cambiarTituloActionBar(title);

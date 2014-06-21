@@ -19,11 +19,11 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
-import com.creation.data.Esqueleto;
-import com.creation.data.Movimientos;
-import com.creation.data.TTipoMovimiento;
-import com.creation.data.Textura;
-import com.game.data.Personaje;
+import com.creation.data.Skeleton;
+import com.creation.data.Movements;
+import com.creation.data.TTypeMovement;
+import com.creation.data.Texture;
+import com.game.data.Character;
 import com.main.model.GameResources;
 
 public class ExternalStorageManager
@@ -201,7 +201,7 @@ public class ExternalStorageManager
 		return listFilter;
 	}
 	
-	public Personaje importarPersonaje(String nombre)
+	public Character importarPersonaje(String nombre)
 	{
 		comprobarDirectorio(getDirectorioRaiz());
 		
@@ -210,10 +210,10 @@ public class ExternalStorageManager
 			FileInputStream file = new FileInputStream(new File(getDirectorioRaiz() + "/" + nombre));
 			ObjectInputStream data = new ObjectInputStream(file);
 
-			Personaje personaje = new Personaje();
-			personaje.setEsqueleto((Esqueleto) data.readObject());
-			personaje.setTextura((Textura) data.readObject());
-			personaje.setMovimientos((Movimientos) data.readObject());
+			Character personaje = new Character();
+			personaje.setEsqueleto((Skeleton) data.readObject());
+			personaje.setTextura((Texture) data.readObject());
+			personaje.setMovimientos((Movements) data.readObject());
 			personaje.setNombre((String) data.readObject());
 			
 			data.close();
@@ -243,7 +243,7 @@ public class ExternalStorageManager
 		return null;
 	}
 	
-	public boolean exportarPersonaje(Personaje personaje)
+	public boolean exportarPersonaje(Character personaje)
 	{
 		comprobarDirectorio(getDirectorioRaiz());
 		
@@ -281,7 +281,7 @@ public class ExternalStorageManager
 		return false;
 	}
 	
-	public boolean exportarEnemigo(Personaje personaje)
+	public boolean exportarEnemigo(Character personaje)
 	{
 		comprobarDirectorio(getDirectorioRaiz());
 		
@@ -292,7 +292,7 @@ public class ExternalStorageManager
 
 			data.writeObject(personaje.getEsqueleto());
 			data.writeObject(personaje.getTextura());
-			data.writeObject(personaje.getMovimientos().get(TTipoMovimiento.Run));
+			data.writeObject(personaje.getMovimientos().get(TTypeMovement.Run));
 
 			data.flush();
 			data.close();

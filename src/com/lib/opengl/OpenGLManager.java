@@ -11,13 +11,13 @@ import android.graphics.Color;
 import android.opengl.GLUtils;
 
 import com.creation.data.Handle;
-import com.creation.data.MapaBits;
+import com.creation.data.BitmapImage;
 import com.lib.buffer.HandleArray;
 import com.main.model.GamePreferences;
 
 public class OpenGLManager
 {
-	public static MapaBits capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)
+	public static BitmapImage capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)
 	{
 		int screenshotSize = width * height;
 		ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
@@ -34,7 +34,7 @@ public class OpenGLManager
 			pixelsBuffer[i] = ((pixelsBuffer[i] & 0xff00ff00)) | ((pixelsBuffer[i] & 0x000000ff) << 16) | ((pixelsBuffer[i] & 0x00ff0000) >> 16);
 		}
 
-		MapaBits textura = new MapaBits(pixelsBuffer, width, height);
+		BitmapImage textura = new BitmapImage(pixelsBuffer, width, height);
 		return textura;
 	}
 	

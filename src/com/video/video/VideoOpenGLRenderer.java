@@ -11,40 +11,40 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.android.opengl.OpenGLRenderer;
-import com.android.opengl.TTipoFondoRenderer;
-import com.android.opengl.TTipoTexturasRenderer;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Personaje;
+import com.android.opengl.TTypeBackgroundRenderer;
+import com.android.opengl.TTypeTexturesRenderer;
+import com.creation.data.TTypeMovement;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 import com.project.main.R;
-import com.video.data.ObjetoInanimado;
-import com.video.data.TTipoActores;
+import com.video.data.InanimatedObject;
+import com.video.data.TTypeActors;
 import com.video.data.Video;
 
 public class VideoOpenGLRenderer extends OpenGLRenderer
 {
-	private TEstadoVideo estadoVideo;
+	private TStateVideo estadoVideo;
 	private int sonidoActivado;
 	
 	private boolean texturasCargadas;
 	
-	private Personaje cientifico, guitarrista;
-	private List<ObjetoInanimado> listaObjetos;
+	private Character cientifico, guitarrista;
+	private List<InanimatedObject> listaObjetos;
 
 	public VideoOpenGLRenderer(Context context, Video video)
 	{
-		super(context, TTipoFondoRenderer.Intercambiable, TTipoTexturasRenderer.Video);
+		super(context, TTypeBackgroundRenderer.Swappable, TTypeTexturesRenderer.Video);
 		
 		seleccionarTexturaFondo(video.getIdTexturaFondos());
 		
 		sonidoActivado = -1;
-		estadoVideo = TEstadoVideo.Nada;
+		estadoVideo = TStateVideo.Nothing;
 		
-		cientifico = video.getPersonaje(TTipoActores.Cientifico);
-		guitarrista = video.getPersonaje(TTipoActores.Guitarrista);
+		cientifico = video.getPersonaje(TTypeActors.Scientific);
+		guitarrista = video.getPersonaje(TTypeActors.Guitarist);
 		
-		guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
-		cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
+		guitarrista.seleccionarAnimacion(TTypeMovement.Attack);
+		cientifico.seleccionarAnimacion(TTypeMovement.Jump);
 		
 		listaObjetos = video.getListaObjetos();
 	
@@ -73,7 +73,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		cientifico.cargarTextura(gl, this, mContext);
 		guitarrista.cargarTextura(gl, this, mContext);
 		
-		Iterator<ObjetoInanimado> it = listaObjetos.iterator();
+		Iterator<InanimatedObject> it = listaObjetos.iterator();
 		while(it.hasNext())
 		{
 			it.next().cargarTextura(gl, this, mContext);
@@ -97,7 +97,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		
 		for (int i = 0; i < listaObjetos.size(); i++)
 		{
-			ObjetoInanimado objeto = listaObjetos.get(i);
+			InanimatedObject objeto = listaObjetos.get(i);
 			
 			if (objeto.getEstadoActivo() == estadoVideo)
 			{
@@ -108,11 +108,11 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		// Centrado de Marco
 		centrarPersonajeEnMarcoInicio(gl);
 
-		if (estadoVideo == TEstadoVideo.Brief)
+		if (estadoVideo == TStateVideo.Brief)
 		{
 			cientifico.dibujar(gl, this);
 		}
-		else if (estadoVideo == TEstadoVideo.Rock)
+		else if (estadoVideo == TStateVideo.Rock)
 		{
 			guitarrista.dibujar(gl, this);
 		}
@@ -120,7 +120,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		// Centrado de Marco
 		centrarPersonajeEnMarcoFinal(gl);
 		
-		if (estadoVideo == TEstadoVideo.Nada)
+		if (estadoVideo == TStateVideo.Nothing)
 		{
 			dibujarMarcoCompleto(gl, Color.argb(175, 0, 0, 0), GamePreferences.DEEP_OUTSIDE_FRAMES);
 		}
@@ -134,7 +134,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 
 		for (int i = 0; i < listaObjetos.size(); i++)
 		{
-			ObjetoInanimado objeto = listaObjetos.get(i);
+			InanimatedObject objeto = listaObjetos.get(i);
 			
 			if (objeto.getEstadoActivo() == estadoVideo && objeto.contains(worldX, worldY))
 			{
@@ -155,12 +155,12 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	{
 		if (cientifico.animar())
 		{
-			cientifico.seleccionarAnimacion(TTipoMovimiento.Jump);
+			cientifico.seleccionarAnimacion(TTypeMovement.Jump);
 		}
 		
 		if (guitarrista.animar())
 		{
-			guitarrista.seleccionarAnimacion(TTipoMovimiento.Attack);
+			guitarrista.seleccionarAnimacion(TTypeMovement.Attack);
 		}
 	}
 	
@@ -173,7 +173,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		return isFondoFinal();
 	}
 	
-	public void seleccionarEstado(TEstadoVideo estado)
+	public void seleccionarEstado(TStateVideo estado)
 	{
 		estadoVideo = estado;
 		camaraRestore();
@@ -196,7 +196,7 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		cientifico.descargarTextura(this);
 		guitarrista.descargarTextura(this);
 		
-		Iterator<ObjetoInanimado> it = listaObjetos.iterator();
+		Iterator<InanimatedObject> it = listaObjetos.iterator();
 		while(it.hasNext())
 		{
 			it.next().descargarTextura(this);

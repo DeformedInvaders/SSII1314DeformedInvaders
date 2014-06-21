@@ -8,10 +8,10 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Personaje;
+import com.creation.data.TTypeMovement;
+import com.game.data.Character;
 import com.lib.buffer.VertexArray;
 import com.main.model.GamePreferences;
 
@@ -29,10 +29,10 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public DeformOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.MultiTouch, false);
+		super(context, attrs, TStateDetector.MultiTouch, false);
 	}
 
-	public void setParameters(OnDeformListener listener, Personaje personaje, TTipoMovimiento movimiento)
+	public void setParameters(OnDeformListener listener, Character personaje, TTypeMovement movimiento)
 	{
 		mListener = listener;
 		

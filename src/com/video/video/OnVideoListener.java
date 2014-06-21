@@ -6,6 +6,6 @@ public interface OnVideoListener
 	public void onPlayMusic(int music);
 	public void onPlaySoundEffect(int sound, boolean blockable);
 	public void onPlayVoice(int voice);
-	public void onChangeDialog(int text, TEstadoVideo estado);
+	public void onChangeDialog(int text, TStateVideo estado);
 	public void onDismissDialog();
 }

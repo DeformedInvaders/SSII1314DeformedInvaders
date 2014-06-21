@@ -1,10 +1,10 @@
 package com.main.model;
 
-import com.creation.data.TTipoSticker;
-import com.game.data.TTipoEntidad;
-import com.game.game.TTipoEndgame;
-import com.game.select.TTipoLevel;
-import com.video.data.TTipoActores;
+import com.creation.data.TTypeSticker;
+import com.game.data.TTypeEntity;
+import com.game.game.TTypeEndgame;
+import com.game.select.TTypeLevel;
+import com.video.data.TTypeActors;
 
 public class GameResources
 {	
@@ -35,7 +35,7 @@ public class GameResources
 	private static final String DRAWABLE_STONEHENGE_ID = "stonehenge_";
 	private static final String DRAWABLE_VIDEO_ID = "video_";
 	
-	private static final String DRAWABLE_GUITARRIST_ID = "guitarrist";
+	private static final String DRAWABLE_GUITARIST_ID = "guitarist";
 	private static final String DRAWABLE_SCIENTIFIC_ID = "scientific";
 	
 	private static final String DRAWABLE_BACKGROUND_ID = "background_";
@@ -99,22 +99,22 @@ public class GameResources
 	private static final String FONT_EGYPT_PATH = FONT_PATH + "egypt" + FONT_EXTENSION;
 	private static final String FONT_STONEHENGE_PATH = FONT_PATH + "stonehenge" + FONT_EXTENSION;
 	
-	public static final String GET_ENEMIES(TTipoEntidad entidad, TTipoLevel nivel, int pos)
+	public static final String GET_ENEMIES(TTypeEntity entidad, TTypeLevel nivel, int pos)
 	{
 		String tipoEntidad;
 		
 		switch(entidad)
 		{
-			case Enemigo:
+			case Enemy:
 				tipoEntidad = DRAWABLE_ENEMY_ID;
 			break;
-			case Obstaculo:
+			case Obstacle:
 				tipoEntidad = DRAWABLE_OBSTACLE_ID;
 			break;
-			case Misil:
+			case Missil:
 				tipoEntidad = DRAWABLE_MISSILE_ID;
 			break;
-			case Jefe:
+			case Boss:
 				tipoEntidad = DRAWABLE_BOSS_ID;
 			break;
 			default:
@@ -138,7 +138,7 @@ public class GameResources
 		}
 	}	
 	
-	public static final String GET_ENEMIES_FILES(TTipoLevel nivel, int pos)
+	public static final String GET_ENEMIES_FILES(TTypeLevel nivel, int pos)
 	{
 		switch(nivel)
 		{
@@ -157,7 +157,7 @@ public class GameResources
 		}
 	}
 	
-	public static final String GET_BOSS_FILES(TTipoLevel nivel, int pos)
+	public static final String GET_BOSS_FILES(TTypeLevel nivel, int pos)
 	{
 		switch(nivel)
 		{
@@ -176,20 +176,20 @@ public class GameResources
 		}
 	}
 	
-	public static final String GET_ACTORS_FILES(TTipoActores actor)
+	public static final String GET_ACTORS_FILES(TTypeActors actor)
 	{
 		switch(actor)
 		{
-			case Guitarrista:
-				return ACTORS_PATH + DRAWABLE_GUITARRIST_ID + CHARACTER_EXTENSION;
-			case Cientifico:
+			case Guitarist:
+				return ACTORS_PATH + DRAWABLE_GUITARIST_ID + CHARACTER_EXTENSION;
+			case Scientific:
 				return ACTORS_PATH + DRAWABLE_SCIENTIFIC_ID + CHARACTER_EXTENSION;
 			default:
 				return null;
 		}
 	}
 	
-	public static final String GET_STICKER(TTipoSticker pegatina, int pos)
+	public static final String GET_STICKER(TTypeSticker pegatina, int pos)
 	{
 		switch(pegatina)
 		{
@@ -208,7 +208,7 @@ public class GameResources
 		}
 	}
 	
-	public static final String GET_BACKGROUND(TTipoLevel nivel, int pos)
+	public static final String GET_BACKGROUND(TTypeLevel nivel, int pos)
 	{
 		String ratio;
 		
@@ -254,7 +254,7 @@ public class GameResources
 		return DRAWABLE_BACKGROUND_ID + ratio + DRAWABLE_VIDEO_ID + (pos + 1);
 	}
 	
-	public static final String GET_POLAROID(TTipoLevel nivel, TTipoEndgame juego)
+	public static final String GET_POLAROID(TTypeLevel nivel, TTypeEndgame juego)
 	{
 		String tipoJuego;
 		
@@ -293,7 +293,7 @@ public class GameResources
 		}		
 	}
 	
-	public static final String GET_ACHIEVEMENTS(TTipoLevel nivel, TTipoEndgame juego)
+	public static final String GET_ACHIEVEMENTS(TTypeLevel nivel, TTypeEndgame juego)
 	{
 		String tipoJuego;
 		
@@ -329,7 +329,7 @@ public class GameResources
 		}		
 	}
 	
-	public static final String GET_FONT_PATH(TTipoLevel nivel)
+	public static final String GET_FONT_PATH(TTypeLevel nivel)
 	{
 		switch(nivel)
 		{

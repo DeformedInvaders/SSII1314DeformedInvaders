@@ -3,13 +3,13 @@ package com.lib.math;
 import com.android.storage.ExternalStorageManager;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
+import com.lib.utils.DelaunayMesh;
 import com.lib.utils.FloatArray;
-import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
 
 public class DelaunayMeshGenerator
 {
-	public Mesh computeMesh(FloatArray vertices)
+	public DelaunayMesh computeMesh(FloatArray vertices)
 	{	
 		Polygon poligonoBSpline = new Polygon(vertices.items);
 		float areaPoligonoBSpline = Math.abs(poligonoBSpline.area());
@@ -48,7 +48,7 @@ ExternalStorageManager.writeLogcat("TEST", "Mesh has change.");
 				
 				poligono.setVertices(vert);
 				
-				if (Math.abs(poligono.area()) > areaPoligonoBSpline / 10)
+				if (Math.abs(poligono.area()) > areaPoligonoBSpline / 50)
 				{
 					Vector2 centroGravedad = GeometryUtils.triangleCentroid(vert[0], vert[1], vert[2], vert[3], vert[4], vert[5], new Vector2());
 					
@@ -71,6 +71,6 @@ ExternalStorageManager.writeLogcat("TEST", "Mesh has change.");
 ExternalStorageManager.writeLogcat("TEST", "Mesh Generation completed.");
 		delaunayCalculator.trim(delaunayTriangulos, delaunayPuntos, vertices, 0, vertices.size);
 ExternalStorageManager.writeLogcat("TEST", "Mesh Generator triming outside triangles.");
-		return new Mesh(new VertexArray(delaunayPuntos), new TriangleArray(delaunayTriangulos));
+		return new DelaunayMesh(new VertexArray(delaunayPuntos), new TriangleArray(delaunayTriangulos));
 	}
 }

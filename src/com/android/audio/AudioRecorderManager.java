@@ -7,7 +7,7 @@ import android.media.MediaRecorder;
 public class AudioRecorderManager
 {
 	private MediaRecorder recorder;
-	private TEstadoRecord estado;
+	private TStateRecorder estado;
 
 	/* Constructora */
 
@@ -15,7 +15,7 @@ public class AudioRecorderManager
 	{
 		recorder = new MediaRecorder();
 
-		estado = TEstadoRecord.Parado;
+		estado = TStateRecorder.Stopped;
 	}
 
 	/* Métodos de Selección de Estado */
@@ -24,7 +24,7 @@ public class AudioRecorderManager
 	{
 		try
 		{
-			if (estado == TEstadoRecord.Parado)
+			if (estado == TStateRecorder.Stopped)
 			{
 				// Initial
 				recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -40,7 +40,7 @@ public class AudioRecorderManager
 				recorder.start();
 				// Recording
 
-				estado = TEstadoRecord.Grabando;
+				estado = TStateRecorder.Recording;
 				return true;
 			}
 		}
@@ -54,13 +54,13 @@ public class AudioRecorderManager
 
 	public boolean stopRecording()
 	{
-		if (estado == TEstadoRecord.Grabando)
+		if (estado == TStateRecorder.Recording)
 		{
 			// Recording
 			recorder.stop();
 			// Initial
 
-			estado = TEstadoRecord.Parado;
+			estado = TStateRecorder.Stopped;
 			return true;
 		}
 
@@ -76,11 +76,11 @@ public class AudioRecorderManager
 
 	public boolean isRecording()
 	{
-		return estado == TEstadoRecord.Grabando;
+		return estado == TStateRecorder.Recording;
 	}
 
 	public boolean isStopped()
 	{
-		return estado == TEstadoRecord.Parado;
+		return estado == TStateRecorder.Stopped;
 	}
 }

@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.game.data.Entidad;
-import com.game.data.InstanciaNivel;
-import com.game.data.Jefe;
+import com.game.data.Entity;
+import com.game.data.InstanceLevel;
+import com.game.data.Boss;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.project.main.R;
@@ -22,7 +22,7 @@ public abstract class SummaryAlert extends WindowAlert
 	private static final int sizeText = 30;
 	private static final int sizeTextSmall = 20;
 	
-	public SummaryAlert(Context context, int title, int textYes, InstanciaNivel nivel)
+	public SummaryAlert(Context context, int title, int textYes, InstanceLevel nivel)
 	{
 		super(context, title, false);
 		
@@ -66,10 +66,10 @@ public abstract class SummaryAlert extends WindowAlert
 	
 			// Procesamiento
 				
-			Iterator<Entidad> it = nivel.getTipoEnemigos().iterator();
+			Iterator<Entity> it = nivel.getTipoEnemigos().iterator();
 			while(it.hasNext())
 			{
-				Entidad enemigo = it.next();
+				Entity enemigo = it.next();
 				
 				ImageView imageView = new ImageView(context);
 				imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));
@@ -77,13 +77,13 @@ public abstract class SummaryAlert extends WindowAlert
 				
 				switch(enemigo.getTipo())
 				{
-					case Enemigo:
+					case Enemy:
 						layoutImagesEnemigos.addView(imageView);
 					break;
-					case Obstaculo:
+					case Obstacle:
 						layoutImagesObstaculos.addView(imageView);
 					break;
-					case Misil:
+					case Missil:
 						imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH() / 2));
 						layoutImagesMisiles.addView(imageView);
 					default:
@@ -91,7 +91,7 @@ public abstract class SummaryAlert extends WindowAlert
 				}
 			}
 			
-			Jefe jefe = nivel.getBoss();
+			Boss jefe = nivel.getBoss();
 			
 			ImageView imageView = new ImageView(context);
 			imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));

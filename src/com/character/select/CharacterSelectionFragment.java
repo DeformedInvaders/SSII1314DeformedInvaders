@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
-import com.game.data.Personaje;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -20,26 +20,26 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 {
 	private CharacterSelectionFragmentListener mCallback;
 	
-	private List<Personaje> listaPersonajes;
+	private List<Character> listaPersonajes;
 	private int posicionInicial;
 	
 	/* Constructora */
 
-	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Personaje> l)
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Character> l)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
 		fragment.setParameters(c, l, -1);
 		return fragment;
 	}
 	
-	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Personaje> l, CharacterSelectionDataSaved datosSalvados)
+	public static final CharacterSelectionFragment newInstance(CharacterSelectionFragmentListener c, List<Character> l, CharacterSelectionDataSaved datosSalvados)
 	{
 		CharacterSelectionFragment fragment = new CharacterSelectionFragment();
 		fragment.setParameters(c, l, datosSalvados.getIndice());
 		return fragment;
 	}
 
-	private void setParameters(CharacterSelectionFragmentListener c, List<Personaje> l, int indice)
+	private void setParameters(CharacterSelectionFragmentListener c, List<Character> l, int indice)
 	{
 		mCallback = c;
 		listaPersonajes = l;
@@ -80,10 +80,10 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 			fondo.setBackgroundResource(R.drawable.background_notlong_display);
 		}
 
-		Iterator<Personaje> it = listaPersonajes.iterator();
+		Iterator<Character> it = listaPersonajes.iterator();
 		while (it.hasNext())
 		{
-			Personaje p = it.next();
+			Character p = it.next();
 			viewPager.addView(CharacterSelectFragment.newInstance(this, p), p.getNombre());
 		}
 		

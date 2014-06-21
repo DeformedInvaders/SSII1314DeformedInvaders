@@ -12,14 +12,14 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.android.opengl.OpenGLRenderer;
-import com.android.opengl.TTipoFondoRenderer;
-import com.android.opengl.TTipoTexturasRenderer;
+import com.android.opengl.TTypeBackgroundRenderer;
+import com.android.opengl.TTypeTexturesRenderer;
 import com.creation.data.Handle;
-import com.creation.data.Pegatinas;
-import com.creation.data.TTipoMovimiento;
-import com.creation.data.Textura;
-import com.game.data.Personaje;
-import com.game.data.TTipoEntidad;
+import com.creation.data.Stickers;
+import com.creation.data.TTypeMovement;
+import com.creation.data.Texture;
+import com.game.data.Character;
+import com.game.data.TTypeEntity;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
@@ -38,7 +38,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private OnDeformListener mListener;
 
 	// Modo Grabado
-	private TEstadoDeform estado;
+	private TStateDeform estado;
 	private boolean modoGrabar;
 
 	/* Movimientos */
@@ -80,20 +80,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	private Handle objetoHandle, objetoHandleSeleccionado;
 
 	/* Textura */
-	private Textura textura;
+	private Texture textura;
 	private FloatBuffer coordsTextura;
 	
 	// Pegatinas
-	private Pegatinas pegatinas;
+	private Stickers pegatinas;
 
 	/* Constructora */
 
-	public DeformOpenGLRenderer(Context context, int color, OnDeformListener listener, Personaje personaje, TTipoMovimiento movimiento)
+	public DeformOpenGLRenderer(Context context, int color, OnDeformListener listener, Character personaje, TTypeMovement movimiento)
 	{
-		super(context, TTipoFondoRenderer.Nada, TTipoTexturasRenderer.Personaje, color);
+		super(context, TTypeBackgroundRenderer.Blank, TTypeTexturesRenderer.Character, color);
 		
 		mListener = listener;
-		estado = TEstadoDeform.Nada;
+		estado = TStateDeform.Nothing;
 		modoGrabar = false;
 		
 		listaHandlesAnimacion = new ArrayList<HandleArray>();
@@ -143,10 +143,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// Textura
-		textura.cargarTextura(gl, this, mContext, TTipoEntidad.Personaje, 0);
+		textura.cargarTextura(gl, this, mContext, TTypeEntity.Character, 0);
 
 		// Pegatinas
-		pegatinas.cargarTexturas(gl, this, mContext, TTipoEntidad.Personaje, 0);
+		pegatinas.cargarTexturas(gl, this, mContext, TTypeEntity.Character, 0);
 	}
 
 	@Override
@@ -154,7 +154,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onDrawFrame(gl);
 
-		if (estado == TEstadoDeform.Reproducir)
+		if (estado == TStateDeform.Playing)
 		{
 			// Centrado de Marco
 			centrarPersonajeEnMarcoInicio(gl);
@@ -185,20 +185,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void dibujarPersonaje(GL10 gl, FloatBuffer malla, FloatBuffer contorno, VertexArray vertices)
 	{
 		// Textura
-		textura.dibujar(gl, this, malla, coordsTextura, TTipoEntidad.Personaje, 0);
+		textura.dibujar(gl, this, malla, coordsTextura, TTypeEntity.Character, 0);
 
 		// Contorno
 		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
 
 		// Pegatinas
-		pegatinas.dibujar(gl, this, vertices, triangulos, TTipoEntidad.Personaje, 0);
+		pegatinas.dibujar(gl, this, vertices, triangulos, TTypeEntity.Character, 0);
 	}
 
 	/* Métodos de Selección de Estado */
 
 	public void seleccionarAnyadir()
 	{		
-		estado = TEstadoDeform.Anyadir;
+		estado = TStateDeform.Adding;
 		
 		if (deformator == null)
 		{
@@ -213,12 +213,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarEliminar()
 	{
-		estado = TEstadoDeform.Eliminar;
+		estado = TStateDeform.Deleting;
 	}
 
 	public void seleccionarMover()
 	{
-		estado = TEstadoDeform.Deformar;
+		estado = TStateDeform.Moving;
 		
 		buscador = null;
 	}
@@ -228,7 +228,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean reiniciar()
 	{
-		estado = TEstadoDeform.Nada;
+		estado = TStateDeform.Nothing;
 		modoGrabar = false;
 		
 		buscador = null;
@@ -248,15 +248,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchDown(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TEstadoDeform.Anyadir)
+		if (estado == TStateDeform.Adding)
 		{
 			return anyadirHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TEstadoDeform.Eliminar)
+		else if (estado == TStateDeform.Deleting)
 		{
 			return eliminarHandle(pixelX, pixelY, screenWidth, screenHeight);
 		}
-		else if (estado == TEstadoDeform.Deformar)
+		else if (estado == TStateDeform.Moving)
 		{
 			return seleccionarHandle(pixelX, pixelY, screenWidth, screenHeight, pointer);
 		}
@@ -345,7 +345,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchMove(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TEstadoDeform.Deformar)
+		if (estado == TStateDeform.Moving)
 		{
 			// Handle sin Pulsar
 			if (punteros[pointer] == -1 || !handles.isSelectedHandle(punteros[pointer]))
@@ -387,7 +387,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchPointerUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TEstadoDeform.Deformar)
+		if (estado == TStateDeform.Moving)
 		{
 			handles.setSelectedHandle(punteros[pointer], true);
 			
@@ -400,7 +400,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (estado == TEstadoDeform.Deformar && punteros[pointer] != -1)
+		if (estado == TStateDeform.Moving && punteros[pointer] != -1)
 		{
 			handles.setSelectedHandle(punteros[pointer], true);
 			
@@ -425,7 +425,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 					public void run()
 					{
 						construirListadeMovimientos();
-						estado = TEstadoDeform.Nada;
+						estado = TStateDeform.Nothing;
 						alert.dismiss();
 					}
 				});
@@ -440,7 +440,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	protected boolean onMultiTouchPreAction(int countPointer)
 	{
-		if (estado == TEstadoDeform.Deformar)
+		if (estado == TStateDeform.Moving)
 		{
 			if (numPunteros > countPointer)
 			{
@@ -460,7 +460,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	
 	protected boolean onMultiTouchPostAction()
 	{
-		if (estado == TEstadoDeform.Deformar)
+		if (estado == TStateDeform.Moving)
 		{
 			if (modoGrabar)
 			{
@@ -539,7 +539,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public void seleccionarGrabado()
 	{
 		modoGrabar = true;
-		estado = TEstadoDeform.Deformar;
+		estado = TStateDeform.Moving;
 
 		verticesModificados = vertices.clone();
 		
@@ -554,7 +554,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void selecionarPlay()
 	{
-		estado = TEstadoDeform.Reproducir;
+		estado = TStateDeform.Playing;
 
 		iniciarAnimacion();
 	}
@@ -579,7 +579,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarReposo()
 	{
-		estado = TEstadoDeform.Nada;
+		estado = TStateDeform.Nothing;
 	}
 
 	/* Métodos de Obtención de Información */
@@ -591,27 +591,27 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 	public boolean isEstadoAnyadir()
 	{
-		return estado == TEstadoDeform.Anyadir;
+		return estado == TStateDeform.Adding;
 	}
 
 	public boolean isEstadoEliminar()
 	{
-		return estado == TEstadoDeform.Eliminar;
+		return estado == TStateDeform.Deleting;
 	}
 
 	public boolean isEstadoDeformar()
 	{
-		return estado == TEstadoDeform.Deformar;
+		return estado == TStateDeform.Moving;
 	}
 
 	public boolean isEstadoGrabacion()
 	{
-		return estado == TEstadoDeform.Deformar && modoGrabar;
+		return estado == TStateDeform.Moving && modoGrabar;
 	}
 
 	public boolean isEstadoReproduccion()
 	{
-		return estado == TEstadoDeform.Reproducir;
+		return estado == TStateDeform.Playing;
 	}
 
 	public List<VertexArray> getMovimientos()
@@ -629,10 +629,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public DeformDataSaved saveData()
 	{
 		// Textura
-		textura.descargarTextura(this, TTipoEntidad.Personaje, 0);
+		textura.descargarTextura(this, TTypeEntity.Character, 0);
 		
 		// Pegatinas
-		pegatinas.descargarTextura(this, TTipoEntidad.Personaje, 0);
+		pegatinas.descargarTextura(this, TTypeEntity.Character, 0);
 
 		return new DeformDataSaved(handles, verticesModificados, estado, listaVerticesAnimacion);
 	}

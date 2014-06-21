@@ -4,11 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.TTipoSticker;
-import com.creation.data.Textura;
-import com.game.data.Personaje;
+import com.creation.data.TTypeSticker;
+import com.creation.data.Texture;
+import com.game.data.Character;
 
 public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 {	
@@ -19,10 +19,10 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public PaintOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.SimpleTouch, false);
+		super(context, attrs, TStateDetector.SimpleTouch, false);
 	}
 
-	public void setParameters(Personaje personaje)
+	public void setParameters(Character personaje)
 	{		
 		// Asignar Renderer al GLSurfaceView
 		renderer = new PaintOpenGLRenderer(getContext(), Color.WHITE, personaje);
@@ -54,60 +54,60 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarNada()
 	{
 		renderer.seleccionarNada();
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 	
 	public void seleccionarMano()
 	{
 		renderer.seleccionarMano();
-		setEstado(TEstadoDetector.CamaraDetectors);
+		setEstado(TStateDetector.CamaraDetectors);
 		requestRender();
 	}
 
 	public void seleccionarPincel()
 	{
 		renderer.seleccionarPincel();
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 
 	public void seleccionarCubo()
 	{
 		renderer.seleccionarCubo();
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 
 	public void seleccionarColor(int color)
 	{
 		renderer.seleccionarColor(color);
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 	}
 
-	public void seleccionarSize(TTipoSize size)
+	public void seleccionarSize(TTypeSize size)
 	{
 		renderer.seleccionarSize(size);
 	}
 
-	public void anyadirPegatina(int pegatina, TTipoSticker tipo)
+	public void anyadirPegatina(int pegatina, TTypeSticker tipo)
 	{
 		renderer.seleccionarPegatina(pegatina, tipo);
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 	
-	public void eliminarPegatina(TTipoSticker tipo)
+	public void eliminarPegatina(TTypeSticker tipo)
 	{
 		renderer.eliminarPegatina(tipo);
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 		requestRender();		
 	}
 	
-	public void editarPegatina(TTipoSticker tipo)
+	public void editarPegatina(TTypeSticker tipo)
 	{
 		renderer.editarPegatina(tipo);
-		setEstado(TEstadoDetector.CoordDetectors);
+		setEstado(TStateDetector.CoordDetectors);
 		requestRender();
 	}
 
@@ -166,7 +166,7 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 		return renderer.isEstadoPegatinas();
 	}
 	
-	public Textura getTextura()
+	public Texture getTextura()
 	{
 		renderer.seleccionarCaptura();
 		requestRender();

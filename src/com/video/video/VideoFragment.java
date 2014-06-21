@@ -17,7 +17,7 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 {
 	private VideoFragmentListener mCallback;
 	
-	private TEstadoDialogo estadoDialogo;
+	private TStateDialog estadoDialogo;
 	private TextDialog dialogoEscena, dialogoPersonaje, dialogoActor;
 	private ImageView imagenPlay;
 	
@@ -148,30 +148,30 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	}
 	
 	@Override
-	public void onChangeDialog(final int text, TEstadoVideo estado)
+	public void onChangeDialog(final int text, TStateVideo estado)
 	{
-		if (estado == TEstadoVideo.Outside || estado == TEstadoVideo.Door)
+		if (estado == TStateVideo.Outside || estado == TStateVideo.Door)
 		{
-			estadoDialogo = TEstadoDialogo.Escena;
+			estadoDialogo = TStateDialog.Scene;
 		}
-		else if (estado == TEstadoVideo.Rock)
+		else if (estado == TStateVideo.Rock)
 		{
-			estadoDialogo = TEstadoDialogo.Personaje;
+			estadoDialogo = TStateDialog.Character;
 		}
-		else if (estado == TEstadoVideo.Noise || estado == TEstadoVideo.Brief)
+		else if (estado == TStateVideo.Noise || estado == TStateVideo.Brief)
 		{
-			estadoDialogo = TEstadoDialogo.Actor;
+			estadoDialogo = TStateDialog.Actor;
 		}
 		else
 		{
-			estadoDialogo = TEstadoDialogo.Nada;
+			estadoDialogo = TStateDialog.Nothing;
 		}
 		
 		getActivity().runOnUiThread(new Runnable() {
 	        @Override
 	        public void run()
 	        {
-	        	if (estadoDialogo == TEstadoDialogo.Escena)
+	        	if (estadoDialogo == TStateDialog.Scene)
 	        	{
 	        		if (dialogoEscena == null)
 	        		{
@@ -184,7 +184,7 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 		        	dialogoEscena.setText(text);
 		        	dialogoEscena.show(canvas, posX, posY);
 	        	}
-	        	else if (estadoDialogo == TEstadoDialogo.Personaje)
+	        	else if (estadoDialogo == TStateDialog.Character)
 	        	{
 	        		if (dialogoPersonaje == null)
 	        		{
@@ -197,7 +197,7 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 		        	dialogoPersonaje.setText(text);
 		        	dialogoPersonaje.show(canvas, posX, posY);
 	        	}
-	        	else if (estadoDialogo == TEstadoDialogo.Actor)
+	        	else if (estadoDialogo == TStateDialog.Actor)
 	        	{
 	        		if (dialogoActor == null)
 	        		{
@@ -217,15 +217,15 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	@Override
 	public void onDismissDialog()
 	{
-		if (estadoDialogo == TEstadoDialogo.Escena)
+		if (estadoDialogo == TStateDialog.Scene)
 		{
 			dialogoEscena.dismiss();
 		}
-		else if (estadoDialogo == TEstadoDialogo.Personaje)
+		else if (estadoDialogo == TStateDialog.Character)
 		{
 			dialogoPersonaje.dismiss();
 		}
-		else if (estadoDialogo == TEstadoDialogo.Actor)
+		else if (estadoDialogo == TStateDialog.Actor)
 		{
 			dialogoActor.dismiss();
 		}

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.game.data.Nivel;
+import com.game.data.Level;
 import com.main.model.GamePreferences;
 import com.main.model.GameStatistics;
 import com.project.main.R;
@@ -20,20 +20,20 @@ public class LevelSelectFragment extends OpenGLFragment
 	private OnLevelListener mListener;
 
 	private GameStatistics estadisticas;
-	private Nivel nivel;
+	private Level nivel;
 
 	private IconImageButton botonNivel;
 
 	/* Constructora */
 
-	public static final LevelSelectFragment newInstance(OnLevelListener l, Nivel n, GameStatistics e)
+	public static final LevelSelectFragment newInstance(OnLevelListener l, Level n, GameStatistics e)
 	{
 		LevelSelectFragment fragment = new LevelSelectFragment();
 		fragment.setParameters(l, n, e);
 		return fragment;
 	}
 
-	private void setParameters(OnLevelListener l, Nivel n, GameStatistics e)
+	private void setParameters(OnLevelListener l, Level n, GameStatistics e)
 	{
 		mListener = l;
 		nivel = n;

@@ -9,11 +9,11 @@ import android.view.View;
 import com.android.opengl.BackgroundDataSaved;
 import com.android.sensor.OrientationDetector;
 import com.android.touch.GameDetector;
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.InstanciaNivel;
-import com.game.data.Personaje;
+import com.creation.data.TTypeMovement;
+import com.game.data.InstanceLevel;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -45,7 +45,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		contadorCiclos = 0;
 	}
 
-	public void setParameters(OnGameListener listener, Personaje personaje, InstanciaNivel nivel)
+	public void setParameters(OnGameListener listener, Character personaje, InstanceLevel nivel)
 	{
 		mListener = listener;
 
@@ -60,7 +60,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				if (renderer.playAnimation())
 				{
-					renderer.seleccionarAnimacion(TTipoMovimiento.Run);
+					renderer.seleccionarAnimacion(TTypeMovement.Run);
 					animacionFinalizada = true;
 				}
 
@@ -68,34 +68,34 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 
 				switch (renderer.isGameEnded())
 				{
-					case VidaPerdidaPersonaje:
+					case CharacterLifeLost:
 						mListener.onGamePlaySoundEffect(R.raw.effect_game_loselife, false);
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
 					break;
-					case VidaPerdidaBoss:
+					case BossLifeLost:
 						mListener.onGamePlaySoundEffect(R.raw.effect_game_loselife, false);
 						mListener.onGameLivesChanged(renderer.getVidasPersonaje(), renderer.getVidasBoss());
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
 					break;
-					case CambioPuntuacion:
+					case ScoreChanged:
 						mListener.onGameScoreChanged(renderer.getPuntuacion());
 						postDelayed(this);
 					break;
-					case FinFaseEnemigos:
+					case EnemiesPhaseEnded:
 						mListener.onGameEnemiesFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
 						sensorDetector.onSensorCalibrated();
 						postDelayed(this);
 					break;
-					case FinFaseBoss:
+					case BossPhaseEnded:
 						mListener.onGameBossFinished(renderer.getPuntuacion(), renderer.getVidasPersonaje(), renderer.getVidasBoss());
 					break;
-					case FinJuegoDerrota:	
+					case GameOver:	
 						mListener.onGameFailed(renderer.getPuntuacion(), renderer.getVidasPersonaje());
 					break;
-					case Nada:
+					case Nothing:
 						postDelayed(this);
 					break;
 				}
@@ -105,14 +105,14 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			}
 		};
 
-		renderer.seleccionarAnimacion(TTipoMovimiento.Run);
+		renderer.seleccionarAnimacion(TTypeMovement.Run);
 		animacionFinalizada = true;
 		threadActivo = false;
 	}
 	
 	private void postDelayed(Runnable r)
 	{
-		if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+		if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 		{
 			handler.postDelayed(r, GamePreferences.TIME_INTERVAL_ANIMATION(contadorCiclos));
 		}
@@ -123,7 +123,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	}
 
 	@Override
-	public void setEstado(TEstadoDetector e)
+	public void setEstado(TStateDetector e)
 	{
 		super.setEstado(e);
 		
@@ -134,25 +134,25 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				@Override
 				public void onDragUp()
 				{
-					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 					{
-						seleccionarAnimacion(TTipoMovimiento.Jump);
+						seleccionarAnimacion(TTypeMovement.Jump);
 					}
 				}
 
 				@Override
 				public void onDragDown()
 				{
-					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 					{
-						seleccionarAnimacion(TTipoMovimiento.Crouch);
+						seleccionarAnimacion(TTypeMovement.Crouch);
 					}
 				}
 				
 				@Override
 				public void onTouchMove(float pixelY)
 				{
-					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseBoss && !GamePreferences.IS_SENSOR_ENABLED())
+					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.BossPhase && !GamePreferences.IS_SENSOR_ENABLED())
 					{
 						seleccionarPosicion(pixelY);
 					}
@@ -161,7 +161,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				@Override
 				public void onTap()
 				{
-					seleccionarAnimacion(TTipoMovimiento.Attack);
+					seleccionarAnimacion(TTypeMovement.Attack);
 				}
 				
 			};
@@ -176,7 +176,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarEstado(TEstadoPersonaje.Subir);
+						seleccionarEstado(TStateCharacter.Up);
 					}
 				}
 
@@ -185,7 +185,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarEstado(TEstadoPersonaje.Bajar);
+						seleccionarEstado(TStateCharacter.Down);
 					}
 				}
 
@@ -194,7 +194,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 				{
 					if (GamePreferences.IS_SENSOR_ENABLED())
 					{
-						seleccionarEstado(TEstadoPersonaje.Nada);
+						seleccionarEstado(TStateCharacter.Nothing);
 					}
 				}
 				
@@ -234,7 +234,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	
 	/* Métodos de Selección de Estado */
 	
-	public void seleccionarEstado(TEstadoPersonaje estado)
+	public void seleccionarEstado(TStateCharacter estado)
 	{
 		if (threadActivo)
 		{
@@ -250,7 +250,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 		}
 	}
 	
-	public void seleccionarAnimacion(TTipoMovimiento movimiento)
+	public void seleccionarAnimacion(TTypeMovement movimiento)
 	{
 		if (threadActivo)
 		{
@@ -258,7 +258,7 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 			{
 				if (renderer.seleccionarAnimacion(movimiento))
 				{
-					if (GamePreferences.GET_ESTADO_GAME() == TEstadoGame.FaseEnemies)
+					if (GamePreferences.GET_ESTADO_GAME() == TStateGame.EnemiesPhase)
 					{
 						int sound = movimiento.getSound();
 						if (sound != -1)

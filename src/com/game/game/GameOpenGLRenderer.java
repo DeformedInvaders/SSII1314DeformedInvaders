@@ -12,46 +12,46 @@ import android.graphics.Color;
 
 import com.android.opengl.BackgroundDataSaved;
 import com.android.opengl.OpenGLRenderer;
-import com.android.opengl.TTipoFondoRenderer;
-import com.android.opengl.TTipoTexturasRenderer;
+import com.android.opengl.TTypeBackgroundRenderer;
+import com.android.opengl.TTypeTexturesRenderer;
 import com.creation.data.Handle;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Burbuja;
-import com.game.data.Disparo;
-import com.game.data.Entidad;
-import com.game.data.InstanciaEntidad;
-import com.game.data.InstanciaNivel;
-import com.game.data.Jefe;
-import com.game.data.Personaje;
-import com.game.data.Plataforma;
+import com.creation.data.TTypeMovement;
+import com.game.data.Shield;
+import com.game.data.Shot;
+import com.game.data.Entity;
+import com.game.data.InstanceEntity;
+import com.game.data.InstanceLevel;
+import com.game.data.Boss;
+import com.game.data.Character;
+import com.game.data.Platform;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
 public class GameOpenGLRenderer extends OpenGLRenderer
 {
 	// Estado
-	private TEstadoJefe estadoJefe;
+	private TStateBoss estadoJefe;
 	private int numIteraciones;
 
 	// Protagonista
-	private Personaje protagonista;
+	private Character protagonista;
 	
-	private InstanciaEntidad personaje;
-	private Burbuja burbujaPersonaje;
-	private Plataforma plataformaPersonaje;
-	private Disparo disparoPersonaje;
+	private InstanceEntity personaje;
+	private Shield burbujaPersonaje;
+	private Platform plataformaPersonaje;
+	private Shot disparoPersonaje;
 	
 	// Boss
-	private Jefe lider;
+	private Boss lider;
 	
-	private InstanciaEntidad jefe;
-	private Burbuja burbujaJefe;
-	private Plataforma plataformaJefe;
-	private Disparo disparoJefe;
+	private InstanceEntity jefe;
+	private Shield burbujaJefe;
+	private Platform plataformaJefe;
+	private Shot disparoJefe;
 	
 	// Enemigos
-	private List<Entidad> tipoEnemigos;
-	private List<InstanciaEntidad> listaEnemigos;
+	private List<Entity> tipoEnemigos;
+	private List<InstanceEntity> listaEnemigos;
 	private int posEnemigoActual;
 	private Handle handleEnemigoActual;
 
@@ -62,26 +62,26 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	// Texturas
 	private boolean texturasCargadas;
 	
-	private TEstadoPersonaje estadoPersonaje;
+	private TStateCharacter estadoPersonaje;
 
 	/* Constructura */
 
-	public GameOpenGLRenderer(Context context, Personaje p, InstanciaNivel l)
+	public GameOpenGLRenderer(Context context, Character p, InstanceLevel l)
 	{
-		super(context, TTipoFondoRenderer.Desplazable, TTipoTexturasRenderer.Juego);
+		super(context, TTypeBackgroundRenderer.Movable, TTypeTexturesRenderer.Game);
 		seleccionarTexturaFondo(l.getFondoNivel().getIdTexturaFondos());
 
-		GamePreferences.SET_GAME_PARAMETERS(TEstadoGame.FaseEnemies);
+		GamePreferences.SET_GAME_PARAMETERS(TStateGame.EnemiesPhase);
 		
 		protagonista = p;
 		
 		lider = l.getBoss();
-		estadoJefe = TEstadoJefe.Nada;
+		estadoJefe = TStateBoss.Nothing;
 		
-		personaje = new InstanciaEntidad(protagonista.getId(), protagonista.getTipo());
-		burbujaPersonaje = new Burbuja(personaje, GamePreferences.MAX_CHARACTER_LIVES);
-		plataformaPersonaje = new Plataforma(personaje);
-		disparoPersonaje = new Disparo(personaje);
+		personaje = new InstanceEntity(protagonista.getId(), protagonista.getTipo());
+		burbujaPersonaje = new Shield(personaje, GamePreferences.MAX_CHARACTER_LIVES);
+		plataformaPersonaje = new Platform(personaje);
+		disparoPersonaje = new Shot(personaje);
 		
 		burbujaPersonaje.activarBurbuja();
 		plataformaPersonaje.desactivarPlataforma();
@@ -92,10 +92,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		posEnemigoActual = 0;
 		handleEnemigoActual = new Handle(50, 20, Color.YELLOW);
 		
-		jefe = new InstanciaEntidad(lider.getId(), lider.getTipo());
-		burbujaJefe = new Burbuja(jefe, GamePreferences.MAX_BOSS_LIVES);
-		plataformaJefe = new Plataforma(jefe);
-		disparoJefe = new Disparo(jefe);
+		jefe = new InstanceEntity(lider.getId(), lider.getTipo());
+		burbujaJefe = new Shield(jefe, GamePreferences.MAX_BOSS_LIVES);
+		plataformaJefe = new Platform(jefe);
+		disparoJefe = new Shot(jefe);
 		
 		burbujaJefe.desactivarBurbuja();
 		plataformaJefe.desactivarPlataforma();
@@ -136,18 +136,18 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		jefe.setDimensions(lider.getHeight(), lider.getWidth());
 		
 		// Lista Enemigos
-		Iterator<Entidad> it = tipoEnemigos.iterator();
+		Iterator<Entity> it = tipoEnemigos.iterator();
 		while (it.hasNext())
 		{
 			it.next().cargarTextura(gl, this, mContext);
 		}
 		
 		// Actualización de Dimensiones
-		Iterator<InstanciaEntidad> ite = listaEnemigos.iterator();
+		Iterator<InstanceEntity> ite = listaEnemigos.iterator();
 		while (ite.hasNext())
 		{
-			InstanciaEntidad instancia = ite.next();
-			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+			InstanceEntity instancia = ite.next();
+			Entity entidad = tipoEnemigos.get(instancia.getIdEntidad());
 			instancia.setDimensions(entidad.getHeight(), entidad.getWidth());
 		}
 		
@@ -176,10 +176,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 		switch (GamePreferences.GET_ESTADO_GAME())
 		{
-			case FaseEnemies:
+			case EnemiesPhase:
 				onDrawEnemiesPhase(gl);
 			break;
-			case FaseBoss:
+			case BossPhase:
 				onDrawBossPhase(gl);
 			break;
 			default:
@@ -205,8 +205,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			int i = posEnemigoActual;
 			while (activo && i < listaEnemigos.size())
 			{
-				InstanciaEntidad instancia = listaEnemigos.get(i);
-				Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+				InstanceEntity instancia = listaEnemigos.get(i);
+				Entity entidad = tipoEnemigos.get(instancia.getIdEntidad());
 				instancia.dibujar(gl, this, entidad);
 				
 				activo = instancia.getPosicionX() < getScreenWidth();
@@ -218,8 +218,8 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			{
 				if (posEnemigoActual < listaEnemigos.size())
 				{
-					InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
-					Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+					InstanceEntity instancia = listaEnemigos.get(posEnemigoActual);
+					Entity entidad = tipoEnemigos.get(instancia.getIdEntidad());
 					
 					gl.glPushMatrix();
 		
@@ -266,11 +266,11 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	
 	/* Métodos de Modificación de Estado */
 
-	public boolean seleccionarAnimacion(TTipoMovimiento movimiento)
+	public boolean seleccionarAnimacion(TTypeMovement movimiento)
 	{
 		protagonista.seleccionarAnimacion(movimiento);
 		
-		if (movimiento == TTipoMovimiento.Attack)
+		if (movimiento == TTypeMovement.Attack)
 		{
 			if (!disparoPersonaje.isActivado())
 			{
@@ -281,7 +281,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			
 			return false;
 		}
-		else if (movimiento == TTipoMovimiento.Jump)
+		else if (movimiento == TTypeMovement.Jump)
 		{
 			personaje.saltar(protagonista.getIndiceAnimacion());
 			return true;
@@ -290,7 +290,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		return true;
 	}
 	
-	public void seleccionarEstado(TEstadoPersonaje estado) 
+	public void seleccionarEstado(TStateCharacter estado) 
 	{
 		estadoPersonaje = estado;
 	}
@@ -319,9 +319,9 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 	{
 		switch (GamePreferences.GET_ESTADO_GAME())
 		{
-			case FaseEnemies:
+			case EnemiesPhase:
 				return playAnimationEnemiesPhase();
-			case FaseBoss:
+			case BossPhase:
 				return playAnimationBossPhase();
 			default:
 			break;
@@ -346,21 +346,21 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		
 		if (posEnemigoActual < listaEnemigos.size())
 		{
-			InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);
-			Entidad entidad = tipoEnemigos.get(instancia.getIdEntidad());
+			InstanceEntity instancia = listaEnemigos.get(posEnemigoActual);
+			Entity entidad = tipoEnemigos.get(instancia.getIdEntidad());
 			if (instancia.getPosicionX() < -entidad.getWidth())
 			{
 				switch (entidad.getTipo())
 				{
-					case Enemigo:
+					case Enemy:
 						puntuacion += GamePreferences.SCORE_ACTION_WRONG;
 						puntuacionModificada = true;
 					break;
-					case Obstaculo:
+					case Obstacle:
 						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
 						puntuacionModificada = true;
 					break;
-					case Misil:
+					case Missil:
 						puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
 						puntuacionModificada = true;
 					default:
@@ -389,14 +389,14 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		plataformaPersonaje.animar();
 		plataformaJefe.animar();
 		
-		if(estadoPersonaje == TEstadoPersonaje.Bajar)
+		if(estadoPersonaje == TStateCharacter.Down)
 		{
 			if (personaje.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
 				personaje.bajar();
 			}
 		}
-		else if (estadoPersonaje == TEstadoPersonaje.Subir)
+		else if (estadoPersonaje == TStateCharacter.Up)
 		{
 			if (personaje.getPosicionY() + personaje.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
@@ -404,30 +404,30 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			}
 		}
 		
-		if(estadoJefe == TEstadoJefe.Nada)
+		if(estadoJefe == TStateBoss.Nothing)
 		{
 			if(numIteraciones == 0)
 			{
-				int tipoMovimiento = (int) Math.floor(Math.random() * TEstadoJefe.values().length);
-				estadoJefe = TEstadoJefe.values()[tipoMovimiento];
+				int tipoMovimiento = (int) Math.floor(Math.random() * TStateBoss.values().length);
+				estadoJefe = TStateBoss.values()[tipoMovimiento];
 				numIteraciones = (int) Math.floor(Math.random() * 9) + 1;
 				
-				if (estadoJefe == TEstadoJefe.Bajar && jefe.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() <= 0)
+				if (estadoJefe == TStateBoss.Down && jefe.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() <= 0)
 				{
-					estadoJefe = TEstadoJefe.Subir;
+					estadoJefe = TStateBoss.Up;
 				}	
-				else if (estadoJefe == TEstadoJefe.Subir && jefe.getPosicionY() + jefe.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() >= getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
+				else if (estadoJefe == TStateBoss.Up && jefe.getPosicionY() + jefe.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() >= getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 				{
-					estadoJefe = TEstadoJefe.Bajar;
+					estadoJefe = TStateBoss.Down;
 				}
-				else if (estadoJefe == TEstadoJefe.Atacar)
+				else if (estadoJefe == TStateBoss.Attack)
 				{
 					numIteraciones = 10;
 					
 					if (disparoJefe.isActivado())
 					{
 						numIteraciones = 0;
-						estadoJefe = TEstadoJefe.Nada;
+						estadoJefe = TStateBoss.Nothing;
 					}
 				}
 				
@@ -435,7 +435,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 				return protagonista.animar();
 			}
 		}
-		else if (estadoJefe == TEstadoJefe.Subir)
+		else if (estadoJefe == TStateBoss.Up)
 		{	
 			if (jefe.getPosicionY() + jefe.getHeight() + GamePreferences.DIST_MOVIMIENTO_CHARACTER() < getScreenHeight() - GamePreferences.DISTANCE_GAME_BOTTOM())
 			{
@@ -443,10 +443,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				estadoJefe = TEstadoJefe.Nada;
+				estadoJefe = TStateBoss.Nothing;
 			}
 		}
-		else if (estadoJefe == TEstadoJefe.Bajar)
+		else if (estadoJefe == TStateBoss.Down)
 		{
 			if (jefe.getPosicionY() - GamePreferences.DIST_MOVIMIENTO_CHARACTER() > 0)
 			{
@@ -454,10 +454,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			}
 			else
 			{
-				estadoJefe = TEstadoJefe.Nada;
+				estadoJefe = TStateBoss.Nothing;
 			}
 		}
-		else if (estadoJefe == TEstadoJefe.Atacar)
+		else if (estadoJefe == TStateBoss.Attack)
 		{
 			disparoJefe.activarDisparo();
 			plataformaJefe.activarDisparo();
@@ -466,7 +466,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		numIteraciones--;
 		if (numIteraciones == 0)
 		{
-			estadoJefe = TEstadoJefe.Nada;
+			estadoJefe = TStateBoss.Nothing;
 		}
 			
 		lider.animar();
@@ -475,28 +475,28 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 
 	/* Métodos de Obtención de Información */
 	
-	public TEventoGame isGameEnded()
+	public TEventGame isGameEnded()
 	{
 		switch (GamePreferences.GET_ESTADO_GAME())
 		{
-			case FaseEnemies:
+			case EnemiesPhase:
 				return isGameEndedEnemiesPhase();
-			case FaseBoss:
+			case BossPhase:
 				return isGameEndedBossPhase();
 			default:
 			break;
 		}
 		
-		return TEventoGame.Nada;
+		return TEventGame.Nothing;
 	}
 
-	private TEventoGame isGameEndedEnemiesPhase()
+	private TEventGame isGameEndedEnemiesPhase()
 	{
 		// Final del juego
 		if (isFondoFinal())
 		{
 			puntuacion += GamePreferences.SCORE_LEVEL_COMPLETED;
-			GamePreferences.SET_GAME_PARAMETERS(TEstadoGame.FaseBoss);
+			GamePreferences.SET_GAME_PARAMETERS(TStateGame.BossPhase);
 			
 			protagonista.reposo();
 			plataformaPersonaje.activarPlataforma();
@@ -509,23 +509,23 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			burbujaJefe.activarBurbuja();
 			plataformaJefe.activarPlataforma();
 			
-			return TEventoGame.FinFaseEnemigos;
+			return TEventGame.EnemiesPhaseEnded;
 		}
 		
 		// Colision con enemigo actual
 		if (posEnemigoActual < listaEnemigos.size())
 		{
-			InstanciaEntidad instancia = listaEnemigos.get(posEnemigoActual);			
-			TEstadoColision colision = personaje.colision(instancia, protagonista.getMovimientoActual());
+			InstanceEntity instancia = listaEnemigos.get(posEnemigoActual);			
+			TStateCollision colision = personaje.colision(instancia, protagonista.getMovimientoActual());
 			
 			switch (colision)
 			{
-				case EnemigoDerrotado:
+				case EnemyDefeated:
 					posEnemigoActual++;
 					
 					puntuacion += GamePreferences.SCORE_ACTION_RIGHT;
-					return TEventoGame.CambioPuntuacion;
-				case Colision:
+					return TEventGame.ScoreChanged;
+				case EnemyCollision:
 					posEnemigoActual++;
 					
 					if (!GamePreferences.IS_DEBUG_ENABLED())
@@ -538,10 +538,10 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 					if (!burbujaPersonaje.isAlive())
 					{					
 						protagonista.reposo();
-						return TEventoGame.FinJuegoDerrota;
+						return TEventGame.GameOver;
 					}
 					
-					return TEventoGame.VidaPerdidaPersonaje;
+					return TEventGame.CharacterLifeLost;
 				default:
 				break;
 			}
@@ -552,13 +552,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		{
 			puntuacionModificada = false;
 			
-			return TEventoGame.CambioPuntuacion;
+			return TEventGame.ScoreChanged;
 		}
 
-		return TEventoGame.Nada;
+		return TEventGame.Nothing;
 	}
 	
-	private TEventoGame isGameEndedBossPhase()
+	private TEventGame isGameEndedBossPhase()
 	{
 		if (disparoPersonaje.getPosicionX() > getScreenWidth())
 		{
@@ -570,7 +570,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			disparoJefe.desactivarDisparo();
 		}
 		
-		if (personaje.colision(disparoJefe) == TEstadoColision.Colision)
+		if (personaje.colision(disparoJefe) == TStateCollision.EnemyCollision)
 		{
 			if (!GamePreferences.IS_DEBUG_ENABLED())
 			{
@@ -583,13 +583,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			
 			if (!burbujaPersonaje.isAlive())
 			{
-				return TEventoGame.FinJuegoDerrota;
+				return TEventGame.GameOver;
 			}
 			
-			return TEventoGame.VidaPerdidaPersonaje;
+			return TEventGame.CharacterLifeLost;
 		}
 		
-		if (jefe.colision(disparoPersonaje) == TEstadoColision.Colision)
+		if (jefe.colision(disparoPersonaje) == TStateCollision.EnemyCollision)
 		{
 			burbujaJefe.quitarVida();
 			disparoPersonaje.desactivarDisparo();
@@ -598,13 +598,13 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 			
 			if (!burbujaJefe.isAlive())
 			{
-				return TEventoGame.FinFaseBoss;
+				return TEventGame.BossPhaseEnded;
 			}
 			
-			return TEventoGame.VidaPerdidaBoss;
+			return TEventGame.BossLifeLost;
 		}
 		
-		return TEventoGame.Nada;
+		return TEventGame.Nothing;
 	}
 	
 	public int getPuntuacion()
@@ -638,7 +638,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		disparoJefe.descargarTextura(this);
 		
 		// Lista Enemigos
-		Iterator<Entidad> it = tipoEnemigos.iterator();
+		Iterator<Entity> it = tipoEnemigos.iterator();
 		while (it.hasNext())
 		{
 			it.next().descargarTextura(this);

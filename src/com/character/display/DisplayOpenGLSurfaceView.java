@@ -5,10 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.AttributeSet;
 
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Personaje;
+import com.creation.data.TTypeMovement;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 
 public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
@@ -28,7 +28,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public DisplayOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.SimpleTouch, true);
+		super(context, attrs, TStateDetector.SimpleTouch, true);
 
 		handler = new Handler();
 
@@ -52,7 +52,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 		threadActivo = false;
 	}
 
-	public void setParameters(OnDisplayListener listener, Personaje personaje, boolean random)
+	public void setParameters(OnDisplayListener listener, Character personaje, boolean random)
 	{
 		mListener = listener;
 		movimientoAleatorio = random;
@@ -79,7 +79,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 		if (movimientoAleatorio && personajeCargado)
 		{
 			int animacion = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_MOVIMIENTOS);
-			seleccionarAnimacion(TTipoMovimiento.values()[animacion]);
+			seleccionarAnimacion(TTypeMovement.values()[animacion]);
 			return true;
 		}
 
@@ -88,7 +88,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 
 	/* Métodos de Selección de Estado */
 
-	public void seleccionarAnimacion(TTipoMovimiento movimiento)
+	public void seleccionarAnimacion(TTypeMovement movimiento)
 	{
 		if (!threadActivo)
 		{
@@ -109,7 +109,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarRetoque()
 	{
 		renderer.seleccionarRetoque(getHeight(), getWidth());
-		setEstado(TEstadoDetector.CamaraDetectors);
+		setEstado(TStateDetector.CamaraDetectors);
 
 		requestRender();
 	}
@@ -145,7 +145,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 	public Bitmap getCapturaPantalla()
 	{
 		renderer.seleccionarCaptura();
-		setEstado(TEstadoDetector.SimpleTouch);
+		setEstado(TStateDetector.SimpleTouch);
 
 		requestRender();
 		return renderer.getCapturaPantalla();

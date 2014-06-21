@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Personaje;
+import com.creation.data.TTypeMovement;
+import com.game.data.Character;
 import com.lib.buffer.VertexArray;
 import com.project.main.R;
 
@@ -19,8 +19,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 {
 	private OnDeformationListener mListener;
 	
-	private Personaje personaje;
-	private TTipoMovimiento movimiento;
+	private Character personaje;
+	private TTypeMovement movimiento;
 	
 	private DeformOpenGLSurfaceView canvas;
 	private IconImageButton botonAnyadir, botonEliminar, botonDeformar, botonReiniciar, botonGrabar, botonReproducir;
@@ -29,14 +29,14 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	
 	/* Constructora */
 
-	public static final DeformFragment newInstance(OnDeformationListener l, Personaje p, TTipoMovimiento m)
+	public static final DeformFragment newInstance(OnDeformationListener l, Character p, TTypeMovement m)
 	{
 		DeformFragment fragment = new DeformFragment();
 		fragment.setParameters(l, p, m);
 		return fragment;
 	}
 
-	private void setParameters(OnDeformationListener l, Personaje p, TTipoMovimiento m)
+	private void setParameters(OnDeformationListener l, Character p, TTypeMovement m)
 	{
 		mListener = l;
 		personaje = p;

@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.creation.data.TTipoSticker;
+import com.creation.data.TTypeSticker;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.main.model.GameStatistics;
@@ -30,7 +30,7 @@ public abstract class StickerDialog extends WindowDialog
 		LinearLayout mainLayout = (LinearLayout) findViewById(R.id.linearLayoutSticker1);
 		LinearLayout[] stickerLayout = new LinearLayout[GamePreferences.NUM_TYPE_STICKERS];
 		
-		TTipoSticker[] pegatinas = TTipoSticker.values();
+		TTypeSticker[] pegatinas = TTypeSticker.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
 			stickerLayout[i] = construirLayout(mainLayout, pegatinas[i]);
@@ -38,7 +38,7 @@ public abstract class StickerDialog extends WindowDialog
 		}
 	}
 	
-	private LinearLayout construirLayout(LinearLayout mainLayout, TTipoSticker tipo)
+	private LinearLayout construirLayout(LinearLayout mainLayout, TTypeSticker tipo)
 	{
 		LinearLayout typeLayout = new LinearLayout(mContext);
 		typeLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -83,7 +83,7 @@ public abstract class StickerDialog extends WindowDialog
 		cargarPegatina(layout, idImagen, tagImagen, listener);
 	}
 	
-	private void construirPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTipoSticker tipo, OnClickListener listener)
+	private void construirPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTypeSticker tipo, OnClickListener listener)
 	{
 		boolean juegoTerminado = true;
 		boolean pegatinaAnyiadida = false;
@@ -100,7 +100,7 @@ public abstract class StickerDialog extends WindowDialog
 				cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
 				pegatinaAnyiadida = true;
 			}
-			else if (tipo == TTipoSticker.Eyes || tipo == TTipoSticker.Mouth)
+			else if (tipo == TTypeSticker.Eyes || tipo == TTypeSticker.Mouth)
 			{
 				if (i < GamePreferences.NUM_TYPE_STICKERS(tipo) - 4)
 				{
@@ -146,17 +146,17 @@ public abstract class StickerDialog extends WindowDialog
 
 	/* Métodos Abstractos */
 
-	public abstract void onAddSticker(int tag, TTipoSticker tipo);
-	public abstract void onDeleteSticker(TTipoSticker tipo);
-	public abstract void onEditSticker(TTipoSticker tipo);
+	public abstract void onAddSticker(int tag, TTypeSticker tipo);
+	public abstract void onDeleteSticker(TTypeSticker tipo);
+	public abstract void onEditSticker(TTypeSticker tipo);
 
 	/* Métodos Listener onClick */
 	
 	public class OnAddStickerClickListener implements OnClickListener
 	{
-		private TTipoSticker tipoPegatina;
+		private TTypeSticker tipoPegatina;
 		
-		public OnAddStickerClickListener(TTipoSticker tipo)
+		public OnAddStickerClickListener(TTypeSticker tipo)
 		{
 			super();
 			
@@ -173,9 +173,9 @@ public abstract class StickerDialog extends WindowDialog
 	
 	public class OnDeleteStickerClickListener implements OnClickListener
 	{
-		private TTipoSticker tipoPegatina;
+		private TTypeSticker tipoPegatina;
 		
-		public OnDeleteStickerClickListener(TTipoSticker tipo)
+		public OnDeleteStickerClickListener(TTypeSticker tipo)
 		{
 			super();
 			
@@ -192,9 +192,9 @@ public abstract class StickerDialog extends WindowDialog
 	
 	public class OnEditStickerClickListener implements OnClickListener
 	{
-		private TTipoSticker tipoPegatina;
+		private TTypeSticker tipoPegatina;
 	
-		public OnEditStickerClickListener(TTipoSticker tipo)
+		public OnEditStickerClickListener(TTypeSticker tipo)
 		{
 			super();
 			

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.OpenGLSurfaceView;
 import com.main.model.GamePreferences;
 import com.video.data.Video;
@@ -13,7 +13,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 {
 	private OnVideoListener mListener;
 	
-	private TEstadoVideo estado;
+	private TStateVideo estado;
 	private Video video;
 	
 	private VideoOpenGLRenderer renderer;
@@ -31,7 +31,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public VideoOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.SimpleTouch, false);
+		super(context, attrs, TStateDetector.SimpleTouch, false);
 	}
 
 	public void setParameters(OnVideoListener listener, Video v)
@@ -39,7 +39,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 		mListener = listener;
 		
 		video = v;
-		estado = TEstadoVideo.Nada;
+		estado = TStateVideo.Nothing;
 		threadActivo = false;
 		
 		posMensaje = 0;
@@ -65,7 +65,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 					if (tiempoActual - tiempoInicio >= tiempoDuracion)
 					{
 						// Fin de Video
-						if (estado == TEstadoVideo.Logo)
+						if (estado == TStateVideo.Space)
 						{
 							threadActivo = false;
 							
@@ -84,7 +84,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 							
 							renderer.seleccionarEstado(estado);
 							
-							if (estado != TEstadoVideo.Outside)
+							if (estado != TStateVideo.Outside)
 							{
 								renderer.avanzarEscena();
 								requestRender();
@@ -127,7 +127,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 					}
 					
 					// Cambio de Ciclo de Escena
-					if (estado == TEstadoVideo.Door)
+					if (estado == TStateVideo.Door)
 					{
 						renderer.acercarEscena(0.999f);
 					}

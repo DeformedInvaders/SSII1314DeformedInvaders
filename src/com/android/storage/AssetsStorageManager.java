@@ -9,16 +9,16 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.creation.data.Esqueleto;
-import com.creation.data.Movimientos;
-import com.creation.data.Textura;
-import com.game.data.Enemigo;
-import com.game.data.Jefe;
-import com.game.data.Personaje;
-import com.game.select.TTipoLevel;
+import com.creation.data.Skeleton;
+import com.creation.data.Movements;
+import com.creation.data.Texture;
+import com.game.data.Enemy;
+import com.game.data.Boss;
+import com.game.data.Character;
+import com.game.select.TTypeLevel;
 import com.lib.buffer.VertexArray;
 import com.main.model.GameResources;
-import com.video.data.TTipoActores;
+import com.video.data.TTypeActors;
 
 public class AssetsStorageManager
 {
@@ -33,7 +33,7 @@ public class AssetsStorageManager
 		mContext = context;
 	}
 	
-	public Enemigo importarEnemigo(TTipoLevel nivel, int indiceTextura, int idEnemigo)
+	public Enemy importarEnemigo(TTypeLevel nivel, int indiceTextura, int idEnemigo)
 	{
 		try
 		{
@@ -41,9 +41,9 @@ public class AssetsStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Guardar Personajes
-			Enemigo enemigo = new Enemigo(indiceTextura, idEnemigo);
-			enemigo.setEsqueleto((Esqueleto) data.readObject());
-			enemigo.setTextura((Textura) data.readObject());
+			Enemy enemigo = new Enemy(indiceTextura, idEnemigo);
+			enemigo.setEsqueleto((Skeleton) data.readObject());
+			enemigo.setTextura((Texture) data.readObject());
 			enemigo.setMovimientos((List<VertexArray>) data.readObject());
 
 			data.close();
@@ -73,7 +73,7 @@ public class AssetsStorageManager
 		return null;
 	}
 	
-	public Jefe importarJefe(TTipoLevel nivel, int indiceTextura, int idEnemigo)
+	public Boss importarJefe(TTypeLevel nivel, int indiceTextura, int idEnemigo)
 	{
 		try
 		{
@@ -81,9 +81,9 @@ public class AssetsStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Guardar Personajes
-			Jefe jefe = new Jefe(indiceTextura, idEnemigo);
-			jefe.setEsqueleto((Esqueleto) data.readObject());
-			jefe.setTextura((Textura) data.readObject());
+			Boss jefe = new Boss(indiceTextura, idEnemigo);
+			jefe.setEsqueleto((Skeleton) data.readObject());
+			jefe.setTextura((Texture) data.readObject());
 			jefe.setMovimientos((List<VertexArray>) data.readObject());
 
 			data.close();
@@ -113,7 +113,7 @@ public class AssetsStorageManager
 		return null;
 	}
 	
-	public Personaje importarActor(TTipoActores actor)
+	public Character importarActor(TTypeActors actor)
 	{
 		try
 		{
@@ -121,10 +121,10 @@ public class AssetsStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Guardar Personajes
-			Personaje personaje = new Personaje(actor.ordinal());
-			personaje.setEsqueleto((Esqueleto) data.readObject());
-			personaje.setTextura((Textura) data.readObject());
-			personaje.setMovimientos((Movimientos) data.readObject());
+			Character personaje = new Character(actor.ordinal());
+			personaje.setEsqueleto((Skeleton) data.readObject());
+			personaje.setTextura((Texture) data.readObject());
+			personaje.setMovimientos((Movements) data.readObject());
 			personaje.setNombre((String) data.readObject());
 
 			data.close();

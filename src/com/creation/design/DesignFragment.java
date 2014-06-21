@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.creation.data.Esqueleto;
+import com.creation.data.Skeleton;
 import com.main.model.GameResources;
 import com.project.main.R;
 
@@ -49,7 +49,7 @@ public class DesignFragment extends OpenGLFragment
 
 	public interface DesignFragmentListener
 	{
-		public void onDesignReady(Esqueleto esqueleto, DesignDataSaved datosSalvados);
+		public void onDesignReady(Skeleton esqueleto, DesignDataSaved datosSalvados);
 	}
 
 	/* Métodos Fragment */
@@ -139,7 +139,7 @@ public class DesignFragment extends OpenGLFragment
 		botonReset.setVisibility(View.INVISIBLE);
 		botonTriangular.setVisibility(View.INVISIBLE);
 		
-		canvas.setEstado(TEstadoDetector.SimpleTouch);
+		canvas.setEstado(TStateDetector.SimpleTouch);
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class DesignFragment extends OpenGLFragment
 		
 		if (canvas.isEstadoRetocando())
 		{
-			canvas.setEstado(TEstadoDetector.CoordDetectors);
+			canvas.setEstado(TStateDetector.CoordDetectors);
 		}
 	}
 

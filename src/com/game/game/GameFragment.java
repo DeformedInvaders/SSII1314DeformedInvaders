@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.android.opengl.BackgroundDataSaved;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.game.data.InstanciaNivel;
-import com.game.data.Personaje;
+import com.game.data.InstanceLevel;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 import com.project.main.R;
@@ -25,8 +25,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 {
 	private GameFragmentListener mCallback;
 
-	private InstanciaNivel level;
-	private Personaje personaje;
+	private InstanceLevel level;
+	private Character personaje;
 	private int firstCharacterLives;
 
 	private GameOpenGLSurfaceView canvas;
@@ -40,14 +40,14 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	/* Constructora */
 
-	public static final GameFragment newInstance(GameFragmentListener c, Personaje p, InstanciaNivel l)
+	public static final GameFragment newInstance(GameFragmentListener c, Character p, InstanceLevel l)
 	{
 		GameFragment fragment = new GameFragment();
 		fragment.setParameters(c, p, l);
 		return fragment;
 	}
 
-	private void setParameters(GameFragmentListener c, Personaje p, InstanciaNivel l)
+	private void setParameters(GameFragmentListener c, Character p, InstanceLevel l)
 	{
 		mCallback = c;
 		personaje = p;
@@ -57,8 +57,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 	public interface GameFragmentListener
 	{
-		public void onGameFinished(final InstanciaNivel nivel, final int score, TTipoEndgame endgame);
-		public void onGameFailed(final InstanciaNivel nivel, TTipoEndgame endgame);
+		public void onGameFinished(final InstanceLevel nivel, final int score, TTypeEndgame endgame);
+		public void onGameFailed(final InstanceLevel nivel, TTypeEndgame endgame);
 		public void onGamePlaySoundEffect(int sound, boolean blockable);
 	}
 
@@ -291,16 +291,16 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		{
 			if (characterLives == GamePreferences.MAX_CHARACTER_LIVES)
 			{
-				mCallback.onGameFinished(level, score, TTipoEndgame.LevelMastered);
+				mCallback.onGameFinished(level, score, TTypeEndgame.LevelMastered);
 			}
 			else
 			{
-				mCallback.onGameFinished(level, score, TTipoEndgame.LevelPerfected);
+				mCallback.onGameFinished(level, score, TTypeEndgame.LevelPerfected);
 			}
 		}
 		else
 		{
-			mCallback.onGameFinished(level, score, TTipoEndgame.LevelCompleted);
+			mCallback.onGameFinished(level, score, TTypeEndgame.LevelCompleted);
 		}
 	}
 
@@ -310,7 +310,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		actualizarPuntuacion(score);
 		actualizarVidasPersonaje(characterLives);
 		
-		mCallback.onGameFailed(level, TTipoEndgame.GameOver);
+		mCallback.onGameFailed(level, TTypeEndgame.GameOver);
 	}
 	
 	@Override

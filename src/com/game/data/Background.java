@@ -1,6 +1,6 @@
 package com.game.data;
 
-import com.game.game.TTipoEndgame;
+import com.game.game.TTypeEndgame;
 
 public class Background
 {
@@ -25,7 +25,7 @@ public class Background
 		return idFondoSol;
 	}
 	
-	public int getIdPolaroid(TTipoEndgame tipo)
+	public int getIdPolaroid(TTypeEndgame tipo)
 	{
 		return idPolaroid[tipo.ordinal()];
 	}

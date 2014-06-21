@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
-import com.android.touch.TEstadoDetector;
+import com.android.touch.TStateDetector;
 import com.android.view.OpenGLSurfaceView;
-import com.creation.data.Esqueleto;
+import com.creation.data.Skeleton;
 
 public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 {
@@ -17,7 +17,7 @@ public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public DesignOpenGLSurfaceView(Context context, AttributeSet attrs)
 	{
-		super(context, attrs, TEstadoDetector.SimpleTouch, false);
+		super(context, attrs, TStateDetector.SimpleTouch, false);
 
 		// Asignar Renderer al GLSurfaceView
 		renderer = new DesignOpenGLRenderer(getContext(), Color.WHITE);
@@ -81,7 +81,7 @@ public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 		return renderer.isEstadoRetocando();
 	}
 
-	public Esqueleto getEsqueleto()
+	public Skeleton getEsqueleto()
 	{
 		return renderer.getEsqueleto();
 	}

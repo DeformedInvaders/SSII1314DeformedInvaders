@@ -12,10 +12,10 @@ import android.graphics.Color;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 
-import com.creation.data.MapaBits;
-import com.creation.data.TTipoSticker;
-import com.game.data.TTipoEntidad;
-import com.lib.buffer.Dimensiones;
+import com.creation.data.BitmapImage;
+import com.creation.data.TTypeSticker;
+import com.game.data.TTypeEntity;
+import com.lib.buffer.Dimensions;
 import com.lib.buffer.VertexArray;
 import com.lib.opengl.BufferManager;
 import com.lib.opengl.OpenGLManager;
@@ -37,8 +37,8 @@ public abstract class OpenGLRenderer implements Renderer
 	private int colorFondo;
 
 	// Parámetros de Texturas
-	private TTipoFondoRenderer tipoFondo;
-	private TTipoTexturasRenderer tipoTexturas;
+	private TTypeBackgroundRenderer tipoFondo;
+	private TTypeTexturesRenderer tipoTexturas;
 	private FloatBuffer coordTexturaRectangulo;
 	
 	private int numFondos, numCharacters, numTexturas;
@@ -80,12 +80,12 @@ public abstract class OpenGLRenderer implements Renderer
 
 	/* Constructoras */
 	
-	public OpenGLRenderer(Context context, TTipoFondoRenderer fondo, TTipoTexturasRenderer texturas)
+	public OpenGLRenderer(Context context, TTypeBackgroundRenderer fondo, TTypeTexturesRenderer texturas)
 	{
 		this(context, fondo, texturas, Color.argb(0, 0, 0, 0));
 	}
 
-	public OpenGLRenderer(Context context, TTipoFondoRenderer fondo, TTipoTexturasRenderer texturas, int color)
+	public OpenGLRenderer(Context context, TTypeBackgroundRenderer fondo, TTypeTexturesRenderer texturas, int color)
 	{
 		mContext = context;
 		
@@ -497,7 +497,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 
-	protected MapaBits capturaPantalla(GL10 gl)
+	protected BitmapImage capturaPantalla(GL10 gl)
 	{
 		return OpenGLManager.capturaPantalla(gl, (int) marcoAnchuraLateral, (int) marcoAlturaLateral, (int) marcoAnchuraInterior, (int) marcoAnchuraInterior);
 	}
@@ -578,54 +578,54 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Gestión de posición de Texturas
 	
-	private int obtenerPosicionTexturaMalla(TTipoEntidad tipoEntidad, int posEntidad)
+	private int obtenerPosicionTexturaMalla(TTypeEntity tipoEntidad, int posEntidad)
 	{
 		switch (tipoEntidad)
 		{
-			case Personaje:
+			case Character:
 				return POS_TEXTURE_CHARACTER_SKELETON + posEntidad;
-			case Enemigo:
+			case Enemy:
 				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
-			case Jefe:
+			case Boss:
 				return POS_TEXTURE_BOSS_SKELETON;
 			default:
 				return -1;
 		}
 	}
 
-	private int obtenerPosicionTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker tipoPegatina)
+	private int obtenerPosicionTexturaRectangulo(TTypeEntity tipoEntidad, int posEntidad, TTypeSticker tipoPegatina)
 	{
 		switch (tipoEntidad)
 		{
-			case Personaje:
+			case Character:
 				return POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * posEntidad) + tipoPegatina.ordinal();
-			case Jefe:
+			case Boss:
 				return POS_TEXTURE_BOSS_STICKER + tipoPegatina.ordinal();
-			case Enemigo:
+			case Enemy:
 				return POS_TEXTURE_ENEMY_STICKER + (GamePreferences.NUM_TYPE_STICKERS * posEntidad) + tipoPegatina.ordinal();
-			case Obstaculo:
+			case Obstacle:
 				return POS_TEXTURE_OBSTACLE + posEntidad;
-			case Misil:
+			case Missil:
 				return POS_TEXTURE_MISSILE + posEntidad;
-			case BurbujaPersonaje:
+			case CharacterShield:
 				return POS_TEXTURE_CHARACTER_BUBBLE + posEntidad;
-			case BurbujaBoss:
+			case BossShield:
 				return POS_TEXTURE_BOSS_BUBBLE + posEntidad;
-			case PlataformaPersonaje:
+			case CharacterPlatform:
 				return POS_TEXTURE_CHARACTER_PLATFORM + posEntidad;
-			case PlataformaBoss:
+			case BossPlatform:
 				return POS_TEXTURE_BOSS_PLATFORM + posEntidad;
-			case DisparoPersonaje:
+			case CharacterShot:
 				return POS_TEXTURE_CHARACTER_SHOT + posEntidad;
-			case DisparoBoss:
+			case BossShot:
 				return POS_TEXTURE_BOSS_SHOT + posEntidad;
-			case ArmaPersonaje:
+			case CharacterWeapon:
 				return POS_TEXTURE_CHARACTER_WEAPON + posEntidad;
-			case ArmaBoss:
+			case BossWeapon:
 				return POS_TEXTURE_BOSS_WEAPON + posEntidad;
-			case ObjetoInanimado:
+			case InanimatedObject:
 				return POS_TEXTURE_INANIMATED_OBJECT + posEntidad;
-			case ObjetoAnimado:
+			case AnimatedObject:
 				return POS_TEXTURE_ANIMATED_OBJECT + posEntidad;
 			default:
 				return -1;
@@ -673,7 +673,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Contrucción de Textura para Entidades
 
-	public void cargarTexturaMalla(GL10 gl, Bitmap textura, TTipoEntidad tipoEntidad, int posEntidad)
+	public void cargarTexturaMalla(GL10 gl, Bitmap textura, TTypeEntity tipoEntidad, int posEntidad)
 	{
 		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
 
@@ -683,7 +683,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void descargarTexturaMalla(TTipoEntidad tipoEntidad, int posEntidad)
+	public void descargarTexturaMalla(TTypeEntity tipoEntidad, int posEntidad)
 	{
 		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
 
@@ -693,7 +693,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 	
-	private Dimensiones cargarTexturaRectangulo(GL10 gl, Bitmap bitmap, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	private Dimensions cargarTexturaRectangulo(GL10 gl, Bitmap bitmap, float textureHeight, float textureWidth, int indiceTextura, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -704,7 +704,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 			VertexArray vertices = new VertexArray();
 			
-			if(tipoEntidad == TTipoEntidad.Personaje || tipoEntidad == TTipoEntidad.Enemigo || tipoEntidad == TTipoEntidad.Jefe)
+			if(tipoEntidad == TTypeEntity.Character || tipoEntidad == TTypeEntity.Enemy || tipoEntidad == TTypeEntity.Boss)
 			{
 				vertices.addVertex(-textureWidth/2, -textureHeight/2);
 				vertices.addVertex(-textureWidth/2, textureHeight/2);
@@ -721,13 +721,13 @@ public abstract class OpenGLRenderer implements Renderer
 			
 			verticesTexturaEntidades[posTextura] = BufferManager.construirBufferListaPuntos(vertices);
 
-			return new Dimensiones(textureHeight, textureWidth);
+			return new Dimensions(textureHeight, textureWidth);
 		}
 
 		return null;
 	}
 
-	public Dimensiones cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	public Dimensions cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
 	{
 		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 
@@ -737,14 +737,14 @@ public abstract class OpenGLRenderer implements Renderer
 		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
 	}
 	
-	public Dimensiones cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	public Dimensions cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
 	{
 		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
 		
 		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
 	}
 
-	public void descargarTexturaRectangulo(TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	public void descargarTexturaRectangulo(TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -756,7 +756,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Pintura de Texturas para Entidades
 
-	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTipoEntidad tipoEntidad, int posEntidad)
+	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTypeEntity tipoEntidad, int posEntidad)
 	{
 		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
 
@@ -766,7 +766,7 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, TTipoEntidad tipoEntidad, int posEntidad, TTipoSticker posPegatina)
+	public void dibujarTexturaRectangulo(GL10 gl, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
 	{
 		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
 
@@ -780,11 +780,11 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected void seleccionarTexturaFondo(int... indiceTexturas)
 	{		
-		if (tipoFondo != TTipoFondoRenderer.Nada)
+		if (tipoFondo != TTypeBackgroundRenderer.Blank)
 		{
 			if (indiceTexturas.length > 0)
 			{
-				if (tipoFondo == TTipoFondoRenderer.Fijo)
+				if (tipoFondo == TTypeBackgroundRenderer.Static)
 				{
 					indiceTexturaFondo[0] = indiceTexturas[0];
 					dibujarTexturaFondo[0] = true;
@@ -830,7 +830,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void cargarTexturaFondo(GL10 gl)
 	{
-		if (tipoFondo != TTipoFondoRenderer.Nada)
+		if (tipoFondo != TTypeBackgroundRenderer.Blank)
 		{
 			for (int i = 0; i < numFondos; i++)
 			{
@@ -842,7 +842,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			if (!fondosCargados)
 			{			
-				if (tipoFondo == TTipoFondoRenderer.Desplazable)
+				if (tipoFondo == TTypeBackgroundRenderer.Movable)
 				{
 					posicionarTexturaFondoDesplazable();
 				}
@@ -858,7 +858,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	private void descargarTexturaFondo()
 	{
-		if (tipoFondo != TTipoFondoRenderer.Nada)
+		if (tipoFondo != TTypeBackgroundRenderer.Blank)
 		{
 			for (int i = 0; i < numFondos; i++)
 			{
@@ -869,7 +869,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void dibujarFondo(GL10 gl)
 	{
-		if (tipoFondo != TTipoFondoRenderer.Nada)
+		if (tipoFondo != TTypeBackgroundRenderer.Blank)
 		{
 			for (int i = 0; i < numFondos; i++)
 			{
@@ -892,7 +892,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void actualizarTexturaFondo()
 	{
-		if (tipoFondo != TTipoFondoRenderer.Nada)
+		if (tipoFondo != TTypeBackgroundRenderer.Blank)
 		{
 			VertexArray vertices = new VertexArray();
 			vertices.addVertex(xLeft, yBottom);
@@ -974,11 +974,11 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	protected void animarFondo()
 	{
-		if (tipoFondo == TTipoFondoRenderer.Desplazable)
+		if (tipoFondo == TTypeBackgroundRenderer.Movable)
 		{
 			animarTexturaFondoDesplazable();
 		}
-		else if (tipoFondo == TTipoFondoRenderer.Intercambiable)
+		else if (tipoFondo == TTypeBackgroundRenderer.Swappable)
 		{
 			animarTexturaFondoIntercambiable();
 		}

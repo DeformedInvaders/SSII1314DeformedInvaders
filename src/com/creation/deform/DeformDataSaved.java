@@ -11,11 +11,11 @@ public class DeformDataSaved extends DataSaved
 	private HandleArray handles;
 	private VertexArray verticesModificados;
 	private List<VertexArray> listaVertices;
-	private TEstadoDeform estado;
+	private TStateDeform estado;
 
 	/* Constructora */
 
-	public DeformDataSaved(HandleArray handles, VertexArray verticesModificados, TEstadoDeform estado, List<VertexArray> listaVertices)
+	public DeformDataSaved(HandleArray handles, VertexArray verticesModificados, TStateDeform estado, List<VertexArray> listaVertices)
 	{
 		this.handles = handles;
 		this.verticesModificados = verticesModificados;
@@ -40,7 +40,7 @@ public class DeformDataSaved extends DataSaved
 		return listaVertices;
 	}
 
-	public TEstadoDeform getEstado()
+	public TStateDeform getEstado()
 	{
 		return estado;
 	}

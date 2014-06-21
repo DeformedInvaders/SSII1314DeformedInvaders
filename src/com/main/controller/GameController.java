@@ -15,21 +15,21 @@ import com.android.alert.SummaryAlert;
 import com.android.alert.TextInputAlert;
 import com.character.select.CharacterSelectionDataSaved;
 import com.character.select.CharacterSelectionFragment;
-import com.creation.data.Esqueleto;
-import com.creation.data.Movimientos;
-import com.creation.data.Textura;
+import com.creation.data.Skeleton;
+import com.creation.data.Movements;
+import com.creation.data.Texture;
 import com.creation.deform.DeformationFragment;
 import com.creation.design.DesignDataSaved;
 import com.creation.design.DesignFragment;
 import com.creation.paint.PaintDataSaved;
 import com.creation.paint.PaintFragment;
-import com.game.data.InstanciaNivel;
-import com.game.data.Nivel;
-import com.game.data.Personaje;
+import com.game.data.InstanceLevel;
+import com.game.data.Level;
+import com.game.data.Character;
 import com.game.game.GameFragment;
-import com.game.game.TTipoEndgame;
+import com.game.game.TTypeEndgame;
 import com.game.select.LevelSelectionFragment;
-import com.game.select.TTipoLevel;
+import com.game.select.TTypeLevel;
 import com.main.model.GameCore;
 import com.main.model.GameStatistics;
 import com.main.view.MainFragment;
@@ -44,15 +44,15 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	private GameCore core;
 	private ViewActivity view;
 	
-	private Stack<Estado> pila;
-	private TEstadoController estado;
+	private Stack<SavedState> pila;
+	private TStateController estado;
 	
 	public GameController(Context context, ViewActivity activity, GameCore gameCore)
 	{
 		mContext = context;
 		core = gameCore;
 		view = activity;
-		pila = new Stack<Estado>();
+		pila = new Stack<SavedState>();
 	}
 	
 	private void sendToastMessage(int message)
@@ -155,11 +155,11 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Design Fragment
 
 	@Override
-	public void onDesignReady(Esqueleto esqueleto, DesignDataSaved datosSalvados)
+	public void onDesignReady(Skeleton esqueleto, DesignDataSaved datosSalvados)
 	{
 		if (core.actualizarNuevoPersonaje(esqueleto))
 		{
-			pila.push(new Estado(estado, datosSalvados));
+			pila.push(new SavedState(estado, datosSalvados));
 			cambiarEstadoPaint(core.getNuevoPersonaje(), core.getEstadisticasNiveles());
 		}
 	}
@@ -167,17 +167,17 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Paint Fragment
 
 	@Override
-	public void onPaintReady(final Textura textura, final PaintDataSaved datosSalvados)
+	public void onPaintReady(final Texture textura, final PaintDataSaved datosSalvados)
 	{
 		if (core.actualizarNuevoPersonaje(textura))
 		{
-			pila.push(new Estado(estado, datosSalvados));
+			pila.push(new SavedState(estado, datosSalvados));
 			cambiarEstadoDeformation(core.getNuevoPersonaje());
 		}
 	}
 	
 	@Override
-	public void onRepaintReady(final Textura textura, final int indice)
+	public void onRepaintReady(final Texture textura, final int indice)
 	{
     	if (core.repintarPersonaje(indice, textura))
 		{
@@ -188,7 +188,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Animation Fragment
 
 	@Override
-	public void onDeformationReady(final Movimientos movimientos)
+	public void onDeformationReady(final Movements movimientos)
 	{
 		if (core.actualizarNuevoPersonaje(movimientos))
 		{
@@ -215,7 +215,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 	
 	@Override
-	public void onRedeformationReady(final Movimientos movimientos, final int indice)
+	public void onRedeformationReady(final Movements movimientos, final int indice)
 	{
     	if (core.redeformarPersonaje(indice, movimientos))
 		{
@@ -270,7 +270,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onCharacterSelectionRenameCharacter(final int indice)
 	{
-		Personaje personaje = core.getPersonaje(indice);
+		Character personaje = core.getPersonaje(indice);
 		if (personaje != null)
 		{
 			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, personaje.getNombre(), R.string.text_button_rename, R.string.text_button_cancel, true) {
@@ -294,14 +294,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onCharacterSelectionRepaintCharacter(final int indice, final CharacterSelectionDataSaved datosSalvados)
 	{
-		pila.push(new Estado(estado, datosSalvados));
+		pila.push(new SavedState(estado, datosSalvados));
 		cambiarEstadoRepaint(core.getPersonaje(indice), indice, core.getEstadisticasNiveles());
 	}
 	
 	@Override
 	public void onCharacterSelectionRedeformCharacter(final int indice,final CharacterSelectionDataSaved datosSalvados)
 	{
-		pila.push(new Estado(estado, datosSalvados));
+		pila.push(new SavedState(estado, datosSalvados));
 		cambiarEstadoRedeformation(core.getPersonaje(indice), indice);
 	}
 	
@@ -345,7 +345,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 
 	// Métodos Level Selection Fragment
 
-	public void onLevelSelectionSelectLevel(final TTipoLevel level)
+	public void onLevelSelectionSelectLevel(final TTypeLevel level)
 	{	
 		SummaryAlert alert = new SummaryAlert(mContext, R.string.text_summary, R.string.text_button_ready, core.getNivel(level)) {
 			@Override
@@ -361,7 +361,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	// Métodos Game Fragment
 
 	@Override
-	public void onGameFinished(final InstanciaNivel level, final int score, TTipoEndgame endgame)
+	public void onGameFinished(final InstanceLevel level, final int score, TTypeEndgame endgame)
 	{
 		if(!core.isNivelPerfecto(level.getTipoNivel()))
 		{
@@ -390,7 +390,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	}
 
 	@Override
-	public void onGameFailed(final InstanciaNivel level, TTipoEndgame endgame)
+	public void onGameFailed(final InstanceLevel level, TTypeEndgame endgame)
 	{
 		if(core.actualizarEstadisticas(level, endgame))
 		{
@@ -452,20 +452,20 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 
 	/* Métodos de Modificación de la Vista */
 
-	private void cambiarEstadoMain(Personaje personaje, int numeroPersonajes, int numeroFicheros)
+	private void cambiarEstadoMain(Character personaje, int numeroPersonajes, int numeroFicheros)
 	{
-		estado = TEstadoController.Main;
+		estado = TStateController.Main;
 		view.insertarMainFragmento(personaje, numeroPersonajes, numeroFicheros, estado.getTitle());
 		
 		actualizarMusica();
 		
 		pila.clear();
-		pila.push(new Estado(estado));
+		pila.push(new SavedState(estado));
 	}
 
 	private void cambiarEstadoDesign()
 	{
-		estado = TEstadoController.Design;
+		estado = TStateController.Design;
 		view.insertarDesignFragmento(estado.getTitle());
 		
 		actualizarMusica();
@@ -473,73 +473,73 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	
 	private void cambiarEstadoDesign(DesignDataSaved datosSalvados)
 	{
-		estado = TEstadoController.Design;
+		estado = TStateController.Design;
 		view.insertarDesignFragmento(datosSalvados, estado.getTitle());
 	}
 
-	private void cambiarEstadoPaint(Personaje nuevoPersonaje, GameStatistics[] estadisticasNiveles)
+	private void cambiarEstadoPaint(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles)
 	{		
-		estado = TEstadoController.Paint;
+		estado = TStateController.Paint;
 		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, estado.getTitle());
 	}
 	
-	private void cambiarEstadoPaint(Personaje nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados)
+	private void cambiarEstadoPaint(Character nuevoPersonaje, GameStatistics[] estadisticasNiveles, PaintDataSaved datosSalvados)
 	{		
-		estado = TEstadoController.Paint;
+		estado = TStateController.Paint;
 		view.insertarPaintFragmento(nuevoPersonaje, estadisticasNiveles, datosSalvados, estado.getTitle());
 	}
 	
-	private void cambiarEstadoRepaint(Personaje personaje, int indice, GameStatistics[] estadisticasNiveles)
+	private void cambiarEstadoRepaint(Character personaje, int indice, GameStatistics[] estadisticasNiveles)
 	{		
-		estado = TEstadoController.Repaint;
+		estado = TStateController.Repaint;
 		view.insertarPaintFragmento(personaje, indice, estadisticasNiveles, estado.getTitle());
 		
 		actualizarMusica();
 	}
 
-	private void cambiarEstadoDeformation(Personaje nuevoPersonaje)
+	private void cambiarEstadoDeformation(Character nuevoPersonaje)
 	{		
-		estado = TEstadoController.Deformation;
+		estado = TStateController.Deformation;
 		view.insertarDeformationFragmento(nuevoPersonaje, estado.getTitle());
 	}
 	
-	private void cambiarEstadoRedeformation(Personaje personaje, int indice)
+	private void cambiarEstadoRedeformation(Character personaje, int indice)
 	{		
-		estado = TEstadoController.Redeformation;
+		estado = TStateController.Redeformation;
 		view.insertarDeformationFragmento(personaje, indice, estado.getTitle());
 		
 		actualizarMusica();
 	}
 
-	private void cambiarEstadoCharacterSelection(List<Personaje> listaPersonajes)
+	private void cambiarEstadoCharacterSelection(List<Character> listaPersonajes)
 	{
-		estado = TEstadoController.CharacterSelection;
+		estado = TStateController.CharacterSelection;
 		view.insertarCharacterSelectionFragmento(listaPersonajes, estado.getTitle());
 	}
 	
-	private void cambiarEstadoCharacterSelection(List<Personaje> listaPersonajes, CharacterSelectionDataSaved datosSalvados)
+	private void cambiarEstadoCharacterSelection(List<Character> listaPersonajes, CharacterSelectionDataSaved datosSalvados)
 	{
-		estado = TEstadoController.CharacterSelection;
+		estado = TStateController.CharacterSelection;
 		view.insertarCharacterSelectionFragmento(listaPersonajes, datosSalvados, estado.getTitle());
 		
 		actualizarMusica();
 	}
 
-	private void cambiarEstadoLevelSelection(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles)
+	private void cambiarEstadoLevelSelection(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles)
 	{
-		estado = TEstadoController.LevelSelection;
+		estado = TStateController.LevelSelection;
 		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, estado.getTitle());
 	}
 	
-	private void cambiarEstadoLevelSelection(List<Nivel> listaNiveles, GameStatistics[] estadisticasNiveles, TTipoLevel nivel)
+	private void cambiarEstadoLevelSelection(List<Level> listaNiveles, GameStatistics[] estadisticasNiveles, TTypeLevel nivel)
 	{
-		estado = TEstadoController.LevelSelection;
+		estado = TStateController.LevelSelection;
 		view.insertarLevelSelectionFragmento(listaNiveles, estadisticasNiveles, nivel, estado.getTitle());
 	}
 
-	private void cambiarEstadoGame(Personaje personajeSeleccionado, InstanciaNivel nivel)
+	private void cambiarEstadoGame(Character personajeSeleccionado, InstanceLevel nivel)
 	{		
-		estado = TEstadoController.Game;
+		estado = TStateController.Game;
 		view.insertarGameFragmento(personajeSeleccionado, nivel, nivel.getTipoNivel().getDescription());
 		
 		actualizarMusica();
@@ -547,7 +547,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	
 	private void cambiarEstadoVideo(Video video)
 	{
-		estado = TEstadoController.Video;
+		estado = TStateController.Video;
 		view.insertarVideoFragmento(video, estado.getTitle());
 		core.pausarMusica();
 		actualizarMusica();
@@ -555,14 +555,14 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	
 	public boolean isEstadoDesapilador()
 	{
-		return estado != TEstadoController.Main && estado != TEstadoController.Game && estado != TEstadoController.Video;
+		return estado != TStateController.Main && estado != TStateController.Game && estado != TStateController.Video;
 	}
 
 	public void desapilarEstado()
 	{
 		if (!pila.isEmpty() && isEstadoDesapilador())
 		{
-			Estado cima = pila.pop();
+			SavedState cima = pila.pop();
 
 			switch(cima.getEstadoSalvado())
 			{
@@ -588,15 +588,15 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		core.actualizarVolumen();
 		
-		if (estado == TEstadoController.Game)
+		if (estado == TStateController.Game)
 		{
 			core.reproducirMusica(true);
 		}
-		else if (estado == TEstadoController.Design || estado == TEstadoController.Paint || estado == TEstadoController.Deformation || estado == TEstadoController.Repaint)
+		else if (estado == TStateController.Design || estado == TStateController.Paint || estado == TStateController.Deformation || estado == TStateController.Repaint)
 		{
 			core.reproducirMusica(R.raw.music_creation, true);
 		}
-		else if (estado != TEstadoController.Video)
+		else if (estado != TStateController.Video)
 		{
 			core.reproducirMusica(R.raw.music_main, true);
 		}
@@ -609,7 +609,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	
 	public void continuarMusica()
 	{
-		if (estado != TEstadoController.Video)
+		if (estado != TStateController.Video)
 		{
 			core.continuarMusica();
 		}

@@ -1,11 +1,11 @@
 package com.main.model;
 
-import com.creation.data.TTipoMovimiento;
-import com.creation.data.TTipoSticker;
-import com.game.data.TTipoEntidad;
-import com.game.game.TEstadoGame;
-import com.game.game.TTipoEndgame;
-import com.game.select.TTipoLevel;
+import com.creation.data.TTypeMovement;
+import com.creation.data.TTypeSticker;
+import com.game.data.TTypeEntity;
+import com.game.game.TStateGame;
+import com.game.game.TTypeEndgame;
+import com.game.select.TTypeLevel;
 
 public class GamePreferences
 {
@@ -55,12 +55,12 @@ public class GamePreferences
 	public static final int MAX_CHARACTER_LIVES = 3;
 	public static final int MAX_BOSS_LIVES = 3;
 	
-	public static final int NUM_TYPE_LEVELS = TTipoLevel.values().length;
-	public static final int NUM_TYPE_MOVIMIENTOS = TTipoMovimiento.values().length;
-	public static final int NUM_TYPE_STICKERS = TTipoSticker.values().length - 1;
-	public static final int NUM_TYPE_ENDGAME = TTipoEndgame.values().length;
+	public static final int NUM_TYPE_LEVELS = TTypeLevel.values().length;
+	public static final int NUM_TYPE_MOVIMIENTOS = TTypeMovement.values().length;
+	public static final int NUM_TYPE_STICKERS = TTypeSticker.values().length - 1;
+	public static final int NUM_TYPE_ENDGAME = TTypeEndgame.values().length;
 	
-	public static final int NUM_TYPE_BACKGROUNDS_FIJO = 1;
+	public static final int NUM_TYPE_BACKGROUNDS_STATIC = 1;
 	public static final int NUM_TYPE_BACKGROUNDS_LEVEL = 5;
 	public static final int NUM_TYPE_BACKGROUNDS_VIDEO = 7;
 	public static final int NUM_TYPE_CHARACTER_DESIGN = 1;
@@ -107,7 +107,7 @@ public class GamePreferences
 	private static boolean ACCELEROMETER_AVAILABLE;
 	
 	// Estado del Juego
-	private static TEstadoGame ESTADO_GAME;
+	private static TStateGame ESTADO_GAME;
 	
 	public static void SET_SCREEN_PARAMETERS(float width, float height)
 	{
@@ -140,7 +140,7 @@ public class GamePreferences
 		CHARACTER_GAME = pos;
 	}
 	
-	public static void SET_GAME_PARAMETERS(TEstadoGame estado)
+	public static void SET_GAME_PARAMETERS(TStateGame estado)
 	{
 		ESTADO_GAME = estado;
 	}
@@ -206,7 +206,7 @@ public class GamePreferences
 		return CHARACTER_GAME;
 	}
 	
-	public static final TEstadoGame GET_ESTADO_GAME() 
+	public static final TStateGame GET_ESTADO_GAME() 
 	{
 		return ESTADO_GAME;
 	}
@@ -285,7 +285,7 @@ public class GamePreferences
 	
 	public static final int TIME_INTERVAL_ANIMATION(int ciclos)
 	{
-		if (ESTADO_GAME == TEstadoGame.FaseEnemies)
+		if (ESTADO_GAME == TStateGame.EnemiesPhase)
 		{
 			if(ciclos < MAX_NUM_CICLOS() / 6)
 			{
@@ -331,7 +331,7 @@ public class GamePreferences
 	
 	/* Tipos de Elementos */
 	
-	public static final int NUM_TYPE_STICKERS(TTipoSticker pegatina)
+	public static final int NUM_TYPE_STICKERS(TTypeSticker pegatina)
 	{
 		switch(pegatina)
 		{
@@ -350,15 +350,15 @@ public class GamePreferences
 		}
 	}
 	
-	public static final int NUM_TYPE_ENEMIES(TTipoEntidad entidad)
+	public static final int NUM_TYPE_ENEMIES(TTypeEntity entidad)
 	{
 		switch(entidad)
 		{
-			case Enemigo:
+			case Enemy:
 				return NUM_TYPE_ENEMIES;
-			case Obstaculo:
+			case Obstacle:
 				return NUM_TYPE_OBSTACLES;
-			case Misil:
+			case Missil:
 				return NUM_TYPE_MISSILES;
 			default:
 				return -1;
@@ -391,38 +391,38 @@ public class GamePreferences
 		return 0.5f;
 	}
 	
-	public static final float GAME_SCALE_FACTOR(TTipoEntidad entidad)
+	public static final float GAME_SCALE_FACTOR(TTypeEntity entidad)
 	{
-		if (ESTADO_GAME == TEstadoGame.FaseEnemies)
+		if (ESTADO_GAME == TStateGame.EnemiesPhase)
 		{
 			switch(entidad)
 			{
-				case Personaje:
+				case Character:
 					return GAME_SCALE_FACTOR_ENEMIES();
-				case Misil:
+				case Missil:
 					return SCREEN_HEIGHT_SCALE_FACTOR();
-				case Obstaculo:
+				case Obstacle:
 					return SCREEN_HEIGHT_SCALE_FACTOR();
-				case Enemigo:
-				case Jefe:
+				case Enemy:
+				case Boss:
 					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_ENEMIES();
 				default:
 					return 1.0f;
 			}
 		}
-		else if (ESTADO_GAME == TEstadoGame.FaseBoss)
+		else if (ESTADO_GAME == TStateGame.BossPhase)
 		{
 			switch(entidad)
 			{
-				case Personaje:
+				case Character:
 					return GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
-				case Enemigo:
-				case Jefe:
+				case Enemy:
+				case Boss:
 					return SCREEN_HEIGHT_SCALE_FACTOR() * GAME_SCALE_FACTOR_BOSS() * GAME_SCALE_FACTOR_ENEMIES();
-				case PlataformaPersonaje:
-				case PlataformaBoss:
-				case BurbujaPersonaje:
-				case BurbujaBoss:
+				case CharacterPlatform:
+				case BossPlatform:
+				case CharacterShield:
+				case BossShield:
 					return GAME_SCALE_FACTOR_BOSS();
 				default:
 					return 1.0f;

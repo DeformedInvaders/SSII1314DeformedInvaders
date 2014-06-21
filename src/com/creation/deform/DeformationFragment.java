@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import com.android.view.IconImageButton;
 import com.android.view.ViewFrameFragment;
 import com.android.view.ViewFrameSwipeable;
-import com.creation.data.Movimientos;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Personaje;
+import com.creation.data.Movements;
+import com.creation.data.TTypeMovement;
+import com.game.data.Character;
 import com.lib.buffer.VertexArray;
 import com.main.model.GamePreferences;
 import com.main.model.GameResources;
@@ -26,27 +26,27 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 
 	private IconImageButton botonReady;
 	
-	private Personaje personaje;
-	private Movimientos movimientos;
+	private Character personaje;
+	private Movements movimientos;
 	private int personajeIndice;
 
 	/* Constructora */
 
-	public static final DeformationFragment newInstance(AnimationFragmentListener c, Personaje p)
+	public static final DeformationFragment newInstance(AnimationFragmentListener c, Character p)
 	{
 		DeformationFragment fragment = new DeformationFragment();
 		fragment.setParameters(c, p, -1);
 		return fragment;
 	}
 	
-	public static final DeformationFragment newInstance(AnimationFragmentListener c, Personaje p, int n)
+	public static final DeformationFragment newInstance(AnimationFragmentListener c, Character p, int n)
 	{
 		DeformationFragment fragment = new DeformationFragment();
 		fragment.setParameters(c, p, n);
 		return fragment;
 	}
 
-	private void setParameters(AnimationFragmentListener c, Personaje p, int n)
+	private void setParameters(AnimationFragmentListener c, Character p, int n)
 	{
 		mCallback = c;
 		personaje = p;
@@ -54,7 +54,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		
 		if (personajeIndice == -1)
 		{
-			movimientos = new Movimientos();
+			movimientos = new Movements();
 		}
 		else
 		{
@@ -64,8 +64,8 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 
 	public interface AnimationFragmentListener
 	{
-		public void onDeformationReady(final Movimientos movimientos);
-		public void onRedeformationReady(final Movimientos movimientos, int indice);
+		public void onDeformationReady(final Movements movimientos);
+		public void onRedeformationReady(final Movements movimientos, int indice);
 		public void onDeformationPlaySoundEffect(int sound);
 	}
 
@@ -84,7 +84,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		frameLayout = (ViewFrameSwipeable) rootView.findViewById(R.id.frameViewAnimation1);
 		frameLayout.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());		
 		
-		TTipoMovimiento[] movimientos = TTipoMovimiento.values();
+		TTypeMovement[] movimientos = TTypeMovement.values();
 		for(int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
 		{
 			frameLayout.addView(DeformFragment.newInstance(this, personaje, movimientos[i]), getString(movimientos[i].getTitle()));
@@ -125,7 +125,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 
 			if (movimiento != null && movimiento.size() > 0)
 			{
-				movimientos.set(movimiento, TTipoMovimiento.values()[i]);
+				movimientos.set(movimiento, TTypeMovement.values()[i]);
 			}
 
 			i++;
@@ -170,7 +170,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 	@Override
 	public void onPlaySoundEffect()
 	{
-		int sound = TTipoMovimiento.values()[frameLayout.getPosition()].getSound();
+		int sound = TTypeMovement.values()[frameLayout.getPosition()].getSound();
 		if (sound != -1)
 		{
 			mCallback.onDeformationPlaySoundEffect(sound);

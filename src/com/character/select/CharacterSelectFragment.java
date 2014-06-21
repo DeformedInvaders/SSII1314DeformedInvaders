@@ -14,8 +14,8 @@ import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayOpenGLSurfaceView;
 import com.character.display.OnDisplayListener;
-import com.creation.data.TTipoMovimiento;
-import com.game.data.Personaje;
+import com.creation.data.TTypeMovement;
+import com.game.data.Character;
 import com.main.model.GameResources;
 import com.project.main.R;
 
@@ -26,18 +26,18 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	private DisplayOpenGLSurfaceView canvas;
 	private IconImageButton botonCamara, botonRun, botonJump, botonCrouch, botonAttack, botonReady, botonRepaint, botonRedeform, botonDelete, botonRename, botonExport;
 
-	private Personaje personaje;
+	private Character personaje;
 	
 	/* Constructora */
 
-	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Personaje personaje)
+	public static final CharacterSelectFragment newInstance(OnCharacterListener listener, Character personaje)
 	{
 		CharacterSelectFragment fragment = new CharacterSelectFragment();
 		fragment.setParameters(listener, personaje);
 		return fragment;
 	}
 
-	private void setParameters(OnCharacterListener l, Personaje p)
+	private void setParameters(OnCharacterListener l, Character p)
 	{
 		mListener = l;
 		personaje = p;
@@ -245,7 +245,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTipoMovimiento.Run);
+			canvas.seleccionarAnimacion(TTypeMovement.Run);
 		}
 	}
 
@@ -254,7 +254,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTipoMovimiento.Jump);
+			canvas.seleccionarAnimacion(TTypeMovement.Jump);
 		}
 	}
 
@@ -263,7 +263,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTipoMovimiento.Crouch);
+			canvas.seleccionarAnimacion(TTypeMovement.Crouch);
 		}
 	}
 
@@ -272,7 +272,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		@Override
 		public void onClick(View v)
 		{
-			canvas.seleccionarAnimacion(TTipoMovimiento.Attack);
+			canvas.seleccionarAnimacion(TTypeMovement.Attack);
 		}
 	}
 	

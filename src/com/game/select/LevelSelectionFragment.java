@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.android.view.ViewPagerFragment;
 import com.android.view.ViewPagerSwipeable;
-import com.game.data.Nivel;
+import com.game.data.Level;
 import com.main.model.GameStatistics;
 import com.project.main.R;
 
@@ -18,27 +18,27 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 {
 	private LevelSelectionFragmentListener mCallback;
 
-	private List<Nivel> listaNiveles;
+	private List<Level> listaNiveles;
 	private GameStatistics[] estadoNiveles;
 	private int posicionInicial;
 
 	/* Constructora */
 
-	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado)
+	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Level> lista, GameStatistics[] estado)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
 		fragment.setParameters(c, lista, estado, -1);
 		return fragment;
 	}
 	
-	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado, TTipoLevel nivel)
+	public static final LevelSelectionFragment newInstance(LevelSelectionFragmentListener c, List<Level> lista, GameStatistics[] estado, TTypeLevel nivel)
 	{
 		LevelSelectionFragment fragment = new LevelSelectionFragment();
 		fragment.setParameters(c, lista, estado, nivel.ordinal());
 		return fragment;
 	}
 
-	private void setParameters(LevelSelectionFragmentListener c, List<Nivel> lista, GameStatistics[] estado, int nivel)
+	private void setParameters(LevelSelectionFragmentListener c, List<Level> lista, GameStatistics[] estado, int nivel)
 	{
 		mCallback = c;
 		listaNiveles = lista;
@@ -48,7 +48,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 
 	public interface LevelSelectionFragmentListener
 	{
-		public void onLevelSelectionSelectLevel(final TTipoLevel level);
+		public void onLevelSelectionSelectLevel(final TTypeLevel level);
 	}
 
 	/* Métodos Fragment */
@@ -63,10 +63,10 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 		viewPager.setAdapter(this, getActivity().getSupportFragmentManager(), getActivity().getActionBar());
 
 		int i = 0;
-		Iterator<Nivel> it = listaNiveles.iterator();
+		Iterator<Level> it = listaNiveles.iterator();
 		while (it.hasNext())
 		{
-			Nivel nivel = it.next();
+			Level nivel = it.next();
 			viewPager.addView(LevelSelectFragment.newInstance(this, nivel, estadoNiveles[i]), getString(nivel.getNombreNivel()));
 
 			i++;
@@ -98,7 +98,7 @@ public class LevelSelectionFragment extends ViewPagerFragment implements OnLevel
 	/* Métodos abstractos de OnLevelListener */
 
 	@Override
-	public void onLevelSelected(TTipoLevel level)
+	public void onLevelSelected(TTypeLevel level)
 	{
 		mCallback.onLevelSelectionSelectLevel(level);
 	}

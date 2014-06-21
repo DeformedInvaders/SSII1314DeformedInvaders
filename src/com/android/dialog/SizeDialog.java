@@ -6,14 +6,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.creation.paint.TTipoSize;
+import com.creation.paint.TTypeSize;
 import com.project.main.R;
 
 public abstract class SizeDialog extends WindowDialog
 {
 	private Button botonMas, botonMenos;
 	private ImageView imagenPincel;
-	private TTipoSize size;
+	private TTypeSize size;
 
 	/* Constructora */
 
@@ -21,7 +21,7 @@ public abstract class SizeDialog extends WindowDialog
 	{
 		super(context, R.layout.dialog_size_layout, true);
 
-		size = TTipoSize.Small;
+		size = TTypeSize.Small;
 
 		botonMas = (Button) findViewById(R.id.imageButtonSize1);
 		botonMenos = (Button) findViewById(R.id.imageButtonSize2);
@@ -36,7 +36,7 @@ public abstract class SizeDialog extends WindowDialog
 
 	/* Métodos Abstractos */
 
-	public abstract void onSizeSelected(TTipoSize size);
+	public abstract void onSizeSelected(TTypeSize size);
 
 	/* Métodos Privados */
 
@@ -70,7 +70,7 @@ public abstract class SizeDialog extends WindowDialog
 		@Override
 		public void onClick(View arg0)
 		{
-			TTipoSize[] tipoSize = TTipoSize.values();
+			TTypeSize[] tipoSize = TTypeSize.values();
 			size = tipoSize[size.ordinal() + 1];
 			actualizarBotones();
 		}
@@ -81,7 +81,7 @@ public abstract class SizeDialog extends WindowDialog
 		@Override
 		public void onClick(View arg0)
 		{
-			TTipoSize[] tipoSize = TTipoSize.values();
+			TTypeSize[] tipoSize = TTypeSize.values();
 			size = tipoSize[size.ordinal() - 1];
 			actualizarBotones();
 		}

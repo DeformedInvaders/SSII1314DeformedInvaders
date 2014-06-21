@@ -1,6 +1,6 @@
 package com.lib.buffer;
 
-import com.creation.data.TTipoSticker;
+import com.creation.data.TTypeSticker;
 import com.lib.math.Vector2;
 import com.lib.utils.FloatArray;
 import com.main.model.GamePreferences;
@@ -50,7 +50,7 @@ public class StickerArray extends FloatArray
 		}
 	}
 	
-	public void setSticker(TTipoSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	public void setSticker(TTypeSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
 	{
 		short sticker = (short) tipo.ordinal();
 		
@@ -82,13 +82,13 @@ public class StickerArray extends FloatArray
 		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, NULL_SCALE);
 	}
 	
-	public void setCoords(TTipoSticker tipo, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	public void setCoords(TTypeSticker tipo, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
 	{
 		int id = getIdSticker(tipo);
 		setSticker(tipo, id, x, y, index, vertices, triangulos);
 	}
 	
-	public void setThetaSticker(TTipoSticker tipo, float ang)
+	public void setThetaSticker(TTypeSticker tipo, float ang)
 	{
 		short sticker = (short) tipo.ordinal();
 		float oldAng = getThetaSticker(tipo);
@@ -96,7 +96,7 @@ public class StickerArray extends FloatArray
 		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, (float) (oldAng + ang));
 	}
 	
-	public void setFactorSticker(TTipoSticker tipo, float factor)
+	public void setFactorSticker(TTypeSticker tipo, float factor)
 	{
 		short sticker = (short) tipo.ordinal();
 		float oldFactor = getFactorSticker(tipo);
@@ -104,42 +104,42 @@ public class StickerArray extends FloatArray
 		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, oldFactor * factor);
 	}
 	
-	public int getIdSticker(TTipoSticker tipo)
+	public int getIdSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return (int) get(SIZE_STICKER * sticker + ID_STICKER);
 	}
 	
-	public short getIndexSticker(TTipoSticker tipo)
+	public short getIndexSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return (short) get(SIZE_STICKER * sticker + INDEX_TRIANGLE_STICKER);
 	}
 	
-	public float getAlfaSticker(TTipoSticker tipo)
+	public float getAlfaSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 
 		return get(SIZE_STICKER * sticker + ANGLE_ALFA_STICKER);
 	}
 	
-	public float getBetaSticker(TTipoSticker tipo)
+	public float getBetaSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return get(SIZE_STICKER * sticker + ANGLE_BETA_STICKER);
 	}
 	
-	public float getGammaSticker(TTipoSticker tipo)
+	public float getGammaSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return get(SIZE_STICKER * sticker + ANGLE_GAMMA_STICKER);
 	}
 	
-	public float getXCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	public float getXCoords(TTypeSticker tipo, VertexArray vertices, TriangleArray triangulos)
 	{		
 		short triangle = getIndexSticker(tipo);
 		float alfa = getAlfaSticker(tipo);
@@ -157,7 +157,7 @@ public class StickerArray extends FloatArray
 		return alfa * aX + beta * bX + gamma * cX;
 	}
 	
-	public float getYCoords(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	public float getYCoords(TTypeSticker tipo, VertexArray vertices, TriangleArray triangulos)
 	{
 		short triangle = getIndexSticker(tipo);
 		float alfa = getAlfaSticker(tipo);
@@ -175,14 +175,14 @@ public class StickerArray extends FloatArray
 		return alfa * aY + beta * bY + gamma * cY;
 	}
 	
-	public float getIotaSticker(TTipoSticker tipo)
+	public float getIotaSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return get(SIZE_STICKER * sticker + ANGLE_IOTA_STICKER);
 	}
 	
-	public float getKappaSticker(TTipoSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	public float getKappaSticker(TTypeSticker tipo, VertexArray vertices, TriangleArray triangulos)
 	{
 		float x = getXCoords(tipo, vertices, triangulos);
 		float y = getYCoords(tipo, vertices, triangulos);
@@ -197,21 +197,21 @@ public class StickerArray extends FloatArray
 		return v.angle() - 90;
 	}
 	
-	public float getThetaSticker(TTipoSticker tipo)
+	public float getThetaSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return get(SIZE_STICKER * sticker + ANGLE_THETA_STICKER);
 	}
 	
-	public float getFactorSticker(TTipoSticker tipo)
+	public float getFactorSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
 		return get(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER);
 	}
 	
-	public void removeSticker(TTipoSticker tipo)
+	public void removeSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
@@ -223,7 +223,7 @@ public class StickerArray extends FloatArray
 		restoreSticker(tipo);
 	}
 	
-	public void restoreSticker(TTipoSticker tipo)
+	public void restoreSticker(TTypeSticker tipo)
 	{
 		short sticker = (short) tipo.ordinal();
 		
@@ -231,7 +231,7 @@ public class StickerArray extends FloatArray
 		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, NULL_SCALE);
 	}
 	
-	public boolean isLoadedSticker(TTipoSticker tipo)
+	public boolean isLoadedSticker(TTypeSticker tipo)
 	{		
 		return getIdSticker(tipo) != NULL_INDEX;
 	}

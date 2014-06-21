@@ -13,16 +13,16 @@ import com.android.social.SocialConnector;
 import com.android.storage.AssetsStorageManager;
 import com.android.storage.ExternalStorageManager;
 import com.android.storage.InternalStorageManager;
-import com.creation.data.Esqueleto;
-import com.creation.data.Movimientos;
-import com.creation.data.TTipoMovimiento;
-import com.creation.data.Textura;
-import com.game.data.InstanciaNivel;
-import com.game.data.Nivel;
-import com.game.data.Personaje;
-import com.game.game.TTipoEndgame;
+import com.creation.data.Skeleton;
+import com.creation.data.Movements;
+import com.creation.data.TTypeMovement;
+import com.creation.data.Texture;
+import com.game.data.InstanceLevel;
+import com.game.data.Level;
+import com.game.data.Character;
+import com.game.game.TTypeEndgame;
 import com.game.select.LevelGenerator;
-import com.game.select.TTipoLevel;
+import com.game.select.TTypeLevel;
 import com.project.main.R;
 import com.video.data.Video;
 import com.video.video.VideoGenerator;
@@ -33,8 +33,8 @@ public abstract class GameCore
 	private Context mContext;
 	
 	/* Estructura de Datos */
-	private List<Personaje> listaPersonajes;
-	private Personaje nuevoPersonaje;
+	private List<Character> listaPersonajes;
+	private Character nuevoPersonaje;
 	
 	/* Video */
 	private VideoGenerator videoGenerator;
@@ -126,7 +126,7 @@ public abstract class GameCore
 	
 	/* Métodos de obtención de datos */
 	
-	public List<Personaje> getListaPersonajes()
+	public List<Character> getListaPersonajes()
 	{
 		return listaPersonajes;
 	}
@@ -136,7 +136,7 @@ public abstract class GameCore
 		return estadisticasNiveles;
 	}
 
-	public List<Nivel> getListaNiveles()
+	public List<Level> getListaNiveles()
 	{
 		return levelGenerator.getListaNiveles();
 	}
@@ -156,7 +156,7 @@ public abstract class GameCore
 		return ficheros.length;
 	}
 
-	public InstanciaNivel getNivel(TTipoLevel nivel)
+	public InstanceLevel getNivel(TTypeLevel nivel)
 	{
 		musicaSeleccionada = levelGenerator.getLevel(nivel).getMusicaNivel();
 		
@@ -168,17 +168,17 @@ public abstract class GameCore
 		return videoGenerator.getVideo();
 	}
 	
-	public boolean isNivelPerfecto(TTipoLevel nivel)
+	public boolean isNivelPerfecto(TTypeLevel nivel)
 	{
 		return estadisticasNiveles[nivel.ordinal()].isPerfected();
 	}
 	
-	public Personaje getNuevoPersonaje()
+	public Character getNuevoPersonaje()
 	{
 		return nuevoPersonaje;
 	}
 	
-	public Personaje getPersonaje(int indice)
+	public Character getPersonaje(int indice)
 	{
 		if (indice >= 0 && indice < listaPersonajes.size())
 		{
@@ -188,7 +188,7 @@ public abstract class GameCore
 		return null;
 	}
 	
-	public Personaje getPersonajeSeleccionado()
+	public Character getPersonajeSeleccionado()
 	{
 		if (GamePreferences.GET_CHARACTER_GAME() != -1)
 		{
@@ -207,11 +207,11 @@ public abstract class GameCore
 	
 	public boolean crearNuevoPersonaje()
 	{
-		nuevoPersonaje = new Personaje();	
+		nuevoPersonaje = new Character();	
 		return true;
 	}
 	
-	public boolean actualizarNuevoPersonaje(Esqueleto esqueleto)
+	public boolean actualizarNuevoPersonaje(Skeleton esqueleto)
 	{
 		if (esqueleto != null)
 		{
@@ -226,7 +226,7 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean actualizarNuevoPersonaje(Textura textura)
+	public boolean actualizarNuevoPersonaje(Texture textura)
 	{
 		if (textura != null)
 		{
@@ -244,7 +244,7 @@ public abstract class GameCore
 		return false;
 	}
 		
-	public boolean actualizarNuevoPersonaje(Movimientos movimientos)
+	public boolean actualizarNuevoPersonaje(Movements movimientos)
 	{
 		if (movimientos != null)
 		{
@@ -270,7 +270,7 @@ public abstract class GameCore
 			
 			if (internalManager.guardarPersonaje(nuevoPersonaje))
 			{
-				TTipoMovimiento[] movimientos = TTipoMovimiento.values();
+				TTypeMovement[] movimientos = TTypeMovement.values();
 				for (int i = 0; i < movimientos.length; i++)
 				{
 					internalManager.guardarAudio(nombre, movimientos[i]);
@@ -306,7 +306,7 @@ public abstract class GameCore
 	
 	public boolean importarPersonaje(String nombre)
 	{
-		Personaje personaje = externalManager.importarPersonaje(nombre);
+		Character personaje = externalManager.importarPersonaje(nombre);
 		if (personaje != null)
 		{
 			if (internalManager.guardarPersonaje(personaje))
@@ -328,13 +328,13 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean repintarPersonaje(int indice, Textura textura)
+	public boolean repintarPersonaje(int indice, Texture textura)
 	{
 		if (textura != null)
 		{
 			if (indice >= 0 && indice < listaPersonajes.size())
 			{
-				Personaje personaje = listaPersonajes.get(indice);
+				Character personaje = listaPersonajes.get(indice);
 				personaje.setTextura(textura);
 				internalManager.actualizarPersonaje(personaje);
 				return true;
@@ -348,13 +348,13 @@ public abstract class GameCore
 		return false;
 	}
 	
-	public boolean redeformarPersonaje(int indice, Movimientos movimientos)
+	public boolean redeformarPersonaje(int indice, Movements movimientos)
 	{
 		if (movimientos != null)
 		{
 			if (indice >= 0 && indice < listaPersonajes.size())
 			{
-				Personaje personaje = listaPersonajes.get(indice);
+				Character personaje = listaPersonajes.get(indice);
 				personaje.setMovimientos(movimientos);
 				internalManager.actualizarPersonaje(personaje);
 				return true;
@@ -449,7 +449,7 @@ public abstract class GameCore
 
 	/* Métodos de modificación de la Estadisticas del Juego */
 
-	public boolean actualizarEstadisticas(InstanciaNivel nivel, int score, TTipoEndgame endgame)
+	public boolean actualizarEstadisticas(InstanceLevel nivel, int score, TTypeEndgame endgame)
 	{
 		int posNivel = nivel.getTipoNivel().ordinal();
 		
@@ -460,18 +460,18 @@ public abstract class GameCore
 		estadisticasNiveles[posNivel].increaseVictories();	
 		
 		// Actualizar logos		
-		if (endgame == TTipoEndgame.LevelMastered)
+		if (endgame == TTypeEndgame.LevelMastered)
 		{
 			estadisticasNiveles[posNivel].setCompleted();
 			estadisticasNiveles[posNivel].setPerfected();
 			estadisticasNiveles[posNivel].setMastered();
 		}
-		else if (endgame == TTipoEndgame.LevelPerfected)
+		else if (endgame == TTypeEndgame.LevelPerfected)
 		{
 			estadisticasNiveles[posNivel].setCompleted();
 			estadisticasNiveles[posNivel].setPerfected();
 		}
-		else if (endgame == TTipoEndgame.LevelCompleted)
+		else if (endgame == TTypeEndgame.LevelCompleted)
 		{
 			estadisticasNiveles[posNivel].setCompleted();
 		}
@@ -496,7 +496,7 @@ public abstract class GameCore
 		return internalManager.guardarEstadisticas(estadisticasNiveles);
 	}
 
-	public boolean actualizarEstadisticas(InstanciaNivel nivel, TTipoEndgame endgame)
+	public boolean actualizarEstadisticas(InstanceLevel nivel, TTypeEndgame endgame)
 	{
 		// Sonido Derrota
 		audioPlayerManager.startPlaying(R.raw.effect_game_over, false, false);

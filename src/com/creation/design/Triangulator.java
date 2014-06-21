@@ -11,8 +11,8 @@ import com.lib.math.DelaunayTriangulator;
 import com.lib.math.EarClippingTriangulator;
 import com.lib.math.GeometryUtils;
 import com.lib.math.Vector2;
+import com.lib.utils.DelaunayMesh;
 import com.lib.utils.FloatArray;
-import com.lib.utils.Mesh;
 import com.lib.utils.ShortArray;
 
 public class Triangulator
@@ -40,7 +40,7 @@ ExternalStorageManager.writeLogcat("TEST", "Polygon with more of 2 vertices.");
 			if(poligonoSimple)
 			{
 ExternalStorageManager.writeLogcat("TEST", "Polygon is simple.");
-				Mesh m = calcularMeshGenerator(bsplineVertices);
+				DelaunayMesh m = calcularMeshGenerator(bsplineVertices);
 				vertices = m.getVertices();
 				triangulos = m.getTriangulos();
 				
@@ -106,7 +106,7 @@ ExternalStorageManager.writeLogcat("TEST", "Polygon is complex.");
 		return earClippingCalculator.computeTriangles(vertices);
 	}
 	
-	public static Mesh calcularMeshGenerator(FloatArray vertices)
+	public static DelaunayMesh calcularMeshGenerator(FloatArray vertices)
 	{
 		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
 		return delaunayMeshGenerator.computeMesh(vertices);

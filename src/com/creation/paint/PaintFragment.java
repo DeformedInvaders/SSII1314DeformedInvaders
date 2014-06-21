@@ -14,9 +14,9 @@ import com.android.dialog.SizeDialog;
 import com.android.dialog.StickerDialog;
 import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
-import com.creation.data.TTipoSticker;
-import com.creation.data.Textura;
-import com.game.data.Personaje;
+import com.creation.data.TTypeSticker;
+import com.creation.data.Texture;
+import com.game.data.Character;
 import com.main.model.GameResources;
 import com.main.model.GameStatistics;
 import com.project.main.R;
@@ -32,7 +32,7 @@ public class PaintFragment extends OpenGLFragment
 	private PaintOpenGLSurfaceView canvas;
 	private IconImageButton botonPincel, botonCubo, botonMano, botonNext, botonPrev, botonDelete, botonListo, botonColor, botonSize, botonPegatina;
 
-	private Personaje personaje;
+	private Character personaje;
 	private int personajeIndice;
 	
 	private GameStatistics[] estadoNiveles;
@@ -41,28 +41,28 @@ public class PaintFragment extends OpenGLFragment
 
 	/* Constructora */
 
-	public static final PaintFragment newInstance(PaintFragmentListener c, Personaje p, GameStatistics[] e)
+	public static final PaintFragment newInstance(PaintFragmentListener c, Character p, GameStatistics[] e)
 	{
 		PaintFragment fragment = new PaintFragment();
 		fragment.setParameters(c, p, -1, e, null);
 		return fragment;
 	}
 	
-	public static final PaintFragment newInstance(PaintFragmentListener c, Personaje p, int n, GameStatistics[] e)
+	public static final PaintFragment newInstance(PaintFragmentListener c, Character p, int n, GameStatistics[] e)
 	{
 		PaintFragment fragment = new PaintFragment();
 		fragment.setParameters(c, p, n, e, null);
 		return fragment;
 	}
 	
-	public static final PaintFragment newInstance(PaintFragmentListener c, Personaje p, GameStatistics[] e, PaintDataSaved s)
+	public static final PaintFragment newInstance(PaintFragmentListener c, Character p, GameStatistics[] e, PaintDataSaved s)
 	{
 		PaintFragment fragment = new PaintFragment();
 		fragment.setParameters(c, p, -1, e, s);
 		return fragment;
 	}
 	
-	private void setParameters(PaintFragmentListener c, Personaje p, int n, GameStatistics[] e, PaintDataSaved s)
+	private void setParameters(PaintFragmentListener c, Character p, int n, GameStatistics[] e, PaintDataSaved s)
 	{
 		mCallback = c;
 		personaje = p;
@@ -73,8 +73,8 @@ public class PaintFragment extends OpenGLFragment
 
 	public interface PaintFragmentListener
 	{
-		public void onPaintReady(final Textura textura, final PaintDataSaved datosSalvados);
-		public void onRepaintReady(final Textura textura, final int indice);
+		public void onPaintReady(final Texture textura, final PaintDataSaved datosSalvados);
+		public void onRepaintReady(final Texture textura, final int indice);
 	}
 
 	/* Métodos Fragment */
@@ -280,7 +280,7 @@ public class PaintFragment extends OpenGLFragment
 			{
 				sizeDialog = new SizeDialog(getActivity()) {
 					@Override
-					public void onSizeSelected(TTipoSize size)
+					public void onSizeSelected(TTypeSize size)
 					{
 						canvas.seleccionarSize(size);
 					}
@@ -299,7 +299,7 @@ public class PaintFragment extends OpenGLFragment
 			{
 				stickerDialog = new StickerDialog(getActivity(), estadoNiveles) {
 					@Override
-					public void onAddSticker(int tag, TTipoSticker tipo)
+					public void onAddSticker(int tag, TTypeSticker tipo)
 					{
 						canvas.anyadirPegatina(tag, tipo);
 
@@ -308,7 +308,7 @@ public class PaintFragment extends OpenGLFragment
 					}
 					
 					@Override
-					public void onDeleteSticker(TTipoSticker tipo)
+					public void onDeleteSticker(TTypeSticker tipo)
 					{
 						canvas.eliminarPegatina(tipo);
 						
@@ -317,7 +317,7 @@ public class PaintFragment extends OpenGLFragment
 					}
 					
 					@Override
-					public void onEditSticker(TTipoSticker tipo)
+					public void onEditSticker(TTypeSticker tipo)
 					{
 						canvas.editarPegatina(tipo);
 						

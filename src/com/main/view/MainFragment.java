@@ -12,7 +12,7 @@ import com.android.view.IconImageButton;
 import com.android.view.OpenGLFragment;
 import com.character.display.DisplayOpenGLSurfaceView;
 import com.character.display.OnDisplayListener;
-import com.game.data.Personaje;
+import com.game.data.Character;
 import com.main.model.GamePreferences;
 import com.project.main.R;
 
@@ -23,19 +23,19 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	private DisplayOpenGLSurfaceView canvas;
 	private IconImageButton botonCrear, botonImportar, botonJugar, botonSeleccionar, botonVideo;
 
-	private Personaje personaje;
+	private Character personaje;
 	private int numeroPersonajes, numeroFicheros;
 
 	/* Constructora */
 
-	public static final MainFragment newInstance(MainFragmentListener callback, Personaje personaje, int numPersonajes, int numFicheros)
+	public static final MainFragment newInstance(MainFragmentListener callback, Character personaje, int numPersonajes, int numFicheros)
 	{
 		MainFragment fragment = new MainFragment();
 		fragment.setParameters(callback, personaje, numPersonajes, numFicheros);
 		return fragment;
 	}
 
-	private void setParameters(MainFragmentListener c, Personaje p, int numPersonajes, int numFicheros)
+	private void setParameters(MainFragmentListener c, Character p, int numPersonajes, int numFicheros)
 	{
 		mCallback = c;
 		personaje = p;

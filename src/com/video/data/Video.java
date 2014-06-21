@@ -2,17 +2,17 @@ package com.video.data;
 
 import java.util.List;
 
-import com.game.data.Personaje;
-import com.video.video.TEstadoVideo;
+import com.game.data.Character;
+import com.video.video.TStateVideo;
 
 public class Video
 {
 	private int[] idFondos;
 	private List<int[]> listaMensajes;
-	private List<Personaje> listaPersonajes;
-	private List<ObjetoInanimado> listaObjetos;
+	private List<Character> listaPersonajes;
+	private List<InanimatedObject> listaObjetos;
 	
-	public Video(int[] fondos, List<int[]> mensajes, List<Personaje> personajes, List<ObjetoInanimado> objetos)
+	public Video(int[] fondos, List<int[]> mensajes, List<Character> personajes, List<InanimatedObject> objetos)
 	{
 		idFondos = fondos;
 		
@@ -26,17 +26,17 @@ public class Video
 		return idFondos;
 	}
 	
-	public Personaje getPersonaje(TTipoActores actor)
+	public Character getPersonaje(TTypeActors actor)
 	{
 		return listaPersonajes.get(actor.ordinal());
 	}
 	
-	public List<ObjetoInanimado> getListaObjetos()
+	public List<InanimatedObject> getListaObjetos()
 	{
 		return listaObjetos;
 	}
 	
-	public int[] getMensaje(TEstadoVideo estado)
+	public int[] getMensaje(TStateVideo estado)
 	{
 		if (estado.ordinal() < listaMensajes.size())
 		{
