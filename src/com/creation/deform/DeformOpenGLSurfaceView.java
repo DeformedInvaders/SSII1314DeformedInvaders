@@ -136,7 +136,7 @@ public class DeformOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public void reiniciar()
 	{
-		renderer.reiniciar();
+		renderer.onReset();
 		requestRender();
 	}
 

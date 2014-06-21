@@ -109,7 +109,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarRetoque()
 	{
 		renderer.seleccionarRetoque(getHeight(), getWidth());
-		setEstado(TStateDetector.CamaraDetectors);
+		setDetectorState(TStateDetector.CamaraDetectors);
 
 		requestRender();
 	}
@@ -145,7 +145,7 @@ public class DisplayOpenGLSurfaceView extends OpenGLSurfaceView
 	public Bitmap getCapturaPantalla()
 	{
 		renderer.seleccionarCaptura();
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 
 		requestRender();
 		return renderer.getCapturaPantalla();

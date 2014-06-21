@@ -17,65 +17,65 @@ import com.video.video.TStateVideo;
 
 public class InanimatedObject extends Entity
 {
-	protected TStateVideo estadoActivo;
-	protected int sonidoActivo;
+	protected TStateVideo stateActive;
+	protected int soundActive;
 	
-	protected float posicionX, posicionY, factor;
+	protected float coordX, coordY, factor;
 	
 	protected Rectangle area;
 	protected Handle handle;
 	
-	public InanimatedObject(int id, int textura, float posX, float posY, TStateVideo estado, int sonido)
+	public InanimatedObject(int id, int textura, float x, float y, TStateVideo state, int sound)
 	{
-		idEntidad = id;
-		tipoEntidad = TTypeEntity.InanimatedObject;
-		texturaEntidad = textura;
+		idEntity = id;
+		typeEntity = TTypeEntity.InanimatedObject;
+		textureEntity = textura;
 		
-		posicionX = posX * GamePreferences.SCREEN_WIDTH_SCALE_FACTOR();
-		posicionY = posY * GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR();
+		coordX = x * GamePreferences.SCREEN_WIDTH_SCALE_FACTOR();
+		coordY = y * GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR();
 		
 		factor = 1.0f;
 
-		estadoActivo = estado;
-		sonidoActivo = sonido;
+		stateActive = state;
+		soundActive = sound;
 	}
 	
-	protected int indiceObjeto()
+	protected int objectIndex()
 	{
-		return idEntidad;
+		return idEntity;
 	}
 	
 	/* Métodos Abstráctos de Entidad */
 	
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		Dimensions dim = renderer.cargarTexturaRectangulo(gl, texturaEntidad, tipoEntidad, idEntidad, TTypeSticker.Nothing);
+		Dimensions dim = renderer.loadTextureRectangle(gl, textureEntity, typeEntity, idEntity, TTypeSticker.Nothing);
 		if (dim != null)
 		{
 			width = dim.getWidth();
 			height = dim.getHeight();
 		}
 		
-		area = new Rectangle(posicionX, posicionY, getWidth(), getHeight());
+		area = new Rectangle(coordX, coordY, getWidth(), getHeight());
 		handle = new Handle(area.getX(), area.getY(), area.getWidth(), area.getHeight(), Color.BLUE);
 	}
 
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
-		renderer.descargarTexturaRectangulo(tipoEntidad, idEntidad, TTypeSticker.Nothing);
+		renderer.deleteTextureRectangle(typeEntity, idEntity, TTypeSticker.Nothing);
 	}
 
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
 		gl.glPushMatrix();
 		
-			gl.glTranslatef(posicionX, posicionY, 0.0f);
+			gl.glTranslatef(coordX, coordY, 0.0f);
 			gl.glScalef(GamePreferences.SCREEN_WIDTH_SCALE_FACTOR(), GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR(), 1.0f);
 			gl.glScalef(factor, factor, 1.0f);
-			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceObjeto(), TTypeSticker.Nothing);
+			renderer.drawTextureRectangle(gl, typeEntity, objectIndex(), TTypeSticker.Nothing);
 		
 		gl.glPopMatrix();
 		
@@ -109,17 +109,17 @@ public class InanimatedObject extends Entity
 		return area.contains(x, y);
 	}
 	
-	public TStateVideo getEstadoActivo()
+	public TStateVideo getStateActive()
 	{
-		return estadoActivo;
+		return stateActive;
 	}
 	
-	public int getSonidoActivo()
+	public int getSoundActive()
 	{
-		return sonidoActivo;
+		return soundActive;
 	}
 	
-	public void reposo()
+	public void stopAnimation()
 	{
 		
 	}

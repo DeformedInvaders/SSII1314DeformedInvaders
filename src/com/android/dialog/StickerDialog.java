@@ -33,12 +33,12 @@ public abstract class StickerDialog extends WindowDialog
 		TTypeSticker[] pegatinas = TTypeSticker.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
-			stickerLayout[i] = construirLayout(mainLayout, pegatinas[i]);
-			construirPegatinas(stickerLayout[i], estadisticas, pegatinas[i], new OnAddStickerClickListener(pegatinas[i]));
+			stickerLayout[i] = buildStickerLayout(mainLayout, pegatinas[i]);
+			buildSticker(stickerLayout[i], estadisticas, pegatinas[i], new OnAddStickerClickListener(pegatinas[i]));
 		}
 	}
 	
-	private LinearLayout construirLayout(LinearLayout mainLayout, TTypeSticker tipo)
+	private LinearLayout buildStickerLayout(LinearLayout mainLayout, TTypeSticker tipo)
 	{
 		LinearLayout typeLayout = new LinearLayout(mContext);
 		typeLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -66,7 +66,7 @@ public abstract class StickerDialog extends WindowDialog
 		return layout;
 	}
 
-	private void cargarPegatina(LinearLayout layout, int idImagen, int tagImagen, OnClickListener listener)
+	private void loadSticker(LinearLayout layout, int idImagen, int tagImagen, OnClickListener listener)
 	{
 		ImageView image = new ImageView(mContext);
 		image.setLayoutParams(new LinearLayout.LayoutParams(imageWidth, imageHeight));
@@ -77,42 +77,42 @@ public abstract class StickerDialog extends WindowDialog
 		layout.addView(image);		
 	}
 	
-	private void cargarPegatina(LinearLayout layout, String nombrePegatina, int tagImagen, OnClickListener listener)
+	private void loadSticker(LinearLayout layout, String nombrePegatina, int tagImagen, OnClickListener listener)
 	{
 		int idImagen = mContext.getResources().getIdentifier(nombrePegatina, GameResources.RESOURCE_DRAWABLE, mContext.getPackageName());
-		cargarPegatina(layout, idImagen, tagImagen, listener);
+		loadSticker(layout, idImagen, tagImagen, listener);
 	}
 	
-	private void construirPegatinas(LinearLayout layout, GameStatistics[] estadisticas, TTypeSticker tipo, OnClickListener listener)
+	private void buildSticker(LinearLayout layout, GameStatistics[] estadisticas, TTypeSticker tipo, OnClickListener listener)
 	{
-		boolean juegoTerminado = true;
-		boolean pegatinaAnyiadida = false;
+		boolean gameCompleted = true;
+		boolean stickerAdded = false;
 		
 		for (int i = 0; i < estadisticas.length; i++)
 		{
-			juegoTerminado &= estadisticas[i].isPerfected();
+			gameCompleted &= estadisticas[i].isPerfected();
 		}
 		
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS(tipo); i++)
 		{
 			if (GamePreferences.IS_DEBUG_ENABLED())
 			{
-				cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
-				pegatinaAnyiadida = true;
+				loadSticker(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+				stickerAdded = true;
 			}
 			else if (tipo == TTypeSticker.Eyes || tipo == TTypeSticker.Mouth)
 			{
 				if (i < GamePreferences.NUM_TYPE_STICKERS(tipo) - 4)
 				{
 					// Pegatinas Básicas
-					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
-					pegatinaAnyiadida = true;
+					loadSticker(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+					stickerAdded = true;
 				}
 				else if(estadisticas[0].isPerfected())
 				{
 					// Pegatinas Nivel Luna
-					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
-					pegatinaAnyiadida = true;
+					loadSticker(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+					stickerAdded = true;
 				}
 			}
 			else
@@ -123,24 +123,24 @@ public abstract class StickerDialog extends WindowDialog
 					int pos = (i / (GamePreferences.NUM_TYPE_LEVELS - 1)) + 1;
 					if (estadisticas[pos].isPerfected())
 					{
-						cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
-						pegatinaAnyiadida = true;
+						loadSticker(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+						stickerAdded = true;
 					}
 				}
-				else if (juegoTerminado)
+				else if (gameCompleted)
 				{
 					// Pegatinas Personajes Video
-					cargarPegatina(layout, GameResources.GET_STICKER(tipo, i), i, listener);
-					pegatinaAnyiadida = true;
+					loadSticker(layout, GameResources.GET_STICKER(tipo, i), i, listener);
+					stickerAdded = true;
 				}
 			}
 		}
 		
 		// Opción Eliminar Pegatina
-		if (pegatinaAnyiadida)
+		if (stickerAdded)
 		{
-			cargarPegatina(layout, R.drawable.sticker_delete, 0, new OnDeleteStickerClickListener(tipo));
-			cargarPegatina(layout, R.drawable.sticker_edit, 0, new OnEditStickerClickListener(tipo));
+			loadSticker(layout, R.drawable.sticker_delete, 0, new OnDeleteStickerClickListener(tipo));
+			loadSticker(layout, R.drawable.sticker_edit, 0, new OnEditStickerClickListener(tipo));
 		}
 	}
 
@@ -154,57 +154,57 @@ public abstract class StickerDialog extends WindowDialog
 	
 	public class OnAddStickerClickListener implements OnClickListener
 	{
-		private TTypeSticker tipoPegatina;
+		private TTypeSticker typeSticker;
 		
-		public OnAddStickerClickListener(TTypeSticker tipo)
+		public OnAddStickerClickListener(TTypeSticker type)
 		{
 			super();
 			
-			tipoPegatina = tipo;
+			typeSticker = type;
 		}
 		
 		@Override
 		public void onClick(View v)
 		{
-			onAddSticker((Integer) v.getTag(), tipoPegatina);
+			onAddSticker((Integer) v.getTag(), typeSticker);
 			dismiss();
 		}
 	}
 	
 	public class OnDeleteStickerClickListener implements OnClickListener
 	{
-		private TTypeSticker tipoPegatina;
+		private TTypeSticker typeSticker;
 		
-		public OnDeleteStickerClickListener(TTypeSticker tipo)
+		public OnDeleteStickerClickListener(TTypeSticker type)
 		{
 			super();
 			
-			tipoPegatina = tipo;
+			typeSticker = type;
 		}
 		
 		@Override
 		public void onClick(View v)
 		{
-			onDeleteSticker(tipoPegatina);
+			onDeleteSticker(typeSticker);
 			dismiss();
 		}		
 	}
 	
 	public class OnEditStickerClickListener implements OnClickListener
 	{
-		private TTypeSticker tipoPegatina;
+		private TTypeSticker typeSticker;
 	
-		public OnEditStickerClickListener(TTypeSticker tipo)
+		public OnEditStickerClickListener(TTypeSticker type)
 		{
 			super();
 			
-			tipoPegatina = tipo;
+			typeSticker = type;
 		}
 	
 		@Override
 		public void onClick(View v)
 		{
-			onEditSticker(tipoPegatina);
+			onEditSticker(typeSticker);
 			dismiss();
 		}		
 	}

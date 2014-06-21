@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 
 public abstract class MoveDetector
 {
-	private boolean bloqueado;
+	private boolean locked;
 
 	private float lastPixelX, lastPixelY;
 
@@ -12,7 +12,7 @@ public abstract class MoveDetector
 
 	public MoveDetector()
 	{
-		bloqueado = false;
+		locked = false;
 	}
 	
 	/* Métodos Listener onTouch */
@@ -21,7 +21,7 @@ public abstract class MoveDetector
 	{
 		int action = event.getActionMasked();
 		
-		if (!bloqueado)
+		if (!locked)
 		{
 			float pixelX = event.getX();
 			float pixelY = event.getY();
@@ -40,7 +40,7 @@ public abstract class MoveDetector
 		{
 			if (action == MotionEvent.ACTION_UP)
 			{
-				bloqueado = false;
+				locked = false;
 			}
 		}
 
@@ -49,7 +49,7 @@ public abstract class MoveDetector
 
 	public boolean onStopEvent()
 	{
-		bloqueado = true;
+		locked = true;
 		return true;
 	}
 

@@ -14,9 +14,9 @@ public abstract class Rectangle extends Entity
 	/* Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		Dimensions dim = renderer.cargarTexturaRectangulo(gl, texturaEntidad, tipoEntidad, idEntidad, TTypeSticker.Nothing);
+		Dimensions dim = renderer.loadTextureRectangle(gl, textureEntity, typeEntity, idEntity, TTypeSticker.Nothing);
 		if(dim != null)
 		{
 			width = dim.getWidth();
@@ -25,19 +25,19 @@ public abstract class Rectangle extends Entity
 	}
 
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
-		renderer.descargarTexturaRectangulo(tipoEntidad, idEntidad, TTypeSticker.Nothing);
+		renderer.deleteTextureRectangle(typeEntity, idEntity, TTypeSticker.Nothing);
 	}
 
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
 		gl.glPushMatrix();
 		
-			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 0.0f);
+			gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 0.0f);
 			
-			renderer.dibujarTexturaRectangulo(gl, tipoEntidad, idEntidad, TTypeSticker.Nothing);
+			renderer.drawTextureRectangle(gl, typeEntity, idEntity, TTypeSticker.Nothing);
 			
 		gl.glPopMatrix();
 	}

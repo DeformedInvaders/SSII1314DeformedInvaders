@@ -20,8 +20,8 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 	private ActionBar actionBar;
 	private FragmentManager layoutManager;
 	
-	private List<T> listaFragmentos;
-	private List<String> listaNombres;
+	private List<T> fragmentList;
+	private List<String> titleList;
 	
 	/* Constructora */
 
@@ -34,8 +34,8 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 	{
 		super(context, attrs);
 
-		listaFragmentos = new ArrayList<T>();
-		listaNombres = new ArrayList<String>();
+		fragmentList = new ArrayList<T>();
+		titleList = new ArrayList<String>();
 	}
 
 	/* Métodos Publicos */
@@ -49,17 +49,17 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 		removeAllViews();
 	}
 
-	public void addView(T t, String s)
+	public void addView(T fragment, String title)
 	{
-		listaFragmentos.add(t);
-		listaNombres.add(s);
+		fragmentList.add(fragment);
+		titleList.add(title);
 
-		actionBar.addTab(actionBar.newTab().setText(s).setTabListener(this));
+		actionBar.addTab(actionBar.newTab().setText(title).setTabListener(this));
 	}
 	
 	public void selectView(int position)
 	{
-		if (position > 0 && position < listaFragmentos.size())
+		if (position > 0 && position < fragmentList.size())
 		{
 			actionBar.selectTab(actionBar.getTabAt(position));
 		}
@@ -67,7 +67,7 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 
 	public Iterator<T> iterator()
 	{
-		return listaFragmentos.iterator();
+		return fragmentList.iterator();
 	}
 
 	public int getPosition()
@@ -83,7 +83,7 @@ public class ViewFrameSwipeable<T extends Fragment> extends FrameLayout implemen
 		frameFragment.onPageSelected(tab.getPosition());
 		
 		FragmentTransaction transaction = layoutManager.beginTransaction();
-		transaction.replace(getId(), listaFragmentos.get(tab.getPosition()));
+		transaction.replace(getId(), fragmentList.get(tab.getPosition()));
 		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 		transaction.commit();
 	}

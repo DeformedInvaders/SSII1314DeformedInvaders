@@ -8,35 +8,35 @@ import com.video.video.TStateVideo;
 
 public class MovingObject extends AnimatedObject
 {
-	private float posicionOriginalX, posicionOriginalY, factorOriginal;
+	private float coordXOriginal, coordYOriginal, factorOriginal;
 	
-	public MovingObject(int id, int[] texturas, float posX, float posY, TStateVideo estado, int sonido, TTypeAnimation animacion)
+	public MovingObject(int id, int[] textures, float x, float y, TStateVideo state, int sound, TTypeAnimation animation)
 	{
-		super(id, texturas, posX, posY, estado, sonido, animacion);
+		super(id, textures, x, y, state, sound, animation);
 		
-		posicionOriginalX = posX;
-		posicionOriginalY = posY;
+		coordXOriginal = x;
+		coordYOriginal = y;
 		factorOriginal = 1.0f;
 		
-		numeroCiclosEspera = 1;
+		animationFramesWait = 1;
 	}
 
 	@Override
-	public void reposo()
+	public void stopAnimation()
 	{
-		super.reposo();
+		super.stopAnimation();
 		
-		posicionX = posicionOriginalX;
-		posicionY = posicionOriginalY;
+		coordX = coordXOriginal;
+		coordY = coordYOriginal;
 		factor = factorOriginal;
 	}
 	
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		posicionY = posicionY + GamePreferences.DIST_MOVIMIENTO_SPACESHIP();
+		coordY = coordY + GamePreferences.DIST_MOVIMIENTO_SPACESHIP();
 		factor = factor * 0.998f;
 		
-		super.dibujar(gl, renderer);
+		super.drawTexture(gl, renderer);
 	}
 }

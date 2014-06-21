@@ -18,7 +18,7 @@ import com.main.model.GamePreferences;
 public class OpenGLSurfaceView extends GLSurfaceView
 {
 	private Context mContext;
-	private TStateDetector estadoDetector;
+	private TStateDetector mState;
 
 	private OpenGLRenderer renderer;
 
@@ -30,17 +30,17 @@ public class OpenGLSurfaceView extends GLSurfaceView
 
 	/* Constructora */
 	
-	public OpenGLSurfaceView(Context context, AttributeSet attrs, boolean transparente)
+	public OpenGLSurfaceView(Context context, AttributeSet attrs, boolean alpha)
 	{
-		this(context, attrs, TStateDetector.Disable, transparente);
+		this(context, attrs, TStateDetector.Disable, alpha);
 	}
 	
-	public OpenGLSurfaceView(Context context, AttributeSet attrs, TStateDetector estado, boolean transparente)
+	public OpenGLSurfaceView(Context context, AttributeSet attrs, TStateDetector estado, boolean alpha)
 	{
 		super(context, attrs);
 
 		// Tipo Multitouch
-		estadoDetector = estado;
+		mState = estado;
 		mContext = context;
 
 		// Activar Formato Texturas transparentes
@@ -48,7 +48,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 		getHolder().setFormat(PixelFormat.RGBA_8888);
 		
 		// Activar Formato fondo transparente
-		if (transparente)
+		if (alpha)
 		{
 			setZOrderOnTop(true);
 		}
@@ -103,14 +103,14 @@ public class OpenGLSurfaceView extends GLSurfaceView
 		super.setRenderer(renderer);
 		super.setRenderMode(RENDERMODE_WHEN_DIRTY);
 
-		setEstado(estadoDetector);
+		setDetectorState(mState);
 	}
 
-	public void setEstado(TStateDetector e)
+	public void setDetectorState(TStateDetector e)
 	{
-		estadoDetector = e;
+		mState = e;
 
-		if (estadoDetector == TStateDetector.CamaraDetectors || estadoDetector == TStateDetector.CoordDetectors)
+		if (mState == TStateDetector.CamaraDetectors || mState == TStateDetector.CoordDetectors)
 		{
 			if (scaleDetector == null)
 			{
@@ -119,11 +119,11 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onScale(float factor, float pixelX, float pixelY, float lastPixelX, float lastPixelY)
 					{
-						if (estadoDetector == TStateDetector.CamaraDetectors)
+						if (mState == TStateDetector.CamaraDetectors)
 						{
 							renderer.camaraZoom(2 * GamePreferences.NULL_SCALE_FACTOR - factor);
 						}
-						else if (estadoDetector == TStateDetector.CoordDetectors)
+						else if (mState == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsZoom(factor, pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
@@ -138,21 +138,21 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onDragDown(float pixelX, float pixelY, float lastPixelX, float lastPixelY)
 					{
-						if (estadoDetector == TStateDetector.CamaraDetectors)
+						if (mState == TStateDetector.CamaraDetectors)
 						{
-							renderer.salvarCamara();
+							renderer.saveCamera();
 						}
 					}
 
 					@Override
 					public void onDragMove(float pixelX, float pixelY, float lastPixelX, float lastPixelY)
 					{
-						if (estadoDetector == TStateDetector.CamaraDetectors)
+						if (mState == TStateDetector.CamaraDetectors)
 						{
-							renderer.recuperarCamara();
+							renderer.restoreCamera();
 							renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
-						else if (estadoDetector == TStateDetector.CoordDetectors)
+						else if (mState == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
@@ -166,7 +166,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onRotate(float ang, float pixelX, float pixelY)
 					{
-						if (estadoDetector == TStateDetector.CoordDetectors)
+						if (mState == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsRotate(ang, pixelX, pixelY, getWidth(), getHeight());
 						}
@@ -181,11 +181,11 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					@Override
 					public void onDoubleTap()
 					{
-						if (estadoDetector == TStateDetector.CamaraDetectors)
+						if (mState == TStateDetector.CamaraDetectors)
 						{
 							renderer.camaraRestore();
 						}
-						else if (estadoDetector == TStateDetector.CoordDetectors)
+						else if (mState == TStateDetector.CoordDetectors)
 						{
 							renderer.pointsRestore();
 						}
@@ -199,7 +199,7 @@ public class OpenGLSurfaceView extends GLSurfaceView
 
 	public boolean onTouch(View v, MotionEvent event)
 	{
-		switch (estadoDetector)
+		switch (mState)
 		{
 			case SimpleTouch:
 				return onSingleTouch(v, event);

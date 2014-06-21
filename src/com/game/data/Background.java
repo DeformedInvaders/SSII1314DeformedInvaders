@@ -5,24 +5,24 @@ import com.game.game.TTypeEndgame;
 public class Background
 {
 	private int[] idPolaroid;
-	private int[] idFondos;
-	private int idFondoSol;
+	private int[] idBackground;
+	private int idSun;
 	
-	public Background(int fondoSol, int[] fondos, int[] polaroid)
+	public Background(int sol, int[] background, int[] polaroid)
 	{
-		idFondos = fondos;
-		idFondoSol = fondoSol;
+		idBackground = background;
+		idSun = sol;
 		idPolaroid = polaroid;
 	}
 
-	public int[] getIdTexturaFondos()
+	public int[] getIdBackground()
 	{
-		return idFondos;
+		return idBackground;
 	}
 	
-	public int getIdTexturaSol()
+	public int getIdSun()
 	{
-		return idFondoSol;
+		return idSun;
 	}
 	
 	public int getIdPolaroid(TTypeEndgame tipo)

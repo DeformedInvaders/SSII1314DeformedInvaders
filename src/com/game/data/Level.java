@@ -6,72 +6,72 @@ import com.game.select.TTypeLevel;
 
 public class Level
 {
-	private Typeface fuenteNivel;
-	private TTypeLevel tipoNivel;
-	private int fondoNivel, imagenCompleted, imagenPerfected, imagenMastered;
-	private int nombreNivel, descripcionNivel, colorTextoNivel, musicaNivel;
+	private Typeface levelFont;
+	private TTypeLevel levelType;
+	private int levelBackground, levelImageCompleted, levelImagePerfected, levelImageMastered;
+	private int levelName, levelDescription, levelColor, levelMusic;
 
-	public Level(TTypeLevel numero, int fondo, int completed, int perfected, int mastered, int nombre, int descripcion, int color, Typeface fuente, int musica)
+	public Level(TTypeLevel level, int background, int imageCompleted, int imagePerfected, int imageMastered, int name, int description, int color, Typeface font, int music)
 	{
-		fondoNivel = fondo;
-		imagenCompleted = completed;
-		imagenPerfected = perfected;
-		imagenMastered = mastered;
-		nombreNivel = nombre;
-		descripcionNivel = descripcion;
-		colorTextoNivel = color;
-		tipoNivel = numero;
-		fuenteNivel = fuente;
-		musicaNivel = musica;
+		levelBackground = background;
+		levelImageCompleted = imageCompleted;
+		levelImagePerfected = imagePerfected;
+		levelImageMastered = imageMastered;
+		levelName = name;
+		levelDescription = description;
+		levelColor = color;
+		levelType = level;
+		levelFont = font;
+		levelMusic = music;
 	}
 
-	public int getFondoNivel()
+	public int getLevelBackground()
 	{
-		return fondoNivel;
+		return levelBackground;
 	}
 	
-	public int getImagenCompleted()
+	public int getLevelImageCompleted()
 	{
-		return imagenCompleted;
+		return levelImageCompleted;
 	}
 	
-	public int getImagenPerfected()
+	public int getLevelImagePerfected()
 	{
-		return imagenPerfected;
+		return levelImagePerfected;
 	}
 
-	public int getImagenMastered()
+	public int getLevelImageMastered()
 	{
-		return imagenMastered;
+		return levelImageMastered;
 	}
 	
-	public int getNombreNivel()
+	public int getLevelName()
 	{
-		return nombreNivel;
+		return levelName;
 	}
 
-	public int getDescripcionNivel()
+	public int getLevelDescription()
 	{
-		return descripcionNivel;
+		return levelDescription;
 	}
 
-	public int getColorTextoNivel()
+	public int getLevelColor()
 	{
-		return colorTextoNivel;
+		return levelColor;
 	}
 
-	public TTypeLevel getTipoNivel()
+	public TTypeLevel getLevelType()
 	{
-		return tipoNivel;
+		return levelType;
 	}
 	
-	public Typeface getFuenteNivel()
+	public Typeface getLevelFont()
 	{
-		return fuenteNivel;
+		return levelFont;
 	}
 	
-	public int getMusicaNivel()
+	public int getLevelMusic()
 	{
-		return musicaNivel;
+		return levelMusic;
 	}
 }

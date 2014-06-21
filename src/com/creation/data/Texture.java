@@ -15,60 +15,60 @@ public class Texture implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private BitmapImage mapaBits;
-	private VertexArray coordTextura;
-	private Stickers pegatinas;
+	private BitmapImage bitmap;
+	private VertexArray textureCoords;
+	private Stickers stickers;
 
 	/* Constructora */
 
-	public Texture(BitmapImage mapaBits, VertexArray coordTextura, Stickers pegatinas)
+	public Texture(BitmapImage bitmap, VertexArray textureCoords, Stickers stickers)
 	{
-		this.mapaBits = mapaBits;
-		this.coordTextura = coordTextura;
-		this.pegatinas = pegatinas;
+		this.bitmap = bitmap;
+		this.textureCoords = textureCoords;
+		this.stickers = stickers;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public BitmapImage getMapaBits()
+	public BitmapImage getBitmap()
 	{
-		return mapaBits;
+		return bitmap;
 	}
 
-	public VertexArray getCoordTextura()
+	public VertexArray getTextureCoords()
 	{
-		return coordTextura;
+		return textureCoords;
 	}
 
-	public Stickers getPegatinas()
+	public Stickers getStickers()
 	{
-		return pegatinas;
+		return stickers;
 	}
 	
 	public int getHeight()
 	{
-		return mapaBits.getHeight();
+		return bitmap.getHeight();
 	}
 	
 	public int getWidth()
 	{
-		return mapaBits.getWidth();
+		return bitmap.getWidth();
 	}
 	
 	/* Métodos de representación en renderer */
 	
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context, TTypeEntity tipoEntidad, int posEntidad)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context, TTypeEntity entity, int position)
 	{
-		renderer.cargarTexturaMalla(gl, mapaBits.getBitmap(), tipoEntidad, posEntidad);
+		renderer.loadTextureMesh(gl, bitmap.getBitmap(), entity, position);
 	}
 
-	public void descargarTextura(OpenGLRenderer renderer, TTypeEntity tipoEntidad, int posEntidad)
+	public void deleteTexture(OpenGLRenderer renderer, TTypeEntity entity, int position)
 	{
-		renderer.descargarTexturaMalla(tipoEntidad, posEntidad);
+		renderer.deleteTextureMesh(entity, position);
 	}
 
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, FloatBuffer triangulos, FloatBuffer coordenadas, TTypeEntity tipoEntidad, int posEntidad)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer, FloatBuffer triangulos, FloatBuffer textureCoords, TTypeEntity entity, int position)
 	{
-		renderer.dibujarTexturaMalla(gl, triangulos, coordenadas, tipoEntidad, posEntidad);
+		renderer.drawTextureMesh(gl, triangulos, textureCoords, entity, position);
 	}
 }

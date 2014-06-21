@@ -10,11 +10,11 @@ import com.main.model.GamePreferences;
 public class Character extends Mesh
 {
 	// Nombre
-	private String nombre;
+	private String name;
 	
 	// Movimientos
-	private Movements movimientos;
-	private TTypeMovement tipoMovimiento;
+	private Movements movements;
+	private TTypeMovement movementActual;
 
 	/* Constructora */
 	
@@ -25,21 +25,21 @@ public class Character extends Mesh
 
 	public Character(int id)
 	{
-		tipoEntidad = TTypeEntity.Character;
-		idEntidad = id;
-		texturaEntidad = -1;
+		typeEntity = TTypeEntity.Character;
+		idEntity = id;
+		textureEntity = -1;
 	}
 
 	/* Métodos abstractos de Entidad */
 	
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (esqueletoReady && texturaReady && movimientosReady)
+		if (skeletonReady && textureReady && movementsReady)
 		{
 			gl.glPushMatrix();
 				
-				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-				super.dibujar(gl, renderer);			
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
+				super.drawTexture(gl, renderer);			
 	
 			gl.glPopMatrix();
 		}
@@ -47,46 +47,46 @@ public class Character extends Mesh
 
 	/* Métodos de Animación */
 	
-	public void seleccionarAnimacion(TTypeMovement movimiento)
+	public void selectMovement(TTypeMovement movimiento)
 	{
-		if (movimientosReady)
+		if (movementsReady)
 		{
-			tipoMovimiento = movimiento;
-			listaVerticesAnimacion = movimientos.get(tipoMovimiento);
+			movementActual = movimiento;
+			listAnimationVertex = movements.get(movementActual);
 			
-			iniciar();
+			startAnimation();
 		}
 	}
 
 	/* Métodos de Modificación de Información */
 
-	public void setMovimientos(Movements m)
+	public void setMovements(Movements m)
 	{
-		movimientos = m;
-		movimientosReady = true;
+		movements = m;
+		movementsReady = true;
 		
-		reposo();
+		stopAnimation();
 	}
 	
-	public void setNombre(String n)
+	public void setName(String n)
 	{
-		nombre = n;
+		name = n;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public Movements getMovimientos()
+	public Movements getMovements()
 	{
-		return movimientos;
+		return movements;
 	}
 	
-	public String getNombre()
+	public String getName()
 	{
-		return nombre;
+		return name;
 	}
 	
-	public TTypeMovement getMovimientoActual()
+	public TTypeMovement getMovementActual()
 	{
-		return tipoMovimiento;
+		return movementActual;
 	}
 }

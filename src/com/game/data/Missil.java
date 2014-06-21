@@ -4,10 +4,10 @@ public class Missil extends Rectangle
 {
 	/* Constructora */
 
-	public Missil(int indiceTextura, int idMisil)
+	public Missil(int texture, int id)
 	{
-		tipoEntidad = TTypeEntity.Missil;
-		idEntidad = idMisil;
-		texturaEntidad = indiceTextura;
+		typeEntity = TTypeEntity.Missil;
+		idEntity = id;
+		textureEntity = texture;
 	}
 }

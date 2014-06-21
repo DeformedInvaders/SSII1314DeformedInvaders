@@ -9,7 +9,7 @@ import com.project.main.R;
 
 public class IconImageButton extends ImageButton
 {
-	private boolean activo, visible;
+	private boolean activate, visible;
 	private int backgroundResource, backgroundResourcePressed;
 	
 	public IconImageButton(Context context)
@@ -17,7 +17,7 @@ public class IconImageButton extends ImageButton
 		super(context);
 		
 		visible = true;
-		activo = false;
+		activate = false;
 		backgroundResource = -1;
 		backgroundResourcePressed = -1;
 	}
@@ -27,7 +27,7 @@ public class IconImageButton extends ImageButton
 		super(context, attrs);
 		
 		visible = true;
-		activo = false;
+		activate = false;
 		backgroundResource = -1;
 		backgroundResourcePressed = -1;
 		
@@ -43,7 +43,7 @@ public class IconImageButton extends ImageButton
 		super(context, attrs, defStyle);
 		
 		visible = true;
-		activo = false;
+		activate = false;
 		backgroundResource = -1;
 		backgroundResourcePressed = -1;
 		
@@ -73,7 +73,7 @@ public class IconImageButton extends ImageButton
 	
 	public void setActivo(boolean pressed)
 	{		
-		activo = pressed;
+		activate = pressed;
 		
 		updateBackground();
 	}
@@ -82,7 +82,7 @@ public class IconImageButton extends ImageButton
 	{
 		if (visible)
 		{
-			if (activo)
+			if (activate)
 			{
 				if (backgroundResourcePressed != -1)
 				{

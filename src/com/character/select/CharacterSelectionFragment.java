@@ -84,7 +84,7 @@ public class CharacterSelectionFragment extends ViewPagerFragment implements OnC
 		while (it.hasNext())
 		{
 			Character p = it.next();
-			viewPager.addView(CharacterSelectFragment.newInstance(this, p), p.getNombre());
+			viewPager.addView(CharacterSelectFragment.newInstance(this, p), p.getName());
 		}
 		
 		if (posicionInicial != -1)

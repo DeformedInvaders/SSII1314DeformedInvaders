@@ -4,10 +4,10 @@ public class Obstacle extends Rectangle
 {
 	/* Constructora */
 
-	public Obstacle(int indiceTextura, int idObstaculo)
+	public Obstacle(int texture, int id)
 	{
-		tipoEntidad = TTypeEntity.Obstacle;
-		idEntidad = idObstaculo;
-		texturaEntidad = indiceTextura;
+		typeEntity = TTypeEntity.Obstacle;
+		idEntity = id;
+		textureEntity = texture;
 	}
 }

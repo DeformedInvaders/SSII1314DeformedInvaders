@@ -118,8 +118,8 @@ public class PaintFragment extends OpenGLFragment
 			canvas.restoreData(dataSaved);
 		}
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		
 		List<Integer> listaMensajes = new ArrayList<Integer>();
 		listaMensajes.add(R.string.text_tip_paint_pencil_description);
@@ -180,8 +180,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.restoreData(dataSaved);
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 		
 		canvas.onResume();
@@ -199,7 +199,7 @@ public class PaintFragment extends OpenGLFragment
 	/* Métodos Abstráctos OpenGLFragment */
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		if (!canvas.isBufferSiguienteVacio())
 		{
@@ -219,7 +219,7 @@ public class PaintFragment extends OpenGLFragment
 	}
 
 	@Override
-	protected void reiniciarInterfaz()
+	protected void resetInterface()
 	{
 		botonNext.setVisibility(View.INVISIBLE);
 		botonPrev.setVisibility(View.INVISIBLE);
@@ -235,8 +235,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.seleccionarPincel();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -247,8 +247,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.seleccionarCubo();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -303,8 +303,8 @@ public class PaintFragment extends OpenGLFragment
 					{
 						canvas.anyadirPegatina(tag, tipo);
 
-						reiniciarInterfaz();
-						actualizarInterfaz();
+						resetInterface();
+						updateInterface();
 					}
 					
 					@Override
@@ -312,8 +312,8 @@ public class PaintFragment extends OpenGLFragment
 					{
 						canvas.eliminarPegatina(tipo);
 						
-						reiniciarInterfaz();
-						actualizarInterfaz();
+						resetInterface();
+						updateInterface();
 					}
 					
 					@Override
@@ -321,8 +321,8 @@ public class PaintFragment extends OpenGLFragment
 					{
 						canvas.editarPegatina(tipo);
 						
-						reiniciarInterfaz();
-						actualizarInterfaz();
+						resetInterface();
+						updateInterface();
 					}
 				};
 			}
@@ -330,8 +330,8 @@ public class PaintFragment extends OpenGLFragment
 			stickerDialog.show(v);
 			canvas.seleccionarNada();
 			
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -342,8 +342,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.seleccionarMano();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -354,8 +354,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.anteriorAccion();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -366,8 +366,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.siguienteAccion();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -378,8 +378,8 @@ public class PaintFragment extends OpenGLFragment
 		{
 			canvas.reiniciar();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -388,8 +388,8 @@ public class PaintFragment extends OpenGLFragment
 		@Override
 		public void onClick(View v)
 		{
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 			
 			if(personajeIndice == -1)
 			{

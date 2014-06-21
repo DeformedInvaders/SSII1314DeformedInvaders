@@ -54,35 +54,35 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 	public void seleccionarNada()
 	{
 		renderer.seleccionarNada();
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 	
 	public void seleccionarMano()
 	{
 		renderer.seleccionarMano();
-		setEstado(TStateDetector.CamaraDetectors);
+		setDetectorState(TStateDetector.CamaraDetectors);
 		requestRender();
 	}
 
 	public void seleccionarPincel()
 	{
 		renderer.seleccionarPincel();
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 
 	public void seleccionarCubo()
 	{
 		renderer.seleccionarCubo();
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 
 	public void seleccionarColor(int color)
 	{
 		renderer.seleccionarColor(color);
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 	}
 
 	public void seleccionarSize(TTypeSize size)
@@ -93,21 +93,21 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 	public void anyadirPegatina(int pegatina, TTypeSticker tipo)
 	{
 		renderer.seleccionarPegatina(pegatina, tipo);
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();
 	}
 	
 	public void eliminarPegatina(TTypeSticker tipo)
 	{
 		renderer.eliminarPegatina(tipo);
-		setEstado(TStateDetector.SimpleTouch);
+		setDetectorState(TStateDetector.SimpleTouch);
 		requestRender();		
 	}
 	
 	public void editarPegatina(TTypeSticker tipo)
 	{
 		renderer.editarPegatina(tipo);
-		setEstado(TStateDetector.CoordDetectors);
+		setDetectorState(TStateDetector.CoordDetectors);
 		requestRender();
 	}
 
@@ -125,7 +125,7 @@ public class PaintOpenGLSurfaceView extends OpenGLSurfaceView
 
 	public void reiniciar()
 	{
-		renderer.reiniciar();
+		renderer.onReset();
 		requestRender();
 	}
 

@@ -11,7 +11,7 @@ import com.project.main.R;
 
 public class VideoAlert extends WindowAlert
 {
-	private VideoView video;
+	private VideoView videoView;
 	
 	public VideoAlert(Context context, int title, int message, int textYes, Uri videoPath)
 	{
@@ -21,14 +21,11 @@ public class VideoAlert extends WindowAlert
 		
 		setView(R.layout.alert_video_layout);
 		
-		video = (VideoView) findViewById(R.id.videoViewVideoAlert1);
-		// TODO Comprobar el ancho y alto del video en pantallas pequeñas
-		//video.setScaleX(GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR());
-		//video.setScaleY(GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR());
+		videoView = (VideoView) findViewById(R.id.videoViewVideoAlert1);
 		
-		video.setVideoURI(videoPath);
-		video.setZOrderOnTop(true);
-		video.setOnPreparedListener(new OnPreparedListener() {                    
+		videoView.setVideoURI(videoPath);
+		videoView.setZOrderOnTop(true);
+		videoView.setOnPreparedListener(new OnPreparedListener() {                    
 		    @Override
 		    public void onPrepared(MediaPlayer mediaplayer)
 		    {
@@ -40,10 +37,10 @@ public class VideoAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				video.stopPlayback();
+				videoView.stopPlayback();
 			}
 		});
 		
-		video.start();
+		videoView.start();
 	}
 }

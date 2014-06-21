@@ -18,62 +18,61 @@ public class Stickers implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private StickerArray pegatinas;
+	private StickerArray stickers;
 
 	/* Constructora */
 
 	public Stickers()
 	{
-		pegatinas = new StickerArray();
+		stickers = new StickerArray();
 	}
 	
 	/* Métodos de representación en renderer */
 	
-	public void cargarTexturas(GL10 gl, OpenGLRenderer renderer, Context context, TTypeEntity tipo, int id)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context, TTypeEntity entity, int position)
 	{
-		TTypeSticker[] tipoPegatinas = TTypeSticker.values();
-		
+		TTypeSticker[] typeSticker = TTypeSticker.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{			
-			if (isCargada(tipoPegatinas[i]))
+			if (isStickerLoaded(typeSticker[i]))
 			{
-				renderer.cargarTexturaRectangulo(gl, getIndice(tipoPegatinas[i], context), tipo, id, tipoPegatinas[i]);
+				renderer.loadTextureRectangle(gl, getStickerId(typeSticker[i], context), entity, position, typeSticker[i]);
 			}
 		}
 	}
 	
-	public void descargarTextura(OpenGLRenderer renderer, TTypeEntity tipo, int id)
+	public void deleteTexture(OpenGLRenderer renderer, TTypeEntity entity, int id)
 	{
-		TTypeSticker[] tipoPegatinas = TTypeSticker.values();
+		TTypeSticker[] typeSticker = TTypeSticker.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
-			renderer.descargarTexturaRectangulo(tipo, id, tipoPegatinas[i]);
+			renderer.deleteTextureRectangle(entity, id, typeSticker[i]);
 		}
 	}
 	
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TriangleArray triangulos, TTypeEntity tipo, int id)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer, VertexArray vertices, TriangleArray triangles, TTypeEntity entity, int position)
 	{
-		float factorEscala = GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR();
+		float scaleFactor = GamePreferences.SCREEN_HEIGHT_SCALE_FACTOR();
 		
 		gl.glPushMatrix();
 		
 			gl.glTranslatef(0, 0, GamePreferences.DEEP_STICKERS);
 			
-			TTypeSticker[] tipoPegatinas = TTypeSticker.values();
+			TTypeSticker[] typeSticker = TTypeSticker.values();
 			for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 			{				
-				if (isCargada(tipoPegatinas[i]))
+				if (isStickerLoaded(typeSticker[i]))
 				{
 					gl.glPushMatrix();
 					
-						gl.glTranslatef(pegatinas.getXCoords(tipoPegatinas[i], vertices, triangulos), pegatinas.getYCoords(tipoPegatinas[i], vertices, triangulos), 0.0f);
-						gl.glScalef(factorEscala, factorEscala, 1.0f);
-						gl.glRotatef(pegatinas.getKappaSticker(tipoPegatinas[i], vertices, triangulos), 0.0f, 0.0f, 1.0f);
-						gl.glRotatef(pegatinas.getIotaSticker(tipoPegatinas[i]), 0.0f, 0.0f, 1.0f);
-						gl.glRotatef(pegatinas.getThetaSticker(tipoPegatinas[i]), 0.0f, 0.0f, 1.0f);
-						gl.glScalef(pegatinas.getFactorSticker(tipoPegatinas[i]), pegatinas.getFactorSticker(tipoPegatinas[i]), 1.0f);
+						gl.glTranslatef(stickers.getXCoords(typeSticker[i], vertices, triangles), stickers.getYCoords(typeSticker[i], vertices, triangles), 0.0f);
+						gl.glScalef(scaleFactor, scaleFactor, 1.0f);
+						gl.glRotatef(stickers.getKappaSticker(typeSticker[i], vertices, triangles), 0.0f, 0.0f, 1.0f);
+						gl.glRotatef(stickers.getIotaSticker(typeSticker[i]), 0.0f, 0.0f, 1.0f);
+						gl.glRotatef(stickers.getThetaSticker(typeSticker[i]), 0.0f, 0.0f, 1.0f);
+						gl.glScalef(stickers.getFactorSticker(typeSticker[i]), stickers.getFactorSticker(typeSticker[i]), 1.0f);
 						
-						renderer.dibujarTexturaRectangulo(gl, tipo, id, tipoPegatinas[i]);
+						renderer.drawTextureRectangle(gl, entity, position, typeSticker[i]);
 					
 					gl.glPopMatrix();
 				}
@@ -84,106 +83,106 @@ public class Stickers implements Serializable
 
 	/* Métodos de Modificación de Información */
 
-	public void anyadirPegatina(TTypeSticker tipo, int id, float x, float y, short index, float factor, float angulo, VertexArray vertices, TriangleArray triangulos)
+	public void addSticker(TTypeSticker sticker, int id, float x, float y, short index, float factor, float angle, VertexArray vertices, TriangleArray triangles)
 	{
 		if (id == -1)
 		{
-			eliminarPegatina(tipo);
+			deleteSticker(sticker);
 		}
 		else
 		{
-			pegatinas.setSticker(tipo, id, x, y, index, vertices, triangulos);
-			pegatinas.setFactorSticker(tipo, factor);
-			pegatinas.setThetaSticker(tipo, angulo);
+			stickers.setSticker(sticker, id, x, y, index, vertices, triangles);
+			stickers.setFactorSticker(sticker, factor);
+			stickers.setThetaSticker(sticker, angle);
 		}
 	}
 	
-	public void anyadirPegatina(TTypeSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	public void addSticker(TTypeSticker sticker, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangles)
 	{
 		if (id == -1)
 		{
-			eliminarPegatina(tipo);
+			deleteSticker(sticker);
 		}
 		else
 		{
-			pegatinas.setSticker(tipo, id, x, y, index, vertices, triangulos);
+			stickers.setSticker(sticker, id, x, y, index, vertices, triangles);
 		}
 	}
 	
-	public void eliminarPegatina(TTypeSticker tipo)
+	public void deleteSticker(TTypeSticker sticker)
 	{
-		pegatinas.removeSticker(tipo);	
+		stickers.removeSticker(sticker);	
 	}
 	
-	public void eliminarPegatinas()
+	public void resetSticker()
 	{
-		TTypeSticker[] tipoPegatinas = TTypeSticker.values();
+		TTypeSticker[] typeSticker = TTypeSticker.values();
 		for (int i = 0; i < GamePreferences.NUM_TYPE_STICKERS; i++)
 		{
-			eliminarPegatina(tipoPegatinas[i]);
+			deleteSticker(typeSticker[i]);
 		}
 	}
 	
-	public void ampliarPegatina(TTypeSticker tipo, float factor)
+	public void zoomSticker(TTypeSticker sticker, float factor)
 	{
-		pegatinas.setFactorSticker(tipo, factor);
+		stickers.setFactorSticker(sticker, factor);
 	}
 	
-	public void rotarPegatina(TTypeSticker tipo, float ang)
+	public void rotateSticker(TTypeSticker sticker, float angle)
 	{
-		pegatinas.setThetaSticker(tipo, ang);
+		stickers.setThetaSticker(sticker, angle);
 	}
 	
-	public void moverPegatina(TTypeSticker tipo, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	public void moveSticker(TTypeSticker sticker, float x, float y, short index, VertexArray vertices, TriangleArray triangles)
 	{
-		pegatinas.setCoords(tipo, x, y, index, vertices, triangulos);
+		stickers.setCoords(sticker, x, y, index, vertices, triangles);
 	}
 	
-	public void recuperarPegatina(TTypeSticker tipo)
+	public void restoreSticker(TTypeSticker sticker)
 	{
-		pegatinas.restoreSticker(tipo);
+		stickers.restoreSticker(sticker);
 	}
 
 	/* Métodos de Obtención de Información */
 	
-	public float getXCoords(TTypeSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	public float getXCoords(TTypeSticker sticker, VertexArray vertices, TriangleArray triangles)
 	{
-		return pegatinas.getXCoords(tipo, vertices, triangulos);
+		return stickers.getXCoords(sticker, vertices, triangles);
 	}
 	
-	public float getYCoords(TTypeSticker tipo, VertexArray vertices, TriangleArray triangulos)
+	public float getYCoords(TTypeSticker sticker, VertexArray vertices, TriangleArray triangles)
 	{
-		return pegatinas.getYCoords(tipo, vertices, triangulos);
+		return stickers.getYCoords(sticker, vertices, triangles);
 	}
 	
-	public int getId(TTypeSticker tipo)
+	public int getId(TTypeSticker sticker)
 	{
-		return pegatinas.getIdSticker(tipo);
+		return stickers.getIdSticker(sticker);
 	}
 	
-	public float getTheta(TTypeSticker tipo)
+	public float getTheta(TTypeSticker sticker)
 	{
-		return pegatinas.getThetaSticker(tipo);
+		return stickers.getThetaSticker(sticker);
 	}
 	
-	public float getFactor(TTypeSticker tipo)
+	public float getFactor(TTypeSticker sticker)
 	{
-		return pegatinas.getFactorSticker(tipo);
+		return stickers.getFactorSticker(sticker);
 	}
 	
-	public short getIndice(TTypeSticker tipo)
+	public short getIndex(TTypeSticker sticker)
 	{
-		return pegatinas.getIndexSticker(tipo);
+		return stickers.getIndexSticker(sticker);
 	}
 
-	public boolean isCargada(TTypeSticker tipo)
+	public boolean isStickerLoaded(TTypeSticker sticker)
 	{
-		return pegatinas.isLoadedSticker(tipo);
+		return stickers.isLoadedSticker(sticker);
 	}
 
-	private int getIndice(TTypeSticker tipo, Context context)
+	private int getStickerId(TTypeSticker sticker, Context context)
 	{
-		String nombrePegatina = GameResources.GET_STICKER(tipo, pegatinas.getIdSticker(tipo));
+		String nombrePegatina = GameResources.GET_STICKER(sticker, stickers.getIdSticker(sticker));
 		return context.getResources().getIdentifier(nombrePegatina, GameResources.RESOURCE_DRAWABLE, context.getPackageName());
 	}
 }

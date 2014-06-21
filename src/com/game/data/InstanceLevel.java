@@ -6,51 +6,51 @@ import com.game.select.TTypeLevel;
 
 public class InstanceLevel
 {
-	private TTypeLevel tipoNivel;
-	private String nombreNivel;
+	private TTypeLevel levelType;
+	private String levelName;
 
-	private List<Entity> tiposEnemigos;
-	private List<InstanceEntity> listaEnemigos;
-	private Boss enemigoBoss;
-	private Background fondoNivel;
+	private List<Entity> levelEnemyType;
+	private List<InstanceEntity> levelEnemyList;
+	private Boss levelBoss;
+	private Background levelBackground;
 
-	public InstanceLevel(TTypeLevel tipo, String nombre, List<Entity> tipos, Boss boss, List<InstanceEntity> lista, Background fondo)
+	public InstanceLevel(TTypeLevel type, String name, List<Entity> enemyType, Boss boss, List<InstanceEntity> enemyList, Background background)
 	{
-		tipoNivel = tipo;
-		nombreNivel = nombre;
-		tiposEnemigos = tipos;
-		listaEnemigos = lista;
-		enemigoBoss = boss;
-		fondoNivel = fondo;
+		levelType = type;
+		levelName = name;
+		levelEnemyType = enemyType;
+		levelEnemyList = enemyList;
+		levelBoss = boss;
+		levelBackground = background;
 	}
 
-	public TTypeLevel getTipoNivel()
+	public TTypeLevel getLevelType()
 	{
-		return tipoNivel;
+		return levelType;
 	}
 
-	public String getNombreNivel()
+	public String getLevelName()
 	{
-		return nombreNivel;
+		return levelName;
 	}
 
-	public List<Entity> getTipoEnemigos()
+	public List<Entity> getEnemyType()
 	{
-		return tiposEnemigos;
+		return levelEnemyType;
 	}
 	
 	public Boss getBoss()
 	{
-		return enemigoBoss;
+		return levelBoss;
 	}
 
-	public List<InstanceEntity> getListaEnemigos()
+	public List<InstanceEntity> getEnemyList()
 	{
-		return listaEnemigos;
+		return levelEnemyList;
 	}
 
-	public Background getFondoNivel()
+	public Background getBackground()
 	{
-		return fondoNivel;
+		return levelBackground;
 	}
 }

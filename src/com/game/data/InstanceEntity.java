@@ -14,35 +14,35 @@ import com.main.model.GamePreferences;
 
 public class InstanceEntity
 {
-	private int idEntidad;
-	private TTypeEntity tipoEntidad;
+	private int idEntity;
+	private TTypeEntity typeEntity;
 	
-	private float posicionX, posicionY;
+	private float coordX, coordY;
 	private float height, width;
 	
 	private Circle area;
 	private Handle handle;
-	private boolean areaCargada;
+	private boolean areaLoaded;
 	
-	private int indiceSalto;
-	private int numSalto;
+	private int animationPosition;
+	private int animationLength;
 
 	public InstanceEntity(int id, TTypeEntity tipo)
 	{
 		this(id, tipo, 0.0f, 0.0f);
 	}
 	
-	public InstanceEntity(int id, TTypeEntity tipo, float posX, float posY)
+	public InstanceEntity(int id, TTypeEntity type, float x, float y)
 	{
-		idEntidad = id;
-		tipoEntidad = tipo;
+		idEntity = id;
+		typeEntity = type;
 		
-		areaCargada = false;
+		areaLoaded = false;
 		
-		posicionX = posX;
-		posicionY = posY;
+		coordX = x;
+		coordY = y;
 		
-		indiceSalto = 0;
+		animationPosition = 0;
 	}
 	
 	public void setDimensions(float h, float w)
@@ -50,38 +50,38 @@ public class InstanceEntity
 		height = h;
 		width = w;
 		
-		if (tipoEntidad == TTypeEntity.Missil || tipoEntidad == TTypeEntity.Obstacle)
+		if (typeEntity == TTypeEntity.Missil || typeEntity == TTypeEntity.Obstacle)
 		{
 			area = new Circle(getWidth() / 2.0f, getHeight() / 2.0f, getWidth() / 2.5f);
 			handle = new Handle(50, area.radius, Color.BLACK);
-			areaCargada = true;
+			areaLoaded = true;
 		}
-		else if (tipoEntidad == TTypeEntity.Character || tipoEntidad == TTypeEntity.Enemy || tipoEntidad == TTypeEntity.Boss)
+		else if (typeEntity == TTypeEntity.Character || typeEntity == TTypeEntity.Enemy || typeEntity == TTypeEntity.Boss)
 		{
 			area = new Circle(getWidth() / 2.0f, getHeight() / 2.0f, getWidth() / 2.5f);
 			handle = new Handle(50, area.radius, Color.RED);
-			areaCargada = true;
+			areaLoaded = true;
 		}
 	}
 
-	public int getIdEntidad()
+	public int getIdEntity()
 	{
-		return idEntidad;
+		return idEntity;
 	}
 	
-	public TTypeEntity getTipoEntidad()
+	public TTypeEntity getTypeEntity()
 	{
-		return tipoEntidad;
+		return typeEntity;
 	}
 
-	public float getPosicionX()
+	public float getCoordX()
 	{
-		return posicionX;
+		return coordX;
 	}
 
-	public float getPosicionY()
+	public float getCoordY()
 	{
-		return posicionY;
+		return coordY;
 	}
 	
 	public float getHeight()
@@ -96,64 +96,59 @@ public class InstanceEntity
 	
 	public void setPosicion(float x, float y)
 	{
-		posicionX = x;
-		posicionY = y;
+		coordX = x;
+		coordY = y;
 	}
 	
-	public void avanzar()
+	public void move()
 	{
-		if (tipoEntidad == TTypeEntity.Character)
+		if (typeEntity == TTypeEntity.Character)
 		{
-			if (indiceSalto > 0)
+			if (animationPosition > 0)
 			{
-				if (indiceSalto < 2 * numSalto / 8)
+				if (animationPosition < 2 * animationLength / 8)
 				{
-					posicionY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-					moverArea(posicionX, posicionY);
+					coordY -= GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+					moveArea(coordX, coordY);
 				}
-				else if (indiceSalto >= 6 * numSalto / 8)
+				else if (animationPosition >= 6 * animationLength / 8)
 				{
-					posicionY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
-					moverArea(posicionX, posicionY);
+					coordY += GamePreferences.DIST_MOVIMIENTO_CHARACTER();
+					moveArea(coordX, coordY);
 				}
 				
-				indiceSalto --;
+				animationPosition --;
 			}
 			else
 			{
-				restaurar();
+				coordX = 0;
+				coordY = 0;
+				moveArea(coordX, coordY);
 			}
 		}
-		else if (tipoEntidad == TTypeEntity.Enemy || tipoEntidad == TTypeEntity.Missil || tipoEntidad == TTypeEntity.Obstacle)
+		else if (typeEntity == TTypeEntity.Enemy || typeEntity == TTypeEntity.Missil || typeEntity == TTypeEntity.Obstacle)
 		{
-			posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
-			moverArea(posicionX, posicionY);
+			coordX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
+			moveArea(coordX, coordY);
 		}
 	}
 	
-	public void subir() 
+	public void up() 
 	{
-		posicionY += GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
-		moverArea(posicionX, posicionY);
+		coordY += GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
+		moveArea(coordX, coordY);
 	}
 	
-	public void bajar() 
+	public void down() 
 	{
-		posicionY -= GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
-		moverArea(posicionX, posicionY);
+		coordY -= GamePreferences.DIST_MOVIMIENTO_PLATAFORMA();
+		moveArea(coordX, coordY);
 	}
 	
-	public void saltar(int numFrames)
+	public void jump(int numFrames)
 	{
-		indiceSalto = numFrames;
-		numSalto = numFrames;
-	}
-	
-	public void restaurar()
-	{
-		posicionX = 0;
-		posicionY = 0;
-		moverArea(posicionX, posicionY);
+		animationPosition = numFrames;
+		animationLength = numFrames;
 	}
 	
 	public Circle getArea()
@@ -161,22 +156,22 @@ public class InstanceEntity
 		return area;
 	}
 	
-	private void moverArea(float x, float y)
+	private void moveArea(float x, float y)
 	{
 		area.setPosition(getWidth() / 2.0f + x, getHeight() / 2.0f + y);
 	}
 	
-	public void dibujar(GL10 gl, OpenGLRenderer renderer, Entity entidad)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer, Entity entity)
 	{
 		gl.glPushMatrix();
 
-			gl.glTranslatef(posicionX, posicionY, 0.0f);
+			gl.glTranslatef(coordX, coordY, 0.0f);
 			
-			entidad.dibujar(gl, renderer);
+			entity.drawTexture(gl, renderer);
 	
 		gl.glPopMatrix();
 		
-		if (areaCargada && GamePreferences.IS_DEBUG_ENABLED())
+		if (areaLoaded && GamePreferences.IS_DEBUG_ENABLED())
 		{
 			gl.glPushMatrix();
 			
@@ -188,17 +183,17 @@ public class InstanceEntity
 		}
 	}
 	
-	public TStateCollision colision(InstanceEntity entidad, TTypeMovement movimiento)
+	public TStateCollision collision(InstanceEntity entity, TTypeMovement movement)
 	{
-		if (Intersector.overlaps(area, entidad.getArea()))
+		if (Intersector.overlaps(area, entity.getArea()))
 		{			
 			// Enemigo derrotado
-			if (entidad.getTipoEntidad() == TTypeEntity.Enemy && movimiento == TTypeMovement.Attack)
+			if (entity.getTypeEntity() == TTypeEntity.Enemy && movement == TTypeMovement.Attack)
 			{
 				return TStateCollision.EnemyDefeated;
 			}
 			
-			if (entidad.getTipoEntidad() == TTypeEntity.Missil && movimiento == TTypeMovement.Crouch)
+			if (entity.getTypeEntity() == TTypeEntity.Missil && movement == TTypeMovement.Crouch)
 			{
 				return TStateCollision.Nothing;
 			}
@@ -209,9 +204,9 @@ public class InstanceEntity
 		return TStateCollision.Nothing;
 	}
 	
-	public TStateCollision colision(Shot disparo)
+	public TStateCollision collision(Shot shot)
 	{
-		if (disparo.isActivado() && Intersector.overlaps(area, disparo.getArea()))
+		if (shot.isActive() && Intersector.overlaps(area, shot.getArea()))
 		{
 			return TStateCollision.EnemyCollision;
 		}

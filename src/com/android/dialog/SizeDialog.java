@@ -11,9 +11,9 @@ import com.project.main.R;
 
 public abstract class SizeDialog extends WindowDialog
 {
-	private Button botonMas, botonMenos;
-	private ImageView imagenPincel;
-	private TTypeSize size;
+	private Button buttonEnlarge, buttonShrink;
+	private ImageView imagePencil;
+	private TTypeSize sizeActual;
 
 	/* Constructora */
 
@@ -21,17 +21,17 @@ public abstract class SizeDialog extends WindowDialog
 	{
 		super(context, R.layout.dialog_size_layout, true);
 
-		size = TTypeSize.Small;
+		sizeActual = TTypeSize.Small;
 
-		botonMas = (Button) findViewById(R.id.imageButtonSize1);
-		botonMenos = (Button) findViewById(R.id.imageButtonSize2);
-		imagenPincel = (ImageView) findViewById(R.id.imageButtonSize3);
+		buttonEnlarge = (Button) findViewById(R.id.imageButtonSize1);
+		buttonShrink = (Button) findViewById(R.id.imageButtonSize2);
+		imagePencil = (ImageView) findViewById(R.id.imageButtonSize3);
 
-		botonMas.setOnClickListener(new OnMasClickListener());
-		botonMenos.setOnClickListener(new OnMenosClickListener());
-		imagenPincel.setOnClickListener(new OnPincelClickListener());
+		buttonEnlarge.setOnClickListener(new OnEnlargeClickListener());
+		buttonShrink.setOnClickListener(new OnShrinkClickListener());
+		imagePencil.setOnClickListener(new OnPencilClickListener());
 
-		actualizarBotones();
+		updateButtons();
 	}
 
 	/* Métodos Abstractos */
@@ -40,59 +40,59 @@ public abstract class SizeDialog extends WindowDialog
 
 	/* Métodos Privados */
 
-	private void actualizarBotones()
+	private void updateButtons()
 	{
-		if (size.ordinal() > 0)
+		if (sizeActual.ordinal() > 0)
 		{
-			botonMenos.setEnabled(true);
+			buttonShrink.setEnabled(true);
 		}
 		else
 		{
-			botonMenos.setEnabled(false);
+			buttonShrink.setEnabled(false);
 		}
 
-		if (size.ordinal() < 2)
+		if (sizeActual.ordinal() < 2)
 		{
-			botonMas.setEnabled(true);
+			buttonEnlarge.setEnabled(true);
 		}
 		else
 		{
-			botonMas.setEnabled(false);
+			buttonEnlarge.setEnabled(false);
 		}
 		
-		imagenPincel.setBackgroundResource(size.getImage());
+		imagePencil.setBackgroundResource(sizeActual.getImage());
 	}
 
 	/* Métodos Listener onClick */
 
-	private class OnMasClickListener implements OnClickListener
+	private class OnEnlargeClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
 		{
 			TTypeSize[] tipoSize = TTypeSize.values();
-			size = tipoSize[size.ordinal() + 1];
-			actualizarBotones();
+			sizeActual = tipoSize[sizeActual.ordinal() + 1];
+			updateButtons();
 		}
 	}
 
-	private class OnMenosClickListener implements OnClickListener
+	private class OnShrinkClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
 		{
 			TTypeSize[] tipoSize = TTypeSize.values();
-			size = tipoSize[size.ordinal() - 1];
-			actualizarBotones();
+			sizeActual = tipoSize[sizeActual.ordinal() - 1];
+			updateButtons();
 		}
 	}
 
-	private class OnPincelClickListener implements OnClickListener
+	private class OnPencilClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
 		{
-			onSizeSelected(size);
+			onSizeSelected(sizeActual);
 			dismiss();
 		}
 	}

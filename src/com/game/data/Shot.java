@@ -15,48 +15,49 @@ import com.project.main.R;
 
 public class Shot extends Entity
 {
-	private InstanceEntity entidad;
+	private InstanceEntity instanceEntity;
 	
-	private boolean activado;
-	private int indiceAnimacion;
+	private boolean activate;
+	private int animationPosition;
 	
-	private float posicionX, posicionY;
+	private float coordX, coordY;
 	
 	private Rectangle area;
 	private Handle handle;
-	private boolean areaCargada;
+	private boolean areaLoaded;
 	
 	public Shot(InstanceEntity instancia)
 	{
-		entidad = instancia;
+		instanceEntity = instancia;
 		
-		activado = false;
-		indiceAnimacion = 0;
-		areaCargada = false;
+		activate = false;
+		animationPosition = 0;
+		areaLoaded = false;
 		
-		posicionX = 0.0f;
-		posicionY = 0.0f;
+		coordX = 0.0f;
+		coordY = 0.0f;
 		
-		if (entidad.getTipoEntidad() == TTypeEntity.Character)
+		if (instanceEntity.getTypeEntity() == TTypeEntity.Character)
 		{
-			tipoEntidad = TTypeEntity.CharacterShot;
+			typeEntity = TTypeEntity.CharacterShot;
 		}
-		else if (entidad.getTipoEntidad() == TTypeEntity.Boss)
+		else if (instanceEntity.getTypeEntity() == TTypeEntity.Boss)
 		{
-			tipoEntidad = TTypeEntity.BossShot;
+			typeEntity = TTypeEntity.BossShot;
 		}
 		else
 		{
-			tipoEntidad = TTypeEntity.Nothing;
+			typeEntity = TTypeEntity.Nothing;
 		}
 	}
-	private int indiceDisparo(int indice)
+	
+	private int shotIndex()
 	{
-		if (tipoEntidad == TTypeEntity.CharacterShot)
+		if (typeEntity == TTypeEntity.CharacterShot)
 		{
 			return R.drawable.shot_character;
 		}
-		else if (tipoEntidad == TTypeEntity.BossShot)
+		else if (typeEntity == TTypeEntity.BossShot)
 		{
 			return R.drawable.shot_boss;
 		}
@@ -67,13 +68,13 @@ public class Shot extends Entity
 	/* Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{		
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
 			for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 			{
-				Dimensions dim = renderer.cargarTexturaRectangulo(gl, indiceDisparo(i), tipoEntidad, i, TTypeSticker.Nothing);
+				Dimensions dim = renderer.loadTextureRectangle(gl, shotIndex(), typeEntity, i, TTypeSticker.Nothing);
 				if (dim != null)
 				{
 					width = dim.getWidth();
@@ -81,41 +82,41 @@ public class Shot extends Entity
 				}
 			}
 			
-			area = new Rectangle(posicionX, posicionY, width, height);
+			area = new Rectangle(coordX, coordY, width, height);
 			handle = new Handle(area.getX(), area.getY(), area.getWidth(), area.getHeight(), Color.YELLOW);
-			areaCargada = true;
+			areaLoaded = true;
 		}
 	}
 	
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
 			for (int i = 0; i < GamePreferences.NUM_TYPE_SHOTS; i++)
 			{
-				renderer.descargarTexturaRectangulo(tipoEntidad, i, TTypeSticker.Nothing);
+				renderer.deleteTextureRectangle(typeEntity, i, TTypeSticker.Nothing);
 			}
 		}
 	}
 
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
-			if (activado)
+			if (activate)
 			{
 				gl.glPushMatrix();
 				
-					gl.glTranslatef(posicionX, posicionY, 0.0f);
-					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-					renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacion, TTypeSticker.Nothing);
+					gl.glTranslatef(coordX, coordY, 0.0f);
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
+					renderer.drawTextureRectangle(gl, typeEntity, animationPosition, TTypeSticker.Nothing);
 				
 				gl.glPopMatrix();
 			}
 			
-			if (areaCargada && GamePreferences.IS_DEBUG_ENABLED())
+			if (areaLoaded && GamePreferences.IS_DEBUG_ENABLED())
 			{
 				gl.glPushMatrix();
 				
@@ -128,19 +129,19 @@ public class Shot extends Entity
 		}
 	}
 	
-	public float getPosicionX() 
+	public float getCoordX() 
 	{
-		return posicionX;
+		return coordX;
 	}
 	
-	public float getPosicionY() 
+	public float getCoordY() 
 	{
-		return posicionY;
+		return coordY;
 	}
 	
-	public boolean isActivado() 
+	public boolean isActive() 
 	{
-		return activado;
+		return activate;
 	}
 	
 	public Rectangle getArea()
@@ -148,7 +149,7 @@ public class Shot extends Entity
 		return area;
 	}
 	
-	private void moverArea(float x, float y)
+	private void moveArea(float x, float y)
 	{
 		area.setPosition(x, y);
 	}
@@ -156,57 +157,57 @@ public class Shot extends Entity
 	/* Métodos de modificación de Información */
 	
 	@Override
-	public boolean animar()
+	public boolean animateTexture()
 	{
-		if (activado)
+		if (activate)
 		{
-			indiceAnimacion = (indiceAnimacion + 1) % GamePreferences.NUM_TYPE_SHOTS;
+			animationPosition = (animationPosition + 1) % GamePreferences.NUM_TYPE_SHOTS;
 			return true;
 		}
 		
 		return false;
 	}
 	
-	public void activarDisparo()
+	public void activate()
 	{
-		if (!activado)
+		if (!activate)
 		{
-			if (tipoEntidad == TTypeEntity.CharacterShot)
+			if (typeEntity == TTypeEntity.CharacterShot)
 			{
-				activado = true;
-				posicionX = entidad.getPosicionX() + 3.0f * entidad.getWidth() / 4.0f;
-				posicionY = entidad.getPosicionY() + 2.0f * entidad.getHeight() / 8.0f;
+				activate = true;
+				coordX = instanceEntity.getCoordX() + 3.0f * instanceEntity.getWidth() / 4.0f;
+				coordY = instanceEntity.getCoordY() + 2.0f * instanceEntity.getHeight() / 8.0f;
 			}
-			else if (tipoEntidad == TTypeEntity.BossShot)
+			else if (typeEntity == TTypeEntity.BossShot)
 			{
-				activado = true;
-				posicionX = entidad.getPosicionX() + entidad.getWidth() / 4.0f;
-				posicionY = entidad.getPosicionY() + 2.0f * entidad.getHeight() / 8.0f;
+				activate = true;
+				coordX = instanceEntity.getCoordX() + instanceEntity.getWidth() / 4.0f;
+				coordY = instanceEntity.getCoordY() + 2.0f * instanceEntity.getHeight() / 8.0f;
 			}
 			
-			moverArea(posicionX, posicionY);
+			moveArea(coordX, coordY);
 		}
 	}
 	
-	public void desactivarDisparo()
+	public void deactivate()
 	{
-		activado = false;
+		activate = false;
 	}
 	
-	public void mover() 
+	public void move() 
 	{
-		if (activado)
+		if (activate)
 		{
-			if (tipoEntidad == TTypeEntity.BossShot)
+			if (typeEntity == TTypeEntity.BossShot)
 			{
-				posicionX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
+				coordX -= GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 			}
-			else if (tipoEntidad == TTypeEntity.CharacterShot)
+			else if (typeEntity == TTypeEntity.CharacterShot)
 			{
-				posicionX += GamePreferences.DIST_MOVIMIENTO_ENEMIES();
+				coordX += GamePreferences.DIST_MOVIMIENTO_ENEMIES();
 			}
 			
-			moverArea(posicionX, posicionY);
+			moveArea(coordX, coordY);
 		}
 	}
 	

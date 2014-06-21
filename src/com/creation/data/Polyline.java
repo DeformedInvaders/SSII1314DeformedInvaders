@@ -7,7 +7,7 @@ import com.lib.buffer.VertexArray;
 
 public class Polyline
 {
-	private VertexArray puntos;
+	private VertexArray vertices;
 	private FloatBuffer buffer;
 
 	private int color;
@@ -15,22 +15,20 @@ public class Polyline
 
 	/* Constructora */
 
-	public Polyline(int color, TTypeSize size, VertexArray puntos, FloatBuffer buffer)
+	public Polyline(int color, TTypeSize size, VertexArray vertices, FloatBuffer buffer)
 	{
-		this.puntos = new VertexArray();
-
 		this.size = size;
 		this.color = color;
 
-		this.puntos = puntos;
+		this.vertices = vertices;
 		this.buffer = buffer;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public VertexArray getPuntos()
+	public VertexArray getVertices()
 	{
-		return puntos;
+		return vertices;
 	}
 
 	public FloatBuffer getBuffer()

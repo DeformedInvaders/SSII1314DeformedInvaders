@@ -10,34 +10,34 @@ import com.main.model.GamePreferences;
 
 public class Enemy extends Mesh
 {
-	private List<VertexArray> movimiento;
+	private List<VertexArray> movements;
 
 	/* Constructora */
 	
-	public Enemy(int indiceTextura, int idEnemigo)
+	public Enemy(int texture, int id)
 	{
-		tipoEntidad = TTypeEntity.Enemy;
-		texturaEntidad = indiceTextura;
-		idEntidad = idEnemigo;
+		typeEntity = TTypeEntity.Enemy;
+		textureEntity = texture;
+		idEntity = id;
 	}
 
 	/* Métodos abstractos de Entidad */
 	
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (esqueletoReady && texturaReady && movimientosReady)
+		if (skeletonReady && textureReady && movementsReady)
 		{
 			gl.glPushMatrix();
 						
 				gl.glRotatef(180, 0.0f, 1.0f, 0.0f);
 				gl.glTranslatef(-getWidth(), 0.0f, 0.0f);
-				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
+				gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
 				
 				// Pintura de Lados Traseros
 				gl.glCullFace(GL10.GL_FRONT);
 				
-				super.dibujar(gl, renderer);
+				super.drawTexture(gl, renderer);
 				
 				// Pintura de Lados Frontales
 				gl.glCullFace(GL10.GL_BACK);
@@ -49,32 +49,32 @@ public class Enemy extends Mesh
 	/* Métodos de Animación */
 	
 	@Override
-	public boolean animar()
+	public boolean animateTexture()
 	{
-		boolean finAnimacion = super.animar();
+		boolean endAnimation = super.animateTexture();
 		
-		posicionAnimacion = posicionAnimacion % listaVerticesAnimacion.size();
+		animationPosition = animationPosition % listAnimationVertex.size();
 		
-		return finAnimacion;
+		return endAnimation;
 	}
 	
 	/* Métodos de Modificación de Información */
 
-	public void setMovimientos(List<VertexArray> m)
+	public void setMovements(List<VertexArray> m)
 	{
-		movimiento = m;
-		movimientosReady = true;
+		movements = m;
+		movementsReady = true;
 		
-		listaVerticesAnimacion = movimiento;
-		reposo();
+		listAnimationVertex = movements;
+		stopAnimation();
 		
-		iniciar();
+		startAnimation();
 	}
 	
 	/* Métodos de Obtención de Información */
 	
-	public List<VertexArray> getMovimientos()
+	public List<VertexArray> getMovements()
 	{
-		return movimiento;
+		return movements;
 	}
 }

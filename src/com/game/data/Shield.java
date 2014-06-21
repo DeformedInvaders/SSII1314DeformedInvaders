@@ -11,34 +11,34 @@ import com.project.main.R;
 
 public class Shield extends Entity
 {
-	private InstanceEntity entidad;
+	private InstanceEntity instanceEntity;
 	
-	private boolean activado;
-	private int numVidas;
+	private boolean activate;
+	private int numLives;
 	
-	public Shield(InstanceEntity instancia, int vidas)
+	public Shield(InstanceEntity instance, int lives)
 	{
-		entidad = instancia;
-		activado = false;
-		numVidas = vidas;
+		instanceEntity = instance;
+		activate = false;
+		numLives = lives;
 		
-		if (entidad.getTipoEntidad() == TTypeEntity.Character)
+		if (instanceEntity.getTypeEntity() == TTypeEntity.Character)
 		{
-			tipoEntidad = TTypeEntity.CharacterShield;
+			typeEntity = TTypeEntity.CharacterShield;
 		}
-		else if (entidad.getTipoEntidad() == TTypeEntity.Boss)
+		else if (instanceEntity.getTypeEntity() == TTypeEntity.Boss)
 		{
-			tipoEntidad = TTypeEntity.BossShield;
+			typeEntity = TTypeEntity.BossShield;
 		}
 		else
 		{
-			tipoEntidad = TTypeEntity.Nothing;
+			typeEntity = TTypeEntity.Nothing;
 		}
 	}
 	
 	private int indiceBurbuja(int vidas)
 	{
-		if (tipoEntidad == TTypeEntity.CharacterShield)
+		if (typeEntity == TTypeEntity.CharacterShield)
 		{
 			switch (vidas)
 			{
@@ -50,7 +50,7 @@ public class Shield extends Entity
 					return R.drawable.bubble_character_3;
 			}
 		}
-		else if (tipoEntidad == TTypeEntity.BossShield)
+		else if (typeEntity == TTypeEntity.BossShield)
 		{
 			switch (vidas)
 			{
@@ -69,44 +69,44 @@ public class Shield extends Entity
 	/* Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
 			for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 			{
-				renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indiceBurbuja(i), tipoEntidad, i, TTypeSticker.Nothing);
+				renderer.loadTextureRectangle(gl, instanceEntity.getHeight(), instanceEntity.getWidth(), indiceBurbuja(i), typeEntity, i, TTypeSticker.Nothing);
 			}
 			
-			width = entidad.getWidth();
-			height = entidad.getHeight();
+			width = instanceEntity.getWidth();
+			height = instanceEntity.getHeight();
 		}
 	}
 	
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
 			for (int i = 0; i < GamePreferences.NUM_TYPE_BUBBLES; i++)
 			{
-				renderer.descargarTexturaRectangulo(tipoEntidad, i, TTypeSticker.Nothing);
+				renderer.deleteTextureRectangle(typeEntity, i, TTypeSticker.Nothing);
 			}
 		}
 	}
 
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
-			if (activado && numVidas > 0)
+			if (activate && numLives > 0)
 			{
 				gl.glPushMatrix();
 				
-					gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY(), 0.0f);
-					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-					renderer.dibujarTexturaRectangulo(gl, tipoEntidad, numVidas - 1, TTypeSticker.Nothing);
+					gl.glTranslatef(instanceEntity.getCoordX(), instanceEntity.getCoordY(), 0.0f);
+					gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
+					renderer.drawTextureRectangle(gl, typeEntity, numLives - 1, TTypeSticker.Nothing);
 				
 				gl.glPopMatrix();
 			}
@@ -115,35 +115,35 @@ public class Shield extends Entity
 	
 	/* Métodos de Modificación de Información */
 	
-	public void activarBurbuja()
+	public void activate()
 	{
-		activado = true;
+		activate = true;
 	}
 	
-	public void desactivarBurbuja()
+	public void deactivate()
 	{
-		activado = false;
+		activate = false;
 	}
 	
-	public void reiniciarVidas(int vidas)
+	public void restoreLifes(int lives)
 	{
-		numVidas = vidas;
+		numLives = lives;
 	}
 	
-	public void quitarVida()
+	public void loseLife()
 	{
-		numVidas--;
+		numLives--;
 	}
 	
 	/* Métodos de Obtención de Información */
 	
 	public boolean isAlive()
 	{
-		return numVidas >= 0;
+		return numLives >= 0;
 	}
 	
-	public int getVidas()
+	public int getLives()
 	{
-		return numVidas;
+		return numLives;
 	}
 }

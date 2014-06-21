@@ -74,7 +74,7 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewGame1);
-		imageBackground.setBackgroundResource(level.getFondoNivel().getIdTexturaSol());
+		imageBackground.setBackgroundResource(level.getBackground().getIdSun());
 
 		canvas = (GameOpenGLSurfaceView) rootView.findViewById(R.id.gameGLSurfaceViewGame1);
 		canvas.setParameters(this, personaje, level);
@@ -110,8 +110,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		setCanvasListener(canvas);
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		
 		List<Integer> listaMensajes = new ArrayList<Integer>();
 		listaMensajes.add(R.string.text_tip_game_lives);
@@ -166,8 +166,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 		
 		canvas.onResume();
 		
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 	}
 
 	@Override
@@ -184,10 +184,10 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz() { }
+	protected void resetInterface() { }
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		botonPlay.setActivo(!gamePaused);
 	}
@@ -212,8 +212,8 @@ public class GameFragment extends OpenGLFragment implements OnGameListener
 				canvas.seleccionarResume();
 			}
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 

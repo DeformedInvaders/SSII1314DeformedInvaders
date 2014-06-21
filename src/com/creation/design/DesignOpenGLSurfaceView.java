@@ -46,7 +46,7 @@ public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 
 	protected void reiniciar()
 	{
-		renderer.reiniciar();
+		renderer.onReset();
 		requestRender();
 	}
 

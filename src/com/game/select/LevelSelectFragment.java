@@ -49,39 +49,39 @@ public class LevelSelectFragment extends OpenGLFragment
 
 		// Instanciar Elementos de la GUI
 		ImageView imageBackground = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect1);
-		imageBackground.setBackgroundResource(nivel.getFondoNivel());
+		imageBackground.setBackgroundResource(nivel.getLevelBackground());
 		
 		ImageView imagenCompleted = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect2);
 		if(estadisticas.isCompleted())
 		{
-			imagenCompleted.setBackgroundResource(nivel.getImagenCompleted());
+			imagenCompleted.setBackgroundResource(nivel.getLevelImageCompleted());
 			imagenCompleted.setVisibility(View.VISIBLE);
 		}
 		
 		ImageView imagenPerfected = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect3);
 		if(estadisticas.isPerfected())
 		{
-			imagenPerfected.setBackgroundResource(nivel.getImagenPerfected());
+			imagenPerfected.setBackgroundResource(nivel.getLevelImagePerfected());
 			imagenPerfected.setVisibility(View.VISIBLE);
 		}
 		
 		ImageView imagenMastered = (ImageView) rootView.findViewById(R.id.imageViewLevelSelect4);
 		if(estadisticas.isMastered())
 		{
-			imagenMastered.setBackgroundResource(nivel.getImagenMastered());
+			imagenMastered.setBackgroundResource(nivel.getLevelImageMastered());
 			imagenMastered.setVisibility(View.VISIBLE);
 		}
 		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewLevelSelect1);
-		textBackground.setText(getString(nivel.getDescripcionNivel()));
-		textBackground.setTextColor(nivel.getColorTextoNivel());
-		textBackground.setTypeface(nivel.getFuenteNivel());
+		textBackground.setText(getString(nivel.getLevelDescription()));
+		textBackground.setTextColor(nivel.getLevelColor());
+		textBackground.setTypeface(nivel.getLevelFont());
 
 		botonNivel = (IconImageButton) rootView.findViewById(R.id.imageButtonLevel1);
 		botonNivel.setOnClickListener(new OnLevelClickListener());
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		return rootView;
 	}
 
@@ -92,24 +92,14 @@ public class LevelSelectFragment extends OpenGLFragment
 
 		botonNivel = null;
 	}
-	
-	/*@Override
-	public void onDetach()
-	{
-		super.onDetach();
-
-		mListener = null;
-		estadisticas = null;
-		nivel = null;
-	}*/
 
 	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz() { }
+	protected void resetInterface() { }
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		botonNivel.setActivo(GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked());
 	}
@@ -123,7 +113,7 @@ public class LevelSelectFragment extends OpenGLFragment
 		{
 			if (GamePreferences.IS_DEBUG_ENABLED() || estadisticas.isUnlocked())
 			{
-				mListener.onLevelSelected(nivel.getTipoNivel());
+				mListener.onLevelSelected(nivel.getLevelType());
 			}
 			else
 			{

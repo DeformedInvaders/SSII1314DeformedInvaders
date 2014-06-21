@@ -10,34 +10,34 @@ public class Movements implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<VertexArray>[] movimientos;
+	private List<VertexArray>[] movementsList;
 
 	/* Constructora */
 
 	public Movements()
 	{
-		movimientos = new List[GamePreferences.NUM_TYPE_MOVIMIENTOS];
+		movementsList = new List[GamePreferences.NUM_TYPE_MOVIMIENTOS];
 	}
 
 	/* Métodos de Modificación de Información */
 
 	public void set(List<VertexArray> movimiento, TTypeMovement tipo)
 	{
-		movimientos[tipo.ordinal()] = movimiento;
+		movementsList[tipo.ordinal()] = movimiento;
 	}
 
 	/* Métodos de Obtención de Información */
 
 	public List<VertexArray> get(TTypeMovement tipo)
 	{
-		return movimientos[tipo.ordinal()];
+		return movementsList[tipo.ordinal()];
 	}
 
 	public boolean isReady()
 	{
 		for (int i = 0; i < GamePreferences.NUM_TYPE_MOVIMIENTOS; i++)
 		{
-			if (movimientos[i] == null)
+			if (movementsList[i] == null)
 			{
 				return false;
 			}

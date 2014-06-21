@@ -98,9 +98,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		listaHandlesAnimacion = new ArrayList<HandleArray>();
 		
-		if (personaje.isMovimientosReady())
+		if (personaje.isMovementsReady())
 		{
-			listaVerticesAnimacion = personaje.getMovimientos().get(movimiento);
+			listaVerticesAnimacion = personaje.getMovements().get(movimiento);
 		}
 		else
 		{
@@ -108,10 +108,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 
 		// Esqueleto
-		contorno = personaje.getEsqueleto().getContorno();
-		vertices = personaje.getEsqueleto().getVertices();
+		contorno = personaje.getSkeleton().getHull();
+		vertices = personaje.getSkeleton().getVertices();
 		verticesModificados = vertices.clone();
-		triangulos = personaje.getEsqueleto().getTriangulos();
+		triangulos = personaje.getSkeleton().getTriangles();
 
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 		bufferTriangulos = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
@@ -124,9 +124,9 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		reiniciarHandles();
 		
 		// Textura
-		textura = personaje.getTextura();
-		coordsTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getCoordTextura());
-		pegatinas = textura.getPegatinas();
+		textura = personaje.getTexture();
+		coordsTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getTextureCoords());
+		pegatinas = textura.getStickers();
 
 		objetoHandle = new Handle(20, GamePreferences.POINT_WIDTH, Color.BLACK);
 		objetoHandleSeleccionado = new Handle(20, 2 * GamePreferences.POINT_WIDTH, Color.RED);
@@ -143,10 +143,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		super.onSurfaceCreated(gl, config);
 
 		// Textura
-		textura.cargarTextura(gl, this, mContext, TTypeEntity.Character, 0);
+		textura.loadTexture(gl, this, mContext, TTypeEntity.Character, 0);
 
 		// Pegatinas
-		pegatinas.cargarTexturas(gl, this, mContext, TTypeEntity.Character, 0);
+		pegatinas.loadTexture(gl, this, mContext, TTypeEntity.Character, 0);
 	}
 
 	@Override
@@ -157,20 +157,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		if (estado == TStateDeform.Playing)
 		{
 			// Centrado de Marco
-			centrarPersonajeEnMarcoInicio(gl);
+			drawInsideFrameBegin(gl);
 
 			dibujarPersonaje(gl, triangulosAnimacion, contornoAnimacion, verticesAnimacion);
 
 			// Centrado de Marco
-			centrarPersonajeEnMarcoFinal(gl);
+			drawInsideFrameEnd(gl);
 		}
 		else
 		{
 			// Marcos
-			dibujarMarcoInterior(gl, Color.LTGRAY, GamePreferences.DEEP_INSIDE_FRAMES);
+			drawFrameInside(gl, Color.LTGRAY, GamePreferences.DEEP_INSIDE_FRAMES);
 			
 			// Centrado de Marco
-			centrarPersonajeEnMarcoInicio(gl);
+			drawInsideFrameBegin(gl);
 
 			dibujarPersonaje(gl, bufferTriangulos, bufferContorno, verticesModificados);
 
@@ -178,20 +178,20 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			OpenGLManager.dibujarListaHandle(gl, objetoHandle, objetoHandleSeleccionado, handles);
 
 			// Centrado de Marco
-			centrarPersonajeEnMarcoFinal(gl);
+			drawInsideFrameEnd(gl);
 		}
 	}
 
 	public void dibujarPersonaje(GL10 gl, FloatBuffer malla, FloatBuffer contorno, VertexArray vertices)
 	{
 		// Textura
-		textura.dibujar(gl, this, malla, coordsTextura, TTypeEntity.Character, 0);
+		textura.drawTexture(gl, this, malla, coordsTextura, TTypeEntity.Character, 0);
 
 		// Contorno
 		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
 
 		// Pegatinas
-		pegatinas.dibujar(gl, this, vertices, triangulos, TTypeEntity.Character, 0);
+		pegatinas.drawTexture(gl, this, vertices, triangulos, TTypeEntity.Character, 0);
 	}
 
 	/* Métodos de Selección de Estado */
@@ -207,7 +207,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		if (buscador == null)
 		{
-			buscador = new TriangleQuadTreeSearcher(triangulos, verticesModificados, 0.0f, 0.0f, marcoAnchuraInterior, marcoAnchuraInterior);
+			buscador = new TriangleQuadTreeSearcher(triangulos, verticesModificados, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
 		}
 	}
 
@@ -226,7 +226,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	/* Métodos Abstractos de OpenGLRenderer */
 
 	@Override
-	protected boolean reiniciar()
+	protected boolean onReset()
 	{
 		estado = TStateDeform.Nothing;
 		modoGrabar = false;
@@ -374,7 +374,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			float frameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float frameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			if (!isPuntoFueraMarco(frameX, frameY))
+			if (!isPointOutsideFrame(frameX, frameY))
 			{
 				handles.setCoordsHandle(punteros[pointer], frameX, frameY);
 				return true;
@@ -629,10 +629,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	public DeformDataSaved saveData()
 	{
 		// Textura
-		textura.descargarTextura(this, TTypeEntity.Character, 0);
+		textura.deleteTexture(this, TTypeEntity.Character, 0);
 		
 		// Pegatinas
-		pegatinas.descargarTextura(this, TTypeEntity.Character, 0);
+		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
 
 		return new DeformDataSaved(handles, verticesModificados, estado, listaVerticesAnimacion);
 	}

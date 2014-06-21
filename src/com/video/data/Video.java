@@ -7,40 +7,39 @@ import com.video.video.TStateVideo;
 
 public class Video
 {
-	private int[] idFondos;
-	private List<int[]> listaMensajes;
-	private List<Character> listaPersonajes;
-	private List<InanimatedObject> listaObjetos;
+	private int[] listBackgrounds;
+	private List<int[]> listQuotes;
+	private List<Character> listActors;
+	private List<InanimatedObject> listObjects;
 	
-	public Video(int[] fondos, List<int[]> mensajes, List<Character> personajes, List<InanimatedObject> objetos)
+	public Video(int[] backgrounds, List<int[]> quotes, List<Character> actors, List<InanimatedObject> objects)
 	{
-		idFondos = fondos;
-		
-		listaMensajes = mensajes;
-		listaPersonajes = personajes;
-		listaObjetos = objetos;
+		listBackgrounds = backgrounds;
+		listQuotes = quotes;
+		listActors = actors;
+		listObjects = objects;
 	}
 	
-	public int[] getIdTexturaFondos()
+	public int[] getListBackgrounds()
 	{
-		return idFondos;
+		return listBackgrounds;
 	}
 	
-	public Character getPersonaje(TTypeActors actor)
+	public Character getActor(TTypeActors actor)
 	{
-		return listaPersonajes.get(actor.ordinal());
+		return listActors.get(actor.ordinal());
 	}
 	
-	public List<InanimatedObject> getListaObjetos()
+	public List<InanimatedObject> getListObjects()
 	{
-		return listaObjetos;
+		return listObjects;
 	}
 	
-	public int[] getMensaje(TStateVideo estado)
+	public int[] getQuote(TStateVideo state)
 	{
-		if (estado.ordinal() < listaMensajes.size())
+		if (state.ordinal() < listQuotes.size())
 		{
-			return listaMensajes.get(estado.ordinal());
+			return listQuotes.get(state.ordinal());
 		}
 		
 		return null;

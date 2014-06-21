@@ -11,46 +11,46 @@ import com.project.main.R;
 
 public class Platform extends Entity
 {	
-	private InstanceEntity entidad;
-	private TTypeEntity tipoEntidadArma;
+	private InstanceEntity instanceEntity;
+	private TTypeEntity typeWeapon;
 	
-	private boolean activado;
+	private boolean activate;
 	
-	private int indiceAnimacionFuego;
-	private int indiceAnimacionDisparo;
-	private int indiceArma;
+	private int animationPositionFire;
+	private int animationPositionShot;
+	private int animationPositionWeapon;
 	
-	public Platform(InstanceEntity instancia)
+	public Platform(InstanceEntity instance)
 	{
-		entidad = instancia;
-		activado = false;
+		instanceEntity = instance;
+		activate = false;
 		
-		indiceAnimacionFuego = 0;
-		indiceAnimacionDisparo = 0;
-		indiceArma = 0;
+		animationPositionFire = 0;
+		animationPositionShot = 0;
+		animationPositionWeapon = 0;
 		
-		if (entidad.getTipoEntidad() == TTypeEntity.Character)
+		if (instanceEntity.getTypeEntity() == TTypeEntity.Character)
 		{
-			tipoEntidad = TTypeEntity.CharacterPlatform;
-			tipoEntidadArma = TTypeEntity.CharacterWeapon;
+			typeEntity = TTypeEntity.CharacterPlatform;
+			typeWeapon = TTypeEntity.CharacterWeapon;
 		}
-		else if (entidad.getTipoEntidad() == TTypeEntity.Boss)
+		else if (instanceEntity.getTypeEntity() == TTypeEntity.Boss)
 		{
-			tipoEntidad = TTypeEntity.BossPlatform;
-			tipoEntidadArma = TTypeEntity.BossWeapon;
+			typeEntity = TTypeEntity.BossPlatform;
+			typeWeapon = TTypeEntity.BossWeapon;
 		}
 		else
 		{
-			tipoEntidad = TTypeEntity.Nothing;
-			tipoEntidadArma = TTypeEntity.Nothing;
+			typeEntity = TTypeEntity.Nothing;
+			typeWeapon = TTypeEntity.Nothing;
 		}
 	}
 	
-	private int indicePlataforma(int indice)
+	private int platformIndex(int index)
 	{
-		if (tipoEntidad == TTypeEntity.CharacterPlatform)
+		if (typeEntity == TTypeEntity.CharacterPlatform)
 		{
-			switch (indice)
+			switch (index)
 			{
 				case 0:
 					return R.drawable.platform_character_1;
@@ -60,9 +60,9 @@ public class Platform extends Entity
 					return R.drawable.platform_character_3;
 			}
 		}
-		else if (tipoEntidad == TTypeEntity.BossPlatform)
+		else if (typeEntity == TTypeEntity.BossPlatform)
 		{
-			switch (indice)
+			switch (index)
 			{
 				case 0:
 					return R.drawable.platform_boss_1;
@@ -76,11 +76,11 @@ public class Platform extends Entity
 		return -1;
 	}
 	
-	private int indiceArma(int indice)
+	private int weaponIndex(int index)
 	{
-		if (tipoEntidadArma == TTypeEntity.CharacterWeapon)
+		if (typeWeapon == TTypeEntity.CharacterWeapon)
 		{
-			switch (indice)
+			switch (index)
 			{
 				case 0:
 					return R.drawable.weapon_character_1;
@@ -92,9 +92,9 @@ public class Platform extends Entity
 					return R.drawable.weapon_character_4;
 			}
 		}
-		else if (tipoEntidadArma == TTypeEntity.BossWeapon)
+		else if (typeWeapon == TTypeEntity.BossWeapon)
 		{
-			switch (indice)
+			switch (index)
 			{
 				case 0:
 					return R.drawable.weapon_boss_1;
@@ -110,81 +110,81 @@ public class Platform extends Entity
 		return -1;
 	}
 	
-	private int indiceArma()
+	private int weaponIndex()
 	{
-		if (indiceAnimacionDisparo == 0)
+		if (animationPositionShot == 0)
 		{
-			return indiceArma;
+			return animationPositionWeapon;
 		}
 		else
 		{
-			return indiceArma + GamePreferences.NUM_TYPE_TEXTURE_WEAPONS;
+			return animationPositionWeapon + GamePreferences.NUM_TYPE_TEXTURE_WEAPONS;
 		}
 	}
 	
 	/* Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
 			for (int i = 0; i < GamePreferences.NUM_TYPE_WEAPONS; i++)
 			{
-				renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indiceArma(i), tipoEntidadArma, i, TTypeSticker.Nothing);
+				renderer.loadTextureRectangle(gl, instanceEntity.getHeight(), instanceEntity.getWidth(), weaponIndex(i), typeWeapon, i, TTypeSticker.Nothing);
 			}
 			
 			for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
 			{
-				renderer.cargarTexturaRectangulo(gl, entidad.getHeight(), entidad.getWidth(), indicePlataforma(i), tipoEntidad, i, TTypeSticker.Nothing);
+				renderer.loadTextureRectangle(gl, instanceEntity.getHeight(), instanceEntity.getWidth(), platformIndex(i), typeEntity, i, TTypeSticker.Nothing);
 			}
 			
-			width = entidad.getWidth();
-			height = entidad.getHeight();
+			width = instanceEntity.getWidth();
+			height = instanceEntity.getHeight();
 		}
 	}
 	
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
 			for (int i = 0; i < GamePreferences.NUM_TYPE_WEAPONS; i++)
 			{
-				renderer.descargarTexturaRectangulo(tipoEntidadArma, i, TTypeSticker.Nothing);
+				renderer.deleteTextureRectangle(typeWeapon, i, TTypeSticker.Nothing);
 			}
 			
 			for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
 			{
-				renderer.descargarTexturaRectangulo(tipoEntidad, i, TTypeSticker.Nothing);
+				renderer.deleteTextureRectangle(typeEntity, i, TTypeSticker.Nothing);
 			}
 		}
 	}
 
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (tipoEntidad != TTypeEntity.Nothing)
+		if (typeEntity != TTypeEntity.Nothing)
 		{
-			if (activado)
+			if (activate)
 			{
-				if (indiceArma == 0)
+				if (animationPositionWeapon == 0)
 				{		
 					// Plataforma	
 					gl.glPushMatrix();
 						
-						gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - 5.0f * entidad.getHeight() / 8.0f, 0.0f);
-						gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-						renderer.dibujarTexturaRectangulo(gl, tipoEntidad, indiceAnimacionFuego, TTypeSticker.Nothing);
+						gl.glTranslatef(instanceEntity.getCoordX(), instanceEntity.getCoordY() - 5.0f * instanceEntity.getHeight() / 8.0f, 0.0f);
+						gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
+						renderer.drawTextureRectangle(gl, typeEntity, animationPositionFire, TTypeSticker.Nothing);
 					
 					gl.glPopMatrix();	
 					
 					// Arma Trasera
 					gl.glPushMatrix();
 						
-						gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - entidad.getHeight() / 8.0f, 0.0f);
-						gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-						renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(), TTypeSticker.Nothing);
+						gl.glTranslatef(instanceEntity.getCoordX(), instanceEntity.getCoordY() - instanceEntity.getHeight() / 8.0f, 0.0f);
+						gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
+						renderer.drawTextureRectangle(gl, typeWeapon, weaponIndex(), TTypeSticker.Nothing);
 					
 					gl.glPopMatrix();
 				}
@@ -193,44 +193,44 @@ public class Platform extends Entity
 					// Arma Frontal
 					gl.glPushMatrix();
 						
-						gl.glTranslatef(entidad.getPosicionX(), entidad.getPosicionY() - entidad.getHeight() / 8.0f, 0.0f);
-						gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), GamePreferences.GAME_SCALE_FACTOR(tipoEntidad), 1.0f);
-						renderer.dibujarTexturaRectangulo(gl, tipoEntidadArma, indiceArma(), TTypeSticker.Nothing);
+						gl.glTranslatef(instanceEntity.getCoordX(), instanceEntity.getCoordY() - instanceEntity.getHeight() / 8.0f, 0.0f);
+						gl.glScalef(GamePreferences.GAME_SCALE_FACTOR(typeEntity), GamePreferences.GAME_SCALE_FACTOR(typeEntity), 1.0f);
+						renderer.drawTextureRectangle(gl, typeWeapon, weaponIndex(), TTypeSticker.Nothing);
 						
 					gl.glPopMatrix();
 				}
 				
-				indiceArma = (indiceArma + 1) % 2;
+				animationPositionWeapon = (animationPositionWeapon + 1) % GamePreferences.NUM_TYPE_TEXTURE_WEAPONS;
 			}
 		}
 	}
 	
 	/* Métodos de modificación de Información */
 	
-	public boolean animar()
+	public boolean animateTexture()
 	{
-		indiceAnimacionFuego = (indiceAnimacionFuego + 1) % GamePreferences.NUM_TYPE_PLATFORMS;
+		animationPositionFire = (animationPositionFire + 1) % GamePreferences.NUM_TYPE_PLATFORMS;
 		
-		if (indiceAnimacionDisparo > 0)
+		if (animationPositionShot > 0)
 		{
-			indiceAnimacionDisparo--;
+			animationPositionShot--;
 		}
 		
 		return true;
 	}
 	
-	public void activarDisparo()
+	public void shoot()
 	{
-		indiceAnimacionDisparo = GamePreferences.NUM_FRAMES_DISPARO;
+		animationPositionShot = GamePreferences.NUM_FRAMES_DISPARO;
 	}
 	
-	public void activarPlataforma()
+	public void activate()
 	{
-		activado = true;
+		activate = true;
 	}
 	
-	public void desactivarPlataforma()
+	public void deactivate()
 	{
-		activado = false;
+		activate = false;
 	}
 }

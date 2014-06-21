@@ -103,10 +103,10 @@ public class VideoFragment extends OpenGLFragment implements OnVideoListener
 	/* Métodos abstractos de OpenGLFragment */
 	
 	@Override
-	protected void reiniciarInterfaz() { }
+	protected void resetInterface() { }
 
 	@Override
-	protected void actualizarInterfaz() { }
+	protected void updateInterface() { }
 
 	/* Métodos Listener onClick */
 

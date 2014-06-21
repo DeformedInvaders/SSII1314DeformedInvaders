@@ -35,18 +35,18 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	{
 		super(context, TTypeBackgroundRenderer.Swappable, TTypeTexturesRenderer.Video);
 		
-		seleccionarTexturaFondo(video.getIdTexturaFondos());
+		selectBackground(video.getListBackgrounds());
 		
 		sonidoActivado = -1;
 		estadoVideo = TStateVideo.Nothing;
 		
-		cientifico = video.getPersonaje(TTypeActors.Scientific);
-		guitarrista = video.getPersonaje(TTypeActors.Guitarist);
+		cientifico = video.getActor(TTypeActors.Scientific);
+		guitarrista = video.getActor(TTypeActors.Guitarist);
 		
-		guitarrista.seleccionarAnimacion(TTypeMovement.Attack);
-		cientifico.seleccionarAnimacion(TTypeMovement.Jump);
+		guitarrista.selectMovement(TTypeMovement.Attack);
+		cientifico.selectMovement(TTypeMovement.Jump);
 		
-		listaObjetos = video.getListaObjetos();
+		listaObjetos = video.getListObjects();
 	
 		texturasCargadas = false;
 		
@@ -70,13 +70,13 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	{
 		super.onSurfaceCreated(gl, config);
 
-		cientifico.cargarTextura(gl, this, mContext);
-		guitarrista.cargarTextura(gl, this, mContext);
+		cientifico.loadTexture(gl, this, mContext);
+		guitarrista.loadTexture(gl, this, mContext);
 		
 		Iterator<InanimatedObject> it = listaObjetos.iterator();
 		while(it.hasNext())
 		{
-			it.next().cargarTextura(gl, this, mContext);
+			it.next().loadTexture(gl, this, mContext);
 		}
 	}
 	
@@ -99,30 +99,30 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		{
 			InanimatedObject objeto = listaObjetos.get(i);
 			
-			if (objeto.getEstadoActivo() == estadoVideo)
+			if (objeto.getStateActive() == estadoVideo)
 			{
-				objeto.dibujar(gl, this);
+				objeto.drawTexture(gl, this);
 			}
 		}
 		
 		// Centrado de Marco
-		centrarPersonajeEnMarcoInicio(gl);
+		drawInsideFrameBegin(gl);
 
 		if (estadoVideo == TStateVideo.Brief)
 		{
-			cientifico.dibujar(gl, this);
+			cientifico.drawTexture(gl, this);
 		}
 		else if (estadoVideo == TStateVideo.Rock)
 		{
-			guitarrista.dibujar(gl, this);
+			guitarrista.drawTexture(gl, this);
 		}
 		
 		// Centrado de Marco
-		centrarPersonajeEnMarcoFinal(gl);
+		drawInsideFrameEnd(gl);
 		
 		if (estadoVideo == TStateVideo.Nothing)
 		{
-			dibujarMarcoCompleto(gl, Color.argb(175, 0, 0, 0), GamePreferences.DEEP_OUTSIDE_FRAMES);
+			drawFrameFill(gl, Color.argb(175, 0, 0, 0), GamePreferences.DEEP_OUTSIDE_FRAMES);
 		}
 	}
 	
@@ -136,9 +136,9 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 		{
 			InanimatedObject objeto = listaObjetos.get(i);
 			
-			if (objeto.getEstadoActivo() == estadoVideo && objeto.contains(worldX, worldY))
+			if (objeto.getStateActive() == estadoVideo && objeto.contains(worldX, worldY))
 			{
-				sonidoActivado = objeto.getSonidoActivo();
+				sonidoActivado = objeto.getSoundActive();
 				return true;
 			}
 		}
@@ -153,24 +153,24 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 	
 	public void animarEscena()
 	{
-		if (cientifico.animar())
+		if (cientifico.animateTexture())
 		{
-			cientifico.seleccionarAnimacion(TTypeMovement.Jump);
+			cientifico.selectMovement(TTypeMovement.Jump);
 		}
 		
-		if (guitarrista.animar())
+		if (guitarrista.animateTexture())
 		{
-			guitarrista.seleccionarAnimacion(TTypeMovement.Attack);
+			guitarrista.selectMovement(TTypeMovement.Attack);
 		}
 	}
 	
 	public boolean avanzarEscena()
 	{
-		cientifico.reposo();
-		guitarrista.reposo();
+		cientifico.stopAnimation();
+		guitarrista.stopAnimation();
 		
-		animarFondo();
-		return isFondoFinal();
+		moveBackground();
+		return isBackgroundEnded();
 	}
 	
 	public void seleccionarEstado(TStateVideo estado)
@@ -193,13 +193,13 @@ public class VideoOpenGLRenderer extends OpenGLRenderer
 
 	public void saveData()
 	{
-		cientifico.descargarTextura(this);
-		guitarrista.descargarTextura(this);
+		cientifico.deleteTexture(this);
+		guitarrista.deleteTexture(this);
 		
 		Iterator<InanimatedObject> it = listaObjetos.iterator();
 		while(it.hasNext())
 		{
-			it.next().descargarTextura(this);
+			it.next().deleteTexture(this);
 		}
 	}
 }

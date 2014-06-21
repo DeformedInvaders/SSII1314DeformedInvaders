@@ -70,8 +70,8 @@ public class VideoGenerator
 
 		listaPersonajes = new ArrayList<Character>();
 		
-		listaPersonajes.add(assetsManager.importarActor(TTypeActors.Guitarist));
-		listaPersonajes.add(assetsManager.importarActor(TTypeActors.Scientific));
+		listaPersonajes.add(assetsManager.importActor(TTypeActors.Guitarist));
+		listaPersonajes.add(assetsManager.importActor(TTypeActors.Scientific));
 		
 		// Objetos
 		
@@ -106,7 +106,7 @@ public class VideoGenerator
 		Iterator<InanimatedObject> it = listaObjetos.iterator();
 		while(it.hasNext())
 		{
-			it.next().reposo();
+			it.next().stopAnimation();
 		}
 		
 		return new Video(listaFondos, listaMensajes, listaPersonajes, listaObjetos);

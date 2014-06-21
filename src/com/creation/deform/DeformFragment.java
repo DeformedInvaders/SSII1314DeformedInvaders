@@ -69,8 +69,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		botonGrabar.setOnClickListener(new OnRecordClickListener());
 		botonReproducir.setOnClickListener(new OnPlayClickListener());
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		return rootView;
 	}
 
@@ -99,8 +99,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.restoreData(dataSaved);
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -116,7 +116,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	/* Métodos Abstractos OpenGLFramgent */
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		if (canvas.isHandlesVacio())
 		{
@@ -148,7 +148,7 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	}
 
 	@Override
-	protected void reiniciarInterfaz()
+	protected void resetInterface()
 	{
 		botonAnyadir.setVisibility(View.INVISIBLE);
 		botonEliminar.setVisibility(View.INVISIBLE);
@@ -167,8 +167,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.seleccionarAnyadir();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -179,8 +179,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.seleccionarEliminar();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -191,8 +191,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.seleccionarMover();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -203,8 +203,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.reiniciar();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -215,8 +215,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.seleccionarGrabado();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -227,8 +227,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 		{
 			canvas.seleccionarPlay();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -259,8 +259,8 @@ public class DeformFragment extends OpenGLFragment implements OnDeformListener
 	        @Override
 	        public void run()
 	        {
-	    		reiniciarInterfaz();
-	    		actualizarInterfaz();
+	        	resetInterface();
+	        	updateInterface();
 	        }
 	    });
 	}

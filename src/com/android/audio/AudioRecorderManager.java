@@ -6,16 +6,16 @@ import android.media.MediaRecorder;
 
 public class AudioRecorderManager
 {
-	private MediaRecorder recorder;
-	private TStateRecorder estado;
+	private MediaRecorder audioRecorder;
+	private TStateRecorder mState;
 
 	/* Constructora */
 
 	public AudioRecorderManager()
 	{
-		recorder = new MediaRecorder();
+		audioRecorder = new MediaRecorder();
 
-		estado = TStateRecorder.Stopped;
+		mState = TStateRecorder.Stopped;
 	}
 
 	/* Métodos de Selección de Estado */
@@ -24,23 +24,23 @@ public class AudioRecorderManager
 	{
 		try
 		{
-			if (estado == TStateRecorder.Stopped)
+			if (mState == TStateRecorder.Stopped)
 			{
 				// Initial
-				recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+				audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 				// Initialized
-				recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+				audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 				// DataSourceConfigured
-				recorder.setOutputFile(path);
+				audioRecorder.setOutputFile(path);
 				// DataSourceConfigured
-				recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+				audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 				// DataSourceConfigured
-				recorder.prepare();
+				audioRecorder.prepare();
 				// Prepared
-				recorder.start();
+				audioRecorder.start();
 				// Recording
 
-				estado = TStateRecorder.Recording;
+				mState = TStateRecorder.Recording;
 				return true;
 			}
 		}
@@ -54,13 +54,13 @@ public class AudioRecorderManager
 
 	public boolean stopRecording()
 	{
-		if (estado == TStateRecorder.Recording)
+		if (mState == TStateRecorder.Recording)
 		{
 			// Recording
-			recorder.stop();
+			audioRecorder.stop();
 			// Initial
 
-			estado = TStateRecorder.Stopped;
+			mState = TStateRecorder.Stopped;
 			return true;
 		}
 
@@ -69,18 +69,18 @@ public class AudioRecorderManager
 
 	public void releaseRecorder()
 	{
-		recorder.release();
+		audioRecorder.release();
 	}
 
 	/* Métodos de Obtención de Información */
 
 	public boolean isRecording()
 	{
-		return estado == TStateRecorder.Recording;
+		return mState == TStateRecorder.Recording;
 	}
 
 	public boolean isStopped()
 	{
-		return estado == TStateRecorder.Stopped;
+		return mState == TStateRecorder.Stopped;
 	}
 }

@@ -20,8 +20,8 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 	private ActionBar actionBar;
 	private SectionViewPagerAdapter pageAdapter;
 
-	private List<T> listaFragmentos;
-	private List<String> listaNombres;
+	private List<T> fragmentList;
+	private List<String> titleList;
 
 	private boolean swipeable;
 
@@ -37,8 +37,8 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		super(context, attrs);
 
 		swipeable = true;
-		listaFragmentos = new ArrayList<T>();
-		listaNombres = new ArrayList<String>();
+		fragmentList = new ArrayList<T>();
+		titleList = new ArrayList<String>();
 	}
 
 	/* Métodos Publicos */
@@ -67,17 +67,17 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		});
 	}
 
-	public void addView(T t, String s)
+	public void addView(T fragment, String title)
 	{
-		listaFragmentos.add(t);
-		listaNombres.add(s);
+		fragmentList.add(fragment);
+		titleList.add(title);
 
-		actionBar.addTab(actionBar.newTab().setText(s).setTabListener(pageAdapter));
+		actionBar.addTab(actionBar.newTab().setText(title).setTabListener(pageAdapter));
 	}
 	
 	public void selectView(int position)
 	{
-		if (position > 0 && position < listaFragmentos.size())
+		if (position > 0 && position < fragmentList.size())
 		{
 			actionBar.selectTab(actionBar.getTabAt(position));
 		}
@@ -85,7 +85,7 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 
 	public Iterator<T> iterator()
 	{
-		return listaFragmentos.iterator();
+		return fragmentList.iterator();
 	}
 
 	public int getPosition()
@@ -127,9 +127,9 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		@Override
 		public Fragment getItem(int position)
 		{
-			if (position >= 0 && position < listaFragmentos.size())
+			if (position >= 0 && position < fragmentList.size())
 			{
-				return listaFragmentos.get(position);
+				return fragmentList.get(position);
 			}
 
 			return null;
@@ -138,15 +138,15 @@ public class ViewPagerSwipeable<T extends Fragment> extends ViewPager
 		@Override
 		public int getCount()
 		{
-			return listaFragmentos.size();
+			return fragmentList.size();
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position)
 		{
-			if (position >= 0 && position < listaNombres.size())
+			if (position >= 0 && position < titleList.size())
 			{
-				return listaNombres.get(position).toUpperCase(Locale.getDefault());
+				return titleList.get(position).toUpperCase(Locale.getDefault());
 			}
 
 			return null;

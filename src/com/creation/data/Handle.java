@@ -13,14 +13,14 @@ import com.main.model.GamePreferences;
 
 public class Handle
 {
-	private int colorHandle;
-	private FloatBuffer bufferRelleno, bufferContorno;
+	private int handleColor;
+	private FloatBuffer bufferFill, bufferHull;
 
 	/* Constructora */
 	
 	public Handle(float x, float y, float width, float height, int color)
 	{
-		colorHandle = color;
+		handleColor = color;
 		
 		int longArray = 4 * 2;
 		
@@ -40,20 +40,20 @@ public class Handle
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
-		bufferRelleno = byteBuf.asFloatBuffer();
-		bufferRelleno.put(vertices);
-		bufferRelleno.position(0);
+		bufferFill = byteBuf.asFloatBuffer();
+		bufferFill.put(vertices);
+		bufferFill.position(0);
 		
 		byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
-		bufferContorno = byteBuf.asFloatBuffer();
-		bufferContorno.put(vertices);
-		bufferContorno.position(0);
+		bufferHull = byteBuf.asFloatBuffer();
+		bufferHull.put(vertices);
+		bufferHull.position(0);
 	}
 
 	public Handle(int numIter, float radio, int color)
 	{
-		colorHandle = color;
+		handleColor = color;
 		
 		int longVertices = (numIter + 1) * 2;
 		int longArray = longVertices + 2;
@@ -83,22 +83,22 @@ public class Handle
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
-		bufferRelleno = byteBuf.asFloatBuffer();
-		bufferRelleno.put(vertices);
-		bufferRelleno.position(0);
+		bufferFill = byteBuf.asFloatBuffer();
+		bufferFill.put(vertices);
+		bufferFill.position(0);
 		
 		byteBuf = ByteBuffer.allocateDirect(contorno.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
-		bufferContorno = byteBuf.asFloatBuffer();
-		bufferContorno.put(contorno);
-		bufferContorno.position(0);
+		bufferHull = byteBuf.asFloatBuffer();
+		bufferHull.put(contorno);
+		bufferHull.position(0);
 	}
 
 	/* Métodos de Obtención de Información */
 	
 	public void dibujar(GL10 gl)
 	{
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, colorHandle, bufferRelleno);
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, bufferContorno);
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handleColor, bufferFill);
+		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, bufferHull);
 	}
 }

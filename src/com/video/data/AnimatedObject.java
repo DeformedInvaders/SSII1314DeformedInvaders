@@ -16,73 +16,73 @@ import com.video.video.TStateVideo;
 
 public class AnimatedObject extends InanimatedObject
 {
-	private TTypeAnimation tipoAnimacion;
+	private TTypeAnimation animationType;
 	
-	private int[] texturasAnimadas;
-	private int indiceAnimacionPulsada, indiceAnimacionPasos, indiceAnimacionCiclica;
-	private int ciclosAnimacion;
+	private int[] animationTexture;
+	private int animationPositionPressed, animationPositionStep, animationPositionCyclic;
+	private int animationFrames;
 	
-	protected int numeroCiclosEspera, numeroCiclosAnimacion;
+	protected int animationFramesWait, animationFramesLength;
 	
-	private boolean activado;
+	private boolean activate;
 	
-	public AnimatedObject(int id, int[] texturas, float posX, float posY, TStateVideo estado, int sonido, TTypeAnimation animacion)
+	public AnimatedObject(int id, int[] textures, float x, float y, TStateVideo state, int sound, TTypeAnimation animation)
 	{
-		super(id, -1, posX, posY, estado, sonido);
+		super(id, -1, x, y, state, sound);
 		
-		tipoEntidad = TTypeEntity.AnimatedObject;
-		tipoAnimacion = animacion;
+		typeEntity = TTypeEntity.AnimatedObject;
+		animationType = animation;
 		
-		texturasAnimadas = texturas;
-		indiceAnimacionPulsada = 0;
-		indiceAnimacionPasos = 0;
-		indiceAnimacionCiclica = 0;
+		animationTexture = textures;
+		animationPositionPressed = 0;
+		animationPositionStep = 0;
+		animationPositionCyclic = 0;
 				
-		numeroCiclosEspera = GamePreferences.NUM_FRAMES_CYCLE;
-		numeroCiclosAnimacion = GamePreferences.NUM_FRAMES_ANIMATION;
+		animationFramesWait = GamePreferences.NUM_FRAMES_CYCLE;
+		animationFramesLength = GamePreferences.NUM_FRAMES_ANIMATION;
 		
-		ciclosAnimacion = numeroCiclosEspera;
+		animationFrames = animationFramesWait;
 		
-		activado = false;
+		activate = false;
 	}
 	
 	@Override
-	protected int indiceObjeto()
+	protected int objectIndex()
 	{
-		if (tipoAnimacion == TTypeAnimation.Pressed)
+		if (animationType == TTypeAnimation.Pressed)
 		{
-			if (activado)
+			if (activate)
 			{
-				return indiceObjeto(indiceAnimacionPulsada % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS);
+				return objectIndex(animationPositionPressed % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS);
 			}
 			else
 			{
-				return indiceObjeto(0);
+				return objectIndex(0);
 			}
 		}
-		else if (tipoAnimacion == TTypeAnimation.Cyclic)
+		else if (animationType == TTypeAnimation.Cyclic)
 		{
-			return indiceObjeto(indiceAnimacionCiclica);
+			return objectIndex(animationPositionCyclic);
 		}
 		else
 		{
-			return indiceObjeto(indiceAnimacionPasos);
+			return objectIndex(animationPositionStep);
 		}
 	}
 	
-	private int indiceObjeto(int indice)
+	private int objectIndex(int indice)
 	{
-		return idEntidad * GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS + indice;
+		return idEntity * GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS + indice;
 	}
 	
 	/* Métodos Abstráctos de Entidad */
 	
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
 		for (int i = 0; i < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS; i++)
 		{
-			Dimensions dim = renderer.cargarTexturaRectangulo(gl, texturasAnimadas[i], tipoEntidad, indiceObjeto(i), TTypeSticker.Nothing);
+			Dimensions dim = renderer.loadTextureRectangle(gl, animationTexture[i], typeEntity, objectIndex(i), TTypeSticker.Nothing);
 			if (dim != null)
 			{
 				width = dim.getWidth();
@@ -90,43 +90,43 @@ public class AnimatedObject extends InanimatedObject
 			}
 		}
 		
-		area = new Rectangle(posicionX, posicionY, getWidth(), getHeight());
+		area = new Rectangle(coordX, coordY, getWidth(), getHeight());
 		handle = new Handle(area.getX(), area.getY(), area.getWidth(), area.getHeight(), Color.RED);
 	}
 
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
 		for (int i = 0; i < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS; i++)
 		{
-			renderer.descargarTexturaRectangulo(tipoEntidad, indiceObjeto(i), TTypeSticker.Nothing);
+			renderer.deleteTextureRectangle(typeEntity, objectIndex(i), TTypeSticker.Nothing);
 		}
 	}
 
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		super.dibujar(gl, renderer);
+		super.drawTexture(gl, renderer);
 		
-		ciclosAnimacion--;
+		animationFrames--;
 		
-		if (ciclosAnimacion == 0)
+		if (animationFrames == 0)
 		{
-			ciclosAnimacion = numeroCiclosEspera;
+			animationFrames = animationFramesWait;
 			
-			if (activado)
+			if (activate)
 			{
-				if (indiceAnimacionPulsada > 0)
+				if (animationPositionPressed > 0)
 				{
-					indiceAnimacionPulsada--;
+					animationPositionPressed--;
 				}
 				else
 				{
-					activado = false;
+					activate = false;
 				}
 			}
 			
-			indiceAnimacionCiclica = (indiceAnimacionCiclica + 1) % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS;
+			animationPositionCyclic = (animationPositionCyclic + 1) % GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS;
 		}
 	}
 	
@@ -142,16 +142,16 @@ public class AnimatedObject extends InanimatedObject
 		
 		if (area.contains(x, y))
 		{
-			if (!activado)
+			if (!activate)
 			{
-				activado = true;
-				ciclosAnimacion = numeroCiclosEspera;
-				indiceAnimacionPulsada = numeroCiclosAnimacion;
+				activate = true;
+				animationFrames = animationFramesWait;
+				animationPositionPressed = animationFramesLength;
 			}
 		
-			if (indiceAnimacionPasos < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS - 1)
+			if (animationPositionStep < GamePreferences.NUM_TYPE_TEXTURE_ANIMATED_OBJECTS - 1)
 			{
-				indiceAnimacionPasos++;
+				animationPositionStep++;
 			}
 			
 			return true;
@@ -161,14 +161,14 @@ public class AnimatedObject extends InanimatedObject
 	}
 	
 	@Override
-	public void reposo()
+	public void stopAnimation()
 	{
-		super.reposo();
+		super.stopAnimation();
 		
-		indiceAnimacionPulsada = 0;
-		indiceAnimacionPasos = 0;
-		indiceAnimacionCiclica = 0;
-		ciclosAnimacion = numeroCiclosEspera;;
-		activado = false;
+		animationPositionPressed = 0;
+		animationPositionStep = 0;
+		animationPositionCyclic = 0;
+		animationFrames = animationFramesWait;;
+		activate = false;
 	}
 }

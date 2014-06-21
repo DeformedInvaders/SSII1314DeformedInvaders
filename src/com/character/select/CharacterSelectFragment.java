@@ -57,7 +57,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), GameResources.FONT_LOGO_PATH);
 		
 		TextView textBackground = (TextView) rootView.findViewById(R.id.textViewCharacterSelect1);
-		textBackground.setText(personaje.getNombre());
+		textBackground.setText(personaje.getName());
 		textBackground.setTypeface(textFont);
 
 		botonCamara = (IconImageButton) rootView.findViewById(R.id.imageButtonCharacterSelect1);
@@ -86,8 +86,8 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 
 		setCanvasListener(canvas);
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		return rootView;
 	}
 
@@ -109,15 +109,6 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 		botonRename = null;
 		botonExport = null;
 	}
-	
-	/*@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		
-		mListener = null;
-		personaje = null;
-	}*/
 
 	@Override
 	public void onResume()
@@ -137,7 +128,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz()
+	protected void resetInterface()
 	{
 		botonCamara.setVisibility(View.INVISIBLE);
 		botonRun.setVisibility(View.INVISIBLE);
@@ -155,7 +146,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 	}
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		if (canvas.isEstadoReposo() || !canvas.isEstadoAnimacion())
 		{
@@ -201,7 +192,7 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 			else if (canvas.isEstadoRetoque())
 			{				
 				final Bitmap bitmap = canvas.getCapturaPantalla();
-				String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getNombre() + " " + getString(R.string.text_social_create_character_final);
+				String text = getString(R.string.text_social_create_character_initial) + " " + personaje.getName() + " " + getString(R.string.text_social_create_character_final);
 
 				TextInputAlert alert = new TextInputAlert(getActivity(), R.string.text_social_share_title, R.string.text_social_share_description, text, R.string.text_button_send, R.string.text_button_cancel, false) {
 					@Override
@@ -212,8 +203,8 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 						
 						canvas.seleccionarTerminado();
 
-						reiniciarInterfaz();
-						actualizarInterfaz();
+						resetInterface();
+						updateInterface();
 					}
 
 					@Override
@@ -222,21 +213,21 @@ public class CharacterSelectFragment extends OpenGLFragment implements OnDisplay
 						canvas.seleccionarTerminado();
 						mListener.onSetSwipeable(true);
 
-						reiniciarInterfaz();
-						actualizarInterfaz();
+						resetInterface();
+						updateInterface();
 					}
 
 				};
 
-				reiniciarInterfaz();
-				actualizarInterfaz();
+				resetInterface();
+				updateInterface();
 				alert.show();
 
 				mListener.onSetSwipeable(false);
 			}
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 

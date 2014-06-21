@@ -100,8 +100,8 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 
 		setCanvasListener(canvas);
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		return rootView;
 	}
 
@@ -144,7 +144,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	/* Métodos abstractos de OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz()
+	protected void resetInterface()
 	{
 		botonSeleccionar.setVisibility(View.INVISIBLE);
 		botonJugar.setVisibility(View.INVISIBLE);
@@ -152,7 +152,7 @@ public class MainFragment extends OpenGLFragment implements OnDisplayListener
 	}
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		if (numeroPersonajes > 0 && numeroPersonajes <= GamePreferences.MAX_CHARACTERS)
 		{

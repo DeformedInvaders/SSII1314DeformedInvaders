@@ -20,7 +20,7 @@ public class FacebookConnector
 
 	/* Métodos Públicos */
 
-	public boolean iniciarAutorizacion()
+	public boolean startAuthorization()
 	{
 		facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(SocialInformation.FACEBOOK_APP_ID, SocialInformation.FACEBOOK_APP_SECRET);
@@ -33,7 +33,7 @@ public class FacebookConnector
 		return facebook.getOAuthAuthorizationURL(SocialInformation.FACEBOOK_CALLBACK_URL);
 	}
 
-	public boolean finalizarAutorizacion(Uri uri)
+	public boolean finishAuthorization(Uri uri)
 	{
 		try 
 		{
@@ -48,12 +48,12 @@ public class FacebookConnector
 		return false;
 	}
 
-	public boolean desconexion()
+	public boolean disconnect()
 	{
 		return true;
 	}
 
-	public boolean enviarPost(String message)
+	public boolean sendPost(String message)
 	{
 		try
 		{
@@ -70,7 +70,7 @@ public class FacebookConnector
 		return true;
 	}
 
-	public boolean enviarPost(String message, File file)
+	public boolean sendPost(String message, File file)
 	{
 		try
 		{

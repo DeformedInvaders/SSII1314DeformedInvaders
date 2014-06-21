@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 public abstract class TextInputAlert extends WindowAlert
 {
-	private EditText input;
+	private EditText inputText;
 
 	/* Constructora */
 
@@ -27,13 +27,13 @@ public abstract class TextInputAlert extends WindowAlert
 			setView(R.layout.alert_textinput_layout);
 		}
 		
-		input = (EditText) findViewById(R.id.editTextInputTextAlert1);
+		inputText = (EditText) findViewById(R.id.editTextInputTextAlert1);
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				onPossitiveButtonClick(input.getText().toString());
+				onPossitiveButtonClick(inputText.getText().toString());
 			}
 		});
 
@@ -41,7 +41,7 @@ public abstract class TextInputAlert extends WindowAlert
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				onNegativeButtonClick(input.getText().toString());
+				onNegativeButtonClick(inputText.getText().toString());
 			}
 		});
 	}
@@ -50,14 +50,14 @@ public abstract class TextInputAlert extends WindowAlert
 	{
 		this(context, title, messege, textYes, textNo, restringido);
 		
-		input.setText(text);
+		inputText.setText(text);
 	}
 	
 	public TextInputAlert(Context context, int title, int messege, String text, int textYes, int textNo, boolean restringido)
 	{
 		this(context, title, messege, textYes, textNo, restringido);
 		
-		input.setText(text);
+		inputText.setText(text);
 	}
 
 	/* Métodos Abstractos */

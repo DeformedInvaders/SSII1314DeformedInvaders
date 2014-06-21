@@ -6,14 +6,14 @@ import com.main.model.GamePreferences;
 
 public abstract class DoubleTapDetector
 {
-	private boolean bloqueado;
+	private boolean locked;
 	private long lastTap;
 
 	/* Constructora */
 
 	public DoubleTapDetector()
 	{
-		bloqueado = false;
+		locked = false;
 		lastTap = System.currentTimeMillis();
 	}
 	
@@ -23,7 +23,7 @@ public abstract class DoubleTapDetector
 	{
 		int action = event.getActionMasked();
 		
-		if (!bloqueado)
+		if (!locked)
 		{
 			if (action == MotionEvent.ACTION_UP)
 			{
@@ -34,7 +34,7 @@ public abstract class DoubleTapDetector
 		{
 			if (action == MotionEvent.ACTION_UP)
 			{
-				bloqueado = false;
+				locked = false;
 			}
 		}
 
@@ -43,7 +43,7 @@ public abstract class DoubleTapDetector
 
 	public boolean onStopEvent()
 	{
-		bloqueado = true;
+		locked = true;
 		return true;
 	}
 

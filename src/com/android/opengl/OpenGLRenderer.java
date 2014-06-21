@@ -24,107 +24,107 @@ import com.main.model.GamePreferences;
 public abstract class OpenGLRenderer implements Renderer
 {
 	// Parámetros de la Cámara
-	private float xLeft, xRight, yTop, yBottom, xCentro, yCentro;
+	private float xLeft, xRight, yTop, yBottom, xCenter, yCenter;
 
 	// Copia Seguridad de la Cámara
-	private boolean camaraGuardada;
-	private float lastXLeft, lastXRight, lastYTop, lastYBot, lastXCentro, lastYCentro;
+	private boolean cameraSaved;
+	private float lastXLeft, lastXRight, lastYTop, lastYBot, lastXCenter, lastYCenter;
 
 	// Parámetros del Puerto de Vista
 	private int screenHeight, screenWidth;
 
 	// Parámetros de la Escena
-	private int colorFondo;
+	private int backgroundColor;
 
 	// Parámetros de Texturas
-	private TTypeBackgroundRenderer tipoFondo;
-	private TTypeTexturesRenderer tipoTexturas;
+	private TTypeBackgroundRenderer backgroundType;
+	private TTypeTexturesRenderer textureType;
 	private FloatBuffer coordTexturaRectangulo;
 	
-	private int numFondos, numCharacters, numTexturas;
+	private int numBackgrounds, numCharacters, numTextures;
 	
 	// Texturas Personaje
-	private int POS_TEXTURE_CHARACTER_SKELETON, POS_TEXTURE_CHARACTER_STICKER, POS_TEXTURE_CHARACTER_BUBBLE, POS_TEXTURE_CHARACTER_PLATFORM;
+	private int POS_TEXTURE_CHARACTER_SKELETON, POS_TEXTURE_CHARACTER_STICKER, POS_TEXTURE_CHARACTER_SHIELD, POS_TEXTURE_CHARACTER_PLATFORM;
 	
 	// Texturas Video
 	private int POS_TEXTURE_ANIMATED_OBJECT, POS_TEXTURE_INANIMATED_OBJECT;
 	
 	// Texturas Juego
 	private int POS_TEXTURE_BOSS_SKELETON, POS_TEXTURE_BOSS_STICKER;
-	private int POS_TEXTURE_BOSS_BUBBLE, POS_TEXTURE_BOSS_PLATFORM;
+	private int POS_TEXTURE_BOSS_SHIELD, POS_TEXTURE_BOSS_PLATFORM;
 	private int POS_TEXTURE_MISSILE, POS_TEXTURE_OBSTACLE;
 	private int POS_TEXTURE_ENEMY_SKELETON, POS_TEXTURE_ENEMY_STICKER;
 	private int POS_TEXTURE_CHARACTER_SHOT, POS_TEXTURE_BOSS_SHOT;
 	private int POS_TEXTURE_CHARACTER_WEAPON, POS_TEXTURE_BOSS_WEAPON;
 
-	// Entidades
-	private int[] nombreTexturaEntidades;
-	private boolean[] cargadaTexturaEntidades;
-	private FloatBuffer[] verticesTexturaEntidades;
+	// Entities
+	private int[] textureName;
+	private boolean[] textureLoaded;
+	private FloatBuffer[] textureVertex;
 	
-	// Fondo
-	private int[] nombreTexturaFondo, indiceTexturaFondo;
-	private float[] posicionTexturaFondo;
-	private boolean[] dibujarTexturaFondo, cargadaTexturaFondo;
-	private FloatBuffer[] verticesTexturaFondo;
+	// Backgrounds
+	private int[] backgroundName, backgroundId;
+	private float[] backgroundPosition;
+	private boolean[] backgroundEnabled, backgroundLoaded;
+	private FloatBuffer[] backgroundVertex;
 	
-	private int fondoActual;
-	private boolean fondosCargados, fondoFinalFijado;
+	private int backgroundActual;
+	private boolean backgroundSelected, backgroundEnded;
 
 	// Marco
-	protected float marcoAnchuraInterior, marcoAlturaLateral, marcoAnchuraLateral;
-	private FloatBuffer recMarcoLateral, recMarcoFrontal, recMarcoInterior;
+	protected float frameWidthMiddle, frameHeightSide, frameWidthSide;
+	private FloatBuffer recFrameSide, recMarcoFrontal, recMarcoInterior;
 
 	// Contexto
 	protected Context mContext;
 
 	/* Constructoras */
 	
-	public OpenGLRenderer(Context context, TTypeBackgroundRenderer fondo, TTypeTexturesRenderer texturas)
+	public OpenGLRenderer(Context context, TTypeBackgroundRenderer background, TTypeTexturesRenderer texture)
 	{
-		this(context, fondo, texturas, Color.argb(0, 0, 0, 0));
+		this(context, background, texture, Color.argb(0, 0, 0, 0));
 	}
 
-	public OpenGLRenderer(Context context, TTypeBackgroundRenderer fondo, TTypeTexturesRenderer texturas, int color)
+	public OpenGLRenderer(Context context, TTypeBackgroundRenderer background, TTypeTexturesRenderer texture, int color)
 	{
 		mContext = context;
 		
-		colorFondo = color;
-		tipoFondo = fondo;
-		numFondos = tipoFondo.getNumBackgrounds();
-		tipoTexturas = texturas;
-		numCharacters = tipoTexturas.getNumCharacters();
-		numTexturas = tipoTexturas.getNumTextures();
+		backgroundColor = color;
+		backgroundType = background;
+		numBackgrounds = backgroundType.getNumBackgrounds();
+		textureType = texture;
+		numCharacters = textureType.getNumCharacters();
+		numTextures = textureType.getNumTextures();
 
 		// Marcos
-		actualizarMarcos();
+		updateFrame();
 
 		// Fondos
-		if (numFondos > 0)
+		if (numBackgrounds > 0)
 		{
-			nombreTexturaFondo = new int[numFondos];
-			indiceTexturaFondo = new int[numFondos];
-			posicionTexturaFondo = new float[numFondos];
-			dibujarTexturaFondo = new boolean[numFondos];
-			cargadaTexturaFondo = new boolean[numFondos];
-			verticesTexturaFondo = new FloatBuffer[numFondos];
+			backgroundName = new int[numBackgrounds];
+			backgroundId = new int[numBackgrounds];
+			backgroundPosition = new float[numBackgrounds];
+			backgroundEnabled = new boolean[numBackgrounds];
+			backgroundLoaded = new boolean[numBackgrounds];
+			backgroundVertex = new FloatBuffer[numBackgrounds];
 	
-			fondosCargados = false;
-			fondoFinalFijado = false;
-			fondoActual = 0;
+			backgroundSelected = false;
+			backgroundEnded = false;
+			backgroundActual = 0;
 	
-			for (int i = 0; i < numFondos; i++)
+			for (int i = 0; i < numBackgrounds; i++)
 			{
-				indiceTexturaFondo[i] = -1;
+				backgroundId[i] = -1;
 			}
 		}
 
 		// Textura
-		if (numTexturas > 0)
+		if (numTextures > 0)
 		{
-			nombreTexturaEntidades = new int[numTexturas];
-			cargadaTexturaEntidades = new boolean[numTexturas];
-			verticesTexturaEntidades = new FloatBuffer[numTexturas];
+			textureName = new int[numTextures];
+			textureLoaded = new boolean[numTextures];
+			textureVertex = new FloatBuffer[numTextures];
 	
 			coordTexturaRectangulo = BufferManager.construirBufferTextura();
 		}
@@ -138,14 +138,14 @@ public abstract class OpenGLRenderer implements Renderer
 		POS_TEXTURE_ANIMATED_OBJECT = POS_TEXTURE_INANIMATED_OBJECT + GamePreferences.NUM_TYPE_INANIMATED_OBJECTS;
 		
 		// Juego
-		POS_TEXTURE_CHARACTER_BUBBLE = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
-		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
+		POS_TEXTURE_CHARACTER_SHIELD = POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * numCharacters);
+		POS_TEXTURE_CHARACTER_PLATFORM = POS_TEXTURE_CHARACTER_SHIELD + GamePreferences.NUM_TYPE_BUBBLES;
 		
 		POS_TEXTURE_BOSS_SKELETON = POS_TEXTURE_CHARACTER_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
 		POS_TEXTURE_BOSS_STICKER = POS_TEXTURE_BOSS_SKELETON + 1;
 		
-		POS_TEXTURE_BOSS_BUBBLE = POS_TEXTURE_BOSS_STICKER + GamePreferences.NUM_TYPE_STICKERS;
-		POS_TEXTURE_BOSS_PLATFORM = POS_TEXTURE_BOSS_BUBBLE + GamePreferences.NUM_TYPE_BUBBLES;
+		POS_TEXTURE_BOSS_SHIELD = POS_TEXTURE_BOSS_STICKER + GamePreferences.NUM_TYPE_STICKERS;
+		POS_TEXTURE_BOSS_PLATFORM = POS_TEXTURE_BOSS_SHIELD + GamePreferences.NUM_TYPE_BUBBLES;
 				
 		POS_TEXTURE_MISSILE = POS_TEXTURE_BOSS_PLATFORM + GamePreferences.NUM_TYPE_PLATFORMS;
 		POS_TEXTURE_OBSTACLE = POS_TEXTURE_MISSILE + GamePreferences.NUM_TYPE_MISSILES;
@@ -191,7 +191,7 @@ public abstract class OpenGLRenderer implements Renderer
 		return false;
 	}
 	
-	protected boolean reiniciar()
+	protected boolean onReset()
 	{
 		return false;
 	}
@@ -208,7 +208,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glShadeModel(GL10.GL_SMOOTH);
 
 		// Color de Fondo Blanco
-		gl.glClearColor(Color.red(colorFondo), Color.green(colorFondo), Color.blue(colorFondo), Color.alpha(colorFondo));
+		gl.glClearColor(Color.red(backgroundColor), Color.green(backgroundColor), Color.blue(backgroundColor), Color.alpha(backgroundColor));
 
 		// Limpiar Buffer de Profundidad
 		gl.glClearDepthf(1.0f);
@@ -248,23 +248,23 @@ public abstract class OpenGLRenderer implements Renderer
 		xLeft = 0.0f;
 		yTop = screenHeight;
 		yBottom = 0.0f;
-		xCentro = (xRight + xLeft) / 2.0f;
-		yCentro = (yTop + yBottom) / 2.0f;
+		xCenter = (xRight + xLeft) / 2.0f;
+		yCenter = (yTop + yBottom) / 2.0f;
 		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
 
 		// Copia de Seguridad de la Cámara
-		camaraGuardada = false;
+		cameraSaved = false;
 
 		// Marco
-		actualizarMarcos();
+		updateFrame();
 		
 		// Fondo
-		cargarTexturaFondo(gl);
+		loadBackground(gl);
 
-		actualizarTexturaFondo();
+		updateTextureBackground();
 
 		// Reiniciar la Matriz de ModeladoVista
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -280,7 +280,7 @@ public abstract class OpenGLRenderer implements Renderer
 		GLU.gluOrtho2D(gl, xLeft, xRight, yBottom, yTop);
 
 		// Limpiar Buffer de Color y de Profundidad
-		gl.glClearColor(Color.red(colorFondo), Color.green(colorFondo), Color.blue(colorFondo), Color.alpha(colorFondo));
+		gl.glClearColor(Color.red(backgroundColor), Color.green(backgroundColor), Color.blue(backgroundColor), Color.alpha(backgroundColor));
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		// Activar Matriz de ModeladoVista
@@ -288,7 +288,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glLoadIdentity();
 
 		// Background
-		dibujarFondo(gl);
+		drawBackground(gl);
 	}
 
 	/* Métodos de Obtención de Información */
@@ -310,12 +310,12 @@ public abstract class OpenGLRenderer implements Renderer
 		float newAncho = (xRight - xLeft) * factor;
 		float newAlto = (yTop - yBottom) * factor;
 
-		xRight = xCentro + newAncho / 2.0f;
-		xLeft = xCentro - newAncho / 2.0f;
-		yTop = yCentro + newAlto / 2.0f;
-		yBottom = yCentro - newAlto / 2.0f;
+		xRight = xCenter + newAncho / 2.0f;
+		xLeft = xCenter - newAncho / 2.0f;
+		yTop = lastXCenter + newAlto / 2.0f;
+		yBottom = yCenter - newAlto / 2.0f;
 
-		actualizarMarcos();
+		updateFrame();
 	}
 
 	private void camaraDrag(float dWorldX, float dWorldY)
@@ -325,10 +325,10 @@ public abstract class OpenGLRenderer implements Renderer
 		yBottom += dWorldY;
 		yTop += dWorldY;
 
-		xCentro = (xRight + xLeft) / 2.0f;
-		yCentro = (yTop + yBottom) / 2.0f;
+		xCenter = (xRight + xLeft) / 2.0f;
+		yCenter = (yTop + yBottom) / 2.0f;
 
-		actualizarMarcos();
+		updateFrame();
 	}
 
 	public void camaraDrag(float pixelX, float pixelY, float lastPixelX, float lastPixelY, float screenWidth, float screenHeight)
@@ -352,10 +352,10 @@ public abstract class OpenGLRenderer implements Renderer
 		yTop = screenHeight;
 		yBottom = 0.0f;
 
-		xCentro = (xRight + xLeft) / 2.0f;
-		yCentro = (yTop + yBottom) / 2.0f;
+		xCenter = (xRight + xLeft) / 2.0f;
+		yCenter = (yTop + yBottom) / 2.0f;
 
-		actualizarMarcos();
+		updateFrame();
 	}
 
 	/* Métodos de modificación de puntos */
@@ -370,81 +370,81 @@ public abstract class OpenGLRenderer implements Renderer
 	
 	/* Métodos de Copia de Seguridad de la Cámara */
 
-	public void salvarCamara()
+	public void saveCamera()
 	{
 		lastXLeft = xLeft;
 		lastXRight = xRight;
 		lastYTop = yTop;
 		lastYBot = yBottom;
-		lastXCentro = xCentro;
-		lastYCentro = yCentro;
+		lastXCenter = xCenter;
+		lastYCenter = yCenter;
 
-		camaraGuardada = true;
+		cameraSaved = true;
 	}
 
-	public void recuperarCamara()
+	public void restoreCamera()
 	{
-		if (camaraGuardada)
+		if (cameraSaved)
 		{
 			xLeft = lastXLeft;
 			xRight = lastXRight;
 			yTop = lastYTop;
 			yBottom = lastYBot;
-			xCentro = lastXCentro;
-			yCentro = lastYCentro;
+			xCenter = lastXCenter;
+			yCenter = lastYCenter;
 		}
 	}
 
 	/* Métodos de Captura de Pantalla y Marcos */
 
-	private void actualizarMarcos()
+	private void updateFrame()
 	{
 		float camaraHeight = yTop - yBottom;
 		float camaraWidth = xRight - xLeft;
 		
-		marcoAlturaLateral = GamePreferences.MARCO_ALTURA_LATERAL(camaraWidth, camaraHeight);
-		marcoAnchuraInterior = GamePreferences.MARCO_ANCHURA_INTERIOR(camaraWidth, camaraHeight);
-		marcoAnchuraLateral = GamePreferences.MARCO_ANCHURA_LATERAL(camaraWidth, camaraHeight);
+		frameHeightSide = GamePreferences.MARCO_ALTURA_LATERAL(camaraWidth, camaraHeight);
+		frameWidthMiddle = GamePreferences.MARCO_ANCHURA_INTERIOR(camaraWidth, camaraHeight);
+		frameWidthSide = GamePreferences.MARCO_ANCHURA_LATERAL(camaraWidth, camaraHeight);
 
-		float[] recA = { 0, 0, 0, marcoAnchuraInterior, marcoAnchuraLateral, 0, marcoAnchuraLateral, marcoAnchuraInterior };
-		recMarcoLateral = BufferManager.construirBufferListaPuntos(recA);
+		float[] recA = { 0, 0, 0, frameWidthMiddle, frameWidthSide, 0, frameWidthSide, frameWidthMiddle };
+		recFrameSide = BufferManager.construirBufferListaPuntos(recA);
 
-		float[] recB = { 0, 0, 0, marcoAlturaLateral, camaraWidth, 0, camaraWidth, marcoAlturaLateral };
+		float[] recB = { 0, 0, 0, frameHeightSide, camaraWidth, 0, camaraWidth, frameHeightSide };
 		recMarcoFrontal = BufferManager.construirBufferListaPuntos(recB);
 		
-		float[] recC = { 0, 0, 0, marcoAnchuraInterior, marcoAnchuraInterior, 0, marcoAnchuraInterior,marcoAnchuraInterior };
+		float[] recC = { 0, 0, 0, frameWidthMiddle, frameWidthMiddle, 0, frameWidthMiddle, frameWidthMiddle };
 		recMarcoInterior = BufferManager.construirBufferListaPuntos(recC);
 	}
 	
-	protected boolean isPuntoFueraMarco(float x, float y)
+	protected boolean isPointOutsideFrame(float x, float y)
 	{
-		return (x < xLeft || x > xLeft + marcoAnchuraInterior || y < yBottom || y > yBottom + marcoAnchuraInterior);
+		return (x < xLeft || x > xLeft + frameWidthMiddle || y < yBottom || y > yBottom + frameWidthMiddle);
 	}
 
-	protected void centrarPersonajeEnMarcoInicio(GL10 gl)
+	protected void drawInsideFrameBegin(GL10 gl)
 	{
-		gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0.0f);
+		gl.glTranslatef(frameWidthSide, frameHeightSide, 0.0f);
 	}
 
-	protected void centrarPersonajeEnMarcoFinal(GL10 gl)
+	protected void drawInsideFrameEnd(GL10 gl)
 	{
-		gl.glTranslatef(-marcoAnchuraLateral, -marcoAlturaLateral, 0.0f);
+		gl.glTranslatef(-frameWidthSide, -frameHeightSide, 0.0f);
 	}
 
-	protected void dibujarMarcoExterior(GL10 gl, int color, float deep)
+	protected void drawFrameHull(GL10 gl, int color, float deep)
 	{
-		dibujarMarcoFrontal(gl, color, deep);
-		dibujarMarcoLateral(gl, color, deep);
+		drawFrameFrontal(gl, color, deep);
+		drawFrameSide(gl, color, deep);
 	}
 	
-	protected void dibujarMarcoCompleto(GL10 gl, int color, float deep)
+	protected void drawFrameFill(GL10 gl, int color, float deep)
 	{
-		dibujarMarcoFrontal(gl, color, deep);
-		dibujarMarcoInterior(gl, color, deep);
-		dibujarMarcoLateral(gl, color, deep);
+		drawFrameFrontal(gl, color, deep);
+		drawFrameInside(gl, color, deep);
+		drawFrameSide(gl, color, deep);
 	}
 
-	protected void dibujarMarcoInterior(GL10 gl, int color, float deep)
+	protected void drawFrameInside(GL10 gl, int color, float deep)
 	{
 		gl.glPushMatrix();
 
@@ -452,7 +452,7 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 	
-				gl.glTranslatef(marcoAnchuraLateral, marcoAlturaLateral, 0);
+				gl.glTranslatef(frameWidthSide, frameHeightSide, 0);
 				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
 	
 			gl.glPopMatrix();
@@ -460,7 +460,7 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 	
-	private void dibujarMarcoLateral(GL10 gl, int color, float deep)
+	private void drawFrameSide(GL10 gl, int color, float deep)
 	{
 		gl.glPushMatrix();
 
@@ -468,18 +468,18 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 	
-				gl.glTranslatef(0, marcoAlturaLateral, 0);
-				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
+				gl.glTranslatef(0, frameHeightSide, 0);
+				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recFrameSide);
 		
-				gl.glTranslatef(marcoAnchuraLateral + marcoAnchuraInterior, 0, 0);
-				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoLateral);
+				gl.glTranslatef(frameWidthSide + frameWidthMiddle, 0, 0);
+				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recFrameSide);
 	
 			gl.glPopMatrix();
 
 		gl.glPopMatrix();
 	}
 
-	private void dibujarMarcoFrontal(GL10 gl, int color, float deep)
+	private void drawFrameFrontal(GL10 gl, int color, float deep)
 	{
 		gl.glPushMatrix();
 
@@ -489,7 +489,7 @@ public abstract class OpenGLRenderer implements Renderer
 			
 			OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
-				gl.glTranslatef(0, marcoAlturaLateral + marcoAnchuraInterior, 0);
+				gl.glTranslatef(0, frameHeightSide + frameWidthMiddle, 0);
 				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 			gl.glPopMatrix();
@@ -497,9 +497,9 @@ public abstract class OpenGLRenderer implements Renderer
 		gl.glPopMatrix();
 	}
 
-	protected BitmapImage capturaPantalla(GL10 gl)
+	protected BitmapImage getScreenshot(GL10 gl)
 	{
-		return OpenGLManager.capturaPantalla(gl, (int) marcoAnchuraLateral, (int) marcoAlturaLateral, (int) marcoAnchuraInterior, (int) marcoAnchuraInterior);
+		return OpenGLManager.capturaPantalla(gl, (int) frameWidthSide, (int) frameHeightSide, (int) frameWidthMiddle, (int) frameWidthMiddle);
 	}
 
 	/* Métodos de Conversión de Coordenadas */
@@ -536,22 +536,22 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected float convertWorldXToFrameXCoordinate(float worldX)
 	{
-		return worldX - marcoAnchuraLateral;
+		return worldX - frameWidthSide;
 	}
 
 	protected float convertWorldYToFrameYCoordinate(float worldY)
 	{
-		return worldY - marcoAlturaLateral;
+		return worldY - frameHeightSide;
 	}
 
 	protected float convertFrameXToWorldXCoordinate(float frameX)
 	{
-		return frameX + marcoAnchuraLateral;
+		return frameX + frameWidthSide;
 	}
 
 	protected float convertFrameYToWorldYCoordinate(float frameY)
 	{
-		return frameY + marcoAlturaLateral;
+		return frameY + frameHeightSide;
 	}
 	
 	protected float convertFrameXToPixelXCoordinate(float frameX, float screenWidth)
@@ -578,14 +578,14 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Gestión de posición de Texturas
 	
-	private int obtenerPosicionTexturaMalla(TTypeEntity tipoEntidad, int posEntidad)
+	private int positionTextureMesh(TTypeEntity entity, int position)
 	{
-		switch (tipoEntidad)
+		switch (entity)
 		{
 			case Character:
-				return POS_TEXTURE_CHARACTER_SKELETON + posEntidad;
+				return POS_TEXTURE_CHARACTER_SKELETON + position;
 			case Enemy:
-				return POS_TEXTURE_ENEMY_SKELETON + posEntidad;
+				return POS_TEXTURE_ENEMY_SKELETON + position;
 			case Boss:
 				return POS_TEXTURE_BOSS_SKELETON;
 			default:
@@ -593,40 +593,40 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	private int obtenerPosicionTexturaRectangulo(TTypeEntity tipoEntidad, int posEntidad, TTypeSticker tipoPegatina)
+	private int positionTextureRectangle(TTypeEntity entity, int position, TTypeSticker sticker)
 	{
-		switch (tipoEntidad)
+		switch (entity)
 		{
 			case Character:
-				return POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * posEntidad) + tipoPegatina.ordinal();
+				return POS_TEXTURE_CHARACTER_STICKER + (GamePreferences.NUM_TYPE_STICKERS * position) + sticker.ordinal();
 			case Boss:
-				return POS_TEXTURE_BOSS_STICKER + tipoPegatina.ordinal();
+				return POS_TEXTURE_BOSS_STICKER + sticker.ordinal();
 			case Enemy:
-				return POS_TEXTURE_ENEMY_STICKER + (GamePreferences.NUM_TYPE_STICKERS * posEntidad) + tipoPegatina.ordinal();
+				return POS_TEXTURE_ENEMY_STICKER + (GamePreferences.NUM_TYPE_STICKERS * position) + sticker.ordinal();
 			case Obstacle:
-				return POS_TEXTURE_OBSTACLE + posEntidad;
+				return POS_TEXTURE_OBSTACLE + position;
 			case Missil:
-				return POS_TEXTURE_MISSILE + posEntidad;
+				return POS_TEXTURE_MISSILE + position;
 			case CharacterShield:
-				return POS_TEXTURE_CHARACTER_BUBBLE + posEntidad;
+				return POS_TEXTURE_CHARACTER_SHIELD + position;
 			case BossShield:
-				return POS_TEXTURE_BOSS_BUBBLE + posEntidad;
+				return POS_TEXTURE_BOSS_SHIELD + position;
 			case CharacterPlatform:
-				return POS_TEXTURE_CHARACTER_PLATFORM + posEntidad;
+				return POS_TEXTURE_CHARACTER_PLATFORM + position;
 			case BossPlatform:
-				return POS_TEXTURE_BOSS_PLATFORM + posEntidad;
+				return POS_TEXTURE_BOSS_PLATFORM + position;
 			case CharacterShot:
-				return POS_TEXTURE_CHARACTER_SHOT + posEntidad;
+				return POS_TEXTURE_CHARACTER_SHOT + position;
 			case BossShot:
-				return POS_TEXTURE_BOSS_SHOT + posEntidad;
+				return POS_TEXTURE_BOSS_SHOT + position;
 			case CharacterWeapon:
-				return POS_TEXTURE_CHARACTER_WEAPON + posEntidad;
+				return POS_TEXTURE_CHARACTER_WEAPON + position;
 			case BossWeapon:
-				return POS_TEXTURE_BOSS_WEAPON + posEntidad;
+				return POS_TEXTURE_BOSS_WEAPON + position;
 			case InanimatedObject:
-				return POS_TEXTURE_INANIMATED_OBJECT + posEntidad;
+				return POS_TEXTURE_INANIMATED_OBJECT + position;
 			case AnimatedObject:
-				return POS_TEXTURE_ANIMATED_OBJECT + posEntidad;
+				return POS_TEXTURE_ANIMATED_OBJECT + position;
 			default:
 				return -1;
 		}
@@ -634,7 +634,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	// Métodos de Contrucción de Textura
 
-	protected VertexArray construirTextura(VertexArray vertices, float textureWidth, float textureHeight)
+	protected VertexArray buildTexture(VertexArray vertices, float textureWidth, float textureHeight)
 	{
 		VertexArray textura = new VertexArray(vertices.getNumVertices());
 
@@ -652,59 +652,59 @@ public abstract class OpenGLRenderer implements Renderer
 		return textura;
 	}
 
-	private void cargarTextura(GL10 gl, Bitmap textura, int[] nombreTextura, boolean[] cargadaTextura, int posTextura)
+	private void loadTexture(GL10 gl, Bitmap textura, int[] textureName, boolean[] textureLoaded, int texturePosition)
 	{
-		OpenGLManager.cargarTextura(gl, textura, nombreTextura, posTextura);
+		OpenGLManager.cargarTextura(gl, textura, textureName, texturePosition);
 
-		cargadaTextura[posTextura] = true;
+		textureLoaded[texturePosition] = true;
 	}
 
-	private void cargarTextura(GL10 gl, int indiceTextura, int[] nombreTextura, boolean[] cargadaTextura, int posTextura)
+	private void loadTexture(GL10 gl, int textureId, int[] textureName, boolean[] textureLoaded, int texturePosition)
 	{
-		Bitmap textura = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		Bitmap textura = BitmapFactory.decodeResource(mContext.getResources(), textureId);
 
-		cargarTextura(gl, textura, nombreTextura, cargadaTextura, posTextura);
+		loadTexture(gl, textura, textureName, textureLoaded, texturePosition);
 	}
 
-	private void descargarTextura(boolean[] cargadaTextura, int posTextura)
+	private void deleteTexture(boolean[] textureLoaded, int texturePosition)
 	{
-		cargadaTextura[posTextura] = false;
+		textureLoaded[texturePosition] = false;
 	}
 
 	// Métodos de Contrucción de Textura para Entidades
 
-	public void cargarTexturaMalla(GL10 gl, Bitmap textura, TTypeEntity tipoEntidad, int posEntidad)
+	public void loadTextureMesh(GL10 gl, Bitmap texture, TTypeEntity entity, int position)
 	{
-		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
+		int texturePosition = positionTextureMesh(entity, position);
 
-		if (posTextura != -1 && !cargadaTexturaEntidades[posTextura])
+		if (texturePosition != -1 && !textureLoaded[texturePosition])
 		{
-			cargarTextura(gl, textura, nombreTexturaEntidades, cargadaTexturaEntidades, posTextura);
+			loadTexture(gl, texture, textureName, textureLoaded, texturePosition);
 		}
 	}
 
-	public void descargarTexturaMalla(TTypeEntity tipoEntidad, int posEntidad)
+	public void deleteTextureMesh(TTypeEntity entity, int position)
 	{
-		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
+		int texturePosition = positionTextureMesh(entity, position);
 
-		if (posTextura != -1)
+		if (texturePosition != -1)
 		{
-			descargarTextura(cargadaTexturaEntidades, posTextura);
+			deleteTexture(textureLoaded, texturePosition);
 		}
 	}
 	
-	private Dimensions cargarTexturaRectangulo(GL10 gl, Bitmap bitmap, float textureHeight, float textureWidth, int indiceTextura, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
+	private Dimensions loadTextureRectangle(GL10 gl, Bitmap bitmap, float textureHeight, float textureWidth, int textureId, TTypeEntity entity, int position, TTypeSticker sticker)
 	{
-		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
+		int texturePosition = positionTextureRectangle(entity, position, sticker);
 
-		if (posTextura != -1 && !cargadaTexturaEntidades[posTextura])
+		if (texturePosition != -1 && !textureLoaded[texturePosition])
 		{			
-			cargarTextura(gl, bitmap, nombreTexturaEntidades, cargadaTexturaEntidades, posTextura);
+			loadTexture(gl, bitmap, textureName, textureLoaded, texturePosition);
 			bitmap.recycle();
 
 			VertexArray vertices = new VertexArray();
 			
-			if(tipoEntidad == TTypeEntity.Character || tipoEntidad == TTypeEntity.Enemy || tipoEntidad == TTypeEntity.Boss)
+			if(entity == TTypeEntity.Character || entity == TTypeEntity.Enemy || entity == TTypeEntity.Boss)
 			{
 				vertices.addVertex(-textureWidth/2, -textureHeight/2);
 				vertices.addVertex(-textureWidth/2, textureHeight/2);
@@ -719,7 +719,7 @@ public abstract class OpenGLRenderer implements Renderer
 				vertices.addVertex(textureWidth, textureHeight);
 			}
 			
-			verticesTexturaEntidades[posTextura] = BufferManager.construirBufferListaPuntos(vertices);
+			textureVertex[texturePosition] = BufferManager.construirBufferListaPuntos(vertices);
 
 			return new Dimensions(textureHeight, textureWidth);
 		}
@@ -727,161 +727,161 @@ public abstract class OpenGLRenderer implements Renderer
 		return null;
 	}
 
-	public Dimensions cargarTexturaRectangulo(GL10 gl, int indiceTextura, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
+	public Dimensions loadTextureRectangle(GL10 gl, int textureId, TTypeEntity entity, int position, TTypeSticker sticker)
 	{
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), textureId);
 
 		float textureHeight = bitmap.getHeight();
 		float textureWidth = bitmap.getWidth();
 		
-		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
+		return loadTextureRectangle(gl, bitmap, textureHeight, textureWidth, textureId, entity, position, sticker);
 	}
 	
-	public Dimensions cargarTexturaRectangulo(GL10 gl, float textureHeight, float textureWidth, int indiceTextura, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
+	public Dimensions loadTextureRectangle(GL10 gl, float textureHeight, float textureWidth, int textureId, TTypeEntity entity, int position, TTypeSticker sticker)
 	{
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), indiceTextura);
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), textureId);
 		
-		return cargarTexturaRectangulo(gl, bitmap, textureHeight, textureWidth, indiceTextura, tipoEntidad, posEntidad, posPegatina);
+		return loadTextureRectangle(gl, bitmap, textureHeight, textureWidth, textureId, entity, position, sticker);
 	}
 
-	public void descargarTexturaRectangulo(TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
+	public void deleteTextureRectangle(TTypeEntity entity, int position, TTypeSticker posPegatina)
 	{
-		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
+		int texturePosition = positionTextureRectangle(entity, position, posPegatina);
 
-		if (posTextura != -1)
+		if (texturePosition != -1)
 		{
-			descargarTextura(cargadaTexturaEntidades, posTextura);
+			deleteTexture(textureLoaded, texturePosition);
 		}
 	}
 
 	// Métodos de Pintura de Texturas para Entidades
 
-	public void dibujarTexturaMalla(GL10 gl, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, TTypeEntity tipoEntidad, int posEntidad)
+	public void drawTextureMesh(GL10 gl, FloatBuffer bufferTextureVertex, FloatBuffer bufferTextureCoord, TTypeEntity entity, int position)
 	{
-		int posTextura = obtenerPosicionTexturaMalla(tipoEntidad, posEntidad);
+		int texturePosition = positionTextureMesh(entity, position);
 
-		if (posTextura != -1 && cargadaTexturaEntidades[posTextura])
+		if (texturePosition != -1 && textureLoaded[texturePosition])
 		{
-			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLES, bufferPuntos, bufferCoordTextura, nombreTexturaEntidades[posTextura]);
+			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLES, bufferTextureVertex, bufferTextureCoord, textureName[texturePosition]);
 		}
 	}
 
-	public void dibujarTexturaRectangulo(GL10 gl, TTypeEntity tipoEntidad, int posEntidad, TTypeSticker posPegatina)
+	public void drawTextureRectangle(GL10 gl, TTypeEntity entity, int position, TTypeSticker sticker)
 	{
-		int posTextura = obtenerPosicionTexturaRectangulo(tipoEntidad, posEntidad, posPegatina);
+		int texturePosition = positionTextureRectangle(entity, position, sticker);
 
-		if (posTextura != -1 && cargadaTexturaEntidades[posTextura])
+		if (texturePosition != -1 && textureLoaded[texturePosition])
 		{
-			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, verticesTexturaEntidades[posTextura], coordTexturaRectangulo, nombreTexturaEntidades[posTextura]);
+			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, textureVertex[texturePosition], coordTexturaRectangulo, textureName[texturePosition]);
 		}
 	}
 
 	/* Métodos de Pintura de Fondo */
 
-	protected void seleccionarTexturaFondo(int... indiceTexturas)
+	protected void selectBackground(int... index)
 	{		
-		if (tipoFondo != TTypeBackgroundRenderer.Blank)
+		if (backgroundType != TTypeBackgroundRenderer.Blank)
 		{
-			if (indiceTexturas.length > 0)
+			if (index.length > 0)
 			{
-				if (tipoFondo == TTypeBackgroundRenderer.Static)
+				if (backgroundType == TTypeBackgroundRenderer.Static)
 				{
-					indiceTexturaFondo[0] = indiceTexturas[0];
-					dibujarTexturaFondo[0] = true;
+					backgroundId[0] = index[0];
+					backgroundEnabled[0] = true;
 				}	
 				else
 				{
-					if (numFondos > indiceTexturas.length)
+					if (numBackgrounds > index.length)
 					{
-						numFondos = indiceTexturas.length;
+						numBackgrounds = index.length;
 					}
 					
-					for (int i = 0; i < indiceTexturas.length; i++)
+					for (int i = 0; i < index.length; i++)
 					{
-						indiceTexturaFondo[i] = indiceTexturas[i];
+						backgroundId[i] = index[i];
 					}
 				}
 			}
 		}
 	}
 	
-	private void posicionarTexturaFondoDesplazable()
+	private void loadBackgroundMovable()
 	{
-		for (int i = 0; i < numFondos - 1; i++)
+		for (int i = 0; i < numBackgrounds - 1; i++)
 		{
-			posicionTexturaFondo[i] = i * screenWidth;
-			dibujarTexturaFondo[i] = true;	
+			backgroundPosition[i] = i * screenWidth;
+			backgroundEnabled[i] = true;	
 		}
 
-		posicionTexturaFondo[numFondos - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
-		dibujarTexturaFondo[numFondos - 1] = false;
+		backgroundPosition[numBackgrounds - 1] = GamePreferences.NUM_ITERATION_BACKGROUND() * screenWidth;
+		backgroundEnabled[numBackgrounds - 1] = false;
 	}
 	
-	private void posicionarTexturaFondoIntercambiable()
+	private void loadBackgroundSwappable()
 	{
-		for (int i = 0; i < numFondos; i++)
+		for (int i = 0; i < numBackgrounds; i++)
 		{
-			posicionTexturaFondo[i] = 0.0f;
-			dibujarTexturaFondo[i] = false;
+			backgroundPosition[i] = 0.0f;
+			backgroundEnabled[i] = false;
 		}
 		
-		dibujarTexturaFondo[0] = true;
+		backgroundEnabled[0] = true;
 	}
 
-	private void cargarTexturaFondo(GL10 gl)
+	private void loadBackground(GL10 gl)
 	{
-		if (tipoFondo != TTypeBackgroundRenderer.Blank)
+		if (backgroundType != TTypeBackgroundRenderer.Blank)
 		{
-			for (int i = 0; i < numFondos; i++)
+			for (int i = 0; i < numBackgrounds; i++)
 			{
-				if (indiceTexturaFondo[i] != -1)
+				if (backgroundId[i] != -1)
 				{
-					cargarTextura(gl, indiceTexturaFondo[i], nombreTexturaFondo, cargadaTexturaFondo, i);
+					loadTexture(gl, backgroundId[i], backgroundName, backgroundLoaded, i);
 				}
 			}
 	
-			if (!fondosCargados)
+			if (!backgroundSelected)
 			{			
-				if (tipoFondo == TTypeBackgroundRenderer.Movable)
+				if (backgroundType == TTypeBackgroundRenderer.Movable)
 				{
-					posicionarTexturaFondoDesplazable();
+					loadBackgroundMovable();
 				}
 				else
 				{
-					posicionarTexturaFondoIntercambiable();
+					loadBackgroundSwappable();
 				}
 				
-				fondosCargados = true;
+				backgroundSelected = true;
 			}
 		}
 	}
 	
-	private void descargarTexturaFondo()
+	private void deleteBackground()
 	{
-		if (tipoFondo != TTypeBackgroundRenderer.Blank)
+		if (backgroundType != TTypeBackgroundRenderer.Blank)
 		{
-			for (int i = 0; i < numFondos; i++)
+			for (int i = 0; i < numBackgrounds; i++)
 			{
-				descargarTextura(cargadaTexturaFondo, i);
+				deleteTexture(backgroundLoaded, i);
 			}
 		}
 	}
 
-	private void dibujarFondo(GL10 gl)
+	private void drawBackground(GL10 gl)
 	{
-		if (tipoFondo != TTypeBackgroundRenderer.Blank)
+		if (backgroundType != TTypeBackgroundRenderer.Blank)
 		{
-			for (int i = 0; i < numFondos; i++)
+			for (int i = 0; i < numBackgrounds; i++)
 			{
-				if (cargadaTexturaFondo[i])
+				if (backgroundLoaded[i])
 				{
-					if (dibujarTexturaFondo[i])
+					if (backgroundEnabled[i])
 					{
 						gl.glPushMatrix();
 			
-							gl.glTranslatef(posicionTexturaFondo[i], 0.0f, GamePreferences.DEEP_BACKGROUND);
+							gl.glTranslatef(backgroundPosition[i], 0.0f, GamePreferences.DEEP_BACKGROUND);
 				
-							OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, verticesTexturaFondo[i], coordTexturaRectangulo, nombreTexturaFondo[i]);
+							OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, backgroundVertex[i], coordTexturaRectangulo, backgroundName[i]);
 			
 						gl.glPopMatrix();
 					}
@@ -890,9 +890,9 @@ public abstract class OpenGLRenderer implements Renderer
 		}
 	}
 
-	private void actualizarTexturaFondo()
+	private void updateTextureBackground()
 	{
-		if (tipoFondo != TTypeBackgroundRenderer.Blank)
+		if (backgroundType != TTypeBackgroundRenderer.Blank)
 		{
 			VertexArray vertices = new VertexArray();
 			vertices.addVertex(xLeft, yBottom);
@@ -900,109 +900,109 @@ public abstract class OpenGLRenderer implements Renderer
 			vertices.addVertex(xRight, yBottom);
 			vertices.addVertex(xRight, yTop);
 	
-			for (int i = 0; i < numFondos; i++)
+			for (int i = 0; i < numBackgrounds; i++)
 			{
-				if (cargadaTexturaFondo[i])
+				if (backgroundLoaded[i])
 				{
-					verticesTexturaFondo[i] = BufferManager.construirBufferListaPuntos(vertices);
+					backgroundVertex[i] = BufferManager.construirBufferListaPuntos(vertices);
 				}
 			}
 		}
 	}
 	
-	private void animarTexturaFondoIntercambiable()
+	private void moveBackgroundSwappable()
 	{
-		if (fondoActual < numFondos - 1)
+		if (backgroundActual < numBackgrounds - 1)
 		{
-			for (int i = 0; i < numFondos; i++)
+			for (int i = 0; i < numBackgrounds; i++)
 			{
-				dibujarTexturaFondo[i] = false;
+				backgroundEnabled[i] = false;
 			}
 			
-			fondoActual++;
-			dibujarTexturaFondo[fondoActual] = true;
-			fondoFinalFijado = fondoActual == numFondos - 1;
+			backgroundActual++;
+			backgroundEnabled[backgroundActual] = true;
+			backgroundEnded = backgroundActual == numBackgrounds - 1;
 		}
 	}
 
-	private void animarTexturaFondoDesplazable()
+	private void moveBackgroundMovable()
 	{
-		int lastFondo = numFondos - 1;
+		int lastBackground = numBackgrounds - 1;
 
 		// Activado de Último Fondo
-		if (posicionTexturaFondo[lastFondo] >= screenWidth - GamePreferences.DIST_MOVIMIENTO_BACKGROUND() && posicionTexturaFondo[lastFondo] <= screenWidth + GamePreferences.DIST_MOVIMIENTO_BACKGROUND())
+		if (backgroundPosition[lastBackground] >= screenWidth - GamePreferences.DIST_MOVIMIENTO_BACKGROUND() && backgroundPosition[lastBackground] <= screenWidth + GamePreferences.DIST_MOVIMIENTO_BACKGROUND())
 		{
-			dibujarTexturaFondo[lastFondo] = true;
+			backgroundEnabled[lastBackground] = true;
 			
-			for (int i = 0; i < numFondos - 1; i++)
+			for (int i = 0; i < numBackgrounds - 1; i++)
 			{
-				if (posicionTexturaFondo[i] > screenWidth)
+				if (backgroundPosition[i] > screenWidth)
 				{
-					dibujarTexturaFondo[i] = false;
+					backgroundEnabled[i] = false;
 				}
 			}
 		}
 		
-		if (posicionTexturaFondo[lastFondo] <= 0.0f)
+		if (backgroundPosition[lastBackground] <= 0.0f)
 		{
-			fondoFinalFijado = true;
+			backgroundEnded = true;
 
-			for (int i = 0; i < numFondos - 1; i++)
+			for (int i = 0; i < numBackgrounds - 1; i++)
 			{
-				dibujarTexturaFondo[i] = false;
+				backgroundEnabled[i] = false;
 			}
 		}
 
 		// Desplazamiento
-		for (int i = 0; i < numFondos; i++)
+		for (int i = 0; i < numBackgrounds; i++)
 		{
-			posicionTexturaFondo[i] -= GamePreferences.DIST_MOVIMIENTO_BACKGROUND();
+			backgroundPosition[i] -= GamePreferences.DIST_MOVIMIENTO_BACKGROUND();
 		}
 
 		// Reinicio de Fondo
-		if (posicionTexturaFondo[lastFondo] > screenWidth)
+		if (backgroundPosition[lastBackground] > screenWidth)
 		{
-			for (int i = 0; i < numFondos - 1; i++)
+			for (int i = 0; i < numBackgrounds - 1; i++)
 			{
-				if (posicionTexturaFondo[i] <= -screenWidth)
+				if (backgroundPosition[i] <= -screenWidth)
 				{
-					posicionTexturaFondo[i] = (numFondos - 2) * screenWidth;
+					backgroundPosition[i] = (numBackgrounds - 2) * screenWidth;
 				}
 			}
 		}
 	}
 	
-	protected void animarFondo()
+	protected void moveBackground()
 	{
-		if (tipoFondo == TTypeBackgroundRenderer.Movable)
+		if (backgroundType == TTypeBackgroundRenderer.Movable)
 		{
-			animarTexturaFondoDesplazable();
+			moveBackgroundMovable();
 		}
-		else if (tipoFondo == TTypeBackgroundRenderer.Swappable)
+		else if (backgroundType == TTypeBackgroundRenderer.Swappable)
 		{
-			animarTexturaFondoIntercambiable();
+			moveBackgroundSwappable();
 		}
 	}
 	
-	protected boolean isFondoFinal()
+	protected boolean isBackgroundEnded()
 	{
-		return fondoFinalFijado;
+		return backgroundEnded;
 	}
 	
 	/* Métodos de Guardado de Información */
 	
 	protected BackgroundDataSaved backgroundSaveData()
 	{		
-		descargarTexturaFondo();
+		deleteBackground();
 		
-		return new BackgroundDataSaved(indiceTexturaFondo, posicionTexturaFondo, dibujarTexturaFondo);
+		return new BackgroundDataSaved(backgroundId, backgroundPosition, backgroundEnabled);
 	}
 
 	protected void backgroundRestoreData(BackgroundDataSaved data)
 	{		
-		indiceTexturaFondo = data.getIndiceTexturaFondo();
-		posicionTexturaFondo = data.getPosFondo();
-		dibujarTexturaFondo = data.getDibujarFondo();
-		fondosCargados = true;
+		backgroundId = data.getBackgroundId();
+		backgroundPosition = data.getBackgroundPosition();
+		backgroundEnabled = data.getBackgroundEnabled();
+		backgroundSelected = true;
 	}
 }

@@ -9,22 +9,22 @@ import com.main.model.GamePreferences;
 
 public abstract class Entity
 {
-	protected TTypeEntity tipoEntidad;
-	protected int idEntidad;
-	protected int texturaEntidad;
+	protected TTypeEntity typeEntity;
+	protected int idEntity;
+	protected int textureEntity;
 
 	protected float width = 0.0f;
 	protected float height = 0.0f;
 
 	/* Métodos abstractos a implementar */
 
-	public abstract void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context);
+	public abstract void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context);
 
-	public abstract void descargarTextura(OpenGLRenderer renderer);
+	public abstract void deleteTexture(OpenGLRenderer renderer);
 
-	public abstract void dibujar(GL10 gl, OpenGLRenderer renderer);
+	public abstract void drawTexture(GL10 gl, OpenGLRenderer renderer);
 
-	public boolean animar()
+	public boolean animateTexture()
 	{ 
 		return false;
 	}
@@ -33,26 +33,26 @@ public abstract class Entity
 	
 	public int getId()
 	{
-		return idEntidad;
+		return idEntity;
 	}
 
-	public TTypeEntity getTipo()
+	public TTypeEntity getType()
 	{
-		return tipoEntidad;
+		return typeEntity;
 	}
 	
-	public int getIndiceTextura()
+	public int getIndexTexture()
 	{
-		return texturaEntidad;
+		return textureEntity;
 	}
 	
 	public float getWidth()
 	{
-		return width * GamePreferences.GAME_SCALE_FACTOR(tipoEntidad);
+		return width * GamePreferences.GAME_SCALE_FACTOR(typeEntity);
 	}
 	
 	public float getHeight()
 	{
-		return height * GamePreferences.GAME_SCALE_FACTOR(tipoEntidad);
+		return height * GamePreferences.GAME_SCALE_FACTOR(typeEntity);
 	}
 }

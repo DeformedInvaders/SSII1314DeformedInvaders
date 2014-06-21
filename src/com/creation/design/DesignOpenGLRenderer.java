@@ -62,7 +62,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				if (puntos.getNumVertices() > 0)
 				{
 					// Centrado de Marco
-					centrarPersonajeEnMarcoInicio(gl);
+					drawInsideFrameBegin(gl);
 	
 					if (puntos.getNumVertices() > 1)
 					{
@@ -85,15 +85,15 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 					}
 					
 					// Centrado de Marco
-					centrarPersonajeEnMarcoFinal(gl);
+					drawInsideFrameEnd(gl);
 				}
 			}
 			else
 			{
-				dibujarMarcoInterior(gl, Color.LTGRAY, GamePreferences.DEEP_INSIDE_FRAMES);
+				drawFrameInside(gl, Color.LTGRAY, GamePreferences.DEEP_INSIDE_FRAMES);
 				
 				// Centrado de Marco
-				centrarPersonajeEnMarcoInicio(gl);
+				drawInsideFrameBegin(gl);
 				
 				if (poligonoTriangulado)
 				{
@@ -104,14 +104,14 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
 				}
 				// Centrado de Marco
-				centrarPersonajeEnMarcoFinal(gl);
+				drawInsideFrameEnd(gl);
 			}
 	}
 
 	/* Métodos Abstractos de OpenGLRenderer */
 
 	@Override
-	protected boolean reiniciar()
+	protected boolean onReset()
 	{
 		estado = TSatateDesign.Drawing;
 		puntos.clear();
@@ -320,7 +320,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float frameX = vertices.getXVertex(a);
 			float frameY = vertices.getYVertex(a);
 			
-			if (isPuntoFueraMarco(frameX, frameY))
+			if (isPointOutsideFrame(frameX, frameY))
 			{
 				return false;
 			}

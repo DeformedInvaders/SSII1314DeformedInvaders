@@ -58,7 +58,7 @@ public class DeformationFragment extends ViewFrameFragment implements OnDeformat
 		}
 		else
 		{
-			movimientos = personaje.getMovimientos();
+			movimientos = personaje.getMovements();
 		}
 	}
 

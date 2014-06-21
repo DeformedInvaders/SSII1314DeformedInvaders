@@ -33,87 +33,87 @@ public class AssetsStorageManager
 		mContext = context;
 	}
 	
-	public Enemy importarEnemigo(TTypeLevel nivel, int indiceTextura, int idEnemigo)
+	public Enemy importEnemy(TTypeLevel level, int textureId, int id)
 	{
 		try
 		{
-			InputStream file = mContext.getAssets().open(GameResources.GET_ENEMIES_FILES(nivel, idEnemigo));
+			InputStream file = mContext.getAssets().open(GameResources.GET_ENEMIES_FILES(level, id));
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Guardar Personajes
-			Enemy enemigo = new Enemy(indiceTextura, idEnemigo);
-			enemigo.setEsqueleto((Skeleton) data.readObject());
-			enemigo.setTextura((Texture) data.readObject());
-			enemigo.setMovimientos((List<VertexArray>) data.readObject());
+			Enemy enemy = new Enemy(textureId, id);
+			enemy.setSkeleton((Skeleton) data.readObject());
+			enemy.setTexture((Texture) data.readObject());
+			enemy.setMovements((List<VertexArray>) data.readObject());
 
 			data.close();
 			file.close();
 
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " imported");
-			return enemigo;
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + id + " Level " + level.toString() + " imported");
+			return enemy;
 		}
 		catch (ClassNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " class not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + id + " Level " + level.toString() + " class not found. "+e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " file not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + id + " Level " + level.toString() + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " sream corrupted. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + id + " Level " + level.toString() + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " ioexception. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + id + " Level " + level.toString() + " ioexception. "+e.getMessage());
 		}
 
-		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + idEnemigo + " Level " + nivel.toString() + " not imported.");
+		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Enemy " + id + " Level " + level.toString() + " not imported.");
 		return null;
 	}
 	
-	public Boss importarJefe(TTypeLevel nivel, int indiceTextura, int idEnemigo)
+	public Boss importBoss(TTypeLevel level, int textureId, int id)
 	{
 		try
 		{
-			InputStream file = mContext.getAssets().open(GameResources.GET_BOSS_FILES(nivel, idEnemigo));
+			InputStream file = mContext.getAssets().open(GameResources.GET_BOSS_FILES(level, id));
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Guardar Personajes
-			Boss jefe = new Boss(indiceTextura, idEnemigo);
-			jefe.setEsqueleto((Skeleton) data.readObject());
-			jefe.setTextura((Texture) data.readObject());
-			jefe.setMovimientos((List<VertexArray>) data.readObject());
+			Boss boss = new Boss(textureId, id);
+			boss.setSkeleton((Skeleton) data.readObject());
+			boss.setTexture((Texture) data.readObject());
+			boss.setMovements((List<VertexArray>) data.readObject());
 
 			data.close();
 			file.close();
 
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " imported");
-			return jefe;
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + level.toString() + " imported");
+			return boss;
 		}
 		catch (ClassNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " class not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + level.toString() + " class not found. "+e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " file not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + level.toString() + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " sream corrupted. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + level.toString() + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " ioexception. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + level.toString() + " ioexception. "+e.getMessage());
 		}
 
-		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + nivel.toString() + " not imported");
+		ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Boss Level " + level.toString() + " not imported");
 		return null;
 	}
 	
-	public Character importarActor(TTypeActors actor)
+	public Character importActor(TTypeActors actor)
 	{
 		try
 		{
@@ -121,17 +121,17 @@ public class AssetsStorageManager
 			ObjectInputStream data = new ObjectInputStream(file);
 
 			// Guardar Personajes
-			Character personaje = new Character(actor.ordinal());
-			personaje.setEsqueleto((Skeleton) data.readObject());
-			personaje.setTextura((Texture) data.readObject());
-			personaje.setMovimientos((Movements) data.readObject());
-			personaje.setNombre((String) data.readObject());
+			Character character = new Character(actor.ordinal());
+			character.setSkeleton((Skeleton) data.readObject());
+			character.setTexture((Texture) data.readObject());
+			character.setMovements((Movements) data.readObject());
+			character.setName((String) data.readObject());
 
 			data.close();
 			file.close();
 
 			ExternalStorageManager.writeLogcat(ASSETS_STORAGE_TAG, "Actor " + actor.toString() + " imported");
-			return personaje;
+			return character;
 		}
 		catch (ClassNotFoundException e)
 		{

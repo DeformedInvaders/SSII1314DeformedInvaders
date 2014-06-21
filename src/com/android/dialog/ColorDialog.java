@@ -17,11 +17,11 @@ public abstract class ColorDialog extends WindowDialog
 {
 	private float[] colorActual = new float[3];
 
-	private ColorPalette paletaPrincipal;
-	private ImageView paletaSecundaria;
+	private ColorPalette palleteMain;
+	private ImageView palleteSecondary;
 
-	private Button botonAceptar, botonCancelar;
-	private ImageView imagenCursorPrincipal, imagenCursorSecundario, imagenSeleccionado;
+	private Button buttonOk, buttonCancel;
+	private ImageView imageCursorMain, imageCursorSecondary, imageColorSelected;
 
 	/* Constructora */
 
@@ -29,26 +29,26 @@ public abstract class ColorDialog extends WindowDialog
 	{
 		super(context, R.layout.dialog_color_layout, true);
 
-		botonAceptar = (Button) findViewById(R.id.imageButtonColor1);
-		botonCancelar = (Button) findViewById(R.id.imageButtonColor2);
+		buttonOk = (Button) findViewById(R.id.imageButtonColor1);
+		buttonCancel = (Button) findViewById(R.id.imageButtonColor2);
 
-		botonAceptar.setOnClickListener(new OnAceptarClickListener());
-		botonCancelar.setOnClickListener(new OnCancelarClickListener());
+		buttonOk.setOnClickListener(new OnOkClickListener());
+		buttonCancel.setOnClickListener(new OnCancelClickListener());
 
-		paletaPrincipal = (ColorPalette) findViewById(R.id.paletteColor1);
-		paletaSecundaria = (ImageView) findViewById(R.id.paletteColor2);
+		palleteMain = (ColorPalette) findViewById(R.id.paletteColor1);
+		palleteSecondary = (ImageView) findViewById(R.id.paletteColor2);
 
-		paletaPrincipal.setOnTouchListener(new OnPaletaPrincipalTouchListener());
-		paletaSecundaria.setOnTouchListener(new OnPaletaSecundariaTouchListener());
+		palleteMain.setOnTouchListener(new OnPalleteMainTouchListener());
+		palleteSecondary.setOnTouchListener(new OnPalleteSecondaryTouchListener());
 
-		imagenCursorPrincipal = (ImageView) findViewById(R.id.imageViewColor1);
-		imagenCursorSecundario = (ImageView) findViewById(R.id.imageViewColor2);
-		imagenSeleccionado = (ImageView) findViewById(R.id.imageViewColor3);
+		imageCursorMain = (ImageView) findViewById(R.id.imageViewColor1);
+		imageCursorSecondary = (ImageView) findViewById(R.id.imageViewColor2);
+		imageColorSelected = (ImageView) findViewById(R.id.imageViewColor3);
 
 		Color.colorToHSV(Color.RED, colorActual);
-		moverCursorPrincipal();
-		moverCursorSecundario();
-		imagenSeleccionado.setBackgroundColor(getColor());
+		moveCursorMain();
+		moveCursorSecondary();
+		imageColorSelected.setBackgroundColor(getColor());
 
 		// Posicion inicial de los Cursores
 		final ViewTreeObserver vto = getViewTreeObserver();
@@ -56,8 +56,8 @@ public abstract class ColorDialog extends WindowDialog
 			@Override
 			public void onGlobalLayout()
 			{
-				moverCursorPrincipal();
-				moverCursorSecundario();
+				moveCursorMain();
+				moveCursorSecondary();
 				removeGlobalLayoutListener(this);
 			}
 		});
@@ -69,7 +69,7 @@ public abstract class ColorDialog extends WindowDialog
 
 	/* Métodos Listener onClick */
 
-	private class OnAceptarClickListener implements OnClickListener
+	private class OnOkClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
@@ -79,7 +79,7 @@ public abstract class ColorDialog extends WindowDialog
 		}
 	}
 
-	private class OnCancelarClickListener implements OnClickListener
+	private class OnCancelClickListener implements OnClickListener
 	{
 		@Override
 		public void onClick(View arg0)
@@ -125,34 +125,34 @@ public abstract class ColorDialog extends WindowDialog
 		colorActual[2] = val;
 	}
 
-	private void moverCursorPrincipal()
+	private void moveCursorMain()
 	{
-		float x = getSat() * paletaPrincipal.getMeasuredWidth();
-		float y = (1.0f - getVal()) * paletaPrincipal.getMeasuredHeight();
+		float x = getSat() * palleteMain.getMeasuredWidth();
+		float y = (1.0f - getVal()) * palleteMain.getMeasuredHeight();
 
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imagenCursorPrincipal.getLayoutParams();
-		layoutParams.leftMargin = (int) (paletaPrincipal.getLeft() + x - Math.floor(imagenCursorPrincipal.getMeasuredWidth() / 2));
-		layoutParams.topMargin = (int) (paletaPrincipal.getTop() + y - Math.floor(imagenCursorPrincipal.getMeasuredHeight() / 2));
-		imagenCursorPrincipal.setLayoutParams(layoutParams);
+		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imageCursorMain.getLayoutParams();
+		layoutParams.leftMargin = (int) (palleteMain.getLeft() + x - Math.floor(imageCursorMain.getMeasuredWidth() / 2));
+		layoutParams.topMargin = (int) (palleteMain.getTop() + y - Math.floor(imageCursorMain.getMeasuredHeight() / 2));
+		imageCursorMain.setLayoutParams(layoutParams);
 	}
 
-	private void moverCursorSecundario()
+	private void moveCursorSecondary()
 	{
-		float y = paletaSecundaria.getMeasuredHeight() - (getHue() * paletaSecundaria.getMeasuredHeight() / 360.f);
-		if(y == paletaSecundaria.getMeasuredHeight())
+		float y = palleteSecondary.getMeasuredHeight() - (getHue() * palleteSecondary.getMeasuredHeight() / 360.f);
+		if (y == palleteSecondary.getMeasuredHeight())
 		{
 			y = 0.0f;
 		}
 		
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imagenCursorSecundario.getLayoutParams();
-		layoutParams.leftMargin = (int) (paletaSecundaria.getLeft() - Math.floor(imagenCursorSecundario.getMeasuredWidth() / 2));
-		layoutParams.topMargin = (int) (paletaSecundaria.getTop() + y - Math.floor(imagenCursorSecundario.getMeasuredHeight() / 2));
-		imagenCursorSecundario.setLayoutParams(layoutParams);
+		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imageCursorSecondary.getLayoutParams();
+		layoutParams.leftMargin = (int) (palleteSecondary.getLeft() - Math.floor(imageCursorSecondary.getMeasuredWidth() / 2));
+		layoutParams.topMargin = (int) (palleteSecondary.getTop() + y - Math.floor(imageCursorSecondary.getMeasuredHeight() / 2));
+		imageCursorSecondary.setLayoutParams(layoutParams);
 	}
 
 	/* Métodos Listener onTouch */
 
-	private class OnPaletaPrincipalTouchListener implements OnTouchListener
+	private class OnPalleteMainTouchListener implements OnTouchListener
 	{
 		@Override
 		public boolean onTouch(View v, MotionEvent event)
@@ -176,23 +176,23 @@ public abstract class ColorDialog extends WindowDialog
 					y = 0;
 				}
 
-				if (x > paletaPrincipal.getMeasuredWidth())
+				if (x > palleteMain.getMeasuredWidth())
 				{
-					x = paletaPrincipal.getMeasuredWidth();
+					x = palleteMain.getMeasuredWidth();
 				}
 				
-				if (y > paletaPrincipal.getMeasuredHeight())
+				if (y > palleteMain.getMeasuredHeight())
 				{
-					y = paletaPrincipal.getMeasuredHeight();
+					y = palleteMain.getMeasuredHeight();
 				}
 
-				setSat(1.f / paletaPrincipal.getMeasuredWidth() * x);
-				setVal(1.f - (1.f / paletaPrincipal.getMeasuredHeight() * y));
+				setSat(1.f / palleteMain.getMeasuredWidth() * x);
+				setVal(1.f - (1.f / palleteMain.getMeasuredHeight() * y));
 
 				// Actualizar la vista
 
-				moverCursorPrincipal();
-				imagenSeleccionado.setBackgroundColor(getColor());
+				moveCursorMain();
+				imageColorSelected.setBackgroundColor(getColor());
 
 				return true;
 			}
@@ -201,7 +201,7 @@ public abstract class ColorDialog extends WindowDialog
 		}
 	}
 
-	private class OnPaletaSecundariaTouchListener implements OnTouchListener
+	private class OnPalleteSecondaryTouchListener implements OnTouchListener
 	{
 		@Override
 		public boolean onTouch(View arg0, MotionEvent event)
@@ -219,12 +219,12 @@ public abstract class ColorDialog extends WindowDialog
 					y = 0;
 				}
 
-				if (y > paletaSecundaria.getMeasuredHeight())
+				if (y > palleteSecondary.getMeasuredHeight())
 				{
-					y = paletaSecundaria.getMeasuredHeight() - 0.001f;
+					y = palleteSecondary.getMeasuredHeight() - 0.001f;
 				}
 
-				float hue = 360.f - 360.f / paletaSecundaria.getMeasuredHeight() * y;
+				float hue = 360.f - 360.f / palleteSecondary.getMeasuredHeight() * y;
 				if (hue == 360.f)
 				{
 					hue = 0.f;
@@ -234,9 +234,9 @@ public abstract class ColorDialog extends WindowDialog
 
 				// Actualizar la vista
 
-				paletaPrincipal.setHue(getHue());
-				moverCursorSecundario();
-				imagenSeleccionado.setBackgroundColor(getColor());
+				palleteMain.setHue(getHue());
+				moveCursorSecondary();
+				imageColorSelected.setBackgroundColor(getColor());
 
 				return true;
 			}

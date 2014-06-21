@@ -2,10 +2,10 @@ package com.game.data;
 
 public class Boss extends Enemy
 {
-	public Boss(int indiceTextura, int idEnemigo)
+	public Boss(int texture, int id)
 	{
-		super(indiceTextura, idEnemigo);
+		super(texture, id);
 		
-		tipoEntidad = TTypeEntity.Boss;
+		typeEntity = TTypeEntity.Boss;
 	}
 }

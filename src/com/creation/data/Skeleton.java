@@ -10,9 +10,9 @@ public class Skeleton implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private HullArray contorno;
+	private HullArray hull;
 	private VertexArray vertices;
-	private TriangleArray triangulos;
+	private TriangleArray triangles;
 
 	/* Constructora */
 
@@ -21,18 +21,18 @@ public class Skeleton implements Serializable
 
 	}
 
-	public Skeleton(HullArray contorno, VertexArray vertices, TriangleArray triangulos)
+	public Skeleton(HullArray hull, VertexArray vertices, TriangleArray triangles)
 	{
-		this.contorno = contorno;
+		this.hull = hull;
 		this.vertices = vertices;
-		this.triangulos = triangulos;
+		this.triangles = triangles;
 	}
 
 	/* Métodos de Obtención de Información */
 
-	public HullArray getContorno()
+	public HullArray getHull()
 	{
-		return contorno;
+		return hull;
 	}
 
 	public VertexArray getVertices()
@@ -40,8 +40,8 @@ public class Skeleton implements Serializable
 		return vertices;
 	}
 
-	public TriangleArray getTriangulos()
+	public TriangleArray getTriangles()
 	{
-		return triangulos;
+		return triangles;
 	}
 }

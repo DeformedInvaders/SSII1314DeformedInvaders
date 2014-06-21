@@ -16,9 +16,9 @@ import com.project.main.R;
 
 public class VideoListAlert extends WindowAlert
 {
-	private VideoView video;
-	private IconImageButton botonNext, botonPrev;
-	private int pos, posMax;
+	private VideoView videoView;
+	private IconImageButton buttonNext, buttonPrev;
+	private int posActual, posMax;
 	
 	private List<Integer> listMessage;
 	private List<Uri> listVideoPath;
@@ -27,7 +27,7 @@ public class VideoListAlert extends WindowAlert
 	{
 		super(context, title, false);
 		
-		pos = 0;
+		posActual = 0;
 		posMax = Math.min(message.size(), videoPath.size());
 		
 		listMessage = message;
@@ -35,9 +35,9 @@ public class VideoListAlert extends WindowAlert
 		
 		setView(R.layout.alert_videolist_layout);
 		
-		video = (VideoView) findViewById(R.id.videoViewVideoAlert1);
-		video.setZOrderOnTop(true);
-		video.setOnPreparedListener(new OnPreparedListener() {                    
+		videoView = (VideoView) findViewById(R.id.videoViewVideoAlert1);
+		videoView.setZOrderOnTop(true);
+		videoView.setOnPreparedListener(new OnPreparedListener() {                    
 		    @Override
 		    public void onPrepared(MediaPlayer mediaplayer)
 		    {
@@ -46,17 +46,17 @@ public class VideoListAlert extends WindowAlert
 		});
 		
 		
-		botonPrev = (IconImageButton) findViewById(R.id.imageButtonVideoAlert1);
-		botonNext = (IconImageButton) findViewById(R.id.imageButtonVideoAlert2);
+		buttonPrev = (IconImageButton) findViewById(R.id.imageButtonVideoAlert1);
+		buttonNext = (IconImageButton) findViewById(R.id.imageButtonVideoAlert2);
 		
-		botonNext.setOnClickListener(new OnNextVideoClickListener());
-		botonPrev.setOnClickListener(new OnPrevVideoClickListener());
+		buttonNext.setOnClickListener(new OnNextVideoClickListener());
+		buttonPrev.setOnClickListener(new OnPrevVideoClickListener());
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				video.stopPlayback();
+				videoView.stopPlayback();
 			}
 		});
 		
@@ -69,34 +69,34 @@ public class VideoListAlert extends WindowAlert
 	public void show()
 	{
 		super.show();
-		video.start();
+		videoView.start();
 	}
 	
 	/* Métodos Privados */
 
 	private void actualizarInterfaz()
 	{
-		changeMessage(listMessage.get(pos));
+		changeMessage(listMessage.get(posActual));
 		
-		if(video.isPlaying())
+		if(videoView.isPlaying())
 		{
-			video.stopPlayback();
+			videoView.stopPlayback();
 		}
 		
-		video.setVideoURI(listVideoPath.get(pos));
-		video.start();
+		videoView.setVideoURI(listVideoPath.get(posActual));
+		videoView.start();
 		
-		botonPrev.setVisibility(View.INVISIBLE);
-		botonNext.setVisibility(View.INVISIBLE);
+		buttonPrev.setVisibility(View.INVISIBLE);
+		buttonNext.setVisibility(View.INVISIBLE);
 		
-		if (pos > 0)
+		if (posActual > 0)
 		{
-			botonPrev.setVisibility(View.VISIBLE);
+			buttonPrev.setVisibility(View.VISIBLE);
 		}
 		
-		if (pos < posMax - 1)
+		if (posActual < posMax - 1)
 		{
-			botonNext.setVisibility(View.VISIBLE);
+			buttonNext.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -107,9 +107,9 @@ public class VideoListAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			if (pos > 0)
+			if (posActual > 0)
 			{
-				pos --;
+				posActual --;
 				actualizarInterfaz();
 			}
 		}
@@ -120,9 +120,9 @@ public class VideoListAlert extends WindowAlert
 		@Override
 		public void onClick(View v)
 		{
-			if (pos < posMax - 1)
+			if (posActual < posMax - 1)
 			{
-				pos ++;
+				posActual ++;
 				actualizarInterfaz();
 			}
 		}

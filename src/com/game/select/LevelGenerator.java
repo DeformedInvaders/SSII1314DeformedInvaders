@@ -83,11 +83,11 @@ public class LevelGenerator
 		for (int i = 0; i < GamePreferences.NUM_TYPE_ENEMIES; i++)
 		{
 			int id = obtenerID(GameResources.GET_ENEMIES(TTypeEntity.Enemy, nivel, i));
-			listaEnemigos.add(assetsManager.importarEnemigo(nivel, id, i));
+			listaEnemigos.add(assetsManager.importEnemy(nivel, id, i));
 		}
 		
 		int id = obtenerID(GameResources.GET_ENEMIES(TTypeEntity.Boss, nivel, 0));
-		listaJefes.add(assetsManager.importarJefe(nivel, id, 0));
+		listaJefes.add(assetsManager.importBoss(nivel, id, 0));
 		
 		int[] fondos = new int[GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL];
 		for (int i = 0; i < GamePreferences.NUM_TYPE_BACKGROUNDS_LEVEL; i++)
@@ -116,7 +116,7 @@ public class LevelGenerator
 			int tipoEnemigo = (int) Math.floor(Math.random() * GamePreferences.NUM_TYPE_OPPONENTS);
 			float posXEnemigo = posXActual + (float) (Math.random() * GamePreferences.DISTANCE_BETWEEN_ENEMIES() / 2.0f);
 			float posYEnemigo = GamePreferences.DISTANCE_ENEMY_GROUND();
-			TTypeEntity tipoEntidad = enemigos.get(tipoEnemigo).getTipo();
+			TTypeEntity tipoEntidad = enemigos.get(tipoEnemigo).getType();
 					
 			if (tipoEntidad == TTypeEntity.Missil) posYEnemigo = GamePreferences.DISTANCE_ENEMY_AIR();
 					

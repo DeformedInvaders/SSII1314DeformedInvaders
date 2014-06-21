@@ -42,29 +42,29 @@ public class ExternalStorageManager
 	{
 		mContext = context;
 		
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 	}
 
 	/* Métodos Dirección de Ficheros y Directorios */
 
-	private static String getDirectorioRaiz()
+	private static String getMainDirectory()
 	{
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + ROOT_DIRECTORY;
 	}
 	
-	private String getFicheroTemp()
+	private String getTempFile()
 	{
-		return getDirectorioRaiz() + TEMP_FILE + GameResources.EXTENSION_IMAGE_FILE;
+		return getMainDirectory() + TEMP_FILE + GameResources.EXTENSION_IMAGE_FILE;
 	}
 	
-	private static String getFicheroLog()
+	private static String getLogFile()
 	{
-		return getDirectorioRaiz() + LOG_FILE + GameResources.EXTENSION_TEXT_FILE;
+		return getMainDirectory() + LOG_FILE + GameResources.EXTENSION_TEXT_FILE;
 	}
 
 	/* Métodos Comprobación existencia y creación de Directorios */
 
-	private static boolean comprobarDirectorio(String file)
+	private static boolean checkDirectory(String file)
 	{
 		File dir = new File(file);
 		if (!dir.exists())
@@ -80,11 +80,11 @@ public class ExternalStorageManager
 	
 	public static boolean writeLogcat(String tag, String text)
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 		
 		try
 		{
-			FileOutputStream file = new FileOutputStream(new File(getFicheroLog()), true);
+			FileOutputStream file = new FileOutputStream(new File(getLogFile()), true);
 	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
 	        outputStreamWriter.write(tag + " :: "+text+"\n");
 	        outputStreamWriter.close();
@@ -103,36 +103,36 @@ public class ExternalStorageManager
 
 	/* Métodos Lectura y Escritura Temporal */
 
-	public File cargarImagenTemp()
+	public File loadTempImage()
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 
-		return new File(getFicheroTemp());
+		return new File(getTempFile());
 	}
 	
-	public boolean eliminarImagenTemp()
+	public boolean deleteTempImage()
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 		
-		File file = new File(getFicheroTemp());
+		File file = new File(getTempFile());
 		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "File SaveImage deleted");
 		
 		return file.delete();
 	}
 	
-	public boolean guardarImagenTemp(int imagen)
+	public boolean saveTempImage(int imagen)
 	{
 		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), imagen);
-		return guardarImagenTemp(bitmap);
+		return saveTempImage(bitmap);
 	}
 
-	public boolean guardarImagenTemp(Bitmap bitmap)
+	public boolean saveTempImage(Bitmap bitmap)
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 
 		try
 		{
-			File file = new File(getFicheroTemp());
+			File file = new File(getTempFile());
 			FileOutputStream data = new FileOutputStream(file);
 
 			bitmap.compress(Bitmap.CompressFormat.PNG, 85, data);
@@ -160,38 +160,38 @@ public class ExternalStorageManager
 	
 	/* Método Temporal de Exportación de Personajes a Enemigos */
 	
-	public String[] listaFicheros()
+	public String[] getFileList()
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 		
-		File file = new File(getDirectorioRaiz());
+		File file = new File(getMainDirectory());
 		return file.list();
 	}
 	
-	public String[] listaFicheros(String extension)
+	public String[] getFileList(String extension)
 	{
-		List<String> lista = new ArrayList<String>();
-		comprobarDirectorio(getDirectorioRaiz());
+		List<String> list = new ArrayList<String>();
+		checkDirectory(getMainDirectory());
 		
-		File file = new File(getDirectorioRaiz());
+		File file = new File(getMainDirectory());
 		String[] listFiles = file.list();
 		
 		for (int i = 0; i < listFiles.length; i++)
 		{
 			if (listFiles[i].endsWith(extension))
 			{
-				lista.add(listFiles[i]);
+				list.add(listFiles[i]);
 			}
 		}
 		
-		if (lista.isEmpty())
+		if (list.isEmpty())
 		{
 			return null;
 		}
 		
-		String[] listFilter = new String[lista.size()];
+		String[] listFilter = new String[list.size()];
 		int i = 0;
-		Iterator<String> it = lista.iterator();
+		Iterator<String> it = list.iterator();
 		while (it.hasNext())
 		{
 			listFilter[i] = it.next();
@@ -201,120 +201,120 @@ public class ExternalStorageManager
 		return listFilter;
 	}
 	
-	public Character importarPersonaje(String nombre)
+	public Character importCharacter(String name)
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 		
 		try
 		{
-			FileInputStream file = new FileInputStream(new File(getDirectorioRaiz() + "/" + nombre));
+			FileInputStream file = new FileInputStream(new File(getMainDirectory() + "/" + name));
 			ObjectInputStream data = new ObjectInputStream(file);
 
-			Character personaje = new Character();
-			personaje.setEsqueleto((Skeleton) data.readObject());
-			personaje.setTextura((Texture) data.readObject());
-			personaje.setMovimientos((Movements) data.readObject());
-			personaje.setNombre((String) data.readObject());
+			Character character = new Character();
+			character.setSkeleton((Skeleton) data.readObject());
+			character.setTexture((Texture) data.readObject());
+			character.setMovements((Movements) data.readObject());
+			character.setName((String) data.readObject());
 			
 			data.close();
 			file.close();
 
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " imported");
-			return personaje;
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + name + " imported");
+			return character;
 		}
 		catch (ClassNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " class not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + name + " class not found. "+e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " file not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + name + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " sream corrupted. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + name + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " ioexception. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + name + " ioexception. "+e.getMessage());
 		}
 
-		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + nombre + " not imported.");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + name + " not imported.");
 		return null;
 	}
 	
-	public boolean exportarPersonaje(Character personaje)
+	public boolean exportCharacter(Character character)
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 		
 		try
 		{
-			FileOutputStream file = new FileOutputStream(new File(getDirectorioRaiz() + "/" + personaje.getNombre() + ".cdi"));
+			FileOutputStream file = new FileOutputStream(new File(getMainDirectory() + "/" + character.getName() + ".cdi"));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
-			data.writeObject(personaje.getEsqueleto());
-			data.writeObject(personaje.getTextura());
-			data.writeObject(personaje.getMovimientos());
-			data.writeObject(personaje.getNombre());
+			data.writeObject(character.getSkeleton());
+			data.writeObject(character.getTexture());
+			data.writeObject(character.getMovements());
+			data.writeObject(character.getName());
 
 			data.flush();
 			data.close();
 			file.close();
 
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " exported");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + character.getName() + " exported");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " file not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + character.getName() + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " sream corrupted. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + character.getName() + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " ioexception. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + character.getName() + " ioexception. "+e.getMessage());
 		}
 
-		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + personaje.getNombre() + " not exported");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Character " + character.getName() + " not exported");
 		return false;
 	}
 	
-	public boolean exportarEnemigo(Character personaje)
+	public boolean exportEnemy(Character character)
 	{
-		comprobarDirectorio(getDirectorioRaiz());
+		checkDirectory(getMainDirectory());
 		
 		try
 		{
-			FileOutputStream file = new FileOutputStream(new File(getDirectorioRaiz() + "/" + personaje.getNombre() + ".edi"));
+			FileOutputStream file = new FileOutputStream(new File(getMainDirectory() + "/" + character.getName() + ".edi"));
 			ObjectOutputStream data = new ObjectOutputStream(file);
 
-			data.writeObject(personaje.getEsqueleto());
-			data.writeObject(personaje.getTextura());
-			data.writeObject(personaje.getMovimientos().get(TTypeMovement.Run));
+			data.writeObject(character.getSkeleton());
+			data.writeObject(character.getTexture());
+			data.writeObject(character.getMovements().get(TTypeMovement.Run));
 
 			data.flush();
 			data.close();
 			file.close();
 
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " exported");
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + character.getName() + " exported");
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " file not found. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + character.getName() + " file not found. "+e.getMessage());
 		}
 		catch (StreamCorruptedException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " sream corrupted. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + character.getName() + " sream corrupted. "+e.getMessage());
 		}
 		catch (IOException e)
 		{
-			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " ioexception. "+e.getMessage());
+			ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + character.getName() + " ioexception. "+e.getMessage());
 		}
 
-		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + personaje.getNombre() + " not exported");
+		ExternalStorageManager.writeLogcat(EXTERNAL_STORAGE_TAG, "Enemy " + character.getName() + " not exported");
 		return false;
 	}
 }

@@ -79,7 +79,7 @@ public class VideoOpenGLSurfaceView extends OpenGLSurfaceView
 							estado = estado.getNext();
 							
 							mListener.onDismissDialog();
-							mensajes = video.getMensaje(estado);
+							mensajes = video.getQuote(estado);
 							posMensaje = 0;
 							
 							renderer.seleccionarEstado(estado);

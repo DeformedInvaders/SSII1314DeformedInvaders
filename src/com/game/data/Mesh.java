@@ -21,108 +21,108 @@ import com.lib.opengl.OpenGLManager;
 public abstract class Mesh extends Entity
 {
 	// Esqueleto
-	protected HullArray contorno;
-	protected FloatBuffer bufferContorno;
+	protected HullArray hull;
+	protected FloatBuffer bufferHull;
 
 	protected VertexArray vertices;
 
-	protected TriangleArray triangulos;
-	protected FloatBuffer bufferTriangulos;
+	protected TriangleArray triangles;
+	protected FloatBuffer bufferTriangles;
 
 	// Animación
-	protected List<VertexArray> listaVerticesAnimacion;
+	protected List<VertexArray> listAnimationVertex;
 
-	protected int posicionAnimacion;
-	protected VertexArray verticesAnimacion;
-	protected FloatBuffer bufferTriangulosAnimacion;
-	protected FloatBuffer bufferContornoAnimacion;
+	protected int animationPosition;
+	protected VertexArray animationVertices;
+	protected FloatBuffer bufferAnimationTriangles;
+	protected FloatBuffer bufferAnimationHull;
 
 	// Texturas
-	protected Texture textura;
-	protected FloatBuffer coordTextura;
+	protected Texture texture;
+	protected FloatBuffer textureCoords;
 
 	// Pegatinas
-	protected Stickers pegatinas;
+	protected Stickers stickers;
 
-	protected boolean esqueletoReady, texturaReady, movimientosReady;
+	protected boolean skeletonReady, textureReady, movementsReady;
 	
 	/* Métodos abstractos de Entidad */
 
 	@Override
-	public void cargarTextura(GL10 gl, OpenGLRenderer renderer, Context context)
+	public void loadTexture(GL10 gl, OpenGLRenderer renderer, Context context)
 	{
-		if (texturaReady)
+		if (textureReady)
 		{
 			// Textura
-			textura.cargarTextura(gl, renderer, context, tipoEntidad, idEntidad);
+			texture.loadTexture(gl, renderer, context, typeEntity, idEntity);
 	
 			// Pegatinas
-			pegatinas.cargarTexturas(gl, renderer, context, tipoEntidad, idEntidad);
+			stickers.loadTexture(gl, renderer, context, typeEntity, idEntity);
 		}
 	}
 
 	@Override
-	public void descargarTextura(OpenGLRenderer renderer)
+	public void deleteTexture(OpenGLRenderer renderer)
 	{
-		if (texturaReady)
+		if (textureReady)
 		{
 			// Textura
-			textura.descargarTextura(renderer, tipoEntidad, idEntidad);
+			texture.deleteTexture(renderer, typeEntity, idEntity);
 	
 			// Pegatinas
-			pegatinas.descargarTextura(renderer, tipoEntidad, idEntidad);
+			stickers.deleteTexture(renderer, typeEntity, idEntity);
 		}
 	}
 	
 	@Override
-	public void dibujar(GL10 gl, OpenGLRenderer renderer)
+	public void drawTexture(GL10 gl, OpenGLRenderer renderer)
 	{
-		if (esqueletoReady && texturaReady && movimientosReady)
+		if (skeletonReady && textureReady && movementsReady)
 		{
 			// Textura
-			textura.dibujar(gl, renderer, bufferTriangulosAnimacion, coordTextura, tipoEntidad, idEntidad);
+			texture.drawTexture(gl, renderer, bufferAnimationTriangles, textureCoords, typeEntity, idEntity);
 	
 			// Contorno
-			OpenGLManager.dibujarBuffer(gl, Color.BLACK, bufferContornoAnimacion);
+			OpenGLManager.dibujarBuffer(gl, Color.BLACK, bufferAnimationHull);
 			
 			// Pegatinas
-			pegatinas.dibujar(gl, renderer, verticesAnimacion, triangulos, tipoEntidad, idEntidad);
+			stickers.drawTexture(gl, renderer, animationVertices, triangles, typeEntity, idEntity);
 		}
 	}
 
 	/* Métodos de Animación */
 	
-	protected void iniciar()
+	protected void startAnimation()
 	{
-		if (movimientosReady)
+		if (movementsReady)
 		{	
-			posicionAnimacion = 0;
-			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-			bufferTriangulosAnimacion = BufferManager.construirBufferListaTriangulosRellenos(triangulos, verticesAnimacion);
-			bufferContornoAnimacion = BufferManager.construirBufferListaIndicePuntos(contorno, verticesAnimacion);
+			animationPosition = 0;
+			animationVertices = listAnimationVertex.get(animationPosition);
+			bufferAnimationTriangles = BufferManager.construirBufferListaTriangulosRellenos(triangles, animationVertices);
+			bufferAnimationHull = BufferManager.construirBufferListaIndicePuntos(hull, animationVertices);
 		}
 	}
 
-	public void reposo()
+	public void stopAnimation()
 	{
-		if (movimientosReady)
+		if (movementsReady)
 		{			
-			verticesAnimacion = vertices;
-			bufferTriangulosAnimacion = bufferTriangulos;
-			bufferContornoAnimacion = bufferContorno;
+			animationVertices = vertices;
+			bufferAnimationTriangles = bufferTriangles;
+			bufferAnimationHull = bufferHull;
 		}
 	}
 
-	public boolean animar()
+	public boolean animateTexture()
 	{ 
-		if (movimientosReady)
+		if (movementsReady)
 		{
-			verticesAnimacion = listaVerticesAnimacion.get(posicionAnimacion);
-			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangulosAnimacion, triangulos, verticesAnimacion);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferContornoAnimacion, contorno, verticesAnimacion);
-			posicionAnimacion++;
+			animationVertices = listAnimationVertex.get(animationPosition);
+			BufferManager.actualizarBufferListaTriangulosRellenos(bufferAnimationTriangles, triangles, animationVertices);
+			BufferManager.actualizarBufferListaIndicePuntos(bufferAnimationHull, hull, animationVertices);
+			animationPosition++;
 	
-			return posicionAnimacion == listaVerticesAnimacion.size() - 1;
+			return animationPosition == listAnimationVertex.size() - 1;
 		}
 		
 		return false;
@@ -130,67 +130,72 @@ public abstract class Mesh extends Entity
 
 	/* Métodos de Modificación de Información */
 
-	public void setEsqueleto(Skeleton e)
+	public void setSkeleton(Skeleton s)
 	{
-		contorno = e.getContorno();
-		vertices = e.getVertices();
-		triangulos = e.getTriangulos();
+		hull = s.getHull();
+		vertices = s.getVertices();
+		triangles = s.getTriangles();
 
-		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
-		bufferTriangulos = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
+		bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
+		bufferTriangles = BufferManager.construirBufferListaTriangulosRellenos(triangles, vertices);
 		
-		esqueletoReady = true;
+		skeletonReady = true;
 	}
 
-	public void setTextura(Texture t)
+	public void setTexture(Texture t)
 	{
-		textura = t;
-		pegatinas = textura.getPegatinas();
-		coordTextura = BufferManager.construirBufferListaTriangulosRellenos(triangulos, textura.getCoordTextura());
-		texturaReady = true;
+		texture = t;
+		stickers = texture.getStickers();
+		textureCoords = BufferManager.construirBufferListaTriangulosRellenos(triangles, texture.getTextureCoords());
+		textureReady = true;
 		
-		width = textura.getWidth();
-		height = textura.getHeight();
+		width = texture.getWidth();
+		height = texture.getHeight();
 	}
 	
 	/* Métodos de Obtención de Información */	
-	public int getIndiceAnimacion()
+	public int getAnimationLength()
 	{
-		if (listaVerticesAnimacion != null)
+		if (listAnimationVertex != null)
 		{
-			return listaVerticesAnimacion.size();
+			return listAnimationVertex.size();
 		}
 		
 		return 0;
 	}
 
-	public boolean isEsqueletoReady()
+	public boolean isSkeletonReady()
 	{
-		return esqueletoReady;
+		return skeletonReady;
 	}
 	
-	public boolean isTexturaReady()
+	public boolean isTextureReady()
 	{
-		return texturaReady;
+		return textureReady;
 	}
 	
-	public boolean isMovimientosReady()
+	public boolean isMovementsReady()
 	{
-		return movimientosReady;
+		return movementsReady;
 	}
 	
-	public Skeleton getEsqueleto()
+	public Skeleton getSkeleton()
 	{ 
-		if(isEsqueletoReady())
+		if(skeletonReady)
 		{
-			return new Skeleton(contorno, vertices, triangulos);
+			return new Skeleton(hull, vertices, triangles);
 		}
 		
 		return null;
 	}
 
-	public Texture getTextura()
+	public Texture getTexture()
 	{
-		return textura;
+		if (textureReady)
+		{
+			return texture;
+		}
+		
+		return null;
 	}
 }

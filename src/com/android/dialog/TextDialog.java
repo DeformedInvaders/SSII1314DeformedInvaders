@@ -7,18 +7,18 @@ import com.project.main.R;
 
 public class TextDialog extends WindowDialog
 {
-	private TextView text;
+	private TextView textView;
 	
 	public TextDialog(Context context, int layout)
 	{
 		super(context, layout, false);
-		text = (TextView) findViewById(R.id.textViewDialog1);
+		textView = (TextView) findViewById(R.id.textViewDialog1);
 	}
 
 	/* Métodos Públicos */
 	
 	public void setText(int message)
 	{
-		text.setText(message);
+		textView.setText(message);
 	}
 }

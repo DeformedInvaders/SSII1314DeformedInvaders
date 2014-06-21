@@ -273,7 +273,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		Character personaje = core.getPersonaje(indice);
 		if (personaje != null)
 		{
-			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, personaje.getNombre(), R.string.text_button_rename, R.string.text_button_cancel, true) {
+			TextInputAlert alert = new TextInputAlert(mContext, R.string.text_rename_character_title, R.string.text_rename_character_description, personaje.getName(), R.string.text_button_rename, R.string.text_button_cancel, true) {
 				@Override
 				public void onPossitiveButtonClick(String text)
 				{
@@ -363,7 +363,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	@Override
 	public void onGameFinished(final InstanceLevel level, final int score, TTypeEndgame endgame)
 	{
-		if(!core.isNivelPerfecto(level.getTipoNivel()))
+		if(!core.isNivelPerfecto(level.getLevelType()))
 		{
 			sendToastMessage(R.string.text_game_newstikers);
 		}
@@ -371,17 +371,17 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 		if (core.actualizarEstadisticas(level, score, endgame))
 		{
 			// Seleccionar Siguiente Nivel
-			ImageAlert alert = new ImageAlert(mContext, mContext.getString(R.string.text_game_finish) + " " + score, R.string.text_button_replay, R.string.text_button_levels, level.getFondoNivel().getIdPolaroid(endgame)) {
+			ImageAlert alert = new ImageAlert(mContext, mContext.getString(R.string.text_game_finish) + " " + score, R.string.text_button_replay, R.string.text_button_levels, level.getBackground().getIdPolaroid(endgame)) {
 				@Override
 				public void onPossitiveButtonClick()
 				{
-					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getTipoNivel()));
+					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getLevelType()));
 				}
 	
 				@Override
 				public void onNegativeButtonClick()
 				{
-					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getTipoNivel());
+					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getLevelType());
 				}
 			};
 	
@@ -394,17 +394,17 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	{
 		if(core.actualizarEstadisticas(level, endgame))
 		{
-			ImageAlert alert = new ImageAlert(mContext, R.string.text_game_fail, R.string.text_button_replay, R.string.text_button_levels, level.getFondoNivel().getIdPolaroid(endgame)) {
+			ImageAlert alert = new ImageAlert(mContext, R.string.text_game_fail, R.string.text_button_replay, R.string.text_button_levels, level.getBackground().getIdPolaroid(endgame)) {
 				@Override
 				public void onPossitiveButtonClick()
 				{
-					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getTipoNivel()));
+					cambiarEstadoGame(core.getPersonajeSeleccionado(), core.getNivel(level.getLevelType()));
 				}
 	
 				@Override
 				public void onNegativeButtonClick()
 				{
-					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getTipoNivel());
+					cambiarEstadoLevelSelection(core.getListaNiveles(), core.getEstadisticasNiveles(), level.getLevelType());
 				}
 			};
 	
@@ -540,7 +540,7 @@ public class GameController implements ViewActivity.ActivityFragmentListener, Ma
 	private void cambiarEstadoGame(Character personajeSeleccionado, InstanceLevel nivel)
 	{		
 		estado = TStateController.Game;
-		view.insertarGameFragmento(personajeSeleccionado, nivel, nivel.getTipoNivel().getDescription());
+		view.insertarGameFragmento(personajeSeleccionado, nivel, nivel.getLevelType().getDescription());
 		
 		actualizarMusica();
 	}

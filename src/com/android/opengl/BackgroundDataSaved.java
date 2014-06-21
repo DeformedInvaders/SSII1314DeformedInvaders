@@ -2,29 +2,29 @@ package com.android.opengl;
 
 public class BackgroundDataSaved
 {
-	private int[] indiceTexturaFondo;
-	private float[] posFondo;
-	private boolean[] dibujarFondo;
+	private int[] backgroundId;
+	private float[] backgroundPosition;
+	private boolean[] backgroundEnabled;
 	
-	public BackgroundDataSaved(int[] indices, float[] pos, boolean[] dibujar)
+	public BackgroundDataSaved(int[] index, float[] position, boolean[] enabled)
 	{
-		indiceTexturaFondo = indices;
-		posFondo = pos;
-		dibujarFondo = dibujar;
+		backgroundId = index;
+		backgroundPosition = position;
+		backgroundEnabled = enabled;
 	}
 
-	public int[] getIndiceTexturaFondo()
+	public int[] getBackgroundId()
 	{
-		return indiceTexturaFondo;
+		return backgroundId;
 	}
 
-	public float[] getPosFondo()
+	public float[] getBackgroundPosition()
 	{
-		return posFondo;
+		return backgroundPosition;
 	}
 
-	public boolean[] getDibujarFondo()
+	public boolean[] getBackgroundEnabled()
 	{
-		return dibujarFondo;
+		return backgroundEnabled;
 	}
 }

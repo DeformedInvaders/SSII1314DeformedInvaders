@@ -11,8 +11,8 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 {
 	private Context mContext;
 
-	private MediaPlayer player;
-	private TStatePlayer estado;
+	private MediaPlayer audioPlayer;
+	private TStatePlayer mState;
 
 	/* Constructora */
 	
@@ -20,10 +20,10 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	{
 		mContext = context;
 		
-		player = new MediaPlayer();
-		player.setOnCompletionListener(this);
+		audioPlayer = new MediaPlayer();
+		audioPlayer.setOnCompletionListener(this);
 		
-		estado = TStatePlayer.Free;
+		mState = TStatePlayer.Free;
 	}
 
 	/* Métodos Abstractos */
@@ -34,12 +34,12 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean startPlaying(String path, boolean loop, boolean blockable)
 	{
-		if (blockable && estado != TStatePlayer.Free)
+		if (blockable && mState != TStatePlayer.Free)
 		{
 			return false;
 		}
 		
-		if (estado != TStatePlayer.Free)
+		if (mState != TStatePlayer.Free)
 		{
 			resetPlaying();
 		}
@@ -47,14 +47,14 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		try
 		{
 			// Idle
-			player.setDataSource(path);
+			audioPlayer.setDataSource(path);
 			// Initialized
-			player.prepare();
+			audioPlayer.prepare();
 			// Prepared
-			player.start();
+			audioPlayer.start();
 			// Started
 
-			estado = TStatePlayer.Playing;
+			mState = TStatePlayer.Playing;
 			return true;
 		}
 		catch (IOException e)
@@ -67,12 +67,12 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 	
 	public boolean startPlaying(int path, boolean loop, boolean blockable)
 	{
-		if (blockable && estado != TStatePlayer.Free)
+		if (blockable && mState != TStatePlayer.Free)
 		{
 			return false;
 		}
 		
-		if (estado != TStatePlayer.Free)
+		if (mState != TStatePlayer.Free)
 		{
 			resetPlaying();
 		}
@@ -81,16 +81,16 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 		try
 		{
 			// Idle
-			player.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getDeclaredLength());
-			player.setLooping(loop);
+			audioPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getDeclaredLength());
+			audioPlayer.setLooping(loop);
 			// Initialized
-			player.prepare();
+			audioPlayer.prepare();
 			// Prepared
-			player.start();
+			audioPlayer.start();
 			// Started
 
 			file.close();
-			estado = TStatePlayer.Playing;
+			mState = TStatePlayer.Playing;
 			return true;
 		}
 		catch (IllegalArgumentException e)
@@ -111,12 +111,12 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean pausePlaying()
 	{
-		if (estado == TStatePlayer.Playing)
+		if (mState == TStatePlayer.Playing)
 		{
 			// Started
-			player.pause();
+			audioPlayer.pause();
 			// Pause
-			estado = TStatePlayer.Paused;
+			mState = TStatePlayer.Paused;
 			return true;
 		}
 
@@ -125,12 +125,12 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean resumePlaying()
 	{
-		if (estado == TStatePlayer.Paused)
+		if (mState == TStatePlayer.Paused)
 		{
 			// Pause
-			player.start();
+			audioPlayer.start();
 			// Started
-			estado = TStatePlayer.Playing;
+			mState = TStatePlayer.Playing;
 			return true;
 		}
 
@@ -139,10 +139,10 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	public boolean stopPlaying()
 	{		
-		if (estado == TStatePlayer.Playing || estado == TStatePlayer.Paused)
+		if (mState == TStatePlayer.Playing || mState == TStatePlayer.Paused)
 		{
 			// Started or Paused
-			player.stop();
+			audioPlayer.stop();
 			// Stopped
 
 			resetPlaying();
@@ -154,31 +154,31 @@ public abstract class AudioPlayerManager implements OnCompletionListener
 
 	private void resetPlaying()
 	{
-		player.reset();
+		audioPlayer.reset();
 		// Idle
-		estado = TStatePlayer.Free;
+		mState = TStatePlayer.Free;
 	}
 
 	public void releasePlayer()
 	{
-		player.release();
+		audioPlayer.release();
 	}
 
 	/* Métodos de Obtención de Información */
 
 	public boolean isPlaying()
 	{
-		return estado == TStatePlayer.Playing;
+		return mState == TStatePlayer.Playing;
 	}
 
 	public boolean isPaused()
 	{
-		return estado == TStatePlayer.Paused;
+		return mState == TStatePlayer.Paused;
 	}
 
 	public boolean isStoped()
 	{
-		return estado == TStatePlayer.Free;
+		return mState == TStatePlayer.Free;
 	}
 
 	/* Métodos Listener onCompletition */

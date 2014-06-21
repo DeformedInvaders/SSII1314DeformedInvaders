@@ -83,16 +83,16 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 
 		estado = TStatePaint.Nothing;
 
-		contorno = personaje.getEsqueleto().getContorno();
-		vertices = personaje.getEsqueleto().getVertices();
-		triangulos = personaje.getEsqueleto().getTriangulos();
+		contorno = personaje.getSkeleton().getHull();
+		vertices = personaje.getSkeleton().getVertices();
+		triangulos = personaje.getSkeleton().getTriangles();
 
 		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangulos, vertices);
 		bufferContorno = BufferManager.construirBufferListaIndicePuntos(contorno, vertices);
 		
-		if (personaje.isTexturaReady())
+		if (personaje.isTextureReady())
 		{
-			pegatinas = personaje.getTextura().getPegatinas();
+			pegatinas = personaje.getTexture().getStickers();
 		}
 		else
 		{
@@ -124,7 +124,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if (estado == TStatePaint.Screenshot && estadoCaptura == TStateScreenshot.Capturing)
 		{
 			// Guardar posición actual de la Cámara
-			salvarCamara();
+			saveCamera();
 
 			// Restaurar Cámara posición inicial
 			camaraRestore();
@@ -132,17 +132,17 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			dibujarEsqueleto(gl);
 
 			// Capturar Pantalla
-			textura = capturaPantalla(gl);
+			textura = getScreenshot(gl);
 
 			// Construir Textura
-			coordsTextura = construirTextura(vertices, textura.getWidth(), textura.getHeight());
+			coordsTextura = buildTexture(vertices, textura.getWidth(), textura.getHeight());
 
 			// Restaurar posición anterior de la Cámara
-			recuperarCamara();
+			restoreCamera();
 		}
 
 		// Cargar Pegatinas
-		pegatinas.cargarTexturas(gl, this, mContext, TTypeEntity.Character, 0);
+		pegatinas.loadTexture(gl, this, mContext, TTypeEntity.Character, 0);
 
 		dibujarEsqueleto(gl);
 		
@@ -158,7 +158,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		super.onDrawFrame(gl);
 
 		// Centrado de Marco
-		centrarPersonajeEnMarcoInicio(gl);
+		drawInsideFrameBegin(gl);
 
 		// Esqueleto
 		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, colorPintura, bufferVertices);
@@ -194,23 +194,23 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferContorno);
 
 			// Dibujar Pegatinas
-			pegatinas.dibujar(gl, this, vertices, triangulos, TTypeEntity.Character, 0);
+			pegatinas.drawTexture(gl, this, vertices, triangulos, TTypeEntity.Character, 0);
 		}
 
 		// Centrado de Marco
-		centrarPersonajeEnMarcoFinal(gl);
+		drawInsideFrameEnd(gl);
 	}
 	
 	/* Métodos Abstráctos OpenGLRenderer */
 
 	@Override
-	protected boolean reiniciar()
+	protected boolean onReset()
 	{
 		lineaActual = null;
 		listaLineas.clear();
 
-		pegatinas.descargarTextura(this, TTypeEntity.Character, 0);
-		pegatinas.eliminarPegatinas();
+		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
+		pegatinas.resetSticker();
 		
 		pegatinaActual = 0;
 		pegatinaAnyadida = false;
@@ -311,9 +311,9 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		short triangle = buscador.searchTriangle(frameX, frameY);
 		if (triangle != -1)
 		{			
-			pegatinas.anyadirPegatina(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
+			pegatinas.addSticker(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, vertices, triangulos);
 
-			descargarTexturaRectangulo(TTypeEntity.Character, 0, tipoPegatinaActual);
+			deleteTextureRectangle(TTypeEntity.Character, 0, tipoPegatinaActual);
 			pegatinaAnyadida = true;
 
 			anteriores.push(new ActionSticker(tipoPegatinaActual, pegatinaActual, frameX, frameY, triangle, pegatinas.getFactor(tipoPegatinaActual), pegatinas.getTheta(tipoPegatinaActual)));
@@ -353,7 +353,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TStatePaint.EditSticker)
 		{
-			pegatinas.ampliarPegatina(tipoPegatinaActual, factor);
+			pegatinas.zoomSticker(tipoPegatinaActual, factor);
 		}
 	}
 
@@ -379,7 +379,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				short triangle = buscador.searchTriangle(newStickerFrameX, newtStickerFrameY);
 				if (triangle != -1)
 				{			
-					pegatinas.moverPegatina(tipoPegatinaActual, newStickerFrameX, newtStickerFrameY, triangle, vertices, triangulos);
+					pegatinas.moveSticker(tipoPegatinaActual, newStickerFrameX, newtStickerFrameY, triangle, vertices, triangulos);
 				}
 			}
 		}
@@ -390,7 +390,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TStatePaint.EditSticker)
 		{
-			pegatinas.rotarPegatina(tipoPegatinaActual, (float) Math.toDegrees(angRad));
+			pegatinas.rotateSticker(tipoPegatinaActual, (float) Math.toDegrees(angRad));
 		}
 	}
 	
@@ -399,7 +399,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		if (estado == TStatePaint.EditSticker)
 		{
-			pegatinas.recuperarPegatina(tipoPegatinaActual);
+			pegatinas.restoreSticker(tipoPegatinaActual);
 		}
 	}
 
@@ -430,7 +430,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			int id = pegatinas.getId(tipoPegatinaActual);
 			float x = pegatinas.getXCoords(tipoPegatinaActual, vertices, triangulos);
 			float y = pegatinas.getYCoords(tipoPegatinaActual, vertices, triangulos);
-			short indice = pegatinas.getIndice(tipoPegatinaActual);
+			short indice = pegatinas.getIndex(tipoPegatinaActual);
 			float factor = pegatinas.getFactor(tipoPegatinaActual);
 			float angulo = pegatinas.getTheta(tipoPegatinaActual);
 
@@ -493,7 +493,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		if (buscador == null)
 		{
-			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, marcoAnchuraInterior, marcoAnchuraInterior);
+			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
 		}
 	}
 	
@@ -501,10 +501,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	{
 		guardarPolilinea();
 		
-		if (pegatinas.isCargada(tipo))
+		if (pegatinas.isStickerLoaded(tipo))
 		{
-			descargarTexturaRectangulo(TTypeEntity.Character, 0, tipo);
-			pegatinas.eliminarPegatina(tipo);
+			deleteTextureRectangle(TTypeEntity.Character, 0, tipo);
+			pegatinas.deleteSticker(tipo);
 			
 			anteriores.push(new ActionSticker(tipo));
 			siguientes.clear();
@@ -519,10 +519,10 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		
 		if (buscador == null)
 		{
-			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, marcoAnchuraInterior, marcoAnchuraInterior);
+			buscador = new TriangleQuadTreeSearcher(triangulos, vertices, 0.0f, 0.0f, frameWidthMiddle, frameWidthMiddle);
 		}
 		
-		if (pegatinas.isCargada(tipo))
+		if (pegatinas.isStickerLoaded(tipo))
 		{
 			tipoPegatinaActual = tipo;
 			estado = TStatePaint.EditSticker;
@@ -573,8 +573,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		colorPintura = Color.WHITE;
 		listaLineas = new ArrayList<Polyline>();
 		
-		pegatinas.descargarTextura(this, TTypeEntity.Character, 0);
-		pegatinas.eliminarPegatinas();
+		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
+		pegatinas.resetSticker();
 
 		Iterator<Action> it = pila.iterator();
 		while (it.hasNext())
@@ -607,7 +607,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	
 	private void actualizarEstado(ActionSticker accion)
 	{
-		pegatinas.anyadirPegatina(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), accion.getFactorEscala(), accion.getAnguloRotacion(), vertices, triangulos);
+		pegatinas.addSticker(accion.getTipoPegatina(), accion.getIdPegatina(), accion.getPosXPegatina(), accion.getPosYPegatina(), accion.getIndiceTriangulo(), accion.getFactorEscala(), accion.getAnguloRotacion(), vertices, triangulos);
 	}
 
 	/* Métodos de Obtención de Información */
@@ -675,7 +675,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 	public PaintDataSaved saveData()
 	{
 		// Pegatinas
-		pegatinas.descargarTextura(this, TTypeEntity.Character, 0);
+		pegatinas.deleteTexture(this, TTypeEntity.Character, 0);
 				
 		return new PaintDataSaved(anteriores, siguientes, estado);
 	}

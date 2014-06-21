@@ -35,57 +35,58 @@ public abstract class SummaryAlert extends WindowAlert
 		int imageFolderWidth = imageFolder.getMeasuredHeight();
 		int imageFolderHeight = imageFolder.getMeasuredWidth();
 		
-		TextView textoInicial = (TextView) findViewById(R.id.textViewSummaryAlert1);
-		TextView textoFinal = (TextView) findViewById(R.id.textViewSummaryAlert2);
-		textoInicial.setTypeface(textFont);
-		textoFinal.setTypeface(textFont);
+		TextView textBegin = (TextView) findViewById(R.id.textViewSummaryAlert1);
+		TextView textEnd = (TextView) findViewById(R.id.textViewSummaryAlert2);
+		textBegin.setTypeface(textFont);
+		textEnd.setTypeface(textFont);
 		
 		ScrollView scrollLayout = (ScrollView) findViewById(R.id.scrollLayoutSummaryAlert1);
 		scrollLayout.setPadding(imageFolderWidth / 8, imageFolderHeight / 6, imageFolderWidth / 20, imageFolderHeight / 20);
 
 		LinearLayout layoutScroll = (LinearLayout) findViewById(R.id.linearLayoutSummaryAlert1);
 	
-			// Enemigos
-			LinearLayout layoutImagesEnemigos = new LinearLayout(context);
-			LinearLayout layoutEnemigos = construirLayoutSeccion(context, textFont, layoutImagesEnemigos, R.string.title_alert_enemies, R.string.title_alert_weaknesses_enemies);
+			// Enemies
+		
+			LinearLayout layoutImagesEnemies = new LinearLayout(context);
+			LinearLayout layoutEnemies = buildLayoutSection(context, textFont, layoutImagesEnemies, R.string.title_alert_enemies, R.string.title_alert_weaknesses_enemies);
 				
-			// Obstaculos
+			// Obstacles
 			
-			LinearLayout layoutImagesObstaculos = new LinearLayout(context);
-			LinearLayout layoutObstaculos = construirLayoutSeccion(context, textFont, layoutImagesObstaculos, R.string.title_alert_obstacles, R.string.title_alert_weaknesses_obstacles);
+			LinearLayout layoutImagesObstacles = new LinearLayout(context);
+			LinearLayout layoutObstacles = buildLayoutSection(context, textFont, layoutImagesObstacles, R.string.title_alert_obstacles, R.string.title_alert_weaknesses_obstacles);
 				
-			// Misiles
+			// Missiles
 			
-			LinearLayout layoutImagesMisiles = new LinearLayout(context);
-			LinearLayout layoutMisiles = construirLayoutSeccion(context, textFont, layoutImagesMisiles, R.string.title_alert_missiles, R.string.title_alert_weaknesses_missiles);
+			LinearLayout layoutImagesMissiles = new LinearLayout(context);
+			LinearLayout layoutMissiles = buildLayoutSection(context, textFont, layoutImagesMissiles, R.string.title_alert_missiles, R.string.title_alert_weaknesses_missiles);
 	
-			// Jefe
+			// Boss
 			
-			LinearLayout layoutImagesJefe = new LinearLayout(context);
-			LinearLayout layoutJefe = construirLayoutSeccion(context, textFont, layoutImagesJefe, R.string.title_alert_boss, R.string.title_alert_weaknesses_boss);
+			LinearLayout layoutImagesBoss = new LinearLayout(context);
+			LinearLayout layoutBoss = buildLayoutSection(context, textFont, layoutImagesBoss, R.string.title_alert_boss, R.string.title_alert_weaknesses_boss);
 	
 			// Procesamiento
 				
-			Iterator<Entity> it = nivel.getTipoEnemigos().iterator();
+			Iterator<Entity> it = nivel.getEnemyType().iterator();
 			while(it.hasNext())
 			{
-				Entity enemigo = it.next();
+				Entity enemy = it.next();
 				
 				ImageView imageView = new ImageView(context);
 				imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));
-				imageView.setBackgroundResource(enemigo.getIndiceTextura());
+				imageView.setBackgroundResource(enemy.getIndexTexture());
 				
-				switch(enemigo.getTipo())
+				switch(enemy.getType())
 				{
 					case Enemy:
-						layoutImagesEnemigos.addView(imageView);
+						layoutImagesEnemies.addView(imageView);
 					break;
 					case Obstacle:
-						layoutImagesObstaculos.addView(imageView);
+						layoutImagesObstacles.addView(imageView);
 					break;
 					case Missil:
 						imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH() / 2));
-						layoutImagesMisiles.addView(imageView);
+						layoutImagesMissiles.addView(imageView);
 					default:
 					break;
 				}
@@ -95,13 +96,13 @@ public abstract class SummaryAlert extends WindowAlert
 			
 			ImageView imageView = new ImageView(context);
 			imageView.setLayoutParams(new LinearLayout.LayoutParams(GamePreferences.PICTURE_ENEMY_WIDTH(), GamePreferences.PICTURE_ENEMY_WIDTH()));
-			imageView.setBackgroundResource(jefe.getIndiceTextura());
-			layoutImagesJefe.addView(imageView);
+			imageView.setBackgroundResource(jefe.getIndexTexture());
+			layoutImagesBoss.addView(imageView);
 			
-		layoutScroll.addView(layoutEnemigos);
-		layoutScroll.addView(layoutObstaculos);
-		layoutScroll.addView(layoutMisiles);
-		layoutScroll.addView(layoutJefe);
+		layoutScroll.addView(layoutEnemies);
+		layoutScroll.addView(layoutObstacles);
+		layoutScroll.addView(layoutMissiles);
+		layoutScroll.addView(layoutBoss);
 		
 		setPositiveButton(textYes, new DialogInterface.OnClickListener() {
 			@Override
@@ -112,7 +113,7 @@ public abstract class SummaryAlert extends WindowAlert
 		});
 	}
 	
-	private LinearLayout construirLayoutSeccion(Context context, Typeface textFont, LinearLayout imagesLayout, int title, int title_weaknesses)
+	private LinearLayout buildLayoutSection(Context context, Typeface textFont, LinearLayout imagesLayout, int title, int title_weaknesses)
 	{
 		LinearLayout layout = new LinearLayout(context);
 		layout.setOrientation(LinearLayout.VERTICAL);

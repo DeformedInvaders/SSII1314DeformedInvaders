@@ -123,9 +123,9 @@ public class GameOpenGLSurfaceView extends OpenGLSurfaceView
 	}
 
 	@Override
-	public void setEstado(TStateDetector e)
+	public void setDetectorState(TStateDetector e)
 	{
-		super.setEstado(e);
+		super.setDetectorState(e);
 		
 		if (gameDetector == null)
 		{

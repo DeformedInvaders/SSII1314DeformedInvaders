@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 public abstract class ChooseAlert extends WindowAlert
 {
 	private int selected;
-	private String[] lista;
+	private String[] optionList;
 
 	/* Constructora */
 
@@ -15,9 +15,9 @@ public abstract class ChooseAlert extends WindowAlert
 		super(context, title, false);
 
 		selected = -1;
-		lista = list;
+		optionList = list;
 
-		setSingleChoiceItems(lista, selected, new DialogInterface.OnClickListener() {
+		setSingleChoiceItems(optionList, selected, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
@@ -31,7 +31,7 @@ public abstract class ChooseAlert extends WindowAlert
 			{
 				if (selected != -1)
 				{
-					onSelectedPossitiveButtonClick(lista[selected]);
+					onSelectedPossitiveButtonClick(optionList[selected]);
 				}
 				else
 				{

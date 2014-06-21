@@ -78,8 +78,8 @@ public class DesignFragment extends OpenGLFragment
 			canvas.restoreData(dataSaved);
 		}
 
-		reiniciarInterfaz();
-		actualizarInterfaz();
+		resetInterface();
+		updateInterface();
 		
 		sendAlertMessage(R.string.text_tip_design_draw_title, R.string.text_tip_design_draw_description, GameResources.VIDEO_DESIGN_DRAW_PATH);
 		
@@ -116,8 +116,8 @@ public class DesignFragment extends OpenGLFragment
 		{
 			canvas.restoreData(dataSaved);
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -133,17 +133,17 @@ public class DesignFragment extends OpenGLFragment
 	/* Métodos Abstractos OpenGLFragment */
 
 	@Override
-	protected void reiniciarInterfaz()
+	protected void resetInterface()
 	{
 		botonListo.setVisibility(View.INVISIBLE);
 		botonReset.setVisibility(View.INVISIBLE);
 		botonTriangular.setVisibility(View.INVISIBLE);
 		
-		canvas.setEstado(TStateDetector.SimpleTouch);
+		canvas.setDetectorState(TStateDetector.SimpleTouch);
 	}
 
 	@Override
-	protected void actualizarInterfaz()
+	protected void updateInterface()
 	{
 		if (canvas.isPoligonoCompleto())
 		{
@@ -156,7 +156,7 @@ public class DesignFragment extends OpenGLFragment
 		
 		if (canvas.isEstadoRetocando())
 		{
-			canvas.setEstado(TStateDetector.CoordDetectors);
+			canvas.setDetectorState(TStateDetector.CoordDetectors);
 		}
 	}
 
@@ -201,8 +201,8 @@ public class DesignFragment extends OpenGLFragment
 				}
 			}
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -213,8 +213,8 @@ public class DesignFragment extends OpenGLFragment
 		{
 			canvas.reiniciar();
 
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 		}
 	}
 
@@ -224,8 +224,8 @@ public class DesignFragment extends OpenGLFragment
 		public void onClick(View v)
 		{
 			canvas.seleccionarTriangular();
-			reiniciarInterfaz();
-			actualizarInterfaz();
+			resetInterface();
+			updateInterface();
 			
 			if (!canvas.isPoligonoSimple())
 			{					

@@ -8,9 +8,9 @@ public abstract class OpenGLFragment<T extends OpenGLSurfaceView> extends AlertF
 {
 	/* Métodos Abstractos */
 
-	protected abstract void reiniciarInterfaz();
+	protected abstract void resetInterface();
 
-	protected abstract void actualizarInterfaz();
+	protected abstract void updateInterface();
 
 	/* Métodos Protegidos */
 
@@ -23,8 +23,8 @@ public abstract class OpenGLFragment<T extends OpenGLSurfaceView> extends AlertF
 			{
 				boolean touch = canvas.onTouch(view, event);
 
-				reiniciarInterfaz();
-				actualizarInterfaz();
+				resetInterface();
+				updateInterface();
 				return touch;
 			}
 		});

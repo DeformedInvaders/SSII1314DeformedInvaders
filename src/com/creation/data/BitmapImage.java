@@ -26,7 +26,7 @@ public class BitmapImage implements Serializable
 
 		this.pixelsCompressed = new ArrayList<Integer>();
 
-		comprimirBitmap(pixelsBuffer);
+		compress(pixelsBuffer);
 	}
 
 	public BitmapImage(ArrayList<Integer> pixels, int width, int height)
@@ -52,7 +52,7 @@ public class BitmapImage implements Serializable
 	public Bitmap getBitmap()
 	{
 		int arrayLong = width * height;
-		int buffer[] = descomprimirBitmap();
+		int buffer[] = decompress();
 
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		bitmap.setPixels(buffer, arrayLong - width, -width, 0, 0, width, height);
@@ -61,7 +61,7 @@ public class BitmapImage implements Serializable
 
 	/* Métodos Privados */
 
-	private void comprimirBitmap(int[] array)
+	private void compress(int[] array)
 	{
 		int arrayLong = width * height;
 		int lastColor = 0;
@@ -83,7 +83,7 @@ public class BitmapImage implements Serializable
 		}
 	}
 
-	private int[] descomprimirBitmap()
+	private int[] decompress()
 	{
 		int arrayLong = width * height;
 		int[] buffer = new int[arrayLong];

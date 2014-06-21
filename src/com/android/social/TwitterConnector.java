@@ -20,7 +20,7 @@ public class TwitterConnector
 
 	/* Métodos Públicos */
 
-	public boolean iniciarAutorizacion()
+	public boolean startAuthorization()
 	{
 		twitter = new TwitterFactory().getInstance();
 		twitter.setOAuthConsumer(SocialInformation.TWITTER_CONSUMER_KEY, SocialInformation.TWITTER_CONSUMER_SECRET);
@@ -43,7 +43,7 @@ public class TwitterConnector
 		return requestToken.getAuthorizationURL();
 	}
 
-	public boolean finalizarAutorizacion(Uri uri)
+	public boolean finishAuthorization(Uri uri)
 	{
 		try
 		{
@@ -58,14 +58,14 @@ public class TwitterConnector
 		return false;
 	}
 
-	public boolean desconexion()
+	public boolean disconnect()
 	{
 		requestToken = null;
 
 		return true;
 	}
 
-	public boolean enviarPost(String message)
+	public boolean sendPost(String message)
 	{
 		try
 		{
@@ -82,7 +82,7 @@ public class TwitterConnector
 		return true;
 	}
 
-	public boolean enviarPost(String message, File file)
+	public boolean sendPost(String message, File file)
 	{
 		try
 		{

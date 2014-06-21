@@ -64,7 +64,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 		if (personajeCargado)
 		{
-			personaje.cargarTextura(gl, this, mContext);
+			personaje.loadTexture(gl, this, mContext);
 		}
 	}
 
@@ -78,16 +78,16 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 			if (estadoCaptura == TStateScreenshot.Preparing)
 			{
 				// Marco Oscuro
-				dibujarMarcoInterior(gl, Color.WHITE, GamePreferences.DEEP_INSIDE_FRAMES);
+				drawFrameInside(gl, Color.WHITE, GamePreferences.DEEP_INSIDE_FRAMES);
 			}
 			
 			// Centrado de Marco
-			centrarPersonajeEnMarcoInicio(gl);
+			drawInsideFrameBegin(gl);
 
-			personaje.dibujar(gl, this);
+			personaje.drawTexture(gl, this);
 
 			// Centrado de Marco
-			centrarPersonajeEnMarcoFinal(gl);
+			drawInsideFrameEnd(gl);
 
 			if (estado == TStateDisplay.Nothing || estado == TStateDisplay.Screenshot)
 			{
@@ -96,7 +96,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 					if (estadoCaptura == TStateScreenshot.Capturing)
 					{
 						// Capturar Pantalla
-						BitmapImage textura = capturaPantalla(gl);
+						BitmapImage textura = getScreenshot(gl);
 						captura = textura.getBitmap();
 
 						// Desactivar Modo Captura
@@ -109,12 +109,12 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 						super.onDrawFrame(gl);
 
 						// Centrado de Marco
-						centrarPersonajeEnMarcoInicio(gl);
+						drawInsideFrameBegin(gl);
 
-						personaje.dibujar(gl, this);
+						personaje.drawTexture(gl, this);
 
 						// Centrado de Marco
-						centrarPersonajeEnMarcoFinal(gl);
+						drawInsideFrameEnd(gl);
 					}
 				}
 			}
@@ -148,12 +148,12 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public boolean reproducirAnimacion()
 	{
-		return personaje.animar();
+		return personaje.animateTexture();
 	}
 
 	public void seleccionarReposo()
 	{
-		personaje.reposo();
+		personaje.stopAnimation();
 		
 		estado = TStateDisplay.Nothing;
 		estadoCaptura = TStateScreenshot.Nothing;
@@ -161,7 +161,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 
 	public void seleccionarAnimacion(TTypeMovement movimiento)
 	{
-		personaje.seleccionarAnimacion(movimiento);
+		personaje.selectMovement(movimiento);
 		
 		estado = TStateDisplay.Animation;
 		estadoCaptura = TStateScreenshot.Nothing;
@@ -212,7 +212,7 @@ public class DisplayOpenGLRenderer extends OpenGLRenderer
 	{
 		if (personajeCargado)
 		{
-			personaje.descargarTextura(this);
+			personaje.deleteTexture(this);
 		}
 	}
 }
