@@ -180,13 +180,13 @@
   		<!-- Video -->
   			<string name="dialog_outside_1">Laboratory MX-45.\nClassified location.</string>
   			<string name="dialog_door_1">5 hours ago I received a message from Doctor Chus asking me to come here. It seem urgent.</string>
-		    <string name="dialog_rock_1">Doctor Chus? What in the world&#x2026;</string>
+		    <string name="dialog_rock_1">Doctor Chus? What in the world&#x2026;?</string>
 		    <string name="dialog_noise_1">Oh no!! It\'s that time already? Just give a second&#x2026;</string>
 		    <string name="dialog_brief_1">Here we go! Welcome to my facility, agent. I\'ve asked you to come here because we have&#x2026; a kind of situation&#x2026;</string>
-		    <string name="dialog_brief_2">Two moons ago, a group of insugents broke into this building and stole some of my newest inventions.</string>
-		    <string name="dialog_brief_3">This two devices allows them to transform themselves into any creature known and travel throw time and space.</string>
-		    <string name="dialog_brief_4">Our informers tell us that they already invade a primitive planet called "Earth". They are infiltrating among the natives in order to slave them and use them against us in the incoming war.</string>
-		    <string name="dialog_brief_5">Take the same devices with you and use them wisely. Good luck, agent. I\'ll give further information of your targets when you arrive. By now you only need to know they are calling themselves The&#x2026;</string>
+		    <string name="dialog_brief_2">Two moons ago, a group of insurgents broke into this building and stole some of my newest inventions.</string>
+		    <string name="dialog_brief_3">This two devices allows them to transform themselves into any creature known and to travel through time and space.</string>
+		    <string name="dialog_brief_4">Our informers tell us that they already have invaded a primitive planet called "Earth". They are infiltrating among the natives in order to slave them and use them against us in the incoming war.</string>
+		    <string name="dialog_brief_5">Take the same devices with you and use them wisely. Good luck, agent. I\'ll give you further information of your targets at your arrival. By now you only need to know they are calling themselves The&#x2026;</string>
 	    
 		<!-- Errors -->
 			<string name="error_design">Something wrong happened with the skeleton.</string>

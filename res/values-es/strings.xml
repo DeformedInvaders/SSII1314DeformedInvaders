@@ -34,6 +34,7 @@
 			<string name="title_menu_music">Música</string>
 			<string name="title_menu_tips">Consejos</string>
 			<string name="title_menu_debug">Debug</string>
+			<string name="title_menu_sensor">Sensor</string>
 		
 		<!-- Dialog Section Titles -->	
 			<string name="title_dialog_size">Grosor:</string>
@@ -48,13 +49,15 @@
 			<string name="title_alert_enemies">Enemigos:</string>
 			<string name="title_alert_obstacles">Obstáculos:</string>
 			<string name="title_alert_missiles">Misiles:</string>
+			<string name="title_alert_boss">Jefe:</string>
 			<string name="title_alert_initial">Informe de Inteligencia.\n</string>
 			<string name="title_alert_final">\nBuena suerte.</string>
 			
-			<string name="title_alert_weaknesses_enemies">Known Weaknesses: Atacar, Saltar.</string>
-			<string name="title_alert_weaknesses_obstacles">Known Weaknesses: Saltar.</string>
-			<string name="title_alert_weaknesses_missiles">Known Weaknesses: Agacharse.</string>
-				
+			<string name="title_alert_weaknesses_enemies">Cómo proceder: Atacar, Saltar.</string>
+			<string name="title_alert_weaknesses_obstacles">Cómo proceder: Saltar.</string>
+			<string name="title_alert_weaknesses_missiles">Cómo proceder: Agacharse.</string>
+			<string name="title_alert_weaknesses_boss">Cómo proceder: Disparar.</string>
+			
 		<!-- Dialogs -->
 		
 			<string name="text_tip_design_draw_title">Dibujando el contorno de tu personaje.</string>
@@ -149,6 +152,9 @@
 			<string name="text_processing_level_title">Por favor espere&#x2026;</string>
 			<string name="text_processing_level_description">Cargando el nivel.</string>
 			
+			<string name="text_processing_video_title">Por favor espere&#x2026;</string>
+			<string name="text_processing_video_description">Cargando vídeo.</string>
+			
 			<string name="text_summary">Resumen del nivel.</string>
 			
 			<string name="text_button_yes">Si</string>
@@ -171,8 +177,18 @@
 		    
 		    <string name="text_button_import">Importar</string>
 			
+		<!-- Video -->
+  			<string name="dialog_outside_1">Laboratory MX-45.\nLocalización Clasificada.</string>
+  			<string name="dialog_door_1">Hace 5 horas he recibido un mensaje del Doctor Chus pidiéndome que venga aquí. Parecía urgente.</string>
+		    <string name="dialog_rock_1">¿Doctor Chus? ¿Qué está pasando aquí&#x2026;?</string>
+		    <string name="dialog_noise_1">¡Oh no! ¿Ya es la hora? Dame un segundo&#x2026;</string>
+		    <string name="dialog_brief_1">¡Ya estamos! Bienvenido a mi centro, agente. Le he pedido que venga aquí porque tenemos&#x2026; un pequeño problema&#x2026;</string>
+		    <string name="dialog_brief_2">Hace dos lunas, un grupo de insurgentes irrumpieron en el edificio y robaron algunos de mis nuevas invenciones.</string>
+		    <string name="dialog_brief_3">Estos dos dispositivos les permiten transformarse en cualquier criatura conocida y para viajar a través del tiempo y el espacio.</string>
+		    <string name="dialog_brief_4">Nuestros informantes nos dicen que ya han invadido un primitivo plantea llamado “Tierra”. Se están infiltrando entre los nativos con el fin de esclavizarlos y usarlos contra nosotros en la inminente guerra.</string>
+		    <string name="dialog_brief_5">Toma los mismos dispositivos y úsalos sabiamente. Buena suerte, le daré más instrucciones de sus objetivos a su llegada. Por ahora solo necesita saber que ellos se están haciendo llamar The&#x2026;</string>
+	    
 		<!-- Errors -->
-			<string name="error_play">Próximamente</string>
 			<string name="error_design">Ha ocurrido un problema con el esqueleto.</string>
 			<string name="error_triangle">El poligono no es simple.</string>
 			<string name="error_retouch">El poligono no está dentro del marco.</string>
@@ -205,6 +221,7 @@
 		    <string name="desc_main_import">Importar un personaje creado.</string>
 		    <string name="desc_main_select">Selecionar un personaje.</string>
 		    <string name="desc_main_play">Seleccionar un nivel.</string>
+		    <string name="desc_main_video">Reproducir el vídeo de introducción.</string>
 		    
 		<!-- Design Fragment -->
 		    <string name="desc_design_ready">Listo para definir la textura.</string>
@@ -240,12 +257,13 @@
 	    	<string name="desc_select_delete">Elimina este personaje.</string>
 	    	<string name="desc_select_camera">Publicar este personaje.</string>
 	    	<string name="desc_select_rename">Renombrar este personaje.</string>
-	    	<string name="desc_select_repaint">Repintar este personaje.</string>
+	    	<string name="desc_select_repaint">Editar la decoración de este personaje.</string>
+	    	<string name="desc_select_redeform">Editar las animaciones de este personaje.</string>
 	    	<string name="desc_select_export">Exportar este personaje.</string>
-	    	<string name="desc_select_run">Reproducir animación correr.</string>
-	    	<string name="desc_select_jump">Reproducir animación saltar.</string>
-	    	<string name="desc_select_crouch">Reproducir animación agacharse.</string>
-	    	<string name="desc_select_attack">Reproducir animación atacar.</string>
+	    	<string name="desc_select_run">Reproducir animación de correr.</string>
+	    	<string name="desc_select_jump">Reproducir animación de saltar.</string>
+	    	<string name="desc_select_crouch">Reproducir animación de agacharse.</string>
+	    	<string name="desc_select_attack">Reproducir animación de atacar.</string>
 	    	
 	    <!-- Game Fragment -->
 	    	<string name="desc_game_play">Reanudar el juego.</string>
