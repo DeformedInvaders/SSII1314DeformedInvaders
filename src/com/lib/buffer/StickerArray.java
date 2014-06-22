@@ -50,7 +50,7 @@ public class StickerArray extends FloatArray
 		}
 	}
 	
-	public void setSticker(TTypeSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	public void setSticker(TTypeSticker tipo, int id, float x, float y, short index, float angle, float factor, VertexArray vertices, TriangleArray triangulos)
 	{
 		short sticker = (short) tipo.ordinal();
 		
@@ -78,14 +78,22 @@ public class StickerArray extends FloatArray
 		set(SIZE_STICKER * sticker + ANGLE_BETA_STICKER, beta);
 		set(SIZE_STICKER * sticker + ANGLE_GAMMA_STICKER, gamma);
 		set(SIZE_STICKER * sticker + ANGLE_IOTA_STICKER, -iota);
-		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, NULL_ROTATE);
-		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, NULL_SCALE);
+		set(SIZE_STICKER * sticker + ANGLE_THETA_STICKER, angle);
+		set(SIZE_STICKER * sticker + FACTOR_SCALE_STICKER, factor);
+	}
+	
+	public void setSticker(TTypeSticker tipo, int id, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
+	{
+		setSticker(tipo, id, x, y, index, NULL_ROTATE, NULL_SCALE, vertices, triangulos);
 	}
 	
 	public void setCoords(TTypeSticker tipo, float x, float y, short index, VertexArray vertices, TriangleArray triangulos)
 	{
+		float angle = getThetaSticker(tipo);
+		float factor = getFactorSticker(tipo);		
 		int id = getIdSticker(tipo);
-		setSticker(tipo, id, x, y, index, vertices, triangulos);
+		
+		setSticker(tipo, id, x, y, index, angle, factor, vertices, triangulos);
 	}
 	
 	public void setThetaSticker(TTypeSticker tipo, float ang)

@@ -525,11 +525,11 @@ public abstract class GameCore
 	{
 		if (socialConnector.isFacebookConnected())
 		{
-			socialConnector.disconnectTwitter();
+			socialConnector.disconnectFacebook();
 		}
 		else
 		{
-			socialConnector.connectTwitter();
+			socialConnector.connectFacebook();
 		}	
 		
 		return true;

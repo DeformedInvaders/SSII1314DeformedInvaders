@@ -1,6 +1,5 @@
 package com.lib.math;
 
-import com.android.storage.ExternalStorageManager;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
 import com.lib.utils.DelaunayMesh;
@@ -14,19 +13,15 @@ public class DelaunayMeshGenerator
 		Polygon poligonoBSpline = new Polygon(vertices.items);
 		float areaPoligonoBSpline = Math.abs(poligonoBSpline.area());
 		
-ExternalStorageManager.writeLogcat("TEST", "New Delaunay Mesh Generator.");
 		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();
 		
 		FloatArray delaunayPuntos = vertices.clone();
 		ShortArray delaunayTriangulos = delaunayCalculator.computeTriangles(delaunayPuntos, false);
 
 		boolean meshChanged = true;
-ExternalStorageManager.writeLogcat("TEST", "Generating Mesh.");
 
-		while(meshChanged)
+		while (meshChanged)
 		{
-ExternalStorageManager.writeLogcat("TEST", "Mesh has change.");
-
 			meshChanged = false;
 			
 			Polygon poligono = new Polygon();
@@ -68,9 +63,7 @@ ExternalStorageManager.writeLogcat("TEST", "Mesh has change.");
 			delaunayTriangulos = delaunayCalculator.computeTriangles(delaunayPuntos, false);
 		}
 		
-ExternalStorageManager.writeLogcat("TEST", "Mesh Generation completed.");
 		delaunayCalculator.trim(delaunayTriangulos, delaunayPuntos, vertices, 0, vertices.size);
-ExternalStorageManager.writeLogcat("TEST", "Mesh Generator triming outside triangles.");
 		return new DelaunayMesh(new VertexArray(delaunayPuntos), new TriangleArray(delaunayTriangulos));
 	}
 }

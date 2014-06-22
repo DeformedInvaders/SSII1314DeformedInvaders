@@ -149,7 +149,6 @@ public class OpenGLSurfaceView extends GLSurfaceView
 					{
 						if (mState == TStateDetector.CamaraDetectors)
 						{
-							renderer.restoreCamera();
 							renderer.camaraDrag(pixelX, pixelY, lastPixelX, lastPixelY, getWidth(), getHeight());
 						}
 						else if (mState == TStateDetector.CoordDetectors)

@@ -50,7 +50,7 @@ public class ViewActivity extends FragmentActivity
 	
 	/* Elementos de la Interafaz */
 	private ActionBar mActionBar;
-	private MenuItem botonTwitter, botonFacebook, buttonMusic, buttonTips, /*botonDebug,*/ botonSensor;
+	private MenuItem buttonTwitter, buttonFacebook, buttonMusic, buttonTips, botonDebug, buttonSensor;
 	
 	/* Métodos Activity */
 	
@@ -130,11 +130,11 @@ public class ViewActivity extends FragmentActivity
 		inflater.inflate(R.menu.menu, menu);
 		
 		buttonTips = menu.getItem(0);
-		botonSensor = menu.getItem(1);
+		buttonSensor = menu.getItem(1);
 		buttonMusic = menu.getItem(2);
-		botonTwitter = menu.getItem(3);
-		botonFacebook = menu.getItem(4);
-		//botonDebug = menu.getItem(5);
+		buttonTwitter = menu.getItem(3);
+		buttonFacebook = menu.getItem(4);
+		botonDebug = menu.getItem(5);
 		
 		updateActionBar();
 
@@ -156,8 +156,8 @@ public class ViewActivity extends FragmentActivity
 				return onMenuTwitterButtonClicked();
 			case R.id.menuIcon5:
 				return onMenuFacebookButtonClicked();
-			/*case R.id.menuIcon6:
-				return onMenuDebugButtonClicked();*/
+			case R.id.menuIcon6:
+				return onMenuDebugButtonClicked();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -216,20 +216,20 @@ public class ViewActivity extends FragmentActivity
 	{
 		if (mCore.isTwitterConnected())
 		{
-			botonTwitter.setIcon(R.drawable.icon_social_twitter_connected);
+			buttonTwitter.setIcon(R.drawable.icon_social_twitter_connected);
 		}
 		else
 		{
-			botonTwitter.setIcon(R.drawable.icon_social_twitter_disconnected);
+			buttonTwitter.setIcon(R.drawable.icon_social_twitter_disconnected);
 		}
 
 		if (mCore.isFacebookConnected())
 		{
-			botonFacebook.setIcon(R.drawable.icon_social_facebook_connected);
+			buttonFacebook.setIcon(R.drawable.icon_social_facebook_connected);
 		}
 		else
 		{
-			botonFacebook.setIcon(R.drawable.icon_social_facebook_disconnected);
+			buttonFacebook.setIcon(R.drawable.icon_social_facebook_disconnected);
 		}
 		
 		if (GamePreferences.IS_MUSIC_ENABLED())
@@ -250,22 +250,22 @@ public class ViewActivity extends FragmentActivity
 			buttonTips.setIcon(R.drawable.icon_tool_tips_disabled);
 		}
 		
-		/*if (GamePreferences.IS_DEBUG_ENABLED())
+		if (GamePreferences.IS_DEBUG_ENABLED())
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_enabled);
 		}
 		else
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_disabled);
-		}*/
+		}
 		
 		if (GamePreferences.IS_SENSOR_ENABLED())
 		{
-			botonSensor.setIcon(R.drawable.icon_tool_sensor_enabled);
+			buttonSensor.setIcon(R.drawable.icon_tool_sensor_enabled);
 		}
 		else
 		{
-			botonSensor.setIcon(R.drawable.icon_tool_sensor_disabled);
+			buttonSensor.setIcon(R.drawable.icon_tool_sensor_disabled);
 		}
 	}
 

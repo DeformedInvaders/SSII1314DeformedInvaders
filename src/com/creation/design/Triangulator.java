@@ -1,6 +1,5 @@
 package com.creation.design;
 
-import com.android.storage.ExternalStorageManager;
 import com.lib.buffer.HullArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
@@ -28,18 +27,15 @@ public class Triangulator
 	
 	public Triangulator(VertexArray vertices)
 	{
-ExternalStorageManager.writeLogcat("TEST", "New Triangulator Object.");
 		simplex = false;
 		
 		if(vertices.getNumVertices() > 2)
 		{
-ExternalStorageManager.writeLogcat("TEST", "Polygon with more of 2 vertices.");
 			FloatArray bsplineVertices = calcularBSpline(vertices, 3, NUM_BSPLINE_VERTICES);
 			
 			simplex = calcularPoligonoSimple(bsplineVertices, false).size == 0;
 			if(simplex)
 			{
-ExternalStorageManager.writeLogcat("TEST", "Polygon is simple.");
 				DelaunayMesh m = calcularMeshGenerator(bsplineVertices);
 				mVertices = m.getVertices();
 				mTriangles = m.getTriangles();
@@ -50,10 +46,6 @@ ExternalStorageManager.writeLogcat("TEST", "Polygon is simple.");
 				{
 					mHull.addVertex(i);
 				}
-			}
-			else
-			{
-ExternalStorageManager.writeLogcat("TEST", "Polygon is complex.");
 			}
 		}
 	}

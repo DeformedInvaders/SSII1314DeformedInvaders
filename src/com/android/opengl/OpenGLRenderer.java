@@ -312,7 +312,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 		xRight = xCenter + newAncho / 2.0f;
 		xLeft = xCenter - newAncho / 2.0f;
-		yTop = lastXCenter + newAlto / 2.0f;
+		yTop = yCenter + newAlto / 2.0f;
 		yBottom = yCenter - newAlto / 2.0f;
 
 		updateFrame();

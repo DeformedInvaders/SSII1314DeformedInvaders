@@ -91,9 +91,7 @@ public class Stickers implements Serializable
 		}
 		else
 		{
-			stickers.setSticker(sticker, id, x, y, index, vertices, triangles);
-			stickers.setFactorSticker(sticker, factor);
-			stickers.setThetaSticker(sticker, angle);
+			stickers.setSticker(sticker, id, x, y, index, angle, factor, vertices, triangles);
 		}
 	}
 	
