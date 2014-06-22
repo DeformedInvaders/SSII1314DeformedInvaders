@@ -378,7 +378,9 @@ public class InternalStorageManager
 			GamePreferences.SET_CHARACTER_PARAMETERS(data.readInt());
 			GamePreferences.SET_MUSIC_PARAMETERS(data.readBoolean());
 			GamePreferences.SET_TIP_PARAMETERS(data.readBoolean());
-			GamePreferences.SET_DEBUG_PARAMETERS(data.readBoolean());
+			//FIXME DEBUG
+			//GamePreferences.SET_DEBUG_PARAMETERS(data.readBoolean());
+			GamePreferences.SET_DEBUG_PARAMETERS(false);
 			GamePreferences.SET_SENSOR_PARAMETERS(data.readBoolean());
 
 			data.close();
@@ -405,7 +407,8 @@ public class InternalStorageManager
 		GamePreferences.SET_CHARACTER_PARAMETERS(-1);
 		GamePreferences.SET_MUSIC_PARAMETERS(true);
 		GamePreferences.SET_TIP_PARAMETERS(true);
-		GamePreferences.SET_DEBUG_PARAMETERS(true);
+		//FIXME DEBUG
+		GamePreferences.SET_DEBUG_PARAMETERS(false);
 		GamePreferences.SET_SENSOR_PARAMETERS(true);
 		return false;
 	}

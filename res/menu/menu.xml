@@ -31,9 +31,11 @@
 		android:title="@string/title_menu_facebook"
 		android:showAsAction="always"/>
 	
+	<!-- 
 	<item
 	    android:id="@+id/menuIcon6"
 		android:icon="@drawable/icon_tool_debug_enabled"
 		android:title="@string/title_menu_debug"
 		android:showAsAction="always"/>
+	-->
 </menu>

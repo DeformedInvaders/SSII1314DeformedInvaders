@@ -50,7 +50,8 @@ public class ViewActivity extends FragmentActivity
 	
 	/* Elementos de la Interafaz */
 	private ActionBar mActionBar;
-	private MenuItem buttonTwitter, buttonFacebook, buttonMusic, buttonTips, botonDebug, buttonSensor;
+	//FIXME DEBUG
+	private MenuItem buttonTwitter, buttonFacebook, buttonMusic, buttonTips, buttonSensor;//, botonDebug;
 	
 	/* Métodos Activity */
 	
@@ -134,7 +135,8 @@ public class ViewActivity extends FragmentActivity
 		buttonMusic = menu.getItem(2);
 		buttonTwitter = menu.getItem(3);
 		buttonFacebook = menu.getItem(4);
-		botonDebug = menu.getItem(5);
+		// FIXME DEBUG
+		//botonDebug = menu.getItem(5);
 		
 		updateActionBar();
 
@@ -156,8 +158,10 @@ public class ViewActivity extends FragmentActivity
 				return onMenuTwitterButtonClicked();
 			case R.id.menuIcon5:
 				return onMenuFacebookButtonClicked();
+			/* FIXME DEBUG
 			case R.id.menuIcon6:
 				return onMenuDebugButtonClicked();
+			*/
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -203,6 +207,7 @@ public class ViewActivity extends FragmentActivity
 		return true;
 	}
 	
+	/* FIXME DEBUG
 	public boolean onMenuDebugButtonClicked()
 	{
 		GamePreferences.SWITCH_DEBUG_GAME();
@@ -211,6 +216,7 @@ public class ViewActivity extends FragmentActivity
 		updateActionBar();
 		return true;
 	}
+	*/
 
 	public void updateActionBar()
 	{
@@ -250,6 +256,7 @@ public class ViewActivity extends FragmentActivity
 			buttonTips.setIcon(R.drawable.icon_tool_tips_disabled);
 		}
 		
+		/* FIXME DEBUG
 		if (GamePreferences.IS_DEBUG_ENABLED())
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_enabled);
@@ -258,6 +265,7 @@ public class ViewActivity extends FragmentActivity
 		{
 			botonDebug.setIcon(R.drawable.icon_tool_debug_disabled);
 		}
+		*/
 		
 		if (GamePreferences.IS_SENSOR_ENABLED())
 		{
