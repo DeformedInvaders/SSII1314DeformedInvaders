@@ -283,7 +283,7 @@ public class GameOpenGLRenderer extends OpenGLRenderer
 		}
 		else if (movimiento == TTypeMovement.Jump)
 		{
-			characterInstance.jump(character.getAnimationLength());
+			characterInstance.jump();
 			return true;
 		}
 		

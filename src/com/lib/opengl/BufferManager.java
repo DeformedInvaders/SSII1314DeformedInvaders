@@ -12,15 +12,15 @@ public class BufferManager
 {
 	/* Métodos de Construcción de Buffer de Pintura */
 	
-	public static FloatBuffer construirBufferTextura()
+	public static FloatBuffer buildBufferTexture()
 	{
 		float texture[] = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f };
-		return construirBufferListaPuntos(texture);
+		return buildBufferVertexList(texture);
 	}
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP
-	public static FloatBuffer construirBufferListaPuntos(float[] vertices)
+	public static FloatBuffer buildBufferVertexList(float[] vertices)
 	{
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -33,16 +33,16 @@ public class BufferManager
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de vertices
 	// Uso para GL_POINTS o GL_LINE_LOOP
-	public static FloatBuffer construirBufferListaPuntos(VertexArray vertices)
+	public static FloatBuffer buildBufferVertexList(VertexArray vertices)
 	{
 		float[] arrayVertices = new float[vertices.size];
 		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
 
-		return construirBufferListaPuntos(arrayVertices);
+		return buildBufferVertexList(arrayVertices);
 	}
 
 	// Construcción de un buffer de pintura para puntos a partir de una lista de indice de vertices
-	public static FloatBuffer construirBufferListaIndicePuntos(HullArray contorno, VertexArray vertices)
+	public static FloatBuffer buildBufferVertexIndexList(HullArray contorno, VertexArray vertices)
 	{
 		float[] arrayVertices = new float[2 * contorno.getNumVertices()];
 
@@ -57,12 +57,12 @@ public class BufferManager
 			j = j + 2;
 		}
 
-		return construirBufferListaPuntos(arrayVertices);
+		return buildBufferVertexList(arrayVertices);
 	}
 
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_LINES
-	public static FloatBuffer construirBufferListaTriangulos(TriangleArray triangulos, VertexArray vertices)
+	public static FloatBuffer buildBufferTriangleList(TriangleArray triangulos, VertexArray vertices)
 	{
 		float[] arrayVertices = new float[12 * triangulos.getNumTriangles()];
 
@@ -94,12 +94,12 @@ public class BufferManager
 			j = j + 12;			
 		}
 
-		return construirBufferListaPuntos(arrayVertices);
+		return buildBufferVertexList(arrayVertices);
 	}
 
 	// Construcción de un buffer de pintura para lineas a partir de una lista de triangulos.
 	// Uso para GL_TRIANGLES
-	public static FloatBuffer construirBufferListaTriangulosRellenos(TriangleArray triangulos, VertexArray vertices)
+	public static FloatBuffer buildBufferTriangleFillList(TriangleArray triangulos, VertexArray vertices)
 	{
 		float[] arrayVertices = new float[6 * triangulos.getNumTriangles()];
 
@@ -122,13 +122,13 @@ public class BufferManager
 			j = j + 6;
 		}
 
-		return construirBufferListaPuntos(arrayVertices);
+		return buildBufferVertexList(arrayVertices);
 	}
 
 	/* Metodos de Actualización de Buffers de Pintura */
 
 	// Actualiza los valores de un buffer de pintura para puntos
-	public static void actualizarBufferListaPuntos(FloatBuffer buffer, VertexArray vertices)
+	public static void updateBufferVertexList(FloatBuffer buffer, VertexArray vertices)
 	{
 		float[] arrayVertices = new float[vertices.size];
 		System.arraycopy(vertices.items, 0, arrayVertices, 0, vertices.size);
@@ -139,7 +139,7 @@ public class BufferManager
 
 	// Actualizar los valores de un buffer de pintura para triangulos.
 	// Uso para GL_LINES
-	public static void actualizarBufferListaTriangulos(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
+	public static void updateBufferTriangleList(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
 	{
 		int j = 0;
 		for (short i = 0; i < triangulos.getNumTriangles(); i++)
@@ -172,7 +172,7 @@ public class BufferManager
 
 	// Actualiza los valores de un buffer de pintura para triangulos
 	// Uso para GL_TRIANGLES
-	public static void actualizarBufferListaTriangulosRellenos(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
+	public static void updateBufferTriangleFillList(FloatBuffer buffer, TriangleArray triangulos, VertexArray vertices)
 	{
 		int j = 0;
 		for (short i = 0; i < triangulos.getNumTriangles(); i++)
@@ -195,7 +195,7 @@ public class BufferManager
 	}
 
 	// Actualiza los valores de un buffer de pintura para indice puntos
-	public static void actualizarBufferListaIndicePuntos(FloatBuffer buffer, HullArray contorno, VertexArray vertices)
+	public static void updateBufferVertexIndexList(FloatBuffer buffer, HullArray contorno, VertexArray vertices)
 	{
 		int j = 0;
 		for (short i = 0; i < contorno.getNumVertices(); i++)
@@ -211,7 +211,7 @@ public class BufferManager
 	
 	/* Métodos de Transformación de Puntos */
 	
-	public static void trasladarVertices(float vx, float vy, VertexArray vertices)
+	public static void dragVertices(float vx, float vy, VertexArray vertices)
 	{
 		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
@@ -222,14 +222,14 @@ public class BufferManager
 		}
 	}
 
-	public static void escalarVertices(float fx, float fy, float cx, float cy, VertexArray vertices)
+	public static void scaleVertices(float fx, float fy, float cx, float cy, VertexArray vertices)
 	{
-		trasladarVertices(-cx, -cy, vertices);
-		escalarVertices(fx, fy, vertices);
-		trasladarVertices(cx, cy, vertices);
+		dragVertices(-cx, -cy, vertices);
+		scaleVertices(fx, fy, vertices);
+		dragVertices(cx, cy, vertices);
 	}
 
-	public static void escalarVertices(float fx, float fy, VertexArray vertices)
+	public static void scaleVertices(float fx, float fy, VertexArray vertices)
 	{
 		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{
@@ -240,14 +240,14 @@ public class BufferManager
 		}
 	}
 
-	public static void rotarVertices(float angRad, float cx, float cy, VertexArray vertices)
+	public static void rotateVertices(float angRad, float cx, float cy, VertexArray vertices)
 	{
-		trasladarVertices(-cx, -cy, vertices);
-		rotarVertices(angRad, vertices);
-		trasladarVertices(cx, cy, vertices);
+		dragVertices(-cx, -cy, vertices);
+		rotateVertices(angRad, vertices);
+		dragVertices(cx, cy, vertices);
 	}
 
-	public static void rotarVertices(float angRad, VertexArray vertices)
+	public static void rotateVertices(float angRad, VertexArray vertices)
 	{
 		for (short i = 0; i < vertices.getNumVertices(); i++)
 		{

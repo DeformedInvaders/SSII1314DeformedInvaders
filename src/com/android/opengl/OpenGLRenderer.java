@@ -126,7 +126,7 @@ public abstract class OpenGLRenderer implements Renderer
 			textureLoaded = new boolean[numTextures];
 			textureVertex = new FloatBuffer[numTextures];
 	
-			coordTexturaRectangulo = BufferManager.construirBufferTextura();
+			coordTexturaRectangulo = BufferManager.buildBufferTexture();
 		}
 		
 		// Personaje
@@ -407,13 +407,13 @@ public abstract class OpenGLRenderer implements Renderer
 		frameWidthSide = GamePreferences.FRAME_WIDTH_SIDE(camaraWidth, camaraHeight);
 
 		float[] recA = { 0, 0, 0, frameWidthMiddle, frameWidthSide, 0, frameWidthSide, frameWidthMiddle };
-		recFrameSide = BufferManager.construirBufferListaPuntos(recA);
+		recFrameSide = BufferManager.buildBufferVertexList(recA);
 
 		float[] recB = { 0, 0, 0, frameHeightSide, camaraWidth, 0, camaraWidth, frameHeightSide };
-		recMarcoFrontal = BufferManager.construirBufferListaPuntos(recB);
+		recMarcoFrontal = BufferManager.buildBufferVertexList(recB);
 		
 		float[] recC = { 0, 0, 0, frameWidthMiddle, frameWidthMiddle, 0, frameWidthMiddle, frameWidthMiddle };
-		recMarcoInterior = BufferManager.construirBufferListaPuntos(recC);
+		recMarcoInterior = BufferManager.buildBufferVertexList(recC);
 	}
 	
 	protected boolean isPointOutsideFrame(float x, float y)
@@ -453,7 +453,7 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(frameWidthSide, frameHeightSide, 0);
-				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
+				OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoInterior);
 	
 			gl.glPopMatrix();
 	
@@ -469,10 +469,10 @@ public abstract class OpenGLRenderer implements Renderer
 			gl.glPushMatrix();
 	
 				gl.glTranslatef(0, frameHeightSide, 0);
-				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recFrameSide);
+				OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recFrameSide);
 		
 				gl.glTranslatef(frameWidthSide + frameWidthMiddle, 0, 0);
-				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recFrameSide);
+				OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recFrameSide);
 	
 			gl.glPopMatrix();
 
@@ -487,10 +487,10 @@ public abstract class OpenGLRenderer implements Renderer
 	
 			gl.glPushMatrix();
 			
-			OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
+			OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 				gl.glTranslatef(0, frameHeightSide + frameWidthMiddle, 0);
-				OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
+				OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLE_STRIP, 0, color, recMarcoFrontal);
 	
 			gl.glPopMatrix();
 
@@ -499,7 +499,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	protected BitmapImage getScreenshot(GL10 gl)
 	{
-		return OpenGLManager.capturaPantalla(gl, (int) frameWidthSide, (int) frameHeightSide, (int) frameWidthMiddle, (int) frameWidthMiddle);
+		return OpenGLManager.screenshot(gl, (int) frameWidthSide, (int) frameHeightSide, (int) frameWidthMiddle, (int) frameWidthMiddle);
 	}
 
 	/* Métodos de Conversión de Coordenadas */
@@ -654,7 +654,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 	private void loadTexture(GL10 gl, Bitmap textura, int[] textureName, boolean[] textureLoaded, int texturePosition)
 	{
-		OpenGLManager.cargarTextura(gl, textura, textureName, texturePosition);
+		OpenGLManager.loadTexture(gl, textura, textureName, texturePosition);
 
 		textureLoaded[texturePosition] = true;
 	}
@@ -719,7 +719,7 @@ public abstract class OpenGLRenderer implements Renderer
 				vertices.addVertex(textureWidth, textureHeight);
 			}
 			
-			textureVertex[texturePosition] = BufferManager.construirBufferListaPuntos(vertices);
+			textureVertex[texturePosition] = BufferManager.buildBufferVertexList(vertices);
 
 			return new Dimensions(textureHeight, textureWidth);
 		}
@@ -762,7 +762,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 		if (texturePosition != -1 && textureLoaded[texturePosition])
 		{
-			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLES, bufferTextureVertex, bufferTextureCoord, textureName[texturePosition]);
+			OpenGLManager.drawTexture(gl, GL10.GL_TRIANGLES, bufferTextureVertex, bufferTextureCoord, textureName[texturePosition]);
 		}
 	}
 
@@ -772,7 +772,7 @@ public abstract class OpenGLRenderer implements Renderer
 
 		if (texturePosition != -1 && textureLoaded[texturePosition])
 		{
-			OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, textureVertex[texturePosition], coordTexturaRectangulo, textureName[texturePosition]);
+			OpenGLManager.drawTexture(gl, GL10.GL_TRIANGLE_STRIP, textureVertex[texturePosition], coordTexturaRectangulo, textureName[texturePosition]);
 		}
 	}
 
@@ -881,7 +881,7 @@ public abstract class OpenGLRenderer implements Renderer
 			
 							gl.glTranslatef(backgroundPosition[i], 0.0f, GamePreferences.DEEP_BACKGROUND);
 				
-							OpenGLManager.dibujarTextura(gl, GL10.GL_TRIANGLE_STRIP, backgroundVertex[i], coordTexturaRectangulo, backgroundName[i]);
+							OpenGLManager.drawTexture(gl, GL10.GL_TRIANGLE_STRIP, backgroundVertex[i], coordTexturaRectangulo, backgroundName[i]);
 			
 						gl.glPopMatrix();
 					}
@@ -904,7 +904,7 @@ public abstract class OpenGLRenderer implements Renderer
 			{
 				if (backgroundLoaded[i])
 				{
-					backgroundVertex[i] = BufferManager.construirBufferListaPuntos(vertices);
+					backgroundVertex[i] = BufferManager.buildBufferVertexList(vertices);
 				}
 			}
 		}

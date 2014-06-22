@@ -13,7 +13,7 @@ import com.lib.math.Intersector;
 import com.main.model.GamePreferences;
 
 public class InstanceEntity
-{
+{	
 	private int idEntity;
 	private TTypeEntity typeEntity;
 	
@@ -46,7 +46,7 @@ public class InstanceEntity
 	}
 	
 	public void setDimensions(float h, float w)
-	{
+	{		
 		height = h;
 		width = w;
 		
@@ -145,10 +145,10 @@ public class InstanceEntity
 		moveArea(coordX, coordY);
 	}
 	
-	public void jump(int numFrames)
+	public void jump()
 	{
-		animationPosition = numFrames;
-		animationLength = numFrames;
+		animationPosition = GamePreferences.NUM_FRAMES_ANIMATION;
+		animationLength = GamePreferences.NUM_FRAMES_ANIMATION;
 	}
 	
 	public Circle getArea()

@@ -36,7 +36,8 @@ public class GamePreferences
 	
 	private static final int TIME_INTERVAL_ANIMATION_VIDEO = 20;
 	
-	public static final int NUM_FRAMES_ANIMATION = 20;
+	public static final int NUM_FRAMES_ANIMATION = 50;
+	public static final int NUM_FRAMES_VIDEO = 20;
 	public static final int NUM_FRAMES_CYCLE = 5;
 	public static final int NUM_FRAMES_SHOT = 10;
 	
@@ -50,7 +51,7 @@ public class GamePreferences
 	public static final float DEEP_OBJECTS = 0.99f;
 
 	// Niveles
-	private static final int MAX_ENEMIES = 3;//50;
+	private static final int MAX_ENEMIES = 10;//50;
 	public static final int MAX_CHARACTERS = 10;
 	public static final int MAX_CHARACTER_LIVES = 3;
 	public static final int MAX_BOSS_LIVES = 3;

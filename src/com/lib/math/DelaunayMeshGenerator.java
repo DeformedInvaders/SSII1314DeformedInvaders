@@ -43,7 +43,7 @@ public class DelaunayMeshGenerator
 				
 				poligono.setVertices(vert);
 				
-				if (Math.abs(poligono.area()) > areaPoligonoBSpline / 50)
+				if (Math.abs(poligono.area()) > areaPoligonoBSpline / 40)
 				{
 					Vector2 centroGravedad = GeometryUtils.triangleCentroid(vert[0], vert[1], vert[2], vert[3], vert[4], vert[5], new Vector2());
 					

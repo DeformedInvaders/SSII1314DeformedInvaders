@@ -98,7 +98,7 @@ public class Handle
 	
 	public void dibujar(GL10 gl)
 	{
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handleColor, bufferFill);
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, bufferHull);
+		OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLE_FAN, GamePreferences.SIZE_LINE, handleColor, bufferFill);
+		OpenGLManager.drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE / 2, Color.WHITE, bufferHull);
 	}
 }

@@ -87,8 +87,8 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		vertices = character.getSkeleton().getVertices();
 		triangles = character.getSkeleton().getTriangles();
 
-		bufferVertices = BufferManager.construirBufferListaTriangulosRellenos(triangles, vertices);
-		bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
+		bufferVertices = BufferManager.buildBufferTriangleFillList(triangles, vertices);
+		bufferHull = BufferManager.buildBufferVertexIndexList(hull, vertices);
 		
 		if (character.isTextureReady())
 		{
@@ -161,7 +161,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		drawInsideFrameBegin(gl);
 
 		// Esqueleto
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, backgroundColor, bufferVertices);
+		OpenGLManager.drawBuffer(gl, GL10.GL_TRIANGLES, GamePreferences.SIZE_LINE, backgroundColor, bufferVertices);
 
 		gl.glPushMatrix();
 		
@@ -172,7 +172,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			{
 				synchronized (polylineActual)
 				{
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polylineSize.getSize(), paletteColor, bufferPolyline);
+					OpenGLManager.drawBuffer(gl, GL10.GL_LINE_STRIP, polylineSize.getSize(), paletteColor, bufferPolyline);
 				}
 			}
 			
@@ -182,7 +182,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 				while (it.hasNext())
 				{
 					Polyline polilinea = it.next();
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize().getSize(), polilinea.getColor(), polilinea.getBuffer());
+					OpenGLManager.drawBuffer(gl, GL10.GL_LINE_STRIP, polilinea.getSize().getSize(), polilinea.getColor(), polilinea.getBuffer());
 				}
 			}
 
@@ -191,7 +191,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 		if (mState != TStatePaint.Screenshot)
 		{
 			// Contorno
-			OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
+			OpenGLManager.drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
 
 			// Dibujar Pegatinas
 			stickers.drawTexture(gl, this, vertices, triangles, TTypeEntity.Character, 0);
@@ -273,7 +273,7 @@ public class PaintOpenGLRenderer extends OpenGLRenderer
 			{
 				polylineActual.addVertex(frameX, frameY);
 	
-				bufferPolyline = BufferManager.construirBufferListaPuntos(polylineActual);
+				bufferPolyline = BufferManager.buildBufferVertexList(polylineActual);
 			}
 			
 			return true;

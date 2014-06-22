@@ -113,8 +113,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		verticesModified = vertices.clone();
 		triangles = personaje.getSkeleton().getTriangles();
 
-		bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
-		bufferTriangles = BufferManager.construirBufferListaTriangulosRellenos(triangles, vertices);
+		bufferHull = BufferManager.buildBufferVertexIndexList(hull, vertices);
+		bufferTriangles = BufferManager.buildBufferTriangleFillList(triangles, vertices);
 
 		// Handles
 		handles = new HandleArray();
@@ -125,7 +125,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		
 		// Textura
 		texture = personaje.getTexture();
-		textureCoords = BufferManager.construirBufferListaTriangulosRellenos(triangles, texture.getTextureCoords());
+		textureCoords = BufferManager.buildBufferTriangleFillList(triangles, texture.getTextureCoords());
 		stickers = texture.getStickers();
 
 		handleObject = new Handle(20, GamePreferences.POINT_WIDTH, Color.BLACK);
@@ -172,7 +172,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			drawCharacter(gl, bufferTriangles, bufferHull, verticesModified);
 
 			// Handles
-			OpenGLManager.dibujarListaHandle(gl, handleObject, handleSelectedObject, handles);
+			OpenGLManager.drawHandleList(gl, handleObject, handleSelectedObject, handles);
 
 			// Centrado de Marco
 			drawInsideFrameEnd(gl);
@@ -185,7 +185,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		texture.drawTexture(gl, this, malla, textureCoords, TTypeEntity.Character, 0);
 
 		// Contorno
-		OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
+		OpenGLManager.drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, contorno);
 
 		// Pegatinas
 		stickers.drawTexture(gl, this, vertices, triangles, TTypeEntity.Character, 0);
@@ -233,8 +233,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		handles.clear();
 
 		verticesModified = vertices.clone();
-		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangles, triangles, verticesModified);
-		BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, verticesModified);
+		BufferManager.updateBufferTriangleFillList(bufferTriangles, triangles, verticesModified);
+		BufferManager.updateBufferVertexIndexList(bufferHull, hull, verticesModified);
 
 		animationHandles.clear();
 		animationListVertices.clear();
@@ -272,7 +272,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handles.addHandle(frameX, frameY, triangle, verticesModified, triangles);
 			
 			// Añadir Handle Nuevo
-			deformator.anyadirHandles(handles);
+			deformator.addHandles(handles);
 			
 			return true;
 		}
@@ -308,7 +308,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			handles.removeHandle(handle);
 			
 			// Eliminar Handle
-			deformator.eliminarHandles(handles);
+			deformator.deleteHandles(handles);
 			
 			return true;
 		}
@@ -465,10 +465,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 			}
 			
 			// Cambiar Posicion de los Handles
-			deformator.moverHandles(handles, verticesModified);
+			deformator.moveHandles(handles, verticesModified);
 
-			BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangles, triangles, verticesModified);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, verticesModified);
+			BufferManager.updateBufferTriangleFillList(bufferTriangles, triangles, verticesModified);
+			BufferManager.updateBufferVertexIndexList(bufferHull, hull, verticesModified);
 
 			return true;
 		}
@@ -502,12 +502,12 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 				{
 					HandleArray handleInterpolado = lastHandles.interpolar(animationHandles.get(i), j / numFramesRepetir);
 					
-					deformator.moverHandles(handleInterpolado, frame);
+					deformator.moveHandles(handleInterpolado, frame);
 					animationListVertices.add(frame.clone());
 				}
 			}
 			
-			deformator.moverHandles(animationHandles.get(i), frame);
+			deformator.moveHandles(animationHandles.get(i), frame);
 			animationListVertices.add(frame.clone());
 			lastHandles = animationHandles.get(i);
 			
@@ -545,8 +545,8 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 
 		resetHandles();
 
-		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangles, triangles, verticesModified);
-		BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, verticesModified);
+		BufferManager.updateBufferTriangleFillList(bufferTriangles, triangles, verticesModified);
+		BufferManager.updateBufferVertexIndexList(bufferHull, hull, verticesModified);
 	}
 
 	public void selectPlaying()
@@ -560,15 +560,15 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	{
 		animationPosition = 0;
 		animationVertices = animationListVertices.get(animationPosition);
-		animationTriangles = BufferManager.construirBufferListaTriangulosRellenos(triangles, animationVertices);
-		animationHull = BufferManager.construirBufferListaIndicePuntos(hull, animationVertices);
+		animationTriangles = BufferManager.buildBufferTriangleFillList(triangles, animationVertices);
+		animationHull = BufferManager.buildBufferVertexIndexList(hull, animationVertices);
 	}
 
 	public boolean playAnimation()
 	{
 		animationVertices = animationListVertices.get(animationPosition);
-		BufferManager.actualizarBufferListaTriangulosRellenos(animationTriangles, triangles, animationVertices);
-		BufferManager.actualizarBufferListaIndicePuntos(animationHull, hull, animationVertices);
+		BufferManager.updateBufferTriangleFillList(animationTriangles, triangles, animationVertices);
+		BufferManager.updateBufferVertexIndexList(animationHull, hull, animationVertices);
 		animationPosition++;
 
 		return animationPosition == animationListVertices.size();
@@ -648,10 +648,10 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 		}
 		else if (handles.getNumHandles() > 0)
 		{
-			deformator.anyadirHandles(handles);
+			deformator.addHandles(handles);
 		}
 		
-		BufferManager.actualizarBufferListaTriangulosRellenos(bufferTriangles, triangles, verticesModified);
-		BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, verticesModified);
+		BufferManager.updateBufferTriangleFillList(bufferTriangles, triangles, verticesModified);
+		BufferManager.updateBufferVertexIndexList(bufferHull, hull, verticesModified);
 	}
 }

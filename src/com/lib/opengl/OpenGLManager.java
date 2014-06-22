@@ -17,7 +17,7 @@ import com.main.model.GamePreferences;
 
 public class OpenGLManager
 {
-	public static BitmapImage capturaPantalla(GL10 gl, int leftX, int leftY, int width, int height)
+	public static BitmapImage screenshot(GL10 gl, int leftX, int leftY, int width, int height)
 	{
 		int screenshotSize = width * height;
 		ByteBuffer bb = ByteBuffer.allocateDirect(screenshotSize * 4);
@@ -38,7 +38,7 @@ public class OpenGLManager
 		return textura;
 	}
 	
-	public static void cargarTextura(GL10 gl, Bitmap textura, int[] nombreTexturas, int posTextura)
+	public static void loadTexture(GL10 gl, Bitmap textura, int[] nombreTexturas, int posTextura)
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 
@@ -55,7 +55,7 @@ public class OpenGLManager
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
-	public static void dibujarTextura(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int nombreTextura)
+	public static void drawTexture(GL10 gl, int type, FloatBuffer bufferPuntos, FloatBuffer bufferCoordTextura, int nombreTextura)
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 
@@ -81,7 +81,7 @@ public class OpenGLManager
 	/* Pintura de Buffers */
 	
 	// Pintura de un Buffer de Puntos
-	public static void dibujarBuffer(GL10 gl, int type, int size, int color, FloatBuffer bufferPuntos)
+	public static void drawBuffer(GL10 gl, int type, int size, int color, FloatBuffer bufferPuntos)
 	{
 		gl.glColor4f(Color.red(color) / 255.0f, Color.green(color) / 255.0f, Color.blue(color) / 255.0f, Color.alpha(color) / 255.0f);
 		gl.glFrontFace(GL10.GL_CW);
@@ -102,13 +102,13 @@ public class OpenGLManager
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
-	public static void dibujarBuffer(GL10 gl, int color, FloatBuffer bufferPuntos)
+	public static void drawBuffer(GL10 gl, int color, FloatBuffer bufferPuntos)
 	{
-		dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, color, bufferPuntos);
+		drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, color, bufferPuntos);
 	}
 
 	// Pintura de una Lista de Handles
-	public static void dibujarListaHandle(GL10 gl, Handle handle, Handle handleSeleccionado, HandleArray handles)
+	public static void drawHandleList(GL10 gl, Handle handle, Handle handleSeleccionado, HandleArray handles)
 	{
 		for (short i = 0; i < handles.getNumHandles(); i++)
 		{

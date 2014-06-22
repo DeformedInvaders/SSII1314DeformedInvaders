@@ -83,7 +83,7 @@ public abstract class Mesh extends Entity
 			texture.drawTexture(gl, renderer, bufferAnimationTriangles, textureCoords, typeEntity, idEntity);
 	
 			// Contorno
-			OpenGLManager.dibujarBuffer(gl, Color.BLACK, bufferAnimationHull);
+			OpenGLManager.drawBuffer(gl, Color.BLACK, bufferAnimationHull);
 			
 			// Pegatinas
 			stickers.drawTexture(gl, renderer, animationVertices, triangles, typeEntity, idEntity);
@@ -98,8 +98,8 @@ public abstract class Mesh extends Entity
 		{	
 			animationPosition = 0;
 			animationVertices = listAnimationVertex.get(animationPosition);
-			bufferAnimationTriangles = BufferManager.construirBufferListaTriangulosRellenos(triangles, animationVertices);
-			bufferAnimationHull = BufferManager.construirBufferListaIndicePuntos(hull, animationVertices);
+			bufferAnimationTriangles = BufferManager.buildBufferTriangleFillList(triangles, animationVertices);
+			bufferAnimationHull = BufferManager.buildBufferVertexIndexList(hull, animationVertices);
 		}
 	}
 
@@ -118,8 +118,8 @@ public abstract class Mesh extends Entity
 		if (movementsReady)
 		{
 			animationVertices = listAnimationVertex.get(animationPosition);
-			BufferManager.actualizarBufferListaTriangulosRellenos(bufferAnimationTriangles, triangles, animationVertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferAnimationHull, hull, animationVertices);
+			BufferManager.updateBufferTriangleFillList(bufferAnimationTriangles, triangles, animationVertices);
+			BufferManager.updateBufferVertexIndexList(bufferAnimationHull, hull, animationVertices);
 			animationPosition++;
 	
 			return animationPosition == listAnimationVertex.size() - 1;
@@ -136,8 +136,8 @@ public abstract class Mesh extends Entity
 		vertices = s.getVertices();
 		triangles = s.getTriangles();
 
-		bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
-		bufferTriangles = BufferManager.construirBufferListaTriangulosRellenos(triangles, vertices);
+		bufferHull = BufferManager.buildBufferVertexIndexList(hull, vertices);
+		bufferTriangles = BufferManager.buildBufferTriangleFillList(triangles, vertices);
 		
 		skeletonReady = true;
 	}
@@ -146,7 +146,7 @@ public abstract class Mesh extends Entity
 	{
 		texture = t;
 		stickers = texture.getStickers();
-		textureCoords = BufferManager.construirBufferListaTriangulosRellenos(triangles, texture.getTextureCoords());
+		textureCoords = BufferManager.buildBufferTriangleFillList(triangles, texture.getTextureCoords());
 		textureReady = true;
 		
 		width = texture.getWidth();
@@ -154,15 +154,6 @@ public abstract class Mesh extends Entity
 	}
 	
 	/* Métodos de Obtención de Información */	
-	public int getAnimationLength()
-	{
-		if (listAnimationVertex != null)
-		{
-			return listAnimationVertex.size();
-		}
-		
-		return 0;
-	}
 
 	public boolean isSkeletonReady()
 	{

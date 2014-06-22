@@ -70,17 +70,17 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 						{
 							if (triangulate)
 							{
-								OpenGLManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferTriangles);
+								OpenGLManager.drawBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferTriangles);
 							}
 							else
 							{
-								OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
+								OpenGLManager.drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
 							}
 						}
 						else
 						{
-							OpenGLManager.dibujarBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoints);
-							OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoints);
+							OpenGLManager.drawBuffer(gl, GL10.GL_POINTS, GamePreferences.POINT_WIDTH, Color.RED, bufferPoints);
+							OpenGLManager.drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLUE, bufferPoints);
 						}
 					}
 					
@@ -97,11 +97,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 				
 				if (triangulate)
 				{
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferTriangles);
+					OpenGLManager.drawBuffer(gl, GL10.GL_LINES, GamePreferences.SIZE_LINE, Color.BLACK, bufferTriangles);
 				}
 				else
 				{
-					OpenGLManager.dibujarBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
+					OpenGLManager.drawBuffer(gl, GL10.GL_LINE_LOOP, GamePreferences.SIZE_LINE, Color.BLACK, bufferHull);
 				}
 				// Centrado de Marco
 				drawInsideFrameEnd(gl);
@@ -159,7 +159,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			
 			points.addVertex(frameX, frameY);
 
-			bufferPoints = BufferManager.construirBufferListaPuntos(points);
+			bufferPoints = BufferManager.buildBufferVertexList(points);
 
 			return true;
 		}
@@ -195,8 +195,8 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			if (simplex)
 			{
 				triangles.sortCounterClockwise(vertices);
-				bufferTriangles = BufferManager.construirBufferListaTriangulos(triangles, vertices);
-				bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
+				bufferTriangles = BufferManager.buildBufferTriangleList(triangles, vertices);
+				bufferHull = BufferManager.buildBufferVertexIndexList(hull, vertices);
 				
 				mState = TSatateDesign.Preparing;
 			}
@@ -221,9 +221,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float cFrameX = (frameX + lastFrameX) / 2.0f;
 			float cFrameY = (frameY + lastFrameY) / 2.0f;
 
-			BufferManager.escalarVertices(factor, factor, cFrameX, cFrameY, vertices);
-			BufferManager.actualizarBufferListaTriangulos(bufferTriangles, triangles, vertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, vertices);
+			BufferManager.scaleVertices(factor, factor, cFrameX, cFrameY, vertices);
+			BufferManager.updateBufferTriangleList(bufferTriangles, triangles, vertices);
+			BufferManager.updateBufferVertexIndexList(bufferHull, hull, vertices);
 		}
 	}
 
@@ -241,9 +241,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float dWorldX = frameX - lastFrameX;
 			float dWorldY = frameY - lastFrameY;
 
-			BufferManager.trasladarVertices(dWorldX, dWorldY, vertices);
-			BufferManager.actualizarBufferListaTriangulos(bufferTriangles, triangles, vertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, vertices);
+			BufferManager.dragVertices(dWorldX, dWorldY, vertices);
+			BufferManager.updateBufferTriangleList(bufferTriangles, triangles, vertices);
+			BufferManager.updateBufferVertexIndexList(bufferHull, hull, vertices);
 		}
 	}
 
@@ -255,9 +255,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			float cFrameX = convertPixelXToFrameXCoordinate(pixelX, screenWidth);
 			float cFrameY = convertPixelYToFrameYCoordinate(pixelY, screenHeight);
 			
-			BufferManager.rotarVertices(angRad, cFrameX, cFrameY, vertices);
-			BufferManager.actualizarBufferListaTriangulos(bufferTriangles, triangles, vertices);
-			BufferManager.actualizarBufferListaIndicePuntos(bufferHull, hull, vertices);
+			BufferManager.rotateVertices(angRad, cFrameX, cFrameY, vertices);
+			BufferManager.updateBufferTriangleList(bufferTriangles, triangles, vertices);
+			BufferManager.updateBufferVertexIndexList(bufferHull, hull, vertices);
 		}
 	}
 
@@ -348,9 +348,9 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 		if (simplex)
 		{
-			bufferPoints = BufferManager.construirBufferListaPuntos(points);
-			bufferTriangles = BufferManager.construirBufferListaTriangulos(triangles, vertices);
-			bufferHull = BufferManager.construirBufferListaIndicePuntos(hull, vertices);
+			bufferPoints = BufferManager.buildBufferVertexList(points);
+			bufferTriangles = BufferManager.buildBufferTriangleList(triangles, vertices);
+			bufferHull = BufferManager.buildBufferVertexIndexList(hull, vertices);
 		}
 	}
 }

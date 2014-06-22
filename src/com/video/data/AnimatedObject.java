@@ -39,7 +39,7 @@ public class AnimatedObject extends InanimatedObject
 		animationPositionCyclic = 0;
 				
 		animationFramesWait = GamePreferences.NUM_FRAMES_CYCLE;
-		animationFramesLength = GamePreferences.NUM_FRAMES_ANIMATION;
+		animationFramesLength = GamePreferences.NUM_FRAMES_VIDEO;
 		
 		animationFrames = animationFramesWait;
 		

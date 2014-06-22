@@ -21,22 +21,22 @@ public class Triangulator
 	private VertexArray mVertices;
 	private TriangleArray mTriangles;
 	private HullArray mHull;
-	private boolean simplex;
+	private boolean mSimplex;
 	
 	/* Constructora */
 	
 	public Triangulator(VertexArray vertices)
 	{
-		simplex = false;
+		mSimplex = false;
 		
 		if(vertices.getNumVertices() > 2)
 		{
-			FloatArray bsplineVertices = calcularBSpline(vertices, 3, NUM_BSPLINE_VERTICES);
+			FloatArray bsplineVertices = buildBSpline(vertices, 3, NUM_BSPLINE_VERTICES);
 			
-			simplex = calcularPoligonoSimple(bsplineVertices, false).size == 0;
-			if(simplex)
+			mSimplex = isSimplexPolygon(bsplineVertices, false).size == 0;
+			if(mSimplex)
 			{
-				DelaunayMesh m = calcularMeshGenerator(bsplineVertices);
+				DelaunayMesh m = buildDelaunayMesh(bsplineVertices);
 				mVertices = m.getVertices();
 				mTriangles = m.getTriangles();
 				
@@ -54,7 +54,7 @@ public class Triangulator
 	
 	public boolean getSimplex()
 	{
-		return simplex;
+		return mSimplex;
 	}
 	
 	public VertexArray getVertices()
@@ -74,37 +74,37 @@ public class Triangulator
 	
 	/* Métodos Públicos Estáticos */
 	
-	public static FloatArray calcularConvexHull(FloatArray vertices, boolean ordenados)
+	public static FloatArray buildConvexHull(FloatArray vertices, boolean ordenados)
 	{
 		ConvexHull convexHullCalculator = new ConvexHull();
 		return convexHullCalculator.computePolygon(vertices, ordenados);
 	}
 	
-	public static FloatArray calcularBSpline(FloatArray vertices, int grado, int iter)
+	public static FloatArray buildBSpline(FloatArray vertices, int grado, int iter)
 	{
 		BSpline<Vector2> bsplineCalculator = new BSpline<Vector2>(vertices, grado, true);
 		return bsplineCalculator.computeBSpline(0.0f, iter);
 	}
 	
-	public static ShortArray calcularDelaunay(FloatArray vertices, boolean ordenados)
+	public static ShortArray buildDelaunayTriangulation(FloatArray vertices, boolean ordenados)
 	{
 		DelaunayTriangulator delaunayCalculator = new DelaunayTriangulator();
 		return delaunayCalculator.computeTriangles(vertices, ordenados);
 	}
 	
-	public static ShortArray calcularEarClipping(FloatArray vertices)
+	public static ShortArray buildEarClippingTriangulation(FloatArray vertices)
 	{
 		EarClippingTriangulator earClippingCalculator = new EarClippingTriangulator();
 		return earClippingCalculator.computeTriangles(vertices);
 	}
 	
-	public static DelaunayMesh calcularMeshGenerator(FloatArray vertices)
+	public static DelaunayMesh buildDelaunayMesh(FloatArray vertices)
 	{
 		DelaunayMeshGenerator delaunayMeshGenerator = new DelaunayMeshGenerator();
 		return delaunayMeshGenerator.computeMesh(vertices);
 	}
 	
-	public static ShortArray calcularPoligonoSimple(FloatArray vertices, boolean continuo)
+	public static ShortArray isSimplexPolygon(FloatArray vertices, boolean continuo)
 	{
 		return GeometryUtils.isPolygonSimple(vertices, continuo);
 	}

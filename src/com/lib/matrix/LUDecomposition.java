@@ -279,13 +279,13 @@ public class LUDecomposition implements java.io.Serializable {
 	 */
 
 	public Matrix solve(Matrix B) {
+			 
 		if (B.getRowDimension() != m) {
 			throw new IllegalArgumentException(
 					"Matrix row dimensions must agree.");
 		}
 		if (!this.isNonsingular()) {
-			Matrix m = new Matrix(LU);
-			throw new RuntimeException("Matrix is singular. \n Matrix: "+LU.toString()+" \n M: "+m+" N: "+n);
+			throw new RuntimeException("Matrix is singular.");
 		}
 
 		// Copy right hand side with pivoting

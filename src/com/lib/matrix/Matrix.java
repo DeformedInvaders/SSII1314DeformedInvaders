@@ -1255,8 +1255,10 @@ public class Matrix implements Cloneable, java.io.Serializable {
 				output.print(s);
 			}
 			output.println();
+			output.println();
 		}
 		output.println(); // end with blank line.
+		output.println();
 	}
 
 	/**

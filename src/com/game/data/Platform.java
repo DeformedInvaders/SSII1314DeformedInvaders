@@ -129,18 +129,21 @@ public class Platform extends Entity
 	{
 		if (typeEntity != TTypeEntity.Nothing)
 		{
+			if (height == 0 && width == 0)
+			{
+				width = instanceEntity.getWidth();
+				height = instanceEntity.getHeight();
+			}
+			
 			for (int i = 0; i < GamePreferences.NUM_TYPE_WEAPONS; i++)
 			{
-				renderer.loadTextureRectangle(gl, instanceEntity.getHeight(), instanceEntity.getWidth(), weaponIndex(i), typeWeapon, i, TTypeSticker.Nothing);
+				renderer.loadTextureRectangle(gl, height, width, weaponIndex(i), typeWeapon, i, TTypeSticker.Nothing);
 			}
 			
 			for (int i = 0; i < GamePreferences.NUM_TYPE_PLATFORMS; i++)
 			{
-				renderer.loadTextureRectangle(gl, instanceEntity.getHeight(), instanceEntity.getWidth(), platformIndex(i), typeEntity, i, TTypeSticker.Nothing);
+				renderer.loadTextureRectangle(gl, height, width, platformIndex(i), typeEntity, i, TTypeSticker.Nothing);
 			}
-			
-			width = instanceEntity.getWidth();
-			height = instanceEntity.getHeight();
 		}
 	}
 	
