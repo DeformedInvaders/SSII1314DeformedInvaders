@@ -24,6 +24,7 @@ import com.creation.data.Movements;
 import com.creation.data.TTypeMovement;
 import com.creation.data.Texture;
 import com.game.data.Character;
+import com.main.model.GamePreferences;
 import com.main.model.GameResources;
 
 public class ExternalStorageManager
@@ -82,23 +83,26 @@ public class ExternalStorageManager
 	{
 		checkDirectory(getMainDirectory());
 		
-		try
+		Log.d(tag, text);
+		
+		if (GamePreferences.IS_DEBUG_ENABLED())
 		{
-			FileOutputStream file = new FileOutputStream(new File(getLogFile()), true);
-	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
-	        outputStreamWriter.write(tag + " :: "+text+"\n");
-	        outputStreamWriter.close();
-	        
-	        Log.d(tag, text);
-
-			return true;
-		}
-		catch (IOException e)
-		{
-			
+			try
+			{
+				FileOutputStream file = new FileOutputStream(new File(getLogFile()), true);
+		        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
+		        outputStreamWriter.write(tag + " :: "+text+"\n");
+		        outputStreamWriter.close();
+		        
+				return true;
+			}
+			catch (IOException e)
+			{
+				return false;
+			}
 		}
 		
-		return false;
+		return true;
 	}
 
 	/* Métodos Lectura y Escritura Temporal */
