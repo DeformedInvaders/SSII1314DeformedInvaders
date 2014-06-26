@@ -36,13 +36,16 @@ public class Triangulator
 			mSimplex = isSimplexPolygon(bsplineVertices, false).size == 0;
 			if(mSimplex)
 			{
+				bsplineVertices.removeIndex(bsplineVertices.size - 2);
+				bsplineVertices.removeIndex(bsplineVertices.size - 1);
+				
 				DelaunayMesh m = buildDelaunayMesh(bsplineVertices);
 				mVertices = m.getVertices();
 				mTriangles = m.getTriangles();
 				
-				mHull = new HullArray(NUM_BSPLINE_VERTICES);
+				mHull = new HullArray();
 				
-				for(short i = 0; i < NUM_BSPLINE_VERTICES; i++)
+				for(short i = 0; i < bsplineVertices.size / 2; i++)
 				{
 					mHull.addVertex(i);
 				}

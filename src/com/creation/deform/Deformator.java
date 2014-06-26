@@ -41,7 +41,7 @@ public class Deformator
 
 	public Deformator(VertexArray mesh, TriangleArray triangles, HandleArray handles)
 	{
-		mVertices = mesh;
+		mVertices = mesh.clone();
 		mTriangles = triangles;
 		mEdges = new EdgeArray();
 		
