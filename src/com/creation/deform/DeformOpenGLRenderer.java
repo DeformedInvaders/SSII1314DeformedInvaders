@@ -384,7 +384,7 @@ public class DeformOpenGLRenderer extends OpenGLRenderer
 	@Override
 	protected boolean onTouchPointerUp(float pixelX, float pixelY, float screenWidth, float screenHeight, int pointer)
 	{
-		if (mState == TStateDeform.Moving)
+		if (mState == TStateDeform.Moving && pointers[pointer] != -1)
 		{
 			handles.setSelectedHandle(pointers[pointer], true);
 			

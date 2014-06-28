@@ -1,6 +1,7 @@
 package com.creation.deform;
 
-import com.android.storage.ExternalStorageManager;
+import android.util.Log;
+
 import com.lib.buffer.EdgeArray;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.TriangleArray;
@@ -133,20 +134,19 @@ public class Deformator
 	public void moveHandles(HandleArray handles, VertexArray verticesModificados)
 	{
 		try
-		{
+		{		
 			// Actualizar MatrizB
 			buildMatrixB1(handles, matrixB1);
-
+	
 			// Cálculo de Ajuste de Traslación y Rotación
 			//
 			// A1t * A1 * X = A1t * B1
-
+	
 			matrixA1t.times(matrixB1, matrixA1tB1);
 			
 			Matrix m1 = matrixA1tA1.solve(matrixA1tB1);
-	
-			// Actualizar Valores de los Vertices después del Ajuste de Traslación y
-			// Rotación
+			
+			// Actualizar Valores de los Vertices después del Ajuste de Traslación y Rotación
 			VertexArray verticesTrasRot = mVertices.clone();
 			for (short i = 0; i < numVertices; i++)
 			{
@@ -171,9 +171,9 @@ public class Deformator
 				verticesModificados.setVertex(i, (float) m2x.get(i, 0), (float) m2y.get(i, 0));
 			}
 		}
-		catch(RuntimeException e)
+		catch (RuntimeException e)
 		{
-			ExternalStorageManager.writeLogcat("TEST", "RuntimeException: "+e.getMessage());
+			Log.d("TEST", "RuntimeException "+e.getMessage());
 		}
 	}
 
@@ -266,7 +266,6 @@ public class Deformator
 	// Cálculo Matriz A1
 	private void buildMatrixA1(VertexArray vertices, HandleArray handles, Matrix m)
 	{
-		int j = 0;
 		for (short i = 0; i < numEdges; i++)
 		{
 			short a = mEdges.getAVertex(i);
@@ -276,33 +275,31 @@ public class Deformator
 
 			buildMatrixH(a, b, c, d, vertices, matrixH);
 
-			m.set(j, 2 * a, matrixH.get(0, 0));
-			m.set(j, 2 * a + 1, matrixH.get(0, 1));
-			m.set(j + 1, 2 * a, matrixH.get(1, 0));
-			m.set(j + 1, 2 * a + 1, matrixH.get(1, 1));
+			m.set(2 * i, 2 * a, matrixH.get(0, 0));
+			m.set(2 * i, 2 * a + 1, matrixH.get(0, 1));
+			m.set(2 * i + 1, 2 * a, matrixH.get(1, 0));
+			m.set(2 * i + 1, 2 * a + 1, matrixH.get(1, 1));
 
-			m.set(j, 2 * b, matrixH.get(0, 2));
-			m.set(j, 2 * b + 1, matrixH.get(0, 3));
-			m.set(j + 1, 2 * b, matrixH.get(1, 2));
-			m.set(j + 1, 2 * b + 1, matrixH.get(1, 3));
+			m.set(2 * i, 2 * b, matrixH.get(0, 2));
+			m.set(2 * i, 2 * b + 1, matrixH.get(0, 3));
+			m.set(2 * i + 1, 2 * b, matrixH.get(1, 2));
+			m.set(2 * i + 1, 2 * b + 1, matrixH.get(1, 3));
 
 			if (c != -1)
 			{
-				m.set(j, 2 * c, matrixH.get(0, 4));
-				m.set(j, 2 * c + 1, matrixH.get(0, 5));
-				m.set(j + 1, 2 * c, matrixH.get(1, 4));
-				m.set(j + 1, 2 * c + 1, matrixH.get(1, 5));
+				m.set(2 * i, 2 * c, matrixH.get(0, 4));
+				m.set(2 * i, 2 * c + 1, matrixH.get(0, 5));
+				m.set(2 * i + 1, 2 * c, matrixH.get(1, 4));
+				m.set(2 * i + 1, 2 * c + 1, matrixH.get(1, 5));
 			}
 
 			if (d != -1)
 			{
-				m.set(j, 2 * d, matrixH.get(0, 6));
-				m.set(j, 2 * d + 1, matrixH.get(0, 7));
-				m.set(j + 1, 2 * d, matrixH.get(1, 6));
-				m.set(j + 1, 2 * d + 1, matrixH.get(1, 7));
+				m.set(2 * i, 2 * d, matrixH.get(0, 6));
+				m.set(2 * i, 2 * d + 1, matrixH.get(0, 7));
+				m.set(2 * i + 1, 2 * d, matrixH.get(1, 6));
+				m.set(2 * i + 1, 2 * d + 1, matrixH.get(1, 7));
 			}
-
-			j = j + 2;
 		}
 
 		for (short k = 0; k < numHandles; k++)
@@ -349,16 +346,13 @@ public class Deformator
 	// Cálculo Matriz A2
 	private void buildMatrixA2(HandleArray handles, Matrix m)
 	{
-		int j = 0;
 		for (short i = 0; i < numEdges; i++)
 		{
 			int a = mEdges.getAVertex(i);
 			int b = mEdges.getBVertex(i);
 
-			m.set(j, a, 1);
-			m.set(j, b, -1);
-
-			j = j + 1;
+			m.set(i, a, 1);
+			m.set(i, b, -1);
 		}
 
 		for (short k = 0; k < numHandles; k++)
@@ -452,7 +446,6 @@ public class Deformator
 	// Cálculo Matriz B2
 	private void buildMatrixB2(VertexArray vertices, VertexArray verticesTrasRot, HandleArray handles, Matrix m, Matrix n)
 	{
-		int j = 0;
 		for (short i = 0; i < numEdges; i++)
 		{
 			short a = mEdges.getAVertex(i);
@@ -473,10 +466,8 @@ public class Deformator
 			double tex = matrixT.get(0, 0) * ex + matrixT.get(0, 1) * ey;
 			double tey = matrixT.get(1, 0) * ex + matrixT.get(1, 1) * ey;
 
-			m.set(j, 0, tex);
-			n.set(j, 0, tey);
-
-			j = j + 1;
+			m.set(i, 0, tex);
+			n.set(i, 0, tey);
 		}
 
 		for (short k = 0; k < numHandles; k++)
