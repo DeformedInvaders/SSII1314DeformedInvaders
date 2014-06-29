@@ -4,6 +4,8 @@ import com.lib.utils.ShortArray;
 
 public class TriangleArray extends ShortArray
 {
+	private static final long serialVersionUID = 7233680263696488502L;
+	
 	/*
 		TRIANGLE ARRAY
 		a, b, c: Índice de los puntos que forman el triángulo.

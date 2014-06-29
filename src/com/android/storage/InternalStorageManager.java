@@ -192,11 +192,11 @@ public class InternalStorageManager
 	public boolean saveCharacter(Character personaje)
 	{
 		// Comprobar Nombres de Personajes ya existentes
-		if (existsDirectory(CHARACTER_DIRECTORY, personaje.getName()))
+		/*if (existsDirectory(CHARACTER_DIRECTORY, personaje.getName()))
 		{
 			Toast.makeText(mContext, R.string.error_storage_used_name, Toast.LENGTH_SHORT).show();
 			return false;
-		}
+		}*/
 
 		return updateCharacter(personaje, 0);
 	}
