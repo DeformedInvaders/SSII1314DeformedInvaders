@@ -170,7 +170,7 @@ public class DesignFragment extends OpenGLFragment
 			if (mCanvas.isStateDrawing())
 			{
 				if (mCanvas.isPolygonSimplex())
-				{
+				{					
 					List<Integer> listaMensajes = new ArrayList<Integer>();
 					listaMensajes.add(R.string.text_tip_design_drag_description);
 					listaMensajes.add(R.string.text_tip_design_zoom_description);
@@ -191,6 +191,11 @@ public class DesignFragment extends OpenGLFragment
 			}
 			else if (mCanvas.isStatePreparing())
 			{
+				if (mCanvas.isPolygonSingular())
+				{
+					sendToastMessage(R.string.error_singular);
+				}
+				
 				if (mCanvas.isPolygonReady())
 				{
 					mCallback.onDesignReady(mCanvas.getSkeleton(), mCanvas.saveData());

@@ -1,11 +1,10 @@
 package com.creation.deform;
 
-import android.util.Log;
-
 import com.lib.buffer.EdgeArray;
 import com.lib.buffer.HandleArray;
 import com.lib.buffer.TriangleArray;
 import com.lib.buffer.VertexArray;
+import com.lib.matrix.LUDecomposition;
 import com.lib.matrix.Matrix;
 
 public class Deformator
@@ -20,30 +19,36 @@ public class Deformator
 	
 	// Cálculo de Matrices A1 y B1
 
-	private Matrix matrixG, matrixGt, matrixGtG;
+	private Matrix matrixG3, matrixG3t, matrixGtG;
+	private Matrix matrixG4, matrixG4t;
 
 	private Matrix matrixE, matrixEGtGinv;
 
-	private Matrix matrixh1, matrixh2;
-	private Matrix matrixH;
+	private Matrix matrixh13, matrixh14, matrixh23, matrixh24;
+	private Matrix matrixH3, matrixH4;
 
 	private Matrix matrixA1, matrixA1t, matrixA1tA1;
 	private Matrix matrixB1, matrixA1tB1;
 
 	// Cálculo de Matrices A2 y B2
 
-	private Matrix matrixGtGinvGt, matrixV;
+	private Matrix matrixGtGinvGt3, matrixGtGinvGt4, matrixV3, matrixV4;
 	private Matrix matrixTk, matrixT;
 
 	private Matrix matrixA2, matrixA2t, matrixA2tA2;
 	private Matrix matrixB2x, matrixB2y, matrixA2tB2x, matrixA2tB2y;
 
 	/* Constructora */
-
-	public Deformator(VertexArray mesh, TriangleArray triangles, HandleArray handles)
+	
+	public Deformator(VertexArray vertices, TriangleArray triangles)
 	{
-		mVertices = mesh.clone();
-		mTriangles = triangles;
+		this(vertices, triangles, new HandleArray());
+	}
+
+	public Deformator(VertexArray vertices, TriangleArray triangles, HandleArray handles)
+	{
+		mVertices = vertices.clone();
+		mTriangles = triangles.clone();
 		mEdges = new EdgeArray();
 		
 		buildEdgeMesh(mTriangles);
@@ -52,27 +57,41 @@ public class Deformator
 		numEdges = mEdges.getNumEdges();
 
 		// Calcular Matriz G
-		matrixG = new Matrix(8, 2);
-		matrixGt = new Matrix(2, 8);
+		matrixG4 = new Matrix(8, 2);
+		matrixG4t = new Matrix(2, 8);
+		matrixG3 = new Matrix(6, 2);
+		matrixG3t = new Matrix(2, 6);
 		matrixGtG = new Matrix(2, 2);
 
 		// Calcular Matriz H
-		matrixH = new Matrix(2, 8);
+		matrixH3 = new Matrix(2, 6);
 
-		matrixh1 = new Matrix(2, 8);
-		matrixh1.set(0, 0, -1);
-		matrixh1.set(0, 2, 1);
-		matrixh1.set(1, 1, -1);
-		matrixh1.set(1, 3, 1);
+		matrixh13 = new Matrix(2, 6);
+		matrixh13.set(0, 0, -1);
+		matrixh13.set(0, 2, 1);
+		matrixh13.set(1, 1, -1);
+		matrixh13.set(1, 3, 1);
+		
+		matrixh23 = new Matrix(2, 6);
+		
+		matrixH4 = new Matrix(2, 8);
+		
+		matrixh14 = new Matrix(2, 8);
+		matrixh14.set(0, 0, -1);
+		matrixh14.set(0, 2, 1);
+		matrixh14.set(1, 1, -1);
+		matrixh14.set(1, 3, 1);
 
-		matrixh2 = new Matrix(2, 8);
+		matrixh24 = new Matrix(2, 8);
 
 		matrixE = new Matrix(2, 2);
 		matrixEGtGinv = new Matrix(2, 2);
 
 		// Calcular Matriz T
-		matrixV = new Matrix(8, 1);
-		matrixGtGinvGt = new Matrix(2, 8);
+		matrixV3 = new Matrix(6, 1);
+		matrixV4 = new Matrix(8, 1);
+		matrixGtGinvGt3 = new Matrix(2, 6);
+		matrixGtGinvGt4 = new Matrix(2, 8);
 		matrixTk = new Matrix(2, 1);
 		matrixT = new Matrix(2, 2);
 
@@ -134,7 +153,7 @@ public class Deformator
 	public void moveHandles(HandleArray handles, VertexArray verticesModificados)
 	{
 		try
-		{		
+		{	
 			// Actualizar MatrizB
 			buildMatrixB1(handles, matrixB1);
 	
@@ -173,14 +192,14 @@ public class Deformator
 		}
 		catch (RuntimeException e)
 		{
-			Log.d("TEST", "RuntimeException "+e.getMessage());
+			android.util.Log.d("TEST", "RuntimeException "+e.getMessage());
 		}
 	}
 
 	/* Ajuste de Traslación y Rotación */
 
 	// Cálculo Matriz G
-	private void buildMatrixG(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	private void buildMatrixG4(short a, short b, short c, short d, VertexArray vertices, Matrix m)
 	{
 		float vix = vertices.getXVertex(a);
 		float viy = vertices.getYVertex(a);
@@ -188,23 +207,11 @@ public class Deformator
 		float vjx = vertices.getXVertex(b);
 		float vjy = vertices.getYVertex(b);
 
-		float vlx = 0;
-		float vly = 0;
+		float vlx = vertices.getXVertex(c);
+		float vly = vertices.getYVertex(c);
 
-		float vrx = 0;
-		float vry = 0;
-
-		if (c != -1)
-		{
-			vlx = vertices.getXVertex(c);
-			vly = vertices.getYVertex(c);
-		}
-
-		if (d != -1)
-		{
-			vrx = vertices.getXVertex(d);
-			vry = vertices.getYVertex(d);
-		}
+		float vrx = vertices.getXVertex(d);
+		float vry = vertices.getYVertex(d);
 
 		m.set(0, 0, vix);
 		m.set(0, 1, viy);
@@ -225,7 +232,33 @@ public class Deformator
 		m.set(6, 1, vry);
 		m.set(7, 0, vry);
 		m.set(7, 1, -vrx);
+	}
+	
+	private void buildMatrixG3(short a, short b, short c, VertexArray vertices, Matrix m)
+	{
+		float vix = vertices.getXVertex(a);
+		float viy = vertices.getYVertex(a);
 
+		float vjx = vertices.getXVertex(b);
+		float vjy = vertices.getYVertex(b);
+
+		float vlx = vertices.getXVertex(c);
+		float vly = vertices.getYVertex(c);
+
+		m.set(0, 0, vix);
+		m.set(0, 1, viy);
+		m.set(1, 0, viy);
+		m.set(1, 1, -vix);
+
+		m.set(2, 0, vjx);
+		m.set(2, 1, vjy);
+		m.set(3, 0, vjy);
+		m.set(3, 1, -vjx);
+
+		m.set(4, 0, vlx);
+		m.set(4, 1, vly);
+		m.set(5, 0, vly);
+		m.set(5, 1, -vlx);
 	}
 
 	// Cálculo Matriz E
@@ -246,21 +279,38 @@ public class Deformator
 	}
 
 	// Cálculo Matriz H
-	private void buildMatrixH(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	private void buildMatrixH3(short a, short b, short c, VertexArray vertices, Matrix m)
 	{
-		buildMatrixG(a, b, c, d, vertices, matrixG);
+		buildMatrixG3(a, b, c, vertices, matrixG3);
 
-		matrixG.transpose(matrixGt);
-		matrixGtG = matrixGt.times(matrixG);
+		matrixG3.transpose(matrixG3t);
+		matrixGtG = matrixG3t.times(matrixG3);
 		Matrix gtginv = matrixGtG.inverse();
 
 		buildMatrixE(a, b, vertices, matrixE);
 
 		matrixE.times(gtginv, matrixEGtGinv);
-		matrixEGtGinv.times(matrixGt, matrixh2);
+		matrixEGtGinv.times(matrixG3t, matrixh23);
 
 		// Matriz H
-		matrixh1.minus(matrixh2, m);
+		matrixh13.minus(matrixh23, m);
+	}	
+	
+	private void buildMatrixH4(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	{
+		buildMatrixG4(a, b, c, d, vertices, matrixG4);
+
+		matrixG4.transpose(matrixG4t);
+		matrixGtG = matrixG4t.times(matrixG4);
+		Matrix gtginv = matrixGtG.inverse();
+
+		buildMatrixE(a, b, vertices, matrixE);
+
+		matrixE.times(gtginv, matrixEGtGinv);
+		matrixEGtGinv.times(matrixG4t, matrixh24);
+
+		// Matriz H
+		matrixh14.minus(matrixh24, m);
 	}
 
 	// Cálculo Matriz A1
@@ -272,33 +322,50 @@ public class Deformator
 			short b = mEdges.getBVertex(i);
 			short c = mEdges.getLVertex(i);
 			short d = mEdges.getRVertex(i);
-
-			buildMatrixH(a, b, c, d, vertices, matrixH);
-
-			m.set(2 * i, 2 * a, matrixH.get(0, 0));
-			m.set(2 * i, 2 * a + 1, matrixH.get(0, 1));
-			m.set(2 * i + 1, 2 * a, matrixH.get(1, 0));
-			m.set(2 * i + 1, 2 * a + 1, matrixH.get(1, 1));
-
-			m.set(2 * i, 2 * b, matrixH.get(0, 2));
-			m.set(2 * i, 2 * b + 1, matrixH.get(0, 3));
-			m.set(2 * i + 1, 2 * b, matrixH.get(1, 2));
-			m.set(2 * i + 1, 2 * b + 1, matrixH.get(1, 3));
-
-			if (c != -1)
+			
+			if (c == -1 || d == -1)
 			{
-				m.set(2 * i, 2 * c, matrixH.get(0, 4));
-				m.set(2 * i, 2 * c + 1, matrixH.get(0, 5));
-				m.set(2 * i + 1, 2 * c, matrixH.get(1, 4));
-				m.set(2 * i + 1, 2 * c + 1, matrixH.get(1, 5));
+				short cd = c != -1 ? c : d;
+				buildMatrixH3(a, b, cd, vertices, matrixH3);
+
+				m.set(2 * i, 2 * a, matrixH3.get(0, 0));
+				m.set(2 * i, 2 * a + 1, matrixH3.get(0, 1));
+				m.set(2 * i + 1, 2 * a, matrixH3.get(1, 0));
+				m.set(2 * i + 1, 2 * a + 1, matrixH3.get(1, 1));
+
+				m.set(2 * i, 2 * b, matrixH3.get(0, 2));
+				m.set(2 * i, 2 * b + 1, matrixH3.get(0, 3));
+				m.set(2 * i + 1, 2 * b, matrixH3.get(1, 2));
+				m.set(2 * i + 1, 2 * b + 1, matrixH3.get(1, 3));
+
+				m.set(2 * i, 2 * cd, matrixH3.get(0, 4));
+				m.set(2 * i, 2 * cd + 1, matrixH3.get(0, 5));
+				m.set(2 * i + 1, 2 * cd, matrixH3.get(1, 4));
+				m.set(2 * i + 1, 2 * cd + 1, matrixH3.get(1, 5));
 			}
-
-			if (d != -1)
+			else
 			{
-				m.set(2 * i, 2 * d, matrixH.get(0, 6));
-				m.set(2 * i, 2 * d + 1, matrixH.get(0, 7));
-				m.set(2 * i + 1, 2 * d, matrixH.get(1, 6));
-				m.set(2 * i + 1, 2 * d + 1, matrixH.get(1, 7));
+				buildMatrixH4(a, b, c, d, vertices, matrixH4);
+
+				m.set(2 * i, 2 * a, matrixH4.get(0, 0));
+				m.set(2 * i, 2 * a + 1, matrixH4.get(0, 1));
+				m.set(2 * i + 1, 2 * a, matrixH4.get(1, 0));
+				m.set(2 * i + 1, 2 * a + 1, matrixH4.get(1, 1));
+
+				m.set(2 * i, 2 * b, matrixH4.get(0, 2));
+				m.set(2 * i, 2 * b + 1, matrixH4.get(0, 3));
+				m.set(2 * i + 1, 2 * b, matrixH4.get(1, 2));
+				m.set(2 * i + 1, 2 * b + 1, matrixH4.get(1, 3));
+
+				m.set(2 * i, 2 * c, matrixH4.get(0, 4));
+				m.set(2 * i, 2 * c + 1, matrixH4.get(0, 5));
+				m.set(2 * i + 1, 2 * c, matrixH4.get(1, 4));
+				m.set(2 * i + 1, 2 * c + 1, matrixH4.get(1, 5));
+
+				m.set(2 * i, 2 * d, matrixH4.get(0, 6));
+				m.set(2 * i, 2 * d + 1, matrixH4.get(0, 7));
+				m.set(2 * i + 1, 2 * d, matrixH4.get(1, 6));
+				m.set(2 * i + 1, 2 * d + 1, matrixH4.get(1, 7));	
 			}
 		}
 
@@ -375,7 +442,7 @@ public class Deformator
 	}
 
 	// Cálculo Matriz V
-	private void buildMatrixV(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	private void buildMatrixV3(short a, short b, short c, VertexArray vertices, Matrix m)
 	{
 		float vix = vertices.getXVertex(a);
 		float viy = vertices.getYVertex(a);
@@ -383,23 +450,32 @@ public class Deformator
 		float vjx = vertices.getXVertex(b);
 		float vjy = vertices.getYVertex(b);
 
-		float vlx = 0;
-		float vly = 0;
+		float vlx = vertices.getXVertex(c);
+		float vly = vertices.getYVertex(c);
 
-		float vrx = 0;
-		float vry = 0;
+		m.set(0, 0, vix);
+		m.set(1, 0, viy);
 
-		if (c != -1)
-		{
-			vlx = vertices.getXVertex(c);
-			vly = vertices.getYVertex(c);
-		}
+		m.set(2, 0, vjx);
+		m.set(3, 0, vjy);
 
-		if (d != -1)
-		{
-			vrx = vertices.getXVertex(d);
-			vry = vertices.getYVertex(d);
-		}
+		m.set(4, 0, vlx);
+		m.set(5, 0, vly);
+	}
+	
+	private void buildMatrixV4(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	{
+		float vix = vertices.getXVertex(a);
+		float viy = vertices.getYVertex(a);
+
+		float vjx = vertices.getXVertex(b);
+		float vjy = vertices.getYVertex(b);
+
+		float vlx = vertices.getXVertex(c);
+		float vly = vertices.getYVertex(c);
+
+		float vrx = vertices.getXVertex(d);
+		float vry = vertices.getYVertex(d);
 
 		m.set(0, 0, vix);
 		m.set(1, 0, viy);
@@ -415,19 +491,47 @@ public class Deformator
 	}
 
 	// Cálculo Matriz T
-	private void buildMatrixT(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	private void buildMatrixT3(short a, short b, short c, VertexArray vertices, Matrix m)
 	{
-		buildMatrixG(a, b, c, d, vertices, matrixG);
+		buildMatrixG3(a, b, c, vertices, matrixG3);
 
-		matrixG.transpose(matrixGt);
-		matrixGtG = matrixGt.times(matrixG);
+		matrixG3.transpose(matrixG3t);
+		matrixGtG = matrixG3t.times(matrixG3);
 		Matrix gtginv = matrixGtG.inverse();
 
-		gtginv.times(matrixGt, matrixGtGinvGt);
+		gtginv.times(matrixG3t, matrixGtGinvGt3);
 
-		buildMatrixV(a, b, c, d, vertices, matrixV);
+		buildMatrixV3(a, b, c, vertices, matrixV3);
 
-		matrixGtGinvGt.times(matrixV, matrixTk);
+		matrixGtGinvGt3.times(matrixV3, matrixTk);
+		
+		// double ck = matrizTk.get(0, 0);
+		double ck = -matrixTk.get(0, 0);
+		double sk = matrixTk.get(1, 0);
+
+		m.set(0, 0, ck);
+		m.set(0, 1, sk);
+		m.set(1, 0, -sk);
+		m.set(1, 1, ck);
+
+		double k = 1.0 / (Math.pow(ck, 2) + Math.pow(sk, 2));
+
+		m.times(k);
+	}
+	
+	private void buildMatrixT4(short a, short b, short c, short d, VertexArray vertices, Matrix m)
+	{
+		buildMatrixG4(a, b, c, d, vertices, matrixG4);
+
+		matrixG4.transpose(matrixG4t);
+		matrixGtG = matrixG4t.times(matrixG4);
+		Matrix gtginv = matrixGtG.inverse();
+
+		gtginv.times(matrixG4t, matrixGtGinvGt4);
+
+		buildMatrixV4(a, b, c, d, vertices, matrixV4);
+
+		matrixGtGinvGt4.times(matrixV4, matrixTk);
 		
 		// double ck = matrizTk.get(0, 0);
 		double ck = -matrixTk.get(0, 0);
@@ -452,9 +556,7 @@ public class Deformator
 			short b = mEdges.getBVertex(i);
 			short c = mEdges.getLVertex(i);
 			short d = mEdges.getRVertex(i);
-
-			buildMatrixT(a, b, c, d, verticesTrasRot, matrixT);
-
+			
 			float vix = vertices.getXVertex(a);
 			float viy = vertices.getYVertex(a);
 			float vjx = vertices.getXVertex(b);
@@ -462,12 +564,27 @@ public class Deformator
 
 			float ex = vjx - vix;
 			float ey = vjy - viy;
-
-			double tex = matrixT.get(0, 0) * ex + matrixT.get(0, 1) * ey;
-			double tey = matrixT.get(1, 0) * ex + matrixT.get(1, 1) * ey;
-
-			m.set(i, 0, tex);
-			n.set(i, 0, tey);
+			
+			if (c == -1 || d == -1)
+			{				
+				buildMatrixT3(a, b, c != -1 ? c : d, verticesTrasRot, matrixT);
+	
+				double tex = matrixT.get(0, 0) * ex + matrixT.get(0, 1) * ey;
+				double tey = matrixT.get(1, 0) * ex + matrixT.get(1, 1) * ey;
+	
+				m.set(i, 0, tex);
+				n.set(i, 0, tey);
+			}
+			else
+			{
+				buildMatrixT4(a, b, c, d, verticesTrasRot, matrixT);
+				
+				double tex = matrixT.get(0, 0) * ex + matrixT.get(0, 1) * ey;
+				double tey = matrixT.get(1, 0) * ex + matrixT.get(1, 1) * ey;
+	
+				m.set(i, 0, tex);
+				n.set(i, 0, tey);
+			}
 		}
 
 		for (short k = 0; k < numHandles; k++)
@@ -496,5 +613,11 @@ public class Deformator
 			mEdges.addEdge(b, c, a, mVertices);
 			mEdges.addEdge(c, a, b, mVertices);		
 		}
+	}
+	
+	public boolean isSingular()
+	{
+		LUDecomposition lu = new LUDecomposition(matrixA1tA1);
+		return !lu.isNonsingular();
 	}
 }

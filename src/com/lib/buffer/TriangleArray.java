@@ -64,31 +64,8 @@ public class TriangleArray extends ShortArray
 		return size / SIZE_TRIANGLE;
 	}
 	
-	public void sortCounterClockwise(VertexArray vertices)
+	public TriangleArray clone()
 	{
-		for (short i = 0; i < getNumTriangles(); i++)
-		{
-			short a = getAVertex(i);
-			short b = getBVertex(i);
-			short c = getCVertex(i);
-			
-			float aX = vertices.getXVertex(a);
-			float aY = vertices.getYVertex(a);
-			float bX = vertices.getXVertex(b);
-			float bY = vertices.getYVertex(b);
-			float cX = vertices.getXVertex(c);
-			float cY = vertices.getYVertex(c);
-			
-			// Clockwise positive
-			// Counter-clockwise negative
-			// Aligned zero
-			
-			boolean clockwise = (bX - aX)*(cY - aY) - (cX - aX)*(bY - aY) > 0;
-			
-			if (clockwise)
-			{
-				setVertex(i, b, a, c);
-			}
-		}
+		return new TriangleArray(super.clone());
 	}
 }

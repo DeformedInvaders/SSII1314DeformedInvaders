@@ -396,4 +396,13 @@ public class ShortArray implements Serializable {
 		}
 		return buffer.toString();
 	}
+	
+	@Override
+	public ShortArray clone() {
+		ShortArray f = new ShortArray();
+		for (int i = 0; i < size; i++) {
+			f.add(items[i]);
+		}
+		return f;
+	}
 }

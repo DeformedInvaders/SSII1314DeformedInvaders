@@ -34,7 +34,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	private HullArray hull;
 	private FloatBuffer bufferHull;
 
-	private boolean simplex, triangulate;
+	private boolean simplex, singular, triangulate;
 
 	/* Constructora */
 
@@ -47,6 +47,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		points = new VertexArray();
 		
 		simplex = false;
+		singular = false;
 		triangulate = false;
 	}
 
@@ -121,6 +122,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		hull = null;
 		
 		simplex = false;
+		singular = false;
 		triangulate = false;
 
 		return true;
@@ -191,10 +193,10 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 			vertices = triangulator.getVertices();
 			triangles = triangulator.getTriangles();
 			hull = triangulator.getHull();
+			singular = triangulator.getSingular();
 			
 			if (simplex)
 			{
-				triangles.sortCounterClockwise(vertices);
 				bufferTriangles = BufferManager.buildBufferTriangleList(triangles, vertices);
 				bufferHull = BufferManager.buildBufferVertexIndexList(hull, vertices);
 				
@@ -310,6 +312,11 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 	{
 		return simplex;
 	}
+	
+	public boolean isPolygonSingular()
+	{
+		return singular;
+	}
 
 	public boolean isPolygonReady()
 	{
@@ -334,7 +341,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 
 	public DesignDataSaved saveData()
 	{
-		return new DesignDataSaved(points, vertices, triangles, hull, mState, simplex);
+		return new DesignDataSaved(points, vertices, triangles, hull, mState, simplex, singular);
 	}
 
 	public void restoreData(DesignDataSaved data)
@@ -345,6 +352,7 @@ public class DesignOpenGLRenderer extends OpenGLRenderer
 		triangles = data.getTriangles();
 		hull = data.getHull();
 		simplex = data.getSimplex();
+		singular = data.getSingular();
 
 		if (simplex)
 		{

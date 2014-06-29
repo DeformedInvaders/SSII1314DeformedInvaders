@@ -191,6 +191,7 @@
 		<!-- Errors -->
 			<string name="error_design">Ha ocurrido un problema con el esqueleto.</string>
 			<string name="error_triangle">El poligono no es simple.</string>
+			<string name="error_singular">El poligono no podrá ser deformado.</string>
 			<string name="error_retouch">El poligono no está dentro del marco.</string>
 			<string name="error_paint">Ha ocurrido un problema con la textura.</string>
 			<string name="error_deform">Hay movimientos sin definir.</string>

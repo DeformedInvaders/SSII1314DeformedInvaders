@@ -95,6 +95,11 @@ public class DesignOpenGLSurfaceView extends OpenGLSurfaceView
 	{
 		return mRenderer.isPolygonSimplex();
 	}
+	
+	public boolean isPolygonSingular()
+	{
+		return mRenderer.isPolygonSingular();
+	}
 
 	public boolean isPolygonReady()
 	{

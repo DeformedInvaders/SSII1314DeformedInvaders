@@ -13,11 +13,11 @@ public class DesignDataSaved extends DataSaved
 	private HullArray hull;
 
 	private TSatateDesign state;
-	private boolean simplex;
+	private boolean simplex, singular;
 
 	/* Constructora */
 
-	public DesignDataSaved(VertexArray points, VertexArray vertices, TriangleArray triangles, HullArray hull, TSatateDesign state, boolean simplex)
+	public DesignDataSaved(VertexArray points, VertexArray vertices, TriangleArray triangles, HullArray hull, TSatateDesign state, boolean simplex, boolean singular)
 	{
 		this.points = points;
 		this.vertices = vertices;
@@ -25,6 +25,7 @@ public class DesignDataSaved extends DataSaved
 		this.hull = hull;
 		this.state = state;
 		this.simplex = simplex;
+		this.singular = singular;
 	}
 
 	/* Métodos de Obtención de Información */
@@ -57,5 +58,10 @@ public class DesignDataSaved extends DataSaved
 	public boolean getSimplex()
 	{
 		return simplex;
+	}
+	
+	public boolean getSingular()
+	{
+		return singular;
 	}
 }
